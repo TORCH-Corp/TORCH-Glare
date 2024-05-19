@@ -1,1 +1,2 @@
-# torch-glare
+# TORCH-GlarE
+
