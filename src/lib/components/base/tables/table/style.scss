@@ -1,0 +1,18 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+
+.glare-table {
+
+    width: fit-content;
+    overflow: scroll;
+
+    thead {
+        th {
+            padding: 4px;
+        }
+
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid $border-presentation-table-header;
+        transition: all 250ms ease-in-out;
+    }
+
+}

@@ -1,0 +1,85 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+
+.Tooltip {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 29px;
+    width: fit-content;
+    flex-wrap: nowrap;
+    position: absolute;
+    top: 50%;
+    right: 102%;
+    transform: translate(-0, -50%);
+    z-index: 100;
+    gap: 0;
+
+    p {
+        white-space: nowrap;
+        padding: var(--Space-1, 4px);
+        color: $content-system-global-primary;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 147.5%;
+        background: $black-600;
+        border-radius: 4px;
+    }
+
+    .triangle {
+        transform: rotate(0deg);
+    }
+}
+
+
+
+.Tooltip-Right {
+    right: unset;
+    left: 102%;
+    transform: translate(-0, -50%);
+    flex-direction: row;
+
+    .triangle {
+        transform: rotate(0deg);
+    }
+}
+
+.Tooltip-Left {
+    top: 50%;
+    right: 102%;
+    transform: translate(-0, -50%);
+    flex-direction: row-reverse;
+
+    .triangle {
+        transform: rotate(180deg);
+    }
+}
+
+.Tooltip-TOP {
+    right: -11px;
+    left: unset;
+    top: -100%;
+    transform: translate(-50%, -0%);
+    flex-direction: column-reverse;
+    height: fit-content;
+
+    .triangle {
+        transform: rotate(-90deg) translateX(1px);
+    }
+
+}
+
+.Tooltip-BOTTOM {
+    right: -11px;
+    left: unset;
+    top: unset;
+    bottom: -100%;
+    transform: translate(-50%, -0%);
+    flex-direction: column;
+    height: fit-content;
+
+    .triangle {
+        transform: rotate(90deg) translateX(1px);
+    }
+}

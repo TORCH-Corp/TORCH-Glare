@@ -1,0 +1,32 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+
+.glare-button-field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    button {
+        flex-grow: 1;
+    }
+
+    .glare-button-field-divider {
+        border-style: solid;
+        border-color: $border-presentation-global-primary;
+        border-width: 1px 0 0 0;
+        flex: 1;
+        padding: 0 8px;
+        display: none;
+    }
+}
+
+.with-divider {
+    button {
+        flex-grow: unset;
+    }
+
+    .glare-button-field-divider {
+        display: flex;
+    }
+
+}

@@ -1,0 +1,76 @@
+@import '../../../../../../styles/colors/MappingColorSystem/index';
+
+.glare-TableHeaderCell-wrapper {
+
+    position: relative;
+
+    .table-header-inner-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 200px;
+    }
+
+
+    .glare-TableHeaderCell-resize-line {
+        position: absolute;
+        right: -4px;
+    }
+
+    .label-container {
+        gap: 0 !important;
+    }
+
+    .glare-TableHeaderCell {
+        padding: 0 8px;
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 3px;
+        gap: 8px;
+        touch-action: none;
+        background-color: transparent;
+        transition: background-color 300ms ease-in-out, color 300ms ease-in-out, ;
+        color: $content-presentation-global-primary;
+
+        &:hover {
+            background-color: $background-presentation-action-hover;
+
+            p {
+                color: $content-presentation-action-hover ;
+            }
+
+            span {
+                color: $content-presentation-action-hover ;
+            }
+        }
+    }
+}
+
+.glare-TableHeaderCell-S {
+    height: 20px;
+}
+
+.glare-TableHeaderCell-M {
+    height: 32px;
+}
+
+.glare-TableHeaderCell-L {
+    height: 32px;
+}
+
+
+.TableHeaderCell-without-sort-button {
+    .glare-TableSort {
+        display: none;
+    }
+
+    &:hover {
+        background-color: transparent;
+
+        p {
+            color: $content-presentation-global-primary;
+        }
+    }
+}

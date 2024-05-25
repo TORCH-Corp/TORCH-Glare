@@ -1,0 +1,192 @@
+@import '../../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../../styles/typography/index.scss';
+
+
+/* badges styles */
+
+/* green */
+
+.badge-green {
+    border-color: $border-presentation-badge-green;
+    background: $background-presentation-badge-green;
+
+    .badge-icon {
+        color: $content-presentation-badge-green ;
+    }
+}
+
+
+/* Green Light */
+
+.badge-green-light {
+    border-color: $border-presentation-badge-green-light;
+    background: $background-presentation-badge-green-light; //Background-Presentation-Badge-Green-Light
+
+    .badge-icon {
+        color: $content-presentation-badge-green-light ;
+    }
+
+}
+
+/* Cocktail Green */
+
+.badge-cocktail-green {
+    border-color: $border-presentation-badge-cocktail-green;
+    background: $background-presentation-badge-cocktail-green;
+
+    .badge-icon {
+        color: $content-presentation-badge-cocktail-green ;
+    }
+}
+
+
+/* Yellow */
+
+.badge-yellow {
+    border-color: $border-presentation-badge-yellow;
+    background: $background-presentation-badge-yellow;
+
+
+    .badge-icon {
+        color: $content-presentation-badge-yellow ;
+    }
+}
+
+/* Red Orange */
+
+.badge-red-orange {
+    border-color: $border-presentation-badge-red-orange;
+    background: $background-presentation-badge-red-orange;
+
+    .badge-icon {
+        color: $content-presentation-badge-red-orange ;
+    }
+}
+
+
+
+/* Red Light */
+
+.badge-red-light {
+    border-color: $border-presentation-badge-red;
+    background: $background-presentation-badge-red;
+
+    .badge-icon {
+        color: $content-presentation-badge-red ;
+    }
+}
+
+
+/* Rose*/
+
+.badge-rose {
+    border-color: $border-presentation-badge-rose;
+    background: $background-presentation-badge-rose;
+
+    .badge-icon {
+        color: $content-presentation-badge-rose ;
+    }
+}
+
+/* Purple */
+
+.badge-purple {
+    border-color: $border-presentation-badge-purple;
+    background: $background-presentation-badge-purple;
+
+    .badge-icon {
+        color: $content-presentation-badge-purple ;
+    }
+}
+
+/* Blue Purple */
+
+.badge-blue-purple {
+    border-color: $border-presentation-badge-blue-purple;
+    background: $background-presentation-badge-blue-purple;
+
+    .badge-icon {
+        color: $content-presentation-badge-blue-purple ;
+    }
+
+
+}
+
+/* Blue */
+
+.badge-blue {
+    border-color: $border-presentation-badge-blue;
+    background: $background-presentation-badge-blue;
+
+    .badge-icon {
+        color: $content-presentation-badge-blue ;
+    }
+}
+
+/* Navy */
+
+.badge-navy {
+    border-color: $border-presentation-badge-navy;
+    background: $background-presentation-badge-navy;
+
+    .badge-icon {
+        color: $content-presentation-badge-navy ;
+    }
+}
+
+/* Gray */
+
+.badge-gray {
+    border-color: $border-presentation-badge-gray;
+    background: $background-presentation-badge-gray;
+
+    .badge-icon {
+        color: $content-presentation-badge-gray ;
+    }
+}
+
+
+/* sizes */
+
+.glare-badge-size-S {
+    @include Body-typography-Small-Medium;
+
+    .badge-icon {
+        font-size: 12px;
+    }
+}
+
+.glare-badge-size-M {
+    @include Body-typography-Medium-Medium;
+
+    .badge-icon {
+        font-size: 15px;
+    }
+
+    .glare-badge-close-icon {
+        width: 16px;
+        height: 16px;
+
+        i {
+            font-size: 13px;
+        }
+    }
+}
+
+
+.glare-badge-size-L {
+    @include Body-typography-Medium-Medium;
+
+    .badge-icon {
+        font-size: 15px;
+    }
+
+    .glare-badge-close-icon {
+        width: 16px;
+        height: 16px;
+
+        i {
+            font-size: 13px;
+        }
+    }
+}

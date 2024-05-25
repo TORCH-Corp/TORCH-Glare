@@ -1,0 +1,1 @@
+# Glare Core Color System 1.1

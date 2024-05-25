@@ -1,0 +1,102 @@
+@import '../../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../../styles/typography/index.scss';
+
+.glare-InputLabel-wrapper {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    transition: all 300ms ease-in-out;
+
+    .glare-InputLabel-label-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 300ms ease-in-out;
+
+        p {
+            color: $content-presentation-state-negative;
+            @include Body-typography-Small-Regular;
+        }
+
+        label {
+            color: $content-presentation-global-primary;
+            transition: all 300ms ease-in-out;
+        }
+    }
+
+    .glare-InputLabel-divider {
+        height: 12px;
+        width: 1px;
+        border-radius: 4px;
+        border-left: 1px solid $border-presentation-action-primary;
+        transition: all 150ms ease-in-out;
+    }
+
+    .glare-InputLabel-active {
+        color: $content-presentation-global-secondary !important;
+    }
+}
+
+
+.glare-InputLabel-focus {
+    .glare-InputLabel-divider {
+        height: 22px;
+        border-color: $border-presentation-action-active ;
+    }
+}
+
+
+
+
+
+.glare-InputLabel-size-S {
+    .glare-InputLabel-label-wrapper {
+        label {
+            @include Body-typography-Small-Regular;
+        }
+
+        .glare-InputLabel-active {
+            @include Labels-typography-Small-Regular;
+        }
+
+    }
+}
+
+
+.glare-InputLabel-size-M {
+    .glare-InputLabel-label-wrapper {
+        label {
+            @include Body-typography-Medium-Regular;
+        }
+
+        p {
+            height: 24px !important;
+        }
+
+        .glare-InputLabel-active {
+            @include Labels-typography-Medium-Regular;
+        }
+    }
+
+}
+
+
+
+.glare-InputLabel-size-L {
+    .glare-InputLabel-label-wrapper {
+        label {
+            @include Body-typography-Large-Regular;
+        }
+
+        p {
+            height: 24px !important;
+        }
+
+        .glare-InputLabel-active {
+            @include Body-typography-Small-Regular;
+        }
+    }
+
+}

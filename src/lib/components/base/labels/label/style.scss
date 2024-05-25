@@ -1,0 +1,156 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../styles/typography/index.scss';
+
+
+.glare-label {
+
+    height: fit-content;
+    display: flex;
+    gap: 8px;
+    position: relative;
+
+    .label-container {
+        display: flex;
+        gap: 4px;
+        justify-content: center;
+        align-items: flex-end;
+        text-align: center;
+        min-height: 10px;
+
+        .label {
+            color: $content-presentation-global-primary;
+            @include Body-typography-Small-Regular;
+        }
+
+        .secondaryLabel {
+            color: $content-presentation-global-secondary;
+            @include Labels-typography-Small-Regular;
+            margin-bottom: 1.5px;
+        }
+
+        .requiredLabel {
+            color: $content-presentation-state-negative;
+            @include Labels-typography-Small-Medium;
+        }
+
+    }
+}
+
+
+.S {
+    .label-container {
+        .label {
+            @include Body-typography-Small-Regular;
+        }
+
+        .secondaryLabel {
+            @include Labels-typography-Small-Regular;
+        }
+
+        .requiredLabel {
+            @include Labels-typography-Small-Medium;
+            margin-bottom: 2px;
+        }
+    }
+}
+
+
+.M {
+    .label-container {
+        .label {
+            @include Body-typography-Medium-Regular;
+        }
+
+        .secondaryLabel {
+            @include Labels-typography-Medium-Regular;
+            margin-bottom: 2px;
+        }
+
+        .requiredLabel {
+            @include Labels-typography-Medium-Medium;
+            margin-bottom: 3.5px;
+        }
+    }
+}
+
+
+
+.L {
+    .label-container {
+        .label {
+            @include Body-typography-Large-Regular;
+        }
+
+        .secondaryLabel {
+            @include Body-typography-Small-Regular;
+        }
+
+        .requiredLabel {
+            @include Body-typography-Small-Medium;
+            margin-bottom: 3px;
+        }
+    }
+}
+
+.vertical {
+    .label-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0;
+    }
+}
+
+.horizontal {
+    .label-container {
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-end;
+        text-align: center;
+        gap: 4px;
+    }
+}
+
+
+.disabled {
+    .label-container {
+        .label {
+            color: $content-presentation-state-disabled;
+        }
+
+        .secondaryLabel {
+            color: $content-presentation-state-disabled;
+        }
+    }
+}
+
+
+.as-child {
+    color: inherit !important;
+    transition: inherit;
+}
+
+.child-dir-vertical-reverse {
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.child-dir-vertical {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.child-dir-horizontal {
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+
+.glare-label-System-Style {
+    .label {
+        color: $content-system-global-primary !important;
+    }
+}

@@ -1,0 +1,64 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../styles/colors/CoreColorSystem/ModeOne/index';
+
+.glare-CheckboxLabel {
+
+
+    .label-container {
+        position: relative;
+        width: 100%;
+        justify-content: flex-start;
+
+        .label {
+            height: 100%;
+        }
+    }
+
+    .glare-CheckboxLabel-input {
+        display: flex;
+
+        border-radius: 3px;
+        border: 1px solid $border-presentation-action-primary;
+        background: $background-presentation-action-borderstyle;
+        outline: none;
+        transition: all 300ms ease-in-out;
+
+        &:hover {
+            border: 1px solid $border-presentation-action-active;
+        }
+
+        &:checked {
+            background: $blue-sparkle-600;
+            box-shadow: unset;
+        }
+
+        &:focus {
+            border: 1px solid $border-presentation-state-focus;
+        }
+
+        &:active {
+            border: 1px solid $border-presentation-state-focus;
+        }
+
+        &:disabled {
+            border: 1px solid $border-presentation-action-disabled;
+            background: $background-presentation-action-disabled;
+        }
+    }
+}
+
+
+.glare-CheckboxLabel-input-S {
+    width: 14px;
+    height: 14px;
+}
+
+.glare-CheckboxLabel-input-M {
+    width: 16px;
+    height: 16px;
+}
+
+.glare-CheckboxLabel-input-L {
+    width: 16px;
+    height: 16px;
+}

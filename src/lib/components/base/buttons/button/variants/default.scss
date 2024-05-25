@@ -1,0 +1,131 @@
+@import '../../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../../styles/typography/index.scss';
+
+
+.glare-button {
+
+    height: 26px;
+    color: $content-presentation-action-light-primary;
+    border-radius: 4px;
+    background-color: $background-presentation-action-secondary;
+    display: flex;
+    padding: 2px 6px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    transition: all 300ms ease-in-out;
+
+    .glare-button-icon {
+        width: 16px;
+        color: $content-presentation-action-light-primary;
+
+        i {
+            transition: all 300ms ease-in-out;
+        }
+    }
+
+    .glare-button-loading-img {
+        display: none;
+        width: 12px;
+    }
+
+
+    &:hover {
+        background-color: $background-presentation-action-hover;
+        color: $content-presentation-action-hover;
+
+        .glare-button-icon {
+            color: $content-presentation-action-hover;
+        }
+    }
+
+
+    &:focus {
+        outline: 1.5px solid $border-presentation-state-focus;
+        background: $background-presentation-action-secondary;
+        color: $content-presentation-action-light-primary;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary;
+        }
+    }
+
+    &:active {
+        outline: 1.5px solid $border-presentation-state-focus;
+        background: $background-presentation-action-secondary;
+        color: $content-presentation-action-light-primary;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary;
+        }
+    }
+
+    &:disabled {
+        background: $background-presentation-action-disabled;
+        color: $content-presentation-state-disabled;
+        @include Body-typography-Large-Medium;
+
+        .glare-button-icon {
+            color: $content-presentation-state-disabled;
+        }
+
+        &:hover {
+            background: $background-presentation-action-disabled;
+            color: $content-presentation-state-disabled;
+            outline: none;
+
+            .glare-button-icon {
+                color: $content-presentation-state-disabled;
+            }
+        }
+    }
+}
+
+
+
+/* loading style */
+
+.glare-button-loading {
+    background-color: $background-presentation-action-hover;
+    color: white;
+
+    .glare-button-loading-img {
+        display: block;
+        animation: spin 1.5s infinite linear;
+    }
+
+    &:hover {
+        background-color: $background-presentation-action-hover;
+        color: white;
+        outline: none;
+    }
+
+    &:focus {
+        outline: none;
+        background-color: $background-presentation-action-hover;
+        color: white;
+    }
+
+    &:active {
+        outline: none;
+        background-color: $background-presentation-action-hover;
+        color: white;
+    }
+}
+
+
+@keyframes spin {
+
+    0% {
+        transform: rotate(-360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+
+}
+
+
+@import './variants';

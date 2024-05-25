@@ -1,0 +1,92 @@
+@import '../../../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../../../styles/typography/index.scss';
+
+.glare-table-label {
+    width: 100%;
+    transition: all 200ms ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+
+    .glare-table-label-main-label {
+        color: $content-presentation-global-primary;
+        transition: inherit
+    }
+
+    .glare-table-label-second-label {
+        color: $black-alpha-50;
+    }
+}
+
+.glare-table-label-SemiBold-S,
+.glare-table-label-Regular-S,
+.glare-table-label-SemiBold-M,
+.glare-table-label-Regular-M,
+.glare-table-label-SemiBold-L,
+.glare-table-label-Regular-L {
+    .glare-table-label-second-label {
+        @include Body-typography-Small-Regular;
+    }
+}
+
+
+.glare-table-label-SemiBold-S {
+
+    .glare-table-label-main-label {
+        @include Body-typography-Small-SemiBold;
+    }
+}
+
+.glare-table-label-Regular-S {
+    .glare-table-label-main-label {
+        @include Body-typography-Small-Regular;
+    }
+}
+
+.glare-table-label-SemiBold-M {
+    .glare-table-label-main-label {
+        @include Body-typography-Medium-SemiBold;
+    }
+}
+
+.glare-table-label-Regular-M {
+    .glare-table-label-main-label {
+        @include Body-typography-Medium-Regular;
+    }
+}
+
+.glare-table-label-SemiBold-L {
+    .glare-table-label-main-label {
+        @include Body-typography-Medium-SemiBold;
+    }
+}
+
+.glare-table-label-Regular-L {
+    .glare-table-label-main-label {
+        @include Body-typography-Medium-Regular;
+    }
+}
+
+
+
+.glare-table-label-disabled {
+    .glare-table-label-main-label {
+        color: $black-alpha-50;
+    }
+}
+
+
+
+
+.glare-table-label-start {
+    text-align: start;
+}
+
+.glare-table-label-center {
+    text-align: center;
+}
+
+.glare-table-label-end {
+    text-align: end;
+}

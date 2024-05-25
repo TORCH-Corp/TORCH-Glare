@@ -1,0 +1,280 @@
+@import '../../../../../../styles/colors/MappingColorSystem/index';
+
+.TableIconCell {
+    background-color: transparent;
+
+    i {
+        opacity: 0;
+        color: $background-presentation-action-hover;
+    }
+
+    &:hover {
+        background-color: transparent !important;
+
+        i {
+            // color: white; 
+            opacity: 1;
+        }
+    }
+
+    &:focus {
+        background-color: transparent !important;
+        outline: none;
+
+        i {
+            opacity: 1;
+        }
+    }
+
+    &:active {
+        background-color: transparent !important;
+        outline: none;
+
+        i {
+            opacity: 1;
+        }
+    }
+}
+
+.TableIconCell-For-SubTable {
+
+    background-color: transparent;
+
+    .glare-button-icon {
+        transition: all 250ms ease-in-out;
+
+        i {
+            opacity: 0;
+        }
+    }
+
+    &:hover {
+        background-color: $background-presentation-action-hover !important;
+
+        .glare-button-icon {
+            transform: rotate(90deg) !important;
+            transition: all 250ms ease-in-out;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:focus {
+        background-color: $background-presentation-state-information-primary !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:active {
+        background-color: $background-presentation-state-information-primary !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+}
+
+
+
+.show-TableIconCell {
+    i {
+        // color: white; 
+        opacity: 1 !important;
+    }
+}
+
+
+.TableIconCell-subTable-active {
+
+    background-color: $background-presentation-action-hover !important;
+    outline: none;
+
+    .glare-button-icon {
+        transform: rotate(-90deg) !important;
+
+        i {
+            color: white !important;
+            opacity: 1 !important;
+        }
+    }
+
+
+    &:hover {
+        background-color: $background-presentation-action-hover !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(-90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:focus {
+        background-color: $background-presentation-action-hover !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(-90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:active {
+        background-color: $background-presentation-action-hover !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(-90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+}
+
+
+
+/* RTL */
+
+.TableIconCell-For-SubTable-RTL {
+
+    background-color: transparent;
+
+    .glare-button-icon {
+        transition: all 250ms ease-in-out;
+
+        i {
+            opacity: 0;
+        }
+    }
+
+    &:hover {
+        background-color: $background-presentation-action-hover !important;
+
+        .glare-button-icon {
+            transform: rotate(-90deg) !important;
+            transition: all 250ms ease-in-out;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:focus {
+        background-color: $background-presentation-state-information-primary !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(-90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:active {
+        background-color: $background-presentation-state-information-primary !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(-90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+}
+
+
+.TableIconCell-subTable-active-RTL {
+
+    background-color: $background-presentation-action-hover !important;
+    outline: none;
+
+    .glare-button-icon {
+        transform: rotate(90deg) !important;
+
+        i {
+            color: white !important;
+            opacity: 1 !important;
+        }
+    }
+
+
+    &:hover {
+        background-color: $background-presentation-action-hover !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:focus {
+        background-color: $background-presentation-action-hover !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+    &:active {
+        background-color: $background-presentation-action-hover !important;
+        outline: none;
+
+        .glare-button-icon {
+            transform: rotate(90deg) !important;
+
+            i {
+                color: white !important;
+                opacity: 1 !important;
+            }
+        }
+    }
+
+}

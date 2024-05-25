@@ -1,0 +1,181 @@
+@import '../../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../../styles/typography/index.scss';
+
+/* Secondary Style */
+
+.BlueSecStyle {
+    &:hover {
+        background: $background-presentation-state-information-primary ;
+    }
+}
+
+.YelSecStyle {
+    &:hover {
+        background: $background-presentation-state-warning-primary ;
+        color: $content-presentation-action-light-primary !important;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+
+
+}
+
+.RedSecStyle {
+    &:hover {
+        background: $background-presentation-state-negative-primary ;
+    }
+}
+
+
+.RedSecStyle,
+.YelSecStyle,
+.BlueSecStyle {
+
+
+    &:hover {
+        color: $content-presentation-action-hover;
+    }
+
+    &:focus {
+        color: $content-presentation-action-light-primary ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+
+    &:active {
+        color: $content-presentation-action-light-primary ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+}
+
+
+.BorderStyle {
+    outline: 1px solid $border-presentation-action-disabled ;
+    background: $background-presentation-action-borderstyle ;
+}
+
+
+/* Content Style */
+
+.PrimeContStyle {
+    outline: unset;
+    background-color: transparent;
+    color: $content-presentation-action-light-primary;
+
+    &:hover {
+        background-color: $background-presentation-action-hovercontstyle ;
+        color: $content-presentation-action-light-primary ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+
+    &:focus {
+        background-color: $background-presentation-action-hovercontstyle ;
+        color: $content-presentation-action-light-primary ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+}
+
+.BlueContStyle {
+    outline: unset;
+    background: transparent;
+    color: $content-presentation-action-light-primary;
+
+    &:hover {
+        background-color: $background-presentation-action-hovercontstyle ;
+        color: $content-presentation-action-hover-information;
+
+        .glare-button-icon {
+            color: $content-presentation-action-hover-information;
+        }
+    }
+
+    &:focus {
+        background-color: $background-presentation-action-hovercontstyle ;
+        color: $content-presentation-action-light-primary ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+
+    &:active {
+        background-color: $background-presentation-action-hovercontstyle ;
+        color: $content-presentation-action-light-primary ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+
+}
+
+.RedContStyle {
+    outline: unset;
+    background: transparent;
+    color: $content-presentation-action-light-primary;
+
+    &:hover {
+        background-color: $background-presentation-action-hovercontstyle ;
+        color: $content-presentation-action-hover-negative ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-hover-negative ;
+        }
+    }
+
+    &:focus {
+        background-color: $background-presentation-action-hovercontstyle ;
+        color: $content-presentation-action-light-primary ;
+
+        .glare-button-icon {
+            color: $content-presentation-action-light-primary ;
+        }
+    }
+}
+
+
+/* sizes */
+
+.glare-button-S {
+    @include Body-typography-Small-Medium;
+    height: 22px;
+}
+
+.glare-button-M {
+    @include Body-typography-Medium-Medium;
+    height: 26px;
+}
+
+.glare-button-L {
+    @include Body-typography-Large-Medium;
+    height: 28px;
+}
+
+
+.glare-button-without-icon-S {
+    padding: 0;
+    width: 24px;
+}
+
+.glare-button-without-icon-M {
+    padding: 0;
+    width: 28px;
+}
+
+.glare-button-without-icon-L {
+    padding: 0;
+    width: 30px;
+}

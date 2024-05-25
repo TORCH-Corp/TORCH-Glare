@@ -1,0 +1,72 @@
+.glare-CellSizingLine {
+    position: relative;
+    width: 8px;
+    border: none;
+    background-color: none;
+    user-select: none;
+    cursor: e-resize;
+
+    .glare-CellSizingLine-def-none-sizing {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        transition: all 300ms ease-in-out;
+    }
+
+    .glare-CellSizingLine-def {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        transition: all 300ms ease-in-out;
+    }
+
+    .glare-CellSizingLine-active {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: all 300ms ease-in-out;
+    }
+
+    &:hover {
+        .glare-CellSizingLine-active {
+            opacity: 1;
+        }
+
+        .glare-CellSizingLine-def {
+            opacity: 0;
+        }
+    }
+
+
+    &:focus {
+        .glare-CellSizingLine-active {
+            opacity: 1;
+        }
+
+        .glare-CellSizingLine-def {
+            opacity: 0;
+        }
+    }
+
+    &:active {
+        .glare-CellSizingLine-active {
+            opacity: 1;
+        }
+
+        .glare-CellSizingLine-def {
+            opacity: 0;
+        }
+    }
+}
+
+
+
+.none-sizing {
+    cursor: unset;
+}

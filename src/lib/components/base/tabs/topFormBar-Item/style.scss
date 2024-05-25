@@ -1,0 +1,33 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../styles/typography/index.scss';
+
+.TopFormBarItem {
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: 0px 24px 0px 24px;
+    height: 28px;
+    color: $content-presentation-global-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all 300ms ease-in-out;
+
+    &:hover {
+        background-color: $background-presentation-tab-acton-hover;
+    }
+
+    &:focus {
+        outline: 1px solid $border-presentation-tab-action-selected;
+        background: $background-presentation-tab-action-selected;
+        color: $content-presentation-tab-action-selected;
+    }
+
+    &:active {
+        outline: 1px solid $border-presentation-tab-action-selected;
+        background: $background-presentation-tab-action-selected;
+        color: $content-presentation-tab-action-selected;
+    }
+}
