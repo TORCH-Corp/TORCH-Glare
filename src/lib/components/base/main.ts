@@ -22,6 +22,7 @@ import { TableLabel } from "./tables/components/ui/tableLabel"
 import { TableSort } from "./tables/components/ui/tableSort"
 import { Table } from "./tables/table"
 import { TableCellContainer } from "./tables/table/components/tableCellContainer"
+import { LinkButton } from "./buttons/LinkButton"
 
 
 export {
@@ -48,5 +49,6 @@ export {
     TableIconCell,
     TableCell,
     Table,
-    TableCellContainer
+    TableCellContainer,
+    LinkButton
 }

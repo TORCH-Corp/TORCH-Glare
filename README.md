@@ -43,7 +43,6 @@ const App = () => {
 export default App;
 ```
 
-
 ## Contributing
 
 We welcome contributions to enhance the library! To contribute, please follow these steps:

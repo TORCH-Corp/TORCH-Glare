@@ -1,0 +1,150 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../styles/typography/index.scss';
+
+.glare-link-button {
+    width: fit-content;
+    color: $content-presentation-action-link;
+    border-radius: 6px;
+    background-color: $background-presentation-action-link-primary;
+    outline: none;
+    border: none;
+    padding: 0 3px;
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 250ms ease-in-out;
+
+    &:hover {
+        background-color: $background-presentation-action-link-hover;
+        padding: 0 2px;
+
+        .link-button-arrow-container {
+            opacity: 1;
+            padding: 3px;
+
+            img {
+                display: block;
+            }
+        }
+
+    }
+
+    .link-button-arrow-container {
+        width: 0px;
+        border-radius: 4px;
+        background: $background-presentation-state-information-primary;
+        padding: 0px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        opacity: 0;
+        overflow: hidden;
+        transition: all 150ms ease-in-out;
+
+        img {
+            transition: all 250ms ease-in-out;
+        }
+    }
+}
+
+
+
+
+/* sizes */
+.glare-link-button-size-S {
+    height: 24px;
+    @include Body-typography-Small-SemiBold;
+
+    &:hover {
+        .link-button-arrow-container {
+            width: 20px;
+
+            img {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+    }
+
+    .link-button-arrow-container {
+        width: 0px;
+        height: 20px;
+
+        img {
+            width: 0px;
+            height: 0px;
+        }
+    }
+}
+
+
+
+.glare-link-button-size-M {
+    height: 26px;
+    @include Body-typography-Medium-SemiBold;
+
+
+    &:hover {
+        .link-button-arrow-container {
+            width: 22px;
+
+            img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+    }
+
+    .link-button-arrow-container {
+        width: 0px;
+        height: 22px;
+
+        img {
+            width: 0px;
+            height: 0px;
+        }
+    }
+}
+
+
+
+
+.glare-link-button-size-L {
+    height: 26px;
+    @include Body-typography-Medium-SemiBold;
+
+
+    &:hover {
+        .link-button-arrow-container {
+            width: 22px;
+
+            img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+    }
+
+    .link-button-arrow-container {
+        width: 0px;
+        height: 22px;
+
+        img {
+            width: 0px;
+            height: 0px;
+        }
+    }
+}
+
+.link-button-reverse {
+    img {
+        transform: rotate(-90deg);
+    }
+
+
+}
