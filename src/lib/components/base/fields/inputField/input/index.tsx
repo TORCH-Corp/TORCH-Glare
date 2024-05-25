@@ -1,9 +1,9 @@
 import { InputHTMLAttributes, ReactNode, useRef } from 'react'
 import './style.scss'
 import Button from '../../../buttons/button'
-import { DynamicContainer } from '../../../../../../../lib/Glare/components/helpers'
+import { DynamicContainer } from '../../../../../components/helpers'
 import { useStates } from './hooks/useStates'
-import { useShowDropDown } from '../../../../../../../lib/Glare/hooks/useShowDropDown'
+import { useShowDropDown } from '../../../../../hooks/useShowDropDown'
 import Tooltip from '../../../tooltips/tooltip'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {

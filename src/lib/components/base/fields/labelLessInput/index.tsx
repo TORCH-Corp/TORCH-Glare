@@ -1,9 +1,9 @@
 import { ChangeEvent, InputHTMLAttributes, ReactNode } from 'react'
 import './style.scss'
 import Button from '../../buttons/button'
-import { DynamicContainer } from '../../../../../../lib/Glare/components/helpers'
+import { DynamicContainer } from '../../../../components/helpers'
 import { useStates } from './hooks/useStates'
-import { useShowDropDown } from '../../../../../../lib/Glare/hooks/useShowDropDown'
+import { useShowDropDown } from '../../../../hooks/useShowDropDown'
 import { InputLabel } from './inputLabel'
 import { Tooltip } from '../../main'
 

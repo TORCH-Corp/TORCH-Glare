@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "./react-datepicker.scss";
 

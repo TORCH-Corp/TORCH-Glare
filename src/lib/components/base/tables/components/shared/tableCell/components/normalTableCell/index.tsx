@@ -29,8 +29,8 @@ export const NormalTableCell = (props: Props) => {
             {
                 props.component_type == 'input-date-picker' &&
                 <Datepicker
-                    style='presentation'
-                    size={props.component_size}
+                    component_style='presentation'
+                    component_size={props.component_size}
                     name={props.name}
                     placeholder="dd/MM/yyyy"
                     onChange={props.onDateChange}
