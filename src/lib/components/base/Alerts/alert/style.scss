@@ -1,0 +1,70 @@
+@import '../../../../styles/colors/MappingColorSystem/index';
+@import '../../../../styles/typography/index.scss';
+
+.glare-alert {
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 4px;
+    height: 26px;
+    width: fit-content;
+
+    .glare-alert-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: var(--Radius-2-max, 4px);
+        font-size: 18px;
+    }
+
+    .glare-alert-label {
+        padding: 0 4px;
+        @include Body-typography-Small-Regular;
+        color: $content-presentation-global-primary;
+    }
+}
+
+
+
+
+
+/* variants */
+
+.glare-alert-Info-state {
+    background-color: $background-presentation-state-information-secondary;
+
+    .glare-alert-icon-wrapper {
+        background: $background-presentation-state-information-primary;
+        color: white;
+    }
+}
+
+.glare-alert-Warning-state {
+    background-color: $background-presentation-state-warning-secondary;
+
+    .glare-alert-icon-wrapper {
+        background: $background-presentation-state-warning-primary;
+        color: $background-presentation-state-warning-secondary;
+    }
+}
+
+.glare-alert-Error-state {
+    background-color: $background-presentation-state-negative-secondary;
+
+    .glare-alert-icon-wrapper {
+        background: $background-presentation-state-negative-primary;
+        color: white;
+    }
+}
+
+.glare-alert-Success-state {
+    background-color: $background-presentation-state-success-secondary;
+
+    .glare-alert-icon-wrapper {
+        background: $background-presentation-state-success-primary;
+        color: white;
+    }
+}
