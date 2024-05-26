@@ -2,7 +2,6 @@ import { Label, Button, TopFormBarItem, SideFormBarItem, Badge, DropDownMenuItem
 import { UseDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hooks";
 
 export {
-    /* components */
     Label,
     Button,
     TopFormBarItem,
@@ -31,8 +30,6 @@ export {
     DropDownButton,
     DropDownButtonResultShow,
     Alert,
-
-
 
     /* hooks */
     UseDirectionCalc,
