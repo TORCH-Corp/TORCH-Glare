@@ -1,4 +1,4 @@
-import { Label, Button, TopFormBarItem, SideFormBarItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer } from "./lib/main";
+import { Label, Button, TopFormBarItem, SideFormBarItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, DropDownButton, DropDownButtonResultShow, Alert } from "./lib/main";
 
 export {
     Label,
@@ -24,5 +24,8 @@ export {
     TableIconCell,
     TableCell,
     Table,
-    TableCellContainer
+    TableCellContainer,
+    DropDownButton,
+    DropDownButtonResultShow,
+    Alert
 }
