@@ -1,10 +1,10 @@
-import { InputHTMLAttributes, ReactNode, useRef } from "react"
+import { HTMLAttributes, ReactNode, useRef } from "react"
 import './style.scss'
 import { Button } from "../../main"
 import { useShowDropDown } from "../../../../hooks/useShowDropDown"
 import { DynamicContainer } from "../../../helpers"
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props extends HTMLAttributes<HTMLDivElement> {
     component_size?: "S" | "M" | "L"
     component_label: string
     drop_down_list_child: ReactNode
