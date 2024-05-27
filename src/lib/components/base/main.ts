@@ -25,10 +25,10 @@ import { TableCellContainer } from "./tables/table/components/tableCellContainer
 import { LinkButton } from "./buttons/LinkButton"
 import { DropDownButton } from "./dropDowns/dropDownButton"
 import { DropDownButtonResultShow } from "./dropDowns/dropDownButtonResultShow"
-import Alert from "./Alerts/alert"
+import Alert from "./alerts/alert"
 import { RadioLabel } from "./radio/radioLabel"
 import RingLoading from "./loading/ringLoading"
-
+import Counter from "./counters/counter"
 
 
 export {
@@ -61,5 +61,6 @@ export {
     DropDownButtonResultShow,
     Alert,
     RadioLabel,
-    RingLoading
+    RingLoading,
+    Counter
 }
