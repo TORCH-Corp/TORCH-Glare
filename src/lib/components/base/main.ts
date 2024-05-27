@@ -26,6 +26,8 @@ import { LinkButton } from "./buttons/LinkButton"
 import { DropDownButton } from "./dropDowns/dropDownButton"
 import { DropDownButtonResultShow } from "./dropDowns/dropDownButtonResultShow"
 import Alert from "./Alerts/alert"
+import { RadioLabel } from "./radio/radioLabel"
+import RingLoading from "./loading/ringLoading"
 
 
 
@@ -57,5 +59,7 @@ export {
     LinkButton,
     DropDownButton,
     DropDownButtonResultShow,
-    Alert
+    Alert,
+    RadioLabel,
+    RingLoading
 }

@@ -1,4 +1,4 @@
-import { Label, Button, TopFormBarItem, SideFormBarItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow } from "./components/base/main";
+import { Label, Button, TopFormBarItem, SideFormBarItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow, RadioLabel, RingLoading } from "./components/base/main";
 import { UseDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hooks";
 
 export {
@@ -30,6 +30,8 @@ export {
     DropDownButton,
     DropDownButtonResultShow,
     Alert,
+    RadioLabel,
+    RingLoading,
 
     /* hooks */
     UseDirectionCalc,
