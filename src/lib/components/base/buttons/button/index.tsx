@@ -15,12 +15,12 @@ export default function Button(props: Props) {
   return (
     <button
       {...props}
-      className={`glare-button  glare-button-${props.component_size ? props.component_size : "S"}  glare-button-without-icon-${!props.children && props.component_size}  ${props.is_loading ? "glare-button-loading" : ''} ${props.component_style} ${props.className}`}
+      className={`glare-button  glare-button-${props.component_size ? props.component_size : "S"}  glare-button-without-icon-${!props.children && props.component_size}  ${props.is_loading && !props.right_icon && !props.left_icon ? "glare-button-loading" : ''} ${props.component_style} ${props.className}`}
     >
       {props.left_icon && !props.is_loading ? <div className='glare-button-icon'>{props.left_icon}</div> : null}
       {props.children}
       {props.right_icon && !props.is_loading ? <div className='glare-button-icon'>{props.right_icon}</div> : null}
-      <img className='glare-button-loading-img' src={loadingIcon} alt='loading' />
+      < img className='glare-button-loading-img' src={loadingIcon} alt='loading' />
     </button>
   )
 }

@@ -1,10 +1,10 @@
-import { Alert } from "./main"
+import { Button } from "./main"
 
 function App() {
 
   return (
     <>
-      <Alert component_label={"Label"} component_state={"Info"} />
+      <Button component_style='BlueSecStyle' >Label</Button>
     </>
   )
 }
