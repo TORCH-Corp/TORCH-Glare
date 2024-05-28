@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
 import DropdownMenu from '.';
 
-describe('Alert component', () => {
+describe('DropdownMenu component', () => {
 
     it('renders the component label', () => {
         render(<DropdownMenu data-testid='dropdown' />);

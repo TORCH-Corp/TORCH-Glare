@@ -22,6 +22,7 @@ export default function DropDownMenuItem(props: Props) {
         props.component_type ?
             // checkbox or radio button
             <DropDownMenuItemInput
+                {...props}
                 component_name={props.element_name}
                 input_type={props.component_type}
                 label={props.component_label}
@@ -30,7 +31,6 @@ export default function DropDownMenuItem(props: Props) {
                 component_style={props.component_style}
                 disabled={props.disabled}
                 component_size={props.component_size}
-                {...props}
             />
             :
             // for normal style
