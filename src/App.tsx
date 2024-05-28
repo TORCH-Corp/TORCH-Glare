@@ -1,10 +1,10 @@
-import { InputField } from "./main"
+import { Alert } from "./main"
 
 function App() {
 
   return (
     <>
-      <InputField name={""} />
+      <Alert component_label={"Label"} component_state={"Info"} />
     </>
   )
 }

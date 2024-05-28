@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
@@ -5,6 +6,7 @@ import { libInjectCss } from 'vite-plugin-lib-inject-css';
 import { extname, relative, resolve } from 'path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'glob';
+import { defineConfig as defineVitestConfig } from 'vitest/config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,6 +15,11 @@ export default defineConfig({
     dts({ include: ['src/lib'] }),
     libInjectCss(),
   ],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './test/setup.ts', // assuming the test folder is in the root of our project
+  },
   css: {
     preprocessorOptions: {
       scss: {
@@ -50,3 +57,4 @@ export default defineConfig({
     },
   },
 });
+
