@@ -1,13 +1,14 @@
-import { LinkButton } from "./lib/main"
+import { Datepicker, DropDownButton, DropDownMenu } from "./lib/main"
 
 function App() {
 
   return (
     <>
-      <LinkButton
-        component_size="M"
-        dir='rtl'
-      >Label</LinkButton>
+      <DropDownButton component_label={'Label'}
+        drop_down_list_child={
+          <DropDownMenu data-testid="dropdown">
+            dropdown item
+          </DropDownMenu>} />
     </>
   )
 }
