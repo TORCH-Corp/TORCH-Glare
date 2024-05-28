@@ -1,10 +1,13 @@
-import { Button } from "./main"
+import { LinkButton } from "./lib/main"
 
 function App() {
 
   return (
     <>
-      <Button component_style='BlueSecStyle' >Label</Button>
+      <LinkButton
+        component_size="M"
+        dir='rtl'
+      >Label</LinkButton>
     </>
   )
 }
