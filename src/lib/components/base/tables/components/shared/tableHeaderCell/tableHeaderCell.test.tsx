@@ -1,17 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
-import { TableCell } from '.';
+import { TableHeaderCell } from '.';
 
-describe('TableCell component', () => {
+describe('TableHeaderCell component', () => {
     it('renders the component', () => {
-        render(<TableCell
+        render(<TableHeaderCell
             data-testid='test'
-            component_size={'S'}
-            name={''}
-            cellLabel={''}
-            component_type={'Item Style'}
-        />);
+            component_size={'S'} label={''} id={''} />);
         expect(screen.getByTestId('test')).toBeVisible();
     });
 
