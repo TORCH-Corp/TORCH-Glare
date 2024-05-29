@@ -15,6 +15,7 @@ export default function ActionBarInputField(props: Props) {
         <section className="glare-action-bar-InputField">
             <section className="glare-action-bar-InputField-wrapper">
                 <InputField
+                    {...props}
                     drop_down={true}
                     component_size="M"
                     name={props.name}

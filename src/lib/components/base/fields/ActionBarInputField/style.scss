@@ -19,4 +19,19 @@
         gap: 4px;
         margin: 0 4px;
     }
+
+    .glare-input-field-wrapper {
+        padding: 0 4px;
+
+        .glare-button {
+            width: 32px;
+            height: 32px;
+
+            .glare-button-icon {
+                width: 26px;
+                font-size: 26px;
+            }
+        }
+    }
+
 }
