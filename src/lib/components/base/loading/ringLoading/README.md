@@ -16,7 +16,6 @@ React an HTML div with svg loading img rotates, you can but anything inside in t
   >
   {children}
   </RingLoading>
-
 ```
 
 
