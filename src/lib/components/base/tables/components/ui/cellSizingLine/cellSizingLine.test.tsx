@@ -1,13 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
-import { NoteInputField } from '.';
+import { CellSizingLine } from '.';
 
-describe('NoteInputField component', () => {
-    it('render the component', () => {
-        render(<NoteInputField data-testid='test' name={''} label={''} />);
+describe('CellSizingLine component', () => {
+    it('renders the component', () => {
+        render(<CellSizingLine data-testid='test' />);
         expect(screen.getByTestId('test')).toBeVisible();
     });
-
 });
-

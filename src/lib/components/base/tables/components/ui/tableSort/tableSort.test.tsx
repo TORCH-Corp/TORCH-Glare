@@ -1,13 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
-import { NoteInputField } from '.';
+import { TableSort } from '.';
 
-describe('NoteInputField component', () => {
-    it('render the component', () => {
-        render(<NoteInputField data-testid='test' name={''} label={''} />);
+describe('TableSort component', () => {
+    it('renders the component', () => {
+        render(<TableSort data-testid='test' component_size={'S'} sort_direction={'UP'} />);
         expect(screen.getByTestId('test')).toBeVisible();
     });
-
 });
-

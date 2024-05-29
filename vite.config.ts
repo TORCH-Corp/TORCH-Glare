@@ -53,7 +53,8 @@ export default defineConfig({
     },
     lib: {
       entry: resolve(__dirname, 'src/lib/main.ts'),
-      formats: ['es']
+      formats: ['es'],
+      name: 'TorchGlare'
     },
   },
 });

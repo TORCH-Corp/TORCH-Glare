@@ -23,7 +23,7 @@ export const NormalTableCell = (props: Props) => {
 
 
             {
-                <TableLabel label={props.cellLabel} style={{ padding: "0 8px" }} component_size={props.component_size || "S"} typo_size='SemiBold' />
+                <TableLabel  {...props} label={props.cellLabel} style={{ padding: "0 8px" }} component_size={props.component_size || "S"} typo_size='SemiBold' />
             }
 
             {
@@ -77,7 +77,7 @@ export const NormalTableCell = (props: Props) => {
 
             {
                 props.component_type == 'Label-Buttons' &&
-                <ButtonField>
+                <ButtonField  {...props}>
                     {props.buttons_or_labels_children}
                 </ButtonField>
             }

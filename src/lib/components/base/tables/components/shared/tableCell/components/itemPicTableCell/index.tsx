@@ -15,7 +15,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 export const ItemPicTableCell = (props: Props) => {
     return (
         <td>
-            <section className='glare-table-cell-label-and-icon-container'>
+            <section {...props} className='glare-table-cell-label-and-icon-container'>
                 {props.cell_icon && <ItemPic src={props.cell_icon} alt='table cell icon' component_size={props.component_size} />}
 
                 {

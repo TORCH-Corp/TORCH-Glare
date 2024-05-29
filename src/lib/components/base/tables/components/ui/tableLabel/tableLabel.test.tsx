@@ -1,13 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
-import { NoteInputField } from '.';
+import { TableLabel } from '.';
 
-describe('NoteInputField component', () => {
-    it('render the component', () => {
-        render(<NoteInputField data-testid='test' name={''} label={''} />);
+describe('TableLabel component', () => {
+    it('renders the component', () => {
+        render(<TableLabel data-testid='test' component_size={'S'} typo_size={'SemiBold'} />);
         expect(screen.getByTestId('test')).toBeVisible();
     });
-
 });
-
