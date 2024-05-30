@@ -33,7 +33,7 @@ export function Input(props: Props) {
                 inputRef.current.focus()
             }}
             ref={sectionRef}
-            className={`glare-input-field-wrapper ${style}`}>
+            className={`glare-input-field-wrapper ${style} ${props.className}`}>
 
             <section className='glare-input-field-inner-wrapper'>
                 {props.left_side_icon && <span className="glare-input-icon">{props.left_side_icon}</span>}

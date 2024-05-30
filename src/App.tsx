@@ -4,7 +4,7 @@ function App() {
 
   return (
     <section className='app' >
-      <InputField name={""} theme='System-Style' component_size='L' error_message="Email is Required" />
+      <InputField className="test" label="Label" name={""} theme='System-Style' component_size='L' error_message="Email is Required" />
     </section >
   )
 }

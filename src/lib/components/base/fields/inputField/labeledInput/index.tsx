@@ -23,6 +23,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
 export function LabeledInput(props: Props) {
     return (
         <Label
+            className={props.className}
             label={props.label}
             secondary_label={props.secondary_label}
             name={props.name}
