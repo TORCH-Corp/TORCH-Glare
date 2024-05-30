@@ -28,7 +28,8 @@
   "include": [
     "src",
     "src/lib",
-    "./test/setup.ts "
+    "./test/setup.ts ",
+    "test/index.ts"
   ],
   "references": [
     {

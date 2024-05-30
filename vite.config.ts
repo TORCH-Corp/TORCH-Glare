@@ -8,7 +8,6 @@ import { fileURLToPath } from 'node:url';
 import { glob } from 'glob';
 import { defineConfig as defineVitestConfig } from 'vitest/config';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -18,12 +17,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: './test/setup.ts', // assuming the test folder is in the root of our project
+    setupFiles: './test/setup.ts',
   },
   css: {
     preprocessorOptions: {
       scss: {
-        // Additional SCSS options if needed
       },
     },
   },
@@ -34,12 +32,10 @@ export default defineConfig({
         glob.sync('src/lib/**/*.{ts,tsx}', {
           ignore: ["src/lib/**/*.d.ts"],
         }).map(file => [
-          // The name of the entry point
           relative(
             'src/lib',
             file.slice(0, file.length - extname(file).length)
           ),
-          // The absolute path to the entry file
           fileURLToPath(new URL(file, import.meta.url))
         ])
       ),
@@ -52,7 +48,7 @@ export default defineConfig({
       }
     },
     lib: {
-      entry: resolve(__dirname, 'src/lib/main.ts'),
+      entry: resolve(__dirname, 'src/lib/'),
       formats: ['es'],
       name: 'TorchGlare'
     },

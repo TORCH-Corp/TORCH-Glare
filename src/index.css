@@ -8,5 +8,10 @@
 
 body {
     font-family: 'SF-Pro';
-    width: 50%;
+    width: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }

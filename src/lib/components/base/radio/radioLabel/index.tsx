@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, RefObject } from "react"
-import { Label } from "../../../../main"
+import { Label } from "../../../.."
 import './style.scss'
 import useStates from "./hooks/useStates"
 
