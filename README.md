@@ -1,4 +1,4 @@
-# TORCH Glare Components Library 0.0.3
+# TORCH Glare Components Library 0.0.4
 
 Welcome to the **TORCH Glare Components Library**! This library contains a collection of reusable React components that can be used to build user interfaces efficiently. Below, you will find instructions on how to install, use, and contribute to this library.
 
