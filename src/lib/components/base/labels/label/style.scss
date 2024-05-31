@@ -1,6 +1,4 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
-
 
 .glare-label {
 
@@ -18,24 +16,23 @@
         min-height: 10px;
 
         .label {
-            color: $content-presentation-global-primary;
+            color: var(--content-presentation-global-primary);
             @include Body-typography-Small-Regular;
         }
 
         .secondaryLabel {
-            color: $content-presentation-global-secondary;
+            color: var(--content-presentation-global-secondary);
             @include Labels-typography-Small-Regular;
             margin-bottom: 1.5px;
         }
 
         .requiredLabel {
-            color: $content-presentation-state-negative;
+            color: var(--content-presentation-state-negative);
             @include Labels-typography-Small-Medium;
         }
 
     }
 }
-
 
 .S {
     .label-container {
@@ -54,7 +51,6 @@
     }
 }
 
-
 .M {
     .label-container {
         .label {
@@ -72,8 +68,6 @@
         }
     }
 }
-
-
 
 .L {
     .label-container {
@@ -111,19 +105,17 @@
     }
 }
 
-
 .disabled {
     .label-container {
         .label {
-            color: $content-presentation-state-disabled;
+            color: var(--content-presentation-state-disabled);
         }
 
         .secondaryLabel {
-            color: $content-presentation-state-disabled;
+            color: var(--content-presentation-state-disabled);
         }
     }
 }
-
 
 .as-child {
     color: inherit !important;
@@ -148,9 +140,8 @@
     flex-direction: column;
 }
 
-
 .glare-label-System-Style {
     .label {
-        color: $content-system-global-primary !important;
+        color: var(--content-system-global-primary) !important;
     }
 }

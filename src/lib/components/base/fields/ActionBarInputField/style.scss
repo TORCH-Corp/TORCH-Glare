@@ -1,9 +1,7 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
-
 .glare-action-bar-InputField {
     width: 100%;
     border-radius: var(--Radius-2-max, 4px);
-    background-color: $background-presentation-action-secondary;
+    background-color: var(--background-presentation-action-secondary);
 
     .glare-action-bar-InputField-wrapper {
         display: flex;
@@ -33,5 +31,4 @@
             }
         }
     }
-
 }

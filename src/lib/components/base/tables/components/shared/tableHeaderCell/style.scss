@@ -1,7 +1,4 @@
-@import '../../../../../../styles/colors/MappingColorSystem/index';
-
 .glare-TableHeaderCell-wrapper {
-
     position: relative;
 
     .table-header-inner-wrapper {
@@ -10,7 +7,6 @@
         justify-content: center;
         min-width: 200px;
     }
-
 
     .glare-TableHeaderCell-resize-line {
         position: absolute;
@@ -31,18 +27,15 @@
         gap: 8px;
         touch-action: none;
         background-color: transparent;
-        transition: background-color 300ms ease-in-out, color 300ms ease-in-out, ;
-        color: $content-presentation-global-primary;
+        transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+        color: var(--content-presentation-global-primary);
 
         &:hover {
-            background-color: $background-presentation-action-hover;
+            background-color: var(--background-presentation-action-hover);
 
-            p {
-                color: $content-presentation-action-hover ;
-            }
-
+            p,
             span {
-                color: $content-presentation-action-hover ;
+                color: var(--content-presentation-action-hover);
             }
         }
     }
@@ -60,7 +53,6 @@
     height: 32px;
 }
 
-
 .TableHeaderCell-without-sort-button {
     .glare-TableSort {
         display: none;
@@ -70,7 +62,7 @@
         background-color: transparent;
 
         p {
-            color: $content-presentation-global-primary;
+            color: var(--content-presentation-global-primary);
         }
     }
 }

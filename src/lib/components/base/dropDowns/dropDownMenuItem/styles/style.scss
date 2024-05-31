@@ -1,11 +1,10 @@
-@import '../../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../../styles/typography/index.scss';
 
 .dropDownMenuItem {
     padding: 0 12px;
     height: 24px;
     width: 100%;
-    color: $content-presentation-action-light-primary;
+    color: var(--content-presentation-action-light-primary);
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -14,12 +13,11 @@
     white-space: nowrap;
     border-radius: 4px;
     outline: 1px solid transparent;
-    background-color: $white-00;
-        border: none;
+    background-color: var(--white-00);
+    border: none;
     gap: 8px;
     position: relative;
     transition: all 300ms ease-in-out;
-
 
     .dropDownMenuItem-icon {
         font-size: 16px;
@@ -31,40 +29,32 @@
     }
 
     &:hover {
-        background-color: $background-presentation-action-hover ;
-        color: $content-presentation-action-hover;
+        background-color: var(--background-presentation-action-hover);
+        color: var(--content-presentation-action-hover);
     }
 
-    &:focus {
-        outline: 1px solid $border-presentation-action-disabled;
-        background-color: $background-presentation-action-selected;
-        box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.15);
-        color: $content-presentation-action-hover;
-    }
-
+    &:focus,
     &:active {
-        outline: 1px solid $border-presentation-action-disabled;
-        background-color: $background-presentation-action-selected;
+        outline: 1px solid var(--border-presentation-action-disabled);
+        background-color: var(--background-presentation-action-selected);
         box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.15);
-        color: $content-presentation-action-hover;
+        color: var(--content-presentation-action-hover);
     }
 
     &:disabled {
-        outline: 1px solid $border-presentation-action-disabled;
-        background-color: $background-presentation-action-selected;
+        outline: 1px solid var(--border-presentation-action-disabled);
+        background-color: var(--background-presentation-action-selected);
         box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.15);
-        color: $content-presentation-state-disabled;
+        color: var(--content-presentation-state-disabled);
     }
 }
-
 
 .hasRightSideIcon {
     justify-content: space-between !important;
 }
 
 .dropDownMenuItem-icon-right {
-    color: $content-presentation-action-light-primary;
+    color: var(--content-presentation-action-light-primary);
 }
-
 
 @import './variants';

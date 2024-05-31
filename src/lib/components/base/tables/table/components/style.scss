@@ -1,9 +1,5 @@
-@import '../../../../../styles/colors/MappingColorSystem/index';
-
 .glare-table-row {
-
     position: relative;
-
     transition: all 200ms ease-in-out;
     border: 1px solid transparent;
 
@@ -28,22 +24,22 @@
     }
 
     td {
-        border-bottom: 1px solid $border-presentation-global-primary;
-        border-left: 1px solid $border-presentation-global-primary;
-        border-right: 1px solid $border-presentation-global-primary;
+        border-bottom: 1px solid var(--border-presentation-global-primary);
+        border-left: 1px solid var(--border-presentation-global-primary);
+        border-right: 1px solid var(--border-presentation-global-primary);
     }
 }
 
 .table-cell-hovered {
     td {
-        border-bottom: 1px solid $border-presentation-global-primary;
-        border-left: 1px solid $border-presentation-global-primary;
-        border-right: 1px solid $border-presentation-global-primary;
+        border-bottom: 1px solid var(--border-presentation-global-primary);
+        border-left: 1px solid var(--border-presentation-global-primary);
+        border-right: 1px solid var(--border-presentation-global-primary);
     }
 }
 
 .table-cell-checked {
-    border-top: 2px solid $border-presentation-table-selected !important;
-    border-bottom: 2px solid $border-presentation-table-selected !important;
-    background: $background-presentation-table-row-selected !important;
+    border-top: 2px solid var(--border-presentation-table-selected) !important;
+    border-bottom: 2px solid var(--border-presentation-table-selected) !important;
+    background: var(--background-presentation-table-row-selected) !important;
 }

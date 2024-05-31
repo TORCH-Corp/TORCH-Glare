@@ -1,17 +1,16 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 .glare-input-labelLess-field-wrapper {
     width: 100%;
     position: relative;
-    border: 1px solid $border-presentation-action-primary;
+    border: 1px solid var(--border-presentation-action-primary);
     border-radius: var(--Radius-2-max, 4px);
     padding: 2px 3px;
-    background-color: $background-presentation-form-field-primary;
+    background-color: var(--background-presentation-form-field-primary);
     transition: all 150ms ease-in-out;
 
     &:hover {
-        border-color: $border-presentation-action-active;
+        border-color: var(--border-presentation-action-active);
         box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.30);
     }
 
@@ -35,16 +34,16 @@
 
             .glare-input-label-less-field {
                 width: 100%;
-                color: $content-presentation-action-light-primary;
+                color: var(--content-presentation-action-light-primary);
                 border: none;
                 outline: none;
                 transition: all 250ms ease-in-out;
                 background: inherit;
-                caret-color: $content-presentation-action-hover-information !important;
+                caret-color: var(--content-presentation-action-hover-information) !important;
                 @include Body-typography-Small-Regular;
 
                 &::placeholder {
-                    color: $content-presentation-action-light-secondary ;
+                    color: var(--content-presentation-action-light-secondary);
                 }
             }
 
@@ -64,7 +63,7 @@
 
             .glare-input-trailingLabel {
                 @include Labels-typography-Medium-Medium;
-                color: $content-presentation-action-light-primary;
+                color: var(--content-presentation-action-light-primary);
             }
         }
 

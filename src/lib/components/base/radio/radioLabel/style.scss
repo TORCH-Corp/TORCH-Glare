@@ -1,4 +1,3 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 .glare-RadioLabel {
@@ -20,14 +19,14 @@
         border-radius: 50%;
 
         i {
-            color: $border-presentation-state-focus;
+            color: var(--border-presentation-state-focus);
             transform: scale(1.2);
         }
 
         .check-box-icon {
             border-radius: 50%;
-            border: 1px solid $border-presentation-action-primary;
-            background-color: $background-presentation-action-borderstyle;
+            border: 1px solid var(--border-presentation-action-primary);
+            background-color: var(--background-presentation-action-borderstyle);
             transition: all 300ms ease-in-out;
         }
     }
@@ -39,8 +38,8 @@
 
     &:hover {
         .check-box-icon {
-            border: 1px solid $border-presentation-state-focus;
-            background: $blue-sparkle-alpha-15;
+            border: 1px solid var(--border-presentation-state-focus);
+            background: var(--blue-sparkle-alpha-15);
         }
     }
 }
@@ -48,13 +47,13 @@
 
 /* states */
 .glare-RadioLabel-focus {
-    border-color: $border-presentation-state-focus !important;
+    border-color: var(--border-presentation-state-focus) !important;
 }
 
 .glare-RadioLabel-disabled {
     .check-box-icon {
-        border-color: $border-presentation-action-disabled !important;
-        background-color: $background-presentation-action-disabled !important;
+        border-color: var(--border-presentation-action-disabled) !important;
+        background-color: var(--background-presentation-action-disabled) !important;
     }
 }
 

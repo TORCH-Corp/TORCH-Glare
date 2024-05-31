@@ -2,7 +2,6 @@
 @import '../../../../styles/typography/index.scss';
 
 .glare-alert {
-
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -23,48 +22,44 @@
     .glare-alert-label {
         padding: 0 4px;
         @include Body-typography-Small-Regular;
-        color: $content-presentation-global-primary;
+        color: var(--content-presentation-global-primary);
     }
 }
-
-
-
-
 
 /* variants */
 
 .glare-alert-Info-state {
-    background-color: $background-presentation-state-information-secondary;
+    background-color: var(--background-presentation-state-information-secondary);
 
     .glare-alert-icon-wrapper {
-        background: $background-presentation-state-information-primary;
+        background: var(--background-presentation-state-information-primary);
         color: white;
     }
 }
 
 .glare-alert-Warning-state {
-    background-color: $background-presentation-state-warning-secondary;
+    background-color: var(--background-presentation-state-warning-secondary);
 
     .glare-alert-icon-wrapper {
-        background: $background-presentation-state-warning-primary;
-        color: $background-presentation-state-warning-secondary;
+        background: var(--background-presentation-state-warning-primary);
+        color: var(--background-presentation-state-warning-secondary);
     }
 }
 
 .glare-alert-Error-state {
-    background-color: $background-presentation-state-negative-secondary;
+    background-color: var(--background-presentation-state-negative-secondary);
 
     .glare-alert-icon-wrapper {
-        background: $background-presentation-state-negative-primary;
+        background: var(--background-presentation-state-negative-primary);
         color: white;
     }
 }
 
 .glare-alert-Success-state {
-    background-color: $background-presentation-state-success-secondary;
+    background-color: var(--background-presentation-state-success-secondary);
 
     .glare-alert-icon-wrapper {
-        background: $background-presentation-state-success-primary;
+        background: var(--background-presentation-state-success-primary);
         color: white;
     }
 }

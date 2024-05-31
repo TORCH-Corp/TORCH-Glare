@@ -1,4 +1,3 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 
@@ -12,20 +11,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid $border-system-global-primary;
-    background-color: $background-system-body-primary;
+    border: 1px solid var(--border-system-global-primary);
+    background-color: var(--background-system-body-primary);
     transition: border-color 400ms;
 
     &:hover {
-        border-color: $border-system-action-hover-primary !important;
+        border-color: var(--border-system-action-hover-primary) !important;
     }
 
     &:focus {
-        border-color: $border-system-action-hover-primary !important;
+        border-color: var(--border-system-action-hover-primary) !important;
     }
 
     &:active {
-        border-color: $border-system-action-hover-primary !important;
+        border-color: var(--border-system-action-hover-primary) !important;
     }
 }
 

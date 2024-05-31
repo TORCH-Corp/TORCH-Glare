@@ -6,6 +6,10 @@
     margin: 0;
 }
 
+:root {
+    --content-presentation-global-primary: red;
+}
+
 body {
     font-family: 'SF-Pro';
     width: 100%;

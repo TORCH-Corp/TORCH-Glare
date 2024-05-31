@@ -1,8 +1,6 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 .glare-drop-down-button {
-
     width: fit-content;
 
     .glare-drop-down-button-wrapper {
@@ -12,19 +10,18 @@
         gap: 10px;
 
         .glare-drop-down-button-label {
-            color: $content-presentation-action-light-primary;
+            color: var(--content-presentation-action-light-primary);
         }
 
         .glare-button-icon {
             transition: all 250ms ease-in-out;
         }
     }
-
 }
 
 .glare-drop-down-button-icon-flip {
     .glare-button-icon {
-        transform: rotate(180deg)
+        transform: rotate(180deg);
     }
 
     &:focus {
@@ -35,7 +32,6 @@
         outline-color: transparent !important;
     }
 }
-
 
 /* sizes */
 .glare-drop-down-button-size-S {
