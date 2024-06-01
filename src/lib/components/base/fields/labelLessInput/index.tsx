@@ -100,7 +100,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) =
                 </DynamicContainer>
             }
 
-            <Tooltip message={props.error_message || ""} isActive={props.error_message != undefined || false} />
+            <Tooltip message={props.error_message || ""} isActive={props.error_message != undefined || props.error_message != ''} />
         </section>
     )
 });

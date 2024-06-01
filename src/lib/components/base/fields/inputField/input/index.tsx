@@ -83,7 +83,7 @@ export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
                 </DynamicContainer>
             )}
 
-            <Tooltip message={props.error_message || ""} isActive={props.error_message !== ''} />
+            <Tooltip message={props.error_message || ""} isActive={props.error_message !== '' && props.error_message !== undefined} />
         </section>
     );
 });

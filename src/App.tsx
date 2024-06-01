@@ -1,14 +1,13 @@
 import { InputField, LabelLessInput } from "./lib"
-import { useForm, SubmitHandler } from 'react-hook-form';
 
-interface FormData {
+/* interface FormData {
   email: string;
   password: string;
-}
+} */
 
 function App() {
 
-  const {
+  /* const {
     register,
     handleSubmit,
     setError,
@@ -18,18 +17,20 @@ function App() {
   const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
     console.log(data.email, data.password);
   };
-
+ */
   return (
     <section className='app' >
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
+      <form action="" >
         {/* Email Field */}
         <LabelLessInput
-          label={"Label"} {...register('email')} />
+          label={"Label"} name={""}
+          error_message="hey"
+        />
 
         {/* Password Field */}
         <InputField
-          label="Label"
-          {...register('password')}
+          label="Label" name={""}
+          error_message="hey"
         />
 
         <button type="submit" >Submit</button>
