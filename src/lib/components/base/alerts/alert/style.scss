@@ -23,7 +23,7 @@
     .glare-alert-label {
         padding: 0 4px;
         @include Body-typography-Small-Regular;
-        color: $content-presentation-global-primary;
+        color: var(content-presentation-global-primary);
     }
 }
 
