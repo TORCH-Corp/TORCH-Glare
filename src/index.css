@@ -1,5 +1,6 @@
 @import './fonts/fonts.css';
 
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -9,7 +10,7 @@
 body {
     font-family: 'SF-Pro';
     width: 100%;
-    background-color: black;
+    background-color: var(--bg);
     display: flex;
     justify-content: center;
     align-items: center;

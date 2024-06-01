@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactNode } from "react";
+import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { LabeledInput } from "./labeledInput";
 import { Input } from "./input";
 
@@ -20,7 +20,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     theme?: "System-Style" | ""
 }
 
-export function InputField(props: Props) {
+export const InputField = forwardRef<HTMLInputElement, Props>((props, ref) => {
     return (
         props.label ?
             <LabeledInput
@@ -44,6 +44,7 @@ export function InputField(props: Props) {
             :
             <Input
                 {...props}
+                ref={ref}
                 drop_down={props.drop_down}
                 name={props.name}
                 component_size={props.component_size}
@@ -58,6 +59,6 @@ export function InputField(props: Props) {
             />
     )
 }
-
+)
 
 

@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactNode } from "react";
+import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from "react";
 import { InputField } from "../inputField";
 import './style.scss'
 
@@ -10,12 +10,13 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     action_button_children?: ReactNode | ReactNode[]
 }
 
-export default function ActionBarInputField(props: Props) {
+export const ActionBarInputField = forwardRef((props: Props, ref: Ref<HTMLInputElement>) => {
     return (
         <section className="glare-action-bar-InputField">
             <section className="glare-action-bar-InputField-wrapper">
                 <InputField
                     {...props}
+                    ref={ref} // Pass the ref to InputField
                     drop_down={true}
                     component_size="M"
                     name={props.name}
@@ -29,4 +30,5 @@ export default function ActionBarInputField(props: Props) {
             </section>
         </section>
     )
-}
+});
+

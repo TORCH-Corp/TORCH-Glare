@@ -1,10 +1,38 @@
-import { InputField } from "../dist"
+import { useForm, SubmitHandler, } from "react-hook-form";
+import { InputField, LabelLessInput } from "./lib"
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 function App() {
 
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
+    console.log(data.email, data.password);
+  };
+
   return (
     <section className='app' >
-      <InputField className="test" label="Label" name={""} theme='System-Style' component_size='L' error_message="Email is Required" />
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
+        {/* Email Field */}
+        <LabelLessInput
+          label={"Label"} {...register('email')} />
+
+        {/* Password Field */}
+        <InputField
+          {...register('password')}
+        />
+
+        <button type="submit" >Submit</button>
+      </form>
     </section >
   )
 }
