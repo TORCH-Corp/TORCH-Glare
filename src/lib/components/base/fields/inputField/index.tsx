@@ -25,6 +25,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>((props, ref) => {
         props.label ?
             <LabeledInput
                 {...props}
+                ref={ref}
                 name={props.name}
                 label={props.label}
                 required_label={props.required_label}

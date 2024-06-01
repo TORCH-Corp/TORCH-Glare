@@ -1,5 +1,5 @@
-import { useForm, SubmitHandler, } from "react-hook-form";
 import { InputField, LabelLessInput } from "./lib"
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface FormData {
   email: string;
@@ -28,6 +28,7 @@ function App() {
 
         {/* Password Field */}
         <InputField
+          label="Label"
           {...register('password')}
         />
 

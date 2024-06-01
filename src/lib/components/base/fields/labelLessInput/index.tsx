@@ -1,4 +1,4 @@
-import { forwardRef, InputHTMLAttributes, ReactNode, useRef, ChangeEvent, Ref } from 'react'
+import { forwardRef, InputHTMLAttributes, ReactNode, ChangeEvent } from 'react'
 import './style.scss'
 import Button from '../../buttons/button'
 import { DynamicContainer } from '../../../../components/helpers'
