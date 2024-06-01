@@ -1,4 +1,4 @@
-import { ChangeEvent, InputHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, InputHTMLAttributes, ReactNode, useRef, ChangeEvent, Ref } from 'react'
 import './style.scss'
 import Button from '../../buttons/button'
 import { DynamicContainer } from '../../../../components/helpers'
@@ -24,7 +24,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     theme?: "System-Style"
 }
 
-export function LabelLessInput(props: Props) {
+export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
 
     const { setFocus, style, sectionRef, inputRef, InputChange, activeLabel, InputHover } = useStates(props)
     const { isActive } = useShowDropDown(sectionRef)
@@ -52,11 +52,24 @@ export function LabelLessInput(props: Props) {
                     <input
                         {...props}
                         name={props.name}
-                        ref={inputRef}
-                        onBlur={(e: any) => {
+                        ref={(element) => {
+                            // Set both refs
+                            if (element) {
+                                inputRef.current = element;
+                                if (ref) {
+                                    // If a ref was passed, set it too
+                                    if (typeof ref === 'function') {
+                                        ref(element);
+                                    } else {
+                                        ref.current = element;
+                                    }
+                                }
+                            }
+                        }} onBlur={(e: any) => {
                             setFocus(false)
-                            props.onFocus && props.onFocus(e)
-                        }} onFocus={(e: any) => {
+                            props.onBlur && props.onBlur(e)
+                        }}
+                        onFocus={(e: any) => {
                             setFocus(true)
                             props.onFocus && props.onFocus(e)
                         }}
@@ -90,5 +103,4 @@ export function LabelLessInput(props: Props) {
             <Tooltip message={props.error_message || ""} isActive={props.error_message != undefined || false} />
         </section>
     )
-
-}
+});
