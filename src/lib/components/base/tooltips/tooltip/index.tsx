@@ -6,7 +6,7 @@ import UseDirectionCalc from "../../../../hooks/useDirectionCalc"
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     message: string
-    isActive: boolean
+    is_active: boolean
 }
 
 const Tooltip = (props: Props) => {
@@ -20,12 +20,12 @@ const Tooltip = (props: Props) => {
             top: "Tooltip-TOP",
             bottom: "Tooltip-BOTTOM "
         },
-        isElementActive: props.isActive,
+        isElementActive: props.is_active,
         trigger: { ...props }
     })
 
     return (
-        props.isActive ?
+        props.is_active ?
             <section
                 {...props}
                 ref={ref}
