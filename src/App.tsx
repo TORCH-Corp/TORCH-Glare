@@ -24,15 +24,13 @@ function App() {
         {/* Email Field */}
         <LabelLessInput
           label={"Label"} name={""}
-          error_message="hey"
         />
 
         {/* Password Field */}
         <InputField
           label="Label" name={""}
-          error_message="hey"
+          component_size="M"
         />
-
         <button type="submit" >Submit</button>
       </form>
     </section >

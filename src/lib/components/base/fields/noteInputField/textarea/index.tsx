@@ -17,7 +17,7 @@ export const Textarea = forwardRef((props: Props, ref: Ref<HTMLTextAreaElement>)
                 name={props.name}
                 ref={ref} // Forward the ref
             />
-            <Tooltip message={props.error_message || ""} is_active={props.error_message !== undefined} />
+            <Tooltip message={props.error_message || ""} />
         </section>
     );
 });

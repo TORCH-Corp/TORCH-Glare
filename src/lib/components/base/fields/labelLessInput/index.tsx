@@ -14,7 +14,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     secondary_label?: string
     component_size?: "S" | "M" | "L"
     negative?: boolean
-    drop_down?: boolean
     drop_down_list_child?: ReactNode
     trailing_label?: string
     action_button?: ReactNode
@@ -81,10 +80,10 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) =
                     />
 
                     {
-                        props.trailing_label || props.drop_down || props.action_button ?
+                        props.trailing_label || props.drop_down_list_child || props.action_button ?
                             <span className="glare-input-icon">
                                 {props.trailing_label && <p className='glare-input-trailing-label'>{props.trailing_label}</p>}
-                                {props.drop_down && <Button component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-drop-down-line"></i>}></Button>}
+                                {props.drop_down_list_child && <Button component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-drop-down-line"></i>}></Button>}
                                 {props.action_button}
                             </span>
                             :
@@ -100,7 +99,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) =
                 </DynamicContainer>
             }
 
-            <Tooltip message={props.error_message || ""} is_active={props.error_message != undefined || props.error_message != ''} />
+            <Tooltip message={props.error_message || ""} />
         </section>
     )
 });

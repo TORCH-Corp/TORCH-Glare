@@ -10,7 +10,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     component_size?: "S" | "M" | "L"
     component_style?: "horizontal" | ""
     negative?: boolean
-    drop_down?: boolean
     drop_down_list_child?: ReactNode
     trailing_label?: string
     action_button?: ReactNode
@@ -33,7 +32,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>((props, ref) => {
                 component_size={props.component_size}
                 component_style={props.component_style}
                 left_side_icon={props.left_side_icon}
-                drop_down={props.drop_down}
                 trailing_label={props.trailing_label}
                 action_button={props.action_button}
                 negative={props.negative}
@@ -46,7 +44,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>((props, ref) => {
             <Input
                 {...props}
                 ref={ref}
-                drop_down={props.drop_down}
                 name={props.name}
                 component_size={props.component_size}
                 left_side_icon={props.left_side_icon}

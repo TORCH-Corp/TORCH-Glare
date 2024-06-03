@@ -12,7 +12,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     component_style?: "System-Style" | "";
     negative?: boolean;
     left_side_icon?: ReactNode;
-    drop_down?: boolean;
     trailing_label?: string;
     drop_down_list_child?: ReactNode;
     action_button?: ReactNode;
@@ -67,13 +66,14 @@ export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
                         placeholder={props.placeholder}
                     />
 
-                    {props.trailing_label || props.drop_down || props.action_button ? (
+                    {props.trailing_label || props.drop_down_list_child || props.action_button ? (
                         <span className="glare-input-icon">
                             {props.trailing_label && <p className='glare-input-trailingLabel'>{props.trailing_label}</p>}
-                            {props.drop_down && <Button component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>}></Button>}
+                            {props.drop_down_list_child && <Button component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>}></Button>}
                             {props.action_button}
                         </span>
-                    ) : null}
+                    ) : null
+                    }
                 </section>
             </section>
 
@@ -83,7 +83,7 @@ export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
                 </DynamicContainer>
             )}
 
-            <Tooltip message={props.error_message || ""} is_active={props.error_message !== '' && props.error_message !== undefined} />
+            <Tooltip message={props.error_message || ''} />
         </section>
     );
 });
