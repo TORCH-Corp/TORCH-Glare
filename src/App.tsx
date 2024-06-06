@@ -1,38 +1,25 @@
-import { InputField, LabelLessInput } from "./lib"
-
-/* interface FormData {
-  email: string;
-  password: string;
-} */
+import { DropDownMenu, DropDownMenuItem, InputField, LabelLessInput } from "./lib"
 
 function App() {
 
-  /* const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm<FormData>();
-
-  const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
-    console.log(data.email, data.password);
-  };
- */
   return (
     <section className='app' >
-      <form action="" >
-        {/* Email Field */}
-        <LabelLessInput
-          label={"Label"} name={""}
-        />
+      {/* Email Field */}
 
-        {/* Password Field */}
-        <InputField
-          label="Label" name={""}
-          component_size="M"
-        />
-        <button type="submit" >Submit</button>
-      </form>
+
+      {/* Password Field */}
+      <InputField
+        label="Label" name={""}
+        component_size="M"
+        drop_down_list_child={
+          <DropDownMenu component_style='Presentation-Style'>
+            <DropDownMenuItem component_label={"Label"} element_name={"dsa"} component_style='System-Style' onClick={() => console.log("click")} />
+            <DropDownMenuItem component_label={"Label"} element_name={"dsa"} component_style='System-Style' />
+            <DropDownMenuItem component_label={"Label"} element_name={"dsa"} />
+          </DropDownMenu>
+        }
+      />
+      <button type="submit" >Submit</button>
     </section >
   )
 }

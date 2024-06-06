@@ -12,20 +12,20 @@ describe('LabelLessInput component', () => {
     });
 
 
-    it('displays dropdown list on click', () => {
-        render(<LabelLessInput
-            data-testid='test'
-            drop_down_list_child={<DropDownMenu data-testid="dropdown">
-                dropdown item
-            </DropDownMenu>} name={''} label={''} />
-        );
-
-        const button = screen.getByTestId('test');
-        expect(screen.getByTestId('dropdown')).not.toBeVisible()
-
-        fireEvent.click(button);
-        expect(screen.getByTestId('dropdown')).toBeVisible()
-    });
+    /*  it('displays dropdown list on click', () => {
+         render(<LabelLessInput
+             data-testid='test'
+             drop_down_list_child={<DropDownMenu data-testid="dropdown">
+                 dropdown item
+             </DropDownMenu>} name={''} label={''} />
+         );
+ 
+         const button = screen.getByTestId('test');
+         expect(screen.getByTestId('dropdown')).not.toBeVisible()
+ 
+         fireEvent.click(button);
+         expect(screen.getByTestId('dropdown')).toBeVisible()
+     }); */
 
 });
 

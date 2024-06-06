@@ -3,8 +3,8 @@ import './style.scss';
 import Button from '../../../buttons/button';
 import { DynamicContainer } from '../../../../../components/helpers';
 import { useStates } from './hooks/useStates';
-import { useShowDropDown } from '../../../../../hooks/useShowDropDown';
 import Tooltip from '../../../tooltips/tooltip';
+import { useHideDropDown } from '../../hooks/usehideDropDown';
 
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -20,45 +20,36 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
+
     const { setFocus, style } = useStates(props);
     const sectionRef = useRef<any>(null);
-    const { isActive } = useShowDropDown(sectionRef);
-    const inputRef = useRef<any>(null)
+    const { isActive, setIsActive } = useHideDropDown(sectionRef);
+
 
     return (
         <section
             onClick={() => {
                 setFocus(true);
-                inputRef.current.focus()
             }}
             className={`glare-input-field-wrapper ${style} ${props.className}`}
             ref={sectionRef}
         >
             <section className='glare-input-field-inner-wrapper'>
+
                 {props.left_side_icon && <span className="glare-input-icon">{props.left_side_icon}</span>}
                 {props.badges_children}
 
                 <section className='input-container'>
                     <input
                         {...props}
-                        ref={(element) => {
-                            // Set both refs
-                            inputRef.current = element;
-                            if (ref) {
-                                // If a ref was passed, set it too
-                                if (typeof ref === 'function') {
-                                    ref(element);
-                                } else {
-                                    ref.current = element;
-                                }
-                            }
-                        }}
+                        ref={ref}
                         onBlur={(e: any) => {
                             setFocus(false);
                             props.onFocus && props.onFocus(e);
                         }}
                         onFocus={(e: any) => {
                             setFocus(true);
+                            setIsActive(true) // for dropdown list
                             props.onFocus && props.onFocus(e);
                         }}
                         className={`glare-input-field`}
@@ -66,22 +57,23 @@ export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
                         placeholder={props.placeholder}
                     />
 
-                    {props.trailing_label || props.drop_down_list_child || props.action_button ? (
+                    {props.trailing_label || props.drop_down_list_child || props.action_button ?
                         <span className="glare-input-icon">
                             {props.trailing_label && <p className='glare-input-trailingLabel'>{props.trailing_label}</p>}
-                            {props.drop_down_list_child && <Button component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>}></Button>}
+                            {props.drop_down_list_child && <Button onClick={() => setIsActive(true)} component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>}></Button>}
                             {props.action_button}
                         </span>
-                    ) : null
+                        : null
                     }
+
                 </section>
             </section>
 
-            {props.drop_down_list_child && (
-                <DynamicContainer active={isActive}>
+            {props.drop_down_list_child &&
+                <DynamicContainer onClick={() => setIsActive(false)} active={isActive}>
                     {props.drop_down_list_child}
                 </DynamicContainer>
-            )}
+            }
 
             <Tooltip message={props.error_message || ''} />
         </section>

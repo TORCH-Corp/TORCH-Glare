@@ -10,9 +10,10 @@
 body {
     font-family: 'SF-Pro';
     width: 100%;
-    background-color: var(--bg);
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+
 }

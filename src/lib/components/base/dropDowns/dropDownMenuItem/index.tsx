@@ -46,7 +46,6 @@ export default function DropDownMenuItem(props: Props) {
                     label={props.component_label}
                     required_label={props.required_label}
                     secondary_label={props.secondary_label}
-                    as_child={true}
                     name={props.element_name}
                     child_dir='horizontal'
                 />

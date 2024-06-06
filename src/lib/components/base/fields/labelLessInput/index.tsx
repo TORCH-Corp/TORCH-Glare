@@ -3,9 +3,9 @@ import './style.scss'
 import Button from '../../buttons/button'
 import { DynamicContainer } from '../../../../components/helpers'
 import { useStates } from './hooks/useStates'
-import { useShowDropDown } from '../../../../hooks/useShowDropDown'
 import { InputLabel } from './inputLabel'
 import { Tooltip } from '../../main'
+import { useHideDropDown } from '../hooks/usehideDropDown'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement> {
     name: string
@@ -26,15 +26,14 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
 export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
 
     const { setFocus, style, sectionRef, inputRef, InputChange, activeLabel, InputHover } = useStates(props)
-    const { isActive } = useShowDropDown(sectionRef)
+    const { isActive, setIsActive } = useHideDropDown(sectionRef);
 
     return (
         <section
-            onMouseOver={() => { InputHover(true) }}
+            onMouseOver={() => InputHover(true)}
             onMouseLeave={() => InputHover(false)}
             onClick={() => {
                 setFocus(true)
-                inputRef.current?.focus()
             }}
             ref={sectionRef}
             className={`glare-input-labelLess-field-wrapper  ${style} `}
@@ -70,6 +69,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) =
                         }}
                         onFocus={(e: any) => {
                             setFocus(true)
+                            setIsActive(true)
                             props.onFocus && props.onFocus(e)
                         }}
                         className={`glare-input-label-less-field`}
@@ -83,7 +83,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) =
                         props.trailing_label || props.drop_down_list_child || props.action_button ?
                             <span className="glare-input-icon">
                                 {props.trailing_label && <p className='glare-input-trailing-label'>{props.trailing_label}</p>}
-                                {props.drop_down_list_child && <Button component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-drop-down-line"></i>}></Button>}
+                                {props.drop_down_list_child && <Button onClick={() => setIsActive(true)} component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-drop-down-line"></i>}></Button>}
                                 {props.action_button}
                             </span>
                             :
@@ -92,9 +92,8 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) =
                 </section>
             </section>
 
-            {
-                props.drop_down_list_child &&
-                <DynamicContainer active={isActive}>
+            {props.drop_down_list_child &&
+                <DynamicContainer onClick={() => setIsActive(false)} active={isActive}>
                     {props.drop_down_list_child}
                 </DynamicContainer>
             }

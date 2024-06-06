@@ -19,7 +19,7 @@ export function useStates(props: Props) {
         ${props.negative || props.error_message ? "glare-input-field-negative" : ""} 
         ${props.disabled && "glare-input-field-disabled"} 
         ${props.component_style == "System-Style" && "glare-input-field-system-style"} 
-        ${focus && !props.negative && !props.error_message ? `${props.component_style == "System-Style" ? "glare-input-field-system-style-focus" : "glare-input-field-focus "}` : ""}
+        ${focus && !props.error_message ? `${props.component_style == "System-Style" ? "glare-input-field-system-style-focus" : "glare-input-field-focus"}` : ""}
        `)
     }, [{ ...props }])
 

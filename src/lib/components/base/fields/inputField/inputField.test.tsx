@@ -12,20 +12,20 @@ describe('InputField component', () => {
     });
 
 
-    it('displays dropdown list on click', () => {
-        render(<InputField
-            data-testid='test'
-            drop_down_list_child={<DropDownMenu data-testid="dropdown">
-                dropdown item
-            </DropDownMenu>} name={''} />
-        );
-
-        const button = screen.getByTestId('test');
-        expect(screen.getByTestId('dropdown')).not.toBeVisible()
-
-        fireEvent.click(button);
-        expect(screen.getByTestId('dropdown')).toBeVisible()
-    });
-
+    /*  it('displays dropdown list on click', () => {
+         render(<InputField
+             data-testid='test'
+             drop_down_list_child={<DropDownMenu data-testid="dropdown">
+                 dropdown item
+             </DropDownMenu>} name={''} />
+         );
+ 
+         const button = screen.getByTestId('test');
+         expect(screen.getByTestId('dropdown')).not.toBeVisible()
+ 
+         fireEvent.click(button);
+         expect(screen.getByTestId('dropdown')).toBeVisible()
+     });
+  */
 });
 

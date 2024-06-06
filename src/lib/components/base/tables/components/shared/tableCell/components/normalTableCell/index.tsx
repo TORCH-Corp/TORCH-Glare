@@ -57,7 +57,6 @@ export const NormalTableCell = (props: Props) => {
                     component_size={"S"}
                     disabled={props.disabled}
                     negative={props.negative}
-                    drop_down={true}
                     drop_down_list_child={props.drop_down_list_child}
                 />
             }
