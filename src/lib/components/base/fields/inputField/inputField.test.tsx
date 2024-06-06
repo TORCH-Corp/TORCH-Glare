@@ -1,8 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
 import { InputField } from '.';
-import { DropDownMenu } from '../../main';
 
 describe('InputField component', () => {
 

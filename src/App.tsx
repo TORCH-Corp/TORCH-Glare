@@ -1,4 +1,4 @@
-import { DropDownMenu, DropDownMenuItem, InputField, LabelLessInput } from "./lib"
+import { DropDownMenu, DropDownMenuItem, InputField } from "./lib"
 
 function App() {
 
@@ -10,6 +10,7 @@ function App() {
       {/* Password Field */}
       <InputField
         label="Label" name={""}
+        error_message="werwerwerwerwerwesssssssssssssssssssssssssssssssssssssssssseeeeeeeeeeeeeeeeeeeeeeeeeerwwrwrwwrerwe"
         component_size="M"
         drop_down_list_child={
           <DropDownMenu component_style='Presentation-Style'>
