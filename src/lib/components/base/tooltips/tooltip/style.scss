@@ -18,7 +18,9 @@
         line-height: 147.5%;
         background: $black-600;
         border-radius: 4px;
+        min-width: 200px;
         max-width: 300px;
+        width: fit-content;
         overflow: hidden;
         word-wrap: break-word;
     }
