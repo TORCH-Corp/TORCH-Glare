@@ -1,4 +1,4 @@
-import { DropDownMenu, DropDownMenuItem, InputField } from "./lib"
+import { AuthButton, DropDownMenu, DropDownMenuItem, InputField } from "./lib"
 
 function App() {
 
@@ -8,7 +8,7 @@ function App() {
 
 
       {/* Password Field */}
-      <InputField
+      {/*    <InputField
         label="Label" name={""}
         error_message="werweeewrerwe"
         component_size="M"
@@ -19,8 +19,8 @@ function App() {
             <DropDownMenuItem component_label={"Label"} element_name={"dsa"} />
           </DropDownMenu>
         }
-      />
-      <button type="submit" >Submit</button>
+      /> */}
+      <AuthButton type="submit" >Label</AuthButton>
     </section >
   )
 }

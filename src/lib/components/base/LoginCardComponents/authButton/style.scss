@@ -12,25 +12,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid $border-system-global-primary;
+    outline: 1px solid $border-system-global-primary;
     background-color: $background-system-body-primary;
-    transition: border-color 400ms;
+    transition: all ease-in-out 250ms;
+    border: none;
 
     &:hover {
-        border-color: $border-system-action-hover-primary !important;
+        outline-color: $border-system-action-hover-primary !important;
     }
 
     &:focus {
-        border-color: $border-system-action-hover-primary !important;
+        outline-color: $border-system-action-hover-primary !important;
     }
 
     &:active {
-        border-color: $border-system-action-hover-primary !important;
+        outline-color: $border-system-action-hover-primary !important;
     }
 }
 
 .no-bg {
     background-color: transparent;
-    border-color: transparent;
+    outline-color: transparent;
     text-decoration: none;
 }
