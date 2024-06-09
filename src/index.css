@@ -1,5 +1,5 @@
 @import './fonts/fonts.css';
-
+@import './lib/styles/colors/colorMapping/dark.css';
 
 * {
     box-sizing: border-box;
@@ -7,17 +7,12 @@
     margin: 0;
 }
 
-:root {
-    --content-presentation-global-primary: red;
-}
 
 body {
     font-family: 'SF-Pro';
     width: 100%;
-    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-
 }

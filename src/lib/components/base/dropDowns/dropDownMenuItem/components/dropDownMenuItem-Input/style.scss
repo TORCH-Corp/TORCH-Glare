@@ -1,12 +1,10 @@
-@import '../../../../../../styles/colors/MappingColorSystem/index';
-
 .dropDownMenuItemInput {
     display: flex;
     width: 12px;
     height: 12px;
     border-radius: 3px;
-    border: 1px solid $border-presentation-action-primary;
-    background: $background-presentation-action-borderstyle;
+    border: 1px solid var(--border-presentation-action-primary);
+    background: var(--background-presentation-action-borderstyle);
 }
 
 .dropDownMenuIteminput-label {
