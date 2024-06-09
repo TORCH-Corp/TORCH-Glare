@@ -5,6 +5,7 @@ import UseDirectionCalc from '../../../hooks/useDirectionCalc'
 interface Props {
   children: ReactNode
   active: boolean
+  onClick?: () => any
 }
 
 export function DynamicContainer(props: Props) {
@@ -23,7 +24,7 @@ export function DynamicContainer(props: Props) {
   })
 
   return (
-    <section ref={ref} className={`Dynamic-Container ${dir}`} style={{ display: props.active ? "flex" : "none" }}>
+    <section onClick={props.onClick} ref={ref} className={`Dynamic-Container ${dir}`} style={{ display: props.active ? "flex" : "none" }}>
       {props.children}
     </section>
   )

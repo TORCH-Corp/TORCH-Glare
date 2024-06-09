@@ -6,7 +6,7 @@ import Tooltip from '.';
 describe('TopFormBarItem component', () => {
 
     it('renders the component label', () => {
-        render(<Tooltip message={'Label'} isActive={true} />);
+        render(<Tooltip message={'Label'} />);
         expect(screen.getByText('Label')).toBeVisible();
     });
 });

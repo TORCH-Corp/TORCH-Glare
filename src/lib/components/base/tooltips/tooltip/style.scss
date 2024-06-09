@@ -2,18 +2,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 29px;
-    width: fit-content;
-    flex-wrap: nowrap;
     position: absolute;
-    top: 50%;
-    right: 102%;
-    transform: translate(0, -50%);
-    z-index: 100;
+    z-index: 10;
+  
     gap: 0;
 
     p {
-        white-space: nowrap;
         padding: var(--Space-1, 4px);
         color: var(--content-system-global-primary);
         font-size: 14px;
@@ -22,6 +16,11 @@
         line-height: 147.5%;
         background: var(--black-600);
         border-radius: 4px;
+        min-width: 200px;
+        max-width: 300px;
+        width: fit-content;
+        overflow: hidden;
+        word-wrap: break-word;
     }
 
     .triangle {
@@ -30,10 +29,9 @@
 }
 
 .Tooltip-Right {
-    right: unset;
+    top: 50%;
     left: 102%;
-    transform: translate(0, -50%);
-    flex-direction: row;
+    transform: translate(-0, -50%);
 
     .triangle {
         transform: rotate(0deg);
@@ -52,24 +50,15 @@
 }
 
 .Tooltip-TOP {
-    right: -11px;
-    left: unset;
-    top: -100%;
-    transform: translate(-50%, 0%);
-    flex-direction: column-reverse;
+    flex-direction: column;
     height: fit-content;
 
     .triangle {
-        transform: rotate(-90deg) translateX(1px);
+        transform: rotate(90deg) translateX(1px);
     }
 }
 
 .Tooltip-BOTTOM {
-    right: -11px;
-    left: unset;
-    top: unset;
-    bottom: -100%;
-    transform: translate(-50%, 0%);
     flex-direction: column;
     height: fit-content;
 

@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactNode } from "react";
+import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { LabeledInput } from "./labeledInput";
 import { Input } from "./input";
 
@@ -10,7 +10,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     component_size?: "S" | "M" | "L"
     component_style?: "horizontal" | ""
     negative?: boolean
-    drop_down?: boolean
     drop_down_list_child?: ReactNode
     trailing_label?: string
     action_button?: ReactNode
@@ -20,11 +19,12 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     theme?: "System-Style" | ""
 }
 
-export function InputField(props: Props) {
+export const InputField = forwardRef<HTMLInputElement, Props>((props, ref) => {
     return (
         props.label ?
             <LabeledInput
                 {...props}
+                ref={ref}
                 name={props.name}
                 label={props.label}
                 required_label={props.required_label}
@@ -32,7 +32,6 @@ export function InputField(props: Props) {
                 component_size={props.component_size}
                 component_style={props.component_style}
                 left_side_icon={props.left_side_icon}
-                drop_down={props.drop_down}
                 trailing_label={props.trailing_label}
                 action_button={props.action_button}
                 negative={props.negative}
@@ -44,7 +43,7 @@ export function InputField(props: Props) {
             :
             <Input
                 {...props}
-                drop_down={props.drop_down}
+                ref={ref}
                 name={props.name}
                 component_size={props.component_size}
                 left_side_icon={props.left_side_icon}
@@ -58,6 +57,6 @@ export function InputField(props: Props) {
             />
     )
 }
-
+)
 
 

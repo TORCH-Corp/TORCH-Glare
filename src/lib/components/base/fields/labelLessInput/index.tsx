@@ -1,11 +1,11 @@
-import { ChangeEvent, InputHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, InputHTMLAttributes, ReactNode, ChangeEvent } from 'react'
 import './style.scss'
 import Button from '../../buttons/button'
 import { DynamicContainer } from '../../../../components/helpers'
 import { useStates } from './hooks/useStates'
-import { useShowDropDown } from '../../../../hooks/useShowDropDown'
 import { InputLabel } from './inputLabel'
 import { Tooltip } from '../../main'
+import { useHideDropDown } from '../hooks/usehideDropDown'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement> {
     name: string
@@ -14,7 +14,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     secondary_label?: string
     component_size?: "S" | "M" | "L"
     negative?: boolean
-    drop_down?: boolean
     drop_down_list_child?: ReactNode
     trailing_label?: string
     action_button?: ReactNode
@@ -24,18 +23,17 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     theme?: "System-Style"
 }
 
-export function LabelLessInput(props: Props) {
+export const LabelLessInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
 
     const { setFocus, style, sectionRef, inputRef, InputChange, activeLabel, InputHover } = useStates(props)
-    const { isActive } = useShowDropDown(sectionRef)
+    const { isActive, setIsActive } = useHideDropDown(sectionRef);
 
     return (
         <section
-            onMouseOver={() => { InputHover(true) }}
+            onMouseOver={() => InputHover(true)}
             onMouseLeave={() => InputHover(false)}
             onClick={() => {
                 setFocus(true)
-                inputRef.current?.focus()
             }}
             ref={sectionRef}
             className={`glare-input-labelLess-field-wrapper  ${style} `}
@@ -52,12 +50,26 @@ export function LabelLessInput(props: Props) {
                     <input
                         {...props}
                         name={props.name}
-                        ref={inputRef}
-                        onBlur={(e: any) => {
+                        ref={(element) => {
+                            // Set both refs
+                            if (element) {
+                                inputRef.current = element;
+                                if (ref) {
+                                    // If a ref was passed, set it too
+                                    if (typeof ref === 'function') {
+                                        ref(element);
+                                    } else {
+                                        ref.current = element;
+                                    }
+                                }
+                            }
+                        }} onBlur={(e: any) => {
                             setFocus(false)
-                            props.onFocus && props.onFocus(e)
-                        }} onFocus={(e: any) => {
+                            props.onBlur && props.onBlur(e)
+                        }}
+                        onFocus={(e: any) => {
                             setFocus(true)
+                            setIsActive(true)
                             props.onFocus && props.onFocus(e)
                         }}
                         className={`glare-input-label-less-field`}
@@ -68,10 +80,10 @@ export function LabelLessInput(props: Props) {
                     />
 
                     {
-                        props.trailing_label || props.drop_down || props.action_button ?
+                        props.trailing_label || props.drop_down_list_child || props.action_button ?
                             <span className="glare-input-icon">
                                 {props.trailing_label && <p className='glare-input-trailing-label'>{props.trailing_label}</p>}
-                                {props.drop_down && <Button component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-drop-down-line"></i>}></Button>}
+                                {props.drop_down_list_child && <Button onClick={() => setIsActive(true)} component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-drop-down-line"></i>}></Button>}
                                 {props.action_button}
                             </span>
                             :
@@ -80,15 +92,13 @@ export function LabelLessInput(props: Props) {
                 </section>
             </section>
 
-            {
-                props.drop_down_list_child &&
-                <DynamicContainer active={isActive}>
+            {props.drop_down_list_child &&
+                <DynamicContainer onClick={() => setIsActive(false)} active={isActive}>
                     {props.drop_down_list_child}
                 </DynamicContainer>
             }
 
-            <Tooltip message={props.error_message || ""} isActive={props.error_message != undefined || false} />
+            <Tooltip message={props.error_message || ""} />
         </section>
     )
-
-}
+});

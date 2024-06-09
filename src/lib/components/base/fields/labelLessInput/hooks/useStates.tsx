@@ -13,7 +13,7 @@ export function useStates(props: Props) {
     const [style, setStyle] = useState('')
     const [activeLabel, setActiveLabel] = useState(false)
     const sectionRef = useRef<HTMLDivElement>(null)
-    const inputRef = useRef<HTMLInputElement>(null)
+    const inputRef = useRef<any>(null)
 
     const InputChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.value == "") {

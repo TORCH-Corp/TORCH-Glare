@@ -14,7 +14,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 export function DropDownMenuItemInput(props: Props) {
     return (
         <Label
-            as_child={true}
             child_dir="vertical-reverse"
             name={props.name || props.component_name}
             component_size={props.component_size}

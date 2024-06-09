@@ -11,9 +11,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--border-system-global-primary);
+    outline: 1px solid var(--border-system-global-primary);
     background-color: var(--background-system-body-primary);
-    transition: border-color 400ms;
+    transition: all ease-in-out 250ms;
+    border: none;
 
     &:hover {
         border-color: var(--border-system-action-hover-primary) !important;
@@ -30,6 +31,6 @@
 
 .no-bg {
     background-color: transparent;
-    border-color: transparent;
+    outline-color: transparent;
     text-decoration: none;
 }

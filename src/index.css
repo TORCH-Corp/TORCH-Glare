@@ -1,5 +1,6 @@
 @import './fonts/fonts.css';
 
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -18,4 +19,5 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+
 }
