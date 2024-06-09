@@ -1,4 +1,3 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 
@@ -12,21 +11,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: 1px solid $border-system-global-primary;
-    background-color: $background-system-body-primary;
+    outline: 1px solid var(--border-system-global-primary);
+    background-color: var(--background-system-body-primary);
     transition: all ease-in-out 250ms;
     border: none;
 
     &:hover {
-        outline-color: $border-system-action-hover-primary !important;
+        border-color: var(--border-system-action-hover-primary) !important;
     }
 
     &:focus {
-        outline-color: $border-system-action-hover-primary !important;
+        border-color: var(--border-system-action-hover-primary) !important;
     }
 
     &:active {
-        outline-color: $border-system-action-hover-primary !important;
+        border-color: var(--border-system-action-hover-primary) !important;
     }
 }
 

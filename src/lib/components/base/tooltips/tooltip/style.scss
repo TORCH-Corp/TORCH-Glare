@@ -1,22 +1,20 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
-
 .Tooltip {
-
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     z-index: 10;
+  
     gap: 0;
 
     p {
         padding: var(--Space-1, 4px);
-        color: $content-system-global-primary;
+        color: var(--content-system-global-primary);
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
         line-height: 147.5%;
-        background: $black-600;
+        background: var(--black-600);
         border-radius: 4px;
         min-width: 200px;
         max-width: 300px;
@@ -29,8 +27,6 @@
         transform: rotate(0deg);
     }
 }
-
-
 
 .Tooltip-Right {
     top: 50%;
@@ -60,7 +56,6 @@
     .triangle {
         transform: rotate(90deg) translateX(1px);
     }
-
 }
 
 .Tooltip-BOTTOM {

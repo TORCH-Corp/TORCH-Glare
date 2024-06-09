@@ -1,4 +1,3 @@
-@import '../../../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../../../styles/typography/index.scss';
 
 .glare-table-label {
@@ -10,12 +9,12 @@
     flex-direction: column;
 
     .glare-table-label-main-label {
-        color: $content-presentation-global-primary;
-        transition: inherit
+        color: var(--content-presentation-global-primary);
+        transition: inherit;
     }
 
     .glare-table-label-second-label {
-        color: $black-alpha-50;
+        color: var(--black-alpha-50);
     }
 }
 
@@ -30,9 +29,7 @@
     }
 }
 
-
 .glare-table-label-SemiBold-S {
-
     .glare-table-label-main-label {
         @include Body-typography-Small-SemiBold;
     }
@@ -68,16 +65,11 @@
     }
 }
 
-
-
 .glare-table-label-disabled {
     .glare-table-label-main-label {
-        color: $black-alpha-50;
+        color: var(--black-alpha-50);
     }
 }
-
-
-
 
 .glare-table-label-start {
     text-align: start;

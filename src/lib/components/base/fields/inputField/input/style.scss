@@ -1,20 +1,18 @@
-@import '../../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../../styles/typography/index.scss';
 
 .glare-input-field-wrapper {
     width: 100%;
     position: relative;
-    border: 1px solid $border-presentation-action-primary;
+    border: 1px solid var(--border-presentation-action-primary);
     border-radius: var(--Radius-2-max, 4px);
     padding: 0px 8px;
-    background-color: $background-presentation-form-field-primary;
+    background-color: var(--background-presentation-form-field-primary);
     transition: all 150ms ease-in-out;
 
     &:hover {
-        border-color: $border-presentation-action-active;
+        border-color: var(--border-presentation-action-active);
         box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.30);
     }
-
 
     .glare-input-field-inner-wrapper {
         display: flex;
@@ -44,12 +42,12 @@
             outline: none;
             transition: all 250ms ease-in-out;
             background: inherit;
-            color: $content-presentation-action-light-primary;
+            color: var(--content-presentation-action-light-primary);
             @include Body-typography-Small-Regular;
-            caret-color: $content-presentation-action-hover-information !important;
+            caret-color: var(--content-presentation-action-hover-information) !important;
 
             &::placeholder {
-                color: $content-presentation-action-light-secondary ;
+                color: var(--content-presentation-action-light-secondary);
             }
         }
 
@@ -65,10 +63,9 @@
 
             .glare-input-trailingLabel {
                 @include Labels-typography-Medium-Medium;
-                color: $content-presentation-action-light-primary;
+                color: var(--content-presentation-action-light-primary);
             }
         }
-
 
         &::-webkit-scrollbar {
             display: none;
@@ -83,6 +80,5 @@
         }
     }
 }
-
 
 @import './variants';

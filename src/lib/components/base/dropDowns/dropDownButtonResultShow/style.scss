@@ -1,8 +1,6 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 .glare-drop-down-button-result-show {
-
     width: fit-content;
 
     .glare-drop-down-button-result-show-wrapper {
@@ -10,13 +8,13 @@
         justify-content: center;
         align-items: center;
         gap: 2px;
-        background: $background-presentation-action-secondary;
+        background: var(--background-presentation-action-secondary);
 
         .glare-drop-down-button-result-show-label {
-            color: $content-presentation-action-light-primary;
+            color: var(--content-presentation-action-light-primary);
             border-radius: var(--Radius-2-max, 4px);
-            border: 2px solid $border-presentation-action-disabled;
-            background: $background-presentation-form-header;
+            border: 2px solid var(--border-presentation-action-disabled);
+            background: var(--background-presentation-form-header);
             padding: 0px 8px;
         }
 
@@ -24,12 +22,11 @@
             transition: all 250ms ease-in-out;
         }
     }
-
 }
 
 .glare-drop-down-button-result-show-icon-flip {
     .glare-button-icon {
-        transform: rotate(180deg)
+        transform: rotate(180deg);
     }
 
     &:focus {
@@ -40,7 +37,6 @@
         outline-color: transparent !important;
     }
 }
-
 
 /* sizes */
 .glare-drop-down-button-result-show-size-S {

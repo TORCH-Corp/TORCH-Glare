@@ -1,57 +1,52 @@
-@import '../../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../../styles/typography/index.scss';
 
-
 .menuItem-Presentation-Warning-Style {
-    color: $content-presentation-state-information ;
+    color: var(--content-presentation-state-information);
 
     &:hover {
-        background-color: $background-presentation-state-information-primary ;
-        color: $content-presentation-action-hover ;
+        background-color: var(--background-presentation-state-information-primary);
+        color: var(--content-presentation-action-hover);
     }
 }
 
-
 .menuItem-Presentation-Negative-Style {
-    color: $content-presentation-state-negative ;
+    color: var(--content-presentation-state-negative);
 
     &:hover {
-        background-color: $background-presentation-state-negative-primary ;
-        color: $content-presentation-action-hover ;
+        background-color: var(--background-presentation-state-negative-primary);
+        color: var(--content-presentation-action-hover);
     }
 
     &:active {
-        color: $content-presentation-state-negative ;
+        color: var(--content-presentation-state-negative);
     }
 }
 
-
 .menuItem-System-Style {
-    background-color: $background-system-body-primary ;
-    color: $content-system-global-primary ;
+    background-color: var(--background-system-body-primary);
+    color: var(--content-system-global-primary);
     outline: 1px solid transparent;
 
     &:hover {
-        background-color: $background-system-action-hover-secondary ;
-        outline-color: $border-system-action-hover-primary;
+        background-color: var(--background-system-action-hover-secondary);
+        outline-color: var(--border-system-action-hover-primary);
     }
 
     &:focus {
-        background-color: $background-system-action-selected-primary ;
+        background-color: var(--background-system-action-selected-primary);
         outline-color: transparent;
     }
 
     &:active {
-        background-color: $background-system-action-selected-primary ;
+        background-color: var(--background-system-action-selected-primary);
         outline-color: transparent;
     }
 
     &:disabled {
-        background-color: $background-system-body-secondary;
-        color: $content-system-global-disabled;
+        background-color: var(--background-system-body-secondary);
+        color: var(--content-system-global-disabled);
     }
 }
-
 
 /* sizes */
 

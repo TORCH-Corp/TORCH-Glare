@@ -1,126 +1,114 @@
-@import '../../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../../styles/typography/index.scss';
 
 /* Secondary Style */
 
 .BlueSecStyle {
     &:hover {
-        background: $background-presentation-state-information-primary ;
+        background: var(--background-presentation-state-information-primary);
     }
 }
 
 .YelSecStyle {
     &:hover {
-        background: $background-presentation-state-warning-primary ;
-        color: $content-presentation-action-light-primary !important;
+        background: var(--background-presentation-state-warning-primary);
+        color: var(--content-presentation-action-light-primary) !important;
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
 }
 
 .RedSecStyle {
     &:hover {
-        background: $background-presentation-state-negative-primary ;
+        background: var(--background-presentation-state-negative-primary);
     }
 }
-
 
 .RedSecStyle,
 .YelSecStyle,
 .BlueSecStyle {
-
-
-
-
     &:focus {
-        color: $content-presentation-action-light-primary ;
+        color: var(--content-presentation-action-light-primary);
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
 
     &:active {
-        color: $content-presentation-action-light-primary ;
+        color: var(--content-presentation-action-light-primary);
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
 
     &:hover {
-        color: $content-presentation-action-hover;
+        color: var(--content-presentation-action-hover);
     }
 }
 
-
 .BorderStyle {
-    outline: 1px solid $border-presentation-action-disabled ;
-    background: $background-presentation-action-borderstyle ;
+    outline: 1px solid var(--border-presentation-action-disabled);
+    background: var(--background-presentation-action-borderstyle);
 }
-
 
 /* Content Style */
 
 .PrimeContStyle {
     outline: unset;
     background-color: transparent;
-    color: $content-presentation-action-light-primary;
+    color: var(--content-presentation-action-light-primary);
 
     &:focus {
-        background-color: $background-presentation-action-hovercontstyle ;
-        color: $content-presentation-action-light-primary ;
+        background-color: var(--background-presentation-action-hovercontstyle);
+        color: var(--content-presentation-action-light-primary);
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
 
     &:hover {
-        background-color: $background-presentation-action-hovercontstyle ;
-        color: $content-presentation-action-light-primary ;
+        background-color: var(--background-presentation-action-hovercontstyle);
+        color: var(--content-presentation-action-light-primary);
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
-
-
 }
 
 .BlueContStyle {
     outline: unset;
     background: transparent;
-    color: $content-presentation-action-light-primary;
-
-
+    color: var(--content-presentation-action-light-primary);
 
     &:focus {
-        background-color: $background-presentation-action-hovercontstyle ;
-        color: $content-presentation-action-light-primary ;
+        background-color: var(--background-presentation-action-hovercontstyle);
+        color: var(--content-presentation-action-light-primary);
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
 
     &:active {
-        background-color: $background-presentation-action-hovercontstyle ;
-        color: $content-presentation-action-light-primary ;
+        background-color: var(--background-presentation-action-hovercontstyle);
+        color: var(--content-presentation-action-light-primary);
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
 
     &:hover {
-        background-color: $background-presentation-action-hovercontstyle ;
-        color: $content-presentation-action-hover-information;
+        background-color: var(--background-presentation-action-hovercontstyle);
+        color: var(--content-presentation-action-hover-information);
 
         .glare-button-icon {
-            color: $content-presentation-action-hover-information;
+            color: var(--content-presentation-action-hover-information);
         }
     }
 }
@@ -128,28 +116,26 @@
 .RedContStyle {
     outline: unset;
     background: transparent;
-    color: $content-presentation-action-light-primary;
-
+    color: var(--content-presentation-action-light-primary);
 
     &:focus {
-        background-color: $background-presentation-action-hovercontstyle ;
-        color: $content-presentation-action-light-primary ;
+        background-color: var(--background-presentation-action-hovercontstyle);
+        color: var(--content-presentation-action-light-primary);
 
         .glare-button-icon {
-            color: $content-presentation-action-light-primary ;
+            color: var(--content-presentation-action-light-primary);
         }
     }
 
     &:hover {
-        background-color: $background-presentation-action-hovercontstyle ;
-        color: $content-presentation-action-hover-negative ;
+        background-color: var(--background-presentation-action-hovercontstyle);
+        color: var(--content-presentation-action-hover-negative);
 
         .glare-button-icon {
-            color: $content-presentation-action-hover-negative ;
+            color: var(--content-presentation-action-hover-negative);
         }
     }
 }
-
 
 /* sizes */
 
@@ -167,7 +153,6 @@
     @include Body-typography-Large-Medium;
     height: 28px;
 }
-
 
 .glare-button-without-icon-S {
     padding: 0;

@@ -1,11 +1,10 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 .glare-link-button {
     width: fit-content;
-    color: $content-presentation-action-link;
+    color: var(--content-presentation-action-link);
     border-radius: 6px;
-    background-color: $background-presentation-action-link-primary;
+    background-color: var(--background-presentation-action-link-primary);
     outline: none;
     border: none;
     padding: 0 3px;
@@ -17,7 +16,7 @@
     transition: all 250ms ease-in-out;
 
     &:hover {
-        background-color: $background-presentation-action-link-hover;
+        background-color: var(--background-presentation-action-link-hover);
         padding: 0 2px;
 
         .link-button-arrow-container {
@@ -28,13 +27,12 @@
                 display: block;
             }
         }
-
     }
 
     .link-button-arrow-container {
         width: 0px;
         border-radius: 4px;
-        background: $background-presentation-state-information-primary;
+        background: var(--background-presentation-state-information-primary);
         padding: 0px;
         display: flex;
         justify-content: flex-start;
@@ -48,9 +46,6 @@
         }
     }
 }
-
-
-
 
 /* sizes */
 .glare-link-button-size-S {
@@ -66,7 +61,6 @@
                 height: 14px;
             }
         }
-
     }
 
     .link-button-arrow-container {
@@ -80,12 +74,9 @@
     }
 }
 
-
-
 .glare-link-button-size-M {
     height: 26px;
     @include Body-typography-Medium-SemiBold;
-
 
     &:hover {
         .link-button-arrow-container {
@@ -96,7 +87,6 @@
                 height: 16px;
             }
         }
-
     }
 
     .link-button-arrow-container {
@@ -110,13 +100,9 @@
     }
 }
 
-
-
-
 .glare-link-button-size-L {
     height: 26px;
     @include Body-typography-Medium-SemiBold;
-
 
     &:hover {
         .link-button-arrow-container {
@@ -127,7 +113,6 @@
                 height: 16px;
             }
         }
-
     }
 
     .link-button-arrow-container {
@@ -145,6 +130,4 @@
     img {
         transform: rotate(-90deg);
     }
-
-
 }

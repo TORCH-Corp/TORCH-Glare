@@ -1,4 +1,3 @@
-@import '../../../../styles/colors/MappingColorSystem/index';
 @import '../../../../styles/typography/index.scss';
 
 .glare-date-picker {
@@ -32,45 +31,43 @@
 
 /* theme */
 .glare-date-picker-presentation {
-
     input {
         width: 100%;
         outline: none;
-        background-color: $background-presentation-form-field-primary !important;
-        color: $content-presentation-action-light-primary !important;
+        background-color: var(--background-presentation-form-field-primary) !important;
+        color: var(--content-presentation-action-light-primary) !important;
         @include Body-typography-Small-Regular;
-        caret-color: $content-presentation-action-hover-information !important;
-        border: 1px solid $border-presentation-action-primary;
+        caret-color: var(--content-presentation-action-hover-information) !important;
+        border: 1px solid var(--border-presentation-action-primary);
         transition: all 150ms ease-in-out !important;
 
         &::placeholder {
-            color: $content-presentation-action-light-secondary ;
+            color: var(--content-presentation-action-light-secondary);
         }
 
         &:hover {
-            border-color: $border-presentation-action-active;
+            border-color: var(--border-presentation-action-active);
             box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.30);
-            background-color: $background-presentation-form-field-primary !important;
+            background-color: var(--background-presentation-form-field-primary) !important;
         }
 
         &:focus {
             opacity: 1 !important;
-            border-color: $border-presentation-state-focus !important;
+            border-color: var(--border-presentation-state-focus) !important;
             box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.30);
-            color: $content-presentation-action-light-primary !important;
-            background-color: $background-presentation-form-field-primary !important;
+            color: var(--content-presentation-action-light-primary) !important;
+            background-color: var(--background-presentation-form-field-primary) !important;
         }
 
         &:active {
             opacity: 1 !important;
-            border-color: $border-presentation-state-focus !important;
+            border-color: var(--border-presentation-state-focus) !important;
             box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.30);
-            color: $content-presentation-action-light-primary !important;
-            background-color: $background-presentation-form-field-primary !important;
+            color: var(--content-presentation-action-light-primary) !important;
+            background-color: var(--background-presentation-form-field-primary) !important;
         }
     }
 }
-
 
 .glare-date-picker-on-table-cell {
     input {
@@ -78,10 +75,8 @@
     }
 }
 
-
 /* size */
 .glare-date-picker-S {
-
     .glare-date-picker-icon {
         height: 20px;
         width: 20px;

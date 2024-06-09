@@ -2,7 +2,7 @@
 
 .glare-counter {
     .glare-counter-label {
-        color: $content-system-global-primary;
+        color: var(--content-system-global-primary);
         text-align: center;
         font-family: inherit;
         font-size: 10px;
@@ -10,8 +10,8 @@
         font-weight: 700;
         line-height: 142%;
         border-radius: 50%;
-        border: 1px solid $background-system-body-primary;
-        background-color: $background-system-state-negative;
+        border: 1px solid var(--background-system-body-primary);
+        background-color: var(--background-system-state-negative);
         width: 14px;
         height: 14px;
         display: flex;
