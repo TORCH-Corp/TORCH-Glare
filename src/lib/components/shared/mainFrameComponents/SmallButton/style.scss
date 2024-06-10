@@ -1,0 +1,56 @@
+.glare-small-button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    color: var(--content-system-action-hover-primary);
+    border-radius: 8px;
+    border: unset !important;
+    outline: 1px solid transparent;
+    position: relative;
+    transition: all 250ms ease-in-out;
+
+    i {
+        font-size: 22px;
+    }
+
+    img {
+        width: 22px;
+        object-fit: contain;
+        background-repeat: no-repeat;
+    }
+
+    &:hover {
+        background-color: var(--background-system-action-hover-secondary);
+        ;
+        outline: solid;
+        outline-color: var(--border-system-action-hover-primary);
+        outline-width: 1px;
+        color: var(--content-system-action-hover-primary);
+    }
+
+    &:focus {
+        background-color: var(--background-system-action-selected-primary);
+        outline: 1px solid transparent;
+    }
+
+    &:active {
+        background-color: var(--background-system-action-selected-primary);
+        outline: 1px solid transparent;
+    }
+
+
+    .glare-counter {
+        position: absolute;
+        top: 3px;
+        right: 5px;
+
+        .glare-counter-label {
+            border: unset !important;
+            outline: unset !important;
+        }
+
+    }
+}
