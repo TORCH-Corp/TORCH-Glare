@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
 import { ActionBarInputField } from '.';
-import { DropDownMenu } from '../../main';
+import { DropDownMenu } from '../..';
 
 describe('ActionBarInputField component', () => {
 

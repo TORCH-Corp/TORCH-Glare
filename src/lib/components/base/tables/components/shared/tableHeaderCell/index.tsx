@@ -1,5 +1,5 @@
 import { useResize } from '../../../../../../hooks/useResize'
-import { CellSizingLine } from '../../../../main'
+import { CellSizingLine } from '../../../..'
 import { TableLabel } from '../../ui/tableLabel'
 import { TableSort } from '../../ui/tableSort'
 import './style.scss'

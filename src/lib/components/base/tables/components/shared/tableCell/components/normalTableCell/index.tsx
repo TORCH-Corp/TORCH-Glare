@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, ReactNode } from "react"
-import { ButtonField, Datepicker, InputField, TableLabel } from "../../../../../../main"
+import { ButtonField, Datepicker, InputField, TableLabel } from "../../../../../.."
 import './style.scss'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {

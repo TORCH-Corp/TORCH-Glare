@@ -1,4 +1,4 @@
-import { ProfileItem } from "./profileItem";
+import { ProfileItem } from "./mainFrameComponents";
 
 export {
     ProfileItem

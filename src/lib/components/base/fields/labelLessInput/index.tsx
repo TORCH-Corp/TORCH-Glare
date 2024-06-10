@@ -4,7 +4,7 @@ import Button from '../../buttons/button'
 import { DynamicContainer } from '../../../../components/helpers'
 import { useStates } from './hooks/useStates'
 import { InputLabel } from './inputLabel'
-import { Tooltip } from '../../main'
+import { Tooltip } from '../..'
 import { useHideDropDown } from '../hooks/usehideDropDown'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement> {

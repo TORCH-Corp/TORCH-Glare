@@ -1,5 +1,5 @@
 import { InputHTMLAttributes } from 'react'
-import { CheckboxLabel } from '../../../../../main'
+import { CheckboxLabel } from '../../../../..'
 import { CellSizingLine } from '../../../../components/ui/cellSizingLine'
 import './style.scss'
 

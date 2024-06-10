@@ -1,5 +1,5 @@
 import { DropDownMenu, DropDownMenuItem } from './lib'
-import { ProfileItem } from './lib/components/shared/profileItem'
+import { ProfileItem } from '../dist/'
 import './lib/styles/colors/colorMapping/dark.css'
 
 function App() {

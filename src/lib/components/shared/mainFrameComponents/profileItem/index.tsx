@@ -1,11 +1,11 @@
-import { ReactNode, useRef } from "react"
-import { useHideDropDown } from "../../base/fields/hooks/usehideDropDown"
-import { Button } from "../../base/main"
+import { HTMLAttributes, ReactNode, useRef } from "react"
+import { useHideDropDown } from "../../../base/fields/hooks/usehideDropDown"
+import Button from "../../../base/buttons/button"
+import { DynamicContainer } from "../../../helpers"
 import './style.scss'
-import { DynamicContainer } from "../../helpers"
 
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
     Label: string
     user_avatar: string
     drop_down_list_child?: ReactNode
@@ -15,8 +15,9 @@ export const ProfileItem = (props: Props) => {
     const itemRef = useRef(null)
     const { isActive, setIsActive } = useHideDropDown(itemRef)
     return (
-        <section className="profile-item-wrapper" ref={itemRef}>
+        <section {...props} className="profile-item-wrapper" ref={itemRef}>
             <Button
+
                 className="profile-item"
                 left_icon={<i className="ri-arrow-down-s-line"></i>}
                 component_size='M'

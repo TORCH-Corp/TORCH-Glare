@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode, useRef } from "react"
 import './style.scss'
-import { Button } from "../../main"
+import { Button } from "../.."
 import { useShowDropDown } from "../../../../hooks/useShowDropDown"
 import { DynamicContainer } from "../../../helpers"
 
