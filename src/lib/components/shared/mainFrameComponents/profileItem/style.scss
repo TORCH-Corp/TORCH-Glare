@@ -1,16 +1,26 @@
 .profile-item-wrapper {
     position: relative;
     width: 100%;
-    transition: all 250ms ease-in-out;
 
     .profile-item {
         height: 40px !important;
         width: 100%;
-        flex-direction: row-reverse;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         justify-content: space-between;
         background-color: transparent;
+        border: unset;
         outline: none;
         border-radius: 8px;
+        padding: 0 6px;
+        color: var(--content-system-action-hover-primary);
+        font-family: inherit;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 148%;
+        transition: all 250ms ease-in-out;
 
         &:focus {
             background-color: var(--background-system-action-selected-primary, #252729);
@@ -21,6 +31,8 @@
         }
 
         &:hover {
+
+
             .profile-item-label-img-wrapper {
                 gap: 6px;
 
@@ -29,11 +41,17 @@
                 }
             }
 
-            .glare-button-icon {
+            i {
                 color: var(--border-system-action-hover-primary, #9748ff);
             }
         }
 
+
+        i {
+            font-size: 18px !important;
+            color: inherit;
+            transition: all 250ms ease-in-out;
+        }
 
 
         .profile-item-label-img-wrapper {
@@ -55,10 +73,6 @@
                 align-items: center;
                 gap: 8px;
 
-                .glare-button-icon {
-                    font-size: 18px !important;
-                }
-
                 .profile-item-icon {
                     width: 28px;
                     height: 28px;
@@ -67,6 +81,8 @@
                     border-radius: 50%;
                 }
             }
+
+
 
         }
     }
