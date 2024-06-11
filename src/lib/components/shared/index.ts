@@ -1,7 +1,7 @@
 import { AuthButton, PasswordLevel } from "./LoginCardComponents";
-import { ProfileItem, SideBarItem, SmallButton } from "./mainFrameComponents";
+import { FeedBackItem, ProfileItem, SideBarItem, SmallButton } from "./mainFrameComponents";
 
 export {
-    ProfileItem, SideBarItem, AuthButton, PasswordLevel, SmallButton
+    ProfileItem, SideBarItem, AuthButton, PasswordLevel, SmallButton, FeedBackItem
 
 }

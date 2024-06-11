@@ -1,11 +1,11 @@
-import { ProfileItem } from './lib'
+import { FeedBackItem } from '../dist'
 import './lib/styles/colors/colorMapping/dark.css'
 
 function App() {
 
   return (
     <section className='app' >
-      <ProfileItem Label={'Label'} user_avatar={''} />
+      <FeedBackItem />
     </section >
   )
 }
