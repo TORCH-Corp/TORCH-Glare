@@ -1,16 +1,18 @@
-import { TableCell } from '../dist'
-import './lib/styles/colors/colorMapping/dark.css'
+import { InputField } from './lib'
+import './lib/styles/colors/colorMapping/default.css'
 
 function App() {
 
   return (
     <section className='app' >
-      <TableCell
-        data-testid='test'
-        component_size={'S'}
-        name={'dasd'}
-        cellLabel={'asdas'}
-        component_type={'Label-Buttons'}
+      <InputField
+        component_size="M"
+        label="User Name"
+        placeholder="name@mail.com"
+        left_side_icon={<i className="ri-account-circle-fill"></i>}
+        theme="System-Style"
+        className="sign-in-input"
+        name={''}
       />
     </section >
   )
