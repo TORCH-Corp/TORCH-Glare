@@ -7,7 +7,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     required_label?: string;
     secondary_label?: string;
     component_size?: "S" | "M" | "L";
-    component_style?: "horizontal" | "";
+    component_style?: "horizontal" | "vertical";
     left_side_icon?: ReactNode;
     drop_down_list_child?: ReactNode;
     trailing_label?: string;
@@ -44,7 +44,7 @@ export const LabeledInput = forwardRef<HTMLInputElement, Props>(({
             secondary_label={secondary_label}
             name={name}
             component_size={component_size}
-            child_dir={component_style === "horizontal" ? "vertical" : ""}
+            child_dir={component_style}
             component_style={component_style === "horizontal" ? "vertical" : ""}
             theme={theme}
         >

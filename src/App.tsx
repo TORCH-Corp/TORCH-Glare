@@ -11,9 +11,9 @@ function App() {
         placeholder="name@mail.com"
         left_side_icon={<i className="ri-account-circle-fill"></i>}
         theme="System-Style"
-        className="sign-in-input"
         name={''}
       />
+
     </section >
   )
 }

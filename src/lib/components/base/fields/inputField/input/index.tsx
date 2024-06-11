@@ -31,7 +31,15 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
     className,
     ...props
 }, ref) => {
-    const { setFocus, style } = useStates({ ...props, negative });
+    const { setFocus, style } =
+        useStates({
+            component_size,
+            component_style,
+            negative,
+            badges_children,
+            error_message,
+            className, ...props
+        });
     const sectionRef = useRef<HTMLDivElement>(null);
     const { isActive, setIsActive } = useHideDropDown(sectionRef);
 
