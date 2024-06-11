@@ -19,31 +19,48 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     name: string;
 }
 
-export const LabeledInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
+export const LabeledInput = forwardRef<HTMLInputElement, Props>(({
+    label,
+    required_label,
+    secondary_label,
+    component_size,
+    component_style,
+    left_side_icon,
+    drop_down_list_child,
+    trailing_label,
+    action_button,
+    negative,
+    badges_children,
+    error_message,
+    theme,
+    name,
+    className,
+    ...props
+}, ref) => {
     return (
         <Label
-            className={props.className}
-            label={props.label}
-            secondary_label={props.secondary_label}
-            name={props.name}
-            component_size={props.component_size}
-            child_dir={props.component_style === "horizontal" ? "vertical" : ""}
-            component_style={props.component_style === "horizontal" ? "vertical" : ""}
-            theme={props.theme}
+            className={className}
+            label={label}
+            secondary_label={secondary_label}
+            name={name}
+            component_size={component_size}
+            child_dir={component_style === "horizontal" ? "vertical" : ""}
+            component_style={component_style === "horizontal" ? "vertical" : ""}
+            theme={theme}
         >
             <Input
-                {...props}
                 ref={ref}
-                component_size={props.component_size}
-                left_side_icon={props.left_side_icon}
-                name={props.name}
-                drop_down_list_child={props.drop_down_list_child}
-                trailing_label={props.trailing_label}
-                action_button={props.action_button}
-                negative={props.negative}
-                badges_children={props.badges_children}
-                error_message={props.error_message}
-                component_style={props.theme}
+                component_size={component_size}
+                left_side_icon={left_side_icon}
+                name={name}
+                drop_down_list_child={drop_down_list_child}
+                trailing_label={trailing_label}
+                action_button={action_button}
+                negative={negative}
+                badges_children={badges_children}
+                error_message={error_message}
+                component_style={theme}
+                {...props}
             />
         </Label>
     );

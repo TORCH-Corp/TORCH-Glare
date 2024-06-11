@@ -1,4 +1,4 @@
-import { forwardRef, InputHTMLAttributes, Ref } from "react";
+import { forwardRef, InputHTMLAttributes } from "react";
 import { Label } from "../../../..";
 import "./style.scss";
 import useStates from "./hooks/useStates";
@@ -11,27 +11,37 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     secondary_label?: string;
 }
 
-export const RadioLabel = forwardRef((props: Props, ref: Ref<HTMLInputElement>) => {
-    const { selected, handleSelect, handleFocus, fucus } = useStates();
+export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
+    component_size,
+    check_box_name,
+    label,
+    required_label,
+    secondary_label,
+    ...props
+}, ref) => {
+
+
+    const { fucus, handleFocus, selected, handleSelect } = useStates();
 
     return (
         <Label
-            name={props.check_box_name}
-            component_size={props.component_size}
-            required_label={props.required_label}
-            child_dir='vertical-reverse'
-            label={props.label}
-            secondary_label={props.secondary_label}
+            name={check_box_name}
+            component_size={component_size}
+            required_label={required_label}
+            child_dir="vertical-reverse"
+            label={label}
+            secondary_label={secondary_label}
             disabled={props.disabled}
-            className={`glare-RadioLabel  ${props.className} glare-RadioLabel-size-${props.component_size}`}
+            className={`glare-RadioLabel ${props.className} glare-RadioLabel-size-${component_size}`}
         >
-            <span className={`check-box-icon-wrapper ${fucus && !selected && "glare-RadioLabel-focus"} ${props.disabled && "glare-RadioLabel-disabled"} `}>
+            <span
+                className={`check-box-icon-wrapper ${fucus && !selected ? "glare-RadioLabel-focus" : ""} ${props.disabled ? "glare-RadioLabel-disabled" : ""}`}
+            >
                 {selected ? <i className="ri-radio-button-fill"></i> : <span className="check-box-icon"></span>}
             </span>
 
             <input
                 {...props}
-
                 onChange={(e) => {
                     handleSelect(e);
                     props.onChange && props.onChange(e);
@@ -45,12 +55,13 @@ export const RadioLabel = forwardRef((props: Props, ref: Ref<HTMLInputElement>) 
                     props.onBlur && props.onBlur(e);
                 }}
                 ref={ref}
-                id={props.check_box_name}
-                type={'radio'}
-                className={`glare-RadioLabel-input`}
+                id={check_box_name}
+                type="radio"
+                className="glare-RadioLabel-input"
+                aria-checked={selected}
+                aria-label={label}  // Consider providing a meaningful label
                 disabled={props.disabled}
             />
         </Label>
     );
 });
-

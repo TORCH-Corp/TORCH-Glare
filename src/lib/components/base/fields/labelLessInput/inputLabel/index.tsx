@@ -1,25 +1,23 @@
-import './style.scss'
-
+import './style.scss';
 
 interface Props {
-    active: boolean
-    label: string
-    component_size?: "S" | "M" | "L"
-    required?: boolean
-    name?: string
+    active: boolean;
+    label: string;
+    component_size?: "S" | "M" | "L";
+    required?: boolean;
+    name?: string;
 }
-export function InputLabel(props: Props) {
 
-
+export function InputLabel({ active, label, component_size = "S", required, name }: Props) {
     return (
-        <section className={`glare-InputLabel-wrapper glare-InputLabel-size-${props.component_size ? props.component_size : "S"}`} >
+        <section className={`glare-InputLabel-wrapper glare-InputLabel-size-${component_size}`}>
             <section className='glare-InputLabel-label-wrapper'>
-                <label className={props.active ? "glare-InputLabel-active" : ""} htmlFor={props.name}>
-                    {props.label}
+                <label className={active ? "glare-InputLabel-active" : ""} htmlFor={name}>
+                    {label}
                 </label>
-                {props.required && <p>*</p>}
+                {required && <p>*</p>}
             </section>
             <span className='glare-InputLabel-divider'></span>
         </section>
-    )
+    );
 }

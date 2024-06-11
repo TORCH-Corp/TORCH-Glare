@@ -1,37 +1,45 @@
-import { LabelHTMLAttributes } from 'react'
-import './style.scss'
+import { LabelHTMLAttributes } from 'react';
+import './style.scss';
 
 interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
-    label?: string
-    required_label?: string
-    secondary_label?: string
-    component_size?: "S" | "M" | "L"
-    component_style?: "vertical" | "horizontal" | ""
-    as_child?: boolean
-    child_dir?: "vertical" | "vertical-reverse" | "horizontal" | ""
-    theme?: "System-Style" | ""
-    disabled?: boolean
-    name: string
+    label?: string;
+    required_label?: string;
+    secondary_label?: string;
+    component_size?: "S" | "M" | "L";
+    component_style?: "vertical" | "horizontal" | "";
+    as_child?: boolean;
+    child_dir?: "vertical" | "vertical-reverse" | "horizontal" | "";
+    theme?: "System-Style" | "";
+    disabled?: boolean;
+    name: string;
 }
-// 
-export function Label(props: Props) {
 
+export function Label({
+    label,
+    required_label,
+    secondary_label,
+    component_size = "S",
+    component_style = "horizontal",
+    as_child = false,
+    child_dir = "horizontal",
+    theme = "",
+    disabled = false,
+    name,
+    className,
+    children,
+    ...props
+}: Props) {
     return (
         <section
             {...props}
-            className={`glare-label ${props.component_size || "S"} ${props.component_style || 'horizontal'} 
-            ${props.disabled ? "disabled" : ""} child-dir-${props.child_dir || 'horizontal'}
-            ${props.className} glare-label-${props.theme}`
-            }
+            className={`glare-label ${component_size} ${component_style} ${disabled ? "disabled" : ""} child-dir-${child_dir} ${className} glare-label-${theme}`}
         >
-            <label className='label-container' htmlFor={props.name}>
-                {props.label && <label className={`label ${props.as_child ? "as-child" : ""}`} htmlFor={props.name}>{props.label} </label>}
-                {props.secondary_label && <p className='secondaryLabel'>{`${props.secondary_label}`}</p>}
-                {props.required_label && <span className='requiredLabel' >{`(${props.required_label})`}</span>}
+            <label className="label-container" htmlFor={name}>
+                {label && <span className={`label ${as_child ? "as-child" : ""}`} >{label}</span>}
+                {secondary_label && <p className="secondaryLabel">{secondary_label}</p>}
+                {required_label && <span className="requiredLabel">({required_label})</span>}
             </label>
-
-            {props.children}
+            {children}
         </section>
-    )
+    );
 }
-

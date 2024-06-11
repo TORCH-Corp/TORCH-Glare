@@ -1,9 +1,9 @@
-import { forwardRef, TextareaHTMLAttributes, Ref } from "react";
+import { forwardRef, TextareaHTMLAttributes } from "react";
 import { Label } from "../../labels/label";
 import { Textarea } from "./textarea";
 import "./style.scss";
 
-interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement | HTMLLabelElement> {
+interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     name: string;
     label?: string;
     required_label?: string;
@@ -13,23 +13,32 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement | HTMLLabelEl
     negative?: boolean;
 }
 
-export const NoteInputField = forwardRef((props: Props, ref: Ref<HTMLTextAreaElement>) => {
+export const NoteInputField = forwardRef<HTMLTextAreaElement, Props>(({
+    name,
+    label,
+    required_label,
+    secondary_label,
+    component_style,
+    error_message,
+    negative,
+    ...props
+}, ref) => {
     return (
         <Label
-            label={props.label}
-            secondary_label={props.secondary_label}
-            name={props.name}
-            component_size={"M"}
-            child_dir={props.component_style === "horizontal" ? "vertical" : ""}
-            component_style={props.component_style === "horizontal" ? "vertical" : ""}
+            label={label}
+            secondary_label={secondary_label}
+            name={name}
+            component_size="M"
+            child_dir={component_style === "horizontal" ? "vertical" : ""}
+            component_style={component_style === "horizontal" ? "vertical" : ""}
             className="custom-label"
         >
             <Textarea
                 {...props}
+                name={name}
                 ref={ref} // Forward the ref
-                negative={props.negative}
-                error_message={props.error_message}
-            />
+                negative={negative}
+                error_message={error_message} />
         </Label>
     );
 });

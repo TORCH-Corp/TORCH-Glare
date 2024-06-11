@@ -10,15 +10,26 @@ interface Props extends ButtonHTMLAttributes<HTMLSpanElement> {
   badge_size?: "S" | "M" | "L";
 }
 
-export default function Badge(props: Props) {
+const Badge: React.FC<Props> = ({
+  label,
+  onCloseBtnClick,
+  selected,
+  badge_icon,
+  badge_style,
+  badge_size
+  , ...props }) => {
+
   return (
     <span
       {...props}
-      className={`glare-badge glare-badge-size-${props.badge_size ? props.badge_size : "S"} ${props.badge_style} ${props.className}`}
+      className={`glare-badge glare-badge-size-${badge_size ? badge_size : "S"} ${badge_style} ${props.className}`}
     >
-      <span className='badge-icon'> {props.badge_icon ? props.badge_icon : <i className="ri-circle-fill badge-def-icon"></i>}</span>
-      {props.label}
-      {props.selected && <button onClick={props.onCloseBtnClick} className='glare-badge-close-icon'><i className="ri-close-line"></i></button>}
+      <span className='badge-icon'> {badge_icon ? badge_icon : <i className="ri-circle-fill badge-def-icon"></i>}</span>
+      {label}
+      {selected && <button onClick={onCloseBtnClick} className='glare-badge-close-icon'><i className="ri-close-line"></i></button>}
     </span>
   );
 }
+
+
+export default Badge

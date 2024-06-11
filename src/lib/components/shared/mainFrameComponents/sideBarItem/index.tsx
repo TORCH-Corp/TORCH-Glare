@@ -1,17 +1,18 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react'
-import './style.scss'
+import React, { ButtonHTMLAttributes, ReactNode } from 'react';
+import './style.scss';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    Label: string
-    icon?: ReactNode
+    Label: string;
+    icon?: ReactNode;
 }
 
-export const SideBarItem = (props: Props) => {
+const SideBarItem: React.FC<Props> = ({ Label, icon, ...buttonProps }) => {
     return (
-        <button {...props} className='glare-side-bar-item'>
-            {props.icon}
-            <p>{props.Label}</p>
+        <button {...buttonProps} className='glare-side-bar-item'>
+            {icon}
+            <p>{Label}</p>
         </button>
-    )
-}
+    );
+};
 
+export default SideBarItem;

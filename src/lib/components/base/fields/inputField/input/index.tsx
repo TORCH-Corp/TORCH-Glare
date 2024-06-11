@@ -1,11 +1,10 @@
-import { forwardRef, useRef, InputHTMLAttributes, ReactNode } from 'react';
+import { forwardRef, InputHTMLAttributes, ReactNode, useRef } from 'react';
 import './style.scss';
 import Button from '../../../buttons/button';
 import { DynamicContainer } from '../../../../../components/helpers';
 import { useStates } from './hooks/useStates';
 import Tooltip from '../../../tooltips/tooltip';
 import { useHideDropDown } from '../../hooks/usehideDropDown';
-
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     component_size?: "S" | "M" | "L";
@@ -19,37 +18,44 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     error_message?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
-
-    const { setFocus, style } = useStates(props);
-    const sectionRef = useRef<any>(null);
+export const Input = forwardRef<HTMLInputElement, Props>(({
+    component_size,
+    component_style,
+    negative,
+    left_side_icon,
+    trailing_label,
+    drop_down_list_child,
+    action_button,
+    badges_children,
+    error_message,
+    className,
+    ...props
+}, ref) => {
+    const { setFocus, style } = useStates({ ...props, negative });
+    const sectionRef = useRef<HTMLDivElement>(null);
     const { isActive, setIsActive } = useHideDropDown(sectionRef);
-
 
     return (
         <section
-            onClick={() => {
-                setFocus(true);
-            }}
-            className={`glare-input-field-wrapper ${style} ${props.className}`}
+            onClick={() => setFocus(true)}
+            className={`glare-input-field-wrapper ${style} ${className}`}
             ref={sectionRef}
         >
             <section className='glare-input-field-inner-wrapper'>
-
-                {props.left_side_icon && <span className="glare-input-icon">{props.left_side_icon}</span>}
-                {props.badges_children}
+                {left_side_icon && <span className="glare-input-icon">{left_side_icon}</span>}
+                {badges_children}
 
                 <section className='input-container'>
                     <input
                         {...props}
                         ref={ref}
-                        onBlur={(e: any) => {
+                        onBlur={(e) => {
                             setFocus(false);
-                            props.onFocus && props.onFocus(e);
+                            props.onBlur && props.onBlur(e);
                         }}
-                        onFocus={(e: any) => {
+                        onFocus={(e) => {
                             setFocus(true);
-                            setIsActive(true) // for dropdown list
+                            setIsActive(true); // for dropdown list
                             props.onFocus && props.onFocus(e);
                         }}
                         className={`glare-input-field`}
@@ -57,27 +63,27 @@ export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
                         placeholder={props.placeholder}
                     />
 
-                    {props.trailing_label || props.drop_down_list_child || props.action_button ?
+                    {(trailing_label || drop_down_list_child || action_button) && (
                         <span className="glare-input-icon">
-                            {props.trailing_label && <p className='glare-input-trailingLabel'>{props.trailing_label}</p>}
-                            {props.drop_down_list_child && <Button onClick={() => setIsActive(true)} component_size={props.component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>}></Button>}
-                            {props.action_button}
+                            {trailing_label && <p className='glare-input-trailingLabel'>{trailing_label}</p>}
+                            {drop_down_list_child && (
+                                <Button onClick={() => setIsActive(true)} component_size={component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>} />
+                            )}
+                            {action_button}
                         </span>
-                        : null
-                    }
-
+                    )}
                 </section>
             </section>
 
-            {props.drop_down_list_child &&
+            {drop_down_list_child && (
                 <DynamicContainer onClick={() => setIsActive(false)} active={isActive}>
-                    {props.drop_down_list_child}
+                    {drop_down_list_child}
                 </DynamicContainer>
-            }
+            )}
 
-            <Tooltip message={props.error_message || ''} />
+            {error_message && <Tooltip message={error_message} />}
         </section>
     );
 });
 
-
+export default Input;

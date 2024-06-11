@@ -1,26 +1,31 @@
+import React from "react";
 import { ButtonHTMLAttributes } from "react";
 import { Button } from "../../../..";
-import './style.scss'
+import './style.scss';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    isHover?: boolean
-    isSubTableActive?: boolean
-    forSubTable?: boolean
-    rtl?: boolean
+    isHover?: boolean;
+    isSubTableActive?: boolean;
+    forSubTable?: boolean;
+    rtl?: boolean;
 }
-export function TableIconCell(props: Props) {
+
+export const TableIconCell = React.forwardRef<HTMLButtonElement, Props>(({
+    isHover,
+    isSubTableActive,
+    forSubTable,
+    rtl,
+    ...props
+}, ref) => {
     return (
         <Button
             {...props}
-            className={
-                `${props.forSubTable ? `TableIconCell-For-SubTable${props.rtl ? "-RTL" : ""}` : `TableIconCell`} 
-            ${props.isHover && 'show-TableIconCell'} 
-            ${props.isSubTableActive && `TableIconCell-subTable-active${props.rtl ? "-RTL" : ""}`}`}
-
+            ref={ref}
+            className={`TableIconCell${forSubTable ? `-For-SubTable${rtl ? "-RTL" : ""}` : ""} ${isHover ? 'show-TableIconCell' : ''} ${isSubTableActive ? `TableIconCell-subTable-active${rtl ? "-RTL" : ""}` : ''}`}
             component_size="S"
-
-            left_icon={props.rtl ? <i className="ri-arrow-left-s-line"></i> : <i className="ri-arrow-right-s-line"></i>}
-            component_style='PrimeContStyle'
-        > </Button>
-    )
-}
+            left_icon={rtl ? <i className="ri-arrow-left-s-line"></i> : <i className="ri-arrow-right-s-line"></i>}
+            component_style="PrimeContStyle"
+        >
+        </Button>
+    );
+});

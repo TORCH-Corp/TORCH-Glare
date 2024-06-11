@@ -1,40 +1,36 @@
-import { HTMLAttributes, useRef } from "react"
-import RectangleIcon from "./rectangleIcon"
-import './style.scss'
-import UseDirectionCalc from "../../../../hooks/useDirectionCalc"
-
+import React, { HTMLAttributes, useRef } from 'react';
+import RectangleIcon from './rectangleIcon';
+import './style.scss';
+import useDirectionCalc from '../../../../hooks/useDirectionCalc';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-    message: string | null
+    message: string | null;
 }
 
-const Tooltip = (props: Props) => {
-
-    const ref = useRef<any>(null)
-    const dir = UseDirectionCalc({
+const Tooltip: React.FC<Props> = ({ message, className, ...props }) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const direction = useDirectionCalc({
         ElementRef: ref,
         dirClasses: {
-            left: "Tooltip-Left",
-            right: "Tooltip-Right",
-            top: "Tooltip-TOP",
-            bottom: "Tooltip-BOTTOM "
+            left: 'Tooltip-Left',
+            right: 'Tooltip-Right',
+            top: 'Tooltip-TOP',
+            bottom: 'Tooltip-BOTTOM'
         },
-        isElementActive: props.message ? true : false,
-        trigger: { ...props }
-    })
+        isElementActive: Boolean(message),
+        trigger: props // Assuming trigger is to spread additional props onto the root element
+    });
 
-    return (
-        props.message ?
-            <section
-                {...props}
-                ref={ref}
-                className={`Tooltip ${dir} ${props.className}`}>
-                <RectangleIcon />
-                <p>{props.message}</p>
-            </section>
-            :
-            null
-    )
-}
+    return message ? (
+        <section
+            ref={ref}
+            className={`Tooltip ${direction} ${className}`}
+            {...props}
+        >
+            <RectangleIcon />
+            <p>{message}</p>
+        </section>
+    ) : null;
+};
 
-export default Tooltip
+export default Tooltip;

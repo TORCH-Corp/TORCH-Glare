@@ -1,31 +1,36 @@
-import { ReactNode, useRef } from 'react'
-import './style.scss'
-import UseDirectionCalc from '../../../hooks/useDirectionCalc'
+import React, { ReactNode, useRef } from 'react';
+import './style.scss';
+import useDirectionCalc from '../../../hooks/useDirectionCalc';
 
 interface Props {
-  children: ReactNode
-  active: boolean
-  onClick?: () => any
+  children: ReactNode;
+  active: boolean;
+  onClick?: () => void;
 }
 
-export function DynamicContainer(props: Props) {
+export const DynamicContainer: React.FC<Props> = ({ children, active, onClick }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
-  const ref = useRef<any>(null)
-  const dir = UseDirectionCalc({
+  const dir = useDirectionCalc({
     ElementRef: ref,
     dirClasses: {
-      left: "",
-      right: "",
-      top: "Dynamic-Container-top",
-      bottom: ""
+      left: '',
+      right: '',
+      top: 'Dynamic-Container-top',
+      bottom: '',
     },
-    isElementActive: props.active,
-    trigger: props.children
-  })
+    isElementActive: active,
+    trigger: children,
+  });
 
   return (
-    <section onClick={props.onClick} ref={ref} className={`Dynamic-Container ${dir}`} style={{ display: props.active ? "flex" : "none" }}>
-      {props.children}
+    <section
+      onClick={onClick}
+      ref={ref}
+      className={`Dynamic-Container ${dir}`}
+      style={{ display: active ? 'flex' : 'none' }}
+    >
+      {children}
     </section>
-  )
-}
+  );
+};

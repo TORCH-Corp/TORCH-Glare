@@ -1,14 +1,19 @@
-import { ButtonHTMLAttributes } from 'react'
-import { TableIconCell } from '../../../../components/ui/tableIconCell'
+import React, { ButtonHTMLAttributes } from 'react';
+import { TableIconCell } from '../../../../components/ui/tableIconCell';
 
-
-interface Props extends ButtonHTMLAttributes<HTMLDivElement> {
-    is_hovered: boolean
-    for_subtable?: boolean
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+    is_hovered: boolean;
+    for_subtable?: boolean;
 }
-export const DropdownButton = (props: Props) => {
+
+// Using React.FC for functional component typing
+export const DropdownButton: React.FC<Props> = ({ is_hovered, for_subtable, ...props }) => {
     return (
-        <TableIconCell forSubTable={props.for_subtable} className='table-dropdown-button-container ' isHover={props.is_hovered} />
-    )
-}
-
+        <TableIconCell
+            {...props}
+            forSubTable={for_subtable}
+            className={`table-dropdown-button-container ${is_hovered ? 'hovered' : ''}`}
+            isHover={is_hovered}
+        />
+    );
+};

@@ -1,24 +1,26 @@
-import { AnchorHTMLAttributes } from "react"
-import arrow from './assets/arrow.svg'
-import './style.scss'
+import React, { AnchorHTMLAttributes } from 'react';
+import arrow from './assets/arrow.svg';
+import './style.scss';
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
-    component_size?: "S" | "M" | "L"
-    dir?: "ltr" | "rtl"
+    component_size?: "S" | "M" | "L";
+    dir?: "ltr" | "rtl";
 }
 
-export const LinkButton = (props: Props) => {
+export const LinkButton: React.FC<Props> = ({
+    component_size = "S",
+    dir,
+    ...props
+}) => {
     return (
         <a
             {...props}
-            className={`glare-link-button glare-link-button-size-${props.component_size || "S"} ${props.dir == 'rtl' && "link-button-reverse"}`}
+            className={`glare-link-button glare-link-button-size-${component_size} ${dir === 'rtl' ? "link-button-reverse" : ''} ${props.className}`}
         >
             {props.children}
             <div className="link-button-arrow-container">
-                <img src={arrow} />
+                <img src={arrow} alt="arrow" />
             </div>
         </a>
-    )
-}
-
-
+    );
+};

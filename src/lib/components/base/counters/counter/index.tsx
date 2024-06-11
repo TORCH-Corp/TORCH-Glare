@@ -1,14 +1,19 @@
-import { HTMLAttributes } from "react";
+import React, { HTMLAttributes } from "react";
 import './style.scss';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-    label: number
+    label: number;
 }
 
-export default function Counter(props: Props) {
+export const Counter: React.FC<Props> = ({
+    label,
+    ...props
+}) => {
     return (
-        <section {...props} className="glare-counter" >
-            <p className="glare-counter-label">{props.label}</p>
+        <section {...props} className={`glare-counter ${props.className}`}>
+            <p className="glare-counter-label">{label}</p>
         </section>
-    )
-}
+    );
+};
+
+export default Counter;

@@ -1,4 +1,4 @@
-import { forwardRef, TextareaHTMLAttributes, Ref } from 'react';
+import { forwardRef, TextareaHTMLAttributes } from 'react';
 import './style.scss';
 import Tooltip from '../../../tooltips/tooltip';
 
@@ -8,17 +8,21 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     error_message?: string;
 }
 
-export const Textarea = forwardRef((props: Props, ref: Ref<HTMLTextAreaElement>) => {
+export const Textarea = forwardRef<HTMLTextAreaElement, Props>(({
+    name,
+    negative,
+    error_message,
+    ...props
+}, ref) => {
     return (
         <section className='glare-textarea-wrapper'>
             <textarea
                 {...props}
-                className={`glare-textarea ${props.negative || props.error_message ? "glare-textarea-negative" : ""} ${props.className}`}
-                name={props.name}
+                className={`glare-textarea ${negative || error_message ? "glare-textarea-negative" : ""} ${props.className}`}
+                name={name}
                 ref={ref} // Forward the ref
             />
-            <Tooltip message={props.error_message || ""} />
+            <Tooltip message={error_message || ""} />
         </section>
     );
 });
-
