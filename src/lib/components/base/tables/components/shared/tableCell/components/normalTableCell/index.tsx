@@ -1,6 +1,9 @@
 import { InputHTMLAttributes, ReactNode } from "react"
-import { ButtonField, Datepicker, InputField, TableLabel } from "../../../../../.."
 import './style.scss'
+import { TableLabel } from "../../../../ui/tableLabel"
+import { Datepicker } from "../../../../../../datePickers/datePicker"
+import { InputField } from "../../../../../../fields/inputField"
+import ButtonField from "../../../../../../fields/buttonField"
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     onDateChange?: (date: Date) => void

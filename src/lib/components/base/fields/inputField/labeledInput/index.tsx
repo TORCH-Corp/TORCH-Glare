@@ -1,5 +1,5 @@
 import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
-import { Label } from '../../..';
+import { Label } from '../../../labels/label';
 import { Input } from '../input';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement> {

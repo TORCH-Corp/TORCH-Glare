@@ -1,7 +1,7 @@
 import React from "react";
 import { ButtonHTMLAttributes } from "react";
-import { Button } from "../../../..";
 import './style.scss';
+import Button from "../../../../buttons/button";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     isHover?: boolean;

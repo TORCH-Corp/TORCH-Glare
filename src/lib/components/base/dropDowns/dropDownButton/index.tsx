@@ -1,8 +1,8 @@
 import React, { HTMLAttributes, ReactNode, useRef } from "react";
 import './style.scss';
-import { Button } from "../..";
+import Button from "../../buttons/button";
 import { useShowDropDown } from "../../../../hooks/useShowDropDown";
-import { DynamicContainer } from "../../../helpers";
+import { DynamicContainer } from "../../../helpers/dynamicContainer";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     component_size?: "S" | "M" | "L";

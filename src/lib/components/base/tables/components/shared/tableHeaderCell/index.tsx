@@ -1,11 +1,11 @@
 import { TableHTMLAttributes, forwardRef, useRef } from 'react';
 import { useResize } from '../../../../../../hooks/useResize';
-import { CellSizingLine } from '../../../..';
 import { TableLabel } from '../../ui/tableLabel';
 import { TableSort } from '../../ui/tableSort';
 import './style.scss';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { CellSizingLine } from '../../ui/cellSizingLine';
 
 interface Props extends TableHTMLAttributes<HTMLTableCellElement> {
     label: string;
