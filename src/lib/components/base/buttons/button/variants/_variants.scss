@@ -153,7 +153,7 @@
 
 .glare-button-L {
     @include Body-typography-Large-Medium;
-    height: 28px;
+    height: 24px;
     padding: 0px 15px
 }
 
@@ -170,4 +170,5 @@
 .glare-button-without-icon-L {
     padding: 0;
     width: 30px;
+    height: 28px !important;
 }
