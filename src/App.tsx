@@ -1,15 +1,14 @@
-import { ContentColumn } from './lib/components/shared'
+import { FieldSection } from './lib/components/shared'
 import './lib/styles/colors/colorMapping/light.css'
 
 function App() {
 
   return (
     <section className='app' >
-      <ContentColumn
-        component_label='Label'
-        component_subLabel='Label'
-        warning_label='label'
-        error_label='Label'
+      <FieldSection
+        name={'ss'}
+        label={'Label'}
+        secondary_label='Label'
       />
     </section >
   )

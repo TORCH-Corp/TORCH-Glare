@@ -1,28 +1,45 @@
 import { HTMLAttributes } from 'react';
 import { Alert } from '../../../../components/base/alerts/alert';
 import './style.scss';
+import { Label } from '../../../base';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     component_label: string
-    component_subLabel?: string
+    secondary_label?: string
+    required_label?: string
     warning_label?: string
     error_label?: string
+    component_size?: "S" | "M" | "L";
+
 }
 export function ContentColumn({
     component_label,
-    component_subLabel,
+    secondary_label,
     warning_label,
+    required_label,
     error_label,
+    component_size,
     ...props
 }: Props) {
     return (
         <section {...props} className='content-column'>
-            <p className='content-column-label'>{component_label}</p>
-            <section className='content-column-wrapper'>
-                {component_subLabel && <p className='content-column-sub-label'>{component_subLabel}</p>}
-                {warning_label ? <Alert component_label={warning_label} component_state={'Warning'} /> : null}
-                {error_label ? <Alert component_label={error_label} component_state={'Error'} /> : null}
-            </section>
+            <Label
+                label={component_label}
+                secondary_label={secondary_label}
+                required_label={required_label}
+                component_size={component_size}
+                component_style='vertical'
+                name={''}
+            />
+            {warning_label || error_label ?
+                <section className='content-column-wrapper'>
+                    {warning_label ? <Alert component_label={warning_label} component_state={'Warning'} /> : null}
+                    {error_label ? <Alert component_label={error_label} component_state={'Error'} /> : null}
+                </section>
+                :
+                null
+            }
+
         </section>
     )
 }
