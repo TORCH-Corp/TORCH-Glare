@@ -1,5 +1,5 @@
 @import './fonts/fonts.css';
-@import './lib/styles/colors/colorMapping/default.css';
+@import './lib/styles/colors/colorMapping/dark.css';
 
 * {
     box-sizing: border-box;

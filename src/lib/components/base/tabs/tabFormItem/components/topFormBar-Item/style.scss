@@ -1,7 +1,6 @@
 @import '../../../../../../styles/typography/index.scss';
 
 .TopFormBarItem {
-    background-color: rgba(0, 0, 0, 0.08);
     border-radius: 4px;
     padding: 0px 24px;
     height: 28px;
@@ -13,23 +12,27 @@
     overflow: hidden;
     white-space: nowrap;
     border: none;
+    outline: 1px solid transparent;
+    background: var(--background-presentation-tab-default-topbar);
     transition: all 300ms ease-in-out;
 
     @include Body-typography-Medium-Medium;
 
     &:hover {
-        background-color: var(--background-presentation-tab-acton-hover);
+        background: var(--background-presentation-tab-hover-topbar);
+        color: var(--content-presentation-tab-action-hover);
+        outline: 1px solid var(--border-presentation-tab-hover-topbar);
     }
 
     &:focus {
-        outline: 1px solid var(--border-presentation-tab-action-selected);
-        background: var(--background-presentation-tab-action-selected);
+        outline: unset;
+        background: var(--background-presentation-tab-selected-topbar);
         color: var(--content-presentation-tab-action-selected);
     }
 
     &:active {
-        outline: 1px solid var(--border-presentation-tab-action-selected);
-        background: var(--background-presentation-tab-action-selected);
+        outline: unset;
+        background: var(--background-presentation-tab-selected-topbar);
         color: var(--content-presentation-tab-action-selected);
     }
 }

@@ -20,22 +20,21 @@
     @include Body-typography-Medium-Medium;
 
     &:hover {
-        background: var(--background-presentation-form-base);
+        background: var(--background-presentation-tab-hover-sidebar);
+        outline: 1px solid var(--border-presentation-tab-default-sidebar);
         padding: 0 16px;
     }
 
     &:focus {
         outline: unset;
-        background: var(--background-system-body-primary);
-        box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+        background: var(--background-presentation-tab-selected-sidebar);
         color: var(--content-presentation-action-dark-primary);
         padding: 0 16px;
     }
 
     &:active {
         outline: unset;
-        background: var(--background-system-body-primary);
-        box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+        background: var(--background-presentation-tab-selected-sidebar);
         color: var(--content-presentation-action-dark-primary);
         padding: 0 16px;
     }

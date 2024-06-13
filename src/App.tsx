@@ -13,7 +13,7 @@ function App() {
         theme="System-Style"
         name={''}
       />
-      <TabFormItem componentType={'Side'} >Label</TabFormItem>
+      <TabFormItem componentType={'Top'} >Label</TabFormItem>
 
     </section >
   )
