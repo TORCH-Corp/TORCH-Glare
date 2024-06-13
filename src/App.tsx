@@ -1,4 +1,4 @@
-import { InputField } from './lib'
+import { Button, InputField } from './lib'
 import './lib/styles/colors/colorMapping/default.css'
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
         name={''}
       />
 
+      <Button component_size='S' right_icon={<i className="ri-arrow-right-s-line"></i>} >Next</Button>
     </section >
   )
 }

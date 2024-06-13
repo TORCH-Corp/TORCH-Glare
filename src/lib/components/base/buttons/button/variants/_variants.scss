@@ -142,16 +142,19 @@
 .glare-button-S {
     @include Body-typography-Small-Medium;
     height: 22px;
+    padding: 0px 6px
 }
 
 .glare-button-M {
     @include Body-typography-Medium-Medium;
     height: 26px;
+    padding: 0px 8px
 }
 
 .glare-button-L {
     @include Body-typography-Large-Medium;
     height: 28px;
+    padding: 0px 15px
 }
 
 .glare-button-without-icon-S {
