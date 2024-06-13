@@ -1,4 +1,4 @@
-import { Button, InputField } from './lib'
+import { Button, InputField, TabFormItem } from './lib'
 import './lib/styles/colors/colorMapping/default.css'
 
 function App() {
@@ -13,8 +13,8 @@ function App() {
         theme="System-Style"
         name={''}
       />
+      <TabFormItem componentType={'Side'} >Label</TabFormItem>
 
-      <Button component_size='L' right_icon={<i className="ri-arrow-right-s-line"></i>} >Next</Button>
     </section >
   )
 }

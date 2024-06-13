@@ -1,3 +1,5 @@
+@import '../../../../../../styles/typography/index.scss';
+
 .TopFormBarItem {
     background-color: rgba(0, 0, 0, 0.08);
     border-radius: 4px;
@@ -10,7 +12,10 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    border: none;
     transition: all 300ms ease-in-out;
+
+    @include Body-typography-Medium-Medium;
 
     &:hover {
         background-color: var(--background-presentation-tab-acton-hover);
