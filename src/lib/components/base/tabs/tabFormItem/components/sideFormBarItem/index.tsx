@@ -1,5 +1,5 @@
 import './style.scss';
-import { Label } from '../../labels/label';
+import { Label } from '../../../../labels/label';
 import { ButtonHTMLAttributes } from 'react';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {

@@ -1,7 +1,5 @@
 import { Label } from "./labels/label"
 import Button from "./buttons/button"
-import TopFormBarItem from "./tabs/topFormBar-Item"
-import SideFormBarItem from "./tabs/sideFormBarItem"
 import Badge from "./badges/badge"
 import DropDownMenuItem from "./dropDowns/dropDownMenuItem"
 import DropDownMenu from "./dropDowns/dropdownMenu"
@@ -29,14 +27,14 @@ import Alert from "./alerts/alert"
 import { RadioLabel } from "./radio/radioLabel"
 import RingLoading from "./loading/ringLoading"
 import Counter from "./counters/counter"
+import TabFormItem from "./tabs/tabFormItem"
 
 
 
 export {
     Label,
     Button,
-    TopFormBarItem,
-    SideFormBarItem,
+    TabFormItem,
     Badge,
     DropDownMenuItem,
     DropDownMenu,
