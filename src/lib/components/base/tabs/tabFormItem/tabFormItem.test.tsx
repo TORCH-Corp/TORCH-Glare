@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
-import SideFormBarItem from '.';
+import TabFormItem from '.';
 
-describe('SideFormBarItem component', () => {
+describe('TabFormItem component', () => {
 
     it('renders the component label', () => {
-        render(<SideFormBarItem >Label</SideFormBarItem>);
+        render(<TabFormItem componentType={'Top'} >Label</TabFormItem>);
         expect(screen.getByText('Label')).toBeVisible();
     });
 });

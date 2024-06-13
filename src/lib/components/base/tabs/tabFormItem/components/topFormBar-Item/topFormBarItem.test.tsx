@@ -6,7 +6,7 @@ import TopFormBarItem from '.';
 describe('TopFormBarItem component', () => {
 
     it('renders the component label', () => {
-        render(<TopFormBarItem label='Label' component_size={'M'} name={''} />);
+        render(<TopFormBarItem >Label</TopFormBarItem>);
         expect(screen.getByText('Label')).toBeVisible();
     });
 });

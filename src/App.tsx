@@ -1,4 +1,4 @@
-import { Button, InputField, TabFormItem } from './lib'
+import { InputField, TabFormItem } from './lib'
 import './lib/styles/colors/colorMapping/default.css'
 
 function App() {
