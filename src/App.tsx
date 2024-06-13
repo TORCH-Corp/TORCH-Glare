@@ -14,7 +14,7 @@ function App() {
         name={''}
       />
 
-      <Button right_icon={<i className="ri-arrow-right-s-line"></i>} ></Button>
+      <Button component_size='L' right_icon={<i className="ri-arrow-right-s-line"></i>} >Next</Button>
     </section >
   )
 }
