@@ -1,0 +1,29 @@
+@import '../../../../styles/typography/index.scss';
+
+
+.content-column {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+
+    .content-column-label {
+        color: var(--content-presentation-global-primary);
+        @include Headers-typography-Small-Regular;
+    }
+
+    .content-column-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+
+        .content-column-sub-label {
+            color: var(--content-presentation-global-primary);
+            @include Body-typography-Small-Regular;
+        }
+    }
+
+}

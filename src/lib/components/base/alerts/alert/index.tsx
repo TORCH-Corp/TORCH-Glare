@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 export const Alert: React.FC<Props> = ({ component_label, component_state, ...props }) => {
   return (
     <section {...props} className={`glare-alert glare-alert-${component_state}-state ${props.className}`}>
-      <div className="glare-alert-icon-wrapper">
+      <section className="glare-alert-icon-wrapper">
         {
           component_state == 'Error' ?
             <i className="ri-alert-fill"></i>
@@ -19,7 +19,7 @@ export const Alert: React.FC<Props> = ({ component_label, component_state, ...pr
               :
               <i className="ri-error-warning-fill"></i>
         }
-      </div>
+      </section>
 
       <p className="glare-alert-label">{component_label}</p>
     </section>

@@ -1,20 +1,16 @@
-import { InputField, TabFormItem } from './lib'
-import './lib/styles/colors/colorMapping/default.css'
+import { ContentColumn } from './lib/components/shared'
+import './lib/styles/colors/colorMapping/light.css'
 
 function App() {
 
   return (
     <section className='app' >
-      <InputField
-        component_size="M"
-        label="User Name"
-        placeholder="name@mail.com"
-        left_side_icon={<i className="ri-account-circle-fill"></i>}
-        theme="System-Style"
-        name={''}
+      <ContentColumn
+        component_label='Label'
+        component_subLabel='Label'
+        warning_label='label'
+        error_label='Label'
       />
-      <TabFormItem componentType={'Top'} >Label</TabFormItem>
-
     </section >
   )
 }

@@ -2,24 +2,29 @@
 
 .glare-alert {
     display: flex;
+    position: relative;
+    /* Make parent a positioned element */
     justify-content: flex-start;
     align-items: center;
     border-radius: 4px;
-    height: 26px;
+    min-height: 26px;
     width: fit-content;
 
     .glare-alert-icon-wrapper {
+        position: absolute;
+        /* Position relative to the parent */
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 26px;
-        height: 26px;
+        min-width: 26px;
+        height: 100%;
+        /* Should now fill the parent's height */
         border-radius: var(--Radius-2-max, 4px);
         font-size: 18px;
     }
 
     .glare-alert-label {
-        padding: 0 4px;
+        padding: 0 30px;
         @include Body-typography-Small-Regular;
         color: var(--content-presentation-global-primary);
     }
