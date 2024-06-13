@@ -14,10 +14,11 @@
     transition: all 300ms ease-in-out;
 
     .glare-button-icon {
-        width: 16px;
+        width: 12px;
         color: var(--content-presentation-action-light-primary);
 
         i {
+            font-size: 12px;
             transition: all 300ms ease-in-out;
         }
     }
