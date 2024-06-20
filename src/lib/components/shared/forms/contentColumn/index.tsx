@@ -1,7 +1,7 @@
 import { HTMLAttributes } from 'react';
 import { Alert } from '../../../../components/base/alerts/alert';
 import './style.scss';
-import { Label } from '../../../base';
+import { Label } from '../../../base/labels/label';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     component_label: string
