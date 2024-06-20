@@ -41,7 +41,7 @@ After installing the library, you can start using the components in your React p
 
 ```tsx
 import React from 'react';
-import {Button} from 'torch-glare/dist';
+import {Button} from 'torch-glare';
 import 'torch-glare/dist/themes/colorMapping/dark.css'; // this well make the component theme dark
 
 const App = () => {

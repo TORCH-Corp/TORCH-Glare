@@ -1,5 +1,5 @@
-import { InputField } from '../dist/'
-import 'torch-glare/dist/themes/colorMapping/dark.css';
+import { InputField } from 'torch-glare'
+import 'torch-glare/dist/themes/colorMapping/light.css';
 
 function App() {
 

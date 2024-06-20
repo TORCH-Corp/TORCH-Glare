@@ -3976,14 +3976,13 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-torch-glare@^0.0.32:
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/torch-glare/-/torch-glare-0.0.32.tgz#18b97aba9a7ef900d3983dab7bc3f742c2cf4680"
-  integrity sha512-khn8iiLV5HxpfpfRUWBphKaZjux0YyTdAzVud9cNBAgvYRI3JS/xMvzzf+oo6WkrMSBl4jnWT2y4ntsKhH+/Vw==
+torch-glare@^0.0.38:
+  version "0.0.38"
+  resolved "https://registry.yarnpkg.com/torch-glare/-/torch-glare-0.0.38.tgz#12f9e9f08054c75c69c5057f488a8ec1fe191840"
+  integrity sha512-JBeY5vOX2UkxmbDu4AcCXU/ic2uFQB+MyuCo7JbJxYF3cFwR0ciF14ww4CHHZR6JwwII7O+Zb51waok0nZqLHA==
   dependencies:
     "@dnd-kit/core" "^6.1.0"
     "@dnd-kit/sortable" "^8.0.0"
-    "@types/react-datepicker" "^6.2.0"
     react "^18.2.0"
     react-datepicker "^6.9.0"
     react-dom "^18.2.0"

@@ -16,8 +16,8 @@ export default defineConfig({
     libInjectCss(),
     copy({
       targets: [
-        { src: './src/lib/styles/colors/colorMapping', dest: 'dist/themes' },
-        { src: './src/lib/styles/colors/coreColorSystem', dest: 'dist/themes' },
+        { src: 'src/lib/styles/colors/colorMapping', dest: 'dist/themes' },
+        { src: 'src/lib/styles/colors/coreColorSystem', dest: 'dist/themes' },
       ],
       hook: 'writeBundle' // Ensure the plugin runs at the right time
     })
@@ -59,9 +59,8 @@ export default defineConfig({
       }
     },
     lib: {
-      entry: resolve(__dirname, 'src/lib/'),
+      entry: resolve(__dirname, 'src/lib/index.ts'), // Adjust this path if needed
       formats: ['es'],
-      name: 'TorchGlare'
     },
   },
 });
