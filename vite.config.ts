@@ -6,6 +6,7 @@ import { libInjectCss } from 'vite-plugin-lib-inject-css';
 import { extname, relative, resolve } from 'path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'glob';
+import copy from 'rollup-plugin-copy';
 import { defineConfig as defineVitestConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -13,6 +14,13 @@ export default defineConfig({
     react(),
     dts({ include: ['src/lib'] }),
     libInjectCss(),
+    copy({
+      targets: [
+        { src: './src/lib/styles/colors/colorMapping', dest: 'dist/themes' },
+        { src: './src/lib/styles/colors/coreColorSystem', dest: 'dist/themes' },
+      ],
+      hook: 'writeBundle' // Ensure the plugin runs at the right time
+    })
   ],
   test: {
     environment: 'jsdom',
