@@ -17,6 +17,7 @@
 
         .label {
             color: var(--content-presentation-global-primary);
+            text-align: start;
             @include Body-typography-Small-Regular;
         }
 

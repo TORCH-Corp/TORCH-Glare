@@ -25,6 +25,12 @@
         align-items: flex-start;
         flex-direction: column;
         gap: 0;
+
+        .label-container {
+            .requiredLabel {
+                margin-top: 4px;
+            }
+        }
     }
 
 }
