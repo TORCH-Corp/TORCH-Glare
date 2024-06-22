@@ -7,7 +7,7 @@ function App() {
     <section className='app' >
       <FieldSection
         name={'ss'}
-        label={'Label'}
+        label={'LabelLAbel Label'}
         component_size='M'
         required_label='Required'
       />

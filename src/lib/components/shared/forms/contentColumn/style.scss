@@ -6,6 +6,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
+    min-width: 25%;
     gap: 8px;
 
     .content-column-label {
@@ -28,8 +29,8 @@
 
     .content-column-labels {
         display: flex;
-        justify-content: flex-start;
-        align-items: center;
+        justify-content: center;
+        align-items: flex-start;
         gap: 4px;
     }
 
