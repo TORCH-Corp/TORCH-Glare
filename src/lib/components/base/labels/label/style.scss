@@ -24,11 +24,13 @@
             color: var(--content-presentation-global-secondary);
             @include Labels-typography-Small-Regular;
             margin-bottom: 1.5px;
+            text-align: start;
         }
 
         .requiredLabel {
             color: var(--content-presentation-state-negative);
             @include Labels-typography-Small-Medium;
+            text-align: start;
         }
     }
 }

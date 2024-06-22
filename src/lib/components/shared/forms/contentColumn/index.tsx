@@ -28,14 +28,14 @@ export function ContentColumn({
             <section className='content-column-labels'>
                 <Label
                     label={component_label}
-                    secondary_label={secondary_label}
+                    required_label={required_label}
                     component_size={component_size}
-                    component_style='vertical'
+                    component_style='horizontal'
                     name={name}
                 />
                 <Label
+                    secondary_label={secondary_label}
                     className='content-column-required-label'
-                    required_label={required_label}
                     component_size={component_size}
                     name={name}
                 />

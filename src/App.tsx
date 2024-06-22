@@ -6,10 +6,11 @@ function App() {
   return (
     <section className='app' >
       <FieldSection
-        name={'ss'}
-        label={'LabelLAbel Label'}
-        component_size='M'
-        required_label='Required'
+        component_size="M"
+        secondary_label="add your company name"
+        label="Company Name"
+        required_label="Required"
+        name={"companyName"}
       />
     </section >
   )
