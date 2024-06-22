@@ -34,6 +34,7 @@ export function ContentColumn({
                     name={name}
                 />
                 <Label
+                    className='content-column-required-label'
                     required_label={required_label}
                     component_size={component_size}
                     name={name}
