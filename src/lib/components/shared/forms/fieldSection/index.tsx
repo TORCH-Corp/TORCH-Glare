@@ -43,6 +43,7 @@ export function FieldSection({
     return (
         <section className="glare-field-section">
             <ContentColumn
+                name={name}
                 component_label={label}
                 secondary_label={secondary_label}
                 required_label={required_label}

@@ -1,14 +1,15 @@
-import { InputField } from 'torch-glare'
-import 'torch-glare/dist/themes/colorMapping/light.css';
+import 'torch-glare/dist/themes/colorMapping/default.css';
+import { FieldSection } from './lib/components/shared';
 
 function App() {
 
   return (
     <section className='app' >
-      <InputField
+      <FieldSection
         name={'ss'}
         label={'Label'}
-        secondary_label='Label'
+        component_size='M'
+        required_label='Required'
       />
     </section >
   )

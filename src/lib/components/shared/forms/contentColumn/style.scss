@@ -3,7 +3,7 @@
 
 .content-column {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
     gap: 8px;
@@ -26,4 +26,23 @@
         }
     }
 
+    .content-column-labels {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 4px;
+    }
+
+}
+
+.content-column-size-S {
+    min-height: 30px;
+}
+
+.content-column-size-M {
+    min-height: 40px;
+}
+
+.content-column-size-L {
+    min-height: 40px;
 }
