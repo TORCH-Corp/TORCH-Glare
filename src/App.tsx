@@ -6,7 +6,7 @@ function App() {
   return (
     <section className='app' >
       <FieldSection
-        component_size="M"
+        component_size="L"
         secondary_label="add your company name"
         label="Company Name"
         required_label="Required"
