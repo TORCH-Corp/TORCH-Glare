@@ -98,6 +98,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(({
                             {trailing_label && <p className='glare-input-trailing-label'>{trailing_label}</p>}
                             {drop_down_list_child && (
                                 <Button
+                                    type='button'
                                     onClick={() => setIsActive(true)}
                                     component_size={component_size}
                                     disabled={props.disabled}

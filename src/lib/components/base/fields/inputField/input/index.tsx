@@ -75,7 +75,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
                         <span className="glare-input-icon">
                             {trailing_label && <p className='glare-input-trailingLabel'>{trailing_label}</p>}
                             {drop_down_list_child && (
-                                <Button onClick={() => setIsActive(true)} component_size={component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>} />
+                                <Button type='button' onClick={() => setIsActive(true)} component_size={component_size} disabled={props.disabled} left_icon={<i className="ri-arrow-down-s-line"></i>} />
                             )}
                             {action_button}
                         </span>
