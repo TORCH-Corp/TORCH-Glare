@@ -1,4 +1,4 @@
-# SmallButton 1.0 Component
+# IconButton 1.0 Component
 
 ## Overview
 

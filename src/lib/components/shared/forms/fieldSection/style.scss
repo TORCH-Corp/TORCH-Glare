@@ -1,23 +1,26 @@
 @import '../../../../styles/mediaQuery/queries.scss';
 
 .glare-field-section {
-    display: grid;
-    grid-template-columns: 20% 75%;
-    /* 20% for the first column, auto for the second (takes remaining space) */
-    gap: 24px;
+
     width: 100%;
     padding: 16px 12px;
     border-top: 1px solid var(--border-presentation-global-primary);
-    align-items: end;
-    /* Align items to the bottom */
-    justify-content: space-between;
-    /* Spacing between columns */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 12px;
 
     @include respond-to(tabletPortrait) {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 28% 68%;
+        gap: 24px;
     }
+
+    @include respond-to(laptop) {
+        grid-template-columns: 20% 75%;
+    }
+
 }

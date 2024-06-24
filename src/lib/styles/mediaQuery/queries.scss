@@ -10,43 +10,43 @@ $breakpoint-large-desktop: 1920px;
 
 @mixin respond-to($breakpoint) {
     @if $breakpoint ==smallPhone {
-        @media only screen and (max-width: $breakpoint-small-phone) {
+        @media only screen and (min-width: $breakpoint-small-phone) {
             @content;
         }
     }
 
     @else if $breakpoint ==phone {
-        @media only screen and (max-width: $breakpoint-phone) {
+        @media only screen and (min-width: $breakpoint-phone) {
             @content;
         }
     }
 
     @else if $breakpoint ==tabletPortrait {
-        @media only screen and (max-width: $breakpoint-tablet-portrait) {
+        @media only screen and (min-width: $breakpoint-tablet-portrait) {
             @content;
         }
     }
 
     @else if $breakpoint ==tabletLandscape {
-        @media only screen and (max-width: $breakpoint-tablet-landscape) {
+        @media only screen and (min-width: $breakpoint-tablet-landscape) {
             @content;
         }
     }
 
     @else if $breakpoint ==laptop {
-        @media only screen and (max-width: $breakpoint-laptop) {
+        @media only screen and (min-width: $breakpoint-laptop) {
             @content;
         }
     }
 
     @else if $breakpoint ==desktop {
-        @media only screen and (max-width: $breakpoint-desktop) {
+        @media only screen and (min-width: $breakpoint-desktop) {
             @content;
         }
     }
 
     @else if $breakpoint ==largeDesktop {
-        @media only screen and (max-width: $breakpoint-large-desktop) {
+        @media only screen and (min-width: $breakpoint-large-desktop) {
             @content;
         }
     }

@@ -7,7 +7,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     count?: number;
 }
 
-const SmallButton: React.FC<Props> = ({ icon, count, className, ...buttonProps }) => {
+const IconButton: React.FC<Props> = ({ icon, count, className, ...buttonProps }) => {
     return (
         <button {...buttonProps} className={`glare-small-button ${className}`}>
             {count ? <Counter label={count} /> : null}
@@ -16,4 +16,4 @@ const SmallButton: React.FC<Props> = ({ icon, count, className, ...buttonProps }
     );
 };
 
-export default SmallButton;
+export default IconButton;
