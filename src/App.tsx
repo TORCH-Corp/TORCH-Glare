@@ -20,26 +20,6 @@ function App() {
               badge_size='M'
               label={'e.namedddddddddddddddddddddddddd'}
               selected />
-            <Badge
-              badge_style='badge-blue'
-              badge_size='M'
-              label={'e.namedddddddddddddddddddddddddd'}
-              selected />
-            <Badge
-              badge_style='badge-blue'
-              badge_size='M'
-              label={'e.namedddddddddddddddddddddddddd'}
-              selected />
-            <Badge
-              badge_style='badge-blue'
-              badge_size='M'
-              label={'e.namedddddddddddddddddddddddddd'}
-              selected />
-            <Badge
-              badge_style='badge-blue'
-              badge_size='M'
-              label={'e.namedddddddddddddddddddddddddd'}
-              selected />
           </>
         }
 

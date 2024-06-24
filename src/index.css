@@ -18,5 +18,9 @@ body {
 }
 
 .app {
-    width: 800px;
+    width: 100%;
+}
+
+#root {
+    width: 100%;
 }
