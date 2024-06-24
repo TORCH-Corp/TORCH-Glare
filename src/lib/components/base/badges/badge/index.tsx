@@ -25,7 +25,7 @@ const Badge: React.FC<Props> = ({
       className={`glare-badge glare-badge-size-${badge_size ? badge_size : "S"} ${badge_style} ${props.className}`}
     >
       <span className='badge-icon'> {badge_icon ? badge_icon : <i className="ri-circle-fill badge-def-icon"></i>}</span>
-      {label}
+      <p className='badge-label'>{label}</p>
       {selected && <button onClick={onCloseBtnClick} className='glare-badge-close-icon'><i className="ri-close-line"></i></button>}
     </span>
   );

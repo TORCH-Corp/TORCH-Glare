@@ -1,11 +1,10 @@
 .drop-down-menu {
     width: 100%;
     display: flex;
-    padding: var(--Space-1, 4px);
     flex-direction: column;
-    align-items: center;
-    border-radius: 8px;
     gap: 2px;
+    padding: var(--Space-1, 4px);
+    border-radius: 8px;
     max-height: 200px;
     overflow: scroll;
 

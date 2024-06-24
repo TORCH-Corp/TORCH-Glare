@@ -15,6 +15,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement | HTMLInputElemen
     right_side_icon?: ReactNode;
     icon?: ReactNode;
     component_type?: "checkbox" | "radio";
+    isChecked?: boolean
 }
 
 const DropDownMenuItem: React.FC<Props> = ({
@@ -28,14 +29,16 @@ const DropDownMenuItem: React.FC<Props> = ({
     component_style,
     right_side_icon,
     icon,
+    isChecked,
     className,
     ...props
 }) => {
     return (
-        component_type ? (
+        component_type ?
             // Checkbox or radio button
             <DropDownMenuItemInput
                 {...props}
+                checked={isChecked}
                 component_name={element_name}
                 input_type={component_type}
                 label={component_label}
@@ -45,7 +48,7 @@ const DropDownMenuItem: React.FC<Props> = ({
                 disabled={props.disabled}
                 component_size={component_size}
             />
-        ) : (
+            :
             // Normal style
             <button
                 {...props}
@@ -65,7 +68,7 @@ const DropDownMenuItem: React.FC<Props> = ({
                 {/* If we need an icon or label on the right side */}
                 {right_side_icon && <button onClick={onRightSideIconClick} className='dropDownMenuItem-icon'>{right_side_icon}</button>}
             </button>
-        )
+
     );
 };
 

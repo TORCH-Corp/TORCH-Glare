@@ -137,7 +137,9 @@
 /* sizes */
 
 .glare-badge-size-S {
-    @include Body-typography-Small-Medium;
+    .badge-label {
+        @include Body-typography-Small-Medium;
+    }
 
     .badge-icon {
         font-size: 12px;
@@ -145,7 +147,11 @@
 }
 
 .glare-badge-size-M {
-    @include Body-typography-Medium-Medium;
+    height: 26px !important;
+
+    .badge-label {
+        @include Body-typography-Medium-Medium;
+    }
 
     .badge-icon {
         font-size: 15px;
@@ -162,7 +168,11 @@
 }
 
 .glare-badge-size-L {
-    @include Body-typography-Medium-Medium;
+    height: 26px !important;
+
+    .badge-label {
+        @include Body-typography-Medium-Medium;
+    }
 
     .badge-icon {
         font-size: 15px;

@@ -1,9 +1,13 @@
 .glare-field-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    display: grid;
+    grid-template-columns: 20% 75%;
+    /* 20% for the first column, auto for the second (takes remaining space) */
     gap: 24px;
     width: 100%;
     padding: 16px 12px;
     border-top: 1px solid var(--border-presentation-global-primary);
+    align-items: end;
+    /* Align items to the bottom */
+    justify-content: space-between;
+    /* Spacing between columns */
 }

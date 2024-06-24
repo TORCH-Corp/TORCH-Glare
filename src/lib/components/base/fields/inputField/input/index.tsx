@@ -45,7 +45,10 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
 
     return (
         <section
-            onClick={() => setFocus(true)}
+            onClick={() => {
+                setFocus(true)
+                setIsActive(true)
+            }}
             className={`glare-input-field-wrapper ${style} ${className}`}
             ref={sectionRef}
         >
