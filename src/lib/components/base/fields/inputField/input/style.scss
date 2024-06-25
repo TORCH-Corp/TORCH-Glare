@@ -10,7 +10,7 @@
     transition: all 150ms ease-in-out;
 
     &:hover {
-        border-color: var(--border-presentation-action-active);
+        border-color: var(--border-presentation-action-hover);
         box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.30);
     }
 

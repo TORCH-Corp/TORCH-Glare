@@ -17,15 +17,15 @@
     border: none;
 
     &:hover {
-        border-color: var(--border-system-action-hover-primary) !important;
+        outline-color: var(--border-system-action-hover-primary) !important;
     }
 
     &:focus {
-        border-color: var(--border-system-action-hover-primary) !important;
+        outline-color: var(--border-system-action-hover-primary) !important;
     }
 
     &:active {
-        border-color: var(--border-system-action-hover-primary) !important;
+        outline-color: var(--border-system-action-hover-primary) !important;
     }
 }
 
