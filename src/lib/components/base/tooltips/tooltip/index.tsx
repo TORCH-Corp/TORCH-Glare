@@ -23,9 +23,10 @@ const Tooltip: React.FC<Props> = ({ message, className, ...props }) => {
 
     return message ? (
         <section
-            ref={ref}
-            className={`Tooltip ${direction} ${className}`}
             {...props}
+            ref={ref}
+            dir='ltr'
+            className={`Tooltip ${direction} ${className}`}
         >
             <RectangleIcon />
             <p>{message}</p>
