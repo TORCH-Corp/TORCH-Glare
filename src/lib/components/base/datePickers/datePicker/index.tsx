@@ -3,14 +3,14 @@ import DatePicker from "react-datepicker";
 import "./react-datepicker.scss";
 
 interface Props {
-    onChange?: (date: Date) => void;
-    selected?: Date;
+    onChange?: (date: Date) => void; // date change event handlers
+    selected?: Date; // selected date
     placeholder: string;
     name: string;
     onBlur?: () => void;
-    component_style?: "presentation" | "system";
-    onTableCell?: boolean;
-    component_size?: "S" | "M" | "L";
+    component_style?: "presentation" | "system"; // this props will change the button style see on figma design file
+    onTableCell?: boolean; // to have anther sizes for tables when this component in table cell
+    component_size?: "S" | "M" | "L"; // this props will change the button style size see on figma design file
 }
 
 export const Datepicker = forwardRef((props: Props, ref: ForwardedRef<any>) => {
@@ -41,6 +41,7 @@ export const Datepicker = forwardRef((props: Props, ref: ForwardedRef<any>) => {
                 ref={ref} // Forward the ref
             />
 
+            {/* date picker default icon */}
             <span className="glare-date-picker-icon"><i className="ri-calendar-2-line"></i></span>
         </section>
     );

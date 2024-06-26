@@ -3,13 +3,13 @@ import { Label } from "../../labels/label";
 import "./style.scss";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    component_size?: "S" | "M" | "L";
-    check_box_name: string;
+    component_size?: "S" | "M" | "L"; // this props will change the button style size see on figma design file
+    check_box_name: string; // this important for link the label with the input
     label?: string;
     required_label?: string;
     secondary_label?: string;
     component_type?: "checkbox" | "radio" | any;
-    isChecked?: boolean
+    isChecked?: boolean // this will check the input if true
 }
 
 export const CheckboxLabel = forwardRef(({

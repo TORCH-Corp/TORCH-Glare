@@ -3,20 +3,20 @@ import { LabeledInput } from "./labeledInput";
 import { Input } from "./input";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement> {
-    name: string;
+    name: string; // this is important for link to the input to the label
     label?: string;
     required_label?: string;
     secondary_label?: string;
-    component_size?: "S" | "M" | "L";
-    component_style?: "horizontal" | "vertical";
-    negative?: boolean;
-    drop_down_list_child?: ReactNode;
-    trailing_label?: string;
-    action_button?: ReactNode;
-    left_side_icon?: ReactNode;
-    badges_children?: ReactNode | ReactNode[];
-    error_message?: string;
-    theme?: "System-Style" | "";
+    component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
+    component_style?: "horizontal" | "vertical"; // this will change the label direction of the component
+    negative?: boolean; // to have negative colors theme
+    drop_down_list_child?: ReactNode; // to add drop down list if you pass it
+    trailing_label?: string; // to add trailing label
+    action_button?: ReactNode; // to add action button to the end of the input
+    left_side_icon?: ReactNode; // to add left side icon
+    badges_children?: ReactNode | ReactNode[]; // to add badges components inside the component
+    error_message?: string; // to show tooltip component when error_message not null
+    theme?: "System-Style" | ""; // this is used to change the color theme of the component
 }
 
 export const InputField = forwardRef<HTMLInputElement, Props>(({
@@ -36,6 +36,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
     theme,
     ...props
 }, ref) => {
+
+    // if you have label then return LabeledInput else return just the Input
     return label ? (
         <LabeledInput
             ref={ref}

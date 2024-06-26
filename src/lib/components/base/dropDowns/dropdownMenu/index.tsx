@@ -3,7 +3,7 @@ import './style.scss';
 
 interface Props extends HTMLAttributes<HTMLUListElement> {
     Ref?: RefObject<HTMLUListElement>;
-    component_style?: "System-Style" | "Presentation-Style";
+    component_style?: "System-Style" | "Presentation-Style"; // this props will change the button style  see on figma design file
 }
 
 const DropDownMenu: React.FC<Props> = ({

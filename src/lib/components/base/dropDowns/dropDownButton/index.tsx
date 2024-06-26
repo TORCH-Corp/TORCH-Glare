@@ -5,9 +5,9 @@ import { useShowDropDown } from "../../../../hooks/useShowDropDown";
 import { DynamicContainer } from "../../../helpers/dynamicContainer";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-    component_size?: "S" | "M" | "L";
+    component_size?: "S" | "M" | "L"; // this props will change the button style size see on figma design file
     component_label: string;
-    drop_down_list_child: ReactNode;
+    drop_down_list_child: ReactNode; // this will show drop down list if you pass it
 }
 
 export const DropDownButton: React.FC<Props> = ({
@@ -18,6 +18,7 @@ export const DropDownButton: React.FC<Props> = ({
     ...props
 }) => {
     const sectionRef = useRef<HTMLDivElement>(null);
+    // this hook will show or hide the drop down list
     const { isActive } = useShowDropDown(sectionRef);
 
     return (
@@ -34,6 +35,8 @@ export const DropDownButton: React.FC<Props> = ({
                     left_icon={<i className="ri-arrow-down-s-line"></i>}
                 />
             </section>
+            {/* this dynamic container will show the drop down list when you click on the button. 
+                this dynamic container will detect the hit the viewport and change the direction.*/}
             <DynamicContainer active={isActive}>
                 {drop_down_list_child}
             </DynamicContainer>

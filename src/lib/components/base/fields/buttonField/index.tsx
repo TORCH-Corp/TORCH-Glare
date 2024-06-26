@@ -3,7 +3,7 @@ import './style.scss';
 import { Divider } from "./divider";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-    with_divider?: boolean;
+    with_divider?: boolean; // to display the divider line if you pass it see on figma design file
 }
 
 const ButtonField: React.FC<Props> = ({

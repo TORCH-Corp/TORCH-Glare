@@ -3,8 +3,8 @@ import arrow from './assets/arrow.svg';
 import './style.scss';
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
-    component_size?: "S" | "M" | "L";
-    dir?: "ltr" | "rtl";
+    component_size?: "S" | "M" | "L"; // this props will change the button style size see on figma design file
+    dir?: "ltr" | "rtl"; // this prop important for rtl layout
 }
 
 export const LinkButton: React.FC<Props> = ({

@@ -11,6 +11,7 @@ export const Alert: React.FC<Props> = ({ component_label, component_state, ...pr
     <section {...props} className={`glare-alert glare-alert-${component_state}-state ${props.className}`}>
       <section className="glare-alert-icon-wrapper">
         {
+          // icons for the different states
           component_state == 'Error' ?
             <i className="ri-alert-fill"></i>
             :
