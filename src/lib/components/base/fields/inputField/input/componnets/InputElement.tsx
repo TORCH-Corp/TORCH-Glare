@@ -1,31 +1,34 @@
-import { Dispatch, InputHTMLAttributes, SetStateAction } from "react";
+import { Dispatch, InputHTMLAttributes, SetStateAction, forwardRef } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  ref: any,
-  setFocus: Dispatch<SetStateAction<boolean>>
-  setIsActive: Dispatch<SetStateAction<boolean>>
+  setFocus: Dispatch<SetStateAction<boolean>>;
+  setIsActive: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function InputElement({
-  ref, setFocus, setIsActive, ...props
-}: Props) {
+export const InputElement = forwardRef<HTMLInputElement, Props>(({
+  setFocus,
+  setIsActive,
+  onBlur,
+  onFocus,
+  ...props
+}, ref) => {
   return (
     <input
       {...props}
       ref={ref}
       onBlur={(e) => {
-        // to disable fucus state style
+        // to disable focus state style
         setFocus(false);
-        props.onBlur && props.onBlur(e);
+        onBlur && onBlur(e);
       }}
       onFocus={(e) => {
         setFocus(true);
         // for dropdown list show or hide when user click on the input
         setIsActive(true);
-        props.onFocus && props.onFocus(e);
+        onFocus && onFocus(e);
       }}
-      className={`glare-input-field`}
+      className="glare-input-field"
       placeholder={props.placeholder}
     />
-  )
-}
+  );
+});

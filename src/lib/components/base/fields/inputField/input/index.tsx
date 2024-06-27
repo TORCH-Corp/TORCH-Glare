@@ -4,7 +4,7 @@ import { DynamicContainer } from '../../../../../components/helpers/dynamicConta
 import { useStates } from './hooks/useStates';
 import Tooltip from '../../../tooltips/tooltip';
 import { useHideDropDown } from '../../hooks/usehideDropDown';
-import InputElement from './componnets/InputElement';
+import { InputElement } from './componnets/InputElement';
 import { ExtraComponents } from './componnets/extraComponents';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {

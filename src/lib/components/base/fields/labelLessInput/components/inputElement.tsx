@@ -1,15 +1,18 @@
-import { InputHTMLAttributes, Dispatch, SetStateAction, ChangeEvent, ChangeEventHandler } from "react";
+import { InputHTMLAttributes, Dispatch, SetStateAction, ChangeEvent, ChangeEventHandler, forwardRef } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    ref: any,
     setFocus: Dispatch<SetStateAction<boolean>>
     setIsActive: Dispatch<SetStateAction<boolean>>
     InputChange: ChangeEventHandler<any>,
     inputRef: any
 }
-export function InputElement({
-    ref, setFocus, setIsActive, InputChange, inputRef, ...props
-}: Props) {
+export const InputElement = forwardRef<HTMLInputElement, Props>(({
+    setFocus,
+    setIsActive,
+    inputRef,
+    InputChange,
+    ...props
+}, ref) => {
     return (
         <input
             {...props}
@@ -38,4 +41,4 @@ export function InputElement({
                 InputChange(e);
             }}
         />)
-}
+})
