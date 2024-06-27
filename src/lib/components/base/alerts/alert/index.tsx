@@ -3,7 +3,7 @@ import './style.scss'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   component_label: string
-  component_state: 'Info' | "Warning" | "Error" | "Success"
+  component_state: 'Info' | "Warning" | "Error" | "Success" // the component styles see on figma design file
 }
 
 export const Alert: React.FC<Props> = ({ component_label, component_state, ...props }) => {

@@ -4,13 +4,13 @@ import { Textarea } from "./textarea";
 import "./style.scss";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-    name: string;
+    name: string; // the name of the textArea and this is important to link the textArea with the label
     label?: string;
     required_label?: string;
     secondary_label?: string;
-    component_style?: "vertical" | "horizontal" | "";
-    error_message?: string;
-    negative?: boolean;
+    component_style?: "vertical" | "horizontal" | ""; // this is used to change the label direction
+    error_message?: string; // this is used to show the error message tooltip
+    negative?: boolean; // this is used to have negative style
 }
 
 export const NoteInputField = forwardRef<HTMLTextAreaElement, Props>(({

@@ -2,12 +2,23 @@ import { MouseEventHandler, ReactNode, ButtonHTMLAttributes } from 'react';
 import './styles/default.scss';
 
 interface Props extends ButtonHTMLAttributes<HTMLSpanElement> {
-  label?: string;
-  onCloseBtnClick?: MouseEventHandler;
-  selected?: boolean;
-  badge_icon?: ReactNode;
-  badge_style?: "badge-green" | "badge-green-light" | "badge-cocktail-green" | "badge-yellow" | "badge-red-orange" | "badge-red-light" | "badge-rose" | "badge-purple" | "badge-blue-purple" | "badge-blue" | "badge-navy" | "badge-gray";
-  badge_size?: "S" | "M" | "L";
+  label?: string; // label of the badge
+  onCloseBtnClick?: MouseEventHandler; // click event of the close button
+  selected?: boolean; // to show the close button
+  badge_icon?: ReactNode; // if you pass any icon then it will replace the default icon
+  badge_style?:
+  "badge-green" |
+  "badge-green-light" |
+  "badge-cocktail-green" |
+  "badge-yellow" |
+  "badge-red-orange" |
+  "badge-red-light" | "badge-rose"
+  | "badge-purple" |
+  "badge-blue-purple" |
+  "badge-blue" |
+  "badge-navy" |
+  "badge-gray" // the component themes see on figma design file
+  badge_size?: "S" | "M" | "L"; // the component style sizes 
 }
 
 const Badge: React.FC<Props> = ({

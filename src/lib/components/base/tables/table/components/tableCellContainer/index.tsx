@@ -16,6 +16,7 @@ export const TableCellContainer: React.FC<Props> = ({
     has_sub_table,
     ...props
 }) => {
+
     const { isHover, setIsHover, handleChecked, checkBoxRef } = useStates(isChecked);
 
     return (

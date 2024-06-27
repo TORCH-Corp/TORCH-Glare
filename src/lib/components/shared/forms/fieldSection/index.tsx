@@ -5,21 +5,21 @@ import './style.scss'
 
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    name: string;
-    label: string;
-    required_label?: string;
-    secondary_label?: string;
-    warning_label?: string
-    error_label?: string
-    negative?: boolean;
-    drop_down_list_child?: ReactNode;
-    trailing_label?: string;
-    action_button?: ReactNode;
-    left_side_icon?: ReactNode;
-    badges_children?: ReactNode | ReactNode[];
-    error_message?: string;
-    component_size?: "S" | "M" | "L";
-    theme?: "System-Style" | "";
+    name: string; // this important to link the component
+    label: string; // this is the label of the component
+    required_label?: string; // this is the required style label
+    secondary_label?: string; // this is the secondary style label
+    warning_label?: string // this will show the alert component with warning style if not null
+    error_label?: string // this will show the component alert with error style if not null
+    negative?: boolean; // to have a negative style
+    drop_down_list_child?: ReactNode; // this will show the dropdown list if not null
+    trailing_label?: string; // this will show the trailing label if not null
+    action_button?: ReactNode; // this will show the action button if not null
+    left_side_icon?: ReactNode; // this will show the left side icon
+    badges_children?: ReactNode | ReactNode[]; // this is for badges children
+    error_message?: string; // this will show tooltip with error message if not null
+    component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
+    theme?: "System-Style" | ""; // this is used to change the theme style of the component
 }
 
 export function FieldSection({

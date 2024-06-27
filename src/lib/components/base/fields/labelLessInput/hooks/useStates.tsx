@@ -9,12 +9,14 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
 }
 export function useStates(props: Props) {
 
-    const [focus, setFocus] = useState(false)
-    const [style, setStyle] = useState('')
-    const [activeLabel, setActiveLabel] = useState(false)
-    const sectionRef = useRef<HTMLDivElement>(null)
-    const inputRef = useRef<any>(null)
 
+    const [focus, setFocus] = useState(false) // fucus is to store input fucus state
+    const [style, setStyle] = useState('') // style is to store all of the styles
+    const [activeLabel, setActiveLabel] = useState(false) // activeLabel is to store if the label is active or not
+    const sectionRef = useRef<HTMLDivElement>(null) // we use sectionRef with the useHideDropDown hook
+    const inputRef = useRef<any>(null) // we use inputRef to detect if the input is focused or not and take control of it
+
+    // we use this to if the user start typing or not and change the label style 
     const InputChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.value == "") {
             setActiveLabel(false)
@@ -23,6 +25,7 @@ export function useStates(props: Props) {
         }
     }
 
+    // we use this to if the user hover over the component and change the label style
     const InputHover = (hover: boolean) => {
         if (hover) {
             if (inputRef.current?.value != "") {
@@ -37,6 +40,7 @@ export function useStates(props: Props) {
 
 
     useEffect(() => {
+        // here we set the style based on the props and user events and store them in the style state
         setStyle
             (`glare-input-labelLess-size-${props.component_size ? props.component_size : "S"} 
         ${focus && !props.negative && !props.error_message ? "glare-input-labelLess-field-focus glare-InputLabel-focus" : ""} 
@@ -48,5 +52,6 @@ export function useStates(props: Props) {
         `)
     }, [{ ...props }])
 
+    // here we return the style state to use it with the component class name and other states
     return { focus, setFocus, style, setStyle, sectionRef, inputRef, activeLabel, setActiveLabel, InputChange, InputHover }
 }

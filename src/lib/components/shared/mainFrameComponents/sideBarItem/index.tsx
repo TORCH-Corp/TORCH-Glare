@@ -2,8 +2,8 @@ import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 import './style.scss';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    Label: string;
-    icon?: ReactNode;
+    Label: string; // label of the button
+    icon?: ReactNode; // icon of the button 
 }
 
 const SideBarItem: React.FC<Props> = ({ Label, icon, ...buttonProps }) => {

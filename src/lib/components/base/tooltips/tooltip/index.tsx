@@ -4,14 +4,16 @@ import './style.scss';
 import useDirectionCalc from '../../../../hooks/useDirectionCalc';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-    message: string | null;
+    message: string | null; // the message to be shown in the tooltip
 }
 
 const Tooltip: React.FC<Props> = ({ message, className, ...props }) => {
     const ref = useRef<HTMLDivElement>(null);
+    // detect the viewport and change the direction of the tooltip
     const direction = useDirectionCalc({
         ElementRef: ref,
         dirClasses: {
+            // these are the classes that will be added to the tooltip to change its direction
             left: 'Tooltip-Left',
             right: 'Tooltip-Right',
             top: 'Tooltip-TOP',

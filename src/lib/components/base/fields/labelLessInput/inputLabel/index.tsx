@@ -12,9 +12,11 @@ export function InputLabel({ active, label, component_size = "S", required, name
     return (
         <section className={`glare-InputLabel-wrapper glare-InputLabel-size-${component_size}`}>
             <section className='glare-InputLabel-label-wrapper'>
+                {/* active is when the input is focused we will change the label font size */}
                 <label className={active ? "glare-InputLabel-active" : ""} htmlFor={name}>
                     {label}
                 </label>
+                {/* this is the required symbol and it will be shown only if required is true */}
                 {required && <p>*</p>}
             </section>
             <span className='glare-InputLabel-divider'></span>

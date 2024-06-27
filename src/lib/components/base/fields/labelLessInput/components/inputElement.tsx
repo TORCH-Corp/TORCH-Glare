@@ -28,8 +28,8 @@ export function InputElement({
                 props.onBlur && props.onBlur(e);
             }}
             onFocus={(e: any) => {
-                setFocus(true);
-                setIsActive(true);
+                setFocus(true); // for the input fucus style
+                setIsActive(true); // to show the drop down list
                 props.onFocus && props.onFocus(e);
             }}
             className="glare-input-label-less-field"

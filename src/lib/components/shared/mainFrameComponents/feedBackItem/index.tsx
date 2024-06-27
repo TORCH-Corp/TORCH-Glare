@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes } from 'react'
 import './style.scss'
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    collapse?: boolean
+    collapse?: boolean // to collapse the item
 }
 
 export const FeedBackItem: React.FC<Props> = ({ collapse, ...props }) => {

@@ -4,11 +4,11 @@ import "./style.scss";
 import useStates from "./hooks/useStates";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    component_size: "S" | "M" | "L";
-    check_box_name: string;
-    label?: string;
-    required_label?: string;
-    secondary_label?: string;
+    component_size: "S" | "M" | "L"; // this is used to change the size style of the component
+    check_box_name: string; // the name of the radio and this is important to link the radio with the label
+    label?: string; // main label
+    required_label?: string; // normal text with required style
+    secondary_label?: string; // normal text with secondary style
 }
 
 export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
@@ -37,16 +37,19 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
             <span
                 className={`check-box-icon-wrapper ${fucus && !selected ? "glare-RadioLabel-focus" : ""} ${props.disabled ? "glare-RadioLabel-disabled" : ""}`}
             >
+                {/* here if the input is checked we will show the check box icon */}
                 {selected ? <i className="ri-radio-button-fill"></i> : <span className="check-box-icon"></span>}
             </span>
 
             <input
                 {...props}
                 onChange={(e) => {
+                    // here we can handle the change event and show the check icon
                     handleSelect(e);
                     props.onChange && props.onChange(e);
                 }}
                 onFocus={(e) => {
+                    // here we can handle the fucus event and change the component style
                     handleFocus(true);
                     props.onFocus && props.onFocus(e);
                 }}

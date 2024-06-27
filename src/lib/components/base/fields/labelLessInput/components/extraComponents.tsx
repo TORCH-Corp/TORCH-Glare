@@ -12,6 +12,7 @@ interface Props {
 export function ExtraComponents({
     drop_down_list_child, action_button, trailing_label, setIsActive, component_size, disabled }: Props) {
     return (
+        // show action button, drop down list button, trailing label if you pass any of them
         trailing_label || drop_down_list_child || action_button) && (
             <span className="glare-input-icon">
                 {trailing_label && <p className='glare-input-trailing-label'>{trailing_label}</p>}

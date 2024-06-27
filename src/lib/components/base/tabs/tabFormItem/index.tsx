@@ -3,7 +3,7 @@ import SideFormBarItem from "./components/sideFormBarItem";
 import TopFormBarItem from "./components/topFormBar-Item";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    componentType: "Top" | "Side"
+    componentType: "Top" | "Side" // component type and style see on the figma design file
 }
 
 const TabFormItem: React.FC<Props> = ({
@@ -11,6 +11,7 @@ const TabFormItem: React.FC<Props> = ({
     ...props
 }) => {
     return (
+        // render the top or side form bar item based on the component type prop
         componentType === 'Top' ?
             <TopFormBarItem
                 {...props}

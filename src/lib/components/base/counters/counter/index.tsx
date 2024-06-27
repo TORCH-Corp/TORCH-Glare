@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 import './style.scss';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-    label: number;
+    label: number; // label of the counter it should be a number
 }
 
 export const Counter: React.FC<Props> = ({

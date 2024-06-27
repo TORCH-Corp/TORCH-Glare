@@ -22,6 +22,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, Props>(({
                 name={name}
                 ref={ref} // Forward the ref
             />
+
+            {/* // show error message tooltip if error_message is passed */}
             <Tooltip message={error_message || ""} />
         </section>
     );

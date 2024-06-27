@@ -2,16 +2,16 @@ import { LabelHTMLAttributes } from 'react';
 import './style.scss';
 
 interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
-    label?: string;
-    required_label?: string;
-    secondary_label?: string;
-    component_size?: "S" | "M" | "L";
-    component_style?: "vertical" | "horizontal" | "";
-    as_child?: boolean;
-    child_dir?: "vertical" | "vertical-reverse" | "horizontal" | "";
-    theme?: "System-Style" | "";
-    disabled?: boolean;
-    name: string;
+    label?: string; // main label
+    required_label?: string; // normal text with required style
+    secondary_label?: string;  //normal text with secondary style
+    component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
+    component_style?: "vertical" | "horizontal" | ""; // this is used to change the set of labels direction
+    as_child?: boolean; // this is used to make the label color same as the parent component
+    child_dir?: "vertical" | "vertical-reverse" | "horizontal" | ""; // this is used to change the children direction
+    theme?: "System-Style" | ""; // this is used to change the theme of the component
+    disabled?: boolean; // this is used to disable the label
+    name: string; // the name of the label and this is important to link the label with parent component
 }
 
 export function Label({
