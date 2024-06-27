@@ -1,8 +1,8 @@
 import React from 'react';
 import './styles/style.scss';
-import { Label } from '../../labels/label';
 import { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { DropDownMenuItemInput } from './components/dropDownMenuItem-Input';
+import { NormalDropdownMenuItem } from './components/normalDropdownMenuItem';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement | HTMLInputElement> {
     component_size?: 'M'; // this props will change the button style size see on figma design file
@@ -51,24 +51,19 @@ const DropDownMenuItem: React.FC<Props> = ({
             />
             :
             // Normal style
-            <button
+            <NormalDropdownMenuItem
                 {...props}
-                className={`dropDownMenuItem menuItem-${component_style} dropDownMenuItem-size-${component_size} ${right_side_icon ? "hasRightSideIcon" : ""} ${className}`}
-                id={element_name}
-            >
-                {/* If we need to have an icon and this is the default icon */}
-                {icon && <div className='dropDownMenuItem-icon'>{icon}</div>}
-                <Label
-                    component_size={component_size}
-                    label={component_label}
-                    required_label={required_label}
-                    secondary_label={secondary_label}
-                    name={element_name}
-                    child_dir='horizontal'
-                />
-                {/* If we need an icon or label on the right side */}
-                {right_side_icon && <button onClick={onRightSideIconClick} className='dropDownMenuItem-icon'>{right_side_icon}</button>}
-            </button>
+                component_size={component_size}
+                component_label={component_label}
+                element_name={element_name}
+                component_style={component_style}
+                secondary_label={secondary_label}
+                required_label={required_label}
+                disabled={props.disabled}
+                onRightSideIconClick={onRightSideIconClick}
+                right_side_icon={right_side_icon}
+                icon={icon}
+            />
     )
 };
 

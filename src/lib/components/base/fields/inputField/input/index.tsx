@@ -71,7 +71,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
                         setFocus={setFocus}
                         setIsActive={setIsActive}
                     />
-                    {/* to add action button or drop down list or trailing label to the end of the input */}
+                    {/* to add action button or drop down list button or trailing label to the end of the input */}
                     <ExtraComponents
                         setIsActive={setIsActive}
                         drop_down_list_child={drop_down_list_child}

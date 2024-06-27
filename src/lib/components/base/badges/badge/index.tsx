@@ -1,5 +1,6 @@
 import { MouseEventHandler, ReactNode, ButtonHTMLAttributes } from 'react';
 import './styles/default.scss';
+import { BadgeIcon } from './components/badgeIcon';
 
 interface Props extends ButtonHTMLAttributes<HTMLSpanElement> {
   label?: string; // label of the badge
@@ -12,8 +13,9 @@ interface Props extends ButtonHTMLAttributes<HTMLSpanElement> {
   "badge-cocktail-green" |
   "badge-yellow" |
   "badge-red-orange" |
-  "badge-red-light" | "badge-rose"
-  | "badge-purple" |
+  "badge-red-light" |
+  "badge-rose" |
+  "badge-purple" |
   "badge-blue-purple" |
   "badge-blue" |
   "badge-navy" |
@@ -35,12 +37,8 @@ const Badge: React.FC<Props> = ({
       {...props}
       className={`glare-badge glare-badge-size-${badge_size ? badge_size : "S"} ${badge_style} ${props.className}`}
     >
-      {/* default icon for badge is circle in case you don't pass any icon*/}
-      <span className='badge-icon'>
-        {badge_icon ? badge_icon : <i className="ri-circle-fill badge-def-icon"></i>}
-      </span>
+      <BadgeIcon badge_icon={badge_icon} />
       <p className='badge-label'>{label}</p>
-
       {/* if the badge is selected then show the close button*/}
       {selected && <button onClick={onCloseBtnClick} className='glare-badge-close-icon'><i className="ri-close-line"></i></button>}
     </span>

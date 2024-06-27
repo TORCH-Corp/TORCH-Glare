@@ -1,6 +1,7 @@
 import React, { ButtonHTMLAttributes, ReactNode } from 'react';
 import './variants/default.scss';
 import loadingIcon from './icons/loading.svg';
+import { ButtonIcon } from './components/buttonIcon';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   left_icon?: ReactNode; // this will show icon on the left side if you pass it
@@ -33,14 +34,11 @@ const Button: React.FC<Props> = ({
     <button
       {...props}
       ref={ref}
-      className={`glare-button glare-button-${component_size} glare-button-without-icon-${!children && component_size} ${is_loading && !right_icon && !left_icon ? "glare-button-loading" : ''} ${component_style} ${className}`}
+      className={`glare-button glare-button-${component_size} glare-button-without-icon-${!children && component_size} ${is_loading ? "glare-button-loading" : ''} ${component_style} ${className}`}
     >
-      {/* if you pass left icon and not loading then show icon on the left side */}
-      {left_icon && !is_loading ? <div className='glare-button-icon'>{left_icon}</div> : null}
+      <ButtonIcon is_loading={is_loading} icon={left_icon} />
       {children}
-      {/* if you pass right icon and not loading then show icon on the right side */}
-      {right_icon && !is_loading ? <div className='glare-button-icon'>{right_icon}</div> : null}
-
+      <ButtonIcon is_loading={is_loading} icon={right_icon} />
       {/* loading icon will show only if is_loading is true */}
       <img className='glare-button-loading-img' src={loadingIcon} alt='loading' />
     </button>

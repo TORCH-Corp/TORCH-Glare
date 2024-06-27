@@ -1,5 +1,6 @@
 import { HTMLAttributes } from 'react'
 import './style.scss'
+import { AlertIcon } from './components/alertIcon'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   component_label: string
@@ -10,18 +11,8 @@ export const Alert: React.FC<Props> = ({ component_label, component_state, ...pr
   return (
     <section {...props} className={`glare-alert glare-alert-${component_state}-state ${props.className}`}>
       <section className="glare-alert-icon-wrapper">
-        {
-          // icons for the different states
-          component_state == 'Error' ?
-            <i className="ri-alert-fill"></i>
-            :
-            component_state == 'Success' ?
-              <i className="ri-checkbox-circle-fill"></i>
-              :
-              <i className="ri-error-warning-fill"></i>
-        }
+        <AlertIcon component_state={component_state} />
       </section>
-
       <p className="glare-alert-label">{component_label}</p>
     </section>
   )

@@ -1,8 +1,8 @@
 import React, { HTMLAttributes, ReactNode, useRef } from "react";
 import './style.scss';
-import Button from "../../buttons/button";
 import { DynamicContainer } from "../../../helpers/dynamicContainer";
 import { useShowDropDown } from "../../../../hooks/useShowDropDown";
+import { LabelAndButton } from "./components/labelAndButton";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     component_size?: "S" | "M" | "L"; // this props will change the button style size see on figma design file
@@ -27,16 +27,7 @@ export const DropDownButtonResultShow: React.FC<Props> = ({
             ref={sectionRef}
             className={`glare-drop-down-button-result-show glare-drop-down-button-result-show-size-${component_size} ${className}`}
         >
-            <section className="glare-drop-down-button-result-show-wrapper">
-                <p className="glare-drop-down-button-result-show-label">{selected_value}</p>
-                <Button
-                    // the button icon will flip when you click on the button
-                    className={isActive ? "glare-drop-down-button-result-show-icon-flip" : ""}
-                    component_size={component_size}
-                    left_icon={<i className="ri-arrow-down-s-line"></i>}
-                />
-            </section>
-
+            <LabelAndButton component_size={component_size} selected_value={selected_value} isActive={isActive} />
             {/* this dynamic container will show the drop down list when you click on the button. 
                 this dynamic container will detect the hit the viewport and change the direction.*/
             }
