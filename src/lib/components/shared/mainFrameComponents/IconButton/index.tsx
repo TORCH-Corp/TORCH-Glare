@@ -14,7 +14,7 @@ const IconButton: React.FC<Props> = ({ icon, count, className, ...buttonProps })
             {count ? <Counter label={count} /> : null}
             {icon}
         </button>
-    );
+    )
 };
 
 export default IconButton;
