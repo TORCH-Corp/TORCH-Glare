@@ -26,8 +26,8 @@ function UseDirectionCalc({ dirClasses, ElementRef, isElementActive, trigger }: 
         const element = ElementRef.current;
 
         if (element) {
-            const positionStatus = getElementPositionStatus(element);
-            setDir(determineDirection(storedPositionStatus, setStoredPositionStatus, positionStatus, dirClasses));
+            const newPositionStatus = getElementPositionStatus(element);
+            setDir(determineDirection(storedPositionStatus, setStoredPositionStatus, newPositionStatus, dirClasses));
         }
     };
 
