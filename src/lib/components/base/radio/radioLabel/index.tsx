@@ -2,7 +2,6 @@ import { forwardRef, InputHTMLAttributes } from "react";
 import { Label } from "../../labels/label";
 import "./style.scss";
 import useStates from "./hooks/useStates";
-import LabelLessInput from "../../fields/labelLessInput";
 import { InputElement } from "./components/inputElement";
 import { CheckboxIcon } from "./components/checkboxIcon";
 
