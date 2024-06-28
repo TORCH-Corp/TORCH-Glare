@@ -2,6 +2,9 @@ import { forwardRef, InputHTMLAttributes } from "react";
 import { Label } from "../../labels/label";
 import "./style.scss";
 import useStates from "./hooks/useStates";
+import LabelLessInput from "../../fields/labelLessInput";
+import { InputElement } from "./components/inputElement";
+import { CheckboxIcon } from "./components/checkboxIcon";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     component_size: "S" | "M" | "L"; // this is used to change the size style of the component
@@ -34,36 +37,14 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
             disabled={props.disabled}
             className={`glare-RadioLabel ${props.className} glare-RadioLabel-size-${component_size}`}
         >
-            <span
-                className={`check-box-icon-wrapper ${fucus && !selected ? "glare-RadioLabel-focus" : ""} ${props.disabled ? "glare-RadioLabel-disabled" : ""}`}
-            >
-                {/* here if the input is checked we will show the check box icon */}
-                {selected ? <i className="ri-radio-button-fill"></i> : <span className="check-box-icon"></span>}
-            </span>
+            <CheckboxIcon fucus={fucus} selected={selected} disabled={props.disabled} />
 
-            <input
-                {...props}
-                onChange={(e) => {
-                    // here we can handle the change event and show the check icon
-                    handleSelect(e);
-                    props.onChange && props.onChange(e);
-                }}
-                onFocus={(e) => {
-                    // here we can handle the fucus event and change the component style
-                    handleFocus(true);
-                    props.onFocus && props.onFocus(e);
-                }}
-                onBlur={(e) => {
-                    handleFocus(false);
-                    props.onBlur && props.onBlur(e);
-                }}
+            <InputElement
                 ref={ref}
-                id={check_box_name}
-                type="radio"
-                className="glare-RadioLabel-input"
-                aria-checked={selected}
-                aria-label={label}  // Consider providing a meaningful label
-                disabled={props.disabled}
+                check_box_name={check_box_name}
+                handleSelect={handleSelect}
+                handleFocus={handleFocus}
+                selected={selected}
             />
         </Label>
     );

@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import Button from "../../../../buttons/button";
+import Button from "../../../../../buttons/button";
 
 interface Props {
   drop_down_list_child?: ReactNode; // to add drop down list if you pass it

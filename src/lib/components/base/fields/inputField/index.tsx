@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
-import { LabeledInput } from "./labeledInput";
-import { Input } from "./input";
+import { LabeledInput } from "./components/labeledInput";
+import { Input } from "./components/input";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement> {
     name: string; // this is important for link to the input to the label

@@ -2,7 +2,7 @@ import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
 import './style.scss';
 import { DynamicContainer } from '../../../../components/helpers/dynamicContainer';
 import { useStates } from './hooks/useStates';
-import { InputLabel } from './inputLabel';
+import { InputLabel } from './components/inputLabel';
 import Tooltip from '../../tooltips/tooltip';
 import { useHideDropDown } from '../hooks/usehideDropDown';
 import { InputElement } from './components/inputElement';
@@ -82,7 +82,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(({
                         inputRef={inputRef}
                     />
 
-                    {/* to add action button or drop down list or trailing label to the end of the input */}
+                    {/* to add action button or drop down list button or trailing label to the end of the input */}
                     <ExtraComponents
                         setIsActive={setIsActive}
                         drop_down_list_child={drop_down_list_child}
