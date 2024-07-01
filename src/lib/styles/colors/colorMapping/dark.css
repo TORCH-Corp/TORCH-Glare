@@ -1,12 +1,14 @@
 @import '../coreColorSystem/default.css';
 
-:root {
+
+   :root {
     --background-presentation-tab-default-topbar: #FFFFFF14;
-    --background-presentation-form-sidebar: #0F1011FF;
+    --background-presentation-form-tabs: #0F1011FF;
     --background-presentation-tab-default-sidebar: #FFFFFF14;
+    --background-presentation-stepper-hover: #FFFFFF14;
     --border-presentation-action-disabled: var(--black-500);
     --background-system-body-primary: var(--black-900);
-    --content-presentation-action-dark-primary: var(--white-200);
+    --content-presentation-action-primary: var(--white-200);
     --content-presentation-action-hover: var(--white-00);
     --content-presentation-state-success: var(--green-cyan-400);
     --content-presentation-state-warning: var(--yellow-400);
@@ -22,7 +24,7 @@
     --border-presentation-state-success: var(--green-cyan-700);
     --border-presentation-state-warning: var(--yellow-700);
     --border-presentation-state-negative: var(--medium-red-600);
-    --content-presentation-global-highlight-darkback: var(--white-alpha-30);
+    --content-presentation-global-highlightback: var(--white-alpha-30);
     --background-system-body-secondary: var(--black-800);
     --border-system-global-primary: var(--black-600);
     --content-system-global-primary: var(--white-200);
@@ -48,7 +50,7 @@
     --background-presentation-action-borderstyle: var(--white-alpha-5);
     --content-presentation-global-secondary: var(--white-700);
     --content-presentation-action-light-secondary: var(--white-700);
-    --content-presentation-action-dark-secondary: var(--white-500);
+    --content-presentation-action-secondary: var(--white-500);
     --content-system-global-disabled: var(--black-100);
     --content-presentation-state-information: var(--blue-sparkle-400);
     --border-presentation-action-hover: var(--blue-sparkle-600);
@@ -149,4 +151,14 @@
     --background-presentation-tab-hover-sidebar: var(--white-alpha-15);
     --background-presentation-tab-selected-sidebar: var(--white-alpha-30);
     --border-presentation-tab-default-sidebar: var(--white-alpha-025);
-}
+    --content-presentation-stepper-selected: var(--white-00);
+    --border-presentation-stepper-default: var(--black-200);
+    --border-presentation-stepper-hover: var(--violet-500);
+    --border-presentation-stepper-selected: var(--violet-600);
+    --border-presentation-stepper-negative: var(--medium-red-700);
+    --border-presentation-stepper-divider: var(--violet-500);
+    --background-presentation-stepper-selected: var(--violet-600);
+    --border-presentation-action-borderstyle: var(--white-alpha-15);
+    --border-presentation-action-checkbox-primary: var(--black-200);
+  }
+  

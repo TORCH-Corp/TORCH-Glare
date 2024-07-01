@@ -1,0 +1,28 @@
+@import '../../../../../../../../styles/typography/index.scss';
+
+.glare-stepper-counter-circle {
+    border-radius: 50%;
+    border-style: solid;
+    border-color: var(--border-presentation-stepper);
+    border-width: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    transition: all 200ms ease-in-out;
+
+    @include Headers-typography-Medium-Medium;
+}
+
+.glare-stepper-counter-circle-selected {
+    background: var(--background-presentation-stepper-selected) !important;
+    border-color: var(--background-presentation-stepper-selected) !important;
+    color: var(--content-presentation-stepper-selected) !important;
+}
+
+.glare-stepper-counter-circle-negative {
+    background: transparent !important;
+    border-color: var(--border-presentation-stepper-negative) !important;
+    color: var(--content-presentation-global-primary);
+}

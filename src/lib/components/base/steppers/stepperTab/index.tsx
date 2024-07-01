@@ -3,7 +3,7 @@ import './style.scss'
 export function StepperTab() {
   return (
     <section className="glare-stepper-tab">
-      <StepperLine>1</StepperLine>
+      <StepperLine isCompleted isNegative>1</StepperLine>
     </section>
   )
 }

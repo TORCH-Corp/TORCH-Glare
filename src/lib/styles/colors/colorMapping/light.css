@@ -1,9 +1,13 @@
 @import '../coreColorSystem/default.css';
 
-:root {
+@import '../coreColorSystem/default.css';
+
+   /* Aliases  */
+   :root {
     --background-presentation-table-row-selected: #4200FF0D;
     --border-presentation-table-selected: #CFBEFFFF;
     --background-presentation-tab-default-topbar: #00000014;
+    --background-presentation-stepper-hover: #00000014;
     --border-presentation-action-disabled: var(--white-500);
     --background-system-body-primary: var(--black-900);
     --content-presentation-action-dark-primary: var(--white-200);
@@ -42,12 +46,12 @@
     --border-system-action-hover-secondary: var(--purple-600);
     --border-system-global-sidebar-list-border: var(--white-500);
     --border-presentation-state-focus: var(--blue-sparkle-600);
-    --content-presentation-action-light-primary: var(--black-1000);
+    --content-presentation-action-primary: var(--black-1000);
     --background-presentation-action-selected: var(--black-alpha-5);
     --content-presentation-state-disabled: var(--black-alpha-30);
     --background-presentation-action-borderstyle: var(--black-alpha-5);
     --content-presentation-global-secondary: var(--black-200);
-    --content-presentation-action-light-secondary: var(--black-100);
+    --content-presentation-action-secondary: var(--black-100);
     --content-presentation-action-dark-secondary: var(--white-500);
     --content-system-global-disabled: var(--black-100);
     --content-presentation-state-information: var(--blue-sparkle-800);
@@ -59,7 +63,7 @@
     --background-presentation-table-row-hover: var(--black-alpha-025);
     --background-presentation-table-acton-hover: var(--blue-sparkle-alpha-10);
     --border-presentation-table-action-hover: var(--blue-sparkle-500);
-    --content-presentation-global-highlight-lightback: var(--black-alpha-30);
+    --content-presentation-global-highlightback: var(--black-alpha-30);
     --background-presentation-table-row-disabled: var(--black-alpha-5);
     --background-presentation-form-base: var(--white-00);
     --border-presentation-table-dropdown: var(--black-700);
@@ -70,7 +74,7 @@
     --content-presentation-tab-action-selected: var(--white-00);
     --border-presentation-tab-hover-topbar: var(--black-alpha-025);
     --background-presentation-badge-green: var(--green-cyan-100);
-    --background-presentation-badge-green-light: var(--cool-green-100);
+    --background-presentation-badge-green: var(--cool-green-100);
     --background-presentation-badge-cocktail-green: var(--cocktail-green-200);
     --background-presentation-badge-yellow: var(--yellow-200);
     --background-presentation-badge-red-orange: var(--red-orange-100);
@@ -82,7 +86,7 @@
     --background-presentation-badge-navy: var(--wavy-navy-200);
     --background-presentation-badge-gray: var(--white-200);
     --content-presentation-badge-green: var(--green-cyan-800);
-    --content-presentation-badge-green-light: var(--cool-green-800);
+    --content-presentation-badge-green: var(--cool-green-800);
     --content-presentation-badge-cocktail-green: var(--cocktail-green-800);
     --content-presentation-badge-yellow: var(--yellow-700);
     --content-presentation-badge-red-orange: var(--red-orange-800);
@@ -94,7 +98,7 @@
     --content-presentation-badge-navy: var(--wavy-navy-800);
     --content-presentation-badge-gray: var(--black-100);
     --border-presentation-badge-green: var(--green-cyan-300);
-    --border-presentation-badge-green-light: var(--cool-green-300);
+    --border-presentation-badge-green: var(--cool-green-300);
     --border-presentation-badge-cocktail-green: var(--cocktail-green-400);
     --border-presentation-badge-yellow: var(--yellow-400);
     --border-presentation-badge-red-orange: var(--red-orange-300);
@@ -143,10 +147,20 @@
     --content-presentation-action-link: var(--blue-sparkle-700);
     --background-presentation-form-field-hover: var(--white-25);
     --background-presentation-action-dropdown-primary: var(--white-00);
-    --background-presentation-form-header-shadow: var(--black-alpha-20);
-    --background-presentation-form-sidebar: var(--white-25);
+    --background-presentation-form-header-shadow: var(--black-alpha-10);
+    --background-presentation-form-tabs: var(--white-25);
     --background-presentation-tab-default-sidebar: var(--white-00);
-    --background-presentation-tab-hover-sidebar: var(--black-alpha-15);
+    --background-presentation-tab-hover-sidebar: var(--white-50);
     --background-presentation-tab-selected-sidebar: var(--black-1000);
     --border-presentation-tab-default-sidebar: var(--white-300);
-}
+    --content-presentation-stepper-selected: var(--white-00);
+    --border-presentation-stepper-default: var(--white-700);
+    --border-presentation-stepper-hover: var(--violet-500);
+    --border-presentation-stepper-selected: var(--violet-700);
+    --border-presentation-stepper-negative: var(--medium-red-700);
+    --border-presentation-stepper-divider: var(--violet-700);
+    --background-presentation-stepper-selected: var(--violet-700);
+    --border-presentation-action-borderstyle: var(--black-alpha-15);
+    --border-presentation-action-checkbox-primary: var(--white-700);
+  }
+  
