@@ -1,12 +1,11 @@
 import 'torch-glare/dist/themes/colorMapping/dark.css';
-import { AuthButton, InputField } from './lib';
+import { StepperTab } from './lib/components/base/steppers/stepperTab';
 
 function App() {
 
   return (
     <section className='app' >
-      <AuthButton>Label</AuthButton>
-      <InputField name={''} error_message='error message' />
+      <StepperTab />
     </section >
   )
 }
