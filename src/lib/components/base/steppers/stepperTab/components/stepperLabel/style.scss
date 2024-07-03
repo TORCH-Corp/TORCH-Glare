@@ -6,16 +6,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: fit-content;
     height: 26px;
     border-radius: var(--Radius-2-max, 4px);
     background-color: transparent;
     border: none;
     outline: none;
     overflow: hidden;
+    padding: 0 24px;
 
     @include respond-to(phone) {
-        justify-content: center
+        justify-content: center;
     }
 
     .stepper-tab-label-text {
