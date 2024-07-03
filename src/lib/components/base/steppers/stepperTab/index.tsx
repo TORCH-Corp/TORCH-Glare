@@ -12,19 +12,27 @@ interface Props extends HTMLAttributes<HTMLDivElement | HTMLButtonElement> {
   with_start_flag: boolean // If the stepper tab has a start flag
 }
 
-export function StepperTab(props: Props) {
+export function StepperTab({
+  stepper_counter,
+  stepper_label,
+  is_selected,
+  is_completed,
+  is_negative,
+  with_start_flag,
+  ...props
+}: Props) {
   return (
     <section {...props} className={"glare-stepper-tab " + props.className}>
       <StepperLabel
-        is_selected={props.is_selected}
-        stepper_label={props.stepper_label}
+        is_selected={is_selected}
+        stepper_label={stepper_label}
       />
       <StepperLine
-        with_start_flag={props.with_start_flag}
-        is_selected={props.is_selected}
-        is_completed={props.is_completed}
-        is_negative={props.is_negative}
-      >{props.stepper_counter}</StepperLine>
+        with_start_flag={with_start_flag}
+        is_selected={is_selected}
+        is_completed={is_completed}
+        is_negative={is_negative}
+      >{stepper_counter}</StepperLine>
     </section>
   )
 }

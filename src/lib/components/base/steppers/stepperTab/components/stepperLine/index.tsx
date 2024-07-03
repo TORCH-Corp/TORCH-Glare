@@ -9,20 +9,30 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   is_negative?: boolean
   with_start_flag: boolean
 }
-export default function StepperLine(props: Props) {
+export default function StepperLine({
+  with_start_flag,
+  is_selected,
+  is_completed,
+  is_negative,
+  ...props }: Props) {
   return (
     <section {...props} className="stepper-tab-main-line">
       <Line
-        {...props}
+        with_start_flag={with_start_flag}
+        is_selected={is_selected}
+        is_completed={is_completed}
+        is_negative={is_negative}
       />
       <Circle
-        {...props}
+        is_selected={is_selected}
+        is_completed={is_completed}
+        is_negative={is_negative}
       >{props.children}</Circle>
       <Line
         with_start_flag={false}
-        is_selected={props.is_selected}
-        is_completed={props.is_completed}
-        is_negative={props.is_negative}
+        is_selected={is_selected}
+        is_completed={is_completed}
+        is_negative={is_negative}
       />
     </section>
   )

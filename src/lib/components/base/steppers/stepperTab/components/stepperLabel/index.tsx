@@ -4,11 +4,11 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     stepper_label: string
     is_selected?: boolean
 }
-export function StepperLabel(props: Props) {
+export function StepperLabel({ stepper_label, is_selected, ...props }: Props) {
     return (
-        <section dir='ltr' className={`stepper-tab-label ${props.is_selected ? "stepper-tab-label-selected" : ""}`} >
+        <section {...props} dir='ltr' className={`stepper-tab-label ${is_selected ? "stepper-tab-label-selected" : ""}`} >
             <button type='button' className='stepper-tab-label-icon'><i className="ri-arrow-left-double-line"></i></button >
-            <p className="stepper-tab-label-text">{props.stepper_label}</p>
+            <p className="stepper-tab-label-text">{stepper_label}</p>
             <button type='button' className='stepper-tab-label-icon'> <i className="ri-arrow-right-double-line"></i></button >
         </section>
     )
