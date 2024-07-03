@@ -8,11 +8,12 @@
 
     &:hover {
         .stepper-tab-line {
-            background: var(--border-presentation-stepper-hover);
+            background: var(--border-presentation-stepper-hover) !important;
         }
 
         .glare-stepper-counter-circle {
             border-color: var(--border-presentation-stepper-hover);
+            color: var(--content-presentation-global-primary);
         }
     }
 }

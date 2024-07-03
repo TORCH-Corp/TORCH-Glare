@@ -1,4 +1,4 @@
-import './lib/styles/colors/colorMapping/default.css';
+import './lib/styles/colors/colorMapping/dark.css'
 import { StepperTab } from './lib/components/base/steppers/stepperTab';
 
 function App() {

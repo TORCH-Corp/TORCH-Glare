@@ -3,7 +3,7 @@
 .glare-stepper-counter-circle {
     border-radius: 50%;
     border-style: solid;
-    border-color: var(--border-presentation-stepper);
+    border-color: var(--border-presentation-stepper-default);
     border-width: 4px;
     display: flex;
     align-items: center;
@@ -11,6 +11,7 @@
     height: 30px;
     width: 30px;
     transition: all 200ms ease-in-out;
+    color: var(--content-presentation-global-secondary);
 
     @include Headers-typography-Medium-Medium;
 }

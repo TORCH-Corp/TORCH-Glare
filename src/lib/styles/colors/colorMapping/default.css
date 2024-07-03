@@ -153,7 +153,7 @@
   --background-presentation-tab-selected-sidebar: var(--black-1000);
   --border-presentation-tab-sidebar: var(--white-300);
   --content-presentation-stepper-selected: var(--white-00);
-  --border-presentation-stepper: var(--white-700);
+  --border-presentation-stepper-default: var(--white-700);
   --border-presentation-stepper-hover: var(--violet-500);
   --border-presentation-stepper-selected: var(--violet-700);
   --border-presentation-stepper-negative: var(--medium-red-700);
