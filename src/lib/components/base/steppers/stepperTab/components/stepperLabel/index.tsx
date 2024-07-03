@@ -6,10 +6,10 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 export function StepperLabel(props: Props) {
     return (
-        <button type='button' dir='ltr' className={`stepper-tab-label ${props.is_selected ? "stepper-tab-label-selected" : ""}`} >
-            <div className='stepper-tab-label-icon'><i className="ri-arrow-left-double-line"></i></div >
+        <section dir='ltr' className={`stepper-tab-label ${props.is_selected ? "stepper-tab-label-selected" : ""}`} >
+            <button type='button' className='stepper-tab-label-icon'><i className="ri-arrow-left-double-line"></i></button >
             <p className="stepper-tab-label-text">{props.stepper_label}</p>
-            <div className='stepper-tab-label-icon'> <i className="ri-arrow-right-double-line"></i></div >
-        </button>
+            <button type='button' className='stepper-tab-label-icon'> <i className="ri-arrow-right-double-line"></i></button >
+        </section>
     )
 }
