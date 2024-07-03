@@ -2,19 +2,19 @@ import { HTMLAttributes } from 'react'
 import './style.scss'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  isSelected?: boolean
-  isCompleted?: boolean
-  isNegative?: boolean
+  is_selected?: boolean
+  is_completed?: boolean
+  is_negative?: boolean
 }
 export function Circle(props: Props) {
   return (
-    <div className={`glare-stepper-counter-circle  ${props.isSelected || props.isCompleted && !props.isNegative ? 'glare-stepper-counter-circle-selected' : ''} ${props.isNegative ? 'glare-stepper-counter-circle-negative' : ''}`}>{
-      props.isCompleted && !props.isNegative ?
+    <div className={`glare-stepper-counter-circle  ${props.is_selected || props.is_completed && !props.is_negative ? 'glare-stepper-counter-circle-selected' : ''} ${props.is_negative ? 'glare-stepper-counter-circle-negative' : ''}`}>{
+      props.is_completed && !props.is_negative ?
         // the checkmark icon
         <i className="ri-check-line"></i>
         :
         // the negative exclamation mark
-        props.isNegative ?
+        props.is_negative ?
           <p>!</p>
           :
           // any other number

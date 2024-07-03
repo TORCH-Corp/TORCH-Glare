@@ -1,3 +1,5 @@
+@import '../../../../../../../../styles/mediaQuery/queries.scss';
+
 .stepper-tab-line-wrapper {
     flex: 1;
     display: flex;
@@ -18,6 +20,11 @@
         height: 8px;
         border-radius: 1px;
         background: var(--border-presentation-stepper-divider);
+        display: none;
+
+        @include respond-to(phone) {
+            display: flex;
+        }
     }
 }
 

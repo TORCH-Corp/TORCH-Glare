@@ -1,7 +1,18 @@
-.glare-stepper-tab{
+.glare-stepper-tab {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
+    gap: 4px;
+
+    &:hover {
+        .stepper-tab-line {
+            background: var(--border-presentation-stepper-hover);
+        }
+
+        .glare-stepper-counter-circle {
+            border-color: var(--border-presentation-stepper-hover);
+        }
+    }
 }

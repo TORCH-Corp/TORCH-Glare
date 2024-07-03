@@ -28,6 +28,7 @@ import { RadioLabel } from "./radio/radioLabel"
 import RingLoading from "./loading/ringLoading"
 import Counter from "./counters/counter"
 import TabFormItem from "./tabs/tabFormItem"
+import { StepperTab } from "./steppers/stepperTab"
 
 
 
@@ -61,5 +62,6 @@ export {
     Alert,
     RadioLabel,
     RingLoading,
-    Counter
+    Counter,
+    StepperTab
 }
