@@ -1,6 +1,6 @@
 import './style.scss'
 interface Props {
-  with_start_flag?: boolean
+  with_start_flag: boolean
   is_selected?: boolean
   is_completed?: boolean
   is_negative?: boolean

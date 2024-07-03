@@ -9,6 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement | HTMLButtonElement> {
   is_selected?: boolean  // if the stepper tab is selected
   is_completed?: boolean // If the stepper tab is completed
   is_negative?: boolean // If the stepper tab is negative
+  with_start_flag: boolean // If the stepper tab has a start flag
 }
 
 export function StepperTab(props: Props) {
@@ -19,6 +20,7 @@ export function StepperTab(props: Props) {
         stepper_label={props.stepper_label}
       />
       <StepperLine
+        with_start_flag={props.with_start_flag}
         is_selected={props.is_selected}
         is_completed={props.is_completed}
         is_negative={props.is_negative}
