@@ -13,6 +13,7 @@
         background: var(--border-presentation-stepper-default);
         height: 3px;
         width: 100%;
+        transition: all 250ms ease-in-out;
     }
 
     .stepper-tab-start-line {
@@ -21,6 +22,7 @@
         border-radius: 1px;
         background: var(--border-presentation-stepper-divider);
         display: none;
+        transition: all 250ms ease-in-out;
 
         @include respond-to(phone) {
             display: flex;

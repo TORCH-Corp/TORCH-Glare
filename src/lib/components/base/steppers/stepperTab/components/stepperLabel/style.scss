@@ -13,9 +13,12 @@
     border: none;
     outline: none;
     overflow: hidden;
-    padding: 0 24px;
+    width: 100%;
+    padding: 0 4px;
 
     @include respond-to(phone) {
+        padding: 0 24px;
+        width: fit-content;
         justify-content: center;
     }
 
@@ -48,14 +51,23 @@
 }
 
 .stepper-tab-label-selected {
-    border-radius: var(--Radius-2-max, 4px);
-    background-color: var(--background-presentation-stepper-selected);
 
-    .stepper-tab-label-text {
-        color: var(--content-presentation-stepper-selected);
+    @include respond-to(phone) {
+        border-radius: var(--Radius-2-max, 4px);
+        background-color: var(--background-presentation-stepper-selected) !important;
+
+        .stepper-tab-label-text {
+            color: var(--content-presentation-stepper-selected) !important;
+        }
+
+        .stepper-tab-label-icon {
+            color: var(--content-presentation-stepper-selected) !important;
+        }
     }
+}
 
-    .stepper-tab-label-icon {
-        color: var(--content-presentation-stepper-selected);
+.stepper-tab-button-disabled {
+    i {
+        color: var(--content-presentation-state-disabled) !important;
     }
 }

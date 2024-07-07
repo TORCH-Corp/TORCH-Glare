@@ -1,7 +1,27 @@
+@import '../../../../../../styles/mediaQuery/queries.scss';
+
 .stepper-tab-main-line {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 30px;
+    position: relative;
+
+    .stepper-tab-musk {
+        background: linear-gradient(90deg,
+                var(--background-presentation-form-tabs) 0%,
+                var(--background-presentation-form-tabs-gradient) 20.000000298023224%,
+                var(--background-presentation-form-tabs-gradient) 80.0000011920929%,
+                var(--background-presentation-form-tabs) 100%);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        @include respond-to(phone) {
+            display: none;
+        }
+    }
+
+
 }

@@ -4,6 +4,7 @@
 :root {
   --background-presentation-tab-default-topbar: #FFFFFF14;
   --background-presentation-form-tabs: #0F1011FF;
+  --background-presentation-form-tabs-gradient: #0F101100;
   --background-presentation-tab-default-sidebar: #FFFFFF14;
   --background-presentation-stepper-hover: #FFFFFF14;
   --border-presentation-action-disabled: var(--black-500);

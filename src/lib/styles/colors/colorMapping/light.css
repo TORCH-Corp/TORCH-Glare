@@ -149,6 +149,7 @@
   --background-presentation-action-dropdown-primary: var(--white-00);
   --background-presentation-form-header-shadow: var(--black-alpha-10);
   --background-presentation-form-tabs: var(--white-25);
+  --background-presentation-form-tabs-gradient: #F9F9F900;
   --background-presentation-tab-default-sidebar: var(--white-00);
   --background-presentation-tab-hover-sidebar: var(--white-50);
   --background-presentation-tab-selected-sidebar: var(--black-1000);
