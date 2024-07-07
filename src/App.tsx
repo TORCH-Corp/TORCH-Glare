@@ -1,11 +1,11 @@
+import { StepperTab } from './lib'
 import './lib/styles/colors/colorMapping/dark.css'
-import { StepperTab } from './lib/components/base/steppers/stepperTab';
 
 function App() {
 
   return (
     <section className='app' >
-      <StepperTab is_selected with_start_flag stepper_counter={0} stepper_label={'First Stepper First Stepper First Stepper'} />
+      <StepperTab forward={() => { console.log('forward') }} backward={() => { console.log('backward') }} stepper_label={'step one'} is_selected stepper_counter={0} with_start_flag={true} />
     </section >
   )
 }
