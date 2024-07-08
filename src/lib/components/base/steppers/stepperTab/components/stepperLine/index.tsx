@@ -8,11 +8,9 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   is_completed?: boolean
   is_negative?: boolean
   is_the_first: boolean
-  is_the_last?: boolean
 }
 export default function StepperLine({
   is_the_first,
-  is_the_last,
   is_selected,
   is_completed,
   is_negative,
@@ -20,7 +18,7 @@ export default function StepperLine({
   return (
     <section {...props} className="stepper-tab-main-line">
       <Line
-        with_start_flag={is_the_first}
+        with_start_flag={!is_the_first}
         is_selected={is_selected}
         is_completed={is_completed}
         is_negative={is_negative}

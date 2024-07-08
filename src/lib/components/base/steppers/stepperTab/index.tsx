@@ -10,7 +10,6 @@ interface Props extends HTMLAttributes<HTMLDivElement | HTMLButtonElement> {
   is_completed?: boolean // If the stepper tab is completed
   is_negative?: boolean // If the stepper tab is negative
   is_the_first: boolean // If the first steeper tab
-  is_the_last?: boolean // If the last steeper tab
   forward: any // Function to go forward the stepper tab
   backward: any // Function to go backward the stepper tab
 }
@@ -22,7 +21,6 @@ export function StepperTab({
   is_completed,
   is_negative,
   is_the_first,
-  is_the_last,
   backward,
   forward,
   ...props
@@ -30,8 +28,6 @@ export function StepperTab({
   return (
     <section {...props} dir='ltr' className={"glare-stepper-tab " + props.className}>
       <StepperLabel
-        is_the_first={is_the_first}
-        is_the_last={is_the_last}
         forward={forward}
         backward={backward}
         is_selected={is_selected}
