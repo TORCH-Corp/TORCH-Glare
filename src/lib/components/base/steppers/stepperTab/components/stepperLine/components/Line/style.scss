@@ -15,19 +15,6 @@
         width: 100%;
         transition: all 250ms ease-in-out;
     }
-
-    .stepper-tab-start-line {
-        width: 2px;
-        height: 8px;
-        border-radius: 1px;
-        background: var(--border-presentation-stepper-divider);
-        display: none;
-        transition: all 250ms ease-in-out;
-
-        @include respond-to(phone) {
-            display: flex;
-        }
-    }
 }
 
 .stepper-tab-line-selected {

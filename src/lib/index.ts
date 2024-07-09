@@ -1,4 +1,4 @@
-import { Label, Button, TabFormItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow, RadioLabel, RingLoading, Counter, StepperTab } from "./components/base";
+import { Label, Button, TabFormItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow, RadioLabel, RingLoading, Counter, StepperTab, StepperPhoneArrow, StepperDivider } from "./components/base";
 import { ProfileItem, AuthButton, PasswordLevel, SideBarItem, IconButton, FeedBackItem, ContentColumn, FieldSection } from "./components/shared";
 import { UseDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hooks";
 
@@ -36,6 +36,8 @@ export {
     Counter,
     TabFormItem,
     StepperTab,
+    StepperPhoneArrow,
+    StepperDivider,
 
 
 

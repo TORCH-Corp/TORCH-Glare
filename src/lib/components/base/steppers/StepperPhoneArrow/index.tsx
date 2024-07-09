@@ -6,7 +6,7 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
 }
 export function StepperPhoneArrow({ reverse_icon, disabled, ...props }: Props) {
     return (
-        <button disabled={disabled} {...props} className={`glare-stepper-phone-arrow ${disabled ? "glare-stepper-phone-arrow-disabled" : ""}  ${props.className}`} >
+        <button type="button" disabled={disabled} {...props} className={`glare-stepper-phone-arrow ${disabled ? "glare-stepper-phone-arrow-disabled" : ""}  ${props.className}`} >
             {
                 reverse_icon ?
                     <i className="ri-arrow-right-double-fill"></i>

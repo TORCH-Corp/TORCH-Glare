@@ -29,6 +29,8 @@ import RingLoading from "./loading/ringLoading"
 import Counter from "./counters/counter"
 import TabFormItem from "./tabs/tabFormItem"
 import { StepperTab } from "./steppers/stepperTab"
+import { StepperPhoneArrow } from "./steppers/StepperPhoneArrow"
+import { StepperDivider } from "./steppers/stepperDivider"
 
 
 
@@ -63,5 +65,7 @@ export {
     RadioLabel,
     RingLoading,
     Counter,
-    StepperTab
+    StepperTab,
+    StepperPhoneArrow,
+    StepperDivider
 }
