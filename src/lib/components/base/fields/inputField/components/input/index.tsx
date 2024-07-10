@@ -92,7 +92,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
             )}
 
             {/* to render the tooltip here when error_message not null */}
-            {error_message && <Tooltip message={error_message} />}
+            {error_message && <Tooltip {...props} message={error_message} />}
         </section>
     );
 });

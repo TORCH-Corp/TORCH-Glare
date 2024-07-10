@@ -28,5 +28,5 @@ export const determineDirection = (storedPositionStatus: DirectionsStatus, setSt
     if (storedPositionStatus.left && storedPositionStatus.right && !storedPositionStatus.bottom) return dirClasses.top;
     if (storedPositionStatus.left && storedPositionStatus.right && !storedPositionStatus.top) return dirClasses.bottom;
 
-    return dirClasses.left; // default case
+    return dirClasses.right; // default case
 };
