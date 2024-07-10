@@ -17,7 +17,7 @@ export function ExtraComponents({
       <span className="glare-input-icon">
         {trailing_label && <p className='glare-input-trailingLabel'>{trailing_label}</p>}
         {drop_down_list_child && (
-          <Button type='button' onClick={() => setIsActive(true)} component_size={component_size} disabled={disabled} left_icon={<i className="ri-arrow-down-s-line"></i>} />
+          <Button tabIndex={-1} type='button' onClick={() => setIsActive(true)} component_size={component_size} disabled={disabled} left_icon={<i className="ri-arrow-down-s-line"></i>} />
         )}
         {action_button}
       </span>
