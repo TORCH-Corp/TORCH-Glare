@@ -10,7 +10,7 @@ Welcome to the **TORCH Glare Components Library**! This library contains a colle
 - each component has simple README file.
 - the components use advanced typography system based on the framework design system, we use scss mixins.
 - the components use advanced color mapping system by using normal CSS vars inside scss files, with that we have more than a single color mod, we have dark, light, default mods.
-- we use font icons of RemixIcons library, you should import RemixIcons CDN in your index.html to have the icons.
+- we use font icons of RemixIcons library.
 
 
 ### More About Framework Typography
@@ -18,10 +18,6 @@ more about [typography](typography.md)
 
 ### More About Framework Color system
 more about [colorSystem](colorsSystem.md)
-
-### More About Framework default Icons  
-more about [icons](icons.md)
-
 
 
 ### Project Folders Structure
