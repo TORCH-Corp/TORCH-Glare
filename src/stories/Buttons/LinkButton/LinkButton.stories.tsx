@@ -1,8 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { ComponentProps } from 'react';
-import { LinkButton } from '../../lib'
-import '../../lib/styles/colors/colorMapping/default.css'
+import { LinkButton } from '../../../lib'
 
 type StoryProps = ComponentProps<typeof LinkButton> & {
     buttonText: string;
@@ -10,10 +9,9 @@ type StoryProps = ComponentProps<typeof LinkButton> & {
 
 const meta: Meta<StoryProps> = {
     component: LinkButton,
-    tags: ['autodocs'],
     argTypes: {
         component_size: {
-            options: ['S', 'M', 'L'],
+            options: ['S', 'M'],
             control: {
                 type: 'select',
             },
@@ -30,8 +28,8 @@ type Story = StoryObj<StoryProps>;
 
 export const LinkButtonStory: Story = {
     args: {
-        children: 'Hello',
-        component_size: 'S',
+        children: 'LinkButton Playground',
+        component_size: 'M',
         dir: "ltr"
     },
     render: ({ children, ...args }) => {

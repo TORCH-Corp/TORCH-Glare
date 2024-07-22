@@ -1,5 +1,9 @@
 @import '../../../../styles/mediaQuery/queries.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-field-section {
 
     width: 100%;

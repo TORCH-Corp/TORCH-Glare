@@ -1,9 +1,13 @@
+* {
+    box-sizing: border-box;
+}
+
 .drop-down-menu {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: var(--Space-1, 4px);
+    padding: var(--Space-1, 4px) !important;
     border-radius: 8px;
     max-height: 200px;
     overflow: scroll;

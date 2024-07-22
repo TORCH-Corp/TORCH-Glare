@@ -1,5 +1,9 @@
 @import '../../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-button {
     height: 26px;
     color: var(--content-presentation-action-light-primary);

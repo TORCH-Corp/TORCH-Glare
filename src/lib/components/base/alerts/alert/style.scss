@@ -1,5 +1,9 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-alert {
     display: flex;
     position: relative;

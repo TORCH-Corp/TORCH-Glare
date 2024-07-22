@@ -1,13 +1,21 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-drop-down-button-result-show {
     width: fit-content;
+    position: relative;
+    height: fit-content;
 
     .glare-drop-down-button-result-show-wrapper {
+        height: fit-content;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 2px;
+        border-radius: 4px;
         background: var(--background-presentation-action-secondary);
 
         .glare-drop-down-button-result-show-label {
@@ -15,7 +23,8 @@
             border-radius: var(--Radius-2-max, 4px);
             border: 2px solid var(--border-presentation-action-disabled);
             background: var(--background-presentation-form-header);
-            padding: 0px 8px;
+            padding: 0px 8px !important;
+            margin: 0 !important;
         }
 
         .glare-button-icon {

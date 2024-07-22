@@ -1,5 +1,9 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 
 .sign-in-button {
     width: 100%;

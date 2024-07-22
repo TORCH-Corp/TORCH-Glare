@@ -1,4 +1,18 @@
+* {
+    box-sizing: border-box;
+}
+
 .glare-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--background-system-body-primary);
+    background-color: var(--background-system-state-negative);
+    overflow: hidden;
+
     .glare-counter-label {
         color: var(--content-system-global-primary);
         text-align: center;
@@ -6,14 +20,9 @@
         font-size: 10px;
         font-style: normal;
         font-weight: 700;
-        line-height: 142%;
-        border-radius: 50%;
-        border: 1px solid var(--background-system-body-primary);
-        background-color: var(--background-system-state-negative);
         width: 14px;
-        height: 14px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        line-height: 142%;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 }

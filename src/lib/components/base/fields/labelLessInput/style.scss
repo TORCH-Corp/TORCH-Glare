@@ -1,5 +1,9 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-input-labelLess-field-wrapper {
     width: 100%;
     position: relative;

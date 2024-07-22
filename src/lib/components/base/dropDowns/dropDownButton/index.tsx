@@ -30,7 +30,7 @@ export const DropDownButton: React.FC<Props> = ({
             <LabelAndButton component_size={component_size} component_label={component_label} isActive={isActive} />
             {/* this dynamic container will show the drop down list when you click on the button. 
                 this dynamic container will detect the hit the viewport and change the direction.*/}
-            <DynamicContainer active={isActive}>
+            <DynamicContainer style={{ width: sectionRef.current ? sectionRef.current?.offsetWidth * 1.4 : "100%" }} active={isActive} >
                 {drop_down_list_child}
             </DynamicContainer>
         </section>

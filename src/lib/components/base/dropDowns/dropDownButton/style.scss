@@ -1,7 +1,12 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-drop-down-button {
     width: fit-content;
+    position: relative;
 
     .glare-drop-down-button-wrapper {
         display: flex;

@@ -1,10 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+
 .Tooltip {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     z-index: 10;
-  
+
     gap: 0;
 
     p {

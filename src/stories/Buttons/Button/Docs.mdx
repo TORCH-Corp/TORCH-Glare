@@ -1,0 +1,88 @@
+import { Button } from '../../../lib/index.ts';
+import * as ButtonStories from './Button.stories.tsx';
+import { Meta, Title, Description, Source } from '@storybook/blocks';
+
+<Title>Button Component</Title>
+<Meta of={ButtonStories}/>
+
+  This is the Glare Button component with different styles, sizes, and icons.
+
+## Button Styles
+#### Default Style
+<Button>Default Button</Button>
+<Source code={`<Button>Default Button</Button>`} />
+
+#### Blue Secondary Style
+<Button component_style="BlueSecStyle">Blue Secondary</Button>
+<Source code={`<Button component_style="BlueSecStyle">Blue Secondary</Button>`} />
+
+#### Yellow Secondary Style
+<Button component_style="YelSecStyle">Yellow Secondary</Button>
+<Source code={`<Button component_style="YelSecStyle">Yellow Secondary</Button>`} />
+
+#### Red Secondary Style
+<Button component_style="RedSecStyle">Red Secondary</Button>
+<Source code={`<Button component_style="RedSecStyle">Red Secondary</Button>`} />
+
+#### Border Style
+<Button component_style="BorderStyle">Border Style</Button>
+<Source code={`<Button component_style="BorderStyle">Border Style</Button>`} />
+
+#### Primary Content Style
+<Button component_style="PrimeContStyle">Primary Content</Button>
+<Source code={`<Button component_style="PrimeContStyle">Primary Content</Button>`} />
+
+#### Blue Content Style
+<Button component_style="BlueContStyle">Blue Content</Button>
+<Source code={`<Button component_style="BlueContStyle">Blue Content</Button>`} />
+
+#### Red Content Style
+<Button component_style="RedContStyle">Red Content</Button>
+<Source code={`<Button component_style="RedContStyle">Red Content</Button>`} />
+
+## Button Sizes
+
+#### Small Size Button
+<Button component_size="S">Small Button</Button>
+<Source code={`<Button component_size="S">Small Button</Button>`} />
+
+#### Medium Size Button
+<Button component_size="M">Medium Button</Button>
+<Source code={`<Button component_size="M">Medium Button</Button>`} />
+
+#### Large Size Button
+<Button component_size="L">Large Button</Button>
+<Source code={`<Button component_size="L">Large Button</Button>`} />
+
+## Button States
+
+#### Button with Left Icon
+<Button left_icon={<i className="ri-add-line"></i>}>Left Icon</Button>
+<Source code={`<Button left_icon={<i className="ri-add-line"></i>}>Left Icon</Button>`} />
+
+#### Button with Right Icon
+<Button right_icon={<i className="ri-add-line"></i>}>Right Icon</Button>
+<Source code={`<Button right_icon={<i className="ri-add-line"></i>}>Right Icon</Button>`} />
+
+#### Button with Icon Only
+<Button right_icon={<i className="ri-add-line"></i>}></Button>
+<Source code={`<Button right_icon={<i className="ri-add-line"></i>}></Button>`} />
+
+#### Loading Button
+<Button is_loading>Loading...</Button>
+<Source code={`<Button is_loading>Loading...</Button>`} />
+
+## Usage
+
+```jsx
+import { Button } from 'torch-glare';
+
+const App = () => (
+  <div>
+    <Button component_style="BlueSecStyle" component_size="M">
+      Example Button
+    </Button>
+  </div>
+);
+
+export default App;
