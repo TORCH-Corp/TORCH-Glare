@@ -1,11 +1,11 @@
-import { DropDownMenuItem } from '../../../lib';
+import { DropDownMenuItem,DropDownMenu } from '../../../lib';
 import * as DropDownMenuItemStories from './DropDownMenuItem.stories.tsx';
 import { Meta, Title, Source } from '@storybook/blocks';
 
 <Title>DropDownMenuItem Component</Title>
 <Meta of={DropDownMenuItemStories} />
 
-This is the Glare DropDownMenuItem component, which supports various types and styles of dropdown menu items.
+This is the Glare DropDownMenuItem component, which supports various types and styles of dropdown menu items, this component used with dropdown
 
 
 ### DropDownMenuItem Styles
@@ -179,7 +179,38 @@ This is the Glare DropDownMenuItem component, which supports various types and s
 />
 `} />
 
+## DropDownMenuItem Use Case 
 
+### In DropDown
+ <DropDownMenu  
+style={{width:"300px"}}
+component_style='System-Style'>
+    <DropDownMenuItem
+      component_label="example 1"
+      element_name="example1"
+      component_style="System-Style"
+    />
+    <DropDownMenuItem
+      component_label="example 2"
+      element_name="example2"
+      component_style="System-Style"
+    />
+  </DropDownMenu>
+
+<Source code={`
+ <DropDownMenu component_style='System-Style'>
+    <DropDownMenuItem
+      component_label="example 1"
+      element_name="example1"
+      component_style="System-Style"
+    />
+    <DropDownMenuItem
+      component_label="example 2"
+      element_name="example2"
+      component_style="System-Style"
+    />
+  </DropDownMenu>
+`} />
 
 ## Usage
 
@@ -187,34 +218,29 @@ This is the Glare DropDownMenuItem component, which supports various types and s
 import { DropDownMenuItem } from 'torch-glare';
 
 const App = () => (
-  <div>
+ <DropDownMenu  component_style='System-Style'>
     <DropDownMenuItem
-      component_type="checkbox"
-      component_label="Checkbox Item"
-      element_name="checkbox-item"
-      isChecked={true}
+      component_label="example 1"
+      element_name="example1"
       component_style="System-Style"
     />
     <DropDownMenuItem
-      component_type="radio"
-      component_label="Radio Item"
-      element_name="radio-item"
-      isChecked={false}
+      component_label="example 2"
+      element_name="example2"
+      component_style="System-Style"
+    />
+        <DropDownMenuItem
+      component_label="example 3"
+      element_name="example3"
       component_style="System-Style"
     />
     <DropDownMenuItem
-      component_label="Normal Item with Icon"
-      element_name="normal-item-icon"
+      component_label="example 4"
+      element_name="example4"
       component_style="System-Style"
-      right_side_icon={<i className="ri-settings-line"></i>}
-      onRightSideIconClick={() => alert('Icon clicked')}
     />
-    <DropDownMenuItem
-      component_label="Normal Item without Icon"
-      element_name="normal-item-no-icon"
-      component_style="Presentation-Warning-Style"
-    />
-  </div>
+  </DropDownMenu>
+
 );
 
 export default App;
