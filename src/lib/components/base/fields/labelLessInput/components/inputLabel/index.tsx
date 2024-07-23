@@ -8,9 +8,9 @@ interface Props {
     name?: string;
 }
 
-export function InputLabel({ active, label, component_size = "S", required, name }: Props) {
+export function InputLabel({ active, label, component_size, required, name }: Props) {
     return (
-        <section className={`glare-InputLabel-wrapper glare-InputLabel-size-${component_size}`}>
+        <section className={`glare-InputLabel-wrapper glare-InputLabel-size-${component_size || "S"}`}>
             <section className='glare-InputLabel-label-wrapper'>
                 {/* active is when the input is focused we will change the label font size */}
                 <label className={active ? "glare-InputLabel-active" : ""} htmlFor={name}>

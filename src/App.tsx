@@ -1,4 +1,4 @@
-import { Datepicker } from './lib'
+import { Datepicker, TabFormItem } from './lib'
 import './lib/styles/colors/colorMapping/dark.css'
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
         placeholder="Select date"
         name="example-datepicker"
       />
+
     </section >
   )
 }

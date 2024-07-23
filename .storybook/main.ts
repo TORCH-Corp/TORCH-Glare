@@ -13,5 +13,17 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      propFilter: (prop) => {
+        if (prop.parent) {
+          return !prop.parent.fileName.includes('node_modules');
+        }
+        return true;
+      }
+    }
+  }
 };
 export default config;

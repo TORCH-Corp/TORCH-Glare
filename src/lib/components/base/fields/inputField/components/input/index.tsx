@@ -55,6 +55,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
             }}
             className={`glare-input-field-wrapper ${style} ${className}`}
             ref={sectionRef}
+            style={props.style}
         >
             <section className='glare-input-field-inner-wrapper'>
                 {/* to add left side icon */}
@@ -66,6 +67,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
                     {/* the base input element */}
                     <InputElement
                         {...props}
+                        style={{}}
                         ref={ref}
                         setFocus={setFocus}
                         setIsActive={setIsActive}

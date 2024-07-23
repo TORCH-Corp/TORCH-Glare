@@ -26,6 +26,7 @@ const Tooltip: React.FC<Props> = ({ message, ...props }) => {
     return message ? (
         <section
             {...props}
+            style={{}}
             ref={ref}
             dir='ltr'
             className={`Tooltip ${direction}`}

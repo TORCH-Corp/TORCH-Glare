@@ -7,7 +7,6 @@ import { CheckboxIcon } from "./components/checkboxIcon";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     component_size: "S" | "M" | "L"; // this is used to change the size style of the component
-    check_box_name: string; // the name of the radio and this is important to link the radio with the label
     label?: string; // main label
     required_label?: string; // normal text with required style
     secondary_label?: string; // normal text with secondary style
@@ -15,7 +14,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
     component_size,
-    check_box_name,
     label,
     required_label,
     secondary_label,
@@ -27,7 +25,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
 
     return (
         <Label
-            name={check_box_name}
+            name={props.name}
             component_size={component_size}
             required_label={required_label}
             child_dir="vertical-reverse"
@@ -40,7 +38,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
 
             <InputElement
                 ref={ref}
-                check_box_name={check_box_name}
+                name={props.name}
                 handleSelect={handleSelect}
                 handleFocus={handleFocus}
                 selected={selected}

@@ -11,6 +11,7 @@ Welcome to the **TORCH Glare Components Library**! This library contains a colle
 - the components use advanced typography system based on the framework design system, we use scss mixins.
 - the components use advanced color mapping system by using normal CSS vars inside scss files, with that we have more than a single color mod, we have dark, light, default mods.
 - we use font icons of RemixIcons library.
+- we make stories for all of the components using StoryBook library
 
 
 ### More About Framework Typography
@@ -35,7 +36,9 @@ src
 │   │   ├── mediaQuery             # mediaQuery mixins
 │   │   └── typography             # typography mixins
 │   └── types  
-        
+├── stories                        # this folder contains all of the component stories
+├── App.tsx                        # only for testing locally
+               
 
 
 

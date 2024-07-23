@@ -1,0 +1,51 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { RingLoading } from '../../../lib';
+import * as RingLoadingStories from './RingLoading.stories.tsx';
+
+<Title>RingLoading Component</Title>
+<Meta title="UI Components/RingLoading" component={RingLoading} of={RingLoadingStories} />
+
+This `RingLoading` component provides a visual indication of loading processes, featuring a rotating ring animation. It supports different sizes and allows for the inclusion of custom content within the animation frame.
+
+
+## Examples
+
+### Small Size
+<RingLoading component_size="S">
+  <span>Loading...</span>
+</RingLoading>
+<Source code={`<RingLoading component_size="S">
+  <span>Loading...</span>
+</RingLoading>`} />
+
+### Medium Size
+<RingLoading component_size="M">
+  <span>Please wait...</span>
+</RingLoading>
+<Source code={`<RingLoading component_size="M">
+  <span>Please wait...</span>
+</RingLoading>`} />
+
+### Large Size
+<RingLoading component_size="L">
+  <span>Processing your request...</span>
+</RingLoading>
+<Source code={`<RingLoading component_size="L">
+  <span>Processing your request...</span>
+</RingLoading>`} />
+
+## Usage
+
+```jsx
+import {RingLoading }from 'torch-glare';
+
+const App = () => (
+  <div>
+    <RingLoading component_size="M">
+      <div>Loading data, please stand by...</div>
+    </RingLoading>
+  </div>
+);
+
+export default App;
+```

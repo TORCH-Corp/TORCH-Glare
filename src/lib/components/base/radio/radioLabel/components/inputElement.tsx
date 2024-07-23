@@ -1,13 +1,13 @@
 import { InputHTMLAttributes, forwardRef } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    check_box_name: string; // the name of the radio and this is important to link the radio with the label
+    name: string | undefined; // the name of the radio and this is important to link the radio with the label
     handleSelect: (e: any) => void
     handleFocus: (e: boolean) => void
     selected: boolean
 }
 export const InputElement = forwardRef<HTMLInputElement, Props>(({
-    check_box_name,
+    name,
     handleSelect,
     handleFocus,
     selected,
@@ -31,7 +31,7 @@ export const InputElement = forwardRef<HTMLInputElement, Props>(({
                 props.onBlur && props.onBlur(e);
             }}
             ref={ref}
-            id={check_box_name}
+            id={name}
             type="radio"
             className="glare-RadioLabel-input"
             checked={selected}

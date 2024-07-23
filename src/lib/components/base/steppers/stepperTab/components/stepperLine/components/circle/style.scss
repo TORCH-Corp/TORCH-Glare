@@ -12,7 +12,10 @@
     width: 30px;
     transition: all 200ms ease-in-out;
     color: var(--content-presentation-global-secondary);
-
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 30px;
     @include Headers-typography-Medium-Medium;
 }
 

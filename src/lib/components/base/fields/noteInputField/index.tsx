@@ -8,7 +8,7 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     label?: string;
     required_label?: string;
     secondary_label?: string;
-    component_style?: "vertical" | "horizontal" | ""; // this is used to change the label direction
+    label_style?: "vertical" | "horizontal" | ""; // this is used to change the label direction
     error_message?: string; // this is used to show the error message tooltip
     negative?: boolean; // this is used to have negative style
 }
@@ -18,7 +18,7 @@ export const NoteInputField = forwardRef<HTMLTextAreaElement, Props>(({
     label,
     required_label,
     secondary_label,
-    component_style,
+    label_style,
     error_message,
     negative,
     ...props
@@ -29,13 +29,16 @@ export const NoteInputField = forwardRef<HTMLTextAreaElement, Props>(({
             secondary_label={secondary_label}
             name={name}
             component_size="M"
-            child_dir={component_style === "horizontal" ? "vertical" : ""}
-            component_style={component_style === "horizontal" ? "vertical" : ""}
+            required_label={required_label}
+            child_dir={label_style === "vertical" ? "horizontal" : ""}
+            component_style={label_style === "horizontal" ? "vertical" : ""}
             className="custom-label"
+            style={props.style}
         >
             <Textarea
                 {...props}
                 name={name}
+                style={{}}
                 ref={ref} // Forward the ref
                 negative={negative}
                 error_message={error_message} />

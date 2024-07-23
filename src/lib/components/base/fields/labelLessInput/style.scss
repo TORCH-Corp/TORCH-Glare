@@ -25,7 +25,6 @@
         overflow: scroll;
         height: 100%;
         gap: 4px;
-        padding: 0 3px;
         transition: all 300ms ease-in-out;
 
         .input-container {
@@ -64,10 +63,13 @@
             font-size: 14px;
             color: #A0A0A0;
             transition: all 150ms ease-in-out;
+            margin: 0 !important;
 
             .glare-input-trailingLabel {
                 @include Labels-typography-Medium-Medium;
                 color: var(--content-presentation-action-light-primary);
+                margin: 0 !important;
+                white-space: nowrap;
             }
         }
 

@@ -7,7 +7,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     required_label?: string;
     secondary_label?: string;
     component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
-    component_style?: "horizontal" | "vertical"; // this will change the label direction of the component
+    label_style?: "horizontal" | "vertical"; // this will change the label direction of the component
     left_side_icon?: ReactNode; // to add left side icon
     drop_down_list_child?: ReactNode; // to add drop down list if you pass it
     trailing_label?: string; // to add trailing label
@@ -24,7 +24,7 @@ export const LabeledInput = forwardRef<HTMLInputElement, Props>(({
     required_label,
     secondary_label,
     component_size,
-    component_style,
+    label_style,
     left_side_icon,
     drop_down_list_child,
     trailing_label,
@@ -39,13 +39,15 @@ export const LabeledInput = forwardRef<HTMLInputElement, Props>(({
 }, ref) => {
     return (
         <Label
+            style={props.style}
             className={className}
             label={label}
             secondary_label={secondary_label}
+            required_label={required_label}
             name={name}
             component_size={component_size}
-            child_dir={component_style}
-            component_style={component_style === "horizontal" ? "vertical" : ""}
+            child_dir={label_style === "horizontal" ? "vertical" : "horizontal"}
+            component_style={label_style === "horizontal" ? "vertical" : "horizontal"}
             theme={theme}
         >
             <Input
@@ -60,6 +62,7 @@ export const LabeledInput = forwardRef<HTMLInputElement, Props>(({
                 badges_children={badges_children}
                 error_message={error_message}
                 component_style={theme}
+                style={{}}
                 {...props}
             />
         </Label>
