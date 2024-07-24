@@ -55,11 +55,13 @@
 }
 
 .Tooltip-TOP {
-    flex-direction: column;
+    flex-direction: column-reverse;
     height: fit-content;
+    top: -130%;
+    transform: unset !important;
 
     .triangle {
-        transform: rotate(90deg) translateX(1px);
+        transform: rotate(-90deg) translateX(1px);
     }
 }
 

@@ -16,6 +16,7 @@
         p {
             color: var(--content-presentation-state-negative);
             @include Body-typography-Small-Regular;
+            margin: 0 !important;
         }
 
         label {

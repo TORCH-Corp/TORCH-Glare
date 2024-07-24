@@ -41,9 +41,10 @@ export function FieldSection({
     ...props
 }: Props) {
     return (
-        <section className="glare-field-section">
+        <section style={props.style} className="glare-field-section">
             <ContentColumn
                 name={name}
+                style={{}}
                 component_label={label}
                 secondary_label={secondary_label}
                 required_label={required_label}
@@ -53,6 +54,7 @@ export function FieldSection({
             />
             <InputField
                 {...props}
+                style={{}}
                 name={name}
                 component_size={component_size}
                 left_side_icon={left_side_icon}

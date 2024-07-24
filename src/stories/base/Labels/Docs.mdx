@@ -1,0 +1,44 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { Label } from '../../../lib';
+import * as LabelStories from './Label.stories.tsx';
+
+<Title>Label Component</Title>
+<Meta of={LabelStories} />
+
+This `Label` component is designed to enhance form usability by providing contextual labels, required field indicators, and secondary information. It supports various configurations such as label sizing, orientation, theming, and accessibility through linkage with form elements.
+
+## Examples
+
+### Basic Usage
+<Label name="basic" label="Basic Label" />
+<Source code={`<Label name="basic" label="Basic Label" />`} />
+
+### With Required Indicator
+<Label name="required" label="Required Field" required_label="*" />
+<Source code={`<Label name="required" label="Required Field" required_label="*" />`} />
+
+### With Secondary Text
+<Label name="detailed" label="Detailed Label" secondary_label="More Info" />
+<Source code={`<Label name="detailed" label="Detailed Label" secondary_label="More Info" />`} />
+
+### With Thematic Styling
+<Label name="themed" label="Themed Label" theme="System-Style" />
+<Source code={`<Label name="themed" label="Themed Label" theme="System-Style" />`} />
+
+### Fully Configured
+<Label name="full" label="Full Configuration" required_label="*" secondary_label="Optional" component_size="M" component_style="horizontal" />
+<Source code={`<Label name="full" label="Full Configuration" required_label="*" secondary_label="Optional" component_size="M" component_style="horizontal" />`} />
+
+## Usage
+
+```jsx
+import { Label } from 'your-component-library';
+
+const App = () => (
+  <div>
+    <Label name="userLabel" label="Username" required_label="*" component_size="L" component_style="horizontal" theme="System-Style" />
+  </div>
+);
+
+export default App;
+```

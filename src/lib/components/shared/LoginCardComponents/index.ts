@@ -1,6 +1,6 @@
-import AuthButton from "./authButton";
-import PasswordLevel from "./passwordLevel";
+import LoginButton from "./LoginButton";
+import PassCheck from "./PassCheck";
 
 export {
-    AuthButton, PasswordLevel
+    LoginButton, PassCheck
 }

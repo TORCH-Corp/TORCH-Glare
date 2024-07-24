@@ -1,5 +1,5 @@
 import { Label, Button, TabFormItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow, RadioLabel, RingLoading, Counter, StepperTab, StepperPhoneArrow, StepperDivider } from "./components/base";
-import { ProfileItem, AuthButton, PasswordLevel, SideBarItem, IconButton, FeedBackItem, ContentColumn, FieldSection } from "./components/shared";
+import { ProfileItem, LoginButton, PassCheck, SideBarItem, IconButton, FeedBackItem, ContentColumn, FieldSection } from "./components/shared";
 import { UseDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hooks";
 import 'remixicon/fonts/remixicon.css'
 
@@ -45,8 +45,8 @@ export {
     /* shared components */
     ProfileItem,
     SideBarItem,
-    AuthButton,
-    PasswordLevel,
+    LoginButton,
+    PassCheck,
     IconButton,
     FeedBackItem,
     ContentColumn,

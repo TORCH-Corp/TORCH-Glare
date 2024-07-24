@@ -24,16 +24,40 @@ function UseDirectionCalc({ dirClasses, ElementRef, isElementActive, trigger }: 
     const handlePosition = () => {
         if (!ElementRef.current) return
         const element = ElementRef.current;
-
         if (element) {
             const newPositionStatus = getElementPositionStatus(element);
-            setDir(determineDirection(storedPositionStatus, setStoredPositionStatus, newPositionStatus, dirClasses));
+            const calcPosition = determineDirection(storedPositionStatus, setStoredPositionStatus, newPositionStatus, dirClasses);
+            if (calcPosition !== undefined) setDir(calcPosition);
         }
     };
 
+
     useEffect(() => {
-        handlePosition();
+        // Define the event handlers
+        const handleMouseEnter = () => handlePosition();
+        const handleResize = () => handlePosition();
+        const handleScroll = () => handlePosition();
+
+        // Get the current element from the ref
+        const currentElement = ElementRef.current;
+
+        if (currentElement) {
+            // Add event listeners
+            currentElement.addEventListener('mouseenter', handleMouseEnter);
+            window.addEventListener('resize', handleResize);
+            window.addEventListener('scroll', handleScroll);
+        }
+
+        // Cleanup function to remove event listeners
+        return () => {
+            if (currentElement) {
+                currentElement.removeEventListener('mouseenter', handleMouseEnter);
+            }
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, [ElementRef, isElementActive, trigger]);
+
 
     // here we are returning the direction state with the selected class name 
     return dir;

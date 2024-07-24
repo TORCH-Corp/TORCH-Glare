@@ -1,0 +1,65 @@
+import { DropDownButton,DropDownMenu, DropDownMenuItem } from '../../../../lib';
+import * as DropDownButtonStories from './DropDownButton.stories.tsx';
+import { Meta, Title, Source } from '@storybook/blocks';
+
+
+<Title>DropDownButton Component</Title>
+<Meta of={DropDownButtonStories} />
+
+This is the Glare DropDownButton component, which includes various sizes and supports dropdown menus.
+
+## DropDownButton Sizes
+
+#### Small Size
+<DropDownButton component_size="S" component_label="Small Dropdown" />
+<Source code={`<DropDownButton component_size="S" component_label="Small Dropdown" />
+`} />
+
+#### Medium Size
+<DropDownButton component_size="M" component_label="Medium Dropdown" />
+<Source code={`<DropDownButton component_size="M" component_label="Medium Dropdown" />
+`} />
+
+#### Large Size
+<DropDownButton component_size="L" component_label="Large Dropdown" />
+<Source code={`<DropDownButton component_size="L" component_label="Large Dropdown" />
+`} />
+
+
+## DropDownButton with Dropdown Menu
+
+#### Dropdown with Menu Item
+<DropDownButton component_size="M" component_label="Dropdown with Menu" drop_down_list_child={
+    <DropDownMenu>
+        <DropDownMenuItem component_style='System-Style' component_label={'Option Example'} element_name={'example3'} />
+    </DropDownMenu>
+} />
+<Source code={`
+<DropDownButton component_size="M" component_label="Dropdown with Menu" drop_down_list_child={
+    <DropDownMenu>
+        <DropDownMenuItem component_style='System-Style' component_label={'Option Example'} element_name={'example'} />
+    </DropDownMenu>
+} />
+`} />
+
+## Usage
+
+```jsx
+import { DropDownButton, DropDownMenu, DropDownMenuItem } from 'torch-glare';
+
+const App = () => (
+  <div>
+    <DropDownButton
+      component_size="M"
+      component_label="Example Dropdown"
+      drop_down_list_child={
+        <DropDownMenu>
+          <DropDownMenuItem component_style='System-Style' component_label={'Option Example'} element_name={'example'} />
+        </DropDownMenu>
+      }
+    />
+  </div>
+);
+
+export default App;
+```

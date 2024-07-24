@@ -1,0 +1,90 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { ContentColumn} from '../../../lib/index.ts';
+import * as ContentColumnStories from './ContentColumn.stories.tsx';
+
+
+<Title>ContentColumn Component</Title>
+<Meta of={ContentColumnStories} />
+
+The `ContentColumn` component displays a column with a primary label, secondary label, and optional warning and error messages. It is used to structure content with different labels and alerts.
+
+## Default Style
+
+<ContentColumn
+  component_label="Primary Label"
+  secondary_label="Secondary Label"
+  required_label="Required Label"
+  component_size="M"
+  name="contentColumn"
+/>
+
+<Source
+code={`<ContentColumn
+  component_label="Primary Label"
+  secondary_label="Secondary Label"
+  required_label="Required Label"
+  component_size="M"
+  name="contentColumn"
+/>`}
+/>
+
+
+## Example with Only Warning Label
+<ContentColumn
+  component_label="Primary Label"
+  warning_label="Warning Label"
+  component_size="S"
+  name="warningColumn"
+/>
+<Source
+code={`<ContentColumn
+  component_label="Primary Label"
+  warning_label="Warning Label"
+  component_size="S"
+  name="warningColumn"
+/>`}
+/>
+
+
+## Full Example 
+
+  <ContentColumn
+    component_label="Primary Label"
+    secondary_label="Secondary Label"
+    required_label="Required Label"
+    warning_label="Warning Label"
+    error_label="Error Label"
+    component_size="M"
+    name="contentColumn"
+  />
+
+<Source
+code={`<ContentColumn
+    component_label="Primary Label"
+    secondary_label="Secondary Label"
+    required_label="Required Label"
+    warning_label="Warning Label"
+    error_label="Error Label"
+    component_size="M"
+    name="contentColumn"
+  />`}
+/>
+
+
+```jsx
+import { ContentColumn } from 'torch-glare';
+
+const App = () => (
+  <ContentColumn
+    component_label="Primary Label"
+    secondary_label="Secondary Label"
+    required_label="Required Label"
+    warning_label="Warning Label"
+    error_label="Error Label"
+    component_size="M"
+    name="contentColumn"
+  />
+);
+
+export default App;
+```

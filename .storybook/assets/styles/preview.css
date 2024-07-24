@@ -1,0 +1,5 @@
+@import '../../../src/fonts/fonts.css';
+
+* {
+    font-family: 'SF-Pro' !important;
+}
