@@ -8,6 +8,7 @@ type StoryProps = ComponentProps<typeof FieldSection> & {
 
 const meta: Meta<StoryProps> = {
     component: FieldSection,
+    title: 'Forms/FieldSection',
     argTypes: {
         name: { control: 'text', description: 'Important to link the component' },
         label: { control: 'text', description: 'Label of the component' },
@@ -37,7 +38,7 @@ export default meta;
 
 type Story = StoryObj<StoryProps>;
 
-export const FieldSectionStory: Story = {
+export const FieldSection_Playground: Story = {
     args: {
         name: "fieldSection",
         label: "Field Section",

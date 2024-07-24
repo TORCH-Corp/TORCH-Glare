@@ -8,6 +8,7 @@ type StoryProps = ComponentProps<typeof ContentColumn> & {
 
 const meta: Meta<StoryProps> = {
     component: ContentColumn,
+    title: 'Forms/ContentColumn',
     argTypes: {
         component_label: { control: 'text', description: 'The label of the component' },
         secondary_label: { control: 'text', description: 'The secondary style label' },
@@ -26,7 +27,7 @@ export default meta;
 
 type Story = StoryObj<StoryProps>;
 
-export const ContentColumnStory: Story = {
+export const ContentColumn_Playground: Story = {
     args: {
         component_label: "Primary Label",
         secondary_label: "Secondary Label",
