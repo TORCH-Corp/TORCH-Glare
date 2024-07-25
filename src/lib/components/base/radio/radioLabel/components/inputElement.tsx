@@ -1,26 +1,16 @@
 import { InputHTMLAttributes, forwardRef } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    name: string | undefined; // the name of the radio and this is important to link the radio with the label
-    handleSelect: (e: any) => void
     handleFocus: (e: boolean) => void
-    selected: boolean
 }
 export const InputElement = forwardRef<HTMLInputElement, Props>(({
     name,
-    handleSelect,
     handleFocus,
-    selected,
     ...props
 }, ref) => {
     return (
         <input
             {...props}
-            onChange={(e) => {
-                // here we can handle the change event and show the check icon
-                handleSelect(e);
-                props.onChange && props.onChange(e);
-            }}
             onFocus={(e) => {
                 // here we can handle the fucus event and change the component style
                 handleFocus(true);
@@ -31,10 +21,7 @@ export const InputElement = forwardRef<HTMLInputElement, Props>(({
                 props.onBlur && props.onBlur(e);
             }}
             ref={ref}
-            id={name}
             type="radio"
             className="glare-RadioLabel-input"
-            checked={selected}
-            disabled={props.disabled}
         />)
 })

@@ -10,6 +10,12 @@ const meta: Meta<StoryProps> = {
     component: RadioLabel,
     title: 'Components/Radio/RadioLabel',
     argTypes: {
+        is_selected: {
+            control: {
+                type: 'boolean',
+            },
+            description: 'Sets the size of the label component.'
+        },
         component_size: {
             options: ['S', 'M', 'L'],
             control: {

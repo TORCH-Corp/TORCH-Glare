@@ -1,0 +1,30 @@
+import { Badge ,FieldSection,DropDownMenu} from '../../../lib/index.ts';
+import * as BadgeStories from './Badge.stories.tsx';
+import { Meta, Title, Source } from '@storybook/blocks';
+
+<Title>Badge Component</Title>
+<Meta of={BadgeStories}/>
+
+  This is the Glare Badge component, which showcases various styles and options. Here are some use cases.
+
+## Use Cases
+
+### Select Use Case
+
+In this scenario, we utilize an input with a dropdown menu, allowing us to select options by choosing the badges from the dropdown.
+
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <FieldSection badges_children={
+          <>
+            <Badge selected badge_size='S' badge_style="badge-blue" label="Option one" />
+            <Badge selected badge_size='S' badge_style="badge-cocktail-green" label="Option Two" />
+          </>
+        }
+          drop_down_list_child={
+            <DropDownMenu component_style='Presentation-Style'>
+              <Badge  badge_size='S' badge_style="badge-blue" label='Option Three' />
+              <Badge badge_size='S' badge_style="badge-blue" label='Option Four' />
+            </DropDownMenu>
+          }
+          name={'example'} label={'Some Label'} required_label={'*'} />
+      </div>

@@ -17,6 +17,23 @@ const meta: Meta<StoryProps> = {
                 type: 'select',
             },
         },
+        badge_style: {
+            options: ["badge-green",
+                "badge-green-light",
+                "badge-cocktail-green",
+                "badge-yellow",
+                "badge-red-orange",
+                "badge-red-light",
+                "badge-rose",
+                "badge-purple",
+                "badge-blue-purple",
+                "badge-blue",
+                "badge-navy",
+                "badge-gray"],
+            control: {
+                type: 'select',
+            },
+        },
     },
     args: {
         onCloseBtnClick: fn()
@@ -30,7 +47,6 @@ type Story = StoryObj<StoryProps>;
 export const Badge_Playground: Story = {
     args: {
         label: "Badge Playground",
-        badge_style: "badge-blue",
         selected: false
     },
     render: ({ ...args }) => {

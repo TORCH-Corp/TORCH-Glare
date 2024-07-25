@@ -1,0 +1,40 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { RadioLabel } from '../../../../lib/index.ts';
+import * as RadioLabelStories from './RadioLabel.stories.tsx';
+
+<Title>RadioLabel Component</Title>
+<Meta title="Form Components/RadioLabel" component={RadioLabel} of={RadioLabelStories} />
+
+This `RadioLabel` component combines custom radio functionality with label management, providing a unified component for scenarios requiring radio buttons with extensive label options such as required and secondary labels.
+
+## Use Cases
+
+### Form Use
+
+<div style={{padding:"30px",gap:"4px",display:"flex",alignItems:"flex-start",justifyContent:"center",flexDirection:"column"}}>
+<form >
+<RadioLabel
+    name="Red"
+    id='Red1'
+    label="Red"
+    component_size='M'
+    value="Red1"
+    is_selected
+/>
+<RadioLabel
+    name="Green"
+    label="Green"
+    id='Green1'
+    component_size='M'
+    value="Green1"
+/>
+<RadioLabel
+    name="Blue"
+    id='Blue1'
+    label="Blue"
+    component_size='M'
+    value="Blue1"
+/>
+
+</form>
+</div>

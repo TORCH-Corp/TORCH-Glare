@@ -1,0 +1,23 @@
+import { Button,InputField } from '../../../../lib/index.ts';
+import * as ButtonStories from './Button.stories.tsx';
+import { Meta, Title, Description, Source } from '@storybook/blocks';
+
+<Title>Button Component</Title>
+<Meta of={ButtonStories}/>
+
+This is the Glare Button component with different styles, sizes, and icons, and here are some use cases.
+
+## Use Cases
+
+#### Submit Use Case
+
+In this example, we are using the button component to submit and cancel.
+
+     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: "flex-end", alignItems: "flex-end", gap: "10px" ,maxWidth:"300px"}}>
+        <InputField name={''} />
+        <div style={{ display: 'flex', gap: "4px" }}>
+          <Button component_style="RedSecStyle" style={{ width: "fit-content" }}>Cancel</Button>
+          <Button component_style="BlueSecStyle" style={{ width: "fit-content" }}>Submit</Button>
+        </div>
+      </div>
+

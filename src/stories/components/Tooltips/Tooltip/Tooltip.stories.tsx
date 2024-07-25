@@ -3,7 +3,6 @@ import { ComponentProps } from 'react';
 import { Tooltip } from '../../../../lib'
 
 type StoryProps = ComponentProps<typeof Tooltip> & {
-    buttonText: string;
 };
 
 const meta: Meta<StoryProps> = {

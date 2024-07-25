@@ -20,7 +20,7 @@ const meta: Meta<StoryProps> = {
     },
     args: {
         onClick: fn(),
-    },
+    },// 
 };
 
 export default meta;

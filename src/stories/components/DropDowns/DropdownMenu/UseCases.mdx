@@ -1,0 +1,28 @@
+import { DropDownMenu, DropDownMenuItem,InputField } from '../../../../lib/index.ts';
+import * as DropDownMenuStories from './DropdownMenu.stories.tsx';
+import { Meta, Title, Source } from '@storybook/blocks';
+
+<Title>DropDownMenu Component</Title>
+<Meta of={DropDownMenuStories} />
+
+This is the Glare DropDownMenu component, which supports different styles and allows you to include menu items.
+
+## Use Cases
+
+### With InputField
+<InputField style={{width:"300px"}} name='' drop_down_list_child={
+ <DropDownMenu  
+component_style='System-Style'>
+    <DropDownMenuItem
+      component_label="example 1"
+      element_name="example1"
+      component_style="System-Style"
+    />
+    <DropDownMenuItem
+      component_label="example 2"
+      element_name="example2"
+      component_style="System-Style"
+    />
+  </DropDownMenu>
+
+}/>

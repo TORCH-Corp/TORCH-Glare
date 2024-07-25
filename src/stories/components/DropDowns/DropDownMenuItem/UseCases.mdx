@@ -1,0 +1,27 @@
+import { DropDownMenuItem,DropDownMenu } from '../../../../lib/index.ts';
+import * as DropDownMenuItemStories from './DropDownMenuItem.stories.tsx';
+import { Meta, Title, Source } from '@storybook/blocks';
+
+<Title>DropDownMenuItem Component Use Cases</Title>
+<Meta of={DropDownMenuItemStories} />
+
+This is the Glare DropDownMenuItem component, which supports various types and styles of dropdown menu items, this component used with dropdown
+
+
+## Use Cases
+
+### In DropDown
+ <DropDownMenu  
+style={{width:"300px"}}
+component_style='System-Style'>
+    <DropDownMenuItem
+      component_label="example 1"
+      element_name="example1"
+      component_style="System-Style"
+    />
+    <DropDownMenuItem
+      component_label="example 2"
+      element_name="example2"
+      component_style="System-Style"
+    />
+  </DropDownMenu>

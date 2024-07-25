@@ -5,7 +5,6 @@ import { ContentColumn } from '../../../lib'
 type StoryProps = ComponentProps<typeof ContentColumn> & {
     buttonText: string;
 };
-
 const meta: Meta<StoryProps> = {
     component: ContentColumn,
     title: 'Forms/ContentColumn',

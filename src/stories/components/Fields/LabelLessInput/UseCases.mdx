@@ -1,0 +1,23 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { LabelLessInput} from '../../../../lib/index.ts';
+import * as LabelLessInputStories from './LabelLessInput.stories.tsx';
+
+<Title>LabelLessInput Component</Title>
+<Meta of={LabelLessInputStories} />
+
+This is the Glare LabelLessInput component, a versatile input solution that supports various configurations such as labels, icons, dropdowns, and action elements like buttons and badges. It is designed for flexibility with options for size, style, negative theming, and error handling.
+
+## Use Cases
+
+### Form Use
+<div style={{ maxWidth: "300px", display: 'flex', flexDirection:"column",justifyContent:"center", margin: "30px 0", gap: "10px" }}>        
+<LabelLessInput
+    name="examples"
+    label='First Name' 
+/>
+
+<LabelLessInput
+    name="examples"
+    label='Last Name' 
+/>
+</div>

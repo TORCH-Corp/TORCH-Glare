@@ -1,18 +1,11 @@
-import { Datepicker, TabFormItem } from './lib'
 import './lib/styles/colors/colorMapping/dark.css'
 
 function App() {
 
   return (
-    <section className='app' >
-      <Datepicker
-        component_style='system'
-        component_size="M"
-        placeholder="Select date"
-        name="example-datepicker"
-      />
+    <div style={{ maxWidth: "400px", display: 'flex', flexDirection: 'column', margin: "30px 0", gap: "10px" }}>
 
-    </section >
+    </div>
   )
 }
 export default App

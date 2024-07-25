@@ -1,0 +1,19 @@
+import { Label,LinkButton } from '../../../../lib/index.ts';
+import * as  LinkButtonStories from './LinkButton.stories.tsx';
+import { Meta, Title, Description, Source } from '@storybook/blocks';
+
+<Title>Button Component</Title>
+<Meta of={LinkButtonStories}/>
+
+This is the Glare Button component with different styles, sizes, and icons, and here are some use cases.
+
+## Use Cases
+
+#### Submit Use Case
+
+In this example, we are using the LinkButton to navigate to another web page.
+
+  <div style={{ display: 'flex', justifyContent: "space-between", alignItems: "center", gap: "10px", maxWidth: "400px" }}>
+      <Label component_size='M' name={"undefined"} label='Company Polices' />
+      <LinkButton style={{ width: "fit-content" }} component_size='S'  >Learn More</LinkButton>
+  </div>

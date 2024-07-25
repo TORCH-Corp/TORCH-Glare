@@ -1,0 +1,24 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { InputField} from '../../../../lib/index.ts';
+import * as InputFieldStories from './InputField.stories.tsx';
+
+<Title>InputField Component</Title>
+<Meta of={InputFieldStories} />
+
+This is the Glare InputField component, a versatile input solution that supports various configurations such as labels, icons, dropdowns, and action elements like buttons and badges. It is designed for flexibility with options for size, style, negative theming, and error handling.
+
+
+## Use Cases
+
+### Login Use
+<div style={{ maxWidth: "300px", display: 'flex', flexDirection:"column",justifyContent:"center", margin: "30px 0", gap: "10px" }}>        
+   <InputField
+      name="with-dropdown"
+      label="User Name"
+    />
+   <InputField
+      name="with-dropdown"
+      label="Password"
+      type="password"
+    />
+</div>

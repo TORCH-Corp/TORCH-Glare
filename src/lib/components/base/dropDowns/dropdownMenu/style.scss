@@ -11,6 +11,7 @@
     border-radius: 8px;
     max-height: 200px;
     overflow: scroll;
+    margin: 0 !important;
 
     &::-webkit-scrollbar {
         display: none;

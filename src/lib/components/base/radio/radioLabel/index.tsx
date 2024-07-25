@@ -10,6 +10,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label?: string; // main label
     required_label?: string; // normal text with required style
     secondary_label?: string; // normal text with secondary style
+    is_selected: boolean;
 }
 
 export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
@@ -17,11 +18,12 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
     label,
     required_label,
     secondary_label,
+    is_selected,
     ...props
 }, ref) => {
 
 
-    const { fucus, handleFocus, selected, handleSelect } = useStates();
+    const { fucus, handleFocus, } = useStates();
 
     return (
         <Label
@@ -34,14 +36,12 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(({
             disabled={props.disabled}
             className={`glare-RadioLabel ${props.className} glare-RadioLabel-size-${component_size}`}
         >
-            <CheckboxIcon fucus={fucus} selected={selected} disabled={props.disabled} />
+            <CheckboxIcon fucus={fucus} selected={is_selected} disabled={props.disabled} />
 
             <InputElement
+                {...props}
                 ref={ref}
-                name={props.name}
-                handleSelect={handleSelect}
                 handleFocus={handleFocus}
-                selected={selected}
             />
         </Label>
     );
