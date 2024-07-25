@@ -1,0 +1,53 @@
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+import React, { useRef, useState } from 'react';
+import { UseDirectionCalc, DynamicContainer } from '../../lib'
+
+
+<Meta title="Hooks/useDirectionCalc" />
+
+# useDirectionCalc
+
+This hook is used to change the direction of the child based on the viewport. It recalculates the direction when the element is active, based on the top, bottom, left, and right position.
+
+## Usege Example
+<Source
+  code={`
+  export const Container: React.FC<Props> = ({ children}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  // useDirectionCalc hook used to change the direction of the child based on the viewport
+  const dir = useDirectionCalc({
+    ElementRef: ref,
+    dirClasses: {
+      left: 'container-left', 
+      right: 'container-right',
+      top: 'container-top',
+      bottom: 'container-bottom',
+    },
+    isElementActive: true,
+    trigger: children,
+  });
+
+  return (
+    <section
+      ref={ref}
+      className={'container' + dir}
+    >
+      {children}
+    </section>
+  );
+};
+  `}
+/>
+
+
+## Before Use The Hook Should:
+
+- make css classes for the deferent direction styles
+- add ref to the component
+
+## In This Example
+
+- we use `container-left` so when the hook is returning left will use this class.
+- we use `container-right` so when the hook is returning right will use this class. and so on..
+- dir constant contains the return class name so we include it in the component class name

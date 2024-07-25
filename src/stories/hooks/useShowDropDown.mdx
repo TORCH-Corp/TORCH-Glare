@@ -1,0 +1,27 @@
+import { Meta, Story, Source, Preview } from '@storybook/addon-docs/blocks';
+
+<Meta title="Hooks/useShowDropDown" />
+
+# useShowDropDown
+
+This hook is used to manage the visibility of a dropdown component. It listens for click events and toggles the dropdown visibility based on whether the click occurred inside or outside the referenced element.
+
+<Source
+  code={`
+const App = () => {
+       const dropdownRef = useRef(null);
+      const { isActive, setIsActive } = useShowDropDown(dropdownRef);
+
+      return ( // when user clicks the dropdown will be visible
+        <div ref={dropdownRef} style={{ border: '1px solid black', padding: '10px', display: 'inline-block' }}>
+          {isActive && (
+            <div style={{ border: '1px solid blue', marginTop: '10px' }}>
+              Dropdown Content
+            </div>
+          )}
+        </div>
+      );
+    }}
+  `}
+/>
+

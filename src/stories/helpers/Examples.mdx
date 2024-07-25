@@ -1,0 +1,39 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import {  } from '../../lib/components/helpers'
+import { DropDownMenu, DropDownMenuItem ,DynamicContainer} from '../../lib'
+import * as DynamicContainerStories from './DynamicContainer.stories';
+
+
+<Title>Dynamic Container Component</Title>
+<Meta of={DynamicContainerStories} />
+
+The `Dynamic React Container` Component to contain HTML elements and change ti's direction when hit the viewport.
+ this component use `useDirectionCalc` hook to change it's dirction when hit the viewport
+
+
+## Used With DropDown
+<Source
+code={`
+<DynamicContainer   >
+    <DropDownMenu component_style="System-Style">
+      <DropDownMenuItem component_style='System-Style' component_label={'Option Example'} element_name={'example'} />
+      <DropDownMenuItem component_style='System-Style' component_label={'Option Example 2'} element_name={'example2'} />
+    </DropDownMenu>
+</DynamicContainer>`}
+/>
+
+
+```jsx
+import { DynamicContainer, DropDownMenu,DropDownMenuItem} from 'torch-glare';
+
+const App = () => (
+ <DynamicContainer active >
+    <DropDownMenu component_style="System-Style">
+      <DropDownMenuItem component_style='System-Style' component_label={'Option Example'} element_name={'example'} />
+      <DropDownMenuItem component_style='System-Style' component_label={'Option Example 2'} element_name={'example2'} />
+    </DropDownMenu>
+</DynamicContainer>
+);
+
+export default App;
+```

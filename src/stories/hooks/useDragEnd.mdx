@@ -1,0 +1,32 @@
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+import React, { useRef, useState } from 'react';
+
+<Meta title="Hooks/useDragEnd" />
+
+# useDragEnd
+
+This hook is used with the `@dnd-kit/core` library to handle drag and drop events. It manages the `dragEnd` event and updates the data indexes accordingly. The data should be an array.
+## Usege Example
+<Source
+  code={`
+const App = () => {
+      const initialData = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+      const [dataArray, setDataArray] = useState(initialData);
+
+      const { handleDragEnd } = useDragEnd(dataArray, setDataArray);
+
+      return (
+        <DndContext onDragEnd={handleDragEnd}>
+          <div>
+            {dataArray.map((item, index) => (
+              <div key={index} id={String(index)} style={{ padding: '10px', border: '1px solid #ccc', marginBottom: '5px' }}>
+                {item}
+              </div>
+            ))}
+          </div>
+        </DndContext>
+      );
+    }}
+  `}
+/>
+
