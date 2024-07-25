@@ -1,0 +1,62 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { InputField} from '../../../../lib/index.ts';
+import * as InputFieldStories from './InputField.stories.tsx';
+
+<Title>InputField 1.0 Component Code</Title>
+<Meta of={InputFieldStories} />
+
+This is the Glare `InputField` component, a versatile input solution that supports various configurations such as labels, icons, dropdowns, and action elements like buttons and badges. It is designed for flexibility with options for size, style, negative theming, and error handling.
+
+The `InputField` component is implemented as a forward-ref component to allow passing refs to the input element. It conditionally renders either a `LabeledInput` or an `Input` component based on whether the `label` prop is provided.
+
+## Design File
+[Figma Design](https://www.figma.com/file/Q3aIuqsK0HWrUrOElSFEIb/TORCH-Glare-V1.4.3?type=design&node-id=1820-419072&mode=dev)
+
+
+### Component Features
+
+- the component use Glare Label component as wrapper so we can use Glare Label features.
+- the component has three sizes variants.
+- you can display the label vertically or horizontally
+- the component can have dropdown you just need to pass it as child.
+- the component can have label at the end
+- the component can have button at the end
+- the component can have icon at the start
+- the component can have badges children rendered inside it you just need to pass them as children.
+- the component can display Error message by Show Tooltip component, you just need to pass error message.
+- the component can have static theme named "System-Style" overwise theme will depend on the imported theme file like dark.css file.
+- the component automatically show negative style when passing error message.
+- this component has hook to handle all of the component styles named "useStates" hook
+- there is functionality when user click on an element in the dropdown component the component will hide automatically.
+- the dropdown Dynamically change it's position when hit the viewport.
+
+
+### Component Folder Structure
+
+The `InputField` component is organized in a modular way, with separate files and folders for different parts of the component. Below is a detailed explanation of the folder structure and the purpose of each file.
+
+#### components/input
+
+This is the main component folder for the `Input` component.
+
+- **components**
+  - **extraComponents.tsx**: Contains components that display at the end of the `Input` component, such as action buttons or icons.
+  - **InputElement.tsx**: The HTML input element component.
+
+- **hooks**
+  - **useStates.tsx**: A custom hook to handle different component styles.
+
+- **index.tsx**: The entry file for the `Input` component.
+
+- **style.scss**: The main styles file for the `Input` component.
+
+- **_variants.scss**: Styles file for the component variants.
+
+#### components/labeledInput
+
+This folder contains the `LabeledInput` component, which wraps the `Input` component with a label.
+
+#### index.tsx
+
+This is the main entry file for the component library.
+

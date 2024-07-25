@@ -1,0 +1,69 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { LabelLessInput} from '../../../../lib/index.ts';
+import * as LabelLessInputStories from './LabelLessInput.stories.tsx';
+
+<Title>LabelLessInput 1.0 Component Code</Title>
+<Meta of={LabelLessInputStories} />
+
+The `LabelLessInput` component is designed to provide a customizable input field that can include various additional features:
+
+- **Label**: The component can include a label, which is linked to the input for accessibility.
+- **Icons**: You can add icons to the left side of the input field.
+- **Action Buttons**: Allows adding action buttons to the end of the input field.
+- **Drop-Down Lists**: Supports drop-down lists that appear based on user interaction.
+- **Tooltips**: Displays error messages or additional information via tooltips.
+
+The component is divided into several parts:
+- **`InputElement`**: Renders the HTML input element.
+- **`InputLabel`**: Manages the input label.
+- **`ExtraComponents`**: Handles additional components such as action buttons and trailing labels.
+- **`DynamicContainer`**: Manages the visibility and position of the drop-down list.
+
+## Default style
+[Figma Design](https://www.figma.com/file/Q3aIuqsK0HWrUrOElSFEIb/TORCH-Glare-V1.4.3?type=design&node-id=5990-202615&mode=dev)
+
+
+### Component Features
+
+- the component has three sizes variants.
+- the component can have dropdown you just need to pass it as child.
+- the component can have label at the end
+- the component can have button at the end
+- the component can have icon at the start
+- the component can have badges children rendered inside it you just need to pass them as children.
+- the component can display Error message by Show Tooltip component, you just need to pass error message.
+- the component can have static theme named "System-Style" overwise theme will depend on the imported theme file like dark.css file.
+- the component automatically show negative style when passing error message.
+- this component has hook to handle all of the component styles named "useStates" hook
+- there is functionality when user click on an element in the dropdown component the component will hide automatically.
+- the dropdown Dynamically change it's position when hit the viewport.
+
+
+
+### Component Folder Structure
+
+The folder structure for the `LabelLessInput` component is organized to separate different aspects of the component. Below is a detailed breakdown of each part:
+
+#### components
+
+- **extraComponents.tsx**: Contains the components that are displayed at the end of the `LabelLessInput` component, such as action buttons or icons.
+
+- **inputElement.tsx**: Defines the HTML input element used in the `LabelLessInput` component.
+
+- **inputLabel**: Contains the label component used in conjunction with the `LabelLessInput` component.
+
+#### hooks
+
+- **useStates.tsx**: A custom hook that manages different component styles and states for the `LabelLessInput` component.
+
+#### index.tsx
+
+- **index.tsx**: The entry point for the component, exporting the `LabelLessInput` component.
+
+#### style.scss
+
+- **style.scss**: Contains the main styles for the `LabelLessInput` component.
+
+#### _variants.scss
+
+- **_variants.scss**: Contains styles for different variants of the `LabelLessInput` component.
