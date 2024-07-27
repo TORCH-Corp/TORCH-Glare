@@ -1,6 +1,10 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
-export const themeContext = createContext<any>(undefined);
+interface ThemeProps {
+    theme: string;
+    updateTheme: (theme: "light" | "dark" | "default") => void
+}
+export const themeContext = createContext<ThemeProps | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
