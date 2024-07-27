@@ -1,0 +1,52 @@
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+
+<Meta title="Documentation/Get Started" />
+
+# TORCH Glare Components Library
+
+Welcome to the **TORCH Glare Components Library**! This library is a collection of reusable React components designed to streamline the development of user interfaces. Below you will find detailed instructions on how to install, utilize, and contribute to this robust library.
+
+## Table of Contents
+
+1. [Installation](#Installation)
+2. [Usage](#Usage)
+
+## Installation
+
+To integrate the TORCH Glare Components into your project, you can install the package using npm or yarn:
+
+### Using npm
+
+```bash
+npm install torch-glare
+```
+
+### Using Yarn
+
+```bash
+yarn add torch-glare
+```
+
+## Usage
+
+After installation, the components are ready to be integrated into your React project. Here is an example of how to import and use a component, along with applying a theme:
+
+Note: it's important to import one of the css theme files dark,light, or default
+```jsx
+import React from 'react';
+import { Button } from 'torch-glare';
+import 'torch-glare/dist/themes/colorMapping/dark.css'; // Applying the dark theme
+
+const App = () => {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+This example imports the Button component and applies the dark theme by importing the corresponding CSS file.
+

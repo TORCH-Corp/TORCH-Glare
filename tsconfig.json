@@ -30,7 +30,7 @@
     "src",
     "src/lib",
     "./test/setup.ts ",
-    "test/index.ts"
+    "test/index.ts",
   ],
   "references": [
     {

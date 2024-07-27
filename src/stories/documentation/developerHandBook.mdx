@@ -1,0 +1,74 @@
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+
+<Meta title="Documentation/Developer HandBook" />
+
+# TORCH Glare Components Library Developer HandBook
+
+## Key Highlights
+
+- **Framework Figma Design**: All components adhere to specifications found in the [Figma Design File](https://www.figma.com/design/Q3aIuqsK0HWrUrOElSFEIb/TORCH-Glare-V1.5.2?node-id=1094-125590&t=ySiHG1iTEWxwMxhA-0). 
+- **Consistency with Figma**: Component names and properties in the library match those in the Figma design file.
+- **Documentation for Components**: Each component includes a simple README file detailing its usage and options.
+- **Advanced Typography System**: Utilizes SCSS mixins based on the framework's design system for sophisticated typography management.
+- **Color Mapping System**: Employs CSS variables within SCSS files to support multiple color modes including dark, light, and default.
+- **Icon Library**: Incorporates font icons from the RemixIcons library.
+- **Storybook Integration**: Comprehensive stories for all components are managed using the Storybook library.
+
+## Additional Resources
+
+- [Typography Details](?path=/docs/styles-typography--docs)
+- [Color System Details](?path=/docs/styles-color-system--docs)
+
+## Project Structure
+
+### Overview
+
+The project is structured to facilitate easy navigation and usage of the components and utilities provided within the library. Below is a breakdown of the main directories and their contents:
+
+### Main Directories
+
+- **`/src`**:
+  - **`index.css`**: Global CSS file for the testing environment.
+  - **`App.tsx`**: Main application file for global setup in a testing environment.
+
+- **`/lib`**:
+  - **`components`**: Main directory containing all framework components.
+    - **`base`**: Houses base components that serve as the building blocks for other complex components.
+    - **`helpers`**: Contains helper components that provide additional functionality.
+    - **`shared`**: Includes shared components used across different parts of the application.
+  - **`hooks`**: Directory for reusable hooks that provide various functionalities across 1components.
+  - **`styles`**:
+    - **`colors`**: Contains CSS files for color definitions and mappings.
+    - **`mediaQuery`**: Includes mixins for responsive design.
+    - **`typography`**: Houses typography mixins aligned with the design system.
+  - **`types`**: Contains TypeScript definitions and interfaces.
+
+- **`/stories`**:
+  - Houses all Storybook stories for components, facilitating component documentation and testing.
+
+### Example of Implementing a Component
+
+Here’s how you can use a button component from the library:
+
+```tsx
+import React from 'react';
+import { Button } from 'torch-glare';
+import 'torch-glare/dist/themes/colorMapping/dark.css'; // Apply the dark theme
+
+const App = () => {
+  return (
+    <div>
+      <Button>Click Me</Button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+
+By importing the specific theme CSS, you can dynamically alter the appearance of components to match the desired theme.
+
+## Conclusion
+
+The TORCH Glare Components Library is designed to provide developers with a robust set of tools to create cohesive and aesthetically pleasing user interfaces efficiently. For more detailed information on implementation and customization, refer to the respective documentation links provided above.

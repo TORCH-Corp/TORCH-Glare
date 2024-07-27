@@ -5,7 +5,6 @@ import { FieldSection } from '../../../lib'
 type StoryProps = ComponentProps<typeof FieldSection> & {
     buttonText: string;
 };
-
 const meta: Meta<StoryProps> = {
     component: FieldSection,
     title: 'Forms/FieldSection',
@@ -24,7 +23,7 @@ const meta: Meta<StoryProps> = {
         badges_children: { control: 'object', description: 'Badges children' },
         error_message: { control: 'text', description: 'Tooltip with error message if not null' },
         component_size: {
-            control: { type: 'radio', options: ['S', 'M', 'L'] },
+            control: { type: 'radio', options: ['M', 'L'] },
             description: 'Change the size style of the component'
         },
         theme: {

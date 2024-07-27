@@ -1,0 +1,89 @@
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+import React, { useRef, useState } from 'react';
+import { UseDirectionCalc, DynamicContainer } from '../../lib'
+
+
+<Meta title="Styles/Color System" />
+
+## Framework Color System
+
+The Framework Color System leverages the 'glare' core color system along with a flexible theme mapping strategy. This approach ensures that all components within the framework can dynamically adapt to different themes while maintaining consistency in color usage.
+
+## Core Color System
+
+### Core Colors Definition
+
+The 'glare' core colors system consists of a set of predefined pure color variables. These are defined globally and serve as the foundational palette for the entire framework.
+
+**Example of Core Colors:**
+
+```css
+:root {
+  --purple-100: #F5EEFFFF;
+  --purple-200: #EBDCFFFF;
+  --purple-300: #D8BAFFFF;
+  --medium-red-800: #88071DFF;
+  --medium-red-900: #5B0513FF;
+  --medium-red-1000: #2D020AFF;
+  // Additional core colors
+}
+```
+
+These color definitions are stored in the coreColorSystem/default.css file, ensuring they are accessible across the entire project.
+
+## Theme-Specific Color Mappings
+### Glare Color Mapping
+The glare color mapping technique utilizes unique CSS variables that are specifically tailored for use with various components. Each theme file uses the same variable names but assigns different values to these variables to create distinct visual themes.
+
+#### Dark Mode Example
+
+When the dark mode is activated by importing dark.css, it modifies the core colors to fit a dark color scheme.
+
+```css
+@import '../coreColorSystem/default.css'; /* Importing core color definitions */
+
+:root {
+  --content-presentation-action-link: var(--blue-sparkle-400);
+  --background-presentation-form-field-hover: var(--black-700);
+  --background-presentation-action-dropdown-primary: var(--black-900);
+  --background-presentation-form-header-shadow: var(--black-alpha-75);
+  --background-presentation-tab-hover-sidebar: var(--white-alpha-15);
+  // Additional mappings for dark mode
+}
+```
+
+
+### Theme Files
+
+The theme-specific files are located in the colorMapping directory and are structured as follows:
+
+   - dark.css: Activates the dark theme mode.
+   - default.css: Applies the default theme settings.
+   - light.css: Enables the light theme mode.
+
+These files override or complement the core color settings based on the theme selected, providing a seamless integration across different parts of the application.
+
+### Directory Structure
+
+The colors and themes are organized within the src/lib/styles/colors directory:
+
+   - colorMapping/: Contains the CSS files for each theme.
+       -- dark.css
+       -- default.css
+       -- light.css
+   - coreColorSystem/: Houses the default.css file with the core color definitions.
+
+## Usage
+
+To apply a theme, import the corresponding CSS file at the top of your main stylesheet or within specific components to override default styles:
+
+```css
+@import 'torch-glare/dist/themes/colorMapping/dark.css'; /* this will make the components theme dark */
+
+```
+
+This import statement would typically be used to dynamically switch between light and dark modes or to enforce specific styling rules based on user preferences or system settings.
+
+## Conclusion
+
+This structured approach to color management ensures that the application maintains visual consistency while allowing for flexibility in theming. It simplifies the process of updating and maintaining styles across large scale applications.

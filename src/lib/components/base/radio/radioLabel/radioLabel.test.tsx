@@ -6,7 +6,7 @@ import { RadioLabel } from '.';
 describe('CheckboxLabel component', () => {
 
     it('renders the component label', () => {
-        render(<RadioLabel check_box_name={'test'} label='Label' component_size={'M'} />);
+        render(<RadioLabel name={'test'} label='Label' component_size={'M'} is_selected={false} />);
         expect(screen.getByText('Label')).toBeVisible();
     });
 });
