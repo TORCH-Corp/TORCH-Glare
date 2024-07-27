@@ -16,12 +16,12 @@ export default defineConfig({
     libInjectCss(),
     copy({
       targets: [
-        { src: 'src/lib/styles/colors/colorMapping', dest: 'dist/themes' },
+        { src: 'src/lib/styles/colors/index.css', dest: 'dist/themes' },
         { src: 'src/lib/styles/colors/coreColorSystem', dest: 'dist/themes' },
         { src: 'src/lib/styles/mediaQuery', dest: 'dist/responsive' },
       ],
       hook: 'writeBundle' // Ensure the plugin runs at the right time
-    })
+    }),
   ],
   test: {
     environment: 'jsdom',

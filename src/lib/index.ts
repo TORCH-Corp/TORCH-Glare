@@ -3,7 +3,6 @@ import { DynamicContainer } from "./components/helpers";
 import { ProfileItem, LoginButton, PassCheck, SideBarItem, IconButton, FeedBackItem, ContentColumn, FieldSection } from "./components/shared";
 import { UseDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hooks";
 import 'remixicon/fonts/remixicon.css'
-import { ThemeLoader } from "./styles/provider/themeLoader";
 
 export {
 
@@ -65,6 +64,4 @@ export {
     useResize,
     useShowDropDown,
 
-    /* themes */
-    ThemeLoader
 }

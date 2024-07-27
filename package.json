@@ -1,7 +1,7 @@
 {
   "name": "torch-glare",
   "private": false,
-  "version": "0.0.96",
+  "version": "0.0.99",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -63,7 +63,7 @@
     "rollup-plugin-copy": "^3.5.0",
     "sass": "^1.77.2",
     "storybook": "^8.2.5",
-    "torch-glare": "^0.0.93",
+    "torch-glare": "^0.0.98",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "vite": "^5.2.11",
