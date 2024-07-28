@@ -15,10 +15,11 @@ export const ActionBarInputField: React.FC<Props> = forwardRef((
     ref: Ref<HTMLInputElement>
 ) => {
     return (
-        <section className={`glare-action-bar-InputField ${className}`}>
+        <section className={`glare-action-bar-InputField ${className}`} style={props.style}>
             <section className="glare-action-bar-InputField-wrapper">
                 <InputField
                     {...props}
+                    style={{}}
                     ref={ref} // Pass the ref to InputField
                     component_size="M" // the input style size
                     name={name}

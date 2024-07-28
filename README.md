@@ -26,14 +26,6 @@ To install the library, you can use npm or yarn:
 
 ## Usage
 
-- you should import RemixIcons CDN in your index.html, copy this code below and paste in your html head tag:
-
-```html
-<head>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-</head>
-```
-
 After installing the library, you can start using the components in your React project. Here's an example of how to import and use a component:
 
 - this components include dark,light,default mods so you well find in styles/colors/colorMapping, this folder contains css files you should import one of them in order to have colors in your component, see this example :

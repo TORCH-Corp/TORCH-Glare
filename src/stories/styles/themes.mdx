@@ -1,0 +1,67 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Styles/Themes" />
+
+# ThemeProvider
+
+The `ThemeProvider` component provides theme management for your application, allowing themes to be persisted across sessions using local storage. It supports three themes: `"light"`, `"dark"`, and `"default"`.
+
+## Usage
+
+### Wrapping your application
+
+Wrap your application with the `ThemeProvider` to enable theme management.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { ThemeProvider } from 'torch-galre';
+
+ReactDOM.render(
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>,
+  document.getElementById('root')
+);
+```
+
+### Changing the Theme
+
+Use the useTheme hook to access and update the theme within your components.
+
+```jsx
+import React from 'react';
+import { useTheme } from "torch-glare";
+
+const App = () => {
+    const { theme, updateTheme } = useTheme();
+
+    return (
+        <div>
+            <p>Current Theme: {theme}</p>
+            <button onClick={() => updateTheme('light')}>Light Theme</button>
+            <button onClick={() => updateTheme('dark')}>Dark Theme</button>
+            <button onClick={() => updateTheme('default')}>Default Theme</button>
+        </div>
+    );
+};
+
+export default App;
+```
+
+## API
+### ThemeProvider
+
+#### Props:
+
+    - children: ReactNode: The children components to be wrapped by the provider.
+
+#### useTheme
+
+Returns an object with the following properties:
+
+   - theme: string: The current theme.
+   - updateTheme: (theme: "light" | "dark" | "default") => void: A function to update the theme.
+
+Ensure your components are wrapped in the ThemeProvider to utilize the useTheme hook properly.

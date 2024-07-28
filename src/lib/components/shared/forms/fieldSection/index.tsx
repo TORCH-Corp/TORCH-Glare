@@ -18,7 +18,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     left_side_icon?: ReactNode; // this will show the left side icon
     badges_children?: ReactNode | ReactNode[]; // this is for badges children
     error_message?: string; // this will show tooltip with error message if not null
-    component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
+    component_size?: "M" | "L"; // this is used to change the size style of the component
     theme?: "System-Style" | ""; // this is used to change the theme style of the component
 }
 
@@ -41,9 +41,10 @@ export function FieldSection({
     ...props
 }: Props) {
     return (
-        <section className="glare-field-section">
+        <section style={{ alignItems: error_label || warning_label || secondary_label ? "end" : "center", ...props.style }} className="glare-field-section"  >
             <ContentColumn
                 name={name}
+                style={{}}
                 component_label={label}
                 secondary_label={secondary_label}
                 required_label={required_label}
@@ -53,8 +54,9 @@ export function FieldSection({
             />
             <InputField
                 {...props}
+                style={{}}
                 name={name}
-                component_size={component_size}
+                component_size={component_size || "M"}
                 left_side_icon={left_side_icon}
                 trailing_label={trailing_label}
                 action_button={action_button}

@@ -1,0 +1,85 @@
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+import React, { useRef, useState } from 'react';
+
+
+<Meta title="Styles/Color System" />
+
+## Framework Color System
+
+The Framework Color System leverages the 'glare' core color system along with a flexible theme mapping strategy. This approach ensures that all components within the framework can dynamically adapt to different themes while maintaining consistency in color usage.
+
+## Directory Structure
+
+The colors and themes are organized within the src/lib/styles/colors directory:
+
+   - coreColorSystem/: Houses the default.css file with the core color definitions.
+   - index.css is the main themes folder 
+
+
+### Core Color System File
+
+The 'glare' core colors system consists of a set of predefined pure color variables. These are defined globally and serve as the foundational palette for the entire framework.
+
+**Example of Core Colors:**
+
+```css
+:root {
+  --purple-100: #F5EEFFFF;
+  --purple-200: #EBDCFFFF;
+  --purple-300: #D8BAFFFF;
+  --medium-red-800: #88071DFF;
+  --medium-red-900: #5B0513FF;
+  --medium-red-1000: #2D020AFF;
+  // Additional core colors
+}
+```
+
+These color definitions are stored in the coreColorSystem/default.css file.
+
+### index.css File
+
+lib/styles/colors/index.css.
+
+index.css file  includes all of the components themes.
+
+the components themes are:
+ - dark theme
+ - default theme
+ - light theme
+
+this mapping will be applied base ot HTML tag data-theme attribute
+
+#### index.css File Example
+
+```css
+
+/* Default theme */
+:root {
+    --content-presentation-action-dark-primary: var(--white-200);
+    --content-presentation-action-hover: var(--white-25);
+    --content-presentation-state-success: var(--green-cyan-700);
+    --content-presentation-state-warning: var(--yellow-700);
+    --content-presentation-state-negative: var(--medium-red-600);
+  // Additional mappings for default mode
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --content-presentation-action-primary: var(--white-200);
+    --content-presentation-action-hover: var(--white-00);
+    --content-presentation-state-success: var(--green-cyan-400);
+    --content-presentation-state-warning: var(--yellow-400);
+    --content-presentation-state-negative: var(--medium-red-400);
+  // Additional mappings for dark mode
+}
+
+/* Light theme */
+[data-theme="light"] {
+    --content-presentation-action-dark-primary: var(--white-200);
+    --content-presentation-action-hover: var(--white-25);
+    --content-presentation-state-success: var(--green-cyan-700);
+    --content-presentation-state-warning: var(--yellow-700);
+    --content-presentation-state-negative: var(--medium-red-600);
+  // Additional mappings for light mode
+}
+```

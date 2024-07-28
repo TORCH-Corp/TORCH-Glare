@@ -8,7 +8,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement>
     required_label?: string;
     secondary_label?: string;
     component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
-    component_style?: "horizontal" | "vertical"; // this will change the label direction of the component
+    label_style?: "horizontal" | "vertical"; // this will change the label direction of the component
     negative?: boolean; // to have negative colors theme
     drop_down_list_child?: ReactNode; // to add drop down list if you pass it
     trailing_label?: string; // to add trailing label
@@ -25,7 +25,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
     required_label,
     secondary_label,
     component_size,
-    component_style = 'horizontal',
+    label_style = 'vertical',
     left_side_icon,
     trailing_label,
     action_button,
@@ -46,7 +46,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
             required_label={required_label}
             secondary_label={secondary_label}
             component_size={component_size}
-            component_style={component_style}
+            label_style={label_style}
             left_side_icon={left_side_icon}
             trailing_label={trailing_label}
             action_button={action_button}

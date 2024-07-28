@@ -1,0 +1,40 @@
+@import '../../../../styles/typography/index.scss';
+
+* {
+    box-sizing: border-box;
+}
+
+
+.sign-in-button {
+    width: 100%;
+    height: 42px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(229, 229, 229, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 1px solid var(--border-system-global-primary);
+    background-color: var(--background-system-body-primary);
+    transition: all ease-in-out 250ms;
+    border: none;
+
+    &:hover {
+        outline-color: var(--border-system-action-hover-primary) !important;
+    }
+
+    &:focus {
+        outline-color: var(--border-system-action-hover-primary) !important;
+    }
+
+    &:active {
+        outline-color: var(--border-system-action-hover-primary) !important;
+    }
+}
+
+.no-bg {
+    background-color: transparent;
+    outline-color: transparent;
+    text-decoration: none;
+}

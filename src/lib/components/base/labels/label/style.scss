@@ -25,6 +25,7 @@
             color: var(--content-presentation-global-secondary);
             @include Labels-typography-Small-Regular;
             margin-bottom: 1.5px;
+            margin-top: 0;
             text-align: start;
         }
 

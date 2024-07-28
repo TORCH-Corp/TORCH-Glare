@@ -1,5 +1,9 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-side-bar-item {
     width: 100%;
     height: 40px;

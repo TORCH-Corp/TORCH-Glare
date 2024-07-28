@@ -34,12 +34,17 @@ export function ContentColumn({
                     name={name}
                 />
                 {/* this only for the secondary label if it exist */}
-                <Label
-                    secondary_label={secondary_label}
-                    className='content-column-required-label'
-                    component_size={component_size}
-                    name={name}
-                />
+                {
+                    secondary_label ?
+                        <Label
+                            secondary_label={secondary_label}
+                            className='content-column-required-label'
+                            component_size={component_size}
+                            name={name}
+                        />
+                        : null
+                }
+
             </section>
 
             {/* show the warning and error components if the props not null */}

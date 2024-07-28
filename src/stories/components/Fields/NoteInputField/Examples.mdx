@@ -1,0 +1,82 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { NoteInputField } from '../../../../lib/index.ts';
+import * as NoteInputFieldStories from './NoteInputField.stories.tsx';
+
+<Title>NoteInputField Component</Title>
+<Meta of={NoteInputFieldStories} />
+
+This is the Glare NoteInputField component, a textarea designed for extensive text input with label support, error handling, and styling options tailored for various use cases.
+
+## Examples
+
+#### Basic Usage
+<NoteInputField style={{width:"300px"}} name="basic" label="Basic Note" placeholder="Write something..."/>
+<Source code={`<NoteInputField name="basic" label="Basic Note" placeholder="Write something..."/>`} />
+
+#### With Error Message
+<NoteInputField
+    style={{width:"300px"}} 
+    name="error"
+    label="Error Note"
+    error_message="Something went wrong"
+    placeholder="Error state"
+/>
+<Source code={`<NoteInputField
+    name="error"
+    label="Error Note"
+    error_message="Something went wrong"
+    placeholder="Error state"
+/>`} />
+
+#### Is Required
+<NoteInputField
+    style={{width:"300px"}} 
+    name="fullyLabeled"
+    label="Full Details"
+    required_label="Required"
+    label_style="horizontal"
+    placeholder="Enter details..."
+/>
+<Source code={`<NoteInputField
+    name="fullyLabeled"
+    label="Full Details"
+    required_label="Required"
+    label_style="horizontal"
+    placeholder="Enter details..."
+/>`} />
+
+#### Negative Styling
+<NoteInputField
+    style={{width:"300px"}} 
+    name="negative"
+    label="Negative Style"
+    negative={true}
+    placeholder="Negative theme"
+/>
+<Source code={`<NoteInputField
+    name="negative"
+    label="Negative Style"
+    negative={true}
+    placeholder="Negative theme"
+/>`} />
+
+## Usage
+
+```jsx
+import { NoteInputField } from 'your-component-library';
+
+const App = () => (
+  <div>
+    <NoteInputField
+        name="note"
+        label="Your Note"
+        placeholder="Enter your note here..."
+        required_label="*"
+        secondary_label="All fields are mandatory"
+        label_style="vertical"
+    />
+  </div>
+);
+
+export default App;
+```

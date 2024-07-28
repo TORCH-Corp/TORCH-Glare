@@ -18,7 +18,7 @@ React textArea element Component.
     label="" // input label 
     required_label="" 
     secondary_label=""
-    component_style ="" // "horizontal" | ""
+    label_style ="" // "horizontal" | ""
     negative={false} 
     error_message="" // to show tooltip with error message
   /> 

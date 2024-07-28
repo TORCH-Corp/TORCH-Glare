@@ -1,5 +1,9 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-alert {
     display: flex;
     position: relative;
@@ -11,12 +15,12 @@
     width: fit-content;
 
     .glare-alert-icon-wrapper {
-        position: absolute;
         /* Position relative to the parent */
         display: flex;
         align-items: center;
         justify-content: center;
         min-width: 26px;
+        min-height: 26px;
         height: 100%;
         /* Should now fill the parent's height */
         border-radius: var(--Radius-2-max, 4px);
@@ -24,9 +28,11 @@
     }
 
     .glare-alert-label {
-        padding: 0 30px;
+        margin: 0 !important;
         @include Body-typography-Small-Regular;
         color: var(--content-presentation-global-primary);
+        padding: 0 4px !important;
+        word-break: normal;
     }
 }
 

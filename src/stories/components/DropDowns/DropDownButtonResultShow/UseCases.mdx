@@ -1,0 +1,26 @@
+import { DropDownButtonResultShow, DropDownMenu, DropDownMenuItem ,Label} from '../../../../lib/index.ts';
+import * as DropDownButtonResultShowStories from './DropDownButtonResultShow.stories.tsx';
+import { Meta, Title, Source } from '@storybook/blocks';
+
+<Title>DropDownButtonResultShow Component</Title>
+<Meta of={DropDownButtonResultShowStories} />
+
+This is the Glare DropDownButtonResultShow component, which includes various sizes and supports dropdown menus with a displayed selected value, here are some use cases.
+
+## Use Cases
+
+### Form Use Case
+
+    <div style={{ maxWidth: "400px", display: 'flex',justifyContent:"space-between", margin: "30px 0", gap: "10px" }}>
+    <Label name="" label='Opration'   component_size="L"/>
+      <DropDownButtonResultShow
+        component_size="M"
+        selected_value='Pending'
+        drop_down_list_child={
+          <DropDownMenu>
+            <DropDownMenuItem component_style='System-Style' component_label={'Pending'} element_name={'option one'} />
+            <DropDownMenuItem component_style='System-Style' component_label={'In Progress'} element_name={'example'} />
+          </DropDownMenu>
+        }
+      />
+    </div>

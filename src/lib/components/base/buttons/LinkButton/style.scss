@@ -1,5 +1,9 @@
 @import '../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .glare-link-button {
     width: fit-content;
     color: var(--content-presentation-action-link);

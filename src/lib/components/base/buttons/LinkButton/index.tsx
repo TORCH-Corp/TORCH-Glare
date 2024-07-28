@@ -15,6 +15,7 @@ export const LinkButton: React.FC<Props> = ({
     return (
         <a
             {...props}
+            dir={dir}
             className={`glare-link-button glare-link-button-size-${component_size} ${dir === 'rtl' ? "link-button-reverse" : ''} ${props.className}`}
         >
             {props.children}

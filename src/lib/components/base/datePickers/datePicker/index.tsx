@@ -7,6 +7,7 @@ interface Props {
     selected?: Date; // selected date
     placeholder: string;
     name: string;
+    style?: any
     onBlur?: () => void;
     component_style?: "presentation" | "system"; // this props will change the button style see on figma design file
     onTableCell?: boolean; // to have anther sizes for tables when this component in table cell
@@ -20,7 +21,8 @@ export const Datepicker = forwardRef((props: Props, ref: ForwardedRef<any>) => {
 
     return (
         <section
-            className={`w-full glare-date-picker glare-date-picker-${props.component_size} glare-date-picker-${props.component_style} ${focus && 'show-datepicker-icon'} ${props.onTableCell && "glare-date-picker-on-table-cell"}`}
+            style={props.style}
+            className={`w-full glare-date-picker glare-date-picker-${props.component_size || "S"} glare-date-picker-${props.component_style} ${focus && 'show-datepicker-icon'} ${props.onTableCell && "glare-date-picker-on-table-cell"}`}
         >
             <DatePicker
                 selected={startDate}

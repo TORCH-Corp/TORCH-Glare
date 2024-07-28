@@ -32,9 +32,11 @@ export const CheckboxLabel = forwardRef(({
             secondary_label={secondary_label}
             disabled={props.disabled}
             className={`glare-CheckboxLabel ${props.className}`}
+            style={props.style}
         >
             <input
                 {...props}
+                style={{}}
                 checked={isChecked}
                 name={check_box_name}
                 ref={ref} // Forward the ref

@@ -20,12 +20,13 @@ const Tooltip: React.FC<Props> = ({ message, ...props }) => {
             bottom: 'Tooltip-BOTTOM'
         },
         isElementActive: Boolean(message),
-        trigger: props // Assuming trigger is to spread additional props onto the root element
+        trigger: { ...props } // Assuming trigger is to spread additional props onto the root element
     });
 
     return message ? (
         <section
             {...props}
+            style={direction == 'Tooltip-TOP' ? { top: ref.current?.offsetHeight ? ref.current?.offsetHeight >= 50 ? '-200%' : "-130%" : "-130%" } : {}}
             ref={ref}
             dir='ltr'
             className={`Tooltip ${direction}`}

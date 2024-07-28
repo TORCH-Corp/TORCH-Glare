@@ -1,20 +1,11 @@
-import { DropDownMenu, DropDownMenuItem, InputField } from './lib'
-import './lib/styles/colors/colorMapping/dark.css'
 
 function App() {
 
   return (
-    <section className='app' >
-      <InputField name={''} error_message='fsfds'
-
-        drop_down_list_child={
-          <DropDownMenu>
-            <DropDownMenuItem component_label={'sss'} element_name={''} />
-          </DropDownMenu>
-        }
-      />
-    </section >
+    <div style={{ maxWidth: "400px", display: 'flex', flexDirection: 'column', margin: "30px 0", gap: "10px" }}>
+    </div>
   )
 }
 export default App
+
 

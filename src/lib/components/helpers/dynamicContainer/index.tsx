@@ -6,11 +6,12 @@ interface Props {
   children: ReactNode;
   active: boolean; // if the component is active will be visible
   onClick?: () => void;
+  style?: any
 }
 
 
 // this component is used with and dropdown menu to change the direction when hit the viewport
-export const DynamicContainer: React.FC<Props> = ({ children, active, onClick }) => {
+export const DynamicContainer: React.FC<Props> = ({ children, style, active, onClick }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   // useDirectionCalc hook used to change the direction of the child based on the viewport
@@ -31,7 +32,7 @@ export const DynamicContainer: React.FC<Props> = ({ children, active, onClick })
       onClick={onClick}
       ref={ref}
       className={`Dynamic-Container ${dir}`}
-      style={{ display: active ? 'flex' : 'none' }}
+      style={{ display: active ? 'flex' : 'none', ...style }}
     >
       {children}
     </section>

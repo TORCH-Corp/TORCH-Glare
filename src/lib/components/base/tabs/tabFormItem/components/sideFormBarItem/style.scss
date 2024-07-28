@@ -1,5 +1,9 @@
 @import '../../../../../../styles/typography/index.scss';
 
+* {
+    box-sizing: border-box;
+}
+
 .sideFormBarItem {
     padding: 0px 8px;
     height: 36px;

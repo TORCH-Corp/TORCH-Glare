@@ -11,7 +11,7 @@ interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
     child_dir?: "vertical" | "vertical-reverse" | "horizontal" | ""; // this is used to change the children direction
     theme?: "System-Style" | ""; // this is used to change the theme of the component
     disabled?: boolean; // this is used to disable the label
-    name: string; // the name of the label and this is important to link the label with parent component
+    name: string | undefined; // the name of the label and this is important to link the label with parent component
 }
 
 export function Label({
@@ -37,7 +37,7 @@ export function Label({
             <label className="label-container" htmlFor={name}>
                 {label && <span className={`label ${as_child ? "as-child" : ""}`} >{label}</span>}
                 {secondary_label && <p className="secondaryLabel">{secondary_label}</p>}
-                {required_label && <span className="requiredLabel">({required_label})</span>}
+                {required_label && <span className="requiredLabel">{required_label}</span>}
             </label>
             {children}
         </section>

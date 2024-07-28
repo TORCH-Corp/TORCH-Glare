@@ -41,7 +41,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(({
 }, ref) => {
 
     // this hook will handle the different states style of the component
-    const { setFocus, style, sectionRef, inputRef, InputChange, activeLabel, InputHover } = useStates(props);
+    const { setFocus, style, sectionRef, inputRef, InputChange, activeLabel, InputHover } = useStates({ component_size, negative, error_message, badges_children, ...props });
     // this hook will show or hide the drop down list when you click on the input
     const { isActive, setIsActive } = useHideDropDown(sectionRef);
 
@@ -52,6 +52,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(({
             onMouseLeave={() => InputHover(false)}
             onClick={() => setFocus(true)}
             ref={sectionRef}
+            style={props.style}
             className={`glare-input-labelLess-field-wrapper ${style} ${className}`}
         >
             <section className='glare-input-labelLess-field-inner-wrapper'>
@@ -77,6 +78,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(({
                         {...props}
                         setIsActive={setIsActive}
                         ref={ref}
+                        style={{}}
                         setFocus={setFocus}
                         InputChange={InputChange}
                         inputRef={inputRef}

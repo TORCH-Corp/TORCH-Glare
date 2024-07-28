@@ -1,0 +1,27 @@
+import { DropDownButton,DropDownMenu, DropDownMenuItem ,Label} from '../../../../lib/index.ts';
+import * as DropDownButtonStories from './DropDownButton.stories.tsx';
+import { Meta, Title, Source } from '@storybook/blocks';
+
+
+<Title>DropDownButton Component Use Cases</Title>
+<Meta of={DropDownButtonStories} />
+
+This is the Glare DropDownButton component, which includes various sizes and supports dropdown menus, here are some use cases.
+
+## Use Cases
+
+### Form Use Case
+
+    <div style={{ maxWidth: "400px", display: 'flex',justifyContent:"space-between", margin: "30px 0", gap: "10px" }}>
+        <Label name="" label='Opration'   component_size="L"/>
+      <DropDownButton
+        component_size="M"
+        component_label="Pending"
+        drop_down_list_child={
+          <DropDownMenu>
+            <DropDownMenuItem component_style='System-Style' component_label={'Pending'} element_name={'option one'} />
+            <DropDownMenuItem component_style='System-Style' component_label={'In Progress'} element_name={'example'} />
+          </DropDownMenu>
+        }
+      />
+    </div>

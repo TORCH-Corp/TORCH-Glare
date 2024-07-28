@@ -1,6 +1,11 @@
 import { Label, Button, TabFormItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow, RadioLabel, RingLoading, Counter, StepperTab, StepperPhoneArrow, StepperDivider } from "./components/base";
-import { ProfileItem, AuthButton, PasswordLevel, SideBarItem, IconButton, FeedBackItem, ContentColumn, FieldSection } from "./components/shared";
+import { DynamicContainer } from "./components/helpers";
+import { ProfileItem, LoginButton, PassCheck, SideBarItem, IconButton, FeedBackItem, ContentColumn, FieldSection } from "./components/shared";
 import { UseDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hooks";
+import 'remixicon/fonts/remixicon.css'
+import './styles/colors/index.css'
+import { ThemeProvider, useTheme } from "./providers/themeProvider";
+
 
 export {
 
@@ -40,12 +45,14 @@ export {
     StepperDivider,
 
 
+    /* Helpers Components */
+    DynamicContainer,
 
     /* shared components */
     ProfileItem,
     SideBarItem,
-    AuthButton,
-    PasswordLevel,
+    LoginButton,
+    PassCheck,
     IconButton,
     FeedBackItem,
     ContentColumn,
@@ -59,4 +66,8 @@ export {
     useDragEnd,
     useResize,
     useShowDropDown,
+
+    /* themes */
+    ThemeProvider,
+    useTheme
 }

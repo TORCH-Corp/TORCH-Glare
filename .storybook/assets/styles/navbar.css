@@ -1,0 +1,22 @@
+.css-cm6swk {
+    overflow: hidden !important;
+    border-radius: 8px;
+    background: var(--Background-System-Body-tertiary, #252729) !important;
+    padding: 4px;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 50px !important;
+    box-shadow: unset !important;
+}
+
+.css-cm6swk>div:first-child {
+    background-color: #000000 !important;
+    width: calc(100% - 9px) !important;
+    border-radius: 4px !important;
+    padding: 8px !important;
+}
+
+.css-1c7ry85 {
+    color: #9C7CC7 !important;
+}

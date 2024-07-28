@@ -1,0 +1,22 @@
+import { Meta, Title, Source} from '@storybook/addon-docs';
+import {Label, Button,ActionBarInputField ,DropDownMenu, DropDownMenuItem } from  '../../../../lib/index.ts';
+import * as ActionBarInputFieldStories from './ActionBarInputField.stories.tsx';
+
+<Meta of={ActionBarInputFieldStories} />
+
+# ActionBarInputField
+
+`ActionBarInputField` is an input component that can include action buttons, badges, and a dropdown menu.
+
+## Use Cases
+
+### Messages App
+    <div style={{ maxWidth: "400px", display: 'flex',justifyContent:"space-between", margin: "30px 0", gap: "10px" }}>        
+    <ActionBarInputField 
+        name="dropdown"
+        placeholder="Add Message..."
+        action_button_children={ 
+          <Button component_size="L" left_icon={<i className="ri-send-plane-2-line"></i>}/>
+        }
+    />
+    </div>
