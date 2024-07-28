@@ -29,13 +29,12 @@ yarn add torch-glare
 
 ## Usage
 
-After installation, the components are ready to be integrated into your React project. Here is an example of how to import and use a component, along with applying a theme:
+After installation, the components are ready to be integrated into your React project. Here is an example of how to import and use a component.
 
-Note: it's important to import one of the css theme files dark,light, or default
+Note: the components theme will be your system theme, to change the components theme you can use ThemeProvider context.
 ```jsx
 import React from 'react';
 import { Button } from 'torch-glare';
-import 'torch-glare/dist/themes/colorMapping/dark.css'; // Applying the dark theme
 
 const App = () => {
   return (
@@ -47,6 +46,4 @@ const App = () => {
 
 export default App;
 ```
-
-This example imports the Button component and applies the dark theme by importing the corresponding CSS file.
 

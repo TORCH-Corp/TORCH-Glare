@@ -13,11 +13,14 @@ import { Meta, Source } from '@storybook/addon-docs/blocks';
 - **Color Mapping System**: Employs CSS variables within SCSS files to support multiple color modes including dark, light, and default.
 - **Icon Library**: Incorporates font icons from the RemixIcons library.
 - **Storybook Integration**: Comprehensive stories for all components are managed using the Storybook library.
+- **T**: Comprehensive stories for all components are managed using the Storybook library.
+- **Theming Provider**: you can change the components theme with ease by wrapping your app with ThemeWrapper context and use useTheme hook to take control of theme.
 
 ## Additional Resources
 
 - [Typography Details](?path=/docs/styles-typography--docs)
 - [Color System Details](?path=/docs/styles-color-system--docs)
+- [Thems Details](?path=/docs/styles-themes--docs)
 
 ## Project Structure
 
@@ -38,7 +41,7 @@ The project is structured to facilitate easy navigation and usage of the compone
     - **`shared`**: Includes shared components used across different parts of the application.
   - **`hooks`**: Directory for reusable hooks that provide various functionalities across 1components.
   - **`styles`**:
-    - **`colors`**: Contains CSS files for color definitions and mappings.
+    - **`colors`**: Contains CSS files for color definitions and mappings and the index.css file of the themes.
     - **`mediaQuery`**: Includes mixins for responsive design.
     - **`typography`**: Houses typography mixins aligned with the design system.
   - **`types`**: Contains TypeScript definitions and interfaces.
@@ -53,7 +56,6 @@ Here’s how you can use a button component from the library:
 ```tsx
 import React from 'react';
 import { Button } from 'torch-glare';
-import 'torch-glare/dist/themes/colorMapping/dark.css'; // Apply the dark theme
 
 const App = () => {
   return (
@@ -65,9 +67,6 @@ const App = () => {
 
 export default App;
 ```
-
-
-By importing the specific theme CSS, you can dynamically alter the appearance of components to match the desired theme.
 
 ## Conclusion
 

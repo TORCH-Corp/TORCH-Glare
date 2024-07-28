@@ -16,12 +16,11 @@ export default defineConfig({
     libInjectCss(),
     copy({
       targets: [
-        { src: 'src/lib/styles/colors/index.css', dest: 'dist/themes' },
-        { src: 'src/lib/styles/colors/coreColorSystem', dest: 'dist/themes' },
         { src: 'src/lib/styles/mediaQuery', dest: 'dist/responsive' },
       ],
       hook: 'writeBundle' // Ensure the plugin runs at the right time
     }),
+
   ],
   test: {
     environment: 'jsdom',
@@ -57,7 +56,9 @@ export default defineConfig({
         chunkFileNames: '[name]-[hash].js',
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].js',
-      }
+      },
+      plugins: [
+      ],
     },
     lib: {
       entry: resolve(__dirname, 'src/lib/index.ts'), // Adjust this path if needed

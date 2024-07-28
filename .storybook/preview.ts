@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react";
-import '../src/lib/styles/colors/colorMapping/default.css';
+import '../src/lib/styles/colors/index.css';
 import './assets/styles/preview.css';
 const preview: Preview = {
   parameters: {
