@@ -30,7 +30,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     useEffect(() => {
         // Apply the theme to the document element
-        console.log(theme)
         document.documentElement.setAttribute('data-theme', theme);
         document.documentElement.setAttribute('data-theme-mode', themeMode);
         // Save the theme to local storage

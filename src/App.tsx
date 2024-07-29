@@ -1,4 +1,4 @@
-import { Button, InputField, useTheme } from "./lib"
+import { Button, InputField, useTheme } from '../dist'
 
 function App() {
 

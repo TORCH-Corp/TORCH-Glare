@@ -17,6 +17,7 @@ export default defineConfig({
     copy({
       targets: [
         { src: 'src/lib/styles/mediaQuery', dest: 'dist/responsive' },
+        { src: 'src/lib/styles/colors', dest: 'dist/' },
       ],
       hook: 'writeBundle' // Ensure the plugin runs at the right time
     }),
