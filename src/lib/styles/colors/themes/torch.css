@@ -1,7 +1,9 @@
 @import '../coreColorSystem/index.css';
 
 /* Aliases  */
-:root {
+html:not([data-theme-mode]),
+[data-theme-mode="TORCH"],
+[data-theme-mode="null"] {
     --background-system-default-folder-solid-grstart: #00000000;
     --background-system-default-folder-primary-grstart: #0F101100;
     --background-system-default-folder-hover-grstart: #00469900;

@@ -1,4 +1,3 @@
-"use client";
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 interface ThemeProps {
@@ -15,26 +14,29 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const [theme, setTheme] = useState<"light" | "dark" | "default">(() => {
         // Initialize the theme from local storage or default to "default"
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme') as "light" | "dark" | "default";
+            if (localStorage.getItem('theme') !== null) return localStorage.getItem('theme') as "light" | "dark" | "default" || "default";
+            return "default";
         }
         return "default";
     });
 
     const [themeMode, setThemeMode] = useState<"TORCH" | "CSS">(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme-mode') as "TORCH" | "CSS";
+            if (localStorage.getItem('theme-mode') !== null) return localStorage.getItem('theme-mode') as "TORCH" | "CSS" || "TORCH";
+            else return "TORCH";
         }
         return "TORCH";
     });
 
     useEffect(() => {
         // Apply the theme to the document element
+        console.log(theme)
         document.documentElement.setAttribute('data-theme', theme);
         document.documentElement.setAttribute('data-theme-mode', themeMode);
         // Save the theme to local storage
         localStorage.setItem('theme', theme);
         localStorage.setItem('theme-mode', themeMode);
-    }, [theme]);
+    }, [theme, themeMode]);
 
     const updateTheme = (newTheme: "light" | "dark" | "default") => {
         setTheme(newTheme);

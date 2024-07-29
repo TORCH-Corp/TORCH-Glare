@@ -1,5 +1,7 @@
  /* Aliases  */
- :root {
+ html:not([data-theme]),
+ [data-theme="default"],
+ [data-theme="null"] {
      --border-presentation-action-disabled: var(--border-presentation-default-action-disabled);
      --background-system-body-primary: var(--background-system-default-body-primary);
      --content-presentation-action-dark-primary: var(--content-presentation-default-action-dark-primary);
