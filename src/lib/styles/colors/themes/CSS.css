@@ -1,7 +1,7 @@
  @import '../coreColorSystem/index.css';
 
  /* Aliases  */
- [data-theme-mod="CSS"] {
+ [data-theme-mode="CSS"] {
      --background-system-default-body-base: var(--black-1000);
      --background-system-default-body-primary: var(--black-1000);
      --background-system-default-body-secondry: var(--black-1000);

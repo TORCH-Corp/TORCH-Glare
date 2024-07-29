@@ -2,11 +2,12 @@ import { Button, InputField, useTheme } from "./lib"
 
 function App() {
 
-  const { updateTheme, theme } = useTheme()
+  const { updateTheme, theme, themeMode, updateMode } = useTheme()
 
   return (
     <div style={{ maxWidth: "400px", display: 'flex', flexDirection: 'column', margin: "30px 0", gap: "10px" }}>
-      <Button onClick={() => updateTheme(theme === "light" ? "dark" : "light")}>Pr</Button>
+      <Button onClick={() => updateTheme(theme === "light" ? "dark" : "light")}>Theme</Button>
+      <Button onClick={() => updateMode(themeMode === "CSS" ? "TORCH" : "CSS")}>Mode</Button>
       <InputField name={""} />
     </div>
   )
