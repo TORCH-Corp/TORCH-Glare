@@ -13,8 +13,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const [theme, setTheme] = useState<"light" | "dark" | "default">(() => {
         // Initialize the theme from local storage or default to "default"
+        const mode = document.documentElement.getAttribute('data-theme') as "light" | "dark" | "default" || "default";
         if (typeof window !== 'undefined') {
             if (localStorage.getItem('theme') !== null) return localStorage.getItem('theme') as "light" | "dark" | "default" || "default";
+            else if (mode) return mode
             return "default";
         }
         return "default";
