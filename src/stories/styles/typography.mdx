@@ -72,6 +72,12 @@ To use the typography mixins in your project, import the `index.scss` file at th
 
 ```scss
 @import 'path/to/src/lib/styles/typography/index.scss';
+
+.button{
+  width:100px;
+  padding:8px;
+  @include Body-typography-Small-Regular;
+}
 ```
 
 This import will make all typography mixins available throughout your stylesheets, allowing you to apply consistent and scalable typography styles easily.

@@ -1,24 +1,23 @@
-import { Meta, Source } from '@storybook/addon-docs/blocks';
-import React, { useRef, useState } from 'react';
-
+import { Meta, Title, Source } from '@storybook/addon-docs';
 
 <Meta title="Styles/Color System" />
 
-## Framework Color System
+# Framework Color System
 
 The Framework Color System leverages the 'glare' core color system along with a flexible theme mapping strategy. This approach ensures that all components within the framework can dynamically adapt to different themes while maintaining consistency in color usage.
 
 ## Directory Structure
 
-The colors and themes are organized within the src/lib/styles/colors directory:
+The colors and themes are organized within the `src/lib/styles/colors` directory:
 
-   - coreColorSystem/: Houses the default.css file with the core color definitions.
-   - index.css is the main themes folder 
+- `coreColorSystem/`: Houses the `index.css` file with the core color definitions.
+- `themes/`: Contains the `torch` and `css` themes files.
+- `mods/`: Contains the `dark`, `light`, and `default` mod CSS files.
+- `index.css`: The entry point file.
 
+## Core Color System File
 
-### Core Color System File
-
-The 'glare' core colors system consists of a set of predefined pure color variables. These are defined globally and serve as the foundational palette for the entire framework.
+The `Glare` core color system consists of a set of predefined pure color variables. These are defined globally and serve as the foundational palette for the entire framework.
 
 **Example of Core Colors:**
 
@@ -30,56 +29,49 @@ The 'glare' core colors system consists of a set of predefined pure color variab
   --medium-red-800: #88071DFF;
   --medium-red-900: #5B0513FF;
   --medium-red-1000: #2D020AFF;
-  // Additional core colors
+  /* Additional core colors */
 }
 ```
 
-These color definitions are stored in the coreColorSystem/default.css file.
+## Themes File
 
-### index.css File
+This file contains the TORCH theme file and CSS theme file. These files are used within the mods file to be referenced by the mod files. Note: CSS is a theme name.
 
-lib/styles/colors/index.css.
-
-index.css file  includes all of the components themes.
-
-the components themes are:
- - dark theme
- - default theme
- - light theme
-
-this mapping will be applied base ot HTML tag data-theme attribute
-
-#### index.css File Example
+### Example of Themes File:
 
 ```css
-
-/* Default theme */
-:root {
-    --content-presentation-action-dark-primary: var(--white-200);
-    --content-presentation-action-hover: var(--white-25);
-    --content-presentation-state-success: var(--green-cyan-700);
-    --content-presentation-state-warning: var(--yellow-700);
-    --content-presentation-state-negative: var(--medium-red-600);
-  // Additional mappings for default mode
-}
-
-/* Dark theme */
-[data-theme="dark"] {
-    --content-presentation-action-primary: var(--white-200);
-    --content-presentation-action-hover: var(--white-00);
-    --content-presentation-state-success: var(--green-cyan-400);
-    --content-presentation-state-warning: var(--yellow-400);
-    --content-presentation-state-negative: var(--medium-red-400);
-  // Additional mappings for dark mode
-}
-
-/* Light theme */
-[data-theme="light"] {
-    --content-presentation-action-dark-primary: var(--white-200);
-    --content-presentation-action-hover: var(--white-25);
-    --content-presentation-state-success: var(--green-cyan-700);
-    --content-presentation-state-warning: var(--yellow-700);
-    --content-presentation-state-negative: var(--medium-red-600);
-  // Additional mappings for light mode
+@import './coreColorSystem/index.css';
+[data-theme-mode="TORCH"] {
+  --border-presentation-default-action-disabled: var(--black-500);
+  --background-system-default-body-primary: var(--medium-red-600);
+  --content-presentation-default-action-dark-primary: var(--purple-1000);
+  --content-presentation-default-action-hover: var(--medium-red-1000);
+  /* Additional vars... */
 }
 ```
+
+## Mods File
+
+This file contains the different theme mods.
+
+The component theme modes are:
+    - dark mod
+    - default mod
+    - light mod
+This mapping will be applied based on the HTML tag data-theme attribute.
+
+#### Example of Mods File:
+
+```css
+/* Default theme */
+[data-theme="default"] {
+  --border-presentation-action-disabled: var(--border-presentation-default-action-disabled);
+  --background-system-body-primary: var(--background-system-default-body-primary);
+  --content-presentation-action-dark-primary: var(--content-presentation-default-action-dark-primary);
+  --content-presentation-action-hover: var(--content-presentation-default-action-hover);
+  /* Additional vars... */
+}
+```
+
+## More on Themeing
+- [Thems Details](?path=/docs/styles-themes--docs)

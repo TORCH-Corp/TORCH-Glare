@@ -4,8 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # ThemeProvider
 
-The `ThemeProvider` component provides theme management for your application, allowing themes to be persisted across sessions using local storage. It supports three themes: `"light"`, `"dark"`, and `"default"`.
-
+The `ThemeProvider` component provides theme management for your application, allowing themes to be persisted across sessions using local storage. It supports multiple themes: `"TORCH"`, `"CSS"` and three mods for each theme: `"light"`, `"dark"`, and `"default"`.
 ## Usage With React 
 
 ### Wrapping your application
@@ -35,10 +34,13 @@ import React from 'react';
 import { useTheme } from "torch-glare";
 
 const App = () => {
-    const { theme, updateTheme } = useTheme();
+    const { theme, updateTheme, updateMode,themeMode } = useTheme();
 
     return (
         <div>
+            <p>Current Theme Mod: {themeMode}</p>
+            <button onClick={() => updateMode('TORCH')}>TORCH Theme Mode</button>
+            <button onClick={() => updateMode('CSS')}>CSS Theme Mode</button>
             <p>Current Theme: {theme}</p>
             <button onClick={() => updateTheme('light')}>Light Theme</button>
             <button onClick={() => updateTheme('dark')}>Dark Theme</button>
@@ -50,10 +52,11 @@ const App = () => {
 export default App;
 ```
 
-## Usage With Next js
+## Usage With Next.js
 
-you need to wrap the ThemeProvider inside another component just to use "use client"
+You need to wrap the ThemeProvider inside another component just to use "use client".
 
+### Creating a ThemeProvider Wrapper component
 ```jsx
 "use client"; // important
 import { ReactNode } from 'react';
@@ -66,6 +69,8 @@ export const ThemeProviderWrapper: React.FC<{ children: ReactNode }> = ({ childr
     );
 };
 ```
+
+### On The Main Layout File
 
 then wrap your nextjs app with ThemeProviderWrapper 
 
@@ -93,16 +98,17 @@ export default async function RootLayout({
 
 ## API
 ### ThemeProvider
+#### Props
 
-#### Props:
+   - children: ReactNode - The children components to be wrapped by the provider.
 
-    - children: ReactNode: The children components to be wrapped by the provider.
-
-#### useTheme
+### useTheme Hook
 
 Returns an object with the following properties:
 
-   - theme: string: The current theme.
-   - updateTheme: (theme: "light" | "dark" | "default") => void: A function to update the theme.
+    - theme: string - The current theme.
+    - updateTheme: (theme: "light" | "dark" | "default") => void - A function to update the theme.
+    - themeMode: string - The current theme mode.
+    - updateMode: (mode: "TORCH" | "CSS") => void - A function to update the theme mode.
 
 Ensure your components are wrapped in the ThemeProvider to utilize the useTheme hook properly.

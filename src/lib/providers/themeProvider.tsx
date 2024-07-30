@@ -1,10 +1,10 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 interface ThemeProps {
-    theme: string;
-    themeMode: string
+    theme: "light" | "dark" | "default";
+    themeMode: "CSS" | "TORCH";
     updateTheme: (theme: "light" | "dark" | "default") => void;
-    updateMode: (theme: "CSS" | "TORCH") => void;
+    updateMode: (themeMode: "CSS" | "TORCH") => void;
 }
 
 export const ThemeContext = createContext<ThemeProps | undefined>(undefined);
@@ -12,29 +12,25 @@ export const ThemeContext = createContext<ThemeProps | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const [theme, setTheme] = useState<"light" | "dark" | "default">(() => {
-        // Initialize the theme from local storage or default to "default"
         const mode = document.documentElement.getAttribute('data-theme') as "light" | "dark" | "default" || "default";
         if (typeof window !== 'undefined') {
-            if (localStorage.getItem('theme') !== null) return localStorage.getItem('theme') as "light" | "dark" | "default" || "default";
-            else if (mode) return mode
-            return "default";
+            const storedTheme = localStorage.getItem('theme') as "light" | "dark" | "default";
+            return storedTheme || mode || "default";
         }
         return "default";
     });
 
     const [themeMode, setThemeMode] = useState<"TORCH" | "CSS">(() => {
         if (typeof window !== 'undefined') {
-            if (localStorage.getItem('theme-mode') !== null) return localStorage.getItem('theme-mode') as "TORCH" | "CSS" || "TORCH";
-            else return "TORCH";
+            const storedThemeMode = localStorage.getItem('theme-mode') as "TORCH" | "CSS";
+            return storedThemeMode || "TORCH";
         }
         return "TORCH";
     });
 
     useEffect(() => {
-        // Apply the theme to the document element
         document.documentElement.setAttribute('data-theme', theme);
         document.documentElement.setAttribute('data-theme-mode', themeMode);
-        // Save the theme to local storage
         localStorage.setItem('theme', theme);
         localStorage.setItem('theme-mode', themeMode);
     }, [theme, themeMode]);
@@ -42,13 +38,13 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const updateTheme = (newTheme: "light" | "dark" | "default") => {
         setTheme(newTheme);
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme-mode', newTheme);
+        localStorage.setItem('theme', newTheme);
     };
 
-    const updateMode = (newTheme: "CSS" | "TORCH") => {
-        setThemeMode(newTheme);
-        document.documentElement.setAttribute('data-theme-mode', newTheme);
-        localStorage.setItem('theme-mode', newTheme);
+    const updateMode = (newThemeMode: "CSS" | "TORCH") => {
+        setThemeMode(newThemeMode);
+        document.documentElement.setAttribute('data-theme-mode', newThemeMode);
+        localStorage.setItem('theme-mode', newThemeMode);
     };
 
     const value = {
