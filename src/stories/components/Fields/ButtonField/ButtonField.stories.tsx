@@ -2,8 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { ButtonField, Button } from '../../../../lib'
 
-type StoryProps = ComponentProps<typeof ButtonField> & {
-};
+type StoryProps = ComponentProps<typeof ButtonField>
 
 const meta: Meta<StoryProps> = {
     component: ButtonField,

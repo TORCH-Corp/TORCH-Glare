@@ -2,8 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { DropDownMenuItem } from '../../../../lib'
 
-type StoryProps = ComponentProps<typeof DropDownMenuItem> & {
-};
+type StoryProps = ComponentProps<typeof DropDownMenuItem>
 
 const meta: Meta<StoryProps> = {
     component: DropDownMenuItem,

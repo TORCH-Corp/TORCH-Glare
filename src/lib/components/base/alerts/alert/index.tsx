@@ -14,7 +14,7 @@ export const Alert: React.FC<Props> = ({ component_label, component_state, ...pr
   useEffect(() => {
     if (!parentRef.current) return
     setParentHeight(parentRef.current.offsetHeight)
-  }, [parentRef.current])
+  }, [parentRef])
 
   return (
     <section ref={parentRef}  {...props} className={`glare-alert glare-alert-${component_state}-state ${props.className}`}>

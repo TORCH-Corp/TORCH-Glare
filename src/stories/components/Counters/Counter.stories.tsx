@@ -2,8 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { Counter } from '../../../lib'
 
-type StoryProps = ComponentProps<typeof Counter> & {
-};
+type StoryProps = ComponentProps<typeof Counter>
 
 const meta: Meta<StoryProps> = {
     component: Counter,

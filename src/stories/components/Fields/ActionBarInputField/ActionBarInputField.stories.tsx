@@ -2,8 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { ActionBarInputField, Button } from '../../../../lib'
 
-type StoryProps = ComponentProps<typeof ActionBarInputField> & {
-};
+type StoryProps = ComponentProps<typeof ActionBarInputField>
 
 const meta: Meta<StoryProps> = {
     component: ActionBarInputField,

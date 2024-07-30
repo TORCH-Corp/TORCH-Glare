@@ -3,8 +3,7 @@ import { fn } from '@storybook/test';
 import { ComponentProps } from 'react';
 import { PassCheck } from '../../../lib'
 
-type StoryProps = ComponentProps<typeof PassCheck> & {
-};
+type StoryProps = ComponentProps<typeof PassCheck>
 
 const meta: Meta<StoryProps> = {
     component: PassCheck,

@@ -2,8 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { Tooltip } from '../../../../lib'
 
-type StoryProps = ComponentProps<typeof Tooltip> & {
-};
+type StoryProps = ComponentProps<typeof Tooltip>
 
 const meta: Meta<StoryProps> = {
     component: Tooltip,

@@ -3,8 +3,7 @@ import { ComponentProps } from 'react';
 import { Datepicker } from '../../../lib'
 import { fn } from '@storybook/test';
 
-type StoryProps = ComponentProps<typeof Datepicker> & {
-};
+type StoryProps = ComponentProps<typeof Datepicker>
 
 const meta: Meta<StoryProps> = {
     component: Datepicker,
