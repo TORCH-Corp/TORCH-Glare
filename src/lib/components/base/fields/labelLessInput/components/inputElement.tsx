@@ -3,8 +3,8 @@ import { InputHTMLAttributes, Dispatch, SetStateAction, ChangeEvent, ChangeEvent
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     setFocus: Dispatch<SetStateAction<boolean>>
     setIsActive: Dispatch<SetStateAction<boolean>>
-    InputChange: ChangeEventHandler<any>,
-    inputRef: any
+    InputChange: ChangeEventHandler<HTMLInputElement>,
+    inputRef: React.MutableRefObject<HTMLInputElement | null>
 }
 export const InputElement = forwardRef<HTMLInputElement, Props>(({
     setFocus,
@@ -26,12 +26,12 @@ export const InputElement = forwardRef<HTMLInputElement, Props>(({
                     }
                 }
             }}
-            onBlur={(e: any) => {
+            onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                 setFocus(false);
                 props.onBlur && props.onBlur(e);
             }}
-            onFocus={(e: any) => {
-                setFocus(true); // for the input fucus style
+            onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                setFocus(true); // for the input focus style
                 setIsActive(true); // to show the drop down list
                 props.onFocus && props.onFocus(e);
             }}

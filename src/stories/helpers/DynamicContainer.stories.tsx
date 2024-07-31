@@ -5,8 +5,7 @@ import { DropDownMenu, DropDownMenuItem, DynamicContainer } from '../../lib'
 
 
 
-type StoryProps = ComponentProps<typeof DynamicContainer> & {
-};
+type StoryProps = ComponentProps<typeof DynamicContainer>
 
 const meta: Meta<StoryProps> = {
     component: DynamicContainer,

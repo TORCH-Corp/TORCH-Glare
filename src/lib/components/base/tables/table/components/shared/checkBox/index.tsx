@@ -8,12 +8,15 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 // Using forwardRef to pass refs down to the input element
-export const CheckBox = forwardRef<HTMLInputElement, Props>((props, ref: ForwardedRef<HTMLInputElement>) => {
+export const CheckBox = forwardRef<HTMLInputElement, Props>(({
+    forSubTable,
+    ...props
+}, ref: ForwardedRef<HTMLInputElement>) => {
     return (
         <section className={`table-button-checkbox`} dir='ltr'>
-            {!props.forSubTable && <CellSizingLine noneSizing={true} className='table-button-checkbox-left-line' />}
+            {!forSubTable && <CellSizingLine noneSizing={true} className='table-button-checkbox-left-line' />}
             <CheckboxLabel {...props} ref={ref} check_box_name="table-check-box" />
-            {!props.forSubTable && <CellSizingLine noneSizing={true} className='table-button-checkbox-right-line' />}
+            {!forSubTable && <CellSizingLine noneSizing={true} className='table-button-checkbox-right-line' />}
         </section>
     );
 });

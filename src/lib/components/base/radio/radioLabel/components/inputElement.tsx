@@ -4,7 +4,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     handleFocus: (e: boolean) => void
 }
 export const InputElement = forwardRef<HTMLInputElement, Props>(({
-    name,
     handleFocus,
     ...props
 }, ref) => {

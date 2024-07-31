@@ -30,7 +30,6 @@ const DropDownMenuItem: React.FC<Props> = ({
     right_side_icon,
     icon,
     isChecked,
-    className,
     ...props
 }) => {
     return (

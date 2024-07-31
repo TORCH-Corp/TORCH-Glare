@@ -13,8 +13,6 @@ export interface DirectionsStatus {
 }
 
 export interface Props {
-    ElementRef: React.RefObject<any> // Assuming ElementRef refers to a div element
+    ElementRef: React.RefObject<HTMLElement> // Assuming ElementRef refers to a div element
     dirClasses: DirectionsClasses
-    isElementActive: boolean
-    trigger?: any
 }

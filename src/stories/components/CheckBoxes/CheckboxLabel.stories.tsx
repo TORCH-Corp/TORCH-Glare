@@ -3,8 +3,7 @@ import { fn } from '@storybook/test';
 import { ComponentProps } from 'react';
 import { CheckboxLabel } from '../../../lib'
 
-type StoryProps = ComponentProps<typeof CheckboxLabel> & {
-};
+type StoryProps = ComponentProps<typeof CheckboxLabel>
 
 const meta: Meta<StoryProps> = {
     component: CheckboxLabel,

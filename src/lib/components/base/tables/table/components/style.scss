@@ -1,7 +1,7 @@
 .glare-table-row {
     position: relative;
     transition: all 200ms ease-in-out;
-    border: 1px solid transparent;
+
 
     .glare-label {
         gap: 0;
@@ -25,7 +25,6 @@
 
     td {
         border-bottom: 1px solid var(--border-presentation-global-primary);
-        border-left: 1px solid var(--border-presentation-global-primary);
         border-right: 1px solid var(--border-presentation-global-primary);
     }
 }
@@ -33,7 +32,6 @@
 .table-cell-hovered {
     td {
         border-bottom: 1px solid var(--border-presentation-global-primary);
-        border-left: 1px solid var(--border-presentation-global-primary);
         border-right: 1px solid var(--border-presentation-global-primary);
     }
 }

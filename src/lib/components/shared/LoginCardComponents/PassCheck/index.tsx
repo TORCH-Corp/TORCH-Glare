@@ -49,7 +49,7 @@ export default function PassCheck(props: Props) {
             passwordLev = 0
             setLevel("")
         }
-    }, [{ ...props }])
+    }, [props.value])
 
 
     return (

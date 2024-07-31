@@ -18,9 +18,7 @@ const Tooltip: React.FC<Props> = ({ message, ...props }) => {
             right: 'Tooltip-Right',
             top: 'Tooltip-TOP',
             bottom: 'Tooltip-BOTTOM'
-        },
-        isElementActive: Boolean(message),
-        trigger: { ...props } // Assuming trigger is to spread additional props onto the root element
+        }
     });
 
     return message ? (

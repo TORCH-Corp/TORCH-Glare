@@ -3,8 +3,7 @@ import { ComponentProps } from 'react';
 import { InputField } from '../../../../lib'
 
 
-type StoryProps = ComponentProps<typeof InputField> & {
-};
+type StoryProps = ComponentProps<typeof InputField>
 
 const meta: Meta<StoryProps> = {
     component: InputField,

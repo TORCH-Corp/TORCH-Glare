@@ -8,7 +8,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     required_label?: string;
     secondary_label?: string;
-    component_type?: "checkbox" | "radio" | any;
+    component_type?: "checkbox" | "radio";
     isChecked?: boolean // this will check the input if true
 }
 

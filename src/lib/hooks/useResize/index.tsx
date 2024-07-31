@@ -8,7 +8,7 @@ import { calculateNewWidthFromMouse, calculateNewWidthFromTouch } from './utils/
 // the hook will return the new width value for the component
 // you should use handleStartResize function to start the resize process
 
-export const useResize = (resizableRef: MutableRefObject<any> | RefObject<any>) => {
+export const useResize = (resizableRef: MutableRefObject<HTMLElement> | RefObject<HTMLElement>) => {
     const [width, setWidth] = useState<number>();
     const [isResizing, setIsResizing] = useState<boolean>(false);
 

@@ -31,25 +31,10 @@ export function DropDownMenuItemInput({
             label={label}
             required_label={required_label}
             secondary_label={secondary_label}
-            component_type={props.type || input_type}
+            component_type={input_type}
             className={`dropDownMenuItem menuItem-${component_style} dropDownMenuItem-size-${component_size} dropDownMenuIteminput-label`}
         />
     )
 }
 
 
-{/* <Label
-    child_dir="vertical-reverse"
-    name={props.name || component_name}
-    component_size={component_size}
-    label={label}
-    secondary_label={secondary_label}
-    className={`dropDownMenuItem menuItem-${component_style} dropDownMenuItem-size-${component_size} dropDownMenuIteminput-label`}
->
-    <input
-        {...props}
-        id={props.name || component_name}
-        type={props.type || input_type}
-        className={`dropDownMenuItemInput ${props.className}`}
-    />
-</Label> */}

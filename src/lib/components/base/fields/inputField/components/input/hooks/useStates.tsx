@@ -24,7 +24,7 @@ export function useStates(props: Props) {
         ${props.component_style == "System-Style" && "glare-input-field-system-style"} 
         ${focus && !props.error_message ? `${props.component_style == "System-Style" ? "glare-input-field-system-style-focus" : "glare-input-field-focus"}` : ""}
        `)
-    }, [{ ...props }])
+    }, [props.component_size, props.className, props.negative, props.error_message, props.disabled, props.component_style, focus])
 
 
     // here we return the styles as string to be used in the component class name

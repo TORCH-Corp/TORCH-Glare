@@ -7,7 +7,6 @@ import { extname, relative, resolve } from 'path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'glob';
 import copy from 'rollup-plugin-copy';
-import { defineConfig as defineVitestConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [
@@ -23,11 +22,6 @@ export default defineConfig({
     }),
 
   ],
-  test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: './test/setup.ts',
-  },
   css: {
     modules: {
       scopeBehaviour: 'local',

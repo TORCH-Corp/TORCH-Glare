@@ -10,7 +10,7 @@ import { determineDirection } from './utils/ determineDirection';
 // isElementActive is used to check if the element is active or not AND THIS WILL HELP to recalculate the direction if the element is not active
 // trigger is used to spread additional props could by anything just for recalculating the direction
 
-function UseDirectionCalc({ dirClasses, ElementRef, isElementActive, trigger }: Props) {
+function useDirectionCalc({ dirClasses, ElementRef }: Props) {
 
     const [dir, setDir] = useState(dirClasses.left);
     // storedPositionStatus is used to avoid infinite loops by store the old position status
@@ -56,11 +56,11 @@ function UseDirectionCalc({ dirClasses, ElementRef, isElementActive, trigger }: 
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [ElementRef, isElementActive, trigger]);
+    }, [ElementRef]);
 
 
     // here we are returning the direction state with the selected class name 
     return dir;
 }
 
-export default UseDirectionCalc;
+export default useDirectionCalc;

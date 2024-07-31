@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from 'react';
+import React, { CSSProperties, ReactNode, useRef } from 'react';
 import './style.scss';
 import useDirectionCalc from '../../../hooks/useDirectionCalc';
 
@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode;
   active: boolean; // if the component is active will be visible
   onClick?: () => void;
-  style?: any
+  style?: CSSProperties; // Fixed type
 }
 
 
@@ -23,8 +23,6 @@ export const DynamicContainer: React.FC<Props> = ({ children, style, active, onC
       top: 'Dynamic-Container-top',
       bottom: '',
     },
-    isElementActive: active,
-    trigger: children,
   });
 
   return (

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from 'react'
 
 
 
@@ -17,7 +17,7 @@ export default function useStates(IsChecked: boolean) {
         }
     }, [IsChecked])
 
-    const handleChecked = (e: ChangeEvent<any>, eventHandler: any) => {
+    const handleChecked = (e: ChangeEvent<HTMLInputElement>, eventHandler: ChangeEventHandler<HTMLInputElement> | undefined) => {
         eventHandler && eventHandler(e)
         setIsChecked(e.target.checked)
     }

@@ -3,8 +3,7 @@ import { ComponentProps } from 'react';
 import { LabelLessInput } from '../../../../lib'
 
 
-type StoryProps = ComponentProps<typeof LabelLessInput> & {
-};
+type StoryProps = ComponentProps<typeof LabelLessInput>
 
 const meta: Meta<StoryProps> = {
     component: LabelLessInput,
