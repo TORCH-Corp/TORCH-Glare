@@ -5,6 +5,7 @@
 .glare-table {
     width: fit-content;
     overflow: scroll;
+    border-collapse: collapse;
 
     thead {
         th {
@@ -12,7 +13,7 @@
         }
 
         border-top: 2px solid transparent;
-        border-bottom: 2px solid var(--border-presentation-table-header);
+        border-bottom: 2px solid var(--border-presentation-table-header) !important;
         transition: all 250ms ease-in-out;
     }
 }

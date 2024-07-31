@@ -56,7 +56,7 @@ function useDirectionCalc({ dirClasses, ElementRef }: Props) {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('scroll', handleScroll);
         };
-    }, []);
+    }, [ElementRef]);
 
 
     // here we are returning the direction state with the selected class name 

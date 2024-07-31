@@ -51,7 +51,7 @@ export const useResize = (resizableRef: MutableRefObject<HTMLElement> | RefObjec
             document.removeEventListener('touchmove', handleTouchMove);
             document.removeEventListener('touchend', handleStopResize);
         };
-    }, []);
+    }, [isResizing]);
 
     return {
         // Width will be the new width of the component
