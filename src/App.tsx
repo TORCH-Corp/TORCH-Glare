@@ -17,8 +17,8 @@ function App() {
       label: 'data THREE',
       id: '3',
       cells: ['data 3', 'data 33', 'data 333', 'data 3333', 'data 33333', 'data 3333333', 'data 33333333', 'data 333333333', 'data 3333333333'],
-    },
-  ]);
+    }
+  ])
 
   const renderTableHeaderCells = () => {
     return data.map((item) => (
@@ -38,7 +38,10 @@ function App() {
 
     for (let i = 0; i < numRows; i++) {
       rows.push(
-        <TableCellContainer key={i} isChecked={false}>
+        <TableCellContainer
+          key={i}
+          isChecked={false}
+        >
           {data.map(item => (
             <TableCell
               key={`${item.id}-${i}`}
@@ -58,8 +61,7 @@ function App() {
       table_header_cells_children_data={data}
       table_header_cells_children_setter_data={setData}
       table_header_cells_children={renderTableHeaderCells()}
-      table_body_cells_children={renderTableBodyCells()}
-    />
+      table_body_cells_children={renderTableBodyCells()} />
   );
 }
 
