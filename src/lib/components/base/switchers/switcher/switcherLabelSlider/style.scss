@@ -1,0 +1,14 @@
+.glare-switcher-label-slider {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    transform: translateY(-15px);
+    transition: all 300ms ease-in-out;
+}
+
+
+.glare-switcher-label-slider-active {
+    transform: translateY(15px)
+}

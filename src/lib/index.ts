@@ -1,4 +1,4 @@
-import { Label, Button, TabFormItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow, RadioLabel, RingLoading, Counter, StepperTab, StepperPhoneArrow, StepperDivider } from "./components/base";
+import { Label, Button, TabFormItem, Badge, DropDownMenuItem, DropDownMenu, Datepicker, Tooltip, InputField, LabelLessInput, ActionBarInputField, NoteInputField, ButtonField, CellSizingLine, ItemPic, TableLabel, TableSort, CheckboxLabel, TableHeaderCell, TableIconCell, TableCell, Table, TableCellContainer, LinkButton, Alert, DropDownButton, DropDownButtonResultShow, RadioLabel, RingLoading, Counter, StepperTab, StepperPhoneArrow, StepperDivider, Switcher } from "./components/base";
 import { DynamicContainer } from "./components/helpers";
 import { ProfileItem, LoginButton, PassCheck, SideBarItem, IconButton, FeedBackItem, ContentColumn, FieldSection } from "./components/shared";
 import { useDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hooks";
@@ -56,7 +56,7 @@ export {
     FeedBackItem,
     ContentColumn,
     FieldSection,
-
+    Switcher,
 
 
 
