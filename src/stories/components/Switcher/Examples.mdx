@@ -1,0 +1,48 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { Switcher } from '../../../lib';
+import * as SwitcherStories from './Switcher.stories.tsx';
+
+<Title>Switcher Component</Title>
+<Meta of={SwitcherStories} />
+
+## Description
+
+The `Switcher` component is a toggle button that switches between an active and inactive state. It also includes optional labels for each state.
+
+## Examples
+
+### Basic Style
+<Switcher active={false}  />
+
+```jsx
+<Switcher active={false}  />
+```
+
+## Active State With Label
+<Switcher active={true}  active_label="Active"  disabled_label= 'Disabled' />
+
+```jsx
+<Switcher active={true} active_label="Active"  disabled_label= 'Disabled'  />
+```
+
+## Disabled State With Label
+<Switcher active={false} active_label="Active"  disabled_label= 'Disabled' />
+
+```jsx
+<Switcher active={false} active_label="Active"  disabled_label= 'Disabled'  />
+```
+
+
+### Usege 
+
+```jsx
+import { Switcher } from 'torch-glare';
+
+const App = () => (
+  <div>
+   <Switcher active={true} active_label="Active"  disabled_label= 'Disabled'  />
+  </div>
+);
+
+export default App;
+```

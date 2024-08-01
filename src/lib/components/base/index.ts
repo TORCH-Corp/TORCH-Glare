@@ -31,6 +31,7 @@ import TabFormItem from "./tabs/tabFormItem"
 import { StepperTab } from "./steppers/stepperTab"
 import { StepperPhoneArrow } from "./steppers/StepperPhoneArrow"
 import { StepperDivider } from "./steppers/stepperDivider"
+import { Switcher } from "./switchers/switcher"
 
 
 
@@ -67,5 +68,6 @@ export {
     Counter,
     StepperTab,
     StepperPhoneArrow,
-    StepperDivider
+    StepperDivider,
+    Switcher
 }
