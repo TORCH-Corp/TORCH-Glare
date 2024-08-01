@@ -66,3 +66,9 @@
         }
     }
 }
+
+.TableHeaderCell-dummy {
+    &:hover {
+        background-color: transparent !important;
+    }
+}

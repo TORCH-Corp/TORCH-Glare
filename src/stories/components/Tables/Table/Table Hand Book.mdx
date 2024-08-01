@@ -1,0 +1,175 @@
+import { Meta, Title, Source } from '@storybook/addon-docs';
+import { Table, TableCell, TableCellContainer, TableHeaderCell } from '../../../../lib/index.ts'
+import * as TableStories from './Table.stories.tsx';
+
+# Table Component
+<Meta  of={TableStories}/>
+
+The `Table` component is flexible and resizable with customizable header and body cells. 
+It allows for drag-and-drop functionality for the headers.
+
+## Table Core Components
+to render table components correctly you need the core components to render the table header there cells, the core components:
+
+- `TableHeaderCell` is the table header component
+- `TableCell` is the table cell component, that should render under the `TableHeaderCell` as data.
+- `TableCellContainer` is the container for the `TableCell` component, you must use it with the `TableCell` component to have the correct Table shape.
+
+### TableHeaderCell 
+The `TableHeaderCell` component is the header of the table.
+- [TableHeaderCell Details](?path=/docs/components-tables-table--tableheadercell)
+
+### TableCell 
+The `TableCell` component is the table data.
+- [TableCell Details](?path=/docs/components-tables-table--tablecell)
+
+### TableCellContainer 
+The `TableCellContainer` component is the cells wrapper.
+- [TableCellContainer Details](?path=/docs/components-tables-table--tablecellcontainer)
+
+
+## Examples
+
+<Table
+    table_header_cells_children_data={[]}
+    table_header_cells_children_setter_data={()=>{}}
+    table_header_cells_children={
+    <>
+        <TableHeaderCell
+            resizable={true}
+            component_size="M"
+            label={'Data Header 1'}
+            id={'1'}
+        />
+         <TableHeaderCell
+            resizable={true}
+            component_size="M"
+            label={'Data Header 2'}
+            id={'2'}
+        />
+    </>
+    }
+    table_body_cells_children={
+         <TableCellContainer isChecked={false}>
+            <TableCell
+                cellLabel={'Data Cell 1'}
+                component_size="M"
+            />
+            <TableCell
+                cellLabel={'Data Cell 2'}
+                component_size="M"
+            />
+        </TableCellContainer>
+    } />
+
+
+
+    <Source
+  code={`
+  <Table
+    table_header_cells_children_data={[]}
+    table_header_cells_children_setter_data={()=>{}}
+    table_header_cells_children={
+    <>
+        <TableHeaderCell
+            resizable={true}
+            component_size="M"
+            label={'Data Header 1'}
+            id={'1'}
+        />
+         <TableHeaderCell
+            resizable={true}
+            component_size="M"
+            label={'Data Header 2'}
+            id={'2'}
+        />
+    </>
+    }
+    table_body_cells_children={
+         <TableCellContainer isChecked={false}>
+            <TableCell
+                cellLabel={'Data Cell 1'}
+                component_size="M"
+            />
+            <TableCell
+                cellLabel={'Data Cell 2'}
+                component_size="M"
+            />
+        </TableCellContainer>
+    } />
+
+  `}
+/>
+
+
+
+
+## Usege
+
+```jsx
+import { useState } from 'react';
+import { Table, TableCell, TableCellContainer, TableHeaderCell } from 'torch-glare';
+
+function App() {
+  const [data, setData] = useState([
+    {
+      label: 'Data Example 1',
+      id: '1',
+      cells: ['data 1', 'data 11', 'data 111', 'data 1111'],
+    },
+    {
+      label: 'Data Example 2',
+      id: '2',
+      cells: ['data 2', 'data 222', 'data 2222', 'data 22222'],
+    }
+  ])
+
+  const renderTableHeaderCells = () => {
+    return data.map((item) => (
+      <TableHeaderCell
+        key={item.id}
+        resizable={true}
+        component_size="M"
+        label={item.label}
+        id={item.id}
+      />
+    ));
+  };
+
+  const renderTableBodyCells = () => {
+    const numRows = Math.max(...data.map(item => item.cells.length));
+    const rows = [];
+
+    for (let i = 0; i < numRows; i++) {
+      rows.push(
+        <TableCellContainer
+          key={i}
+          isChecked={false}
+        >
+          {data.map(item => (
+            <TableCell
+              key={`${item.id}-${i}`}
+              cellLabel={item.cells[i] || ''}
+              component_size="M"
+            />
+          ))}
+        </TableCellContainer>
+      );
+    }
+
+    return rows;
+  };
+
+  return (
+    <Table
+      table_header_cells_children_data={data}
+      table_header_cells_children_setter_data={setData}
+      table_header_cells_children={renderTableHeaderCells()}
+      table_body_cells_children={renderTableBodyCells()} />
+  );
+}
+
+export default App;
+
+```
+

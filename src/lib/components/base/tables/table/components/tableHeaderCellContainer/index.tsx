@@ -9,6 +9,7 @@ import { CheckBox } from '../shared/checkBox';
 interface Props extends TableHTMLAttributes<HTMLTableRowElement> {
     handle_drag_end: (event: DragEndEvent) => void;
     table_header_cell_data: any; // Define the type more specifically if possible
+    isDummy?: boolean
 }
 
 export const TableHeaderCellContainer: React.FC<Props> = ({

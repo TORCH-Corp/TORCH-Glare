@@ -11,7 +11,6 @@ body {
     font-family: 'SF-Pro';
     width: 100%;
     display: flex;
-    padding: 20px;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -28,4 +27,8 @@ body {
 
 #root {
     width: 100%;
+}
+
+.table-container-example {
+    display: flex;
 }
