@@ -1,10 +1,6 @@
 
-import { PicContainer } from "./lib/components/base/upload&download/picContainer";
-import { AttachedPic } from "./lib/components/base/upload&download/attachedPic";
-import { convertImageFileToDataUrl } from "./lib/utils/convertImageFileToDataUrl";
+import { AttachedPic, PicContainer, convertImageFileToDataUrl } from "./lib";
 import { useState, ChangeEvent } from "react";
-
-
 
 function App() {
 
@@ -18,7 +14,8 @@ function App() {
   return (
     <section className="attachment-wrapper">
       <PicContainer onChange={handleFileChange} id={"test"} selectedImg={imageSrc} ExpandImageClick={() => setImagePreviewActive(true)} />
-      {imagePreviewActive && <AttachedPic headerLabel="Preview" style={{ position: "absolute", top: "0" }} src={imageSrc} changeLabel="Change" deleteLabel="Delete" deleteButtonClick={() => setImageSrc("")} changeButtonClick={() => setImageSrc("")} closeButtonClick={() => setImagePreviewActive(false)} />}
+      {imagePreviewActive &&
+        <AttachedPic headerLabel="Preview" style={{ position: "absolute", top: "0" }} src={imageSrc} changeLabel="Change" deleteLabel="Delete" deleteButtonClick={() => setImageSrc("")} changeButtonClick={() => setImageSrc("")} closeButtonClick={() => setImagePreviewActive(false)} />}
     </section>
   );
 }

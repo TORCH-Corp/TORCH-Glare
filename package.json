@@ -29,10 +29,10 @@
     "react": "^18.2.0",
     "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.3",
     "remixicon": "^4.3.0"
   },
   "devDependencies": {
+    "react-dropzone": "^14.2.3",
     "@babel/preset-env": "^7.24.6",
     "@babel/preset-react": "^7.24.6",
     "@babel/preset-typescript": "^7.24.6",

@@ -18,6 +18,7 @@
         @include Labels-typography-Small-Regular;
         max-width: 50px;
         word-break: break-all;
+        margin: 0 !important;
     }
 
     &:hover {

@@ -42,7 +42,7 @@ export default meta;
 
 type Story = StoryObj<StoryProps>;
 
-export const RingLoading_Playground: Story = {
+export const StepperTab_Playground: Story = {
     args: {
         stepper_label: "Label",
         stepper_counter: 1

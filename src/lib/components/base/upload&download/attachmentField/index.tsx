@@ -11,10 +11,10 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 export function AttachmentField({ getInputProps, getRootProps, isDropAreaActive, mainLabel, secondaryLabel, ...props }: Props) {
     return (
-        <Button component_style="PrimeContStyle"  {...getRootProps()} className={'glare-attachment-drop-zone' + (isDropAreaActive ? ' drop-area-active' : '')}>
+        <Button style={{ ...props.style }} component_style="PrimeContStyle"  {...getRootProps()} className={`glare-attachment-drop-zone ${props.className}` + (isDropAreaActive ? ' drop-area-active' : '')}>
             <h1 className='glare-attachment-field-main-label'>{mainLabel}</h1>
             <p className='glare-attachment-field-label'>{secondaryLabel}</p>
-            <input  {...props} {...getInputProps()} type="file" hidden />
+            <input  {...props} style={{}} {...getInputProps()} type="file" hidden />
         </Button>
     )
 }

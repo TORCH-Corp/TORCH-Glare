@@ -1,3 +1,5 @@
+@import '../../../../styles/typography/index.scss';
+
 .glare-attached-pic-wrapper {
     display: flex;
     justify-content: center;
@@ -17,6 +19,13 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
+        margin: 0 !important;
+    }
+
+    .glare-attached-pic-label {
+        margin: 0 !important;
+        color: var(--content-presentation-global-primary);
+        @include Display-typography-Medium-SemiBold;
     }
 
     .glare-attached-pic {

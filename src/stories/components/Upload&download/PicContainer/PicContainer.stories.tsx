@@ -2,7 +2,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ChangeEvent, ComponentProps, useState } from 'react';
 import { AttachedPic, PicContainer } from '../../../../lib'
 import { convertImageFileToDataUrl } from '../../../../lib/utils/convertImageFileToDataUrl'
-import React from 'react';
 
 type StoryProps = ComponentProps<typeof PicContainer>;
 
@@ -38,7 +37,6 @@ export const PicContainer_Playground: Story = {
                 {imagePreviewActive && (
                     <AttachedPic
                         headerLabel="Preview"
-                        style={{ position: "absolute", top: "0" }}
                         src={imageSrc}
                         changeLabel="Change"
                         deleteLabel="Delete"
@@ -50,7 +48,10 @@ export const PicContainer_Playground: Story = {
                             setImageSrc("")
                             setImagePreviewActive(false)
                         }}
-                        closeButtonClick={() => setImagePreviewActive(false)}
+                        closeButtonClick={() => {
+                            setImagePreviewActive(false)
+                        }
+                        }
                     />
                 )}
             </section>

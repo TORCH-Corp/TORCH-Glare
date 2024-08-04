@@ -16,6 +16,7 @@
         color: var(--content-presentation-badge-gray);
         @include Labels-typography-Small-Regular;
         transition: all 300ms ease-in-out;
+        margin: 0 !important;
     }
 
     i {

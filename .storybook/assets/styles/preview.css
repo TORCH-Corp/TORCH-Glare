@@ -2,5 +2,7 @@
 
 * {
     font-family: 'SF-Pro' !important;
-
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
