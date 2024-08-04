@@ -28,6 +28,7 @@ export const AttachmentField_Playground: Story = {
         return (
             <section >
                 <AttachmentField
+                    {...args}
                     getInputProps={getInputProps}
                     getRootProps={getRootProps}
                     isDropAreaActive={isDragActive}
