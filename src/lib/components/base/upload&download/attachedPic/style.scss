@@ -1,0 +1,37 @@
+.glare-attached-pic-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 320px;
+    height: fit-content;
+    padding: 8px;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border-presentation-global-primary);
+    background: var(--background-presentation-form-base);
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+
+    .glare-attached-pic-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .glare-attached-pic {
+        width: 100%;
+        object-fit: cover;
+        object-position: 50% 50%;
+        border-radius: 6px;
+    }
+
+    .glare-attached-pic-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        gap: 8px;
+    }
+
+}

@@ -29,6 +29,9 @@ body {
     width: 100%;
 }
 
-.table-container-example {
+.attachment-wrapper {
     display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
