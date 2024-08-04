@@ -40,8 +40,9 @@ export function FieldSection({
     theme,
     ...props
 }: Props) {
+
     return (
-        <section style={{ alignItems: error_label || warning_label || secondary_label ? "end" : "center", ...props.style }} className="glare-field-section"  >
+        <section style={window.innerWidth > 600 ? { alignItems: error_label || warning_label || secondary_label ? "end" : "center", ...props.style } : props.style} className="glare-field-section"  >
             <ContentColumn
                 name={name}
                 style={{}}
