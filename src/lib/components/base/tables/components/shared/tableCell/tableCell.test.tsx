@@ -10,7 +10,6 @@ describe('TableCell component', () => {
             component_size={'S'}
             name={''}
             cellLabel={''}
-            component_type={'Item Style'}
         />);
         expect(screen.getByTestId('test')).toBeVisible();
     });

@@ -32,6 +32,9 @@ import { StepperTab } from "./steppers/stepperTab"
 import { StepperPhoneArrow } from "./steppers/StepperPhoneArrow"
 import { StepperDivider } from "./steppers/stepperDivider"
 import { Switcher } from "./switchers/switcher"
+import { PicContainer } from "./upload&download/picContainer"
+import { AttachedPic } from "./upload&download/attachedPic"
+import { AttachmentField } from "./upload&download/attachmentField"
 
 
 
@@ -69,5 +72,8 @@ export {
     StepperTab,
     StepperPhoneArrow,
     StepperDivider,
-    Switcher
+    Switcher,
+    PicContainer,
+    AttachmentField,
+    AttachedPic
 }
