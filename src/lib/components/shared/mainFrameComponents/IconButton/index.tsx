@@ -1,6 +1,6 @@
 import React, { ButtonHTMLAttributes, ReactNode } from "react";
 import './style.scss';
-import Counter from "../../../base/counters/counter";
+import Counter from "@/components/base/counters/counter";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: ReactNode; // icon for the button

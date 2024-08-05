@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { Label } from '../../../lib'
+import { Label } from '@/index'
 
 type StoryProps = ComponentProps<typeof Label> & {
     buttonText: string;

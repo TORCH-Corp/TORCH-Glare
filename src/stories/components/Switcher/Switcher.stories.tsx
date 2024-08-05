@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps, useState } from 'react';
-import { Switcher } from '../../../lib'
+import { Switcher } from '@/index'
 
 type StoryProps = ComponentProps<typeof Switcher>
 

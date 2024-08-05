@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, ReactNode } from "react";
-import { InputField } from "../../../base/fields/inputField";
-import { ContentColumn } from "../contentColumn";
+import { InputField } from "@components/base/fields/inputField";
+import { ContentColumn } from "@components/shared/forms/contentColumn";
 import './style.scss'
 
 

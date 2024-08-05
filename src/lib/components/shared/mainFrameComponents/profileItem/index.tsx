@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, ReactNode, useRef } from 'react';
-import { useHideDropDown } from "../../../base/fields/hooks/usehideDropDown";
 import { DynamicContainer } from "../../../helpers";
 import './style.scss';
+import { useHideDropDown } from '@/hooks/usehideDropDown';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     Label: string; // label of the button

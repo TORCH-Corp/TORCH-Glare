@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode, MouseEventHandler } from "react";
-import { Label } from "../../../../labels/label";
+import { Label } from "@components/base/labels/label";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement | HTMLInputElement> {
     component_size?: 'M'; // this props will change the button style size see on figma design file

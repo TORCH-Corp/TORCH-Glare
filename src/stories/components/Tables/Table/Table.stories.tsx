@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { Table, TableCell, TableCellContainer, TableHeaderCell } from '../../../../lib'
+import { Table, TableCell, TableCellContainer, TableHeaderCell } from '@/index'
 
 type StoryProps = ComponentProps<typeof Table>
 

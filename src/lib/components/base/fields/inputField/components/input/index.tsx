@@ -1,9 +1,9 @@
 import { forwardRef, InputHTMLAttributes, ReactNode, useRef } from 'react';
 import './style.scss';
-import { DynamicContainer } from '../../../../../helpers/dynamicContainer';
+import { DynamicContainer } from '@components/helpers/dynamicContainer';
 import { useStates } from './hooks/useStates';
-import Tooltip from '../../../../tooltips/tooltip';
-import { useHideDropDown } from '../../../hooks/usehideDropDown';
+import Tooltip from '@components/base/tooltips/tooltip';
+import { useHideDropDown } from '@/hooks/usehideDropDown';
 import { InputElement } from './componnets/InputElement';
 import { ExtraComponents } from './componnets/extraComponents';
 

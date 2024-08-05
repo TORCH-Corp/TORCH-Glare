@@ -1,4 +1,4 @@
-import Button from "../../../buttons/button";
+import Button from "@components/base/buttons/button";
 interface Props {
     component_size?: "S" | "M" | "L"; // this props will change the button style size see on figma design file
     component_label: string;

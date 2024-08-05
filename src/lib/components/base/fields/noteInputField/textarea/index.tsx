@@ -1,6 +1,6 @@
 import { forwardRef, TextareaHTMLAttributes } from 'react';
 import './style.scss';
-import Tooltip from '../../../tooltips/tooltip';
+import Tooltip from '@/components/base/tooltips/tooltip';
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     name: string;

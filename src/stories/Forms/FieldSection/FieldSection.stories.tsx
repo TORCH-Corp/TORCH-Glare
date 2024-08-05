@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { FieldSection } from '../../../lib'
+import { FieldSection } from '@/index'
 
 type StoryProps = ComponentProps<typeof FieldSection> & {
     buttonText: string;

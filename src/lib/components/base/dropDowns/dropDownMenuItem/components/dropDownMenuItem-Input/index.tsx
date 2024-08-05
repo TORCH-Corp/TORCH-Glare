@@ -1,6 +1,6 @@
 import { InputHTMLAttributes } from 'react'
 import './style.scss'
-import { CheckboxLabel } from '../../../../checkBoxes/checkboxLabel'
+import { CheckboxLabel } from '@components/base/checkBoxes/checkboxLabel'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     component_name: string

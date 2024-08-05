@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { ComponentProps } from 'react';
-import { Button } from '../../../../lib'
+import { Button } from '@/index'
 
 type StoryProps = ComponentProps<typeof Button> & {
     buttonText: string;

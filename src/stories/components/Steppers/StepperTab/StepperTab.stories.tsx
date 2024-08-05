@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { StepperTab } from '../../../../lib'
+import { StepperTab } from '@/index'
 
 type StoryProps = ComponentProps<typeof StepperTab> & {
     buttonText: string;

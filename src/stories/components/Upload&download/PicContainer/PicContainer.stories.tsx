@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ChangeEvent, ComponentProps, useState } from 'react';
-import { AttachedPic, PicContainer } from '../../../../lib'
-import { convertImageFileToDataUrl } from '../../../../lib/utils/convertImageFileToDataUrl'
+import { AttachedPic, PicContainer } from '@/index'
+import { convertImageFileToDataUrl } from '@utils/convertImageFileToDataUrl'
 
 type StoryProps = ComponentProps<typeof PicContainer>;
 

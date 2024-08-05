@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { Datepicker } from '../../../lib'
+import { Datepicker } from '@/index'
 import { fn } from '@storybook/test';
 
 type StoryProps = ComponentProps<typeof Datepicker>

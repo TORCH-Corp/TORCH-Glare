@@ -4,9 +4,9 @@ import { DynamicContainer } from '../../../../components/helpers/dynamicContaine
 import { useStates } from './hooks/useStates';
 import { InputLabel } from './components/inputLabel';
 import Tooltip from '../../tooltips/tooltip';
-import { useHideDropDown } from '../hooks/usehideDropDown';
 import { InputElement } from './components/inputElement';
 import { ExtraComponents } from './components/extraComponents';
+import { useHideDropDown } from '@/hooks/usehideDropDown';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLLabelElement> {
     name: string; // this is important for link to the input to the label

@@ -1,6 +1,6 @@
 import React, { CSSProperties, ReactNode, useRef } from 'react';
 import './style.scss';
-import useDirectionCalc from '../../../hooks/useDirectionCalc';
+import useDirectionCalc from '@hooks/useDirectionCalc';
 
 interface Props {
   children: ReactNode;

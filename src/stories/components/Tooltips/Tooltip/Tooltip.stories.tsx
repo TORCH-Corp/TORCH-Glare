@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { Tooltip } from '../../../../lib'
+import { Tooltip } from '@/index'
 
 type StoryProps = ComponentProps<typeof Tooltip>
 

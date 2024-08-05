@@ -1,5 +1,5 @@
 import { TableHTMLAttributes, forwardRef, useRef } from 'react';
-import { useResize } from '../../../../../../hooks/useResize';
+import { useResize } from '@hooks/useResize';
 import { TableLabel } from '../../ui/tableLabel';
 import { TableSort } from '../../ui/tableSort';
 import './style.scss';

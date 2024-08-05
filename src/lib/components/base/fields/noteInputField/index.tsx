@@ -1,5 +1,5 @@
 import { forwardRef, TextareaHTMLAttributes } from "react";
-import { Label } from "../../labels/label";
+import { Label } from "@/components/base/labels/label";
 import { Textarea } from "./textarea";
 import "./style.scss";
 

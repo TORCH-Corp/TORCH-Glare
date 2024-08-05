@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { NoteInputField } from '../../../../lib'
+import { NoteInputField } from '@/index'
 
 
 type StoryProps = ComponentProps<typeof NoteInputField>

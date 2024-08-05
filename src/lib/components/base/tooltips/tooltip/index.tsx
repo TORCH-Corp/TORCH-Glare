@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import RectangleIcon from './rectangleIcon';
 import './style.scss';
-import useDirectionCalc from '../../../../hooks/useDirectionCalc';
+import useDirectionCalc from '@hooks/useDirectionCalc';
 
 interface Props {
     message: string | null; // the message to be shown in the tooltip

@@ -1,5 +1,5 @@
 import { forwardRef, InputHTMLAttributes } from "react";
-import { Label } from "../../labels/label";
+import { Label } from "@/components/base/labels/label";
 import "./style.scss";
 import useStates from "./hooks/useStates";
 import { InputElement } from "./components/inputElement";

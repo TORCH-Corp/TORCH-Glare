@@ -1,7 +1,7 @@
 import './style.scss';
 import { TableHeaderCellContainer } from "./components/tableHeaderCellContainer";
 import { Dispatch, ReactNode, SetStateAction, TableHTMLAttributes } from 'react';
-import { useDragEnd } from '../../../../hooks/useDragEnd';
+import { useDragEnd } from '@hooks/useDragEnd';
 import { TableHeaderCell } from '../components/shared/tableHeaderCell';
 
 interface Props extends TableHTMLAttributes<HTMLTableElement> {

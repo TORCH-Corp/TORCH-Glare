@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { ContentColumn } from '../../../lib'
+import { ContentColumn } from '@/index'
 
 type StoryProps = ComponentProps<typeof ContentColumn> & {
     buttonText: string;

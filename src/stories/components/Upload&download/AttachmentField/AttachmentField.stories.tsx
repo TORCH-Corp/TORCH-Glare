@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps, useCallback, useState } from 'react';
-import { AttachedPic, AttachmentField } from '../../../../lib'
-import { convertImageFileToDataUrl } from '../../../../lib/utils/convertImageFileToDataUrl'
+import { AttachedPic, AttachmentField } from '@/index'
+import { convertImageFileToDataUrl } from '@utils/convertImageFileToDataUrl'
 import { useDropzone } from 'react-dropzone';
 
 type StoryProps = ComponentProps<typeof AttachmentField>;

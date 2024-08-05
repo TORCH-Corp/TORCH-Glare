@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { ComponentProps } from 'react';
-import { DropDownMenu, DropDownMenuItem, DynamicContainer } from '../../lib'
+import { DropDownMenu, DropDownMenuItem, DynamicContainer } from '@/index'
 
 
 

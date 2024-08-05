@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { Counter } from '../../../lib'
+import { Counter } from '@/index'
 
 type StoryProps = ComponentProps<typeof Counter>
 

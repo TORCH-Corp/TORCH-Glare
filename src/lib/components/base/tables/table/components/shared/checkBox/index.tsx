@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, ForwardedRef, forwardRef } from 'react';
 import { CellSizingLine } from '../../../../components/ui/cellSizingLine';
 import './style.scss';
-import { CheckboxLabel } from '../../../../../checkBoxes/checkboxLabel';
+import { CheckboxLabel } from '@components/base/checkBoxes/checkboxLabel';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     forSubTable: boolean;

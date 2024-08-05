@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { DropDownMenu, DropDownMenuItem } from '../../../../lib'
+import { DropDownMenu, DropDownMenuItem } from '@/index'
 
 type StoryProps = ComponentProps<typeof DropDownMenu>
 

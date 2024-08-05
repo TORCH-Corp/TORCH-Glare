@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { ButtonField, Button } from '../../../../lib'
+import { ButtonField, Button } from '@/index'
 
 type StoryProps = ComponentProps<typeof ButtonField>
 

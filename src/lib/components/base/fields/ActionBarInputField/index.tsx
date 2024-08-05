@@ -1,5 +1,5 @@
 import React, { forwardRef, InputHTMLAttributes, ReactNode, Ref } from "react";
-import { InputField } from "../inputField";
+import { InputField } from "@components/base/fields/inputField";
 import './style.scss';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {

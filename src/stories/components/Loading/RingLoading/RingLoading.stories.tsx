@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { RingLoading } from '../../../../lib'
+import { RingLoading } from '@/index'
 
 type StoryProps = ComponentProps<typeof RingLoading> & {
     buttonText: string;

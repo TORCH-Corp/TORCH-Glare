@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { RadioLabel } from '../../../../lib'
+import { RadioLabel } from '@/index'
 
 type StoryProps = ComponentProps<typeof RadioLabel> & {
     buttonText: string;

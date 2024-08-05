@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { TabFormItem } from '../../../../lib'
+import { TabFormItem } from '@/index'
 
 type StoryProps = ComponentProps<typeof TabFormItem> & {
     buttonText: string;

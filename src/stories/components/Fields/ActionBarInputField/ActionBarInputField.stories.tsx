@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { ActionBarInputField, Button } from '../../../../lib'
+import { ActionBarInputField, Button } from '@/index'
 
 type StoryProps = ComponentProps<typeof ActionBarInputField>
 

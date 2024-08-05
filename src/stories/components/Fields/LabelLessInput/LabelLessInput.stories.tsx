@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { LabelLessInput } from '../../../../lib'
+import { LabelLessInput } from '@/index'
 
 
 type StoryProps = ComponentProps<typeof LabelLessInput>
