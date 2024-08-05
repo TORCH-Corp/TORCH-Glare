@@ -12,8 +12,8 @@ export const ThemeContext = createContext<ThemeProps | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const [theme, setTheme] = useState<"light" | "dark" | "default">(() => {
-        const mode = document.documentElement.getAttribute('data-theme') as "light" | "dark" | "default" || "default";
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && document) {
+            const mode = document.documentElement.getAttribute('data-theme') as "light" | "dark" | "default" || "default";
             const storedTheme = localStorage.getItem('theme') as "light" | "dark" | "default";
             return storedTheme || mode || "default";
         }
@@ -29,22 +29,29 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
 
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.setAttribute('data-theme-mode', themeMode);
-        localStorage.setItem('theme', theme);
-        localStorage.setItem('theme-mode', themeMode);
+        if (document) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-theme-mode', themeMode);
+            localStorage.setItem('theme', theme);
+            localStorage.setItem('theme-mode', themeMode);
+        }
     }, [theme, themeMode]);
 
     const updateTheme = (newTheme: "light" | "dark" | "default") => {
-        setTheme(newTheme);
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        if (document) {
+            setTheme(newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
     };
 
     const updateMode = (newThemeMode: "CSS" | "TORCH") => {
-        setThemeMode(newThemeMode);
-        document.documentElement.setAttribute('data-theme-mode', newThemeMode);
-        localStorage.setItem('theme-mode', newThemeMode);
+        if (document) {
+            setThemeMode(newThemeMode);
+            document.documentElement.setAttribute('data-theme-mode', newThemeMode);
+            localStorage.setItem('theme-mode', newThemeMode);
+        }
     };
 
     const value = {

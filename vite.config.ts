@@ -30,6 +30,7 @@ export default defineConfig({
       scss: {
         additionalData: `
           @import "@/styles/typography/index";
+          @import "@/styles/mediaQuery/queries";
         `,
       },
     },
