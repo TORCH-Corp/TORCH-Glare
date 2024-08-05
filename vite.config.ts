@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
@@ -7,12 +6,14 @@ import { extname, relative, resolve } from 'path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'glob';
 import copy from 'rollup-plugin-copy';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [
     react(),
     dts({ include: ['src/lib'] }),
     libInjectCss(),
+    tsconfigPaths(), // Add this plugin to handle TypeScript paths
     copy({
       targets: [
         { src: 'src/lib/styles/mediaQuery', dest: 'dist/responsive' },
@@ -20,7 +21,6 @@ export default defineConfig({
       ],
       hook: 'writeBundle' // Ensure the plugin runs at the right time
     }),
-
   ],
   css: {
     modules: {
@@ -28,8 +28,16 @@ export default defineConfig({
     },
     preprocessorOptions: {
       scss: {
+        additionalData: `
+          @import "@/styles/typography/index";
+        `,
       },
     },
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src/lib')
+    }
   },
   build: {
     rollupOptions: {
@@ -52,8 +60,6 @@ export default defineConfig({
         assetFileNames: 'assets/[name][extname]',
         entryFileNames: '[name].js',
       },
-      plugins: [
-      ],
     },
     lib: {
       entry: resolve(__dirname, 'src/lib/index.ts'), // Adjust this path if needed
@@ -61,6 +67,3 @@ export default defineConfig({
     },
   },
 });
-
-
-
