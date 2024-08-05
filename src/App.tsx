@@ -1,4 +1,4 @@
-import { FieldSection } from "./lib";
+import { FieldSection } from "@/index";
 
 function App() {
   return (

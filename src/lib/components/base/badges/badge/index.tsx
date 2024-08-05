@@ -1,5 +1,5 @@
 import { MouseEventHandler, ReactNode, ButtonHTMLAttributes } from 'react';
-import './styles/default.scss';
+import './styles/index.scss';
 import { BadgeIcon } from './components/badgeIcon';
 
 interface Props extends ButtonHTMLAttributes<HTMLSpanElement> {
