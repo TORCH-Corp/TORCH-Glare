@@ -3,7 +3,8 @@
 .glare-radio-card {
     display: flex;
     flex-direction: column;
-    width: fit-content;
+    justify-content: space-between;
+    width: 100%;
     min-width: 200px;
     gap: 8px;
     border-radius: 12px;
@@ -15,8 +16,10 @@
 
     .glare-radio-card-input-wrapper {
         position: absolute;
-        top: 10px;
-        width: calc(100% - 32px);
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
         display: flex;
         justify-content: flex-end;
 
@@ -51,6 +54,12 @@
             color: var(--content-presentation-global-primary);
             @include Body-typography-Medium-SemiBold;
             margin: 0 !important;
+
+            p {
+                color: var(--content-presentation-global-primary);
+                @include Body-typography-Medium-SemiBold;
+                margin: 0 !important;
+            }
         }
 
         .glare-button {

@@ -30,9 +30,9 @@ body {
     width: 100%;
 }
 
-.attachment-wrapper {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+.test {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
