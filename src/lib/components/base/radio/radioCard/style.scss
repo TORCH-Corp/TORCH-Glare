@@ -1,0 +1,92 @@
+@import '@/styles/typography';
+
+.glare-radio-card {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    min-width: 200px;
+    gap: 8px;
+    border-radius: 12px;
+    border: 1px solid var(--border-presentation-global-primary);
+    background: var(--background-presentation-form-radiocard-base);
+    padding: 16px;
+    position: relative;
+    transition: all 200ms ease-in-out;
+
+    .glare-radio-card-input-wrapper {
+        position: absolute;
+        top: 10px;
+        width: calc(100% - 32px);
+        display: flex;
+        justify-content: flex-end;
+
+        .glare-label {
+            gap: 0px !important;
+
+            .check-box-icon {
+                width: 24px;
+                height: 24px;
+            }
+
+            i {
+                font-size: 24px !important;
+            }
+        }
+
+    }
+
+    .glare-radio-card-label {
+        color: var(--content-presentation-global-primary);
+        @include Headers-typography-Medium-SemiBold;
+        margin: 0 !important;
+    }
+
+    .glare-radio-card-info {
+        display: flex;
+        gap: 4px;
+        flex-direction: column;
+        align-items: start;
+
+        .glare-radio-card-info-description {
+            color: var(--content-presentation-global-primary);
+            @include Body-typography-Medium-SemiBold;
+            margin: 0 !important;
+        }
+
+        .glare-button {
+            color: var(--content-presentation-action-link);
+
+            i {
+                color: var(--content-presentation-action-link);
+
+            }
+
+            &:hover {
+                color: var(--content-presentation-action-hover);
+
+                i {
+                    color: var(--content-presentation-action-hover);
+                }
+            }
+        }
+    }
+
+    &:hover {
+        border: 1px solid var(--border-presentation-state-focus);
+
+        .check-box-icon {
+            border: 1px solid var(--border-presentation-state-focus);
+        }
+    }
+}
+
+
+.glare-radio-card-disabled {
+    border: 1px solid var(--border-presentation-global-primary);
+    background: var(--background-presentation-action-disabled);
+
+    &:hover {
+        border: 1px solid var(--border-presentation-global-primary);
+        background: var(--background-presentation-action-disabled);
+    }
+}

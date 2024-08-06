@@ -42,7 +42,7 @@ export default meta;
 
 type Story = StoryObj<StoryProps>;
 
-export const RingLoading_Playground: Story = {
+export const RadioLabel_Playground: Story = {
     args: {
         component_size: "M",
         label: "Label",

@@ -35,6 +35,7 @@ import { Switcher } from "./switchers/switcher"
 import { PicContainer } from "./upload&download/picContainer"
 import { AttachedPic } from "./upload&download/attachedPic"
 import { AttachmentField } from "./upload&download/attachmentField"
+import { RadioCard } from "./radio/radioCard"
 
 
 
@@ -75,5 +76,6 @@ export {
     Switcher,
     PicContainer,
     AttachmentField,
-    AttachedPic
+    AttachedPic,
+    RadioCard
 }
