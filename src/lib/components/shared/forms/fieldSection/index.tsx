@@ -20,6 +20,8 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     error_message?: string; // this will show tooltip with error message if not null
     component_size?: "M" | "L"; // this is used to change the size style of the component
     theme?: "System-Style" | ""; // this is used to change the theme style of the component
+    childrenAtTheTop?: ReactNode
+    childrenAtTheBottom?: ReactNode
 }
 
 export function FieldSection({
@@ -38,11 +40,13 @@ export function FieldSection({
     badges_children,
     error_message,
     theme,
+    childrenAtTheTop,
+    childrenAtTheBottom,
     ...props
 }: Props) {
 
     return (
-        <section style={window.innerWidth > 600 ? { alignItems: error_label || warning_label || secondary_label ? "end" : "center", ...props.style } : props.style} className="glare-field-section"  >
+        <section style={window.innerWidth > 600 ? { alignItems: error_label || warning_label || secondary_label || childrenAtTheBottom || childrenAtTheTop ? "start" : "center", ...props.style } : props.style} className="glare-field-section"  >
             <ContentColumn
                 name={name}
                 style={{}}
@@ -53,20 +57,24 @@ export function FieldSection({
                 warning_label={warning_label}
                 error_label={error_label}
             />
-            <InputField
-                {...props}
-                style={{}}
-                name={name}
-                component_size={component_size || "M"}
-                left_side_icon={left_side_icon}
-                trailing_label={trailing_label}
-                action_button={action_button}
-                negative={negative}
-                badges_children={badges_children}
-                drop_down_list_child={drop_down_list_child}
-                error_message={error_message}
-                theme={theme}
-            />
+            <section className="glare-field-section-input-wrapper">
+                {childrenAtTheTop}
+                <InputField
+                    {...props}
+                    style={{}}
+                    name={name}
+                    component_size={component_size || "M"}
+                    left_side_icon={left_side_icon}
+                    trailing_label={trailing_label}
+                    action_button={action_button}
+                    negative={negative}
+                    badges_children={badges_children}
+                    drop_down_list_child={drop_down_list_child}
+                    error_message={error_message}
+                    theme={theme}
+                />
+                {childrenAtTheBottom}
+            </section>
         </section>
     )
 }

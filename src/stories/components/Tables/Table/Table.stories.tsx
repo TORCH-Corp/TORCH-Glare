@@ -30,7 +30,7 @@ export const Tables_Playground: Story = {
             />
         </TableCellContainer>
     },
-    render: ({ ...args }) => {
+    render: () => {
 
         const [data, setData] = useState([
             {
