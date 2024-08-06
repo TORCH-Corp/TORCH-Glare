@@ -111,18 +111,23 @@ import { useState } from 'react';
 import { Table, TableCell, TableCellContainer, TableHeaderCell } from 'torch-glare';
 
 function App() {
-  const [data, setData] = useState([
-    {
-      label: 'Data Example 1',
-      id: '1',
-      cells: ['data 1', 'data 11', 'data 111', 'data 1111'],
-    },
-    {
-      label: 'Data Example 2',
-      id: '2',
-      cells: ['data 2', 'data 222', 'data 2222', 'data 22222'],
-    }
-  ])
+      const [data, setData] = useState([
+            {
+                label: 'User Name',
+                id: '1',
+                cells: ['John Doe', 'Jane Smith'],
+            },
+            {
+                label: 'User Email',
+                id: '2',
+                cells: ['jane.smith@example.com', 'john.doe@example.com',],
+            },
+            {
+                label: 'User Phone Number',
+                id: '3',
+                cells: ['555-1234', '555-5678'],
+            }
+        ]);
 
   const renderTableHeaderCells = () => {
     return data.map((item) => (
