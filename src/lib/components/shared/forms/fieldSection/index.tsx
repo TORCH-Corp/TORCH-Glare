@@ -65,7 +65,7 @@ export function FieldSection({
                     !hideInputField ?
                         <InputField
                             {...props}
-                            style={{}}
+                            style={{ borderRadius: "6px" }}
                             name={name}
                             component_size={component_size || "M"}
                             left_side_icon={left_side_icon}
