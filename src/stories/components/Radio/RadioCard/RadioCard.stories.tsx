@@ -19,7 +19,7 @@ const meta: Meta<StoryProps> = {
             control: 'text',
             description: 'Main label text.'
         },
-        description: {
+        description_child: {
             control: 'text',
             description: 'Text displayed with description style for additional information.'
         },
@@ -42,7 +42,7 @@ export const RadioCard_Playground: Story = {
     args: {
         label: "Radio Header",
         name: "radio-example",
-        description: "Your Company Account Will be Linked to Your Company Exist Domain",
+        description_child: <p> "Your Company Account Will be Linked to Your Company Exist Domain"</p>,
         learn_more_label: "Learn More"
     },
     render: ({ ...args }) => {

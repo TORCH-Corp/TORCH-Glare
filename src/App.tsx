@@ -4,6 +4,7 @@ function App() {
   return (
     <section>
       <FieldSection
+        hideInputField
         component_size="M"
         secondary_label=""
         label={'company_name'}

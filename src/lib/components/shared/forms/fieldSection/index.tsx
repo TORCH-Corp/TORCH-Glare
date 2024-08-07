@@ -22,6 +22,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     theme?: "System-Style" | ""; // this is used to change the theme style of the component
     childrenAtTheTop?: ReactNode
     childrenAtTheBottom?: ReactNode
+    hideInputField?: boolean
 }
 
 export function FieldSection({
@@ -42,6 +43,7 @@ export function FieldSection({
     theme,
     childrenAtTheTop,
     childrenAtTheBottom,
+    hideInputField,
     ...props
 }: Props) {
 
@@ -59,20 +61,24 @@ export function FieldSection({
             />
             <section className="glare-field-section-input-wrapper">
                 {childrenAtTheTop}
-                <InputField
-                    {...props}
-                    style={{}}
-                    name={name}
-                    component_size={component_size || "M"}
-                    left_side_icon={left_side_icon}
-                    trailing_label={trailing_label}
-                    action_button={action_button}
-                    negative={negative}
-                    badges_children={badges_children}
-                    drop_down_list_child={drop_down_list_child}
-                    error_message={error_message}
-                    theme={theme}
-                />
+                {
+                    !hideInputField ?
+                        <InputField
+                            {...props}
+                            style={{}}
+                            name={name}
+                            component_size={component_size || "M"}
+                            left_side_icon={left_side_icon}
+                            trailing_label={trailing_label}
+                            action_button={action_button}
+                            negative={negative}
+                            badges_children={badges_children}
+                            drop_down_list_child={drop_down_list_child}
+                            error_message={error_message}
+                            theme={theme}
+                        />
+                        : null
+                }
                 {childrenAtTheBottom}
             </section>
         </section>
