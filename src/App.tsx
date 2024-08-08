@@ -1,9 +1,12 @@
-import { LabelLessInput, RadioCard } from "@/index";
+import { RadioCard, RadioLabel } from "@/index";
+import { useState } from "react";
 
 function App() {
+
+  const [is_selected, setIsSelected] = useState(false);
   return (
     <section>
-      <LabelLessInput name={"wrewr"} label={"Test"} required_label="" />
+      <RadioCard onClick={() => setIsSelected(!is_selected)} is_selected={is_selected} label={"Card Label"} description_child={"Card Description"} />
     </section>
   );
 }

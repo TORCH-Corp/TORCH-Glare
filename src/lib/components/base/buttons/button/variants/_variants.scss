@@ -50,14 +50,14 @@
 }
 
 .BorderStyle {
-    outline: 1px solid var(--border-presentation-action-disabled);
+    border: 1px solid var(--border-presentation-action-disabled);
     background: var(--background-presentation-action-borderstyle);
 }
 
 /* Content Style */
 
 .PrimeContStyle {
-    outline: unset;
+    border: unset;
     background-color: transparent;
     color: var(--content-presentation-action-light-primary);
 
@@ -81,7 +81,7 @@
 }
 
 .BlueContStyle {
-    outline: unset;
+    border: unset;
     background: transparent;
     color: var(--content-presentation-action-light-primary);
 
@@ -114,7 +114,7 @@
 }
 
 .RedContStyle {
-    outline: unset;
+    border: unset;
     background: transparent;
     color: var(--content-presentation-action-light-primary);
 

@@ -18,11 +18,12 @@ export function ExtraComponents({
                 {trailing_label && <p className='glare-input-trailing-label'>{trailing_label}</p>}
                 {drop_down_list_child && (
                     <Button
+                        className="glare-drop-down-button-costume"
                         type='button'
                         onClick={() => setIsActive(true)}
-                        component_size={component_size}
+                        component_size={component_size || "S"}
                         disabled={disabled}
-                        left_icon={<i className="ri-arrow-drop-down-line"></i>}
+                        left_icon={<i className="ri-arrow-down-s-line"></i>}
                     />
                 )}
                 {action_button}

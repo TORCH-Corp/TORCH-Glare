@@ -6,7 +6,7 @@
     position: relative;
     border: 1px solid var(--border-presentation-action-primary);
     border-radius: var(--Radius-2-max, 4px);
-    padding: 2px 4px;
+    padding: 3px;
     background-color: var(--background-presentation-form-field-primary);
     transition: all 150ms ease-in-out;
 
@@ -54,7 +54,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0 4px;
             width: fit-content;
             font-size: 14px;
             color: #A0A0A0;

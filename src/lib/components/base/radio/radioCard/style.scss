@@ -38,6 +38,10 @@
 
     }
 
+    .check-box-icon-wrapper {
+        height: 29px;
+    }
+
     .glare-radio-card-label {
         color: var(--content-presentation-global-primary);
         @include Headers-typography-Medium-SemiBold;
