@@ -1,8 +1,7 @@
-@import "../variables/index.scss";
 
 @mixin Headers-typography-Small-Bold {
   font-family: inherit;
-  font-size: $font-size-headers-small;
+  font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 132%;
@@ -12,7 +11,7 @@
 
 @mixin Headers-typography-Small-SemiBold {
   font-family: inherit;
-  font-size: $font-size-headers-small;
+  font-size: 16px;
   font-style: normal;
   font-weight: 590;
   line-height: 132%;
@@ -22,7 +21,7 @@
 
 @mixin Headers-typography-Small-Medium {
   font-family: inherit;
-  font-size: $font-size-headers-small;
+  font-size: 16px;
   font-style: normal;
   font-weight: 510;
   line-height: 132%;
@@ -32,7 +31,7 @@
 
 @mixin Headers-typography-Small-Regular {
   font-family: inherit;
-  font-size: $font-size-headers-small;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 132.3%;
