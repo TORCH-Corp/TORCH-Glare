@@ -3,7 +3,7 @@ html:not([data-theme]),
 [data-theme="default"],
 [data-theme="null"] {
 
-  /* Maping.Default2.0 */
+  /* Maping.Default v2.0 */
   --border-presentation-action-disabled: var(
     --border-presentation-default-action-disabled
   );

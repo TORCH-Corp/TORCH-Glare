@@ -5,8 +5,8 @@ html:not([data-theme-mode]),
 [data-theme-mode="TORCH"],
 [data-theme-mode="null"] {
   
-  /* Themes.Torch1.0 */
-  /* Themes.Torch1.0 Variables */
+  /* Themes.Torch v1.0 */
+  /* Themes.Torch v1.0 Variables */
   --background-system-default-folder-solid-grstart: #00000000;
   --background-system-default-folder-primary-grstart: #0f101100;
   --background-system-default-folder-hover-grstart: #00469900;
