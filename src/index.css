@@ -1,38 +1,38 @@
-@import './fonts/fonts.css';
+@import "./fonts/fonts.css";
 
 * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-
 body {
-    font-family: 'SF-Pro';
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 10px;
-    /*     background-color: rgb(192, 192, 192);
+  font-family: "SF-Pro";
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 10px;
+  background-color: black;
+  /*     background-color: rgb(192, 192, 192);
  */
 }
 
 .app {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #root {
-    width: 100%;
+  width: 100%;
 }
 
 .test {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }

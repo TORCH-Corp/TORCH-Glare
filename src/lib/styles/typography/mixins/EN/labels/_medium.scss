@@ -1,39 +1,41 @@
+@import "../variables/index.scss";
+
 @mixin Labels-typography-Medium-Bold {
-    font-family: inherit;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 142%;
-    /* 14.2px */
-    letter-spacing: 0.2px;
+  font-family: inherit;
+  font-size: $font-size-label-medium;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 142%;
+  /* 14.2px */
+  letter-spacing: 0.2px;
 }
 
 @mixin Labels-typography-Medium-SemiBold {
-    font-family: inherit;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 590;
-    line-height: 142%;
-    /* 14.2px */
-    letter-spacing: 0.2px;
+  font-family: inherit;
+  font-size: $font-size-label-medium;
+  font-style: normal;
+  font-weight: 590;
+  line-height: 142%;
+  /* 14.2px */
+  letter-spacing: 0.2px;
 }
 
 @mixin Labels-typography-Medium-Medium {
-    font-family: inherit;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 510;
-    line-height: 142%;
-    /* 14.2px */
-    letter-spacing: 0.2px;
+  font-family: inherit;
+  font-size: $font-size-label-medium;
+  font-style: normal;
+  font-weight: 510;
+  line-height: 142%;
+  /* 14.2px */
+  letter-spacing: 0.2px;
 }
 
 @mixin Labels-typography-Medium-Regular {
-    font-family: inherit;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 142%;
-    /* 14.2px */
-    letter-spacing: 0.2px;
+  font-family: inherit;
+  font-size: $font-size-label-medium;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 142%;
+  /* 14.2px */
+  letter-spacing: 0.2px;
 }

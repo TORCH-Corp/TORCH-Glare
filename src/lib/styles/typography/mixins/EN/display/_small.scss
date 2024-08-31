@@ -1,39 +1,41 @@
+@import "../variables/index.scss";
+
 @mixin Display-typography-Small-Bold {
-    font-family: inherit;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 120%;
-    /* 26.4px */
-    letter-spacing: -0.22px;
+  font-family: inherit;
+  font-size: $font-size-display-small;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+  /* 26.4px */
+  letter-spacing: -0.22px;
 }
 
 @mixin Display-typography-Small-SemiBold {
-    font-family: inherit;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 590;
-    line-height: 120%;
-    /* 26.4px */
-    letter-spacing: -0.22px;
+  font-family: inherit;
+  font-size: $font-size-display-small;
+  font-style: normal;
+  font-weight: 590;
+  line-height: 120%;
+  /* 26.4px */
+  letter-spacing: -0.22px;
 }
 
 @mixin Display-typography-Small-Medium {
-    font-family: inherit;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 510;
-    line-height: 120%;
-    /* 26.4px */
-    letter-spacing: -0.22px;
+  font-family: inherit;
+  font-size: $font-size-display-small;
+  font-style: normal;
+  font-weight: 510;
+  line-height: 120%;
+  /* 26.4px */
+  letter-spacing: -0.22px;
 }
 
 @mixin Display-typography-Small-Regular {
-    font-family: inherit;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 120%;
-    /* 26.4px */
-    letter-spacing: -0.22px;
+  font-family: inherit;
+  font-size: $font-size-display-small;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  /* 26.4px */
+  letter-spacing: -0.22px;
 }
