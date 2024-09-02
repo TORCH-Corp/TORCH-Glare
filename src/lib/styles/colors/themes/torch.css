@@ -1,12 +1,9 @@
 @import "../coreColorSystem/index.css";
 
-/* Aliases  */
+/* Themes.Torch v1.1 */
 html:not([data-theme-mode]),
 [data-theme-mode="TORCH"],
 [data-theme-mode="null"] {
-  
-  /* Themes.Torch v1.0 */
-  /* Themes.Torch v1.0 Variables */
   --background-system-default-folder-solid-grstart: #00000000;
   --background-system-default-folder-primary-grstart: #0f101100;
   --background-system-default-folder-hover-grstart: #00469900;
@@ -18,10 +15,10 @@ html:not([data-theme-mode]),
   --background-system-dark-folder-hover-grstart: #00469900;
   --background-presentation-default-table-row-selected: #4200ff0d;
   --background-presentation-default-form-tabs-grmid: #f9f9f900;
-  --background-presentation-default-tab-default-topbar: #00000014;
+  --background-presentation-default-tab-topbar-primary: #00000014;
   --background-presentation-light-form-tabs-grmid: #f9f9f900;
   --background-presentation-light-table-row-selected: #4200ff0d;
-  --background-presentation-light-tab-default-topbar: #00000014;
+  --background-presentation-light-tab-topbar-primary: #00000014;
   --background-presentation-light-stepper-hover: #00000014;
   --background-presentation-dark-form-tabs-grmid: #0f101100;
   --border-presentation-default-table-selected: #cfbeffff;
@@ -40,14 +37,14 @@ html:not([data-theme-mode]),
   --background-system-default-body-primary: var(--black-900);
   --background-system-default-body-secondry: var(--black-800);
   --background-system-default-body-tertiary: var(--black-700);
-  --background-system-default-action-hover-primary: var(--purple-1000);
+  --background-system-default-action-primary-hover: var(--purple-1000);
   --background-system-default-action-primary: var(--black-900);
   --background-system-default-action-secondry: var(--black-800);
   --background-system-default-action-tertiary: var(--black-700);
-  --background-system-default-action-hover-secondary: var(--purple-900);
-  --background-system-default-action-hover-tertiary: var(--white-alpha-20);
-  --background-system-default-action-selected-primary: var(--black-700);
-  --background-system-default-action-selected-secondray: var(--black-500);
+  --background-system-default-action-secondary-hover: var(--purple-900);
+  --background-system-default-action-tertiary-hover: var(--white-alpha-20);
+  --background-system-default-action-primary-selected: var(--black-700);
+  --background-system-default-action-secondray-selected: var(--black-500);
   --background-system-default-action-field-primary: var(--black-1000);
   --background-system-default-action-field-hover: var(--blue-sparkle-1000);
   --background-system-default-action-field-desabled: var(--black-500);
@@ -64,11 +61,11 @@ html:not([data-theme-mode]),
   --background-system-light-action-primary: var(--white-00);
   --background-system-light-action-secondry: var(--white-100);
   --background-system-light-action-tertiary: var(--white-00);
-  --background-system-light-action-hover-primary: var(--black-900);
-  --background-system-light-action-hover-secondary: var(--white-300);
-  --background-system-light-action-hover-tertiary: var(--white-alpha-20);
-  --background-system-light-action-selected-primary: var(--black-700);
-  --background-system-light-action-selected-secondray: var(--black-500);
+  --background-system-light-action-primary-hover: var(--black-900);
+  --background-system-light-action-secondary-hover: var(--white-300);
+  --background-system-light-action-tertiary-hover: var(--white-alpha-20);
+  --background-system-light-action-primary-selected: var(--black-700);
+  --background-system-light-action-secondray-selected: var(--black-500);
   --background-system-light-action-field-primary: var(--black-1000);
   --background-system-light-action-field-hover: var(--blue-sparkle-1000);
   --background-system-light-action-field-desabled: var(--black-500);
@@ -85,11 +82,11 @@ html:not([data-theme-mode]),
   --background-system-dark-action-primary: var(--black-900);
   --background-system-dark-action-secondry: var(--black-800);
   --background-system-dark-action-tertiary: var(--black-700);
-  --background-system-dark-action-hover-primary: var(--purple-1000);
-  --background-system-dark-action-hover-secondary: var(--purple-900);
-  --background-system-dark-action-hover-tertiary: var(--white-alpha-20);
-  --background-system-dark-action-selected-primary: var(--black-700);
-  --background-system-dark-action-selected-secondray: var(--black-500);
+  --background-system-dark-action-primary-hover: var(--purple-1000);
+  --background-system-dark-action-secondary-hover: var(--purple-900);
+  --background-system-dark-action-tertiary-hover: var(--white-alpha-20);
+  --background-system-dark-action-primary-selected: var(--black-700);
+  --background-system-dark-action-secondray-selected: var(--black-500);
   --background-system-dark-action-field-primary: var(--black-1000);
   --background-system-dark-action-field-hover: var(--blue-sparkle-1000);
   --background-system-dark-action-field-desabled: var(--black-500);
@@ -144,17 +141,17 @@ html:not([data-theme-mode]),
   --background-presentation-default-action-selected: var(--black-alpha-5);
   --background-presentation-default-action-disabled: var(--white-200);
   --background-presentation-default-action-borderstyle: var(--black-alpha-5);
-  --background-presentation-default-action-hovercontstyle: var(
+  --background-presentation-default-action-contstyle-hover: var(
     --black-alpha-10
   );
   --background-presentation-default-action-link-primary: var(--black-alpha-5);
   --background-presentation-default-action-link-hover: var(--black-alpha-10);
   --background-presentation-default-action-dropdown-primary: var(--white-00);
-  --background-presentation-default-tab-default-sidebar: var(--white-00);
-  --background-presentation-default-tab-hover-topbar: var(--black-alpha-15);
-  --background-presentation-default-tab-hover-sidebar: var(--white-50);
-  --background-presentation-default-tab-selected-topbar: var(--black-1000);
-  --background-presentation-default-tab-selected-sidebar: var(--black-1000);
+  --background-presentation-default-tab-sidebar-primary: var(--white-00);
+  --background-presentation-default-tab-topbar-hover: var(--black-alpha-15);
+  --background-presentation-default-tab-sidebar-hover: var(--white-50);
+  --background-presentation-default-tab-topbar-selected: var(--black-1000);
+  --background-presentation-default-tab-sidebar-selected: var(--black-1000);
   --background-presentation-default-badge-green: var(--green-cyan-100);
   --background-presentation-default-badge-green-light: var(--cool-green-100);
   --background-presentation-default-badge-cocktail-green: var(
@@ -217,11 +214,11 @@ html:not([data-theme-mode]),
   --background-presentation-light-table-acton-hover: var(
     --blue-sparkle-alpha-10
   );
-  --background-presentation-light-tab-default-sidebar: var(--white-00);
-  --background-presentation-light-tab-hover-topbar: var(--black-alpha-15);
-  --background-presentation-light-tab-hover-sidebar: var(--white-50);
-  --background-presentation-light-tab-selected-topbar: var(--black-1000);
-  --background-presentation-light-tab-selected-sidebar: var(--black-1000);
+  --background-presentation-light-tab-sidebar-primary: var(--white-00);
+  --background-presentation-light-tab-topbar-hover: var(--black-alpha-15);
+  --background-presentation-light-tab-sidebar-hover: var(--white-50);
+  --background-presentation-light-tab-topbar-selected: var(--black-1000);
+  --background-presentation-light-tab-sidebar-selected: var(--black-1000);
   --background-presentation-light-badge-green: var(--green-cyan-100);
   --background-presentation-light-badge-green-light: var(--cool-green-100);
   --background-presentation-light-badge-cocktail-green: var(
@@ -274,7 +271,7 @@ html:not([data-theme-mode]),
   --background-presentation-dark-action-selected: var(--white-alpha-5);
   --background-presentation-dark-action-disabled: var(--black-500);
   --background-presentation-dark-action-borderstyle: var(--white-alpha-5);
-  --background-presentation-dark-action-hovercontstyle: var(--white-alpha-10);
+  --background-presentation-dark-action-contstyle-hover: var(--white-alpha-10);
   --background-presentation-dark-action-link-primary: var(--white-alpha-10);
   --background-presentation-dark-action-link-hover: var(--white-alpha-15);
   --background-presentation-dark-action-dropdown-primary: var(--black-900);
@@ -282,12 +279,12 @@ html:not([data-theme-mode]),
   --background-presentation-dark-table-row-selected: var(--violet-1000);
   --background-presentation-dark-table-row-disabled: var(--white-alpha-5);
   --background-presentation-dark-table-acton-hover: var(--blue-sparkle-1000);
-  --background-presentation-dark-tab-default-topbar: var(--white-alpha-075);
-  --background-presentation-dark-tab-default-sidebar: var(--white-alpha-075);
-  --background-presentation-dark-tab-hover-topbar: var(--white-alpha-15);
-  --background-presentation-dark-tab-hover-sidebar: var(--white-alpha-15);
-  --background-presentation-dark-tab-selected-topbar: var(--white-alpha-30);
-  --background-presentation-dark-tab-selected-sidebar: var(--white-alpha-30);
+  --background-presentation-dark-tab-topbar-primary: var(--white-alpha-075);
+  --background-presentation-dark-tab-sidebar-primary: var(--white-alpha-075);
+  --background-presentation-dark-tab-topbar-hover: var(--white-alpha-15);
+  --background-presentation-dark-tab-sidebar-hover: var(--white-alpha-15);
+  --background-presentation-dark-tab-topbar-selected: var(--white-alpha-30);
+  --background-presentation-dark-tab-sidebar-selected: var(--white-alpha-30);
   --background-presentation-dark-badge-green: var(--green-cyan-alpha-20);
   --background-presentation-dark-badge-green-light: var(--cool-green-alpha-10);
   --background-presentation-dark-badge-cocktail-green: var(
@@ -311,8 +308,8 @@ html:not([data-theme-mode]),
   --content-system-default-global-secondary: var(--white-700);
   --content-system-default-global-disabled: var(--black-100);
   --content-system-default-global-label-purple: var(--purple-500);
-  --content-system-default-action-hover-primary: var(--white-25);
-  --content-system-default-action-hover-secondary: var(--purple-500);
+  --content-system-default-action-primary-hover: var(--white-25);
+  --content-system-default-action-secondary-hover: var(--purple-500);
   --content-system-default-badge-purple: var(--purple-600);
   --content-system-default-badge-red: var(--medium-red-600);
   --content-presentation-default-global-primary: var(--black-1000);
@@ -333,11 +330,11 @@ html:not([data-theme-mode]),
   --content-presentation-default-action-light-primary: var(--black-1000);
   --content-presentation-default-action-light-secondary: var(--black-100);
   --content-presentation-default-action-hover: var(--white-25);
-  --content-presentation-default-action-hover-information: var(
+  --content-presentation-default-action-information-hover: var(
     --blue-sparkle-700
   );
-  --content-presentation-default-action-hover-negative: var(--medium-red-600);
-  --content-presentation-default-action-hover-success: var(--cool-green-300);
+  --content-presentation-default-action-negative-hover: var(--medium-red-600);
+  --content-presentation-default-action-success-hover: var(--cool-green-300);
   --content-presentation-default-action-link: var(--blue-sparkle-700);
   --content-presentation-default-tab-action-hover: var(--black-1000);
   --content-presentation-default-tab-action-selected: var(--white-00);
@@ -365,8 +362,8 @@ html:not([data-theme-mode]),
   --content-system-light-global-disabled: var(--white-700);
   --content-system-light-global-label-purple: var(--purple-500);
   --content-system-light-global-label-red: var(--medium-red-500);
-  --content-system-light-action-hover-primary: var(--white-00);
-  --content-system-light-action-hover-secondary: var(--purple-500);
+  --content-system-light-action-primary-hover: var(--white-00);
+  --content-system-light-action-secondary-hover: var(--purple-500);
   --content-system-light-badge-purple: var(--purple-600);
   --content-system-light-badge-red: var(--medium-red-600);
   --content-system-dark-global-primary: var(--white-200);
@@ -374,8 +371,8 @@ html:not([data-theme-mode]),
   --content-system-dark-global-disabled: var(--black-100);
   --content-system-dark-global-label-purple: var(--purple-500);
   --content-system-dark-global-label-red: var(--medium-red-500);
-  --content-system-dark-action-hover-primary: var(--white-25);
-  --content-system-dark-action-hover-secondary: var(--purple-500);
+  --content-system-dark-action-primary-hover: var(--white-25);
+  --content-system-dark-action-secondary-hover: var(--purple-500);
   --content-system-dark-badge-purple: var(--purple-600);
   --content-system-dark-badge-red: var(--medium-red-600);
   --content-presentation-default-cur-color4: var(--macaroon-rose-600);
@@ -399,11 +396,11 @@ html:not([data-theme-mode]),
   --content-presentation-light-action-light-primary: var(--black-1000);
   --content-presentation-light-action-light-secondary: var(--black-100);
   --content-presentation-light-action-hover: var(--white-25);
-  --content-presentation-light-action-hover-information: var(
+  --content-presentation-light-action-information-hover: var(
     --blue-sparkle-700
   );
-  --content-presentation-light-action-hover-negative: var(--medium-red-600);
-  --content-presentation-light-action-hover-success: var(--cool-green-300);
+  --content-presentation-light-action-negative-hover: var(--medium-red-600);
+  --content-presentation-light-action-success-hover: var(--cool-green-300);
   --content-presentation-light-action-link: var(--blue-sparkle-700);
   --content-presentation-light-tab-action-hover: var(--black-1000);
   --content-presentation-light-tab-action-selected: var(--white-00);
@@ -442,9 +439,9 @@ html:not([data-theme-mode]),
   --content-presentation-dark-action-light-primary: var(--white-200);
   --content-presentation-dark-action-light-secondary: var(--white-700);
   --content-presentation-dark-action-hover: var(--white-00);
-  --content-presentation-dark-action-hover-information: var(--blue-sparkle-400);
-  --content-presentation-dark-action-hover-negative: var(--medium-red-400);
-  --content-presentation-dark-action-hover-success: var(--cool-green-400);
+  --content-presentation-dark-action-information-hover: var(--blue-sparkle-400);
+  --content-presentation-dark-action-negative-hover: var(--medium-red-400);
+  --content-presentation-dark-action-success-hover: var(--cool-green-400);
   --content-presentation-dark-action-link: var(--blue-sparkle-400);
   --content-presentation-dark-tab-action-hover: var(--white-25);
   --content-presentation-dark-tab-action-selected: var(--white-00);
@@ -472,8 +469,8 @@ html:not([data-theme-mode]),
   --border-system-default-global-primary: var(--black-600);
   --border-system-default-global-secondary: var(--black-400);
   --border-system-default-global-sidebar-list-border: var(--black-600);
-  --border-system-default-action-hover-primary: var(--purple-600);
-  --border-system-default-action-hover-secondary: var(--purple-600);
+  --border-system-default-action-primary-hover: var(--purple-600);
+  --border-system-default-action-secondary-hover: var(--purple-600);
   --border-system-default-badge-purple: var(--purple-900);
   --border-system-default-badge-red: var(--medium-red-900);
   --border-presentation-default-global-primary: var(--white-300);
@@ -486,8 +483,8 @@ html:not([data-theme-mode]),
   --border-presentation-default-action-hover: var(--black-1000);
   --border-presentation-default-action-borderstyle: var(--black-alpha-15);
   --border-presentation-default-action-checkbox-primary: var(--white-700);
-  --border-presentation-default-tab-default-sidebar: var(--white-300);
-  --border-presentation-default-tab-hover-topbar: var(--black-alpha-025);
+  --border-presentation-default-tab-sidebar-primary: var(--white-300);
+  --border-presentation-default-tab-topbar-hover: var(--black-alpha-025);
   --border-presentation-default-badge-green: var(--green-cyan-300);
   --border-presentation-default-badge-green-light: var(--cool-green-300);
   --border-presentation-default-badge-cocktail-green: var(--cocktail-green-400);
@@ -505,16 +502,16 @@ html:not([data-theme-mode]),
   --border-system-light-global-primary: var(--black-600);
   --border-system-light-global-secondary: var(--black-400);
   --border-system-light-global-sidebar-list-border: var(--white-500);
-  --border-system-light-action-hover-primary: var(--white-500);
-  --border-system-light-action-hover-secondary: var(--purple-600);
+  --border-system-light-action-primary-hover: var(--white-500);
+  --border-system-light-action-secondary-hover: var(--purple-600);
   --border-system-light-action-field-hover-selected: var(--blue-sparkle-600);
   --border-system-light-badge-purple: var(--purple-900);
   --border-system-light-badge-red: var(--medium-red-900);
   --border-system-dark-global-primary: var(--black-600);
   --border-system-dark-global-secondary: var(--black-400);
   --border-system-dark-global-sidebar-list-border: var(--black-600);
-  --border-system-dark-action-hover-primary: var(--purple-600);
-  --border-system-dark-action-hover-secondary: var(--purple-600);
+  --border-system-dark-action-primary-hover: var(--purple-600);
+  --border-system-dark-action-secondary-hover: var(--purple-600);
   --border-system-dark-action-field-hover-selected: var(--blue-sparkle-600);
   --border-system-dark-badge-purple: var(--purple-900);
   --border-system-dark-badge-red: var(--medium-red-900);
@@ -535,8 +532,8 @@ html:not([data-theme-mode]),
   --border-presentation-light-action-hover: var(--black-1000);
   --border-presentation-light-action-borderstyle: var(--black-alpha-15);
   --border-presentation-light-action-checkbox-primary: var(--white-700);
-  --border-presentation-light-tab-default-sidebar: var(--white-300);
-  --border-presentation-light-tab-hover-topbar: var(--black-alpha-025);
+  --border-presentation-light-tab-sidebar-primary: var(--white-300);
+  --border-presentation-light-tab-topbar-hover: var(--black-alpha-025);
   --border-presentation-light-badge-green: var(--green-cyan-300);
   --border-presentation-light-badge-green-light: var(--cool-green-300);
   --border-presentation-light-badge-cocktail-green: var(--cocktail-green-400);
@@ -567,8 +564,8 @@ html:not([data-theme-mode]),
   --border-presentation-dark-action-hover: var(--blue-sparkle-600);
   --border-presentation-dark-action-borderstyle: var(--white-alpha-15);
   --border-presentation-dark-action-checkbox-primary: var(--black-200);
-  --border-presentation-dark-tab-default-sidebar: var(--white-alpha-025);
-  --border-presentation-dark-tab-hover-topbar: var(--white-alpha-025);
+  --border-presentation-dark-tab-sidebar-primary: var(--white-alpha-025);
+  --border-presentation-dark-tab-topbar-hover: var(--white-alpha-025);
   --border-presentation-dark-badge-green: var(--green-cyan-800);
   --border-presentation-dark-badge-green-light: var(--cool-green-800);
   --border-presentation-dark-badge-cocktail-green: var(--cocktail-green-800);
@@ -611,4 +608,371 @@ html:not([data-theme-mode]),
   --background-system-dark-conclusion-main-header-grend: var(--black-1000);
   --background-system-dark-conclusion-shadow-1: var(--black-alpha-75);
   --background-system-dark-conclusion-shadow-2: var(--black-alpha-40);
+  --background-presentation-default-cardbutton-blue-primary: var(
+    --blue-sparkle-alpha-15
+  );
+  --background-presentation-default-cardbutton-orange-primary: var(
+    --orange-alpha-15
+  );
+  --background-presentation-default-cardbutton-red-primary: var(
+    --medium-red-alpha-15
+  );
+  --background-presentation-default-cardbutton-green-primary: var(
+    --green-cyan-alpha-15
+  );
+  --background-presentation-default-cardbutton-rose-primary: var(
+    --macaroon-rose-alpha-15
+  );
+  --background-presentation-default-cardbutton-yellow-primary: var(
+    --yellow-alpha-15
+  );
+  --background-presentation-default-cardbutton-gray-primary: var(
+    --black-alpha-075
+  );
+  --background-presentation-default-cardbutton-blue-hover: var(
+    --blue-sparkle-alpha-5
+  );
+  --background-presentation-default-cardbutton-orange-hover: var(
+    --orange-alpha-5
+  );
+  --background-presentation-default-cardbutton-red-hover: var(
+    --medium-red-alpha-5
+  );
+  --background-presentation-default-cardbutton-green-hover: var(
+    --green-cyan-alpha-5
+  );
+  --background-presentation-default-cardbutton-rose-hover: var(
+    --macaroon-rose-alpha-5
+  );
+  --background-presentation-default-cardbutton-yellow-hover: var(
+    --yellow-alpha-5
+  );
+  --background-presentation-default-cardbutton-gray-hover: var(
+    --black-alpha-025
+  );
+  --background-presentation-default-cardbutton-blue-pressed: var(
+    --blue-sparkle-alpha-20
+  );
+  --background-presentation-default-cardbutton-orange-pressed: var(
+    --orange-alpha-20
+  );
+  --background-presentation-default-cardbutton-red-pressed: var(
+    --medium-red-alpha-20
+  );
+  --background-presentation-default-cardbutton-green-pressed: var(
+    --green-cyan-alpha-15
+  );
+  --background-presentation-default-cardbutton-rose-pressed: var(
+    --macaroon-rose-alpha-20
+  );
+  --background-presentation-default-cardbutton-yellow-pressed: var(
+    --yellow-alpha-20
+  );
+  --background-presentation-default-cardbutton-gray-pressed: var(
+    --black-alpha-10
+  );
+  --background-presentation-light-cardbutton-blue-primary: var(
+    --blue-sparkle-alpha-15
+  );
+  --background-presentation-light-cardbutton-orange-primary: var(
+    --orange-alpha-15
+  );
+  --background-presentation-light-cardbutton-red-primary: var(
+    --medium-red-alpha-15
+  );
+  --background-presentation-light-cardbutton-green-primary: var(
+    --green-cyan-alpha-15
+  );
+  --background-presentation-light-cardbutton-rose-primary: var(
+    --macaroon-rose-alpha-15
+  );
+  --background-presentation-light-cardbutton-yellow-primary: var(
+    --yellow-alpha-15
+  );
+  --background-presentation-light-cardbutton-gray-primary: var(
+    --black-alpha-075
+  );
+  --background-presentation-light-cardbutton-blue-hover: var(
+    --blue-sparkle-alpha-5
+  );
+  --background-presentation-light-cardbutton-orange-hover: var(
+    --orange-alpha-5
+  );
+  --background-presentation-light-cardbutton-red-hover: var(
+    --medium-red-alpha-5
+  );
+  --background-presentation-light-cardbutton-green-hover: var(
+    --green-cyan-alpha-5
+  );
+  --background-presentation-light-cardbutton-rose-hover: var(
+    --macaroon-rose-alpha-5
+  );
+  --background-presentation-light-cardbutton-yellow-hover: var(
+    --yellow-alpha-5
+  );
+  --background-presentation-light-cardbutton-gray-hover: var(--black-alpha-025);
+  --background-presentation-light-cardbutton-blue-pressed: var(
+    --blue-sparkle-alpha-20
+  );
+  --background-presentation-light-cardbutton-orange-pressed: var(
+    --orange-alpha-20
+  );
+  --background-presentation-light-cardbutton-red-pressed: var(
+    --medium-red-alpha-20
+  );
+  --background-presentation-light-cardbutton-green-pressed: var(
+    --green-cyan-alpha-15
+  );
+  --background-presentation-light-cardbutton-rose-pressed: var(
+    --macaroon-rose-alpha-20
+  );
+  --background-presentation-light-cardbutton-yellow-pressed: var(
+    --yellow-alpha-20
+  );
+  --background-presentation-light-cardbutton-gray-pressed: var(
+    --black-alpha-10
+  );
+  --background-presentation-dark-cardbutton-blue-primary: var(
+    --blue-sparkle-alpha-20
+  );
+  --background-presentation-dark-cardbutton-orange-primary: var(
+    --orange-alpha-20
+  );
+  --background-presentation-dark-cardbutton-red-primary: var(
+    --medium-red-alpha-20
+  );
+  --background-presentation-dark-cardbutton-green-primary: var(
+    --green-cyan-alpha-20
+  );
+  --background-presentation-dark-cardbutton-rose-primary: var(
+    --macaroon-rose-alpha-20
+  );
+  --background-presentation-dark-cardbutton-yellow-primary: var(
+    --yellow-alpha-15
+  );
+  --background-presentation-dark-cardbutton-gray-primary: var(--white-alpha-10);
+  --background-presentation-dark-cardbutton-blue-hover: var(
+    --blue-sparkle-alpha-10
+  );
+  --background-presentation-dark-cardbutton-orange-hover: var(
+    --orange-alpha-10
+  );
+  --background-presentation-dark-cardbutton-red-hover: var(
+    --medium-red-alpha-10
+  );
+  --background-presentation-dark-cardbutton-green-hover: var(
+    --green-cyan-alpha-10
+  );
+  --background-presentation-dark-cardbutton-rose-hover: var(
+    --macaroon-rose-alpha-10
+  );
+  --background-presentation-dark-cardbutton-yellow-hover: var(
+    --yellow-alpha-10
+  );
+  --background-presentation-dark-cardbutton-gray-hover: var(--white-alpha-5);
+  --background-presentation-dark-cardbutton-blue-pressed: var(
+    --blue-sparkle-alpha-40
+  );
+  --background-presentation-dark-cardbutton-orange-pressed: var(
+    --orange-alpha-40
+  );
+  --background-presentation-dark-cardbutton-red-pressed: var(
+    --medium-red-alpha-40
+  );
+  --background-presentation-dark-cardbutton-green-pressed: var(
+    --green-cyan-alpha-40
+  );
+  --background-presentation-dark-cardbutton-rose-pressed: var(
+    --macaroon-rose-alpha-40
+  );
+  --background-presentation-dark-cardbutton-yellow-pressed: var(
+    --yellow-alpha-30
+  );
+  --background-presentation-dark-cardbutton-gray-pressed: var(--white-alpha-30);
+  --content-presentation-default-cardbutton-blue-header: var(
+    --blue-sparkle-1000
+  );
+  --content-presentation-default-cardbutton-blue-subtext: var(
+    --blue-sparkle-800
+  );
+  --content-presentation-default-cardbutton-blue-icon: var(--blue-sparkle-600);
+  --content-presentation-default-cardbutton-orange-icon: var(--red-orange-600);
+  --content-presentation-default-cardbutton-orange-header: var(
+    --red-orange-1000
+  );
+  --content-presentation-default-cardbutton-orange-subtext: var(
+    --red-orange-800
+  );
+  --content-presentation-default-cardbutton-red-icon: var(--medium-red-600);
+  --content-presentation-default-cardbutton-red-header: var(--medium-red-1000);
+  --content-presentation-default-cardbutton-red-subtext: var(--medium-red-800);
+  --content-presentation-default-cardbutton-green-icon: var(--green-cyan-600);
+  --content-presentation-default-cardbutton-green-header: var(
+    --green-cyan-1000
+  );
+  --content-presentation-default-cardbutton-green-subtext: var(
+    --green-cyan-800
+  );
+  --content-presentation-default-cardbutton-rose-icon: var(--macaroon-rose-600);
+  --content-presentation-default-cardbutton-rose-header: var(
+    --macaroon-rose-1000
+  );
+  --content-presentation-default-cardbutton-rose-subtext: var(
+    --macaroon-rose-800
+  );
+  --content-presentation-default-cardbutton-yellow-icon: var(--yellow-600);
+  --content-presentation-default-cardbutton-yellow-header: var(--yellow-1000);
+  --content-presentation-default-cardbutton-yellow-subtext: var(--yellow-900);
+  --content-presentation-default-cardbutton-gray-icon: var(--black-500);
+  --content-presentation-default-cardbutton-gray-header: var(--black-950);
+  --content-presentation-default-cardbutton-gray-subtext: var(--black-400);
+  --content-presentation-light-cardbutton-blue-icon: var(--blue-sparkle-600);
+  --content-presentation-light-cardbutton-blue-header: var(--blue-sparkle-1000);
+  --content-presentation-light-cardbutton-blue-subtext: var(--blue-sparkle-800);
+  --content-presentation-light-cardbutton-orange-icon: var(--red-orange-600);
+  --content-presentation-light-cardbutton-orange-header: var(--red-orange-1000);
+  --content-presentation-light-cardbutton-orange-subtext: var(--red-orange-800);
+  --content-presentation-light-cardbutton-red-icon: var(--medium-red-600);
+  --content-presentation-light-cardbutton-red-header: var(--medium-red-1000);
+  --content-presentation-light-cardbutton-red-subtext: var(--medium-red-800);
+  --content-presentation-light-cardbutton-green-icon: var(--green-cyan-600);
+  --content-presentation-light-cardbutton-green-header: var(--green-cyan-1000);
+  --content-presentation-light-cardbutton-green-subtext: var(--green-cyan-800);
+  --content-presentation-light-cardbutton-rose-icon: var(--macaroon-rose-600);
+  --content-presentation-light-cardbutton-rose-header: var(
+    --macaroon-rose-1000
+  );
+  --content-presentation-light-cardbutton-rose-subtext: var(
+    --macaroon-rose-800
+  );
+  --content-presentation-light-cardbutton-yellow-icon: var(--yellow-600);
+  --content-presentation-light-cardbutton-yellow-header: var(--yellow-1000);
+  --content-presentation-light-cardbutton-yellow-subtext: var(--yellow-900);
+  --content-presentation-light-cardbutton-gray-icon: var(--black-500);
+  --content-presentation-light-cardbutton-gray-header: var(--black-950);
+  --content-presentation-light-cardbutton-gray-subtext: var(--black-400);
+  --content-presentation-dark-cardbutton-blue-icon: var(--blue-sparkle-500);
+  --content-presentation-dark-cardbutton-blue-header: var(--blue-sparkle-100);
+  --content-presentation-dark-cardbutton-blue-subtext: var(--blue-sparkle-300);
+  --content-presentation-dark-cardbutton-orange-icon: var(--red-orange-500);
+  --content-presentation-dark-cardbutton-orange-header: var(--red-orange-100);
+  --content-presentation-dark-cardbutton-orange-subtext: var(--red-orange-200);
+  --content-presentation-dark-cardbutton-red-icon: var(--medium-red-500);
+  --content-presentation-dark-cardbutton-red-header: var(--medium-red-100);
+  --content-presentation-dark-cardbutton-red-subtext: var(--medium-red-200);
+  --content-presentation-dark-cardbutton-green-icon: var(--green-cyan-500);
+  --content-presentation-dark-cardbutton-green-header: var(--green-cyan-100);
+  --content-presentation-dark-cardbutton-green-subtext: var(--green-cyan-200);
+  --content-presentation-dark-cardbutton-rose-icon: var(--macaroon-rose-500);
+  --content-presentation-dark-cardbutton-rose-header: var(--macaroon-rose-100);
+  --content-presentation-dark-cardbutton-rose-subtext: var(--macaroon-rose-200);
+  --content-presentation-dark-cardbutton-yellow-icon: var(--yellow-500);
+  --content-presentation-dark-cardbutton-yellow-header: var(--yellow-50);
+  --content-presentation-dark-cardbutton-yellow-subtext: var(--yellow-100);
+  --content-presentation-dark-cardbutton-gray-icon: var(--white-500);
+  --content-presentation-dark-cardbutton-gray-header: var(--white-25);
+  --content-presentation-dark-cardbutton-gray-subtext: var(--white-600);
+  --border-presentation-default-cardbutton-blue-hover: var(--blue-sparkle-700);
+  --border-presentation-default-cardbutton-orange-hover: var(--orange-700);
+  --border-presentation-default-cardbutton-red-hover: var(--medium-red-700);
+  --border-presentation-default-cardbutton-green-hover: var(--green-cyan-700);
+  --border-presentation-default-cardbutton-rose-hover: var(--macaroon-rose-700);
+  --border-presentation-default-cardbutton-yellow-hover: var(--yellow-800);
+  --border-presentation-default-cardbutton-gray-hover: var(--black-200);
+  --border-presentation-light-cardbutton-blue-hover: var(--blue-sparkle-700);
+  --border-presentation-light-cardbutton-orange-hover: var(--orange-700);
+  --border-presentation-light-cardbutton-red-hover: var(--medium-red-700);
+  --border-presentation-light-cardbutton-green-hover: var(--green-cyan-700);
+  --border-presentation-light-cardbutton-rose-hover: var(--macaroon-rose-700);
+  --border-presentation-light-cardbutton-yellow-hover: var(--yellow-800);
+  --border-presentation-light-cardbutton-gray-hover: var(--black-200);
+  --border-presentation-dark-cardbutton-blue-hover: var(--blue-sparkle-700);
+  --border-presentation-dark-cardbutton-orange-hover: var(--orange-700);
+  --border-presentation-dark-cardbutton-red-hover: var(--medium-red-700);
+  --border-presentation-dark-cardbutton-green-hover: var(--green-cyan-700);
+  --border-presentation-dark-cardbutton-rose-hover: var(--macaroon-rose-700);
+  --border-presentation-dark-cardbutton-yellow-hover: var(--yellow-700);
+  --border-presentation-dark-cardbutton-gray-hover: var(--black-200);
+  --background-presentation-default-cardbutton-purple-primary: var(
+    --purple-alpha-15
+  );
+  --background-presentation-default-cardbutton-ocean-primary: var(
+    --ocean-blue-alpha-15
+  );
+  --background-presentation-default-cardbutton-purple-hover: var(
+    --purple-alpha-5
+  );
+  --background-presentation-default-cardbutton-ocean-hover: var(
+    --ocean-blue-alpha-5
+  );
+  --background-presentation-default-cardbutton-purple-pressed: var(
+    --purple-alpha-20
+  );
+  --background-presentation-default-cardbutton-ocean-pressed: var(
+    --ocean-blue-alpha-20
+  );
+  --background-presentation-light-cardbutton-purple-hover: var(
+    --purple-alpha-5
+  );
+  --background-presentation-light-cardbutton-ocean-hover: var(
+    --ocean-blue-alpha-5
+  );
+  --background-presentation-light-cardbutton-purple-pressed: var(
+    --purple-alpha-20
+  );
+  --background-presentation-light-cardbutton-ocean-pressed: var(
+    --ocean-blue-alpha-20
+  );
+  --background-presentation-light-cardbutton-purple-primary: var(
+    --purple-alpha-15
+  );
+  --background-presentation-light-cardbutton-ocean-primary: var(
+    --ocean-blue-alpha-15
+  );
+  --background-presentation-dark-cardbutton-purple-hover: var(
+    --purple-alpha-10
+  );
+  --background-presentation-dark-cardbutton-ocean-hover: var(
+    --ocean-blue-alpha-10
+  );
+  --background-presentation-dark-cardbutton-purple-pressed: var(
+    --purple-alpha-40
+  );
+  --background-presentation-dark-cardbutton-ocean-pressed: var(
+    --ocean-blue-alpha-40
+  );
+  --background-presentation-dark-cardbutton-purple-primary: var(
+    --purple-alpha-20
+  );
+  --background-presentation-dark-cardbutton-ocean-primary: var(
+    --ocean-blue-alpha-20
+  );
+  --content-presentation-default-cardbutton-purple-icon: var(--violet-600);
+  --content-presentation-default-cardbutton-purple-header: var(--violet-1000);
+  --content-presentation-default-cardbutton-purple-subtext: var(--violet-800);
+  --content-presentation-default-cardbutton-ocean-icon: var(--ocean-blue-600);
+  --content-presentation-default-cardbutton-ocean-header: var(
+    --ocean-blue-1000
+  );
+  --content-presentation-default-cardbutton-ocean-subtext: var(
+    --ocean-blue-900
+  );
+  --content-presentation-light-cardbutton-purple-icon: var(--violet-600);
+  --content-presentation-light-cardbutton-purple-header: var(--violet-1000);
+  --content-presentation-light-cardbutton-purple-subtext: var(--violet-800);
+  --content-presentation-light-cardbutton-ocean-icon: var(--ocean-blue-600);
+  --content-presentation-light-cardbutton-ocean-header: var(--ocean-blue-1000);
+  --content-presentation-light-cardbutton-ocean-subtext: var(--ocean-blue-900);
+  --content-presentation-dark-cardbutton-purple-icon: var(--violet-500);
+  --content-presentation-dark-cardbutton-purple-header: var(--violet-100);
+  --content-presentation-dark-cardbutton-purple-subtext: var(--violet-200);
+  --content-presentation-dark-cardbutton-ocean-icon: var(--ocean-blue-500);
+  --content-presentation-dark-cardbutton-ocean-header: var(--ocean-blue-200);
+  --content-presentation-dark-cardbutton-ocean-subtext: var(--ocean-blue-300);
+  --border-presentation-default-cardbutton-purple-hover: var(--violet-700);
+  --border-presentation-default-cardbutton-ocean-hover: var(--ocean-blue-700);
+  --border-presentation-light-cardbutton-purple-hover: var(--violet-700);
+  --border-presentation-light-cardbutton-ocean-hover: var(--ocean-blue-700);
+  --border-presentation-dark-cardbutton-purple-hover: var(--violet-700);
+  --border-presentation-dark-cardbutton-ocean-hover: var(--ocean-blue-700);
 }

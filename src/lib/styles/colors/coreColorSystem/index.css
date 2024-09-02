@@ -1,4 +1,4 @@
-/* Core v1.2 Variables  */
+/* Core v1.3 Variables  */
 :root {
   --purple-100: #f5eeffff;
   --purple-200: #ebdcffff;
@@ -263,4 +263,43 @@
   --dark-navy-900: #00101cff;
   --dark-navy-1000: #000000ff;
   --dark-navy-950: #00070dff;
+  --macaroon-rose-1000: #2e0f19ff;
+  --macaroon-rose-alpha-025: #f5538508;
+  --macaroon-rose-alpha-5: #f553850d;
+  --macaroon-rose-alpha-075: #f5538514;
+  --macaroon-rose-alpha-10: #f553851a;
+  --macaroon-rose-alpha-15: #f5538526;
+  --macaroon-rose-alpha-20: #f5538533;
+  --macaroon-rose-alpha-30: #f553854d;
+  --macaroon-rose-alpha-40: #f5538566;
+  --macaroon-rose-alpha-50: #f5538580;
+  --macaroon-rose-alpha-75: #f55385bf;
+  --yellow-alpha-025: #ffc70008;
+  --yellow-alpha-5: #ffc7000d;
+  --yellow-alpha-075: #ffc70014;
+  --orange-alpha-025: #c7530108;
+  --orange-alpha-5: #c753010d;
+  --orange-alpha-075: #c7530114;
+  --blue-sparkle-alpha-025: #0075ff08;
+  --blue-sparkle-alpha-5: #0075ff0d;
+  --blue-sparkle-alpha-075: #0075ff14;
+  --medium-red-alpha-025: #b60a2608;
+  --medium-red-alpha-5: #b60a260d;
+  --medium-red-alpha-075: #b60a2614;
+  --cool-green-alpha-025: #0ac71308;
+  --cool-green-alpha-5: #0ac7130d;
+  --cool-green-alpha-075: #0ac71314;
+  --green-cyan-alpha-025: #05966908;
+  --green-cyan-alpha-5: #0596690d;
+  --green-cyan-alpha-075: #05966914;
+  --ocean-blue-alpha-025: #00b4d808;
+  --ocean-blue-alpha-5: #00b4d80d;
+  --ocean-blue-alpha-075: #00b4d814;
+  --ocean-blue-alpha-10: #00b4d81a;
+  --ocean-blue-alpha-15: #00b4d826;
+  --ocean-blue-alpha-20: #00b4d833;
+  --ocean-blue-alpha-30: #00b4d84d;
+  --ocean-blue-alpha-40: #00b4d866;
+  --ocean-blue-alpha-50: #00b4d880;
+  --ocean-blue-alpha-75: #00b4d8bf;
 }

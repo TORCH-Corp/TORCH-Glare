@@ -1,9 +1,7 @@
-/* Aliases  */
+/* Maping.Default v2.1 */
 html:not([data-theme]),
 [data-theme="default"],
 [data-theme="null"] {
-
-  /* Maping.Default v2.0 */
   --border-presentation-action-disabled: var(
     --border-presentation-default-action-disabled
   );
@@ -82,29 +80,29 @@ html:not([data-theme]),
   --background-system-state-negative: var(
     --background-system-default-state-negative
   );
-  --border-system-action-hover-primary: var(
-    --border-system-default-action-hover-primary
+  --border-system-action-primary-hover: var(
+    --border-system-default-action-primary-hover
   );
-  --background-system-action-hover-primary: var(
-    --background-system-default-action-hover-primary
+  --background-system-action-primary-hover: var(
+    --background-system-default-action-primary-hover
   );
-  --content-system-action-hover-primary: var(
-    --content-system-default-action-hover-primary
+  --content-system-action-primary-hover: var(
+    --content-system-default-action-primary-hover
   );
-  --background-system-action-selected-primary: var(
-    --background-system-default-action-selected-primary
+  --background-system-action-primary-selected: var(
+    --background-system-default-action-primary-selected
   );
-  --background-system-action-selected-secondray: var(
-    --background-system-default-action-selected-secondray
+  --background-system-action-secondray-selected: var(
+    --background-system-default-action-secondray-selected
   );
-  --background-system-action-hover-tertiary: var(
-    --background-system-default-action-hover-tertiary
+  --background-system-action-tertiary-hover: var(
+    --background-system-default-action-tertiary-hover
   );
-  --content-system-action-hover-secondary: var(
-    --content-system-default-action-hover-secondary
+  --content-system-action-secondary-hover: var(
+    --content-system-default-action-secondary-hover
   );
-  --border-system-action-hover-secondary: var(
-    --border-system-default-action-hover-secondary
+  --border-system-action-secondary-hover: var(
+    --border-system-default-action-secondary-hover
   );
   --border-system-global-sidebar-list-border: var(
     --border-system-default-global-sidebar-list-border
@@ -151,14 +149,14 @@ html:not([data-theme]),
   --border-presentation-table-selected: var(
     --border-presentation-default-table-selected
   );
-  --content-presentation-action-hover-information: var(
-    --content-presentation-default-action-hover-information
+  --content-presentation-action-information-hover: var(
+    --content-presentation-default-action-information-hover
   );
-  --content-presentation-action-hover-negative: var(
-    --content-presentation-default-action-hover-negative
+  --content-presentation-action-negative-hover: var(
+    --content-presentation-default-action-negative-hover
   );
-  --background-presentation-action-hovercontstyle: var(
-    --background-presentation-default-action-hovercontstyle
+  --background-presentation-action-contstyle-hover: var(
+    --background-presentation-default-action-contstyle-hover
   );
   --background-presentation-table-row-hover: var(
     --background-presentation-default-table-row-hover
@@ -184,11 +182,11 @@ html:not([data-theme]),
   --border-presentation-table-header: var(
     --border-presentation-default-table-header
   );
-  --background-presentation-tab-hover-topbar: var(
-    --background-presentation-default-tab-hover-topbar
+  --background-presentation-tab-topbar-hover: var(
+    --background-presentation-default-tab-topbar-hover
   );
-  --background-presentation-tab-selected-topbar: var(
-    --background-presentation-default-tab-selected-topbar
+  --background-presentation-tab-topbar-selected: var(
+    --background-presentation-default-tab-topbar-selected
   );
   --content-presentation-tab-action-hover: var(
     --content-presentation-default-tab-action-hover
@@ -196,8 +194,8 @@ html:not([data-theme]),
   --content-presentation-tab-action-selected: var(
     --content-presentation-default-tab-action-selected
   );
-  --border-presentation-tab-hover-topbar: var(
-    --border-presentation-default-tab-hover-topbar
+  --border-presentation-tab-topbar-hover: var(
+    --border-presentation-default-tab-topbar-hover
   );
   --background-presentation-badge-green: var(
     --background-presentation-default-badge-green
@@ -317,11 +315,11 @@ html:not([data-theme]),
   --background-system-body-tertiary: var(
     --background-system-default-body-tertiary
   );
-  --background-system-action-hover-secondary: var(
-    --background-system-default-action-hover-secondary
+  --background-system-action-secondary-hover: var(
+    --background-system-default-action-secondary-hover
   );
-  --background-presentation-tab-default-topbar: var(
-    --background-presentation-default-tab-default-topbar
+  --background-presentation-tab-topbar-primary: var(
+    --background-presentation-default-tab-topbar-primary
   );
   --background-system-action-field-desabled: var(
     --background-system-default-action-field-desabled
@@ -371,8 +369,8 @@ html:not([data-theme]),
   --background-presentation-state-information-secondary: var(
     --background-presentation-default-state-information-secondary
   );
-  --content-presentation-action-hover-success: var(
-    --content-presentation-default-action-hover-success
+  --content-presentation-action-success-hover: var(
+    --content-presentation-default-action-success-hover
   );
   --background-system-badge-purple: var(
     --background-system-default-badge-purple
@@ -418,17 +416,17 @@ html:not([data-theme]),
   --background-presentation-form-tabs: var(
     --background-presentation-default-form-tabs
   );
-  --background-presentation-tab-default-sidebar: var(
-    --background-presentation-default-tab-default-sidebar
+  --background-presentation-tab-sidebar-primary: var(
+    --background-presentation-default-tab-sidebar-primary
   );
-  --background-presentation-tab-hover-sidebar: var(
-    --background-presentation-default-tab-hover-sidebar
+  --background-presentation-tab-sidebar-hover: var(
+    --background-presentation-default-tab-sidebar-hover
   );
-  --background-presentation-tab-selected-sidebar: var(
-    --background-presentation-default-tab-selected-sidebar
+  --background-presentation-tab-sidebar-selected: var(
+    --background-presentation-default-tab-sidebar-selected
   );
-  --border-presentation-tab-default-sidebar: var(
-    --border-presentation-default-tab-default-sidebar
+  --border-presentation-tab-sidebar-primary: var(
+    --border-presentation-default-tab-sidebar-primary
   );
   --content-presentation-stepper-selected: var(
     --content-presentation-default-stepper-selected
@@ -528,5 +526,194 @@ html:not([data-theme]),
   );
   --background-presentation-form-searchbar-hovermusk: var(
     --background-presentation-default-form-searchbar-hovermusk
+  );
+  --background-presentation-cardbutton-blue-primary: var(
+    --background-presentation-default-cardbutton-blue-primary
+  );
+  --background-presentation-cardbutton-orange-primary: var(
+    --background-presentation-default-cardbutton-orange-primary
+  );
+  --background-presentation-cardbutton-red-primary: var(
+    --background-presentation-default-cardbutton-red-primary
+  );
+  --background-presentation-cardbutton-green-primary: var(
+    --background-presentation-default-cardbutton-green-primary
+  );
+  --background-presentation-cardbutton-rose-primary: var(
+    --background-presentation-default-cardbutton-rose-primary
+  );
+  --background-presentation-cardbutton-yellow-primary: var(
+    --background-presentation-default-cardbutton-yellow-primary
+  );
+  --background-presentation-cardbutton-gray-primary: var(
+    --background-presentation-default-cardbutton-gray-primary
+  );
+  --background-presentation-cardbutton-blue-hover: var(
+    --background-presentation-default-cardbutton-blue-hover
+  );
+  --background-presentation-cardbutton-orange-hover: var(
+    --background-presentation-default-cardbutton-orange-hover
+  );
+  --background-presentation-cardbutton-red-hover: var(
+    --background-presentation-default-cardbutton-red-hover
+  );
+  --background-presentation-cardbutton-green-hover: var(
+    --background-presentation-default-cardbutton-green-hover
+  );
+  --background-presentation-cardbutton-rose-hover: var(
+    --background-presentation-default-cardbutton-rose-hover
+  );
+  --background-presentation-cardbutton-yellow-hover: var(
+    --background-presentation-default-cardbutton-yellow-hover
+  );
+  --background-presentation-cardbutton-gray-hover: var(
+    --background-presentation-default-cardbutton-gray-hover
+  );
+  --background-presentation-cardbutton-green-pressed: var(
+    --background-presentation-default-cardbutton-green-pressed
+  );
+  --background-presentation-cardbutton-rose-pressed: var(
+    --background-presentation-default-cardbutton-rose-pressed
+  );
+  --background-presentation-cardbutton-yellow-pressed: var(
+    --background-presentation-default-cardbutton-yellow-pressed
+  );
+  --background-presentation-cardbutton-gray-pressed: var(
+    --background-presentation-default-cardbutton-gray-pressed
+  );
+  --background-presentation-cardbutton-blue-pressed: var(
+    --background-presentation-default-cardbutton-blue-pressed
+  );
+  --background-presentation-cardbutton-orange-pressed: var(
+    --background-presentation-default-cardbutton-orange-pressed
+  );
+  --background-presentation-cardbutton-red-pressed: var(
+    --background-presentation-default-cardbutton-red-pressed
+  );
+  --content-presentation-cardbutton-blue-icon: var(
+    --content-presentation-default-cardbutton-blue-icon
+  );
+  --content-presentation-cardbutton-blue-header: var(
+    --content-presentation-default-cardbutton-blue-header
+  );
+  --content-presentation-cardbutton-blue-subtext: var(
+    --content-presentation-default-cardbutton-blue-subtext
+  );
+  --content-presentation-cardbutton-orange-icon: var(
+    --content-presentation-default-cardbutton-orange-icon
+  );
+  --content-presentation-cardbutton-orange-header: var(
+    --content-presentation-default-cardbutton-orange-header
+  );
+  --content-presentation-cardbutton-orange-subtext: var(
+    --content-presentation-default-cardbutton-orange-subtext
+  );
+  --content-presentation-cardbutton-red-icon: var(
+    --content-presentation-default-cardbutton-red-icon
+  );
+  --content-presentation-cardbutton-red-header: var(
+    --content-presentation-default-cardbutton-red-header
+  );
+  --content-presentation-cardbutton-red-subtext: var(
+    --content-presentation-default-cardbutton-red-subtext
+  );
+  --content-presentation-cardbutton-green-icon: var(
+    --content-presentation-default-cardbutton-green-icon
+  );
+  --content-presentation-cardbutton-green-header: var(
+    --content-presentation-default-cardbutton-green-header
+  );
+  --content-presentation-cardbutton-green-subtext: var(
+    --content-presentation-default-cardbutton-green-subtext
+  );
+  --content-presentation-cardbutton-rose-header: var(
+    --content-presentation-default-cardbutton-rose-header
+  );
+  --content-presentation-cardbutton-rose-subtext: var(
+    --content-presentation-default-cardbutton-rose-subtext
+  );
+  --content-presentation-cardbutton-rose-icon: var(
+    --content-presentation-default-cardbutton-rose-icon
+  );
+  --content-presentation-cardbutton-yellow-icon: var(
+    --content-presentation-default-cardbutton-yellow-icon
+  );
+  --content-presentation-cardbutton-yellow-header: var(
+    --content-presentation-default-cardbutton-yellow-header
+  );
+  --content-presentation-cardbutton-yellow-subtext: var(
+    --content-presentation-default-cardbutton-yellow-subtext
+  );
+  --content-presentation-cardbutton-gray-icon: var(
+    --content-presentation-default-cardbutton-gray-icon
+  );
+  --content-presentation-cardbutton-gray-header: var(
+    --content-presentation-default-cardbutton-gray-header
+  );
+  --content-presentation-cardbutton-gray-subtext: var(
+    --content-presentation-default-cardbutton-gray-subtext
+  );
+  --border-presentation-cardbutton-blue-hover: var(
+    --border-presentation-default-cardbutton-blue-hover
+  );
+  --border-presentation-cardbutton-orange-hover: var(
+    --border-presentation-default-cardbutton-orange-hover
+  );
+  --border-presentation-cardbutton-red-hover: var(
+    --border-presentation-default-cardbutton-red-hover
+  );
+  --border-presentation-cardbutton-green-hover: var(
+    --border-presentation-default-cardbutton-green-hover
+  );
+  --border-presentation-cardbutton-rose-hover: var(
+    --border-presentation-default-cardbutton-rose-hover
+  );
+  --border-presentation-cardbutton-yellow-hover: var(
+    --border-presentation-default-cardbutton-yellow-hover
+  );
+  --border-presentation-cardbutton-gray-hover: var(
+    --border-presentation-default-cardbutton-gray-hover
+  );
+  --background-presentation-cardbutton-purple-primary: var(
+    --background-presentation-default-cardbutton-purple-primary
+  );
+  --background-presentation-cardbutton-ocean-primary: var(
+    --background-presentation-default-cardbutton-ocean-primary
+  );
+  --background-presentation-cardbutton-purple-hover: var(
+    --background-presentation-default-cardbutton-purple-hover
+  );
+  --background-presentation-cardbutton-ocean-hover: var(
+    --background-presentation-default-cardbutton-ocean-hover
+  );
+  --background-presentation-cardbutton-purple-pressed: var(
+    --background-presentation-default-cardbutton-purple-pressed
+  );
+  --background-presentation-cardbutton-ocean-pressed: var(
+    --background-presentation-default-cardbutton-ocean-pressed
+  );
+  --content-presentation-cardbutton-purple-icon: var(
+    --content-presentation-default-cardbutton-purple-icon
+  );
+  --content-presentation-cardbutton-purple-header: var(
+    --content-presentation-default-cardbutton-purple-header
+  );
+  --content-presentation-cardbutton-purple-subtext: var(
+    --content-presentation-default-cardbutton-purple-subtext
+  );
+  --content-presentation-cardbutton-ocean-icon: var(
+    --content-presentation-default-cardbutton-ocean-icon
+  );
+  --content-presentation-cardbutton-ocean-header: var(
+    --content-presentation-default-cardbutton-ocean-header
+  );
+  --content-presentation-cardbutton-ocean-subtext: var(
+    --content-presentation-default-cardbutton-ocean-subtext
+  );
+  --border-presentation-cardbutton-purple-hover: var(
+    --border-presentation-default-cardbutton-purple-hover
+  );
+  --border-presentation-cardbutton-ocean-hover: var(
+    --border-presentation-default-cardbutton-ocean-hover
   );
 }
