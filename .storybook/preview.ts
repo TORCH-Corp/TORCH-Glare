@@ -1,9 +1,10 @@
 import type { Preview } from "@storybook/react";
-import '../src/lib/styles/colors/index.css';
-import './assets/styles/preview.css';
+import "../src/lib/styles/colors/index.css";
+import "./assets/styles/preview.css";
+
 const preview: Preview = {
   parameters: {
-    layout: 'centered',
+    layout: "centered",
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -11,7 +12,6 @@ const preview: Preview = {
       },
     },
   },
-
 };
 
 export default preview;

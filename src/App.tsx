@@ -1,15 +1,19 @@
-import { Label } from "./lib";
+import { InputField, ThemeProvider } from "./lib";
 
 function App() {
   return (
-    <Label
-      label="Haider"
-      name="Label"
-      component_size="L"
-      component_style="vertical"
-      required_label="Label2"
-      theme="System-Style"
-    />
+    <ThemeProvider>
+      <InputField
+        id="email"
+        name="email"
+        component_size="M"
+        label={"login_inputs.user_name"}
+        placeholder={"login_inputs.email_placeholder"}
+        left_side_icon={<i className="ri-account-circle-fill"></i>}
+        theme="System-Style"
+        className="sign-in-input"
+      />
+    </ThemeProvider>
   );
 }
 

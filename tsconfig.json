@@ -1,15 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "types": [
-      "vitest/globals"
-    ],
+    "types": ["vitest/globals"],
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -25,21 +19,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": [
-        "./src/lib/*"
-      ],
-      "@components/*": [
-        "./src/lib/components/*"
-      ],
-      "@hooks/*": [
-        "./src/lib/hooks/*"
-      ],
-      "@styles/*": [
-        "./src/lib/styles/*"
-      ],
-      "@utils/*": [
-        "./src/lib/utils/*"
-      ]
+      "@/*": ["./src/lib/*"],
+      "@components/*": ["./src/lib/components/*"],
+      "@hooks/*": ["./src/lib/hooks/*"],
+      "@styles/*": ["./src/lib/styles/*"],
+      "@utils/*": ["./src/lib/utils/*"]
     }
   },
   "include": [
