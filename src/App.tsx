@@ -1,8 +1,11 @@
-import { InputField, ThemeProvider } from "./lib";
+import { Button, InputField, useTheme } from "../dist";
 
 function App() {
+
+  const { theme, updateTheme } = useTheme()
   return (
-    <ThemeProvider>
+
+    <div>
       <InputField
         id="email"
         name="email"
@@ -10,10 +13,12 @@ function App() {
         label={"login_inputs.user_name"}
         placeholder={"login_inputs.email_placeholder"}
         left_side_icon={<i className="ri-account-circle-fill"></i>}
-        theme="System-Style"
-        className="sign-in-input"
-      />
-    </ThemeProvider>
+        className="sign-in-input" />
+
+      <Button onClick={() => updateTheme(theme == "dark" ? "light" : "dark")}>
+        {`Change From ${theme}`}
+      </Button>
+    </div>
   );
 }
 
