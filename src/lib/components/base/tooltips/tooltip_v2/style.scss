@@ -1,0 +1,71 @@
+.Tooltip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 10;
+
+    gap: 0;
+
+    p {
+        padding: var(--Space-1, 4px);
+        color: var(--content-system-global-primary);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 147.5%;
+        background: var(--black-600);
+        border-radius: 4px;
+        min-width: 200px;
+        max-width: 300px;
+        width: fit-content;
+        overflow: hidden;
+        word-wrap: break-word;
+        margin: 0 !important;
+    }
+
+    .triangle {
+        transform: rotate(0deg);
+    }
+}
+
+.Tooltip-Right {
+    top: 50%;
+    left: 102%;
+    transform: translate(-0, -50%);
+
+    .triangle {
+        transform: rotate(0deg);
+    }
+}
+
+.Tooltip-Left {
+    top: 50%;
+    right: 102%;
+    transform: translate(0, -50%);
+    flex-direction: row-reverse;
+
+    .triangle {
+        transform: rotate(180deg);
+    }
+}
+
+.Tooltip-TOP {
+    flex-direction: column-reverse;
+    height: fit-content;
+    top: -130%;
+    transform: unset !important;
+
+    .triangle {
+        transform: rotate(-90deg) translateX(1px);
+    }
+}
+
+.Tooltip-BOTTOM {
+    flex-direction: column;
+    height: fit-content;
+
+    .triangle {
+        transform: rotate(90deg) translateX(1px);
+    }
+}
