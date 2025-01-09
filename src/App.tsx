@@ -5,8 +5,8 @@ function App() {
   return (
 
     <TooltipProvider>
-      <Tooltip open text="hello" disabled={true} contentSide={ContentSide.LEFT} type={TooltipType.PRIMARY} size="small" tip={true}>
-        <button>open</button>
+      <Tooltip text="hello" type={TooltipType.PRIMARY} >
+        <input className="w-full border border-blue-500 p-2 rounded-md line-clamp-1 flex-1 overflow-hidden text-[#797C7F] text-xs font-normal leading-[147.5%]" />
       </Tooltip>
     </TooltipProvider>
   );
