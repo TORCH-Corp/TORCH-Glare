@@ -1,10 +1,10 @@
-import { LabelHTMLAttributes } from "react";
+import { LabelHTMLAttributes, ReactNode } from "react";
 import "./style.scss";
 
 interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
-  label?: string; // main label
-  required_label?: string; // normal text with required style
-  secondary_label?: string; //normal text with secondary style
+  label?: ReactNode; // main label
+  required_label?: ReactNode; // normal text with required style
+  secondary_label?: ReactNode; //normal text with secondary style
   component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
   component_style?: "vertical" | "horizontal" | ""; // this is used to change the set of labels direction
   as_child?: boolean; // this is used to make the label color same as the parent component

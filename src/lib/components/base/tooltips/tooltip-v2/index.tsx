@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import '../../../../styles/typography_2/index.scss';
+import { cn } from "../../../../../utils";
 
 
 export enum TooltipType {
@@ -79,7 +80,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
                 side={contentSide}
                 align={contentAlign}
                 avoidCollisions={avoidCollisions}
-                className={twMerge(tooltipStyles({ intent: type }))}
+                className={cn(tooltipStyles({ intent: type }))}
                 {...props}
             >
                 {text}

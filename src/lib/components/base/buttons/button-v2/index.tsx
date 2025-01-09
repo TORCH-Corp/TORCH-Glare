@@ -3,13 +3,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 import './variants/_variants.scss';
 import '../../../../styles/typography_2/index.scss';
+import { cn } from "../../../../../utils";
 
 const buttonVariants = cva(
   "flex items-center justify-center gap-1 transition-all duration-200 ease-in-out",
   {
     variants: {
       component_style: {
-        PrimeStyle: "PrimeStyle",
+        PrimeStyle: "bg-[--background-system-body-tertiary]",
         BlueSecStyle: "BlueSecStyle",
         YelSecStyle: "YelSecStyle",
         RedSecStyle: "RedSecStyle",
@@ -60,7 +61,7 @@ export const Button = function ({
 }: Props) {
   return (
     <button
-      className={twMerge(buttonVariants({
+      className={cn(buttonVariants({
         component_style,
         component_size,
         is_loading,
