@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
-import '../../../../styles/typography copy/index.scss';
+import '../../../../styles/typography_2/index.scss';
 
 
 export enum TooltipType {
@@ -52,7 +52,7 @@ interface TooltipProps extends React.HTMLAttributes<HTMLSpanElement> {
     text: ReactNode
 }
 
-const Tooltip: React.FC<TooltipProps> = ({
+export const Tooltip: React.FC<TooltipProps> = ({
     children,
     open,
     text,
@@ -89,4 +89,4 @@ const Tooltip: React.FC<TooltipProps> = ({
     );
 };
 
-export default Tooltip;
+

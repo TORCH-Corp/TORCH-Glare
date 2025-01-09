@@ -1,0 +1,123 @@
+.PrimeStyle {
+    &:hover {
+        background-color: var(--background-presentation-action-hover);
+        color: var(--content-presentation-action-hover) !important; // !important is used to override the focus color
+    }
+}
+
+.BlueSecStyle {
+    &:hover {
+        background: var(--background-presentation-state-information-primary);
+        color: var(--content-presentation-action-hover) !important; // !important is used to override the focus color
+    }
+}
+
+.YelSecStyle {
+    &:hover {
+        background: var(--background-presentation-state-warning-primary);
+        color: var(--content-presentation-action-light-primary) !important;
+    }
+}
+
+.RedSecStyle {
+    &:hover {
+        background: var(--background-presentation-state-negative-primary);
+        color: var(--content-presentation-action-hover) !important; // !important is used to override the focus color
+    }
+}
+
+// text color and focus for sec style.
+.RedSecStyle,
+.BlueSecStyle,
+.PrimeStyle,
+.YelSecStyle {
+    background: var(--background-presentation-action-secondary);
+    color: var(--content-presentation-action-light-primary);
+
+    &:focus {
+        border: 1px solid var(--border-presentation-state-focus);
+        color: var(--content-presentation-action-light-primary);
+    }
+
+    &:active {
+        border: 1px solid var(--border-presentation-state-focus);
+        color: var(--content-presentation-action-light-primary);
+    }
+}
+
+
+
+/* text color and focus for Content Style */
+
+.PrimeContStyle,
+.BlueContStyle,
+.RedContStyle {
+    border: unset;
+    background-color: transparent;
+
+    &:focus {
+        border: 1px solid var(--border-presentation-state-focus);
+        color: var(--content-presentation-action-light-primary);
+        background: var(--background-presentation-action-borderstyle);
+    }
+
+    &:active {
+        border: 1px solid var(--border-presentation-state-focus);
+        color: var(--content-presentation-action-light-primary);
+        background: var(--background-presentation-action-borderstyle);
+    }
+}
+
+.BorderStyle {
+    border: 1px solid var(--border-presentation-action-disabled);
+    background: var(--background-presentation-action-borderstyle);
+
+    &:hover {
+        background: var(--background-presentation-action-hover);
+        color: var(--content-presentation-action-hover) !important;
+    }
+
+    &:focus {
+        border: 1px solid var(--border-presentation-state-focus);
+        color: var(--content-presentation-action-light-primary);
+    }
+
+    &:active {
+        border: 1px solid var(--border-presentation-state-focus);
+        color: var(--content-presentation-action-light-primary);
+    }
+
+}
+
+.PrimeContStyle {
+    &:hover {
+        background: var(--background-presentation-action-contstyle-hover);
+        color: var(--content-presentation-action-light-primary);
+    }
+}
+
+.BlueContStyle {
+    &:hover {
+        background: var(--background-presentation-action-contstyle-hover);
+        color: var(--content-presentation-action-information-hover);
+    }
+}
+
+.RedContStyle {
+    &:hover {
+        background: var(--background-presentation-action-contstyle-hover);
+        color: var(--content-presentation-action-negative-hover);
+    }
+}
+
+// Disabled style
+.button-disabled {
+    background: var(--background-presentation-action-disabled) !important;
+    color: var(--content-presentation-state-disabled) !important;
+
+    &:hover {
+        background: var(--background-presentation-action-disabled);
+        color: var(--content-presentation-state-disabled);
+        border: none;
+    }
+}

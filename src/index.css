@@ -1,7 +1,7 @@
+@import "./fonts/fonts.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./fonts/fonts.css";
 
 * {
   box-sizing: border-box;
@@ -17,7 +17,7 @@ body {
   align-items: center;
   height: 100vh;
   padding: 10px;
-  background-color: black;
+  background-color: rgb(255, 255, 255);
 }
 
 .app {

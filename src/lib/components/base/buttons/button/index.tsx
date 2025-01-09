@@ -4,7 +4,6 @@ import {
   ReactNode,
   forwardRef,
 } from "react";
-import "./variants/default.scss";
 import { ButtonIcon } from "./components/buttonIcon";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -12,13 +11,13 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   right_icon?: ReactNode; // this will show icon on the right side if you pass it
   is_loading?: boolean; // this will show loading icon if true
   component_style?:
-    | "BlueSecStyle"
-    | "YelSecStyle"
-    | "RedSecStyle"
-    | "BorderStyle"
-    | "PrimeContStyle"
-    | "BlueContStyle"
-    | "RedContStyle"; // this prop will change the button style see on figma design file
+  | "BlueSecStyle"
+  | "YelSecStyle"
+  | "RedSecStyle"
+  | "BorderStyle"
+  | "PrimeContStyle"
+  | "BlueContStyle"
+  | "RedContStyle"; // this prop will change the button style see on figma design file
   component_size?: "S" | "M" | "L"; // this prop will change the button style size see on figma design file
 }
 
