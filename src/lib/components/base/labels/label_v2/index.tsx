@@ -1,21 +1,18 @@
 import { LabelHTMLAttributes, ReactNode } from "react";
-import "./style.scss";
 import React from "react";
-import { extractProps } from "@radix-ui/themes/helpers";
-import { Slot } from '@radix-ui/react-slot';
-import { cn } from "../../../../../utils";
-import { cva } from "class-variance-authority";
-import '../../../../styles/typography_2/index.scss';
+import { cn } from "@/utils";
+import { cva, type VariantProps } from "class-variance-authority";
+import '@/styles/typography_2/index.scss';
 
 const labelComponentVariants = cva("flex", {
   variants: {
-    component_style: {
+    directions: {
       vertical: "flex-col justify-start items-start",
-      horizontal: "flex-row justify-start items-end gap-1",
+      horizontal: "flex-row justify-start items-center gap-1",
     }
   },
   defaultVariants: {
-    component_style: "horizontal",
+    directions: "horizontal",
   },
 });
 
@@ -58,63 +55,36 @@ const requiredLabelVariants = cva("text-[--content-presentation-state-negative] 
   },
 });
 
-
-
-interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
+interface Props extends LabelHTMLAttributes<HTMLLabelElement>, VariantProps<typeof labelComponentVariants> {
   label?: ReactNode; // main label
   required_label?: ReactNode; // normal text with required style
   secondary_label?: ReactNode; //normal text with secondary style
-  component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
-  component_style?: "vertical" | "horizontal"; // this is used to change the set of labels direction
-  as_child?: boolean; // this is used to make the label color same as the parent component
   as?: React.ElementType;
   asChild?: boolean;
-  children?: ReactNode;
+  size?: "S" | "M" | "L";
 }
 
-export const Label = React.forwardRef<HTMLLabelElement, Props>((props, forwardedRef) => {
-  const {
-    children,
-    label,
-    secondary_label,
-    required_label,
-    component_size,
-    component_style,
-    className,
-    asChild,
-    as: Tag = 'span',
-    ...restProps
-  } = extractProps(props);
-  const Component = asChild ? Slot : Tag;
+export const Label = React.forwardRef<HTMLLabelElement, Props>(({
+  children,
+  label,
+  secondary_label,
+  required_label,
+  size,
+  directions,
+  ...props
+
+}, forwardedRef) => {
   return (
-    <Component
-      className={cn(labelComponentVariants({ component_style: component_style }), className)}
+    <label
+      className={cn(labelComponentVariants({ directions }))}
       ref={forwardedRef}
-      {...restProps}
+      {...props}
     >
-      <>
-        <p className={cn(mainLabelVariants({ size: component_size }))}>{label}</p>
-        <p className={cn(secondaryLabelVariants({ size: component_size }))}>{secondary_label}</p>
-        <p className={cn(requiredLabelVariants({ size: component_size }))}>{required_label}</p>
-        {children}
-      </>
-    </Component>
+      <p className={cn(mainLabelVariants({ size }))}>{label}</p>
+      <p className={cn(secondaryLabelVariants({ size }))}>{secondary_label}</p>
+      <p className={cn(requiredLabelVariants({ size }))}>{required_label}</p>
+      {children}
+    </label>
   );
 });
 Label.displayName = 'Label';
-
-{/* <section
-  {...props}
-  className={`glare-label ${component_size} ${component_style} ${disabled ? "disabled" : ""} child-dir-${child_dir} ${className} glare-label-${theme}`}
->
-  <label className="label-container" htmlFor={name}>
-    {label && (
-      <span className={`label ${as_child ? "as-child" : ""}`}>{label}</span>
-    )}
-    {secondary_label && <p className="secondaryLabel">{secondary_label}</p>}
-    {required_label && (
-      <span className="requiredLabel">{required_label}</span>
-    )}
-  </label>
-  {children}
-</section> */}

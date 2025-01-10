@@ -1,14 +1,8 @@
-import { cva } from "class-variance-authority";
+import { cva, VariantProps } from "class-variance-authority";
 import { ReactNode } from "react";
-import { twMerge } from "tailwind-merge";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
-import '../../../../styles/typography_2/index.scss';
-import { cn } from "../../../../../utils";
-
-
-export enum TooltipType {
-    PRIMARY = "primary",
-}
+import '@/styles/typography_2/index.scss';
+import { cn } from "@/utils";
 
 export enum ContentSide {
     TOP = "top",
@@ -25,23 +19,16 @@ export enum ContentAlign {
 
 const tooltipStyles = cva("Body-typography-Medium-Regular rounded-[4px] p-1", {
     variants: {
-        intent: {
+        variant: {
             primary: "bg-[--background-system-body-tertiary] text-[--content-system-global-primary]",
         }
     },
-    compoundVariants: [
-        {
-            intent: "primary",
-            class: ""
-        }
-    ],
     defaultVariants: {
-        intent: "primary",
+        variant: "primary",
     },
 });
 
-interface TooltipProps extends React.HTMLAttributes<HTMLSpanElement> {
-    children: ReactNode;
+interface TooltipProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof tooltipStyles> {
     onOpenChange?: (open: boolean) => void;
     open?: boolean;
     contentSide?: ContentSide;
@@ -49,7 +36,7 @@ interface TooltipProps extends React.HTMLAttributes<HTMLSpanElement> {
     avoidCollisions?: boolean;
     tip?: boolean;
     delay?: number;
-    type?: TooltipType; disabled?: boolean;
+    disabled?: boolean;
     text: ReactNode
 }
 
@@ -58,12 +45,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
     open,
     text,
     onOpenChange,
-    type = TooltipType.PRIMARY,
     contentSide = ContentSide.TOP,
     contentAlign = ContentAlign.CENTER,
     avoidCollisions = true,
     delay = 400,
     tip = true,
+    variant,
     ...props
 }) => {
     return (
@@ -80,7 +67,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
                 side={contentSide}
                 align={contentAlign}
                 avoidCollisions={avoidCollisions}
-                className={cn(tooltipStyles({ intent: type }))}
+                className={cn(tooltipStyles({ variant }))}
                 {...props}
             >
                 {text}
