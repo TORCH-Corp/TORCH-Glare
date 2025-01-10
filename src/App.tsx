@@ -1,18 +1,22 @@
-import { Button } from "./lib/components/base/buttons/button-v2";
-import { Label } from "./lib/components/base/labels/label_v2";
+import { FieldSection } from "@/components/shared/forms/fieldSection_v2";
 function App() {
   return (
     <div>
-      <Label
-        label="Main Label"
-        secondary_label="Secondary Label"
-        required_label="Required"
-        directions='horizontal'
+      <FieldSection
+        label="Label"
+        requiredLabel="*"
+        secondaryLabel="Secondary label"
         size="M"
-
+        childrenUnderLabel={<div>
+          <p>Children under label</p>
+          <p>Children under label</p>
+          <p>Children under label</p>
+        </div>}
       >
-      </Label>
-      <Button variant={"PrimeStyle"}>HELLO</Button>
+        <input type="text" />
+        <input type="text" />
+        <input type="text" />
+      </FieldSection>
     </div>
   );
 }

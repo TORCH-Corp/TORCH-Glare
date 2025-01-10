@@ -51,6 +51,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     delay = 400,
     tip = true,
     variant,
+    className,
     ...props
 }) => {
     return (
@@ -67,7 +68,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
                 side={contentSide}
                 align={contentAlign}
                 avoidCollisions={avoidCollisions}
-                className={cn(tooltipStyles({ variant }))}
+                className={cn(tooltipStyles({ variant, className }))}
                 {...props}
             >
                 {text}

@@ -52,13 +52,13 @@ const requiredLabelVariants = cva("text-[--content-presentation-state-negative] 
   },
   defaultVariants: {
     size: "M",
-  },
+  }
 });
 
 interface Props extends LabelHTMLAttributes<HTMLLabelElement>, VariantProps<typeof labelComponentVariants> {
   label?: ReactNode; // main label
-  required_label?: ReactNode; // normal text with required style
-  secondary_label?: ReactNode; //normal text with secondary style
+  requiredLabel?: ReactNode; // normal text with required style
+  secondaryLabel?: ReactNode; // normal text with secondary style
   as?: React.ElementType;
   asChild?: boolean;
   size?: "S" | "M" | "L";
@@ -67,22 +67,22 @@ interface Props extends LabelHTMLAttributes<HTMLLabelElement>, VariantProps<type
 export const Label = React.forwardRef<HTMLLabelElement, Props>(({
   children,
   label,
-  secondary_label,
-  required_label,
+  secondaryLabel,
+  requiredLabel,
   size,
   directions,
+  className,
   ...props
-
 }, forwardedRef) => {
   return (
     <label
-      className={cn(labelComponentVariants({ directions }))}
+      className={cn(labelComponentVariants({ directions }), className)} // Merge generated and custom classNames
       ref={forwardedRef}
       {...props}
     >
-      <p className={cn(mainLabelVariants({ size }))}>{label}</p>
-      <p className={cn(secondaryLabelVariants({ size }))}>{secondary_label}</p>
-      <p className={cn(requiredLabelVariants({ size }))}>{required_label}</p>
+      {label && <p className={cn(mainLabelVariants({ size }))}>{label}</p>}
+      {secondaryLabel && <p className={cn(secondaryLabelVariants({ size }))}>{secondaryLabel}</p>}
+      {requiredLabel && <p className={cn(requiredLabelVariants({ size }))}>{requiredLabel}</p>}
       {children}
     </label>
   );

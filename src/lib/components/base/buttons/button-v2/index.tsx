@@ -75,6 +75,7 @@ export const Button = function ({
   asChild,
   as: Tag = 'button',
   buttonType,
+  className,
   ...props
 }: Props) {
 
@@ -86,7 +87,8 @@ export const Button = function ({
         variant,
         size,
         is_loading,
-        buttonType
+        buttonType,
+        className
       }))}
       {...props}
     >
