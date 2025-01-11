@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, Component } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import '@/styles/typography_2/index.scss';
 import { cn } from "@/utils";

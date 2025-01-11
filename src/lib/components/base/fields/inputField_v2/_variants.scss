@@ -1,0 +1,103 @@
+@import "@/styles/typography";
+
+/* focus */
+.glare-input-field-focus {
+  .glare-input-field-inner-wrapper {
+    .glare-input-icon {
+      color: black;
+    }
+  }
+
+  & {
+    opacity: 1;
+    border-color: var(--border-presentation-state-focus) !important;
+    box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* negative*/
+.glare-input-field-negative {
+  border-color: var(--border-presentation-state-negative) !important;
+  caret-color: var(--border-presentation-state-negative);
+
+  &:hover {
+    border-color: var(--border-presentation-state-negative) !important;
+  }
+}
+
+.glare-input-field-disabled {
+  border-color: var(--border-presentation-action-disabled) !important;
+  background-color: var(--background-presentation-action-disabled) !important;
+
+  &:hover {
+    border-color: var(--border-presentation-action-disabled) !important;
+    background-color: var(--background-presentation-action-disabled) !important;
+  }
+}
+
+/* system style */
+.glare-input-field-system-style {
+  border: 1px solid var(--border-system-global-primary);
+  background-color: var(--black-alpha-20);
+
+  input {
+    color: white !important;
+    caret-color: var(--content-presentation-action-hover-information);
+  }
+
+  &:hover {
+    background-color: var(--purple-alpha-10) !important;
+    border: 1px solid var(--border-system-action-hover-primary) !important;
+  }
+}
+
+.glare-input-field-system-style-focus {
+  .glare-input-field-inner-wrapper {
+    .glare-input-icon {
+      color: white;
+    }
+  }
+
+  & {
+    opacity: 1;
+    border-color: var(--border-presentation-state-focus) !important;
+    box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* input sizes */
+.glare-input-size-L {
+  .input-container {
+    input {
+      height: 40px;
+    }
+  }
+
+  .glare-input-icon {
+    font-size: 18px;
+  }
+}
+
+.glare-input-size-M {
+  .input-container {
+    input {
+      height: 40px;
+    }
+  }
+
+  .glare-input-icon {
+    font-size: 18px;
+  }
+}
+
+.glare-input-size-S {
+  .input-container {
+    input {
+      height: 30px;
+    }
+  }
+
+  .glare-input-icon {
+    font-size: 16px;
+  }
+}
