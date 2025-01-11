@@ -16,9 +16,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  padding: 10px;
-/*   background-color: rgb(223, 223, 223);
- */}
+  background-color: rgb(223, 223, 223);
+}
 
 .app {
   width: 100%;

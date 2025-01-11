@@ -1,18 +1,6 @@
 import { HTMLAttributes, ReactNode } from "react";
 import './style.scss'
-import { cva } from "class-variance-authority";
-import { cn } from "@/utils";
 import { Label } from "@/components/base/labels/label_v2";
-
-
-const FieldSectionVariants = cva("flex flex-row gap-[16px] flex-1 border-t border-[--border-presentation-global-primary] py-[16px] px-[12px]", {
-    variants: {
-
-    },
-    defaultVariants: {
-    },
-});
-
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     label?: ReactNode
@@ -21,7 +9,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     size?: "S" | "M" | "L"
     childrenUnderLabel?: ReactNode
 }
-
 
 export function FieldSection({
     children,
@@ -34,7 +21,7 @@ export function FieldSection({
 }: Props) {
 
     return (
-        <section {...props} className={cn(FieldSectionVariants())} >
+        <section {...props} className={"flex flex-col gap-[12px] flex-1 border-t border-[--border-presentation-global-primary] py-[16px] px-[12px] max-w-[1200px] sm:gap-[24px] sm:flex-row"} >
             <section className="min-w-[350px] flex flex-col justify-start items-start gap-[8px]">
                 <Label
                     size={size} label={label}
@@ -48,7 +35,7 @@ export function FieldSection({
                 {childrenUnderLabel}
             </section>
 
-            <section className="flex-1 flex flex-row flex-wrap gap-[8px]">
+            <section className="flex-1 flex content-end flex-row flex-wrap gap-[12px]">
                 {children}
             </section>
         </section>

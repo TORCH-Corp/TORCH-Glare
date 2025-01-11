@@ -1,29 +1,32 @@
-import { Button } from "@/components/base/buttons/button-v2";
+import { FieldSection } from "@/components/shared/forms/fieldSection_v2";
+import { Alert } from "./lib";
 function App() {
   return (
-    <Button buttonType="icon" variant='BlueSecStyle'>
-      <p>
-      </p>
-    </Button>
-  );
+    <FieldSection
+      label="Label"
+      requiredLabel="*"
+      secondaryLabel="Secondary label"
+      size="M"
+      childrenUnderLabel={<>
+        <Alert
+          component_label="dsdsdds"
+          component_state="Success"
+        />
+        <Alert
+          component_label="dsdsdds"
+          component_state="Error"
+        />
+      </>}
+    >
+      <div className="flex flex-col gap-[12px] flex-1">
+        <input type="text" className="flex-1" />
+        <input type="text" className="flex-1" />
+        <input type="text" className="flex-1" />
+        <input type="text" className="flex-1" />
+        <input type="text" className="flex-1" />
+      </div>
+    </FieldSection>
+  )
 }
 export default App;
 
-
-{/* <FieldSection
-  label="Label"
-  requiredLabel="*"
-  secondaryLabel="Secondary label"
-  size="M"
-  childrenUnderLabel={<div>
-    <p>Children under label</p>
-    <p>Children under label</p>
-    <p>Children under label</p>
-  </div>}
->
-  <input type="text" />
-  <input type="text" />
-  <input type="text" }/>
-</FieldSection>
-
- */}
