@@ -1,23 +1,81 @@
 import { ButtonHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import './variants/_variants.scss';
 import '@/styles/typography_2/index.scss';
 import { cn } from "@/utils";
 import { Slot } from "@radix-ui/react-slot";
+import { LoadingIcon } from "./loadingIcon";
 
 const buttonVariants = cva(
   "flex items-center justify-center gap-1 transition-[background,color] duration-200 ease-in-out outline-none",
   {
     variants: {
       variant: {
-        PrimeStyle: "PrimeStyle",
-        BlueSecStyle: "BlueSecStyle",
-        YelSecStyle: "YelSecStyle",
-        RedSecStyle: "RedSecStyle",
-        BorderStyle: "BorderStyle",
-        PrimeContStyle: "PrimeContStyle",
-        BlueContStyle: "BlueContStyle",
-        RedContStyle: "RedContStyle",
+        PrimeStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-action-hover)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        BlueSecStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-state-information-primary)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        YelSecStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-state-warning-primary)]",
+          "hover:text-[var(--content-presentation-action-light-primary)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        RedSecStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-state-negative-primary)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        BorderStyle: [
+          "border border-[var(--border-presentation-action-disabled)]",
+          "bg-[var(--background-presentation-action-borderstyle)]",
+          "hover:bg-[var(--background-presentation-action-hover)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:text-[var(--content-presentation-action-light-primary)]",
+          "focus:hover:text-[var(--content-presentation-action-hover)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        PrimeContStyle: [
+          "border-0 bg-transparent",
+          "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
+          "hover:text-[var(--content-presentation-action-light-primary)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:bg-[var(--background-presentation-action-borderstyle)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        BlueContStyle: [
+          "border-0 bg-transparent",
+          "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
+          "hover:text-[var(--content-presentation-action-information-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:bg-[var(--background-presentation-action-borderstyle)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        RedContStyle: [
+          "border-0 bg-transparent",
+          "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
+          "hover:text-[var(--content-presentation-action-negative-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:bg-[var(--background-presentation-action-borderstyle)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
       },
       size: {
         S: "h-[22px] px-[6px] Body-typography-Small-Medium rounded-[4px]",
@@ -25,10 +83,10 @@ const buttonVariants = cva(
         L: "h-[28px] px-[18px] Body-typography-Large-Medium rounded-[6px]",
       },
       is_loading: {
-        true: "cursor-wait",
+        true: "",
       },
       disabled: {
-        true: "button-disabled",
+        true: ""
       },
       buttonType: {
         button: "",
@@ -42,19 +100,34 @@ const buttonVariants = cva(
     },
     compoundVariants: [
       {
+        is_loading: true,
+        className: ["cursor-wait"]
+      },
+      {
+        disabled: true,
+        className:
+          [
+            "cursor-not-allowed",
+            "pointer-events-none",
+            "bg-[--background-presentation-action-disabled]",
+            "text-[--content-presentation-state-disabled]",
+            "border-[--border-presentation-state-disabled]"
+          ],
+      },
+      {
         buttonType: "icon",
         size: "S",
-        className: ""
+        className: "w-[22px] h-[22px] p-0 leading-[0]"
       },
       {
         buttonType: "icon",
         size: "M",
-        className: ""
+        className: "w-[26px] h-[26px] p-0 leading-[0]"
       },
       {
         buttonType: "icon",
         size: "L",
-        className: ""
+        className: "w-[28px] h-[28px] p-0 leading-[0]"
       }
     ]
   }
@@ -76,6 +149,7 @@ export const Button = function ({
   as: Tag = 'button',
   buttonType,
   className,
+  disabled,
   ...props
 }: Props) {
 
@@ -88,11 +162,13 @@ export const Button = function ({
         size,
         is_loading,
         buttonType,
-        className
+        className,
+        disabled
       }))}
       {...props}
     >
       {props.children}
+      {is_loading && <LoadingIcon size={size} />}
     </Component>
   );
 };
