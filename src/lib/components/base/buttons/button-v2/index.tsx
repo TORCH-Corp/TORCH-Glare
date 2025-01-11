@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, Component } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import '@/styles/typography_2/index.scss';
 import { cn } from "@/utils";
@@ -6,7 +6,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { LoadingIcon } from "./loadingIcon";
 
 const buttonVariants = cva(
-  "flex items-center justify-center gap-1 transition-[background,color] duration-200 ease-in-out outline-none",
+  "flex items-center justify-center gap-1 transition-[background,color] duration-200 ease-in-out border border-transparent outline-none",
   {
     variants: {
       variant: {
@@ -101,7 +101,14 @@ const buttonVariants = cva(
     compoundVariants: [
       {
         is_loading: true,
-        className: ["cursor-wait"]
+        className: ["cursor-wait",
+          "bg-[--background-presentation-action-hover]",
+          "text-[--content-presentation-action-hover]",
+          "hover:bg-[--background-presentation-action-hover]",
+          "hover:text-[--content-presentation-action-hover]",
+          "focus:border focus:border-transparent",
+          "active:border active:border-transparent",
+        ]
       },
       {
         disabled: true,
@@ -150,11 +157,13 @@ export const Button = function ({
   buttonType,
   className,
   disabled,
+  children,
   ...props
 }: Props) {
-
   const Component = asChild ? Slot : Tag;
 
+
+  // default 
   return (
     <Component
       className={cn(buttonVariants({
@@ -164,11 +173,23 @@ export const Button = function ({
         buttonType,
         className,
         disabled
-      }))}
-      {...props}
+      }))}  {...props}
     >
-      {props.children}
-      {is_loading && <LoadingIcon size={size} />}
+      {/* to prevent error when using asChild with loading state */}
+      {asChild ?
+        React.cloneElement(children as React.ReactElement, {},
+          <>
+            {(children as React.ReactElement).props.children}
+            {is_loading && <LoadingIcon size={size} />}
+          </>
+        )
+        :
+        <>
+          {children}
+          {is_loading && <LoadingIcon size={size} />}
+        </>
+      }
+
     </Component>
   );
 };

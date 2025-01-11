@@ -1,13 +1,12 @@
 import { Button } from "@/components/base/buttons/button-v2";
 function App() {
   return (
-    <div>
-      <Button is_loading={true} size='M' variant='YelSecStyle' >save</Button>
-    </div>
-
+    <Button buttonType="icon" variant='BlueSecStyle'>
+      <p>
+      </p>
+    </Button>
   );
 }
-
 export default App;
 
 
