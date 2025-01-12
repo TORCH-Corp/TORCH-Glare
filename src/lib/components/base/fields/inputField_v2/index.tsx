@@ -155,6 +155,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
         }
     }, [fucus])
 
+    // TODO: make the user input visible when input is focused
 
     return (
         <DropdownMenu onOpenChange={(open) => {
@@ -162,6 +163,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
         }}  >
             <DropdownMenuTrigger asChild>
                 <section
+                    onFocus={() => setFucus(true)}
+                    onBlur={() => setFucus(false)}
                     ref={sectionRef}
                     className={cn(inputFieldStyles(
                         {
