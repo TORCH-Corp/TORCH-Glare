@@ -4,6 +4,14 @@ export default {
 		"./index.html",
 		"./src/**/*.{js,ts,jsx,tsx}",
 	],
+	theme: {
+		extend: {
+			backgroundImage: {
+				'fade-gradient': 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, var(--background-presentation-form-field-primary) 28%)',
+				'fade-gradient-reverse': 'linear-gradient(280deg, rgba(255, 255, 255, 0) 0%, var(--background-presentation-form-field-primary) 28%)',
+			},
+		},
+	},
 	screens: {
 		sm: '600px',
 		md: '768px',

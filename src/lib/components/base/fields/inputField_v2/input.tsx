@@ -34,12 +34,22 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, Props>(({
     fucusSetter,
+    className,
+    size,
     ...props
 }, ref) => {
 
     return (
         <input
-            className={cn(inputFieldStyles({}))}
+            className={cn(inputFieldStyles(), className)}
+            onFocus={(e) => {
+                fucusSetter && fucusSetter(true)
+                props.onFocus && props.onFocus(e)
+            }}
+            onBlur={(e) => {
+                fucusSetter && fucusSetter(false)
+                props.onBlur && props.onBlur(e)
+            }}
             ref={ref}
             {...props}
         />

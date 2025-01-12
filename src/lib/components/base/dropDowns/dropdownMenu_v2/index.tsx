@@ -1,9 +1,7 @@
-import * as React from "react"
-import * as PopoverPrimitive from "@radix-ui/react-popover"
 import '@styles/globals.css'
-
-import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
+import { DropdownMenu, DropdownMenuContent } from "@/components/ui/dropdown-menu"
+import { cn } from '@/utils';
 
 const dropdownMenuStyles = cva([
     "p-1",
@@ -44,29 +42,16 @@ const dropdownMenuStyles = cva([
 
 interface DropdownMenuProps extends VariantProps<typeof dropdownMenuStyles> {
     variant?: "SystemStyle" | "PresentationStyle";
+    className?: string
+    children?: React.ReactNode
 }
 
-const DropdownMenu = PopoverPrimitive.Root
-
-const DropdownMenuTrigger = PopoverPrimitive.Trigger
-
-const DropdownMenuContent = React.forwardRef<
-    React.ElementRef<typeof PopoverPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> & Pick<DropdownMenuProps, 'variant'>
->(({ className, align = "center", sideOffset = 4, variant, ...props }, ref) => (
-    <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Content
-            ref={ref}
-            align={align}
-            sideOffset={sideOffset}
-            className={cn(dropdownMenuStyles({ variant: variant }),
-                className
-            )}
-
-            {...props}
-        />
-    </PopoverPrimitive.Portal>
-))
-DropdownMenuContent.displayName = "DropdownMenuContent"
-
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent }
+export function DropDownMenu({ variant, className, children, ...props }: DropdownMenuProps) {
+    return (
+        <DropdownMenu   >
+            <DropdownMenuContent className={cn(dropdownMenuStyles({ variant }), className)} {...props}>
+                {children}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
