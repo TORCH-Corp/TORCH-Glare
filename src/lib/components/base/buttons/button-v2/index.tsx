@@ -94,7 +94,7 @@ const buttonVariants = cva(
       }
     },
     defaultVariants: {
-      size: "L",
+      size: "M",
       variant: "PrimeStyle",
       buttonType: "button"
     },
