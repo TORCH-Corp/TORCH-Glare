@@ -5,6 +5,7 @@ import { useDirectionCalc, useDragEnd, useResize, useShowDropDown } from "./hook
 import { ThemeProvider, useTheme } from "./providers/themeProvider";
 import 'remixicon/fonts/remixicon.css'
 import '@styles/colors/index.css'
+import '@styles/globals.css'
 import { convertImageFileToDataUrl } from "./utils";
 
 export {

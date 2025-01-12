@@ -5,18 +5,27 @@ import "@/styles/typography_2/index.scss"
 
 const inputFieldStyles = cva([
     "Body-typography-Small-Regular",
-    "text-[--content-presentation-action-light-secondary]",
-    "p-0",
-    "rounded-[4px]",
+    "text-[--content-presentation-action-light-primary]",
     "bg-transparent",
-    "flex-1",
+    "h-full",
+    "flex-[1_1_0%]",
+    "min-w-[30px]",
     "outline-none",
     "transition-all duration-200 ease-in-out",
     "hover:placeholder:text-[--content-presentation-action-light-primary]",
 ], {
     variants: {
+        size: {
+            S: [
+                "rounded-[6px]",
+            ],
+            M: [
+                "rounded-[8px]",
+            ]
+        }
     },
     defaultVariants: {
+        size: "M"
     },
 });
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -24,6 +33,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(({
+    fucusSetter,
     ...props
 }, ref) => {
 
@@ -31,11 +41,11 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
         <input
             className={cn(inputFieldStyles({}))}
             onFocus={(e) => {
-                props.fucusSetter && props.fucusSetter(true)
+                fucusSetter && fucusSetter(true)
                 props.onFocus && props.onFocus(e)
             }}
             onBlur={(e) => {
-                props.fucusSetter && props.fucusSetter(false)
+                fucusSetter && fucusSetter(false)
                 props.onBlur && props.onBlur(e)
             }}
             ref={ref}

@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import '@/styles/typography_2/index.scss';
 import { cn } from "@/utils";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 export enum ContentSide {
     TOP = "top",
@@ -45,7 +46,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     open,
     text,
     onOpenChange,
-    contentSide = ContentSide.TOP,
+    contentSide,
     contentAlign = ContentAlign.CENTER,
     avoidCollisions = true,
     delay = 400,
@@ -55,26 +56,30 @@ export const Tooltip: React.FC<TooltipProps> = ({
     ...props
 }) => {
     return (
-        <RadixTooltip.Root
-            delayDuration={delay}
-            {...(typeof open !== 'undefined' && { open })}
-            {...(onOpenChange && { onOpenChange })}
-        >
-            <RadixTooltip.Trigger aria-label="Open tooltip" asChild >
-                {children}
-            </RadixTooltip.Trigger>
-
-            <RadixTooltip.Content
-                side={contentSide}
-                align={contentAlign}
-                avoidCollisions={avoidCollisions}
-                className={cn(tooltipStyles({ variant, className }))}
-                {...props}
+        <TooltipProvider>
+            <RadixTooltip.Root
+                delayDuration={delay}
+                {...(typeof open !== 'undefined' && { open })}
+                {...(onOpenChange && { onOpenChange })}
             >
-                {text}
-                {tip && <RadixTooltip.Arrow className="fill-[--background-system-body-tertiary]" />}
-            </RadixTooltip.Content>
-        </RadixTooltip.Root>
+                <RadixTooltip.Trigger aria-label="Open tooltip" asChild >
+                    {children}
+                </RadixTooltip.Trigger>
+
+                <RadixTooltip.Content
+                    sideOffset={2}
+                    side={contentSide}
+                    align={contentAlign}
+                    avoidCollisions={avoidCollisions}
+                    className={cn(tooltipStyles({ variant, className }))}
+                    {...props}
+                >
+                    {text}
+                    {tip && <RadixTooltip.Arrow className="fill-[--background-system-body-tertiary]" />}
+                </RadixTooltip.Content>
+            </RadixTooltip.Root>
+        </TooltipProvider>
+
     );
 };
 

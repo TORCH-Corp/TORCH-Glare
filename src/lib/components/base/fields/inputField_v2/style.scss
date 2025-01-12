@@ -1,5 +1,10 @@
 @import "@/styles/typography";
 
+
+.input-liner-test {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, var(--background-presentation-form-field-primary) 28%);
+}
+
 .glare-input-field-wrapper {
   width: 100%;
   position: relative;
@@ -44,9 +49,7 @@
       padding: 0 4px;
       color: var(--content-presentation-action-light-primary);
       @include Body-typography-Small-Regular;
-      caret-color: var(
-        --content-presentation-action-hover-information
-      ) !important;
+      caret-color: var(--content-presentation-action-hover-information) !important;
 
       &::placeholder {
         color: var(--content-presentation-action-light-secondary);

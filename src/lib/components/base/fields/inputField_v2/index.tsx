@@ -1,17 +1,18 @@
-import { forwardRef, InputHTMLAttributes, ReactNode, useState } from 'react';
+import { forwardRef, InputHTMLAttributes, ReactNode, useEffect, useRef, useState } from 'react';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/utils';
 import "@/styles/typography_2/index.scss"
 import { Input } from './input';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../../dropDowns/dropdownMenu_v2';
+import { Tooltip } from '../../tooltips/tooltip-v2';
+import "./style.scss"
+import { ActionButton } from '../../buttons/actionButton';
 
 const inputFieldStyles = cva([
     "flex ",
     "Body-typography-Small-Regular",
-    "text-[--content-presentation-action-light-secondary]",
     "border border-[--border-presentation-action-primary]",
     "bg-[--background-presentation-form-field-primary]",
-    "rounded-[4px]",
-    "p-0",
     "transition-all duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
     "hover:bg-[--background-presentation-form-field-hover]",
@@ -31,7 +32,9 @@ const inputFieldStyles = cva([
         error: {
             true: [
                 "border-[--border-presentation-state-negative]",
-                "caret-[--border-presentation-state-negative]"
+                "caret-[--border-presentation-state-negative]",
+                "hover:border-[--border-presentation-state-negative]",
+                "hover:caret-[--border-presentation-state-negative]",
             ]
         },
         disabled: {
@@ -39,22 +42,25 @@ const inputFieldStyles = cva([
                 "border-[--border-presentation-action-disabled]",
                 "bg-[--background-presentation-action-disabled]",
             ]
+        },
+        size: {
+            S: [
+                "h-[30px]",
+                "rounded-[6px]",
+            ],
+            M: [
+                "h-[40px]",
+                "rounded-[8px]",
+            ]
         }
     },
     defaultVariants: {
         fucus: false,
         disabled: false,
-        error: false
+        error: false,
+        size: "M"
     },
     compoundVariants: [
-        {
-            error: true,
-            fucus: true,
-            className: [
-                "border-[--border-presentation-state-negative]",
-                "caret-[--border-presentation-state-negative]",
-            ]
-        },
         {
             disabled: true,
             className: [
@@ -66,37 +72,122 @@ const inputFieldStyles = cva([
         }
     ]
 });
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
-    leftSideChild?: ReactNode; // to add left side icon if you pass it 
+
+const iconContainerStyles = cva([
+    "flex items-center justify-center",
+    "leading-0",
+    "text-[16px]",
+    "text-[--content-presentation-action-light-secondary]",
+], {
+    variants: {
+        size: {
+            S: [
+                "text-[16px]",
+            ],
+            M: [
+                "text-[18px]",
+                "px-[2px]"
+            ]
+        }
+    },
+    defaultVariants: {
+        size: "M"
+    }
+})
+
+const childrenContainerStyles = cva([
+    "flex items-center justify-end",
+    "p-1",
+    "absolute",
+    "h-full",
+    "min-w-[40px]",
+    "right-0",
+    "rtl:right-[unset]",
+    'rtl:pr-[20px]',
+    'gap-1',
+    "pl-[20px]",
+    "rtl:pr-[20px]",
+    'input-liner-test'
+], {
+    variants: {
+        size: {
+            S: [
+                "rounded-[6px]",
+            ],
+            M: [
+                "rounded-[8px]",
+            ]
+        }
+    },
+    defaultVariants: {
+        size: "M"
+    }
+})
+
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+    size?: "S" | "M"  // this is used to change the size style of the component
+    icon?: ReactNode; // to add left side icon if you pass it 
     trailing_label?: string; // to add trailing label
-    rightSideChild?: ReactNode; // to add action button to the end of the input 
-    drop_down_list_child?: ReactNode; // to add drop down list if you pass it
+    childrenSide?: ReactNode; // to add action button to the end of the input 
+    dropDownListChildren?: ReactNode; // to add drop down list if you pass it
     errorMessage?: string; // to show tooltip component when error_message not null
 }
 
 export const InputField = forwardRef<HTMLInputElement, Props>(({
-    component_size,
-    leftSideChild,
-    rightSideChild,
-    drop_down_list_child,
+    size = "M",
+    icon,
+    childrenSide,
+    dropDownListChildren,
     errorMessage,
     className,
     ...props
 }, ref) => {
 
     const [fucus, setFucus] = useState(false)
+    const [width, setWidth] = useState(0)
+    const [isDropDownOpen, setIsDropDownOpen] = useState(false)
+    const sectionRef = useRef<HTMLDivElement>(null)
+    // to set the width of the dropdown menu
+
+    useEffect(() => {
+        if (sectionRef.current) {
+            setWidth(sectionRef.current.clientWidth)
+        }
+    }, [fucus])
+
 
     return (
-        <section className={cn(inputFieldStyles(
-            {
-                fucus,
-                error: errorMessage !== undefined,
-                disabled: props.disabled
-            }))}>
-
-            <Input fucusSetter={setFucus} ref={ref}  {...props} />
-        </section>
+        <DropdownMenu onOpenChange={(open) => {
+            setIsDropDownOpen(open)
+        }}  >
+            <DropdownMenuTrigger asChild>
+                <section
+                    ref={sectionRef}
+                    className={cn(inputFieldStyles(
+                        {
+                            fucus,
+                            error: errorMessage !== undefined,
+                            disabled: props.disabled,
+                            size: size
+                        }))}>
+                    <Tooltip open={errorMessage !== undefined} text={errorMessage} >
+                        <section className='flex flex-row flex-1 px-[3px] gap-[4px] overflow-hidden relative'>
+                            {icon && <div className={cn(iconContainerStyles({ size: size }))}>{icon}</div>}
+                            <Input fucusSetter={setFucus} ref={ref}  {...props} />
+                            <div className={cn(childrenContainerStyles({ size: size }))}>
+                                {dropDownListChildren && <ActionButton size={size} ><i style={{ fontSize: `${size === "M" ? 26 : 16}px` }} className={`ri-arrow-down-s-line transition-[transform] duration-400 ease-in-out ${isDropDownOpen ? 'rotate-180' : ''}`}></i></ActionButton>}
+                                {childrenSide}
+                            </div>
+                        </section>
+                    </Tooltip>
+                </section>
+            </DropdownMenuTrigger>
+            {dropDownListChildren &&
+                <DropdownMenuContent style={{ width: width }} variant="SystemStyle" >
+                    {dropDownListChildren}
+                </DropdownMenuContent>
+            }
+        </DropdownMenu>
     )
 });
 
