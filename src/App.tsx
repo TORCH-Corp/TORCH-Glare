@@ -7,18 +7,14 @@ function App() {
       placeholder="Hint"
       icon={<i className="ri-lock-fill"></i>}
       dropDownListChildren={<>
-        <div>Item 1 </div>
-        <div>Item 2 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
-        <div>Item 3 </div>
+        <button>Item 1 </button>
+        <button>Item 2 </button>
+        <button>Item 3 </button>
+        <button>Item 3 </button>
+        <button>Item 3 </button>
+        <button>Item 3 </button>
+        <button>Item 3 </button>
+
       </>}
     />
   )

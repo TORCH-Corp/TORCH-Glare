@@ -2,7 +2,7 @@ import { forwardRef, InputHTMLAttributes, ReactNode, useState } from 'react';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/utils';
 import "@/styles/typography_2/index.scss"
-import { Input } from './input';
+import { Input } from '@/components/base/fields/Input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/base/dropDowns/popover';
 import { Tooltip } from '@/components/base/tooltips/tooltip-v2';
 import { ActionButton } from '@/components/base/buttons/actionButton';
@@ -26,6 +26,13 @@ const inputFieldStyles = cva([
                 "bg-[--background-presentation-form-field-primary]",
                 "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
                 "hover:border-[--border-presentation-state-focus]"
+            ]
+        },
+        onTable: {
+            true: [
+                "border-transparent",
+                "bg-transparent",
+                "h-[26px]"
             ]
         },
         error: {
@@ -57,6 +64,7 @@ const inputFieldStyles = cva([
         fucus: false,
         disabled: false,
         error: false,
+        onTable: false,
         size: "M"
     },
     compoundVariants: [
@@ -67,6 +75,12 @@ const inputFieldStyles = cva([
                 "bg-[--background-presentation-action-disabled]",
                 "hover:border-[--border-presentation-action-disabled]",
                 "hover:bg-[--background-presentation-action-disabled]",
+            ]
+        },
+        {
+            onTable: true,
+            className: [
+                "h-[26px]"
             ]
         }
     ]
@@ -130,6 +144,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
     childrenSide?: ReactNode; // to add action button to the end of the input 
     dropDownListChildren?: ReactNode; // to add drop down list if you pass it
     errorMessage?: string; // to show tooltip component when error_message not null
+    onTable?: boolean; // to change the border style of the component when it is on table
 }
 
 export const InputField = forwardRef<HTMLInputElement, Props>(({
@@ -138,18 +153,18 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
     childrenSide,
     dropDownListChildren,
     errorMessage,
+    onTable,
     className,
     ...props
 }, ref) => {
 
     const [fucus, setFucus] = useState(false)
-    const [isDropDownOpen, setIsDropDownOpen] = useState(false)
     const [dropDownListWidth, setDropDownListWidth] = useState(0)
 
     // TODO: make the user input visible when input is focused
 
     return (
-        <Popover onOpenChange={(open) => setIsDropDownOpen(open)}>
+        <Popover open={fucus}>
             <PopoverTrigger asChild>
                 <section
                     onFocus={(e) => setDropDownListWidth(e.currentTarget.offsetWidth)}
@@ -158,7 +173,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
                             fucus,
                             error: errorMessage !== undefined,
                             disabled: props.disabled,
-                            size: size
+                            size: size,
+                            onTable: onTable
                         }))}>
 
                     <Tooltip open={errorMessage !== undefined} text={errorMessage} >
@@ -168,7 +184,20 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
 
                             <div className={cn(childrenContainerStyles({ size: size }))}>
                                 {childrenSide}
-                                {dropDownListChildren && <ActionButton size={size} ><i style={{ fontSize: `${size === "M" ? 26 : 16}px` }} className={`ri-arrow-down-s-line transition-[transform] duration-400 ease-in-out ${isDropDownOpen ? 'rotate-180' : ''}`}></i></ActionButton>}
+                                {dropDownListChildren && <ActionButton asChild size={onTable ? "XS" : size} >
+                                    <i>
+                                        <i className={cn(
+                                            'ri-arrow-down-s-line',
+                                            'transition-[transform]',
+                                            'duration-400',
+                                            'ease-in-out',
+                                            { 'rotate-180': fucus },
+                                            { "text-[16px]": size === "S" && !onTable },
+                                            { "text-[26px]": size === "M" && !onTable },
+                                            { "text-[16px]": onTable }
+                                        )} />
+                                    </i>
+                                </ActionButton>}
                             </div>
                         </section>
 
@@ -176,7 +205,11 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
                 </section>
             </PopoverTrigger>
 
-            <PopoverContent variant='SystemStyle' onOpenAutoFocus={(e) => e.preventDefault()} style={{ width: dropDownListWidth }}  >
+            <PopoverContent
+                onFocus={() => setFucus(true)}
+                onPointerOver={() => setFucus(true)}
+                onBlur={() => setFucus(false)}
+                variant='SystemStyle' onOpenAutoFocus={(e) => e.preventDefault()} style={{ width: dropDownListWidth }}  >
                 {dropDownListChildren}
             </PopoverContent>
         </Popover>
