@@ -143,17 +143,16 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
 }, ref) => {
 
     const [fucus, setFucus] = useState(false)
+    const [isDropDownOpen, setIsDropDownOpen] = useState(false)
     const [dropDownListWidth, setDropDownListWidth] = useState(0)
 
     // TODO: make the user input visible when input is focused
 
     return (
-        <Popover >
+        <Popover onOpenChange={(open) => setIsDropDownOpen(open)}>
             <PopoverTrigger asChild>
                 <section
-                    onFocus={() => setFucus(true)}
-                    onBlur={() => setFucus(false)}
-                    onPointerEnter={(e) => setDropDownListWidth(e.currentTarget.offsetWidth)}
+                    onFocus={(e) => setDropDownListWidth(e.currentTarget.offsetWidth)}
                     className={cn(inputFieldStyles(
                         {
                             fucus,
@@ -165,11 +164,11 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
                     <Tooltip open={errorMessage !== undefined} text={errorMessage} >
                         <section className='flex flex-row flex-1 px-[3px] gap-[4px] overflow-hidden relative'>
                             {icon && <div className={cn(iconContainerStyles({ size: size }))}>{icon}</div>}
-                            <Input className={fucus ? `pr-[37px] rtl:pl-[35px] rtl:pr-[4px]` : ''} ref={ref}  {...props} />
+                            <Input fucusSetter={setFucus} className={fucus ? `pr-[37px] rtl:pl-[35px] rtl:pr-[4px]` : ''} ref={ref}  {...props} />
 
                             <div className={cn(childrenContainerStyles({ size: size }))}>
                                 {childrenSide}
-                                {dropDownListChildren && <ActionButton size={size} ><i style={{ fontSize: `${size === "M" ? 26 : 16}px` }} className={`ri-arrow-down-s-line transition-[transform] duration-400 ease-in-out ${fucus ? 'rotate-180' : ''}`}></i></ActionButton>}
+                                {dropDownListChildren && <ActionButton size={size} ><i style={{ fontSize: `${size === "M" ? 26 : 16}px` }} className={`ri-arrow-down-s-line transition-[transform] duration-400 ease-in-out ${isDropDownOpen ? 'rotate-180' : ''}`}></i></ActionButton>}
                             </div>
                         </section>
 
@@ -177,7 +176,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
                 </section>
             </PopoverTrigger>
 
-            <PopoverContent onFocus={() => setFucus(true)} onBlur={() => setFucus(false)} variant='SystemStyle' onOpenAutoFocus={(e) => e.preventDefault()} style={{ width: dropDownListWidth }}  >
+            <PopoverContent variant='SystemStyle' onOpenAutoFocus={(e) => e.preventDefault()} style={{ width: dropDownListWidth }}  >
                 {dropDownListChildren}
             </PopoverContent>
         </Popover>
