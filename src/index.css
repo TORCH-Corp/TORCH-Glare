@@ -17,6 +17,7 @@ body {
   align-items: center;
   height: 100vh;
   padding: 10px;
+  background-color: #000;
 }
 
 .app {

@@ -53,7 +53,7 @@ const buttonVariants = cva(
           "active:border active:border-[var(--border-presentation-state-focus)]",
         ],
         PrimeContStyle: [
-          "border-0 bg-transparent",
+          "border-transparent bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-light-primary)]",
           "focus:border focus:border-[var(--border-presentation-state-focus)]",
@@ -61,7 +61,7 @@ const buttonVariants = cva(
           "active:border active:border-[var(--border-presentation-state-focus)]",
         ],
         BlueContStyle: [
-          "border-0 bg-transparent",
+          "border-transparent bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-information-hover)]",
           "focus:border focus:border-[var(--border-presentation-state-focus)]",
@@ -69,7 +69,7 @@ const buttonVariants = cva(
           "active:border active:border-[var(--border-presentation-state-focus)]",
         ],
         RedContStyle: [
-          "border-0 bg-transparent",
+          "border-transparent bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-negative-hover)]",
           "focus:border focus:border-[var(--border-presentation-state-focus)]",
@@ -124,7 +124,7 @@ const buttonVariants = cva(
       {
         buttonType: "icon",
         size: "S",
-        className: "w-[22px] h-[22px] p-0 leading-[0]"
+        className: "w-[22px] h-[22px] p-0 leading-[0] "
       },
       {
         buttonType: "icon",

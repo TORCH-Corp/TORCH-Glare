@@ -1,22 +1,22 @@
 
 import { InputField } from "@/components/base/fields/inputField_v2";
+import { LabelLessInput } from "@/components/base/fields/labelLessInput_v2";
 function App() {
   return (
-    <InputField
-      size="S"
-      placeholder="Hint"
-      icon={<i className="ri-lock-fill"></i>}
-      dropDownListChildren={<>
-        <button>Item 1 </button>
-        <button>Item 2 </button>
-        <button>Item 3 </button>
-        <button>Item 3 </button>
-        <button>Item 3 </button>
-        <button>Item 3 </button>
-        <button>Item 3 </button>
 
-      </>}
-    />
+    <div className="flex flex-col gap-2">
+      <LabelLessInput
+        required
+        placeholder="Hint"
+        icon={<i className="ri-lock-fill"></i>}
+
+      />
+
+      <InputField
+        placeholder="Hint"
+        icon={<i className="ri-lock-fill"></i>}
+      />
+    </div>
   )
 }
-export default App;
+export default App; 

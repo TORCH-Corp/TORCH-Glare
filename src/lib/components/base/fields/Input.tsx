@@ -15,6 +15,13 @@ const inputFieldStyles = cva([
     "hover:placeholder:text-[--content-presentation-action-light-primary]",
 ], {
     variants: {
+        variant: {
+            systemStyle: [
+                "text-white",
+                "placeholder:text-[#A0A0A0]",
+                "hover:placeholder:text-[#A0A0A0]",
+            ]
+        },
         size: {
             S: [
                 "rounded-[6px]",
@@ -25,23 +32,25 @@ const inputFieldStyles = cva([
         }
     },
     defaultVariants: {
-        size: "M"
+        size: "M",
     },
 });
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     fucusSetter?: (fucus: boolean) => void
+    variant?: "systemStyle"
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(({
     fucusSetter,
     className,
+    variant,
     size,
     ...props
 }, ref) => {
 
     return (
         <input
-            className={cn(inputFieldStyles(), className)}
+            className={cn(inputFieldStyles({ variant }), className)}
             onFocus={(e) => {
                 fucusSetter && fucusSetter(true)
                 props.onFocus && props.onFocus(e)
