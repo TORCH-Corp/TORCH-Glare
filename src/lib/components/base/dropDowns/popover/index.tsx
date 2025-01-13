@@ -4,7 +4,7 @@ import { cn } from '@/utils';
 import React from 'react';
 import * as PopoverPrimitive from "@radix-ui/react-popover"
 
-const dropdownMenuStyles = cva([
+const popoverStyles = cva([
     "p-1",
     "rounded-[8px]",
     "border",
@@ -41,7 +41,7 @@ const dropdownMenuStyles = cva([
     }
 })
 
-interface DropdownMenuProps extends VariantProps<typeof dropdownMenuStyles> {
+interface LocalPopOverProps extends VariantProps<typeof popoverStyles> {
     variant?: "SystemStyle" | "PresentationStyle";
     className?: string
 }
@@ -54,14 +54,14 @@ const PopoverTrigger = PopoverPrimitive.Trigger
 
 const PopoverContent = React.forwardRef<
     React.ElementRef<typeof PopoverPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> & DropdownMenuProps
+    React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> & LocalPopOverProps
 >(({ className, align = "center", sideOffset = 4, variant = "SystemStyle", ...props }, ref) => (
     <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
             ref={ref}
             align={align}
             sideOffset={sideOffset}
-            className={cn(dropdownMenuStyles({ variant }),
+            className={cn(popoverStyles({ variant }),
                 className
             )}
             {...props}
