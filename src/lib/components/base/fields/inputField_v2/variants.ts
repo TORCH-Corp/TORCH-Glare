@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 
 export const inputFieldStyles = cva([
     "flex ",
-    "Body-typography-Small-Regular",
+    "typography-body-small-regular",
     "border border-[--border-presentation-action-primary]",
     "bg-[--background-presentation-form-field-primary]",
     "transition-all duration-200 ease-in-out",
@@ -100,6 +100,7 @@ export const inputFieldStyles = cva([
 
 export const iconContainerStyles = cva([
     "flex items-center justify-center",
+    "transition-all duration-200 ease-in-out",
     "leading-0",
     "text-[16px]",
     "text-[--content-presentation-action-light-secondary]",
@@ -133,7 +134,6 @@ export const iconContainerStyles = cva([
         }
     ],
     defaultVariants: {
-
         size: "M"
     }
 })

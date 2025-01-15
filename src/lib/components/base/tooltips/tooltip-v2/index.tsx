@@ -1,9 +1,8 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
-import '@/styles/typography_2/index.scss';
-import { cn } from "@/utils";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { cn } from "@/utils";
 
 export enum ContentSide {
     TOP = "top",
@@ -18,7 +17,7 @@ export enum ContentAlign {
     END = "end",
 }
 
-const tooltipStyles = cva("Body-typography-Medium-Regular rounded-[4px] p-1", {
+const tooltipStyles = cva("typography-body-medium-regular rounded-[4px] p-1", {
     variants: {
         variant: {
             primary: "bg-[--background-system-body-tertiary] text-[--content-system-global-primary]",

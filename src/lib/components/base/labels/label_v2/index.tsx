@@ -2,7 +2,6 @@ import { LabelHTMLAttributes, ReactNode } from "react";
 import React from "react";
 import { cn } from "@/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import '@/styles/typography_2/index.scss';
 
 const labelComponentVariants = cva("flex", {
   variants: {
@@ -19,9 +18,9 @@ const labelComponentVariants = cva("flex", {
 const mainLabelVariants = cva("text-[--content-presentation-global-primary] text-start", {
   variants: {
     size: {
-      S: "Body-typography-Small-Regular",
-      M: "Body-typography-Medium-Regular",
-      L: "Body-typography-Large-Regular",
+      S: "typography-body-small-regular",
+      M: "typography-body-medium-regular",
+      L: "typography-body-large-regular",
     }
   },
   defaultVariants: {
@@ -32,9 +31,9 @@ const mainLabelVariants = cva("text-[--content-presentation-global-primary] text
 const secondaryLabelVariants = cva("text-[--content-presentation-global-secondary] text-start", {
   variants: {
     size: {
-      S: "Labels-typography-Small-Regular",
-      M: "Labels-typography-Medium-Regular",
-      L: "Body-typography-Small-Regular",
+      S: "typography-body-small-regular",
+      M: "typography-body-medium-regular",
+      L: "typography-body-large-regular",
     }
   },
   defaultVariants: {
@@ -45,9 +44,9 @@ const secondaryLabelVariants = cva("text-[--content-presentation-global-secondar
 const requiredLabelVariants = cva("text-[--content-presentation-state-negative] text-start", {
   variants: {
     size: {
-      S: "Labels-typography-Small-Medium",
-      M: "Labels-typography-Medium-Medium",
-      L: "Body-typography-Small-Medium",
+      S: "typography-body-small-medium",
+      M: "typography-body-medium-medium",
+      L: "typography-body-small-medium",
     }
   },
   defaultVariants: {

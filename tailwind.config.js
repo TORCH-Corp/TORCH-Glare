@@ -21,7 +21,8 @@ export default {
 		xl: '1280px',
 		'2xl': '1536px'
 	},
-	plugins: [require("tailwindcss-animate", 'tailwind-scrollbar-hide',
+	plugins: [
+		require("tailwindcss-animate", 'tailwind-scrollbar-hide'),
 		function ({ addComponents }) {
 			addComponents({
 				".typography-display-large-bold": {
@@ -248,43 +249,67 @@ export default {
 					fontWeight: "400",
 				},
 				".typography-body-large-bold": {
-					// need specifications
+					fontSize: "16px",
+					lineHeight: "148%",
+					fontWeight: "700",
 				},
 				".typography-body-large-semibold": {
-					// need specifications
+					fontSize: "16px",
+					lineHeight: "148%",
+					fontWeight: "590",
 				},
 				".typography-body-large-medium": {
-					// need specifications
+					fontSize: "16px",
+					lineHeight: "148%",
+					fontWeight: "510",
 				},
 				".typography-body-large-regular": {
-					// need specifications
+					fontSize: "16px",
+					lineHeight: "147.5%",
+					fontWeight: "400",
 				},
 
 				".typography-body-medium-bold": {
-					// need specifications
+					fontSize: "14px",
+					lineHeight: "148%",
+					fontWeight: "700",
 				},
 				".typography-body-medium-semibold": {
-					// need specifications
+					fontSize: "14px",
+					lineHeight: "148%",
+					fontWeight: "590",
 				},
 				".typography-body-medium-medium": {
-					// need specifications
+					fontSize: "14px",
+					lineHeight: "148%",
+					fontWeight: "510",
 				},
 				".typography-body-medium-regular": {
-					// need specifications
+					fontSize: "14px",
+					lineHeight: "147.5%",
+					fontWeight: "400",
 				},
 				".typography-body-small-bold": {
-					// need specifications
+					fontSize: "12px",
+					lineHeight: "148%",
+					fontWeight: "700",
 				},
 				".typography-body-small-semibold": {
-					// need specifications
+					fontSize: "12px",
+					lineHeight: "148%",
+					fontWeight: "590",
 				},
 				".typography-body-small-medium": {
-					// need specifications
+					fontSize: "12px",
+					lineHeight: "148%",
+					fontWeight: "510",
 				},
 				".typography-body-small-regular": {
-					// need specifications
+					fontSize: "12px",
+					lineHeight: "147.5%",
+					fontWeight: "400",
 				}
 			});
 		}
-	)],
+	],
 }

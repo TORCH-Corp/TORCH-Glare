@@ -1,6 +1,5 @@
 import { forwardRef, InputHTMLAttributes, ReactNode, useState } from 'react';
 import { cva } from 'class-variance-authority';
-import "@/styles/typography_2/index.scss"
 import { InputField } from '../inputField_v2';
 import { cn } from '@/lib/utils';
 
@@ -8,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 const labelLessInputStyles = cva([
     "px-[3px]",
-    "Body-typography-Small-Regular",
+    "typography-body-small-regular",
     "text-[--content-presentation-global-primary]",
     "flex",
     "items-center",
@@ -84,7 +83,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(({
                             "duration-300",
                             "ease-in-out",
                             { "text-[--content-presentation-global-secondary]": fucus },
-                            { "Labels-typography-Small-Regular": fucus },
+                            { "typography-labels-small-regular": fucus },
                         )}>Label</p>
                         {required && <p className='text-[--content-presentation-state-negative]'>*</p>}
                     </section>

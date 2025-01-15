@@ -1,6 +1,5 @@
 import React, { ButtonHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import '@/styles/typography_2/index.scss';
 import { cn } from "@/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { LoadingIcon } from "./loadingIcon";
@@ -78,9 +77,9 @@ const buttonVariants = cva(
         ],
       },
       size: {
-        S: "h-[22px] px-[6px] Body-typography-Small-Medium rounded-[4px]",
-        M: "h-[26px] px-[8px] Body-typography-Medium-Medium rounded-[4px]",
-        L: "h-[28px] px-[18px] Body-typography-Large-Medium rounded-[6px]",
+        S: "h-[22px] px-[6px] typography-body-small-medium rounded-[4px]",
+        M: "h-[26px] px-[8px] typography-body-medium-medium rounded-[4px]",
+        L: "h-[28px] px-[18px] typography-body-large-medium rounded-[6px]",
       },
       is_loading: {
         true: "",
