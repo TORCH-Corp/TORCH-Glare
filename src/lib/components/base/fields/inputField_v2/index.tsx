@@ -53,7 +53,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(({
                     <Tooltip open={errorMessage !== undefined} text={errorMessage} >
                         <section className='flex flex-row flex-1 px-[3px] gap-[4px] overflow-hidden relative'>
                             {icon && <div className={cn(iconContainerStyles({ size: size, variant: variant, fucus: fucus }))}>{icon}</div>}
-                            <Input {...props} variant={variant} fucusSetter={setFucus} className={fucus ? `pr-[37px] rtl:pl-[35px] rtl:pr-[4px]` : ''} ref={ref} />
+                            <Input {...props} variant={variant} fucusSetter={setFucus} className={fucus ? `pr-[70px] rtl:pl-[70px] rtl:pr-[4px]` : ''} ref={ref} />
 
                             <div className={cn(childrenContainerStyles({ size: size, variant: variant }))}>
                                 {childrenSide}

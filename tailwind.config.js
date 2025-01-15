@@ -21,5 +21,270 @@ export default {
 		xl: '1280px',
 		'2xl': '1536px'
 	},
-	plugins: [require("tailwindcss-animate", 'tailwind-scrollbar-hide')],
+	plugins: [require("tailwindcss-animate", 'tailwind-scrollbar-hide',
+		function ({ addComponents }) {
+			addComponents({
+				".typography-display-large-bold": {
+					fontSize: "34px",
+					lineHeight: "120%",
+					letterSpacing: "-0.34px",
+					fontWeight: "700",
+				},
+				".typography-display-large-semibold": {
+					fontSize: "34px",
+					lineHeight: "120%",
+					letterSpacing: "-0.34px",
+					fontWeight: "590",
+				},
+				".typography-display-large-medium": {
+					fontSize: "34px",
+					lineHeight: "120%",
+					letterSpacing: "-0.34px",
+					fontWeight: "510",
+				},
+				".typography-display-large-regular": {
+					fontSize: "34px",
+					lineHeight: "120%",
+					letterSpacing: "-0.34px",
+					fontWeight: "400",
+				},
+
+				".typography-display-medium-bold": {
+					fontSize: "28px",
+					lineHeight: "120%",
+					letterSpacing: "-0.28px",
+					fontWeight: "700",
+				},
+				".typography-display-medium-semibold": {
+					fontSize: "28px",
+					lineHeight: "120%",
+					letterSpacing: "-0.28px",
+					fontWeight: "590",
+				},
+				".typography-display-medium-medium": {
+					fontSize: "28px",
+					lineHeight: "120%",
+					letterSpacing: "-0.28px",
+					fontWeight: "510",
+				},
+				".typography-display-medium-regular": {
+					fontSize: "28px",
+					lineHeight: "120%",
+					letterSpacing: "-0.28px",
+					fontWeight: "400",
+				},
+
+				".typography-display-small-bold": {
+					fontSize: "22px",
+					lineHeight: "120%",
+					letterSpacing: "-0.22px",
+					fontWeight: "700",
+				},
+				".typography-display-small-semibold": {
+					fontSize: "22px",
+					lineHeight: "120%",
+					letterSpacing: "-0.22px",
+					fontWeight: "590",
+				},
+				".typography-display-small-medium": {
+					fontSize: "22px",
+					lineHeight: "120%",
+					letterSpacing: "-0.22px",
+					fontWeight: "510",
+				},
+				".typography-display-small-regular": {
+					fontSize: "22px",
+					lineHeight: "120%",
+					letterSpacing: "-0.22px",
+					fontWeight: "400",
+				},
+
+				".typography-headers-large-bold": {
+					fontSize: "20px",
+					lineHeight: "132%",
+					letterSpacing: "-0.2px",
+					fontWeight: "700",
+				},
+				".typography-headers-large-semibold": {
+					fontSize: "20px",
+					lineHeight: "132%",
+					letterSpacing: "-0.2px",
+					fontWeight: "590",
+				},
+				".typography-headers-large-medium": {
+					fontSize: "20px",
+					lineHeight: "132%",
+					letterSpacing: "-0.2px",
+					fontWeight: "510",
+				},
+				".typography-headers-large-regular": {
+					fontSize: "20px",
+					lineHeight: "132%",
+					letterSpacing: "-0.2px",
+					fontWeight: "400",
+				},
+
+				".typography-headers-medium-bold": {
+					fontSize: "18px",
+					lineHeight: "132%",
+					letterSpacing: "-0.18px",
+					fontWeight: "700",
+				},
+				".typography-headers-medium-semibold": {
+					fontSize: "18px",
+					lineHeight: "132%",
+					letterSpacing: "-0.18px",
+					fontWeight: "590",
+				},
+				".typography-headers-medium-medium": {
+					fontSize: "18px",
+					lineHeight: "132%",
+					letterSpacing: "-0.18px",
+					fontWeight: "510",
+				},
+				".typography-headers-medium-regular": {
+					fontSize: "18px",
+					lineHeight: "132%",
+					letterSpacing: "-0.18px",
+					fontWeight: "400",
+				},
+
+				".typography-headers-small-bold": {
+					fontSize: "16px",
+					lineHeight: "132%",
+					letterSpacing: "-0.16px",
+					fontWeight: "700",
+				},
+				".typography-headers-small-semibold": {
+					fontSize: "16px",
+					lineHeight: "132%",
+					letterSpacing: "-0.16px",
+					fontWeight: "590",
+				},
+				".typography-headers-small-medium": {
+					fontSize: "16px",
+					lineHeight: "132%",
+					letterSpacing: "-0.16px",
+					fontWeight: "510",
+				},
+				".typography-headers-small-regular": {
+					fontSize: "16px",
+					lineHeight: "132%",
+					letterSpacing: "-0.16px",
+					fontWeight: "400",
+				},
+
+				".typography-labels-large-bold": {
+					fontSize: "11px",
+					lineHeight: "142%",
+					letterSpacing: "0.22px",
+					fontWeight: "700",
+				},
+				".typography-labels-large-semibold": {
+					fontSize: "11px",
+					lineHeight: "142%",
+					letterSpacing: "0.22px",
+					fontWeight: "590",
+				},
+				".typography-labels-large-medium": {
+					fontSize: "11px",
+					lineHeight: "142%",
+					letterSpacing: "0.22px",
+					fontWeight: "510",
+				},
+				".typography-labels-large-regular": {
+					fontSize: "11px",
+					lineHeight: "142%",
+					letterSpacing: "0.22px",
+					fontWeight: "400",
+				},
+
+				".typography-labels-medium-bold": {
+					fontSize: "10px",
+					lineHeight: "142%",
+					letterSpacing: "0.2px",
+					fontWeight: "700",
+				},
+				".typography-labels-medium-semibold": {
+					fontSize: "10px",
+					lineHeight: "142%",
+					letterSpacing: "0.2px",
+					fontWeight: "590",
+				},
+				".typography-labels-medium-medium": {
+					fontSize: "10px",
+					lineHeight: "142%",
+					letterSpacing: "0.2px",
+					fontWeight: "510",
+				},
+				".typography-labels-medium-regular": {
+					fontSize: "10px",
+					lineHeight: "142%",
+					letterSpacing: "0.2px",
+					fontWeight: "400",
+				},
+				".typography-labels-small-bold": {
+					fontSize: "9px",
+					lineHeight: "142%",
+					letterSpacing: "0.18px",
+					fontWeight: "700",
+				},
+				".typography-labels-small-semibold": {
+					fontSize: "9px",
+					lineHeight: "142%",
+					letterSpacing: "0.18px",
+					fontWeight: "590",
+				},
+				".typography-labels-small-medium": {
+					fontSize: "9px",
+					lineHeight: "142%",
+					letterSpacing: "0.18px",
+					fontWeight: "510",
+				},
+				".typography-labels-small-regular": {
+					fontSize: "9px",
+					lineHeight: "142%",
+					letterSpacing: "0.18px",
+					fontWeight: "400",
+				},
+				".typography-body-large-bold": {
+					// need specifications
+				},
+				".typography-body-large-semibold": {
+					// need specifications
+				},
+				".typography-body-large-medium": {
+					// need specifications
+				},
+				".typography-body-large-regular": {
+					// need specifications
+				},
+
+				".typography-body-medium-bold": {
+					// need specifications
+				},
+				".typography-body-medium-semibold": {
+					// need specifications
+				},
+				".typography-body-medium-medium": {
+					// need specifications
+				},
+				".typography-body-medium-regular": {
+					// need specifications
+				},
+				".typography-body-small-bold": {
+					// need specifications
+				},
+				".typography-body-small-semibold": {
+					// need specifications
+				},
+				".typography-body-small-medium": {
+					// need specifications
+				},
+				".typography-body-small-regular": {
+					// need specifications
+				}
+			});
+		}
+	)],
 }

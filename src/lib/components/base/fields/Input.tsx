@@ -50,6 +50,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
 
     return (
         <input
+            {...props}
             className={cn(inputFieldStyles({ variant }), className)}
             onFocus={(e) => {
                 fucusSetter && fucusSetter(true)
@@ -60,7 +61,6 @@ export const Input = forwardRef<HTMLInputElement, Props>(({
                 props.onBlur && props.onBlur(e)
             }}
             ref={ref}
-            {...props}
         />
     )
 });

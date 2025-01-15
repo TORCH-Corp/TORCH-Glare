@@ -166,6 +166,7 @@ export const Button = function ({
   // default 
   return (
     <Component
+      {...props}
       className={cn(buttonVariants({
         variant,
         size,
@@ -173,7 +174,7 @@ export const Button = function ({
         buttonType,
         className,
         disabled
-      }))}  {...props}
+      }))}
     >
       {/* to prevent error when using asChild with loading state */}
       {asChild ?

@@ -10,11 +10,29 @@ function App() {
         placeholder="Hint"
         icon={<i className="ri-lock-fill"></i>}
 
+        dropDownListChildren={<>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+        </>}
+
       />
 
       <InputField
+        variant="systemStyle"
         placeholder="Hint"
         icon={<i className="ri-lock-fill"></i>}
+        dropDownListChildren={<>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+          <button>Hello</button>
+        </>}
       />
     </div>
   )
