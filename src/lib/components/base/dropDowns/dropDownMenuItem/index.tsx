@@ -1,69 +1,154 @@
-import React from 'react';
-import './styles/style.scss';
-import { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from 'react';
-import { DropDownMenuItemInput } from './components/dropDownMenuItem-Input';
-import { NormalDropdownMenuItem } from './components/normalDropdownMenuItem';
+import React from "react";
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import { cn } from "@/utils";
+import { MenuItemStyles } from "../menuItem";
+import { VariantProps } from "class-variance-authority";
+import { Circle } from "lucide-react";
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement | HTMLInputElement> {
-    component_size?: 'M'; // this props will change the button style size see on figma design file
-    component_label: string;
-    element_name: string; // this will be the name of the input and this is important to link the input with the label
-    required_label?: string;
-    secondary_label?: string;
-    right_side_icon?: ReactNode; // this will show the right side icon
-    onRightSideIconClick?: MouseEventHandler; // this will be the click event of the right side icon if you pass right side icon
-    component_style?: "Presentation-Warning-Style" | "Presentation-Negative-Style" | "System-Style"; // this props will change the button style see on figma design file
-    icon?: ReactNode; // this will show the default icon if you pass it
-    component_type?: "checkbox" | "radio";
-    isChecked?: boolean // this will check the input if you select component type radio or checkbox
-}
+const DropdownMenuItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
+    inset?: boolean;
+  } & VariantProps<typeof MenuItemStyles>
+>(
+  (
+    { className, inset, variant = "Default", size = "M", disabled, ...props },
+    ref
+  ) => (
+    <DropdownMenuPrimitive.Item
+      {...props}
+      ref={ref}
+      className={cn(MenuItemStyles({ variant, size, disabled }), className)}
+    />
+  )
+);
+DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
-const DropDownMenuItem: React.FC<Props> = ({
-    component_type,
-    component_size = 'M',
-    component_label,
-    element_name,
-    required_label,
-    secondary_label,
-    onRightSideIconClick,
-    component_style,
-    right_side_icon,
-    icon,
-    isChecked,
-    ...props
-}) => {
-    return (
-        // this will show the checkbox or radio button if you pass something to component_type prop
-        // else it will show the normal button
-        component_type ?
-            <DropDownMenuItemInput
-                {...props}
-                checked={isChecked}
-                component_name={element_name}
-                input_type={component_type}
-                label={component_label}
-                secondary_label={secondary_label}
-                required_label={required_label}
-                component_style={component_style}
-                disabled={props.disabled}
-                component_size={component_size}
-            />
-            :
-            // Normal style
-            <NormalDropdownMenuItem
-                {...props}
-                component_size={component_size}
-                component_label={component_label}
-                element_name={element_name}
-                component_style={component_style}
-                secondary_label={secondary_label}
-                required_label={required_label}
-                disabled={props.disabled}
-                onRightSideIconClick={onRightSideIconClick}
-                right_side_icon={right_side_icon}
-                icon={icon}
-            />
-    )
+const DropdownMenuCheckboxItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem> &
+    VariantProps<typeof MenuItemStyles>
+>(
+  (
+    {
+      className,
+      children,
+      checked,
+      variant = "Default",
+      size = "M",
+      disabled,
+      ...props
+    },
+    ref
+  ) => (
+    <DropdownMenuPrimitive.CheckboxItem
+      ref={ref}
+      className={cn(
+        MenuItemStyles({ variant, size, disabled }),
+        "relative pl-8",
+        className
+      )}
+      checked={checked}
+      {...props}
+    >
+      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+        <DropdownMenuPrimitive.ItemIndicator>
+          <i className="ri-radio-button-fill text-white text-[16px]"></i>
+        </DropdownMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </DropdownMenuPrimitive.CheckboxItem>
+  )
+);
+DropdownMenuCheckboxItem.displayName =
+  DropdownMenuPrimitive.CheckboxItem.displayName;
+
+const DropdownMenuRadioItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem> &
+    VariantProps<typeof MenuItemStyles>
+>(
+  (
+    {
+      className,
+      children,
+      variant = "Default",
+      size = "M",
+      disabled,
+      ...props
+    },
+    ref
+  ) => (
+    <DropdownMenuPrimitive.RadioItem
+      ref={ref}
+      className={cn(
+        MenuItemStyles({ variant, size, disabled }),
+        "relative pl-8",
+        className
+      )}
+      {...props}
+    >
+      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+        <DropdownMenuPrimitive.ItemIndicator>
+          <Circle className="h-2 w-2 fill-current" />
+        </DropdownMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </DropdownMenuPrimitive.RadioItem>
+  )
+);
+DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
+
+const DropdownMenuLabel = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Label>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
+    inset?: boolean;
+  }
+>(({ className, inset, ...props }, ref) => (
+  <DropdownMenuPrimitive.Label
+    ref={ref}
+    className={cn(
+      "text-[--content-presentation-state-disabled] typography-body-medium-regular px-[12px] h-[32px] flex justify-start items-center",
+      className
+    )}
+    {...props}
+  />
+));
+DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
+
+const DropdownMenuSeparator = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.Separator
+    ref={ref}
+    className={cn(
+      "mx-[8px] my-[4px] border-b border-b-[rgba(255, 255, 255, 0.00)] flex-1",
+      className
+    )}
+    {...props}
+  />
+));
+DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
+
+const DropdownMenuShortcut = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLSpanElement>) => {
+  return (
+    <span
+      className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
+      {...props}
+    />
+  );
 };
+DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
-export default DropDownMenuItem;
+export {
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuItem,
+};

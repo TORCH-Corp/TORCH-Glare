@@ -1,49 +1,111 @@
 import { LabelHTMLAttributes, ReactNode } from "react";
-import "./style.scss";
+import React from "react";
+import { cn } from "@/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 
-interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
+const labelComponentVariants = cva("flex", {
+  variants: {
+    directions: {
+      vertical: "flex-col justify-start items-start",
+      horizontal: "flex-row justify-start items-center gap-1",
+    },
+  },
+  defaultVariants: {
+    directions: "horizontal",
+  },
+});
+
+const mainLabelVariants = cva(
+  "text-[--content-presentation-global-primary] text-start",
+  {
+    variants: {
+      size: {
+        S: "typography-body-small-regular",
+        M: "typography-body-medium-regular",
+        L: "typography-body-large-regular",
+      },
+    },
+    defaultVariants: {
+      size: "M",
+    },
+  }
+);
+
+const secondaryLabelVariants = cva(
+  "text-[--content-presentation-global-secondary] text-start",
+  {
+    variants: {
+      size: {
+        S: "typography-labels-small-regular",
+        M: "typography-labels-medium-regular",
+        L: "typography-body-small-regular",
+      },
+    },
+    defaultVariants: {
+      size: "M",
+    },
+  }
+);
+
+const requiredLabelVariants = cva(
+  "text-[--content-presentation-state-negative] text-start",
+  {
+    variants: {
+      size: {
+        S: "typography-labels-small-medium",
+        M: "typography-labels-medium-medium",
+        L: "typography-body-small-medium",
+      },
+    },
+    defaultVariants: {
+      size: "M",
+    },
+  }
+);
+
+interface Props
+  extends LabelHTMLAttributes<HTMLLabelElement>,
+    VariantProps<typeof labelComponentVariants> {
   label?: ReactNode; // main label
-  required_label?: ReactNode; // normal text with required style
-  secondary_label?: ReactNode; //normal text with secondary style
-  component_size?: "S" | "M" | "L"; // this is used to change the size style of the component
-  component_style?: "vertical" | "horizontal" | ""; // this is used to change the set of labels direction
-  as_child?: boolean; // this is used to make the label color same as the parent component
-  child_dir?: "vertical" | "vertical-reverse" | "horizontal" | ""; // this is used to change the children direction
-  theme?: "System-Style" | ""; // this is used to change the theme of the component
-  disabled?: boolean; // this is used to disable the label
-  name: string | undefined; // the name of the label and this is important to link the label with parent component
+  requiredLabel?: ReactNode; // normal text with required style
+  secondaryLabel?: ReactNode; // normal text with secondary style
+  as?: React.ElementType;
+  asChild?: boolean;
+  size?: "S" | "M" | "L";
 }
 
-export function Label({
-  label,
-  required_label,
-  secondary_label,
-  component_size = "S",
-  component_style = "horizontal",
-  as_child = false,
-  child_dir = "horizontal",
-  theme = "",
-  disabled = false,
-  name,
-  className,
-  children,
-  ...props
-}: Props) {
-  return (
-    <section
-      {...props}
-      className={`glare-label ${component_size} ${component_style} ${disabled ? "disabled" : ""} child-dir-${child_dir} ${className} glare-label-${theme}`}
-    >
-      <label className="label-container" htmlFor={name}>
-        {label && (
-          <span className={`label ${as_child ? "as-child" : ""}`}>{label}</span>
+export const Label = React.forwardRef<HTMLLabelElement, Props>(
+  (
+    {
+      children,
+      label,
+      secondaryLabel,
+      requiredLabel,
+      size,
+      directions,
+      className,
+      ...props
+    },
+    forwardedRef
+  ) => {
+    return (
+      <label
+        className={cn(labelComponentVariants({ directions }), className)} // Merge generated and custom classNames
+        ref={forwardedRef}
+        {...props}
+      >
+        {label && <p className={cn(mainLabelVariants({ size }))}>{label}</p>}
+        {secondaryLabel && (
+          <p className={cn(secondaryLabelVariants({ size }))}>
+            {secondaryLabel}
+          </p>
         )}
-        {secondary_label && <p className="secondaryLabel">{secondary_label}</p>}
-        {required_label && (
-          <span className="requiredLabel">{required_label}</span>
+        {requiredLabel && (
+          <p className={cn(requiredLabelVariants({ size }))}>{requiredLabel}</p>
         )}
+        {children}
       </label>
-      {children}
-    </section>
-  );
-}
+    );
+  }
+);
+Label.displayName = "Label";

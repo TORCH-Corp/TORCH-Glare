@@ -1,49 +1,110 @@
-import { MouseEventHandler, ReactNode, ButtonHTMLAttributes } from 'react';
-import './styles/index.scss';
-import { BadgeIcon } from './components/badgeIcon';
+import { ReactNode, HTMLAttributes } from "react";
+import { cva, VariantProps } from "class-variance-authority";
 
-interface Props extends ButtonHTMLAttributes<HTMLSpanElement> {
-  label?: string; // label of the badge
-  onCloseBtnClick?: MouseEventHandler; // click event of the close button
-  selected?: boolean; // to show the close button
-  badge_icon?: ReactNode; // if you pass any icon then it will replace the default icon
-  badge_style?:
-  "badge-green" |
-  "badge-green-light" |
-  "badge-cocktail-green" |
-  "badge-yellow" |
-  "badge-red-orange" |
-  "badge-red-light" |
-  "badge-rose" |
-  "badge-purple" |
-  "badge-blue-purple" |
-  "badge-blue" |
-  "badge-navy" |
-  "badge-gray" // the component themes see on figma design file
-  badge_size?: "S" | "M" | "L"; // the component style sizes 
+export const badgeBase = cva(
+  [
+    "px-[6px]",
+    "[&_p]:text-[--content-presentation-action-light-primary]",
+    "flex",
+    "justify-center",
+    "items-center",
+    "border",
+    "rounded-[6px]",
+    "transition-all",
+    "duration-300",
+    "ease-in-out",
+    "w-fit",
+    "[&_i]:leading-0",
+  ],
+  {
+    variants: {
+      size: {
+        XS: "h-[18px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
+        S: "h-[22px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
+        M: "h-[26px] [&_i]:text-[16px] [&_p]:typography-body-medium-medium",
+      },
+      variant: {
+        green:
+          "border-[var(--border-presentation-badge-green)] bg-[var(--background-presentation-badge-green)] [&_i]:text-[var(--content-presentation-badge-green)]",
+        greenLight:
+          "border-[var(--border-presentation-badge-green-light)] bg-[var(--background-presentation-badge-green-light)] [&_i]:text-[var(--content-presentation-badge-green-light)]",
+        cocktailGreen:
+          "border-[var(--border-presentation-badge-cocktail-green)] bg-[var(--background-presentation-badge-cocktail-green)] [&_i]:text-[var(--content-presentation-badge-cocktail-green)]",
+        yellow:
+          "border-[var(--border-presentation-badge-yellow)] bg-[var(--background-presentation-badge-yellow)] [&_i]:text-[var(--content-presentation-badge-yellow)]",
+        redOrange:
+          "border-[var(--border-presentation-badge-red-orange)] bg-[var(--background-presentation-badge-red-orange)] [&_i]:text-[var(--content-presentation-badge-red-orange)]",
+        redLight:
+          "border-[var(--border-presentation-badge-red)] bg-[var(--background-presentation-badge-red)] [&_i]:text-[var(--content-presentation-badge-red)]",
+        rose: "border-[var(--border-presentation-badge-rose)] bg-[var(--background-presentation-badge-rose)] [&_i]:text-[var(--content-presentation-badge-rose)]",
+        purple:
+          "border-[var(--border-presentation-badge-purple)] bg-[var(--background-presentation-badge-purple)] [&_i]:text-[var(--content-presentation-badge-purple)]",
+        bluePurple:
+          "border-[var(--border-presentation-badge-blue-purple)] bg-[var(--background-presentation-badge-blue-purple)] [&_i]:text-[var(--content-presentation-badge-blue-purple)]",
+        blue: "border-[var(--border-presentation-badge-blue)] bg-[var(--background-presentation-badge-blue)] [&_i]:text-[var(--content-presentation-badge-blue)]",
+        navy: "border-[var(--border-presentation-badge-navy)] bg-[var(--background-presentation-badge-navy)] [&_i]:text-[var(--content-presentation-badge-navy)]",
+        gray: "border-[var(--border-presentation-badge-gray)] bg-[var(--background-presentation-badge-gray)] [&_i]:text-[var(--content-presentation-badge-gray)]",
+      },
+    },
+    defaultVariants: {
+      size: "S",
+      variant: "green",
+    },
+  }
+);
+
+// Badge icon styles
+export const badgeIconStyles = cva("flex justify-center items-center", {
+  variants: {
+    size: {
+      S: "text-[12px]",
+      M: "text-[15px]",
+    },
+  },
+  defaultVariants: {
+    size: "S",
+  },
+});
+
+interface BadgeProps
+  extends Omit<HTMLAttributes<HTMLSpanElement>, "className">,
+    VariantProps<typeof badgeBase> {
+  label?: string;
+  onUnselect?: () => void;
+  isSelected?: boolean;
+  badgeIcon?: ReactNode;
+  className?: string;
 }
 
-const Badge: React.FC<Props> = ({
+export const Badge: React.FC<BadgeProps> = ({
   label,
-  onCloseBtnClick,
-  selected,
-  badge_icon,
-  badge_style,
-  badge_size
-  , ...props }) => {
-
+  onUnselect,
+  isSelected,
+  badgeIcon,
+  size = "S",
+  variant = "green",
+  className,
+  ...props
+}) => {
   return (
-    <span
-      {...props}
-      className={`glare-badge glare-badge-size-${badge_size ? badge_size : "S"} ${badge_style} ${props.className}`}
-    >
-      <BadgeIcon badge_icon={badge_icon} />
-      <p className='badge-label'>{label}</p>
-      {/* if the badge is selected then show the close button*/}
-      {selected && <button onClick={onCloseBtnClick} className='glare-badge-close-icon'><i className="ri-close-line"></i></button>}
+    <span {...props} className={badgeBase({ size, variant, className })}>
+      <span className={"flex justify-center items-center"}>
+        {!badgeIcon ? (
+          <i className="ri-circle-fill !text-[8px]"></i>
+        ) : (
+          badgeIcon
+        )}
+      </span>
+
+      <p className="px-[3px]">{label}</p>
+      {isSelected && (
+        <button
+          onClick={onUnselect}
+          className={"flex justify-center items-center"}
+        >
+          <i className="ri-close-line  !text-[--content-presentation-action-light-primary]"></i>
+        </button>
+      )}
     </span>
   );
-}
-
-
-export default Badge
+};

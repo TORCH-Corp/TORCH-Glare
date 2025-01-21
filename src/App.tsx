@@ -1,20 +1,11 @@
-
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/base/dropDowns/dropdownMenu_v2";
-import { DropdownMenuItem } from "@/components/base/dropDowns/dropDownMenuItem_v2";
+import { LinkButton } from "@/components/base/buttons/LinkButton";
+import "@/styles/globals.css";
 
 function App() {
   return (
-
     <div className="flex flex-col gap-2">
-      <DropdownMenu>
-        <DropdownMenuTrigger >
-          OPEN
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <LinkButton>LABEL</LinkButton>
     </div>
-  )
+  );
 }
-export default App; 
+export default App;

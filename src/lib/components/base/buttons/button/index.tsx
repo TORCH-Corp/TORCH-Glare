@@ -1,73 +1,216 @@
-import {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  ReactNode,
-  forwardRef,
-} from "react";
-import { ButtonIcon } from "./components/buttonIcon";
+import React, { ButtonHTMLAttributes } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Slot } from "@radix-ui/react-slot";
+import { LoadingIcon } from "./LoadingIcon";
+import { cn } from "@/utils";
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  left_icon?: ReactNode; // this will show icon on the left side if you pass it
-  right_icon?: ReactNode; // this will show icon on the right side if you pass it
-  is_loading?: boolean; // this will show loading icon if true
-  component_style?:
-  | "BlueSecStyle"
-  | "YelSecStyle"
-  | "RedSecStyle"
-  | "BorderStyle"
-  | "PrimeContStyle"
-  | "BlueContStyle"
-  | "RedContStyle"; // this prop will change the button style see on figma design file
-  component_size?: "S" | "M" | "L"; // this prop will change the button style size see on figma design file
-}
-
-const Button = forwardRef<HTMLButtonElement, Props>(
-  (
-    {
-      left_icon,
-      right_icon,
-      is_loading,
-      component_style,
-      component_size = "S",
-      children,
-      className,
-      ...props
+const buttonVariants = cva(
+  "flex items-center justify-center  transition-[background,color] duration-200 ease-in-out border border-transparent outline-none",
+  {
+    variants: {
+      variant: {
+        PrimeStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-action-hover)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        BlueSecStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-state-information-primary)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        YelSecStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-state-warning-primary)]",
+          "hover:text-[var(--content-presentation-action-light-primary)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        RedSecStyle: [
+          "bg-[var(--background-presentation-action-secondary)]",
+          "text-[var(--content-presentation-action-light-primary)]",
+          "hover:bg-[var(--background-presentation-state-negative-primary)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        BorderStyle: [
+          "border border-[var(--border-presentation-action-disabled)]",
+          "bg-[var(--background-presentation-action-borderstyle)]",
+          "hover:bg-[var(--background-presentation-action-hover)]",
+          "hover:text-[var(--content-presentation-action-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:text-[var(--content-presentation-action-light-primary)]",
+          "focus:hover:text-[var(--content-presentation-action-hover)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        PrimeContStyle: [
+          "border-0 bg-transparent",
+          "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
+          "hover:text-[var(--content-presentation-action-light-primary)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:bg-[var(--background-presentation-action-borderstyle)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        BlueContStyle: [
+          "border-0 bg-transparent",
+          "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
+          "hover:text-[var(--content-presentation-action-information-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:bg-[var(--background-presentation-action-borderstyle)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+        RedContStyle: [
+          "border-0 bg-transparent",
+          "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
+          "hover:text-[var(--content-presentation-action-negative-hover)]",
+          "focus:border focus:border-[var(--border-presentation-state-focus)]",
+          "focus:bg-[var(--background-presentation-action-borderstyle)]",
+          "active:border active:border-[var(--border-presentation-state-focus)]",
+        ],
+      },
+      size: {
+        S: "h-[22px] px-[6px] typography-body-small-medium rounded-[4px]",
+        M: "h-[26px] px-[8px] typography-body-medium-medium rounded-[4px]",
+        L: "h-[28px] px-[15px] typography-body-large-medium rounded-[6px]",
+      },
+      is_loading: {
+        true: "",
+      },
+      disabled: {
+        true: "",
+      },
+      buttonType: {
+        button: "",
+        icon: "",
+      },
     },
-    ref
-  ) => {
-    return (
-      <button
-        {...props}
-        ref={ref}
-        className={`glare-button glare-button-${component_size} glare-button-without-icon-${!children && component_size} ${is_loading ? "glare-button-loading" : ""} ${component_style} ${className}`}
-      >
-        <ButtonIcon is_loading={is_loading} icon={left_icon} />
-        {children}
-        <ButtonIcon is_loading={is_loading} icon={right_icon} />
-        {is_loading && <LoadingRing className="glare-button-loading-img" />}
-      </button>
-    );
+    defaultVariants: {
+      size: "M",
+      variant: "PrimeStyle",
+      buttonType: "button",
+    },
+    compoundVariants: [
+      {
+        is_loading: true,
+        className: [
+          "cursor-wait",
+          "bg-[--background-presentation-action-hover]",
+          "text-[--content-presentation-action-hover]",
+          "hover:bg-[--background-presentation-action-hover]",
+          "hover:text-[--content-presentation-action-hover]",
+          "focus:border focus:border-transparent",
+          "active:border active:border-transparent",
+        ],
+      },
+      {
+        disabled: true,
+        className: [
+          "cursor-not-allowed",
+          "pointer-events-none",
+          "bg-[--background-presentation-action-disabled]",
+          "text-[--content-presentation-state-disabled]",
+          "border-[--border-presentation-state-disabled]",
+        ],
+      },
+      {
+        buttonType: "icon",
+        size: "S",
+        className: "w-[22px] h-[22px] p-0 leading-[0]",
+      },
+      {
+        buttonType: "icon",
+        size: "M",
+        className: "w-[26px] h-[26px] p-0 leading-[0]",
+      },
+      {
+        buttonType: "icon",
+        size: "L",
+        className: "w-[28px] h-[28px] p-0 leading-[0]",
+      },
+    ],
   }
 );
 
-Button.displayName = "Button";
+interface Props
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  is_loading?: boolean;
+  disabled?: boolean;
+  asChild?: boolean;
+  as?: React.ElementType;
+}
+export const Button = function ({
+  is_loading = false,
+  variant,
+  size,
+  asChild,
+  as: Tag = "button",
+  buttonType,
+  className,
+  disabled,
+  children,
+  ...props
+}: Props) {
+  const Component = asChild ? Slot : Tag;
 
-export default Button;
+  const wrapTextContent = (children: React.ReactNode) => {
+    if (Array.isArray(children)) {
+      return children.map((child, index) => {
+        if (typeof child === "string" && child.trim() !== "") {
+          return (
+            <p key={index} className="px-[3px]">
+              {child}
+            </p>
+          );
+        }
+        return child;
+      });
+    }
 
-const LoadingRing = (props: HTMLAttributes<HTMLOrSVGElement>) => (
-  <svg
-    {...props}
-    viewBox="0 0 10 10"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M10 5C10 7.76142 7.76142 10 5 10C2.23858 10 0 7.76142 0 5C0 2.23858 2.23858 0 5 0C7.76142 0 10 2.23858 10 5ZM1.25 5C1.25 7.07107 2.92893 8.75 5 8.75C7.07107 8.75 8.75 7.07107 8.75 5C8.75 2.92893 7.07107 1.25 5 1.25C2.92893 1.25 1.25 2.92893 1.25 5Z"
-      fill="#F4F4F4"
-    />
-    <path
-      d="M10 5C10 4.34339 9.87067 3.69321 9.6194 3.08658C9.36812 2.47995 8.99983 1.92876 8.53553 1.46447C8.07124 1.00017 7.52004 0.631876 6.91342 0.380602C6.30679 0.129329 5.65661 -2.87013e-08 5 0V1.25C5.49246 1.25 5.98009 1.347 6.43506 1.53545C6.89003 1.72391 7.30343 2.00013 7.65165 2.34835C7.99987 2.69657 8.27609 3.10997 8.46455 3.56494C8.653 4.01991 8.75 4.50754 8.75 5H10Z"
-      fill="#0075FF"
-    />
-  </svg>
-);
+    if (children && typeof children === "string" && children.trim() !== "") {
+      return <p className="px-[3px]">{children}</p>;
+    }
+
+    return children;
+  };
+
+  return (
+    <Component
+      className={cn(
+        buttonVariants({
+          variant,
+          size,
+          is_loading,
+          buttonType,
+          className,
+          disabled,
+        })
+      )}
+      {...props}
+    >
+      {asChild ? (
+        React.cloneElement(
+          children as React.ReactElement,
+          {},
+          <>
+            {(children as React.ReactElement).props.children}
+            {is_loading && <LoadingIcon size={size} />}
+          </>
+        )
+      ) : (
+        <>
+          {wrapTextContent(children)}
+          {is_loading && <LoadingIcon size={size} />}
+        </>
+      )}
+    </Component>
+  );
+};

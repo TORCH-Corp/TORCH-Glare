@@ -1,38 +1,82 @@
-import React, { useRef } from 'react';
-import RectangleIcon from './rectangleIcon';
-import './style.scss';
-import useDirectionCalc from '@hooks/useDirectionCalc';
+import { cva, VariantProps } from "class-variance-authority";
+import { ReactNode } from "react";
+import * as RadixTooltip from "@radix-ui/react-tooltip";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { cn } from "@/utils";
 
-interface Props {
-    message: string | null; // the message to be shown in the tooltip
+export type ToolTipSide = "top" | "right" | "bottom" | "left";
+
+export enum ContentAlign {
+  START = "start",
+  CENTER = "center",
+  END = "end",
 }
 
-const Tooltip: React.FC<Props> = ({ message, ...props }) => {
-    const ref = useRef<HTMLDivElement>(null);
-    // detect the viewport and change the direction of the tooltip
-    const direction = useDirectionCalc({
-        ElementRef: ref,
-        dirClasses: {
-            // these are the classes that will be added to the tooltip to change its direction
-            left: 'Tooltip-Left',
-            right: 'Tooltip-Right',
-            top: 'Tooltip-TOP',
-            bottom: 'Tooltip-BOTTOM'
-        }
-    });
+const tooltipStyles = cva("typography-body-medium-regular rounded-[4px] p-1", {
+  variants: {
+    variant: {
+      primary:
+        "bg-[--background-system-body-tertiary] text-[--content-system-global-primary]",
+    },
+  },
+  defaultVariants: {
+    variant: "primary",
+  },
+});
 
-    return message ? (
-        <section
-            {...props}
-            style={direction == 'Tooltip-TOP' ? { top: ref.current?.offsetHeight ? ref.current?.offsetHeight >= 50 ? '-200%' : "-130%" : "-130%" } : {}}
-            ref={ref}
-            dir='ltr'
-            className={`Tooltip ${direction}`}
+interface TooltipProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof tooltipStyles> {
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
+  toolTipSide?: ToolTipSide;
+  contentAlign?: ContentAlign;
+  avoidCollisions?: boolean;
+  tip?: boolean;
+  delay?: number;
+  disabled?: boolean;
+  text: ReactNode;
+}
+
+export const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  open,
+  text,
+  onOpenChange,
+  toolTipSide = "right",
+  contentAlign = ContentAlign.CENTER,
+  avoidCollisions = true,
+  delay = 400,
+  tip = true,
+  variant,
+  className,
+  ...props
+}) => {
+  return (
+    <TooltipProvider>
+      <RadixTooltip.Root
+        delayDuration={delay}
+        {...(typeof open !== "undefined" && { open })}
+        {...(onOpenChange && { onOpenChange })}
+      >
+        <RadixTooltip.Trigger aria-label="Open tooltip" asChild>
+          {children}
+        </RadixTooltip.Trigger>
+
+        <RadixTooltip.Content
+          sideOffset={2}
+          side={toolTipSide}
+          align={contentAlign}
+          avoidCollisions={avoidCollisions}
+          className={cn(tooltipStyles({ variant, className }))}
+          {...props}
         >
-            <RectangleIcon />
-            <p>{message}</p>
-        </section>
-    ) : null;
+          {text}
+          {tip && (
+            <RadixTooltip.Arrow className="fill-[--background-system-body-tertiary]" />
+          )}
+        </RadixTooltip.Content>
+      </RadixTooltip.Root>
+    </TooltipProvider>
+  );
 };
-
-export default Tooltip;

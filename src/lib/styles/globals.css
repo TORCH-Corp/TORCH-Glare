@@ -1,3 +1,6 @@
+@import "./colors/index.css";
+@import "remixicon/fonts/remixicon.css";
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   /* IE and Edge */
