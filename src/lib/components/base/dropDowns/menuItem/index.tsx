@@ -78,9 +78,17 @@ export const MenuItemStyles = cva(
         ],
       },
 
+      active: {
+        true: [
+          "bg-[--background-presentation-action-selected]",
+          "text-[--content-presentation-action-light-primary]",
+        ],
+      },
+
       defaultVariants: {
         variant: "SystemStyle",
         size: "M",
+        active: false,
         disabled: false,
       },
     },
@@ -89,6 +97,16 @@ export const MenuItemStyles = cva(
         disabled: true,
         variant: "SystemStyle",
         className: ["bg-[#1C1D1F]", "text-[#797C7F]"],
+      },
+      {
+        active: true,
+        variant: "SystemStyle",
+        className: ["bg-[#252729]", "text-[#F9F9F9]", "border-transparent"],
+      },
+      {
+        active: true,
+        variant: "Warning",
+        className: ["text-[--content-presentation-state-negative]"],
       },
     ],
   }
@@ -104,6 +122,7 @@ export const MenuItem = function ({
   asChild,
   className,
   children,
+  active,
   ...props
 }: Props) {
   const Component = asChild ? Slot : "li";
@@ -116,6 +135,7 @@ export const MenuItem = function ({
         MenuItemStyles({
           variant,
           size,
+          active,
         }),
         className
       )}

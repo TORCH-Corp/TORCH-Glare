@@ -12,13 +12,24 @@ const DropdownMenuItem = React.forwardRef<
   } & VariantProps<typeof MenuItemStyles>
 >(
   (
-    { className, inset, variant = "Default", size = "M", disabled, ...props },
+    {
+      className,
+      inset,
+      variant = "Default",
+      size = "M",
+      disabled,
+      active,
+      ...props
+    },
     ref
   ) => (
     <DropdownMenuPrimitive.Item
       {...props}
       ref={ref}
-      className={cn(MenuItemStyles({ variant, size, disabled }), className)}
+      className={cn(
+        MenuItemStyles({ variant, size, disabled, active }),
+        className
+      )}
     />
   )
 );

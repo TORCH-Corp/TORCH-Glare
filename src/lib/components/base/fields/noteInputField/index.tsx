@@ -1,28 +1,75 @@
-import { forwardRef, TextareaHTMLAttributes } from "react";
+import * as React from "react";
+import { cn } from "@/lib/utils";
 import { Label } from "@/components/base/labels/label";
-import { Textarea } from "./textarea";
-import "./style.scss";
+import { cva, VariantProps } from "class-variance-authority";
 
-interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  name: string; // the name of the textArea and this is important to link the textArea with the label
-  label?: string;
-  requiredLabel?: string;
-  secondaryLabel?: string;
-  labelDirections?: "vertical" | "horizontal"; // this is used to change the label direction
-  errorMessage?: string; // this is used to show the error message tooltip
-  negative?: boolean; // this is used to have negative style
+// Define the styles for the textarea using cva
+const textareaStyles = cva(
+  [
+    "w-full",
+    "border",
+    "rounded-lg",
+    "px-[4px]",
+    "py-[12px]",
+    "outline-none",
+    "!min-h-[36px]",
+    "transition-[border,background-color,color,caret-color]",
+    "ease-in-out",
+    "duration-150",
+    "text-[var(--content-presentation-action-light-primary)]",
+    "caret-[var(--border-presentation-state-focus)]",
+    "focus:ring-2",
+  ],
+  {
+    variants: {
+      state: {
+        default: [
+          "border-[var(--border-presentation-action-primary)]",
+          "bg-[var(--background-presentation-form-field-primary)]",
+          "hover:border-[var(--border-presentation-action-hover)]",
+          "focus:border-[var(--border-presentation-state-focus)]",
+          "focus:ring-[var(--border-presentation-state-focus)]",
+        ],
+        negative: [
+          "border-[var(--border-presentation-state-negative)]",
+          "caret-[var(--border-presentation-state-negative)]",
+          "hover:border-[var(--border-presentation-state-negative)]",
+          "focus:border-[var(--border-presentation-state-negative)]",
+          "focus:ring-[var(--border-presentation-state-negative)]",
+        ],
+        disabled: [
+          "border-[var(--border-presentation-action-disabled)]",
+          "bg-[var(--background-presentation-action-disabled)]",
+          "text-[var(--border-presentation-action-disabled)]",
+          "cursor-not-allowed",
+          "placeholder-[var(--border-presentation-action-disabled)]",
+        ],
+      },
+    },
+    defaultVariants: {
+      state: "default",
+    },
+  }
+);
+
+// Define the prop types for the Textarea component
+interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+    VariantProps<typeof textareaStyles> {
+  label?: string; // Optional label text
+  requiredLabel?: string; // Text for required field indicator
+  secondaryLabel?: string; // Additional label text
 }
 
-export const NoteInputField = forwardRef<HTMLTextAreaElement, Props>(
+// Textarea component definition
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
-      name,
+      className,
+      state = "default", // Default state for textarea
       label,
       requiredLabel,
       secondaryLabel,
-      labelDirections,
-      errorMessage,
-      negative,
       ...props
     },
     ref
@@ -30,14 +77,18 @@ export const NoteInputField = forwardRef<HTMLTextAreaElement, Props>(
     return (
       <Label
         label={label}
-        secondaryLabel={secondaryLabel}
-        size="M"
         requiredLabel={requiredLabel}
-        className="custom-label"
-        style={props.style}
-      ></Label>
+        secondaryLabel={secondaryLabel}
+      >
+        <textarea
+          className={cn(textareaStyles({ state }), className)}
+          ref={ref}
+          {...props}
+        />
+      </Label>
     );
   }
 );
+Textarea.displayName = "Textarea";
 
-export default NoteInputField;
+export { Textarea };
