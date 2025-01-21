@@ -8,7 +8,7 @@ const textareaStyles = cva(
   [
     "w-full",
     "border",
-    "rounded-lg",
+    "rounded-[4px]",
     "px-[4px]",
     "py-[12px]",
     "outline-none",
@@ -18,7 +18,10 @@ const textareaStyles = cva(
     "duration-150",
     "text-[var(--content-presentation-action-light-primary)]",
     "caret-[var(--border-presentation-state-focus)]",
-    "focus:ring-2",
+    "border-[var(--border-presentation-action-primary)]",
+    "bg-[var(--background-presentation-form-field-primary)]",
+    "hover:border-[var(--border-presentation-action-hover)]",
+    "focus:border-[var(--border-presentation-state-focus)]",
   ],
   {
     variants: {
@@ -28,14 +31,12 @@ const textareaStyles = cva(
           "bg-[var(--background-presentation-form-field-primary)]",
           "hover:border-[var(--border-presentation-action-hover)]",
           "focus:border-[var(--border-presentation-state-focus)]",
-          "focus:ring-[var(--border-presentation-state-focus)]",
         ],
         negative: [
           "border-[var(--border-presentation-state-negative)]",
           "caret-[var(--border-presentation-state-negative)]",
           "hover:border-[var(--border-presentation-state-negative)]",
           "focus:border-[var(--border-presentation-state-negative)]",
-          "focus:ring-[var(--border-presentation-state-negative)]",
         ],
         disabled: [
           "border-[var(--border-presentation-action-disabled)]",
@@ -55,7 +56,7 @@ const textareaStyles = cva(
 // Define the prop types for the Textarea component
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    VariantProps<typeof textareaStyles> {
+  VariantProps<typeof textareaStyles> {
   label?: string; // Optional label text
   requiredLabel?: string; // Text for required field indicator
   secondaryLabel?: string; // Additional label text
