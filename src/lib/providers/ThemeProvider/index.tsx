@@ -1,3 +1,4 @@
+'use client';
 import {
   createContext,
   ReactNode,
@@ -5,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import './themes/index.css';
 
 interface ThemeProps {
   theme: "light" | "dark" | "default";

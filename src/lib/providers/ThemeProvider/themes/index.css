@@ -1,5 +1,6 @@
 @import "./themes/index.css";
 @import "./mods/index.css";
+@import "remixicon/fonts/remixicon.css";
 
 * {
   box-sizing: border-box;

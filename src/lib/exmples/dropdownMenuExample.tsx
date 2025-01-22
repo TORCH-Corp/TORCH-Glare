@@ -16,7 +16,7 @@ import {
   DropdownMenuShortcut,
 } from "@/components/base/DropdownMenuItem";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/providers/themeProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function DropdownMenuExample() {

@@ -1,7 +1,7 @@
 "use client";
 import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
 import { cva } from "class-variance-authority";
-import { cn } from "../utils";
+import { cn } from "./utils";
 
 export const glareAlert = cva(
   "flex relative justify-start items-center rounded-[4px] min-h-26px w-fit pr-1 rtl:pl-1 rtl:pr-0",

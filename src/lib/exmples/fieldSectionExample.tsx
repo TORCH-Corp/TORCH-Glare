@@ -2,7 +2,7 @@ import { Alert } from "@/components/base/Alert";
 import { FieldSection } from "@/components/base/FieldSection";
 import { InputField } from "@/components/base/InputField";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/providers/themeProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function FieldSectionExample() {

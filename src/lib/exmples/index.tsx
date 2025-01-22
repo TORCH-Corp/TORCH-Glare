@@ -1,4 +1,4 @@
-import { useTheme } from "@/providers/themeProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { cn } from "@/utils";
 import { Button } from "@/components/base/Button";
 import ActionButtonExample from "./actionButtonExample";

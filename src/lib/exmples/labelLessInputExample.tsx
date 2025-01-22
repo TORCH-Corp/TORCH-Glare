@@ -2,7 +2,7 @@ import { Button } from "@/components/base/Button";
 import { LabelLessInput } from "@/components/base/LabelLessInput";
 import { MenuItem } from "@/components/base/MenuItem";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/providers/themeProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function LabelLessInputExample() {

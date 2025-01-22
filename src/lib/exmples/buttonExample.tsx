@@ -1,6 +1,6 @@
 import { Button } from "@/components/base/Button";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/providers/themeProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function ButtonExample() {

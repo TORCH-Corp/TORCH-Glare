@@ -207,6 +207,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                   focusSetter={setFucus}
                   size={size}
                   ref={ref}
+                  className="group"
                 />
 
                 <div

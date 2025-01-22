@@ -1,6 +1,6 @@
 import { ActionButton } from "@/components/base/ActionButton";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/providers/themeProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function ActionButtonExample() {
