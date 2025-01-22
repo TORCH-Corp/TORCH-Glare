@@ -1,5 +1,5 @@
 import { HTMLAttributes } from "react";
-import { Button } from "@components/base/buttons/button";
+import { Button } from "@/components/base/button";
 import "./style.scss";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

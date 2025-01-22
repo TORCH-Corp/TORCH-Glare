@@ -1,4 +1,4 @@
-import { Textarea } from "@/components/base/fields/noteInputField";
+import { Textarea } from "@/components/base/textarea";
 import "@/styles/globals.css";
 import { useEffect, useRef } from "react";
 

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ActionButton } from "@/components/base/buttons/actionButton";
+import { ActionButton } from "@/components/base/actionButton";
 import { useTheme } from "@/providers/themeProvider";
 import { cn } from "@/utils";
 import {
@@ -12,20 +12,20 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/base/dropDowns/dropdownMenu";
+} from "@/components/base/dropdownMenu";
 import {
   DropdownMenuCheckboxItem,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-} from "@/components/base/dropDowns/dropDownMenuItem";
-import { FieldSection } from "@/components/shared/forms/fieldSection";
-import { Alert } from "@/components/base/alerts/alert";
-import { InputField } from "@/components/base/fields/inputField";
-import { MenuItem } from "@/components/base/dropDowns/menuItem";
-import { LabelLessInput } from "@/components/base/fields/labelLessInput";
-import { Button } from "@/components/base/buttons/button";
+} from "@/components/base/dropDownMenuItem";
+import { FieldSection } from "@/components/base/fieldSection";
+import { Alert } from "@/components/base/alert";
+import { InputField } from "@/components/base/inputField";
+import { MenuItem } from "@/components/base/menuItem";
+import { LabelLessInput } from "@/components/base/labelLessInput";
+import { Button } from "@/components/base/button";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -374,22 +374,10 @@ export default function Examples() {
             requiredLabel={`Required`}
             childrenUnderLabel={
               <>
-                <Alert
-                  component_label={"Warning"}
-                  component_state={"Warning"}
-                ></Alert>
-                <Alert
-                  component_label={"Error"}
-                  component_state={"Error"}
-                ></Alert>
-                <Alert
-                  component_label={"Info"}
-                  component_state={"Info"}
-                ></Alert>
-                <Alert
-                  component_label={"Success"}
-                  component_state={"Success"}
-                ></Alert>
+                <Alert label={"Warning"} state={"warning"}></Alert>
+                <Alert label={"Error"} state={"error"}></Alert>
+                <Alert label={"Info"} state={"info"}></Alert>
+                <Alert label={"Success"} state={"success"}></Alert>
               </>
             }
           >

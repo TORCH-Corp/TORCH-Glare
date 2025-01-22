@@ -1,6 +1,6 @@
 import { InputHTMLAttributes } from "react";
 import "./style.scss";
-import { Button } from "@/components/base/buttons/button";
+import { Button } from "@/components/base/button";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   getRootProps: () => any;

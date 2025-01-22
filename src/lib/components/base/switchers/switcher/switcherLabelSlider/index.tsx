@@ -1,4 +1,4 @@
-import { Label } from "@/components/base/labels/label";
+import { Label } from "@/components/base/label";
 import "./style.scss";
 interface Props {
   active: boolean;

@@ -1,8 +1,8 @@
 import { VariantProps } from "class-variance-authority";
-import { cn } from "@/utils";
+import { cn } from "../utils";
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { dropdownMenuStyles } from "../dropDowns/dropdownMenu";
+import { dropdownMenuStyles } from "../dropdownMenu";
 
 interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {
   variant?: "SystemStyle" | "PresentationStyle";
