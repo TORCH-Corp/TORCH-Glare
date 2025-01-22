@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "types": ["vitest/globals"],
+    "types": [
+      "vitest/globals"
+    ],
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -19,11 +25,21 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": ["./src/lib/*"],
-      "@components/*": ["./src/lib/components/*"],
-      "@hooks/*": ["./src/lib/hooks/*"],
-      "@styles/*": ["./src/lib/styles/*"],
-      "@utils/*": ["./src/lib/utils/*"]
+      "@/*": [
+        "./src/lib/*"
+      ],
+      "@components/*": [
+        "./src/lib/components/*"
+      ],
+      "@hooks/*": [
+        "./src/lib/hooks/*"
+      ],
+      "@styles/*": [
+        "./src/lib/styles/*"
+      ],
+      "@utils/*": [
+        "./src/lib/utils/*"
+      ]
     }
   },
   "include": [
@@ -31,7 +47,8 @@
     "src",
     "src/lib",
     "./test/setup.ts",
-    "test/index.ts"
+    "test/index.ts",
+    "src/lib/components/base/labelfield/LabelField.tsx"
   ],
   "references": [
     {

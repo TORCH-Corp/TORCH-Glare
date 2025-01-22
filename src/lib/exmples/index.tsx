@@ -1,13 +1,12 @@
-import { useState } from "react";
 import { useTheme } from "@/providers/themeProvider";
 import { cn } from "@/utils";
-import { Button } from "@/components/base/button";
-import ActionButtonExample from "./actionButton.example";
-import ButtonExample from "./button.example";
-import FieldSectionExample from "./fieldSection.example";
-import DropdownMenuExample from "./dropdownMenu.example";
-import InputFieldExample from "./inputFieldExample.example";
-import LabelLessInputExample from "./labelLessInput.example";
+import { Button } from "@/components/base/Button";
+import ActionButtonExample from "./actionButtonExample";
+import ButtonExample from "./buttonExample";
+import FieldSectionExample from "./fieldSectionExample";
+import DropdownMenuExample from "./dropdownMenuExample";
+import InputFieldExample from "./inputFieldExampleExample";
+import LabelLessInputExample from "./labelLessInputExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
