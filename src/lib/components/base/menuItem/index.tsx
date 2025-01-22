@@ -1,5 +1,5 @@
 import { HTMLAttributes } from "react";
-import { cn } from "@/utils";
+import { cn } from "../utils";
 import { cva, VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
 
