@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 import { ActionButton } from "@/components/base/actionButton";
 import { useTheme } from "@/providers/themeProvider";
@@ -57,7 +56,7 @@ export default function Examples() {
 
   return (
     <div
-      className={cn("flex flex-col gap-8  p-4 w-full", {
+      className={cn("flex flex-col gap-8 p-4 w-full overflow-scroll", {
         "bg-white": theme === "light",
         "bg-black": theme === "dark",
       })}
