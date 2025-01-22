@@ -27,8 +27,8 @@ const inputFieldStyles = cva(
         ],
       },
       size: {
-        S: ["rounded-[6px]"],
-        M: ["rounded-[8px]"],
+        S: ["h-[30px] rounded-[6px]"],
+        M: ["h-[40px] rounded-[8px]"],
       },
     },
     defaultVariants: {
@@ -36,23 +36,25 @@ const inputFieldStyles = cva(
     },
   }
 );
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  fucusSetter?: (fucus: boolean) => void;
+
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  focusSetter?: (focus: boolean) => void;
   variant?: "SystemStyle";
+  size?: "S" | "M";
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(
-  ({ fucusSetter, className, variant, size, ...props }, ref) => {
+  ({ focusSetter, className, variant, size, ...props }, ref) => {
     return (
       <input
         {...props}
-        className={cn(inputFieldStyles({ variant }), className)}
+        className={cn(inputFieldStyles({ variant, size }), className)}
         onFocus={(e) => {
-          fucusSetter && fucusSetter(true);
+          focusSetter && focusSetter(true);
           props.onFocus && props.onFocus(e);
         }}
         onBlur={(e) => {
-          fucusSetter && fucusSetter(false);
+          focusSetter && focusSetter(false);
           props.onBlur && props.onBlur(e);
         }}
         ref={ref}

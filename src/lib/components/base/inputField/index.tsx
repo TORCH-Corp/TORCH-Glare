@@ -82,7 +82,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 <Input
                   {...props}
                   variant={variant}
-                  fucusSetter={setFucus}
+                  focusSetter={setFucus}
+                  size={size}
                   ref={ref}
                 />
 
