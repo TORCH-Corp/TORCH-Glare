@@ -1,6 +1,4 @@
 import React, { ButtonHTMLAttributes, ReactNode, useRef } from "react";
-import "./style.scss";
-import { useHideDropDown } from "@/hooks/usehideDropDown";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   Label: string; // label of the button
@@ -17,7 +15,6 @@ const ProfileItem: React.FC<Props> = ({
 }) => {
   const itemRef = useRef<HTMLButtonElement>(null);
   // this hook will show or hide the drop down list when you click on the avatar
-  const { isActive, setIsActive } = useHideDropDown(itemRef);
 
   return (
     <section className="profile-item-wrapper" ref={itemRef}>
@@ -25,7 +22,6 @@ const ProfileItem: React.FC<Props> = ({
         {...buttonProps}
         className="profile-item"
         onClick={(e) => {
-          setIsActive(true); // for dropdown list show or hide when user click on the component
           if (onClick) onClick(e);
         }}
       >

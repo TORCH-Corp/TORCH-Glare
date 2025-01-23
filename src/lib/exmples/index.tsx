@@ -1,12 +1,15 @@
 import { useTheme } from "@/providers/ThemeProvider";
-import { cn } from "@/utils";
+import { cn } from "@/components/base/utils";
 import { Button } from "@/components/base/Button";
-import ActionButtonExample from "./actionButtonExample";
-import ButtonExample from "./buttonExample";
-import FieldSectionExample from "./fieldSectionExample";
-import DropdownMenuExample from "./dropdownMenuExample";
-import InputFieldExample from "./inputFieldExampleExample";
-import LabelLessInputExample from "./labelLessInputExample";
+import ActionButtonExample from "./ActionButtonExample";
+import ButtonExample from "./ButtonExample";
+import FieldSectionExample from "./FieldSectionExample";
+import DropdownMenuExample from "./DropdownMenuExample";
+import InputFieldExample from "./InputFieldExampleExample";
+import LabelLessInputExample from "./LabelLessInputExample";
+import { AlertExample } from "./AlertExample";
+import { BadgeExample } from "./BadgeExample";
+import { ButtonFieldExample } from "./ButtonFieldExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -30,6 +33,9 @@ export default function Examples() {
       <DropdownMenuExample />
       <InputFieldExample />
       <LabelLessInputExample />
+      <AlertExample />
+      <BadgeExample />
+      <ButtonFieldExample />
     </div>
   );
 }

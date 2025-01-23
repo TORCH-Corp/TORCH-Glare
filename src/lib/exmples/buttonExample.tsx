@@ -1,5 +1,5 @@
 import { Button } from "@/components/base/Button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

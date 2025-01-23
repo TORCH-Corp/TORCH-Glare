@@ -1,10 +1,10 @@
-import { ActionButton } from "@/components/base/ActionButton";
+import Alert from "@/components/base/Alert";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
-export default function ActionButtonExample() {
-  const [sizes] = useState<any>(["XS", "S", "M"]);
+export function AlertExample() {
+  const [variants] = useState<any>(["info", "warning", "error", "success"]);
   const { theme } = useTheme();
 
   return (
@@ -15,21 +15,20 @@ export default function ActionButtonExample() {
           theme === "light" ? "text-black" : "text-white"
         )}
       >
-        Action Button Preview
+        Alert Preview
       </h1>
-      {sizes.map((size: any) => (
-        <div key={size} className="flex flex-col gap-2 w-full">
+      {variants.map((variant: any) => (
+        <div key={variant} className="flex flex-col gap-2 w-full">
           <span
             className={cn(
               "text-sm",
               theme === "light" ? "text-black" : "text-white"
             )}
           >
-            Size: {size}
+            Variant: {variant}
           </span>
-          <ActionButton size={size}>
-            <i className="ri-add-circle-fill"></i>
-          </ActionButton>
+          <Alert label={`Alert with variant: ${variant}`} state={variant} >
+          </Alert>
         </div>
       ))}
     </>
