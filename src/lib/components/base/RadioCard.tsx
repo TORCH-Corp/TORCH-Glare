@@ -1,6 +1,6 @@
 import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
 import { cva } from "class-variance-authority";
-import { RadioLabel } from "../radioLabel";
+import { RadioLabel } from "./RadioLabel";
 
 export const glareRadioCard = cva(
   [
