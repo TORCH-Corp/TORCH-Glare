@@ -1,10 +1,10 @@
-import { Badge } from "@/components/base/Badge";
+import TabFormItem from "@/components/base/TabFormItem";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
-export function BadgeExample() {
-  const [variants] = useState<any>(["green", "greenLight", "cocktailGreen", "yellow", 'redOrange', 'redLight', 'rose', 'purple', 'bluePurple', 'blue', 'navy', 'gray']);
+export function TabFormItemExample() {
+  const [variants] = useState<any>(["top", "side"]);
   const { theme } = useTheme();
 
   return (
@@ -15,7 +15,7 @@ export function BadgeExample() {
           theme === "light" ? "text-black" : "text-white"
         )}
       >
-        Badge Preview
+        TabFormItem Preview
       </h1>
       {variants.map((variant: any) => (
         <div key={variant} className="flex flex-col gap-2 w-full">
@@ -25,12 +25,12 @@ export function BadgeExample() {
               theme === "light" ? "text-black" : "text-white"
             )}
           >
-            Variant: {variant}
+            type: {variant}
           </span>
-          <div className="flex gap-2 items-start">
-            <Badge label={`${variant} size: XS`} variant={variant} size={"XS"} isSelected />
-            <Badge label={`${variant} size: S`} variant={variant} size="S" isSelected />
-            <Badge label={`${variant} size: M`} variant={variant} size="M" isSelected />
+          <div className="flex flex-col gap-2 items-start">
+            <TabFormItem componentType={variant} >Default style</TabFormItem>
+            <TabFormItem componentType={variant} active>Active style</TabFormItem>
+            <TabFormItem componentType={variant} buttonType={"icon"} ><i className="ri-home-3-line"></i></TabFormItem>
           </div>
         </div>
       ))}

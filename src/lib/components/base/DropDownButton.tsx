@@ -5,11 +5,119 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "./utils";
 import { dropdownMenuStyles } from "./DropdownMenu";
 import { cva, VariantProps } from "class-variance-authority";
-import { MenuItemStyles } from "./MenuItem";
 import { Button } from "./Button";
 
 
-// radix select as DropDownButton
+// NOTE: radix select as DropDownButton
+
+export const MenuItemStyles = cva(
+  [
+    "text-[--content-presentation-action-light-primary]",
+    "outline-none",
+    "border",
+    "border-transparent",
+    "flex",
+    "gap-[8px]",
+    "items-center",
+    "justify-start",
+    "text-overflow",
+    "overflow-hidden",
+    "px-[12px]",
+    "rounded-[4px]",
+    "transition-all",
+    "ease-in-out",
+    "duration-300",
+  ],
+  {
+    variants: {
+      variant: {
+        Default: [
+          "text-[--content-presentation-action-light-primary]",
+          "bg-[--background-presentation-action-dropdown-primary]",
+          "hover:bg-[--background-presentation-action-hover]",
+          "hover:text-[--content-presentation-action-hover]",
+          "focus:bg-[--background-presentation-action-selected]",
+          "focus:text-[--content-presentation-action-light-primary]",
+          "active:border-[--border-presentation-action-disabled]",
+          "active:bg-[--background-presentation-action-selected]",
+          "active:text-[--content-presentation-action-light-primary]",
+          "active:border-[--border-presentation-action-disabled]",
+          "disabled:text-[--content-presentation-state-disabled]",
+          "disabled:bg-[--white-00]",
+        ],
+        Warning: [
+          "bg-[--background-presentation-action-dropdown-primary]",
+          "text-[--content-presentation-state-information]",
+          "hover:bg-[--background-presentation-state-information-primary]",
+          "hover:text-[--content-presentation-action-hover]",
+        ],
+        Negative: [
+          "bg-[--background-presentation-action-dropdown-primary]",
+          "text-[--content-presentation-state-negative]",
+          "hover:bg-[--background-presentation-state-negative-primary]",
+          "hover:!text-[--content-presentation-action-hover]",
+          "focus:text-[--content-presentation-state-negative]",
+          "active:text-[--content-presentation-state-negative]",
+        ],
+        SystemStyle: [
+          "bg-[#131415]",
+          "text-[#E5E5E5]",
+          "hover:!bg-[#3E1E69]",
+          "hover:!text-[#F9F9F9]",
+          "hover:!border-[#9748FF]",
+          "focus:bg-[#252729]",
+          "focus:border-transparent",
+          "active:border-transparent",
+          "active:bg-[#252729]",
+          "disabled:bg-[#1C1D1F]",
+          "disabled:text-[#797C7F]",
+        ],
+      },
+      size: {
+        S: ["typography-body-small-regular", "h-[24px]"],
+        M: ["typography-body-medium-regular", "h-[32px]"],
+      },
+
+      disabled: {
+        true: [
+          "text-[--content-presentation-state-disabled]",
+          "bg-[--white-00]",
+        ],
+      },
+
+      active: {
+        true: [
+          "bg-[--background-presentation-action-selected]",
+          "text-[--content-presentation-action-light-primary]",
+        ],
+      },
+
+      defaultVariants: {
+        variant: "SystemStyle",
+        size: "M",
+        active: false,
+        disabled: false,
+      },
+    },
+    compoundVariants: [
+      {
+        disabled: true,
+        variant: "SystemStyle",
+        className: ["bg-[#1C1D1F]", "text-[#797C7F]"],
+      },
+      {
+        active: true,
+        variant: "SystemStyle",
+        className: ["bg-[#252729]", "text-[#F9F9F9]", "border-transparent"],
+      },
+      {
+        active: true,
+        variant: "Warning",
+        className: ["text-[--content-presentation-state-negative]"],
+      },
+    ],
+  }
+);
 
 export const dropdownButtonStyles = cva(
   [
@@ -46,13 +154,13 @@ export const dropdownButtonStyles = cva(
   }
 );
 
-const Select = SelectPrimitive.Root;
+const DropDownButton = SelectPrimitive.Root;
 
-const SelectGroup = SelectPrimitive.Group;
+const DropDownButtonGroup = SelectPrimitive.Group;
 
-const SelectValue = SelectPrimitive.Value;
+const DropDownButtonValue = SelectPrimitive.Value;
 
-const SelectTrigger = React.forwardRef<
+const DropDownButtonTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
   VariantProps<typeof dropdownButtonStyles>
@@ -87,9 +195,9 @@ const SelectTrigger = React.forwardRef<
     </SelectPrimitive.Trigger>
   );
 });
-SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
+DropDownButtonTrigger.displayName = "DropDownButtonTrigger"
 
-const SelectScrollUpButton = React.forwardRef<
+const DropDownButtonScrollUpButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
 >(({ className, ...props }, ref) => (
@@ -107,9 +215,9 @@ const SelectScrollUpButton = React.forwardRef<
     />
   </SelectPrimitive.ScrollUpButton>
 ));
-SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
+DropDownButtonScrollUpButton.displayName = "DropDownButtonScrollUpButton";
 
-const SelectScrollDownButton = React.forwardRef<
+const DropDownButtonScrollDownButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollDownButton>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
 >(({ className, ...props }, ref) => (
@@ -127,10 +235,9 @@ const SelectScrollDownButton = React.forwardRef<
     />
   </SelectPrimitive.ScrollDownButton>
 ));
-SelectScrollDownButton.displayName =
-  SelectPrimitive.ScrollDownButton.displayName;
+DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton"
 
-const SelectContent = React.forwardRef<
+const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
   VariantProps<typeof dropdownMenuStyles>
@@ -152,16 +259,16 @@ const SelectContent = React.forwardRef<
         position={position}
         {...props}
       >
-        <SelectScrollUpButton />
+        <DropDownButtonScrollUpButton />
         <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
+        <DropDownButtonScrollDownButton />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )
 );
-SelectContent.displayName = SelectPrimitive.Content.displayName;
+DropDownButtonContent.displayName = "DropDownButtonContent";
 
-const SelectLabel = React.forwardRef<
+const DropDownButtonLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -171,9 +278,9 @@ const SelectLabel = React.forwardRef<
     {...props}
   />
 ));
-SelectLabel.displayName = SelectPrimitive.Label.displayName;
+DropDownButtonLabel.displayName = "DropDownButtonLabel"
 
-const SelectItem = React.forwardRef<
+const DropDownButtonItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
   VariantProps<typeof MenuItemStyles>
@@ -193,9 +300,9 @@ const SelectItem = React.forwardRef<
   </SelectPrimitive.Item>
 ));
 
-SelectItem.displayName = SelectPrimitive.Item.displayName;
+DropDownButtonItem.displayName = "DropDownButtonItem"
 
-const SelectSeparator = React.forwardRef<
+const DropDownButtonSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -205,17 +312,17 @@ const SelectSeparator = React.forwardRef<
     {...props}
   />
 ));
-SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
+DropDownButtonSeparator.displayName = "DropDownButtonSeparator"
 
 export {
-  Select,
-  SelectGroup,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectLabel,
-  SelectItem,
-  SelectSeparator,
-  SelectScrollUpButton,
-  SelectScrollDownButton,
+  DropDownButton,
+  DropDownButtonGroup,
+  DropDownButtonValue,
+  DropDownButtonTrigger,
+  DropDownButtonContent,
+  DropDownButtonLabel,
+  DropDownButtonItem,
+  DropDownButtonSeparator,
+  DropDownButtonScrollUpButton,
+  DropDownButtonScrollDownButton,
 };

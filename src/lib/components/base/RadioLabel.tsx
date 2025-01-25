@@ -42,13 +42,8 @@ export const glareRadioLabelStyles = cva(
           "hover:!border-[--border-presentation-global-primary]",
         ],
       },
-      size: {
-        S: ["w-[12px] h-[12px]"],
-        M: ["w-[24px] h-[24px]"],
-      },
     },
     defaultVariants: {
-      size: "M",
       disabled: false,
     },
   }
@@ -94,7 +89,10 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
             glareRadioLabelStyles({
               disabled: props.disabled,
               checked,
-            })
+            }), {
+            "w-[12px] h-[12px]": size === "S",
+            "w-[24px] h-[24px]": size === "M",
+          }
           )}
         >
           <span
@@ -104,7 +102,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
               {
                 "opacity-100": checked,
               },
-              size === "S" && "w-[4px] h-[4px]",
+              size === "S" && "w-[3px] h-[3px]",
               size === "M" && "w-[6px] h-[6px]"
             )}
           ></span>
@@ -112,6 +110,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
 
         {label && (
           <Label
+            htmlFor={id}
             label={label}
             secondaryLabel={secondaryLabel}
             requiredLabel={requiredLabel}

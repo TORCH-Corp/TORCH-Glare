@@ -151,7 +151,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       errorMessage,
       onTable,
       variant,
-      toolTipSide = "left",
+      toolTipSide,
       className,
       ...props
     },

@@ -43,7 +43,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   open,
   text,
   onOpenChange,
-  toolTipSide = "right",
+  toolTipSide,
   contentAlign = ContentAlign.CENTER,
   avoidCollisions = true,
   delay = 400,

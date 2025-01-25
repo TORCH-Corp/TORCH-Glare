@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "./utils";
@@ -146,73 +146,76 @@ interface Props
   asChild?: boolean;
   as?: React.ElementType;
 }
-export const Button = function ({
-  is_loading = false,
-  variant,
-  size,
-  asChild,
-  as: Tag = "button",
-  buttonType,
-  className,
-  disabled,
-  children,
-  ...props
-}: Props) {
-  const Component = asChild ? Slot : Tag;
+export const Button = forwardRef<HTMLButtonElement, Props>(
+  ({
+    is_loading = false,
+    variant,
+    size,
+    asChild,
+    as: Tag = "button",
+    buttonType,
+    className,
+    disabled,
+    children,
+    ...props
+  }, ref) => {
+    const Component = asChild ? Slot : Tag;
 
-  const wrapTextContent = (children: React.ReactNode) => {
-    if (Array.isArray(children)) {
-      return children.map((child, index) => {
-        if (typeof child === "string" && child.trim() !== "") {
-          return (
-            <p key={index} className="px-[3px]">
-              {child}
-            </p>
-          );
-        }
-        return child;
-      });
-    }
+    const wrapTextContent = (children: React.ReactNode) => {
+      if (Array.isArray(children)) {
+        return children.map((child, index) => {
+          if (typeof child === "string" && child.trim() !== "") {
+            return (
+              <p key={index} className="px-[3px]">
+                {child}
+              </p>
+            );
+          }
+          return child;
+        });
+      }
 
-    if (children && typeof children === "string" && children.trim() !== "") {
-      return <p className="px-[3px]">{children}</p>;
-    }
+      if (children && typeof children === "string" && children.trim() !== "") {
+        return <p className="px-[3px]">{children}</p>;
+      }
 
-    return children;
-  };
+      return children;
+    };
 
-  return (
-    <Component
-      className={cn(
-        buttonVariants({
-          variant,
-          size,
-          is_loading,
-          buttonType,
-          className,
-          disabled,
-        })
-      )}
-      {...props}
-    >
-      {asChild ? (
-        React.cloneElement(
-          children as React.ReactElement,
-          {},
+    return (
+      <Component
+        {...props}
+        ref={ref}
+        className={cn(
+          buttonVariants({
+            variant,
+            size,
+            is_loading,
+            buttonType,
+            className,
+            disabled,
+          })
+        )}
+      >
+        {asChild ? (
+          React.cloneElement(
+            children as React.ReactElement,
+            {},
+            <>
+              {(children as React.ReactElement).props.children}
+              {is_loading && <LoadingIcon size={size} />}
+            </>
+          )
+        ) : (
           <>
-            {(children as React.ReactElement).props.children}
+            {wrapTextContent(children)}
             {is_loading && <LoadingIcon size={size} />}
           </>
-        )
-      ) : (
-        <>
-          {wrapTextContent(children)}
-          {is_loading && <LoadingIcon size={size} />}
-        </>
-      )}
-    </Component>
-  );
-};
+        )}
+      </Component>
+    );
+  }
+)
 
 
 

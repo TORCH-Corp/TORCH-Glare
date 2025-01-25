@@ -4,7 +4,7 @@ import { cn } from '../utils';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
-    selectedImg: string
+    selectedImg: any
     onExpand?: () => void
     expandLabel?: string
     hasExpand?: boolean

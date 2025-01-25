@@ -5,37 +5,64 @@ import ActionButtonExample from "./ActionButtonExample";
 import ButtonExample from "./ButtonExample";
 import FieldSectionExample from "./FieldSectionExample";
 import DropdownMenuExample from "./DropdownMenuExample";
-import InputFieldExample from "./InputFieldExampleExample";
+import InputFieldExample from "./InputFieldExample";
 import LabelLessInputExample from "./LabelLessInputExample";
 import { AlertExample } from "./AlertExample";
 import { BadgeExample } from "./BadgeExample";
 import { ButtonFieldExample } from "./ButtonFieldExample";
+import LabelFieldExample from "./LabelFieldExample";
+import LinkButtonExample from "./LinkButtonExample";
+import { RadioCardExample } from "./RadioCardExample";
+import RadioLabelExample from "./RadioLabelExample";
+import RingLoadingExample from "./RingLoadingExample";
+import SwitcherExample from "./SwitcherExample";
+import { TabFormItemExample } from "./TabFormItemExample";
+import TableExample from "./TableExample";
+import TextareaExample from "./TextareaExample";
+import TooltipExample from "./TooltipExample";
+import AttachmentExample from "./AttachmentExample";
+import DropDownButtonExample from "./DropDownButtonExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
   return (
     <div
-      className={cn("flex flex-col gap-8 p-4 w-full overflow-scroll", {
+      className={cn("w-full flex justify-center", {
         "bg-white": theme === "light",
         "bg-black": theme === "dark",
       })}
     >
-      <Button
-        className="fixed top-[10px] right-[10px]"
-        onClick={() => updateTheme(theme === "light" ? "dark" : "light")}
-      >
-        {theme === "light" ? "GO TO Dark THEME" : "GO TO Light THEME"}{" "}
-      </Button>
+      <section className="flex flex-col gap-8 p-4 max-w-[700px]">
+        <Button
+          className="fixed top-[10px] right-[10px]"
+          onClick={() => updateTheme(theme === "light" ? "dark" : "light")}
+        >
+          {theme === "light" ? "GO TO Dark THEME" : "GO TO Light THEME"}
+        </Button>
 
-      <ActionButtonExample />
-      <ButtonExample />
-      <FieldSectionExample />
-      <DropdownMenuExample />
-      <InputFieldExample />
-      <LabelLessInputExample />
-      <AlertExample />
-      <BadgeExample />
-      <ButtonFieldExample />
+        <ActionButtonExample />
+        <ButtonExample />
+        <TabFormItemExample />
+        <LinkButtonExample />
+        <TooltipExample />
+        <AlertExample />
+        <BadgeExample />
+        <RadioLabelExample />
+        <RadioCardExample />
+        <SwitcherExample />
+        <DropdownMenuExample />
+        <DropDownButtonExample />
+        <ButtonFieldExample />
+        <InputFieldExample />
+        <LabelFieldExample />
+        <LabelLessInputExample />
+        <FieldSectionExample />
+        <RingLoadingExample />
+        <TableExample />
+        <TextareaExample />
+        <AttachmentExample />
+      </section>
+
     </div>
   );
 }

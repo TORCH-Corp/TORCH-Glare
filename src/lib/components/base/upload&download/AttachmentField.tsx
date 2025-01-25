@@ -1,10 +1,10 @@
-import { InputHTMLAttributes } from "react";
+import { forwardRef, InputHTMLAttributes } from "react";
 import { Button } from "@/components/base/Button";
 import { cva } from 'class-variance-authority';
 import { cn } from "../utils";
 
 const dropZoneStyles = cva(
-  ['w-full min-w-[200px] h-[60px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ',
+  ['w-full min-w-[200px] h-[65px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ',
     "!border-[var(--border-presentation-action-borderstyle)] bg-[var(--background-presentation-badge-gray)]",
     "hover:border-[var(--border-presentation-action-borderstyle)]  hover:bg-[var(--background-presentation-badge-gray)]",
   ],
@@ -26,14 +26,15 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   mainLabel: string;
   secondaryLabel: string;
 }
-export function AttachmentField({
+
+export const AttachmentField = forwardRef<HTMLInputElement, Props>(({
   getInputProps,
   getRootProps,
   isDropAreaActive,
   mainLabel,
   secondaryLabel,
   ...props
-}: Props) {
+}: Props, ref) => {
   return (
     <Button
       component_style="PrimeContStyle"
@@ -42,7 +43,7 @@ export function AttachmentField({
     >
       <h1 className="text-[--content-presentation-action-light-primary] typography-body-large-medium">{mainLabel}</h1>
       <p className="text-[--content-presentation-action-light-secondary] typography-body-small-medium">{secondaryLabel}</p>
-      <input {...props}  {...getInputProps?.()} type="file" hidden />
+      <input ref={ref} {...props}  {...getInputProps?.()} type="file" hidden />
     </Button>
   );
-}
+});

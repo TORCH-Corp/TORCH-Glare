@@ -249,7 +249,7 @@ const TableFooterButton = React.forwardRef<
   return (
     <TableRow
       className={cn(
-        "h-[40px] hover:bg-[--background-presentation-table-acton-hover] hover:border-[--border-presentation-table-action-hover]",
+        "h-[40px] hover:bg-[--background-presentation-table-acton-hover] hover:border-y-2 hover:border-[--border-presentation-table-action-hover]",
         className
       )}
     >
@@ -350,7 +350,7 @@ const SortButton = ({
   sortType?: "asc" | "desc" | undefined;
 }) => {
   return (
-    <button className={cn("cursor-pointer text-[16px]")} onClick={onSort}>
+    <button className={cn("cursor-pointer text-[16px] z-10")} onPointerDown={onSort}>
       {sortType === "asc" ? (
         <i className="ri-arrow-up-line text-[--border-presentation-state-focus]" />
       ) : sortType === "desc" ? (

@@ -1,11 +1,11 @@
 import { Button } from "@/components/base/Button";
-import { InputField } from "@/components/base/InputField";
-import { MenuItem } from "@/components/base/MenuItem";
+import { LabelField } from "@/components/base/LabelField";
+import { PopoverItem } from "@/components/base/Popover";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
-export default function InputFieldExample() {
+export default function LabelFieldExample() {
   const { theme } = useTheme();
   const mockIcons = [
     <i className="ri-user-line"></i>,
@@ -24,7 +24,7 @@ export default function InputFieldExample() {
           "text-white": theme === "dark",
         })}
       >
-        InputField Preview
+        LabelField Preview
       </h1>
 
       {/* Loop through variants and sizes */}
@@ -37,23 +37,25 @@ export default function InputFieldExample() {
                 "text-white": theme === "dark",
               })}
             >{`Variant: ${variant}, Size: ${size}`}</h2>
-            <InputField
-              toolTipSide={"top"}
+            <LabelField
+              label={`Label`}
+              secondaryLabel={`Secondary Label`}
+              requiredLabel={`Required`}
               size={size}
               variant={variant === "default" ? undefined : variant}
               icon={mockIcons[idx % mockIcons.length]}
               popoverChildren={
-                <MenuItem
+                <PopoverItem
                   variant={variant == "SystemStyle" ? "SystemStyle" : "Default"}
                   size={size}
                 >
                   Dropdown Content
-                </MenuItem>
+                </PopoverItem>
               }
               errorMessage={error ? "This is an error message" : undefined}
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder={`InputField (${size} - ${variant})`}
+              placeholder={`Label Placeholder`}
             />
           </div>
         ))

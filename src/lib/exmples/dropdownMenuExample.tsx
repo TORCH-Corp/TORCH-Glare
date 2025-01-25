@@ -41,7 +41,7 @@ export default function DropdownMenuExample() {
             <div key={variant} className="flex flex-col items-center">
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className={cn(
+                  className={cn("p-2 rounded-md bg-[var(--background-presentation-form-base)] border border-[var(--border-presentation-global-primary)] text-[var(--content-presentation-global-primary)]",
                     theme === "light" ? "text-black" : "text-white"
                   )}
                 >

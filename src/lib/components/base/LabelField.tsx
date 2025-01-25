@@ -2,6 +2,7 @@ import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { InputField } from "./InputField";
 import { cn } from "./utils";
 import { Label } from "./Label";
+import { ToolTipSide } from "./Tooltip";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -16,6 +17,7 @@ export interface Props
   requiredLabel?: ReactNode; // normal text with required style
   secondaryLabel?: ReactNode; // normal text with secondary style
   labelDirections?: "vertical" | "horizontal"; // to change the direction of the label
+  toolTipSide?: ToolTipSide;
 }
 
 export const LabelField = forwardRef<HTMLInputElement, Props>(
@@ -33,6 +35,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
       onTable,
       className,
       labelDirections,
+      toolTipSide,
       ...props
     },
     ref
@@ -50,6 +53,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
           ref={ref}
           size={size}
           icon={icon}
+          toolTipSide={toolTipSide}
           variant={variant}
           childrenSide={childrenSide}
           popoverChildren={popoverChildren}

@@ -39,10 +39,11 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   id: string;
   description?: ReactNode;
   disabled?: boolean;
+  children?: ReactNode;
 }
 
 export const RadioCard = forwardRef<HTMLInputElement, Props>(
-  ({ headerLabel, description, disabled, className, id, ...props }, ref) => {
+  ({ headerLabel, description, disabled, className, id, children, ...props }, ref) => {
     return (
       <label
         htmlFor={id}
@@ -81,7 +82,7 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
               {description}
             </p>
           )}
-          {props.children}
+          {children}
         </section>
       </label>
     );

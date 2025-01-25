@@ -1,13 +1,16 @@
 import { Button } from "@/components/base/Button";
-import { LabelLessInput } from "@/components/base/LabelLessInput";
+import { InputField } from "@/components/base/InputField";
 import { PopoverItem } from "@/components/base/Popover";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
-export default function LabelLessInputExample() {
+export default function InputFieldExample() {
   const { theme } = useTheme();
-
+  const mockIcons = [
+    <i className="ri-user-line"></i>,
+    <i className="ri-search-line"></i>,
+  ];
   const [anotherSizes] = useState<any>(["S", "M"]);
   const variants = ["default", "SystemStyle"];
   const [error, setError] = useState(false);
@@ -21,10 +24,10 @@ export default function LabelLessInputExample() {
           "text-white": theme === "dark",
         })}
       >
-        LabelLessInput Preview
+        InputField Preview
       </h1>
 
-      {/* Loop through sizes and variants */}
+      {/* Loop through variants and sizes */}
       {anotherSizes.map((size: any) =>
         variants.map((variant: any, idx: any) => (
           <div key={`${size}-${variant}`} className="">
@@ -33,17 +36,11 @@ export default function LabelLessInputExample() {
                 "text-black": theme === "light",
                 "text-white": theme === "dark",
               })}
-            >
-              {`Variant: ${variant}, Size: ${size}`}
-            </h2>
-
-            {/* Render the LabelLessInput component for each size and variant */}
-            <LabelLessInput
-              label={`Label`}
-              required
-              toolTipSide={"top"}
+            >{`Variant: ${variant}, Size: ${size}`}</h2>
+            <InputField
               size={size}
               variant={variant === "default" ? undefined : variant}
+              icon={mockIcons[idx % mockIcons.length]}
               popoverChildren={
                 <PopoverItem
                   variant={variant == "SystemStyle" ? "SystemStyle" : "Default"}
@@ -55,13 +52,13 @@ export default function LabelLessInputExample() {
               errorMessage={error ? "This is an error message" : undefined}
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder={`labelless input`}
+              placeholder={`InputField`}
             />
           </div>
         ))
       )}
 
-      {/* Toggle Error State Button */}
+      {/* Toggle Error State */}
       <Button
         onClick={() => setError((prev) => !prev)}
         className="bg-red-500 text-white px-4 py-2 rounded"
