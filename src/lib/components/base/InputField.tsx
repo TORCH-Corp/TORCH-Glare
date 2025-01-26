@@ -9,7 +9,7 @@ import { ActionButton } from "./ActionButton";
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "S" | "M"; // this is used to change the size style of the component
-  variant?: "SystemStyle";
+  variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
   childrenSide?: ReactNode; // to add action button to the end of the input
   popoverChildren?: ReactNode; // to add drop down list if you pass it
@@ -39,6 +39,7 @@ export const inputFieldStyles = cva(
   {
     variants: {
       variant: {
+        PresentationStyle: [""],
         SystemStyle: [
           "border-[--border-system-global-secondary]",
           "bg-[--background-presentation-form-field-primary]",
@@ -100,7 +101,7 @@ export const inputFieldStyles = cva(
         className: ["h-[26px]"],
       },
       {
-        variant: "SystemStyle",
+        variant: "PresentationStyle",
         fucus: true,
       },
     ],
@@ -119,6 +120,7 @@ export const iconContainerStyles = cva(
     variants: {
       variant: {
         SystemStyle: [""],
+        PresentationStyle: [""],
       },
       fucus: {
         true: "",
@@ -137,6 +139,7 @@ export const iconContainerStyles = cva(
     ],
     defaultVariants: {
       size: "M",
+      variant: "PresentationStyle",
     },
   }
 );
@@ -150,7 +153,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       popoverChildren,
       errorMessage,
       onTable,
-      variant,
+      variant = "PresentationStyle",
       toolTipSide,
       className,
       ...props
@@ -245,7 +248,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
             onOpenAutoFocus={(e: any) => e.preventDefault()}
             onFocus={() => setFucus(true)}
             onBlur={() => setFucus(false)}
-            variant="SystemStyle"
+            variant={variant}
             style={{ width: dropDownListWidth }}
           >
             {popoverChildren}

@@ -1,20 +1,18 @@
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/base/DropdownMenu";
-import {
-  DropdownMenuCheckboxItem,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-} from "@/components/base/DropdownMenuItem";
+
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
@@ -48,104 +46,78 @@ export default function DropdownMenuExample() {
                   SHOW {variant}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent variant={variant}>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
-                      variant={
-                        variant == "SystemStyle" ? "SystemStyle" : "Default"
-                      }
+                      variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                     >
                       Profile
                       <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      variant={
-                        variant == "SystemStyle" ? "SystemStyle" : "Negative"
-                      }
+                      variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                     >
                       Billing
                       <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      variant={
-                        variant == "SystemStyle" ? "SystemStyle" : "Negative"
-                      }
+                      variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                     >
                       Settings
                       <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      variant={
-                        variant == "SystemStyle" ? "SystemStyle" : "Warning"
-                      }
+                      variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
+
                     >
                       Keyboard shortcuts
                       <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
                     </DropdownMenuItem>
-                    <DropdownMenuCheckboxItem variant={variant}>
+                    <DropdownMenuCheckboxItem
+                      variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
+                    >
                       Check IT
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
-                      variant={
-                        variant == "SystemStyle" ? "SystemStyle" : "Default"
-                      }
+                      variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                     >
                       Team
                     </DropdownMenuItem>
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger
-                        variant={
-                          variant == "SystemStyle" ? "SystemStyle" : "Default"
-                        }
+                        variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                       >
                         Invite users
                       </DropdownMenuSubTrigger>
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent
-                          variant={
-                            variant as "PresentationStyle" | "SystemStyle"
-                          }
+                          variant={variant === "PresentationStyle" ? "PresentationStyle" : "SystemStyle"}
                           sideOffset={6}
                         >
                           <DropdownMenuItem
-                            variant={
-                              variant == "SystemStyle"
-                                ? "SystemStyle"
-                                : "Default"
-                            }
+                            variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                           >
                             Email
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            variant={
-                              variant == "SystemStyle"
-                                ? "SystemStyle"
-                                : "Warning"
-                            }
+                            variant={variant === "PresentationStyle" ? "Warning" : "SystemStyle"}
                           >
                             Message
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            variant={
-                              variant == "SystemStyle"
-                                ? "SystemStyle"
-                                : "Negative"
-                            }
+                            variant={variant === "PresentationStyle" ? "Negative" : "SystemStyle"}
+
                           >
                             More...
                           </DropdownMenuItem>
-                        </DropdownMenuSubContent>
+                        </DropdownMenuSubContent  >
                       </DropdownMenuPortal>
                     </DropdownMenuSub>
                     <DropdownMenuItem
-                      variant={
-                        variant == "SystemStyle" ? "SystemStyle" : "Default"
-                      }
+                      variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                     >
                       New Team
                       <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
@@ -153,32 +125,23 @@ export default function DropdownMenuExample() {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    variant={
-                      variant == "SystemStyle" ? "SystemStyle" : "Default"
-                    }
+                    variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >
                     GitHub
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    variant={
-                      variant == "SystemStyle" ? "SystemStyle" : "Default"
-                    }
+                    variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >
                     Support
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    variant={
-                      variant == "SystemStyle" ? "SystemStyle" : "Default"
-                    }
-                    disabled
+                    variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >
                     API
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    variant={
-                      variant == "SystemStyle" ? "SystemStyle" : "Default"
-                    }
+                    variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >
                     Log out
                     <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

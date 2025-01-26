@@ -7,7 +7,7 @@ import { ToolTipSide } from "./Tooltip";
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "S" | "M"; // this is used to change the size style of the component
-  variant?: "SystemStyle";
+  variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
   childrenSide?: ReactNode; // to add action button to the end of the input
   popoverChildren?: ReactNode; // to add drop down list if you pass it
@@ -36,6 +36,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
       className,
       labelDirections,
       toolTipSide,
+
       ...props
     },
     ref

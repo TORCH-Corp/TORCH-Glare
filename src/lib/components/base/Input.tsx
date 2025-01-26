@@ -21,6 +21,7 @@ const inputFieldStyles = cva(
   {
     variants: {
       variant: {
+        "PresentationStyle": "",
         SystemStyle: [
           "placeholder:text-[#A0A0A0]",
           "hover:placeholder:text-[#A0A0A0]",
@@ -33,6 +34,7 @@ const inputFieldStyles = cva(
     },
     defaultVariants: {
       size: "M",
+      variant: "PresentationStyle",
     },
   }
 );
@@ -41,7 +43,7 @@ const inputFieldStyles = cva(
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   focusSetter?: (focus: boolean) => void;
-  variant?: "SystemStyle";
+  variant?: "SystemStyle" | "PresentationStyle";
   size?: "S" | "M";
 }
 

@@ -5,6 +5,7 @@ export const badgeBase = cva(
   [
     "px-[6px]",
     "[&_p]:text-[--content-presentation-action-light-primary]",
+    "[&_i]:!leading-0",
     "flex",
     "justify-center",
     "items-center",
@@ -53,22 +54,10 @@ export const badgeBase = cva(
   }
 );
 
-// Badge icon styles
-export const badgeIconStyles = cva("flex justify-center items-center", {
-  variants: {
-    size: {
-      S: "text-[12px]",
-      M: "text-[15px]",
-    },
-  },
-  defaultVariants: {
-    size: "S",
-  },
-});
 
 interface BadgeProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "className">,
-    VariantProps<typeof badgeBase> {
+  VariantProps<typeof badgeBase> {
   label?: string;
   onUnselect?: () => void;
   isSelected?: boolean;
@@ -100,7 +89,7 @@ export const Badge: React.FC<BadgeProps> = ({
       {isSelected && (
         <button
           onClick={onUnselect}
-          className={"flex justify-center items-center"}
+          className={" rounded-[2px] flex justify-center items-center "}
         >
           <i className="ri-close-line  !text-[--content-presentation-action-light-primary]"></i>
         </button>
