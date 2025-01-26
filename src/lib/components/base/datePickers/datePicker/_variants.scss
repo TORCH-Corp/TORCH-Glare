@@ -1,5 +1,3 @@
-@import '@/styles/typography';
-
 .glare-date-picker {
     position: relative;
     display: flex;
@@ -36,7 +34,6 @@
         outline: none;
         background-color: var(--background-presentation-form-field-primary) !important;
         color: var(--content-presentation-action-light-primary) !important;
-        @include Body-typography-Small-Regular;
         caret-color: var(--content-presentation-action-hover-information) !important;
         border: 1px solid var(--border-presentation-action-primary);
         transition: all 150ms ease-in-out !important;

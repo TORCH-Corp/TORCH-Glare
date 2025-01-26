@@ -58,7 +58,7 @@ export const LinkButton: React.FC<Props> = ({ size = "S", ...props }) => {
         )}
       >
         <Arrow
-          className={cn("", {
+          className={cn("rtl:rotate-[260deg]", {
             "group-hover:w-[14px] group-hover:h-[14px]": size === "S",
             "group-hover:w-[16px] group-hover:h-[16px]": size === "M",
           })}

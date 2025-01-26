@@ -26,7 +26,7 @@ export default function LabelLessInputExample() {
 
       {/* Loop through sizes and variants */}
       {anotherSizes.map((size: any) =>
-        variants.map((variant: any, idx: any) => (
+        variants.map((variant: any) => (
           <div key={`${size}-${variant}`} className="">
             <h2
               className={cn("text-lg font-semibold", {
