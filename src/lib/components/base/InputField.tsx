@@ -1,5 +1,12 @@
 "use client";
-import { forwardRef, InputHTMLAttributes, ReactNode, useState } from "react";
+import {
+  forwardRef,
+  InputHTMLAttributes,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Input } from "./Input";
 import { cn } from "./utils";
 import { Tooltip, ToolTipSide } from "./Tooltip";
@@ -157,11 +164,17 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       className,
       ...props
     },
-    ref
+    forwardedRef
   ) => {
     const [fucus, setFucus] = useState(false);
     const [dropDownListWidth, setDropDownListWidth] = useState(0);
+    const inputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+      if (!forwardedRef) return;
+      if (typeof forwardedRef === "function") forwardedRef(inputRef.current);
+      else forwardedRef.current = inputRef.current;
+    }, [forwardedRef]);
     // TODO: make the user input visible when input is focused
 
     return (
@@ -172,6 +185,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
             onClick={(e) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
               setFucus(true);
+              inputRef.current?.focus();
             }}
             className={cn(
               inputFieldStyles({
@@ -208,7 +222,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                   variant={variant}
                   focusSetter={setFucus}
                   size={size}
-                  ref={ref}
+                  ref={inputRef}
                   className="group"
                 />
 

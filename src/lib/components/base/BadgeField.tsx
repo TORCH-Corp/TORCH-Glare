@@ -12,7 +12,6 @@ import { cn } from "./utils";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { cva } from "class-variance-authority";
-import { Badge } from "./Badge";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -23,6 +22,7 @@ export interface Props
   errorMessage?: string; // to show tooltip component when error_message not null
   onTable?: boolean; // to change the border style of the component when it is on table
   toolTipSide?: ToolTipSide;
+  badgesChildren?: ReactNode;
 }
 
 export const inputFieldStyles = cva(
@@ -36,7 +36,7 @@ export const inputFieldStyles = cva(
     "typography-body-small-regular",
     "border border-[--border-presentation-action-primary]",
     "bg-[--background-presentation-form-field-primary]",
-    "transition-[background,background-color,border] duration-200 ease-in-out",
+    "transition-[background,background-color,color,border,box-shadow] duration-100 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
     "hover:bg-[--background-presentation-form-field-hover]",
     "hover:border-[--border-presentation-action-hover]",
@@ -164,6 +164,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       variant = "PresentationStyle",
       toolTipSide,
       className,
+      badgesChildren,
       ...props
     },
     forwardedRef
@@ -212,19 +213,20 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                     "gap-1 w-full ",
                     " flex flex-row ",
                     "overflow-hidden",
-                    "px-[4px] pl-2 rtl:pr-2 rtl:pl-1",
+                    "px-[4px] ",
                   ],
                   {
                     "content-start flex-wrap": fucus,
                     "justify-start items-center ": !fucus,
                     "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)] rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]":
                       !fucus,
+                    "pl-2 rtl:pr-2 rtl:pl-1": size === "M",
                   },
 
                   {
                     "py-[4px]":
                       (fucus && size === "S") || (fucus && size === "XS"),
-                    "py-[6px]": fucus && size === "M",
+                    "py-[7px]": fucus && size === "M",
                   }
                 )}
               >
@@ -242,40 +244,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   </div>
                 )}
 
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
-                <Badge isSelected size={"M"} label="Label" />
+                {badgesChildren}
 
                 <Input
                   {...props}

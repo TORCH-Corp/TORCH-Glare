@@ -1,3 +1,4 @@
+import { Badge } from "@/components/base/Badge";
 import { BadgeField } from "@/components/base/BadgeField";
 import Examples from "@/exmples";
 
