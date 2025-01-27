@@ -22,14 +22,13 @@ import TextareaExample from "./TextareaExample";
 import TooltipExample from "./TooltipExample";
 import AttachmentExample from "./AttachmentExample";
 import DropDownButtonExample from "./DropDownButtonExample";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
-  const [dir, setDir] = useState<any>();
 
   useEffect(() => {
-    setDir(document.documentElement.dir);
+    document.documentElement.dir = "ltr";
   }, [document.documentElement.dir]);
 
   return (
@@ -55,7 +54,9 @@ export default function Examples() {
               : (document.documentElement.dir = "ltr")
           }
         >
-          {dir === "ltr" ? "GO TO RTL DIRECTION" : "GO TO LTR DIRECTION"}
+          {document.documentElement.dir === "ltr"
+            ? "GO TO RTL DIRECTION"
+            : "GO TO LTR DIRECTION"}
         </Button>
 
         <ActionButtonExample />

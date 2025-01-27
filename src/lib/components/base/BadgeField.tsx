@@ -1,34 +1,42 @@
 "use client";
-import { forwardRef, InputHTMLAttributes, ReactNode, useState } from "react";
+import {
+  forwardRef,
+  InputHTMLAttributes,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Input } from "./Input";
 import { cn } from "./utils";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
-import { ActionButton } from "./ActionButton";
+import { cva } from "class-variance-authority";
+import { Badge } from "./Badge";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
-  size?: "S" | "M"; // this is used to change the size style of the component
+  size?: "XS" | "S" | "M"; // this is used to change the size style of the component
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
-  childrenSide?: ReactNode; // to add action button to the end of the input
   popoverChildren?: ReactNode; // to add drop down list if you pass it
   errorMessage?: string; // to show tooltip component when error_message not null
   onTable?: boolean; // to change the border style of the component when it is on table
   toolTipSide?: ToolTipSide;
 }
 
-import { cva } from "class-variance-authority";
-
 export const inputFieldStyles = cva(
   [
     "flex ",
     "flex-1",
     "flex-col",
+    "items-center",
+    "overflow-hidden",
+    "justify-center",
     "typography-body-small-regular",
     "border border-[--border-presentation-action-primary]",
     "bg-[--background-presentation-form-field-primary]",
-    "transition-all duration-200 ease-in-out",
+    "transition-[background,background-color,border] duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
     "hover:bg-[--background-presentation-form-field-hover]",
     "hover:border-[--border-presentation-action-hover]",
@@ -57,7 +65,7 @@ export const inputFieldStyles = cva(
         ],
       },
       onTable: {
-        true: ["border-transparent", "bg-transparent", "h-[26px]"],
+        true: ["border-transparent", "bg-transparent"],
       },
       error: {
         true: [
@@ -74,8 +82,9 @@ export const inputFieldStyles = cva(
         ],
       },
       size: {
-        S: ["h-[30px]", "rounded-[6px]"],
-        M: ["h-[40px]", "rounded-[8px]"],
+        XS: ["rounded-[6px]"],
+        S: ["rounded-[6px]"],
+        M: ["rounded-[8px]"],
       },
     },
     defaultVariants: {
@@ -110,7 +119,7 @@ export const inputFieldStyles = cva(
 export const iconContainerStyles = cva(
   [
     "flex items-center justify-center",
-    "transition-all duration-200 ease-in-out",
+    "transition-[background,background-color,border] duration-200 ease-in-out",
     "leading-0",
     "text-[16px]",
     "text-[--content-presentation-action-light-secondary]",
@@ -125,6 +134,7 @@ export const iconContainerStyles = cva(
         true: "",
       },
       size: {
+        XS: ["text-[16px]"],
         S: ["text-[16px]"],
         M: ["text-[18px]", "px-[2px]"],
       },
@@ -143,12 +153,11 @@ export const iconContainerStyles = cva(
   }
 );
 
-export const InputField = forwardRef<HTMLInputElement, Props>(
+export const BadgeField = forwardRef<HTMLInputElement, Props>(
   (
     {
       size = "M",
       icon,
-      childrenSide,
       popoverChildren,
       errorMessage,
       onTable,
@@ -157,10 +166,17 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       className,
       ...props
     },
-    ref
+    forwardedRef
   ) => {
     const [fucus, setFucus] = useState(false);
     const [dropDownListWidth, setDropDownListWidth] = useState(0);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (!forwardedRef) return;
+      if (typeof forwardedRef === "function") forwardedRef(inputRef.current);
+      else forwardedRef.current = inputRef.current;
+    }, [forwardedRef]);
 
     // TODO: make the user input visible when input is focused
 
@@ -172,6 +188,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
             onClick={(e) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
               setFucus(true);
+              inputRef.current?.focus();
             }}
             className={cn(
               inputFieldStyles({
@@ -189,7 +206,28 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               open={errorMessage !== undefined}
               text={errorMessage}
             >
-              <section className="flex flex-row flex-1 px-[4px] overflow-hidden relative">
+              <section
+                className={cn(
+                  [
+                    "gap-1 w-full ",
+                    " flex flex-row ",
+                    "overflow-hidden",
+                    "px-[4px] pl-2 rtl:pr-2 rtl:pl-1",
+                  ],
+                  {
+                    "content-start flex-wrap": fucus,
+                    "justify-start items-center ": !fucus,
+                    "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)] rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]":
+                      !fucus,
+                  },
+
+                  {
+                    "py-[4px]":
+                      (fucus && size === "S") || (fucus && size === "XS"),
+                    "py-[6px]": fucus && size === "M",
+                  }
+                )}
+              >
                 {icon && (
                   <div
                     className={cn(
@@ -203,40 +241,57 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                     {icon}
                   </div>
                 )}
+
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+                <Badge isSelected size={"M"} label="Label" />
+
                 <Input
                   {...props}
                   variant={variant}
                   focusSetter={setFucus}
+                  ref={inputRef}
                   size={size}
-                  ref={ref}
-                  className="group"
-                />
-
-                <div
                   className={cn(
-                    "flex items-center justify-center h-full gap-1 py-1"
+                    "group p-0 flex-1 min-w-[100px] transition-none",
+                    {
+                      "h-[18px]": fucus && size === "XS",
+                      "h-[22px]": fucus && size === "S",
+                      "h-[26px]": fucus && size === "M",
+                    }
                   )}
-                >
-                  {childrenSide}
-                  {popoverChildren && (
-                    <ActionButton asChild size={onTable ? "XS" : size}>
-                      <i>
-                        <i
-                          className={cn(
-                            "ri-arrow-down-s-line",
-                            "transition-[transform]",
-                            "duration-400",
-                            "ease-in-out",
-                            { "rotate-180": fucus },
-                            { "text-[16px]": size === "S" || onTable },
-                            { "text-[26px]": size === "M" && !onTable },
-                            { "text-white": variant === "SystemStyle" }
-                          )}
-                        />
-                      </i>
-                    </ActionButton>
-                  )}
-                </div>
+                />
               </section>
             </Tooltip>
           </section>
@@ -258,4 +313,4 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-InputField.displayName = "InputField";
+BadgeField.displayName = "BadgeField";
