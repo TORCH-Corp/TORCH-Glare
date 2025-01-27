@@ -6,7 +6,7 @@ import ButtonExample from "./ButtonExample";
 import FieldSectionExample from "./FieldSectionExample";
 import DropdownMenuExample from "./DropdownMenuExample";
 import InputFieldExample from "./InputFieldExample";
-import LabelLessInputExample from "./LabelLessInputExample";
+import LabelLessInputExample from "./labelLessInputExample";
 import { AlertExample } from "./AlertExample";
 import { BadgeExample } from "./BadgeExample";
 import { ButtonFieldExample } from "./ButtonFieldExample";
@@ -29,8 +29,8 @@ export default function Examples() {
   const [dir, setDir] = useState<any>();
 
   useEffect(() => {
-    setDir(document.documentElement.dir)
-  }, [document.documentElement.dir])
+    setDir(document.documentElement.dir);
+  }, [document.documentElement.dir]);
 
   return (
     <div
@@ -49,7 +49,11 @@ export default function Examples() {
 
         <Button
           className="fixed top-[10px] left-[10px]"
-          onClick={() => document.documentElement.dir === "ltr" ? document.documentElement.dir = "rtl" : document.documentElement.dir = "ltr"}
+          onClick={() =>
+            document.documentElement.dir === "ltr"
+              ? (document.documentElement.dir = "rtl")
+              : (document.documentElement.dir = "ltr")
+          }
         >
           {dir === "ltr" ? "GO TO RTL DIRECTION" : "GO TO LTR DIRECTION"}
         </Button>
@@ -76,7 +80,6 @@ export default function Examples() {
         <TextareaExample />
         <AttachmentExample />
       </section>
-
     </div>
   );
 }
