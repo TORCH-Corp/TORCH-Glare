@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "./utils";
 import { dropdownMenuStyles } from "./DropdownMenu";
 import { cva, VariantProps } from "class-variance-authority";
@@ -198,8 +197,8 @@ const DropDownButtonScrollUpButton = React.forwardRef<
     )}
     {...props}
   >
-    <ChevronUp
-      className="h-4 w-4"
+    <i
+      className="h-4 w-4 ri-arrow-up-s-line"
       color={"var(--content-presentation-action-light-primary)"}
     />
   </SelectPrimitive.ScrollUpButton>
@@ -218,9 +217,9 @@ const DropDownButtonScrollDownButton = React.forwardRef<
     )}
     {...props}
   >
-    <ChevronDown
+    <i
       color={"var(--content-presentation-action-light-primary)"}
-      className="h-4 w-4"
+      className="h-4 w-4 ri-arrow-down-s-line"
     />
   </SelectPrimitive.ScrollDownButton>
 ));
