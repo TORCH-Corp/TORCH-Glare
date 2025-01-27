@@ -27,8 +27,10 @@ export function AlertExample() {
           >
             Variant: {variant}
           </span>
-          <Alert label={`Alert with variant: ${variant}`} state={variant} >
-          </Alert>
+          <Alert
+            label={`Alert with variant: ${variant}`}
+            state={variant}
+          ></Alert>
         </div>
       ))}
     </>

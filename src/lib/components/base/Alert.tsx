@@ -4,52 +4,21 @@ import { cva } from "class-variance-authority";
 import { cn } from "./utils";
 
 export const glareAlert = cva(
-  "flex relative justify-start items-center rounded-[4px] min-h-26px w-fit pr-1 rtl:pl-1 rtl:pr-0",
+  "flex relative justify-start items-center rounded-[4px] min-h-26px w-fit pr-1 rtl:pl-1 rtl:pr-0 [&>section]:text-white",
   {
     variants: {
       state: {
-        info: "bg-[var(--background-presentation-state-information-secondary)]",
-        warning: "bg-[var(--background-presentation-state-warning-secondary)]",
-        error: "bg-[var(--background-presentation-state-negative-secondary)]",
-        success: "bg-[var(--background-presentation-state-success-secondary)]",
-      },
-    },
-    defaultVariants: {
-      state: "info",
-    },
-  }
-);
-
-export const glareAlertIconWrapper = cva(
-  "flex items-center justify-center min-w-[26px] min-h-[26px] h-full rounded-[4px] text-[18px]",
-  {
-    variants: {
-      state: {
-        info: "bg-[var(--background-presentation-state-information-primary)] text-white",
+        info: "bg-[var(--background-presentation-state-information-secondary)] [&>section]:bg-[var(--background-presentation-state-information-primary)] [&>section]:text-[var(--background-presentation-state-information-secondary)]",
         warning:
-          "bg-[var(--background-presentation-state-warning-primary)] text-[var(--background-presentation-state-warning-secondary)]",
+          "bg-[var(--background-presentation-state-warning-secondary)] [&>section]:bg-[var(--background-presentation-state-warning-primary)] [&>section]:text-[var(--background-presentation-state-warning-secondary)]",
         error:
-          "bg-[var(--background-presentation-state-negative-primary)] text-white",
+          "bg-[var(--background-presentation-state-negative-secondary)] [&>section]:bg-[var(--background-presentation-state-negative-primary)] [&>section]:text-[var(--background-presentation-state-negative-secondary)]",
         success:
-          "bg-[var(--background-presentation-state-success-primary)] text-white",
+          "bg-[var(--background-presentation-state-success-secondary)] [&>section]:bg-[var(--background-presentation-state-success-primary)] [&>section]:text-[var(--background-presentation-state-success-secondary)]",
       },
     },
     defaultVariants: {
       state: "info",
-    },
-  }
-);
-
-export const glareAlertLabel = cva(
-  "p-1 word-break-all text-[var(--content-presentation-global-primary)] text-wrap text-start whitespace-pre-wrap",
-  {
-    variants: {
-      typography: {
-        small: "text-sm", // Replace with your Tailwind typography utility or mixin.
-      },
-    },
-    defaultVariants: {
-      typography: "small",
     },
   }
 );
@@ -89,9 +58,7 @@ export const Alert: React.FC<Props> = ({
     >
       <section
         style={{ height: `${parentHeight}px` }}
-        className={glareAlertIconWrapper({
-          state,
-        })}
+        className="flex items-center justify-center min-w-[26px] min-h-[26px] h-full rounded-[4px] text-[18px]"
       >
         {icon ? (
           icon
@@ -103,7 +70,13 @@ export const Alert: React.FC<Props> = ({
           <i className="ri-error-warning-fill"></i>
         )}
       </section>
-      <p className={glareAlertLabel()}>{label}</p>
+      <p
+        className={
+          "p-1 word-break-all text-[var(--content-presentation-global-primary)] text-wrap text-start whitespace-pre-wrap text-sm"
+        }
+      >
+        {label}
+      </p>
     </section>
   );
 };

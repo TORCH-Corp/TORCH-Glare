@@ -7,7 +7,6 @@ import { dropdownMenuStyles } from "./DropdownMenu";
 import { cva, VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 
-
 // NOTE: radix select as DropDownButton
 
 export const MenuItemStyles = cva(
@@ -60,17 +59,17 @@ export const MenuItemStyles = cva(
           "active:text-[--content-presentation-state-negative]",
         ],
         SystemStyle: [
-          "bg-[#131415]",
-          "text-[#E5E5E5]",
-          "hover:!bg-[#3E1E69]",
-          "hover:!text-[#F9F9F9]",
-          "hover:!border-[#9748FF]",
-          "focus:bg-[#252729]",
+          "bg-[--background-system-body-primary]",
+          "text-[--content-system-global-primary]",
+          "hover:!bg-[--background-system-action-secondary-hover]",
+          "hover:!text-[--content-system-action-primary-hover]",
+          "hover:!border-[--border-system-action-primary-hover]",
+          "focus:bg-[--background-System-Action-Primary-Selected]",
           "focus:border-transparent",
           "active:border-transparent",
-          "active:bg-[#252729]",
-          "disabled:bg-[#1C1D1F]",
-          "disabled:text-[#797C7F]",
+          "active:bg-[--background-System-Action-Primary-Selected]",
+          "disabled:bg-[--background-system-body-secondary]",
+          "disabled:text-[--content-system-global-disabled]",
         ],
       },
       size: {
@@ -100,16 +99,6 @@ export const MenuItemStyles = cva(
       },
     },
     compoundVariants: [
-      {
-        disabled: true,
-        variant: "SystemStyle",
-        className: ["bg-[#1C1D1F]", "text-[#797C7F]"],
-      },
-      {
-        active: true,
-        variant: "SystemStyle",
-        className: ["bg-[#252729]", "text-[#F9F9F9]", "border-transparent"],
-      },
       {
         active: true,
         variant: "Warning",
@@ -163,7 +152,7 @@ const DropDownButtonValue = SelectPrimitive.Value;
 const DropDownButtonTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-  VariantProps<typeof dropdownButtonStyles>
+    VariantProps<typeof dropdownButtonStyles>
 >(({ className, children, size = "M", ...props }, ref) => {
   return (
     <SelectPrimitive.Trigger
@@ -195,7 +184,7 @@ const DropDownButtonTrigger = React.forwardRef<
     </SelectPrimitive.Trigger>
   );
 });
-DropDownButtonTrigger.displayName = "DropDownButtonTrigger"
+DropDownButtonTrigger.displayName = "DropDownButtonTrigger";
 
 const DropDownButtonScrollUpButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
@@ -235,12 +224,12 @@ const DropDownButtonScrollDownButton = React.forwardRef<
     />
   </SelectPrimitive.ScrollDownButton>
 ));
-DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton"
+DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton";
 
 const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-  VariantProps<typeof dropdownMenuStyles>
+    VariantProps<typeof dropdownMenuStyles>
 >(
   (
     {
@@ -278,12 +267,12 @@ const DropDownButtonLabel = React.forwardRef<
     {...props}
   />
 ));
-DropDownButtonLabel.displayName = "DropDownButtonLabel"
+DropDownButtonLabel.displayName = "DropDownButtonLabel";
 
 const DropDownButtonItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
-  VariantProps<typeof MenuItemStyles>
+    VariantProps<typeof MenuItemStyles>
 >(({ className, children, variant = "Default", active, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
@@ -300,7 +289,7 @@ const DropDownButtonItem = React.forwardRef<
   </SelectPrimitive.Item>
 ));
 
-DropDownButtonItem.displayName = "DropDownButtonItem"
+DropDownButtonItem.displayName = "DropDownButtonItem";
 
 const DropDownButtonSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
@@ -312,7 +301,7 @@ const DropDownButtonSeparator = React.forwardRef<
     {...props}
   />
 ));
-DropDownButtonSeparator.displayName = "DropDownButtonSeparator"
+DropDownButtonSeparator.displayName = "DropDownButtonSeparator";
 
 export {
   DropDownButton,

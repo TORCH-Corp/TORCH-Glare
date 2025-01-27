@@ -15,57 +15,9 @@ const labelComponentVariants = cva("flex", {
   },
 });
 
-const mainLabelVariants = cva(
-  "text-[--content-presentation-global-primary] text-start",
-  {
-    variants: {
-      size: {
-        S: "typography-body-small-regular",
-        M: "typography-body-medium-regular",
-        L: "typography-body-large-regular",
-      },
-    },
-    defaultVariants: {
-      size: "M",
-    },
-  }
-);
-
-const secondaryLabelVariants = cva(
-  "text-[--content-presentation-global-secondary] text-start",
-  {
-    variants: {
-      size: {
-        S: "typography-labels-small-regular",
-        M: "typography-labels-medium-regular",
-        L: "typography-body-small-regular",
-      },
-    },
-    defaultVariants: {
-      size: "M",
-    },
-  }
-);
-
-const requiredLabelVariants = cva(
-  "text-[--content-presentation-state-negative] text-start",
-  {
-    variants: {
-      size: {
-        S: "typography-labels-small-medium",
-        M: "typography-labels-medium-medium",
-        L: "typography-body-small-medium",
-      },
-    },
-    defaultVariants: {
-      size: "M",
-    },
-  }
-);
-
 interface Props
   extends LabelHTMLAttributes<HTMLLabelElement>,
-  VariantProps<typeof labelComponentVariants> {
+    VariantProps<typeof labelComponentVariants> {
   label?: ReactNode; // main label
   requiredLabel?: ReactNode; // normal text with required style
   secondaryLabel?: ReactNode; // normal text with secondary style
@@ -81,7 +33,7 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
       label,
       secondaryLabel,
       requiredLabel,
-      size,
+      size = "M",
       directions,
       className,
       ...props
@@ -94,14 +46,47 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
         ref={forwardedRef}
         {...props}
       >
-        {label && <p className={cn(mainLabelVariants({ size }))}>{label}</p>}
+        {label && (
+          <p
+            className={cn(
+              "text-[--content-presentation-global-primary] text-start",
+              {
+                "typography-body-small-regular": size === "S",
+                "typography-body-medium-regular": size === "M",
+                "typography-body-large-regular": size === "L",
+              }
+            )}
+          >
+            {label}
+          </p>
+        )}
         {secondaryLabel && (
-          <p className={cn(secondaryLabelVariants({ size }))}>
+          <p
+            className={cn(
+              "text-[--content-presentation-global-secondary] text-start",
+              {
+                "typography-labels-small-regular": size === "S",
+                "typography-labels-medium-regular": size === "M",
+                "typography-body-small-regular": size === "L",
+              }
+            )}
+          >
             {secondaryLabel}
           </p>
         )}
         {requiredLabel && (
-          <p className={cn(requiredLabelVariants({ size }))}>{requiredLabel}</p>
+          <p
+            className={cn(
+              "text-[--content-presentation-state-negative] text-start",
+              {
+                "typography-labels-small-medium": size === "S",
+                "typography-labels-medium-medium": size === "M",
+                "typography-body-small-medium": size === "L",
+              }
+            )}
+          >
+            {requiredLabel}
+          </p>
         )}
         {children}
       </label>

@@ -1,32 +1,9 @@
 "use client";
 
 import { forwardRef, InputHTMLAttributes, ReactNode, useState } from "react";
-import { cva } from "class-variance-authority";
 import { InputField } from "./InputField";
 import { ToolTipSide } from "./Tooltip";
 import { cn } from "./utils";
-
-const labelLessInputStyles = cva(
-  [
-    "px-[3px]",
-    "typography-body-small-regular",
-    "text-[--content-presentation-global-primary]",
-    "flex",
-    "items-center",
-  ],
-  {
-    variants: {
-      variant: {},
-      size: {
-        S: [""],
-        M: [""],
-      },
-    },
-    defaultVariants: {
-      size: "S",
-    },
-  }
-);
 
 interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -83,7 +60,18 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
         onTable={onTable}
         icon={
           <section className="flex items-center">
-            <section className={cn(labelLessInputStyles({}), className)}>
+            <section
+              className={cn(
+                [
+                  "px-[3px]",
+                  "typography-body-small-regular",
+                  "text-[--content-presentation-global-primary]",
+                  "flex",
+                  "items-center",
+                ],
+                className
+              )}
+            >
               <p
                 className={cn(
                   "transition-all",

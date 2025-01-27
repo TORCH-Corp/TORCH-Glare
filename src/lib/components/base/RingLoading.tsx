@@ -15,21 +15,18 @@ export const loadingFrame = cva("relative flex justify-center items-center", {
   },
 });
 
-export const loadingAnimationTextContainer = cva(
-  "absolute flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
-  {
-    variants: {
-      size: {
-        S: "w-[150px] h-[150px]",
-        M: "w-[200px] h-[200px]",
-        L: "w-[300px] h-[300px]",
-      },
+export const loadingAnimationTextContainer = cva("", {
+  variants: {
+    size: {
+      S: "w-[150px] h-[150px]",
+      M: "w-[200px] h-[200px]",
+      L: "w-[300px] h-[300px]",
     },
-    defaultVariants: {
-      size: "S",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: "S",
+  },
+});
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   size: "S" | "M" | "L"; // this is used to change the size style of the component
@@ -43,7 +40,11 @@ export default function RingLoading({ size = "M", ...props }: Props) {
           "w-full h-full animate-spin  bg-transparent object-cover object-center"
         }
       />
-      <section className={cn(loadingAnimationTextContainer({ size }))}>
+      <section
+        className={cn(
+          "absolute flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        )}
+      >
         {props.children}
       </section>
     </section>
