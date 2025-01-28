@@ -175,25 +175,46 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
     forwardedRef
   ) => {
     const [fucus, setFucus] = useState(false);
-    const [dropDownListWidth, setDropDownListWidth] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const popoverRef = useRef<HTMLDivElement>(null);
+    const [dropDownListWidth, setDropDownListWidth] = useState(0);
 
     useEffect(() => {
       if (!forwardedRef) return;
       if (typeof forwardedRef === "function") forwardedRef(inputRef.current);
       else forwardedRef.current = inputRef.current;
     }, [forwardedRef]);
-    // TODO: make the user input visible when input is focused
+
+    useEffect(() => {
+      const handleOutsideClick = (event: MouseEvent) => {
+        if (
+          sectionRef.current &&
+          !sectionRef.current.contains(event.target as Node) &&
+          !popoverRef.current?.contains(event.target as Node)
+        ) {
+          setFucus(false);
+        } else {
+          setFucus(true);
+          inputRef.current?.focus();
+        }
+      };
+
+      document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("pointerdown", handleOutsideClick);
+      return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+        document.removeEventListener("pointerdown", handleOutsideClick);
+      };
+    }, []);
 
     return (
       <Popover open={fucus}>
         <PopoverTrigger asChild>
           <section
-            onContextMenu={(e) => e.stopPropagation()}
-            onClick={(e) => {
+            ref={sectionRef}
+            onPointerDown={(e: any) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
-              setFucus(true);
-              inputRef.current?.focus();
             }}
             className={cn(
               inputFieldStyles({
@@ -245,7 +266,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                         })
                       )}
                     >
-                      {!label && icon ? icon : null}
+                      {icon}
                       <LabelLessSection
                         fucus={fucus}
                         label={label}
@@ -259,7 +280,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 <Input
                   {...props}
                   variant={variant}
-                  focusSetter={setFucus}
+                  onFocus={() => setFucus(true)}
                   ref={inputRef}
                   size={size}
                   className={cn(
@@ -278,11 +299,10 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
 
         {popoverChildren && (
           <PopoverContent
-            onOpenAutoFocus={(e: any) => e.preventDefault()}
-            onFocus={() => setFucus(true)}
-            onBlur={() => setFucus(false)}
-            variant={variant}
+            ref={popoverRef}
             style={{ width: dropDownListWidth }}
+            onOpenAutoFocus={(e: any) => e.preventDefault()}
+            variant={variant}
           >
             {popoverChildren}
           </PopoverContent>

@@ -1,5 +1,6 @@
 import { ReactNode, HTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
+import { cn } from "./utils";
 
 export const badgeBase = cva(
   [
@@ -76,7 +77,16 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   return (
-    <span {...props} className={badgeBase({ size, variant, className })}>
+    <span
+      {...props}
+      className={cn(
+        badgeBase({ size, variant }),
+        {
+          "cursor-default": isSelected,
+        },
+        className
+      )}
+    >
       <span className={"flex justify-center items-center"}>
         {!badgeIcon ? (
           <i className="ri-circle-fill !text-[8px]"></i>
