@@ -12,7 +12,6 @@ export default function LabelFieldExample() {
     <i className="ri-search-line"></i>,
   ];
   const [anotherSizes] = useState<any>(["S", "M"]);
-  const variants = ["default", "SystemStyle"];
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
 
@@ -28,38 +27,33 @@ export default function LabelFieldExample() {
       </h1>
 
       {/* Loop through variants and sizes */}
-      {anotherSizes.map((size: any) =>
-        variants.map((variant: any, idx: any) => (
-          <div key={`${size}-${variant}`} className="">
-            <h2
-              className={cn("text-lg font-semibold", {
-                "text-black": theme === "light",
-                "text-white": theme === "dark",
-              })}
-            >{`Variant: ${variant}, Size: ${size}`}</h2>
-            <LabelField
-              label={`Label`}
-              secondaryLabel={`Secondary Label`}
-              requiredLabel={`Required`}
-              size={size}
-              variant={variant === "default" ? undefined : variant}
-              icon={mockIcons[idx % mockIcons.length]}
-              popoverChildren={
-                <PopoverItem
-                  variant={variant == "SystemStyle" ? "SystemStyle" : "Default"}
-                  size={size}
-                >
-                  Dropdown Content
-                </PopoverItem>
-              }
-              errorMessage={error ? "This is an error message" : undefined}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder={`Label Placeholder`}
-            />
-          </div>
-        ))
-      )}
+      {anotherSizes.map((size: any) => (
+        <div key={`${size}-labelField`} className="">
+          <h2
+            className={cn("text-lg font-semibold", {
+              "text-black": theme === "light",
+              "text-white": theme === "dark",
+            })}
+          >{`Size: ${size}`}</h2>
+          <LabelField
+            label={`Label`}
+            secondaryLabel={`Secondary Label`}
+            requiredLabel={`Required`}
+            size={size}
+            variant={"PresentationStyle"}
+            icon={mockIcons[0]}
+            popoverChildren={
+              <PopoverItem variant={"Default"} size={size}>
+                Dropdown Content
+              </PopoverItem>
+            }
+            errorMessage={error ? "This is an error message" : undefined}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={`Label Placeholder`}
+          />
+        </div>
+      ))}
 
       {/* Toggle Error State */}
       <Button

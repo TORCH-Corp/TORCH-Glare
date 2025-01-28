@@ -126,13 +126,13 @@ export const dropdownButtonStyles = cva(
     variants: {
       size: {
         S: [
-          "[&_button]:h-[22px] [&_button]:w-[22px] [&_p]:typography-body-small-medium",
+          "[&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium",
         ],
         M: [
-          "[&_button]:h-[26px] [&_button]:w-[26px] [&_p]:typography-body-medium-medium",
+          "[&_span]:h-[26px] [&_span]:w-[26px] [&_p]:typography-body-medium-medium",
         ],
         L: [
-          "[&_button]:h-[28px] [&_button]:w-[28px] [&_p]:typography-body-large-medium",
+          "[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium",
         ],
       },
     },
@@ -179,7 +179,7 @@ const DropDownButtonTrigger = React.forwardRef<
           className={cn(
             "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180"
           )}
-        ></i>
+        />
       </Button>
     </SelectPrimitive.Trigger>
   );

@@ -9,7 +9,6 @@ export default function LabelLessInputExample() {
   const { theme } = useTheme();
 
   const [anotherSizes] = useState<any>(["S", "M"]);
-  const variants = ["default", "SystemStyle"];
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
 
@@ -25,41 +24,35 @@ export default function LabelLessInputExample() {
       </h1>
 
       {/* Loop through sizes and variants */}
-      {anotherSizes.map((size: any) =>
-        variants.map((variant: any) => (
-          <div key={`${size}-${variant}`} className="">
-            <h2
-              className={cn("text-lg font-semibold", {
-                "text-black": theme === "light",
-                "text-white": theme === "dark",
-              })}
-            >
-              {`Variant: ${variant}, Size: ${size}`}
-            </h2>
+      {anotherSizes.map((size: any) => (
+        <div key={`${size}-labelLessInput`} className="">
+          <h2
+            className={cn("text-lg font-semibold", {
+              "text-black": theme === "light",
+              "text-white": theme === "dark",
+            })}
+          >
+            {`Size: ${size}`}
+          </h2>
 
-            {/* Render the LabelLessInput component for each size and variant */}
-            <LabelLessInput
-              label={`Label`}
-              required
-              toolTipSide={"top"}
-              size={size}
-              variant={variant === "default" ? undefined : variant}
-              popoverChildren={
-                <PopoverItem
-                  variant={variant == "SystemStyle" ? "SystemStyle" : "Default"}
-                  size={size}
-                >
-                  Dropdown Content
-                </PopoverItem>
-              }
-              errorMessage={error ? "This is an error message" : undefined}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder={`labelless input`}
-            />
-          </div>
-        ))
-      )}
+          {/* Render the LabelLessInput component for each size and variant */}
+          <LabelLessInput
+            label={`Label`}
+            required
+            toolTipSide={"top"}
+            size={size}
+            popoverChildren={
+              <PopoverItem variant={"Default"} size={size}>
+                Dropdown Content
+              </PopoverItem>
+            }
+            errorMessage={error ? "This is an error message" : undefined}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={`labelless input`}
+          />
+        </div>
+      ))}
 
       {/* Toggle Error State Button */}
       <Button

@@ -20,7 +20,6 @@ export default function BadgeFieldExample() {
     { label: "Badge 10", isSelected: false, variant: "redLight" },
   ]);
   const [anotherSizes] = useState<any>(["XS", "S", "M"]);
-  const variants = ["PresentationStyle"];
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
 
@@ -36,76 +35,74 @@ export default function BadgeFieldExample() {
       </h1>
 
       {/* Loop through variants and sizes */}
-      {anotherSizes.map((size: any) =>
-        variants.map((variant: any) => (
-          <div key={`${size}-${variant}`} className="">
-            <h2
-              className={cn("text-lg font-semibold", {
-                "text-black": theme === "light",
-                "text-white": theme === "dark",
-              })}
-            >{`Variant: ${variant}, Size: ${size}`}</h2>
-            <BadgeField
-              size={size}
-              variant={variant}
-              badgesChildren={
-                <>
-                  {badges.map(
-                    (badge: any) =>
-                      badge.isSelected && (
-                        <Badge
-                          key={badge.label}
-                          size={size}
-                          variant={badge.variant}
-                          label={badge.label}
-                          isSelected={badge.isSelected}
-                          onUnselect={() => {
-                            setBadges((prev: any) =>
-                              prev.map((b: any) =>
-                                b.label === badge.label
-                                  ? { ...b, isSelected: false }
-                                  : b
-                              )
-                            );
-                          }}
-                        />
-                      )
-                  )}
-                </>
-              }
-              popoverChildren={
-                <div className="flex flex-col gap-1">
-                  {badges.map(
-                    (badge: any) =>
-                      !badge.isSelected && (
-                        <Badge
-                          key={badge.label}
-                          size={size}
-                          variant={badge.variant}
-                          label={badge.label}
-                          isSelected={badge.isSelected}
-                          onClick={() => {
-                            setBadges((prev: any) =>
-                              prev.map((b: any) =>
-                                b.label === badge.label
-                                  ? { ...b, isSelected: true }
-                                  : b
-                              )
-                            );
-                          }}
-                        />
-                      )
-                  )}
-                </div>
-              }
-              errorMessage={error ? "This is an error message" : undefined}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder={`select a badge`}
-            />
-          </div>
-        ))
-      )}
+      {anotherSizes.map((size: any) => (
+        <div key={`${size}-badgeField`} className="">
+          <h2
+            className={cn("text-lg font-semibold", {
+              "text-black": theme === "light",
+              "text-white": theme === "dark",
+            })}
+          >{`Size: ${size}`}</h2>
+          <BadgeField
+            size={size}
+            variant={"PresentationStyle"}
+            badgesChildren={
+              <>
+                {badges.map(
+                  (badge: any) =>
+                    badge.isSelected && (
+                      <Badge
+                        key={badge.label}
+                        size={size}
+                        variant={badge.variant}
+                        label={badge.label}
+                        isSelected={badge.isSelected}
+                        onUnselect={() => {
+                          setBadges((prev: any) =>
+                            prev.map((b: any) =>
+                              b.label === badge.label
+                                ? { ...b, isSelected: false }
+                                : b
+                            )
+                          );
+                        }}
+                      />
+                    )
+                )}
+              </>
+            }
+            popoverChildren={
+              <div className="flex flex-col gap-1">
+                {badges.map(
+                  (badge: any) =>
+                    !badge.isSelected && (
+                      <Badge
+                        key={badge.label}
+                        size={size}
+                        variant={badge.variant}
+                        label={badge.label}
+                        isSelected={badge.isSelected}
+                        onClick={() => {
+                          setBadges((prev: any) =>
+                            prev.map((b: any) =>
+                              b.label === badge.label
+                                ? { ...b, isSelected: true }
+                                : b
+                            )
+                          );
+                        }}
+                      />
+                    )
+                )}
+              </div>
+            }
+            errorMessage={error ? "This is an error message" : undefined}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={`select a badge`}
+          />
+        </div>
+      ))}
 
       {/* Toggle Error State */}
       <Button
