@@ -41,6 +41,7 @@ const buttonVariants = cva(
           "active:border active:border-[var(--border-presentation-state-focus)]",
         ],
         BorderStyle: [
+          "text-[var(--content-presentation-action-light-primary)]",
           "border border-[var(--border-presentation-action-disabled)]",
           "bg-[var(--background-presentation-action-borderstyle)]",
           "hover:bg-[var(--background-presentation-action-hover)]",
@@ -51,6 +52,7 @@ const buttonVariants = cva(
           "active:border active:border-[var(--border-presentation-state-focus)]",
         ],
         PrimeContStyle: [
+          "text-[var(--content-presentation-action-light-primary)]",
           "border-0 bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-light-primary)]",
@@ -59,6 +61,7 @@ const buttonVariants = cva(
           "active:border active:border-[var(--border-presentation-state-focus)]",
         ],
         BlueContStyle: [
+          "text-[var(--content-presentation-action-light-primary)]",
           "border-0 bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-information-hover)]",
@@ -67,6 +70,7 @@ const buttonVariants = cva(
           "active:border active:border-[var(--border-presentation-state-focus)]",
         ],
         RedContStyle: [
+          "text-[var(--content-presentation-action-light-primary)]",
           "border-0 bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-negative-hover)]",
@@ -84,7 +88,7 @@ const buttonVariants = cva(
         true: "",
       },
       disabled: {
-        true: ""
+        true: "",
       },
       buttonType: {
         button: "",
@@ -140,25 +144,28 @@ const buttonVariants = cva(
 
 interface Props
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
   is_loading?: boolean;
   disabled?: boolean;
   asChild?: boolean;
   as?: React.ElementType;
 }
 export const Button = forwardRef<HTMLButtonElement, Props>(
-  ({
-    is_loading = false,
-    variant,
-    size,
-    asChild,
-    as: Tag = "button",
-    buttonType,
-    className,
-    disabled,
-    children,
-    ...props
-  }, ref) => {
+  (
+    {
+      is_loading = false,
+      variant,
+      size,
+      asChild,
+      as: Tag = "button",
+      buttonType,
+      className,
+      disabled,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const Component = asChild ? Slot : Tag;
 
     const wrapTextContent = (children: React.ReactNode) => {
@@ -215,10 +222,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       </Component>
     );
   }
-)
-
-
-
+);
 
 interface IconProps {
   size?: "S" | "M" | "L" | null;

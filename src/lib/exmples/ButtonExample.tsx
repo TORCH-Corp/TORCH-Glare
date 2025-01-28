@@ -51,7 +51,7 @@ export default function ButtonExample() {
                   Size: {size}
                 </span>
                 <Button variant={variant} size={size}>
-                  Button Text
+                  Button
                 </Button>
               </div>
             ))}

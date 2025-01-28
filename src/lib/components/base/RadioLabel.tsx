@@ -18,7 +18,7 @@ export const glareRadioLabelStyles = cva(
     "h-[12px]",
     "rounded-full",
     "border",
-    "border-[--border-presentation-action-checkBox-primary]",
+    "border-[--border-presentation-action-checkbox-primary]",
     "bg-[--background-presentation-action-borderstyle]",
     "flex",
     "items-center",
@@ -89,10 +89,11 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
             glareRadioLabelStyles({
               disabled: props.disabled,
               checked,
-            }), {
-            "w-[12px] h-[12px]": size === "S",
-            "w-[24px] h-[24px]": size === "M",
-          }
+            }),
+            {
+              "w-[12px] h-[12px]": size === "S",
+              "w-[24px] h-[24px]": size === "M",
+            }
           )}
         >
           <span
