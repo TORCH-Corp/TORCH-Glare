@@ -161,6 +161,7 @@ const DropDownButtonTrigger = React.forwardRef<
     >
       <p>{children}</p>
       <Button
+        as={"span"}
         buttonType="icon"
         className={cn(
           [

@@ -114,6 +114,7 @@ export const dropdownMenuStyles = cva(
     "data-[state=closed]:animate-out",
     "data-[state=closed]:fade-out-0",
     "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
     "scrollbar-hide",
   ],
   {

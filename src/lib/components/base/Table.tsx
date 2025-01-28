@@ -136,11 +136,11 @@ TableRow.displayName = "TableRow";
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
-  TableHeadVariantsProps &
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    sortType?: "asc" | "desc" | undefined;
-    onSort?: () => void;
-  }
+    TableHeadVariantsProps &
+    React.ButtonHTMLAttributes<HTMLButtonElement> & {
+      sortType?: "asc" | "desc" | undefined;
+      onSort?: () => void;
+    }
 >(
   (
     { className, size = "M", disabled, sortType, onSort, isDummy, ...props },
@@ -167,7 +167,7 @@ const TableHead = React.forwardRef<
           {...props}
           className={cn(
             tableHeadVariants({ size, disabled, isDummy }),
-            { "!min-w-[100px]": !isDummy },
+            { "min-w-[150px]": !isDummy },
             className
           )}
         >
@@ -350,7 +350,10 @@ const SortButton = ({
   sortType?: "asc" | "desc" | undefined;
 }) => {
   return (
-    <button className={cn("cursor-pointer text-[16px] z-10")} onPointerDown={onSort}>
+    <button
+      className={cn("cursor-pointer text-[16px] z-10")}
+      onPointerDown={onSort}
+    >
       {sortType === "asc" ? (
         <i className="ri-arrow-up-line text-[--border-presentation-state-focus]" />
       ) : sortType === "desc" ? (

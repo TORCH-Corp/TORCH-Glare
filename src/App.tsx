@@ -1,5 +1,4 @@
-import { Badge } from "@/components/base/Badge";
-import { BadgeField } from "@/components/base/BadgeField";
+import { CheckboxLabel } from "@/components/base/CheckboxLabel";
 import Examples from "@/exmples";
 
 function App() {

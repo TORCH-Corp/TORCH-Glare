@@ -1,9 +1,9 @@
-import { RadioLabel } from "@/components/base/RadioLabel";
+import { CheckboxLabel } from "@/components/base/CheckboxLabel";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
-export default function RadioLabelExample() {
+export default function CheckboxLabelExample() {
   const [sizes] = useState<any>(["S", "M", "L"]);
   const { theme } = useTheme();
 
@@ -15,7 +15,7 @@ export default function RadioLabelExample() {
           theme === "light" ? "text-black" : "text-white"
         )}
       >
-        RadioLabel Preview
+        CheckboxLabel Preview
       </h1>
       {sizes.map((size: any) => (
         <div key={size} className="flex flex-col gap-2 w-full">
@@ -27,14 +27,14 @@ export default function RadioLabelExample() {
           >
             Size: {size}
           </span>
-          <RadioLabel
+          <CheckboxLabel
             requiredLabel="Required"
             secondaryLabel="Secondary Label"
             label={"Label"}
             key={size}
-            id={`radio-${size}`}
+            id={`checkbox-${size}`}
             size={size}
-          ></RadioLabel>
+          ></CheckboxLabel>
         </div>
       ))}
     </>

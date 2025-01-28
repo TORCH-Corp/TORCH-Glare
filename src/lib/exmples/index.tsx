@@ -23,6 +23,8 @@ import TooltipExample from "./TooltipExample";
 import AttachmentExample from "./AttachmentExample";
 import DropDownButtonExample from "./DropDownButtonExample";
 import { useEffect } from "react";
+import BadgeFieldExample from "./BadgeFieldExample";
+import CheckboxLabelExample from "./CheckboxLabelExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -54,9 +56,7 @@ export default function Examples() {
               : (document.documentElement.dir = "ltr")
           }
         >
-          {document.documentElement.dir === "ltr"
-            ? "GO TO RTL DIRECTION"
-            : "GO TO LTR DIRECTION"}
+          Change Direction
         </Button>
 
         <ActionButtonExample />
@@ -66,6 +66,7 @@ export default function Examples() {
         <TooltipExample />
         <AlertExample />
         <BadgeExample />
+        <CheckboxLabelExample />
         <RadioLabelExample />
         <RadioCardExample />
         <SwitcherExample />
@@ -73,6 +74,7 @@ export default function Examples() {
         <DropDownButtonExample />
         <ButtonFieldExample />
         <InputFieldExample />
+        <BadgeFieldExample />
         <LabelFieldExample />
         <LabelLessInputExample />
         <FieldSectionExample />

@@ -15,6 +15,7 @@ export const badgeBase = cva(
     "duration-300",
     "ease-in-out",
     "w-fit",
+    "cursor-pointer",
     "[&_i]:leading-0",
   ],
   {
@@ -54,10 +55,9 @@ export const badgeBase = cva(
   }
 );
 
-
 interface BadgeProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "className">,
-  VariantProps<typeof badgeBase> {
+    VariantProps<typeof badgeBase> {
   label?: string;
   onUnselect?: () => void;
   isSelected?: boolean;
@@ -85,7 +85,7 @@ export const Badge: React.FC<BadgeProps> = ({
         )}
       </span>
 
-      <p className="px-[3px]">{label}</p>
+      <p className="px-[3px] whitespace-nowrap">{label}</p>
       {isSelected && (
         <button
           onClick={onUnselect}

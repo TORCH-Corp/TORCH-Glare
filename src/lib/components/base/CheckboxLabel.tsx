@@ -8,15 +8,15 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   id: string;
   secondaryLabel?: string;
   requiredLabel?: string;
-  size?: "S" | "M" | "L";
   directions?: "vertical" | "horizontal";
+  size?: "S" | "M" | "L";
 }
 
 export const glareRadioLabelStyles = cva(
   [
-    "w-[12px]",
-    "h-[12px]",
-    "rounded-full",
+    "w-[16px]",
+    "h-[16px]",
+    "rounded-[3px]",
     "border",
     "border-[--border-presentation-action-checkbox-primary]",
     "bg-[--background-presentation-action-borderstyle]",
@@ -49,16 +49,16 @@ export const glareRadioLabelStyles = cva(
   }
 );
 
-export const RadioLabel = forwardRef<HTMLInputElement, Props>(
+export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
   (
     {
       id,
       label,
       secondaryLabel,
       requiredLabel,
-      size = "M",
-      type = "radio",
+      type = "checkbox",
       directions,
+      size = "M",
       ...props
     },
     ref
@@ -67,7 +67,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
     return (
       <label
         htmlFor={id}
-        className={cn("flex items-center gap-1 group", props.className)}
+        className={cn("flex items-center gap-1  group", props.className)}
       >
         <input
           {...props}
@@ -88,22 +88,20 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
               checked,
             }),
             {
-              "w-[12px] h-[12px]": size === "S",
-              "w-[24px] h-[24px]": size === "M" || size === "L",
+              "w-[14px] h-[14px]": size === "S",
+              "w-[16px] h-[16px]": size === "M" || size === "L",
             }
           )}
         >
-          <span
+          <i
             className={cn(
-              "opacity-0 w-[4px] h-[4px] rounded-full bg-white",
-              "transition-opacity",
+              "ri-check-line",
+              "text-white transition-opacity opacity-0",
               {
                 "opacity-100": checked,
-              },
-              size === "S" && "w-[3px] h-[3px]",
-              size === "M" && "w-[6px] h-[6px]"
+              }
             )}
-          ></span>
+          ></i>
         </div>
 
         {label && (
@@ -121,4 +119,4 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-RadioLabel.displayName = "RadioLabel";
+CheckboxLabel.displayName = "RadioLabel";

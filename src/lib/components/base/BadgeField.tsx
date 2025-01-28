@@ -12,6 +12,7 @@ import { cn } from "./utils";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { cva } from "class-variance-authority";
+import { LabelLessSection } from "./LabelLessInput";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -23,6 +24,8 @@ export interface Props
   onTable?: boolean; // to change the border style of the component when it is on table
   toolTipSide?: ToolTipSide;
   badgesChildren?: ReactNode;
+  label?: string;
+  required?: boolean;
 }
 
 export const inputFieldStyles = cva(
@@ -157,6 +160,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
   (
     {
       size = "M",
+      label,
+      required,
       icon,
       popoverChildren,
       errorMessage,
@@ -178,7 +183,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       if (typeof forwardedRef === "function") forwardedRef(inputRef.current);
       else forwardedRef.current = inputRef.current;
     }, [forwardedRef]);
-
     // TODO: make the user input visible when input is focused
 
     return (
@@ -220,7 +224,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                     "justify-start items-center ": !fucus,
                     "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)] rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]":
                       !fucus,
-                    "pl-2 rtl:pr-2 rtl:pl-1": size === "M",
+                    "pl-2 rtl:pr-2 rtl:pl-1": size === "M" && !label,
                   },
 
                   {
@@ -230,19 +234,25 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   }
                 )}
               >
-                {icon && (
-                  <div
-                    className={cn(
-                      iconContainerStyles({
-                        size: size,
-                        variant: variant,
-                        fucus: fucus,
-                      })
-                    )}
-                  >
-                    {icon}
-                  </div>
-                )}
+                {icon ||
+                  (label && (
+                    <div
+                      className={cn(
+                        iconContainerStyles({
+                          size: size,
+                          variant: variant,
+                          fucus: fucus,
+                        })
+                      )}
+                    >
+                      {!label && icon ? icon : null}
+                      <LabelLessSection
+                        fucus={fucus}
+                        label={label}
+                        required={required}
+                      />
+                    </div>
+                  ))}
 
                 {badgesChildren}
 

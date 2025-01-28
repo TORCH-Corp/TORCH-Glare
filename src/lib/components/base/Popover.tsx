@@ -2,7 +2,6 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { dropdownMenuStyles } from "./DropdownMenu";
 import { HTMLAttributes } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
@@ -11,6 +10,43 @@ interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {
   className?: string;
 }
 
+const dropdownMenuStyles = cva(
+  [
+    "p-1",
+    "rounded-[8px]",
+    "border",
+    "max-h-[200px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=closed]:animate-out",
+    "data-[state=closed]:fade-out-0",
+    "data-[state=open]:fade-in-0",
+    "scrollbar-hide",
+    "overflow-x-hidden",
+  ],
+  {
+    variants: {
+      variant: {
+        SystemStyle: [
+          "border-[--border-system-global-secondary]",
+          "bg-[--background-system-body-primary]",
+          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
+        ],
+        PresentationStyle: [
+          "border-[--border-presentation-global-primary]",
+          "bg-[--background-presentation-form-base]",
+          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
+
 const Popover = PopoverPrimitive.Root;
 
 const PopoverTrigger = PopoverPrimitive.Trigger;
@@ -18,7 +54,7 @@ const PopoverTrigger = PopoverPrimitive.Trigger;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
-  LocalPopOverProps
+    LocalPopOverProps
 >(
   (
     {
@@ -45,7 +81,7 @@ PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
 interface Props
   extends HTMLAttributes<HTMLLIElement>,
-  VariantProps<typeof PopoverItemStyles> {
+    VariantProps<typeof PopoverItemStyles> {
   asChild?: boolean;
 }
 const PopoverItem = function ({
@@ -77,9 +113,7 @@ const PopoverItem = function ({
   );
 };
 
-
 export { Popover, PopoverTrigger, PopoverContent, PopoverItem };
-
 
 export const PopoverItemStyles = cva(
   [
@@ -171,16 +205,6 @@ export const PopoverItemStyles = cva(
       },
     },
     compoundVariants: [
-      /*       {
-              disabled: true,
-              variant: "SystemStyle",
-              className: ["bg-[#1C1D1F]", "text-[#797C7F]"],
-            },
-            {
-              active: true,
-              variant: "SystemStyle",
-              className: ["bg-[#252729]", "text-[#F9F9F9]", "border-transparent"],
-            }, */
       {
         active: true,
         variant: "Warning",
