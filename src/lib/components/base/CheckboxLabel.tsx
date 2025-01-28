@@ -12,6 +12,50 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   size?: "S" | "M" | "L";
 }
 
+export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      id,
+      label,
+      secondaryLabel,
+      requiredLabel,
+      type = "checkbox",
+      directions,
+      size = "M",
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <label
+        htmlFor={id}
+        className={cn("flex items-center gap-1  group", props.className)}
+      >
+        <Checkbox
+          {...props}
+          id={id}
+          disabled={props.disabled}
+          type={type}
+          size={size}
+          ref={ref}
+        />
+        {label && (
+          <Label
+            htmlFor={id}
+            label={label}
+            secondaryLabel={secondaryLabel}
+            requiredLabel={requiredLabel}
+            size={size}
+            directions={directions}
+          />
+        )}
+      </label>
+    );
+  }
+);
+
+CheckboxLabel.displayName = "RadioLabel";
+
 export const glareRadioLabelStyles = cva(
   [
     "w-[16px]",
@@ -49,37 +93,26 @@ export const glareRadioLabelStyles = cva(
   }
 );
 
-export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
-  (
-    {
-      id,
-      label,
-      secondaryLabel,
-      requiredLabel,
-      type = "checkbox",
-      directions,
-      size = "M",
-      ...props
-    },
-    ref
-  ) => {
+interface CheckBoxProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  size?: "S" | "M" | "L";
+}
+
+export const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
+  ({ size = "M", ...props }, ref) => {
     const [checked, setChecked] = useState(props.checked);
     return (
-      <label
-        htmlFor={id}
-        className={cn("flex items-center gap-1  group", props.className)}
-      >
+      <label htmlFor={props.id} className="flex items-center justify-center">
         <input
           {...props}
-          hidden
+          id={props.id}
           onChange={(e) => {
             props.onChange?.(e);
             setChecked(e.target.checked);
           }}
+          type="checkbox"
+          hidden
           ref={ref}
-          id={id}
-          disabled={props.disabled}
-          type={type}
         />
         <div
           className={cn(
@@ -103,20 +136,9 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
             )}
           ></i>
         </div>
-
-        {label && (
-          <Label
-            htmlFor={id}
-            label={label}
-            secondaryLabel={secondaryLabel}
-            requiredLabel={requiredLabel}
-            size={size}
-            directions={directions}
-          />
-        )}
       </label>
     );
   }
 );
 
-CheckboxLabel.displayName = "RadioLabel";
+Checkbox.displayName = "Checkbox";

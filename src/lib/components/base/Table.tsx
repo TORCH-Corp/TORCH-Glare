@@ -4,6 +4,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { useResize } from "./utils";
 import { useRef } from "react";
 import { Button } from "./Button";
+import { Checkbox } from "./CheckboxLabel";
 
 const tableHeadVariants = cva(
   [
@@ -218,11 +219,13 @@ TableCell.displayName = "TableCell";
 
 const TableCheckbox = React.forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & {}
->(({ className, ...props }, ref) => {
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    id: string;
+  }
+>(({ className, id, ...props }, ref) => {
   return (
     <div className={cn(["flex items-center justify-center"], className)}>
-      <input ref={ref} type="checkbox" {...props} />
+      <Checkbox {...props} ref={ref} size="S" />
     </div>
   );
 });

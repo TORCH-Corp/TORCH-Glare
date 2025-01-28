@@ -1,11 +1,33 @@
-import { SubTableButton, Table, TableBody, TableCell, TableCheckbox, TableFooter, TableFooterButton, TableHead, TableHeader, TableRow } from "@/components/base/Table";
+import {
+  SubTableButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableCheckbox,
+  TableFooter,
+  TableFooterButton,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/base/Table";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, horizontalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
-
 
 export default function TableExample() {
   const { theme } = useTheme();
@@ -51,14 +73,15 @@ export default function TableExample() {
       paymentStatus: "Unpaid",
       totalAmount: "$300.00",
       paymentMethod: "Credit Card",
-    },]
+    },
+  ];
 
   // Define column structure
   const [columns, setColumns] = useState([
-    { id: 'invoice', label: 'Invoice' },
-    { id: 'paymentStatus', label: 'Status' },
-    { id: 'paymentMethod', label: 'Method' },
-    { id: 'totalAmount', label: 'Amount' },
+    { id: "invoice", label: "Invoice" },
+    { id: "paymentStatus", label: "Status" },
+    { id: "paymentMethod", label: "Method" },
+    { id: "totalAmount", label: "Amount" },
   ]);
 
   const sensors = useSensors(
@@ -93,9 +116,18 @@ export default function TableExample() {
         <TableHeader>
           <TableRow>
             <TableHead isDummy></TableHead>
-            <TableHead isDummy><TableCheckbox /></TableHead>
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <SortableContext items={columns.map(col => col.id)} strategy={horizontalListSortingStrategy}>
+            <TableHead isDummy>
+              <TableCheckbox id="checkbox-12" />
+            </TableHead>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={columns.map((col) => col.id)}
+                strategy={horizontalListSortingStrategy}
+              >
                 {columns.map((column) => (
                   <SortableHeader key={column.id} id={column.id}>
                     {column.label}
@@ -108,8 +140,12 @@ export default function TableExample() {
         <TableBody>
           {invoices.map((invoice) => (
             <TableRow key={invoice.invoice}>
-              <TableCell ><SubTableButton /></TableCell>
-              <TableCell><TableCheckbox /></TableCell>
+              <TableCell>
+                <SubTableButton />
+              </TableCell>
+              <TableCell>
+                <TableCheckbox id={`${invoice.invoice}-checkbox`} />
+              </TableCell>
               {columns.map((column) => (
                 <TableCell key={column.id}>
                   {invoice[column.id as keyof typeof invoice]}
@@ -121,27 +157,41 @@ export default function TableExample() {
         </TableBody>
 
         <TableFooter>
-          <TableFooterButton ><i className="ri-add-line"></i> Add</TableFooterButton>
+          <TableFooterButton>
+            <i className="ri-add-line"></i> Add
+          </TableFooterButton>
         </TableFooter>
       </Table>
-
     </>
   );
 }
 
-
-
-const SortableHeader = ({ id, children, ...props }: { id: string, children: React.ReactNode }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+const SortableHeader = ({
+  id,
+  children,
+  ...props
+}: {
+  id: string;
+  children: React.ReactNode;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    cursor: 'grab',
+    cursor: "grab",
   };
 
   return (
-    <TableHead onSort={() => console.log('sort')} {...props} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <TableHead
+      onSort={() => console.log("sort")}
+      {...props}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
       {children}
     </TableHead>
   );

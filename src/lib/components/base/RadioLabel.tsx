@@ -5,12 +5,47 @@ import { cva } from "class-variance-authority";
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
-  id: string;
   secondaryLabel?: string;
   requiredLabel?: string;
   size?: "S" | "M" | "L";
   directions?: "vertical" | "horizontal";
 }
+
+export const RadioLabel = forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      label,
+      secondaryLabel,
+      requiredLabel,
+      size = "M",
+      type = "radio",
+      directions,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <label
+        htmlFor={props.id}
+        className={cn("flex items-center gap-1 group", props.className)}
+      >
+        <Radio {...props} size={size} ref={ref} />
+        {label && (
+          <Label
+            htmlFor={props.id}
+            label={label}
+            secondaryLabel={secondaryLabel}
+            requiredLabel={requiredLabel}
+            size={size}
+            directions={directions}
+          />
+        )}
+      </label>
+    );
+  }
+);
+
+RadioLabel.displayName = "RadioLabel";
 
 export const glareRadioLabelStyles = cva(
   [
@@ -49,26 +84,15 @@ export const glareRadioLabelStyles = cva(
   }
 );
 
-export const RadioLabel = forwardRef<HTMLInputElement, Props>(
-  (
-    {
-      id,
-      label,
-      secondaryLabel,
-      requiredLabel,
-      size = "M",
-      type = "radio",
-      directions,
-      ...props
-    },
-    ref
-  ) => {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  size?: "S" | "M" | "L";
+}
+
+export const Radio = forwardRef<HTMLInputElement, Props>(
+  ({ size = "M", ...props }, ref) => {
     const [checked, setChecked] = useState(props.checked);
     return (
-      <label
-        htmlFor={id}
-        className={cn("flex items-center gap-1 group", props.className)}
-      >
+      <label htmlFor={props.id} className="flex items-center justify-center">
         <input
           {...props}
           hidden
@@ -77,9 +101,8 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
             setChecked(e.target.checked);
           }}
           ref={ref}
-          id={id}
-          disabled={props.disabled}
-          type={type}
+          id={props.id}
+          type={"radio"}
         />
         <div
           className={cn(
@@ -105,20 +128,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
             )}
           ></span>
         </div>
-
-        {label && (
-          <Label
-            htmlFor={id}
-            label={label}
-            secondaryLabel={secondaryLabel}
-            requiredLabel={requiredLabel}
-            size={size}
-            directions={directions}
-          />
-        )}
       </label>
     );
   }
 );
-
-RadioLabel.displayName = "RadioLabel";

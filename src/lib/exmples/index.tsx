@@ -77,11 +77,12 @@ export default function Examples() {
         <BadgeFieldExample />
         <LabelFieldExample />
         <LabelLessInputExample />
-        <FieldSectionExample />
-        <RingLoadingExample />
-        <TableExample />
         <TextareaExample />
         <AttachmentExample />
+        <FieldSectionExample />
+        <TableExample />
+        <RingLoadingExample />
+        <div className="my-10"></div>
       </section>
     </div>
   );

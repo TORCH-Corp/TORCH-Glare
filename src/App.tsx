@@ -1,4 +1,3 @@
-import { CheckboxLabel } from "@/components/base/CheckboxLabel";
 import Examples from "@/exmples";
 
 function App() {
