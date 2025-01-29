@@ -53,7 +53,7 @@ const buttonVariants = cva(
         ],
         PrimeContStyle: [
           "text-[var(--content-presentation-action-light-primary)]",
-          "border-0 bg-transparent",
+          "border-transparent bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-light-primary)]",
           "focus:border focus:border-[var(--border-presentation-state-focus)]",
@@ -62,7 +62,7 @@ const buttonVariants = cva(
         ],
         BlueContStyle: [
           "text-[var(--content-presentation-action-light-primary)]",
-          "border-0 bg-transparent",
+          "border-transparent bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-information-hover)]",
           "focus:border focus:border-[var(--border-presentation-state-focus)]",
@@ -71,7 +71,7 @@ const buttonVariants = cva(
         ],
         RedContStyle: [
           "text-[var(--content-presentation-action-light-primary)]",
-          "border-0 bg-transparent",
+          "border-transparent bg-transparent",
           "hover:bg-[var(--background-presentation-action-contstyle-hover)]",
           "hover:text-[var(--content-presentation-action-negative-hover)]",
           "focus:border focus:border-[var(--border-presentation-state-focus)]",
