@@ -1,6 +1,3 @@
-import LoginButton from "./LoginButton";
-import PassCheck from "./PassCheck";
+import PassCheck from "../../base/PasswordLevel";
 
-export {
-    LoginButton, PassCheck
-}
+export { PassCheck };

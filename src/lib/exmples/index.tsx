@@ -25,6 +25,7 @@ import DropDownButtonExample from "./DropDownButtonExample";
 import { useEffect } from "react";
 import BadgeFieldExample from "./BadgeFieldExample";
 import CheckboxLabelExample from "./CheckboxLabelExample";
+import PasswordLevelExample from "./PasswordLevelExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -77,6 +78,7 @@ export default function Examples() {
         <BadgeFieldExample />
         <LabelFieldExample />
         <LabelLessInputExample />
+        <PasswordLevelExample />
         <TextareaExample />
         <AttachmentExample />
         <FieldSectionExample />
