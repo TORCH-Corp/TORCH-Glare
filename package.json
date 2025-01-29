@@ -1,14 +1,20 @@
 {
-  "name": "torch-glare",
-  "private": false,
-  "version": "0.0.121",
+  "name": "torchcorp",
+  "version": "0.0.3",
+  "bin": {
+    "chesty": "./src/torch/bin/cli.js"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
   "files": [
-    "dist"
+    "src/torch/bin",
+    "src/torch/templates"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "vitest",
     "dev": "vite",
@@ -41,7 +47,8 @@
     "tailwind-merge": "^2.6.0",
     "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^4.3.2",
+    "inquirer": "^9.2.15"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.6",
