@@ -181,8 +181,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       <Popover open={fucus}>
         <PopoverTrigger asChild>
           <section
-            onContextMenu={(e) => e.stopPropagation()}
-            onClick={(e) => {
+            onFocus={(e) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
               setFucus(true);
               inputRef.current?.focus();

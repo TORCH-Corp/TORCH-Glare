@@ -213,7 +213,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
         <PopoverTrigger asChild>
           <section
             ref={sectionRef}
-            onPointerDown={(e: any) => {
+            onFocus={(e: any) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
             }}
             className={cn(
