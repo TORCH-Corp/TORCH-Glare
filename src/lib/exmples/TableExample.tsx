@@ -1,3 +1,4 @@
+import { Badge } from "@/components/base/Badge";
 import {
   SubTableButton,
   Table,
@@ -140,18 +141,26 @@ export default function TableExample() {
         <TableBody>
           {invoices.map((invoice) => (
             <TableRow key={invoice.invoice}>
-              <TableCell>
+              <TableCell isDummy>
                 <SubTableButton />
               </TableCell>
-              <TableCell>
+              <TableCell isDummy>
                 <TableCheckbox id={`${invoice.invoice}-checkbox`} />
               </TableCell>
               {columns.map((column) => (
                 <TableCell key={column.id}>
-                  {invoice[column.id as keyof typeof invoice]}
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  <Badge label={invoice[column.id as keyof typeof invoice]} />
                 </TableCell>
               ))}
-              <TableCell style={{ width: "100vw" }}></TableCell>
+              <TableCell isDummy style={{ width: "100vw" }}></TableCell>
             </TableRow>
           ))}
         </TableBody>

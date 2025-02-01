@@ -168,7 +168,7 @@ const TableHead = React.forwardRef<
           {...props}
           className={cn(
             tableHeadVariants({ size, disabled, isDummy }),
-            { "min-w-[150px]": !isDummy },
+            { "min-w-[200px]": !isDummy },
             className
           )}
         >
@@ -198,13 +198,18 @@ TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
-  React.TdHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
+  React.TdHTMLAttributes<HTMLTableCellElement> & {
+    isDummy?: boolean;
+  }
+>(({ className, isDummy, ...props }, ref) => (
   <td
     ref={ref}
     className={cn(
       [
-        "h-[40px] text-[--content-presentation-action-light-primary] typography-body-small-regular relative border-l border-r border-[--border-presentation-table-header] px-1",
+        "h-[40px] text-[--content-presentation-action-light-primary]",
+        "typography-body-small-regular relative",
+        " border-l border-r border-[--border-presentation-table-header] px-1",
+        "break-all",
         "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
         "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
       ],
@@ -212,7 +217,15 @@ const TableCell = React.forwardRef<
     )}
     {...props}
   >
-    {props.children}
+    <div
+      className={cn(
+        "flex justify-start items-center gap-1 w-[200px] min-w-full overflow-hidden",
+        { "w-auto justify-center": isDummy },
+        className
+      )}
+    >
+      {props.children}
+    </div>
   </td>
 ));
 TableCell.displayName = "TableCell";
@@ -252,7 +265,7 @@ const TableFooterButton = React.forwardRef<
   return (
     <TableRow
       className={cn(
-        "h-[40px] hover:bg-[--background-presentation-table-acton-hover] hover:border-y-2 hover:border-[--border-presentation-table-action-hover]",
+        "h-[40px] border-y hover:bg-[--background-presentation-table-acton-hover] hover:border-y-2 hover:border-[--border-presentation-table-action-hover]",
         className
       )}
     >
@@ -261,7 +274,7 @@ const TableFooterButton = React.forwardRef<
           ref={ref}
           {...props}
           className={cn(
-            "w-full flex items-center justify-start gap-2 typography-body-medium-semibold [&_i]:text-[20px]",
+            "overflow-hidden w-full flex items-center justify-start gap-2 typography-body-medium-semibold [&_i]:text-[20px]",
             className
           )}
         >
