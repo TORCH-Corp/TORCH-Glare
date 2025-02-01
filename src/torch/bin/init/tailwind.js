@@ -1,18 +1,8 @@
-import fs from "fs";
 import path from "path";
-import { typographyClasses } from "./utils.js";
+import { typographyClasses } from "../utils.js";
+import fs from "fs";
 
-export async function initConfig(CONFIG_FILE) {
-  const defaultConfig = { path: "@/components" };
-
-  if (!fs.existsSync(CONFIG_FILE)) {
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(defaultConfig, null, 2));
-    console.log("✅ Created torch.json configuration file");
-  } else {
-    console.log("⚠️ torch.json already exists, skipping creation.");
-  }
-
-  // Initialize Tailwind CSS config if not exists
+export function tailwindInit() {
   const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.js");
 
   if (!fs.existsSync(tailwindConfigPath)) {
@@ -90,8 +80,8 @@ export async function initConfig(CONFIG_FILE) {
 
     // Add the required Tailwind plugins (if not already present)
     const newPlugins = `
-        tailwindcssAnimate,
-        tailwindScrollbarHide,
+        require('tailwindcss-animate'),
+        require('tailwind-scrollbar-hide'),
         function ({ addVariant }) {
           addVariant("rtl", '&[dir="rtl"]');
           addVariant("ltr", '&[dir="ltr"]');

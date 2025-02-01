@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import inquirer from "inquirer";
 import { getConfig } from "./cli.js";
+import { execSync } from "child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,4 +62,53 @@ export async function addComponent(component) {
   const target = path.join(targetDir, `${component}.tsx`);
   fs.copyFileSync(source, target);
   console.log(`✅ ${component}.tsx has been added to ${config.path}!`);
+
+  installDependencies(source);
+}
+
+function installDependencies(componentPath) {
+  const packageJsonPath = path.join(process.cwd(), "package.json");
+
+  if (!fs.existsSync(packageJsonPath)) {
+    console.error(
+      "❌ No package.json found. Run `npm init` or `yarn init` first."
+    );
+    return;
+  }
+
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+  const installedDependencies = Object.keys(packageJson.dependencies || {});
+
+  // Read the component file
+  const componentContent = fs.readFileSync(componentPath, "utf-8");
+
+  // Extract imported modules
+  const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
+  let match;
+  const dependenciesToInstall = new Set();
+
+  while ((match = importRegex.exec(componentContent)) !== null) {
+    const moduleName = match[1];
+
+    // Skip relative imports (local files)
+    if (
+      !moduleName.startsWith(".") &&
+      !installedDependencies.includes(moduleName)
+    ) {
+      dependenciesToInstall.add(moduleName);
+    }
+  }
+
+  if (dependenciesToInstall.size > 0) {
+    console.log(
+      "📦 Installing missing dependencies:",
+      [...dependenciesToInstall].join(", ")
+    );
+    execSync(`npm install ${[...dependenciesToInstall].join(" ")}`, {
+      stdio: "inherit",
+    });
+    console.log("✅ Dependencies installed successfully.");
+  } else {
+    console.log("✅ All dependencies are already installed.");
+  }
 }

@@ -2,7 +2,7 @@
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { Command } from "commander";
-import { initConfig } from "./init.js";
+import { initConfig } from "./init/init.js";
 import { addComponent, listComponents } from "./add.js";
 
 const program = new Command();

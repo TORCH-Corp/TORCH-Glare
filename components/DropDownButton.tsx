@@ -2,6 +2,7 @@
 import React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { cn } from "./utils";
+import { dropdownMenuStyles } from "./DropdownMenu";
 import { cva, VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 
@@ -228,21 +229,32 @@ DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton";
 const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-    VariantProps<typeof dropdownButtonStyles>
->(({ className, children, position = "popper", ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      ref={ref}
-      className={cn(dropdownButtonStyles({}), className)}
-      position={position}
-      {...props}
-    >
-      <DropDownButtonScrollUpButton />
-      <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-      <DropDownButtonScrollDownButton />
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-));
+    VariantProps<typeof dropdownMenuStyles>
+>(
+  (
+    {
+      className,
+      children,
+      variant = "PresentationStyle",
+      position = "popper",
+      ...props
+    },
+    ref
+  ) => (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        ref={ref}
+        className={cn(dropdownMenuStyles({ variant }), className)}
+        position={position}
+        {...props}
+      >
+        <DropDownButtonScrollUpButton />
+        <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+        <DropDownButtonScrollDownButton />
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
+  )
+);
 DropDownButtonContent.displayName = "DropDownButtonContent";
 
 const DropDownButtonLabel = React.forwardRef<
