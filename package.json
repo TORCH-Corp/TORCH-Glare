@@ -10,7 +10,7 @@
     "src/torch/templates"
   ],
   "bin": {
-    "torchcorp": "./src/torch/bin/cli.js"
+    "torchcorp": "./torch.js"
   },
   "publishConfig": {
     "access": "public"
@@ -41,14 +41,15 @@
     "@radix-ui/themes": "^3.1.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "commander": "^13.1.0",
+    "inquirer": "^9.2.15",
     "react": "^18.2.0",
     "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.6.0",
     "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "vite-tsconfig-paths": "^4.3.2",
-    "inquirer": "^9.2.15"
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.6",
