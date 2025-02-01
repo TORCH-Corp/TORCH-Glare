@@ -102,12 +102,12 @@ export async function initConfig(CONFIG_FILE) {
               .map(
                 (typography) => `
            " ${typography.className}": {
-              "fontSize": ${typography.fontSize},
-              "lineHeight": ${typography.lineHeight},
-              "fontWeight": ${typography.fontWeight},
+              "fontSize": "${typography.fontSize}",
+              "lineHeight": "${typography.lineHeight}",
+              "fontWeight": "${typography.fontWeight}",
                ${
                  typography.letterSpacing
-                   ? `"letterSpacing": ${typography.letterSpacing},`
+                   ? `"letterSpacing": "${typography.letterSpacing}",`
                    : ""
                }
             },
