@@ -7,6 +7,43 @@ import { Button } from "./Button";
 
 // NOTE: radix select as DropDownButton
 
+export const dropdownMenuStyles = cva(
+  [
+    "p-1",
+    "rounded-[8px]",
+    "border",
+    "max-h-[200px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=closed]:animate-out",
+    "data-[state=closed]:fade-out-0",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+  ],
+  {
+    variants: {
+      variant: {
+        SystemStyle: [
+          "border-[--border-system-global-secondary]",
+          "bg-[--background-system-body-primary]",
+          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
+        ],
+        PresentationStyle: [
+          "border-[--border-presentation-global-primary]",
+          "bg-[--background-presentation-form-base]",
+          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
+
 export const MenuItemStyles = cva(
   [
     "text-[--content-presentation-action-light-primary]",
@@ -228,21 +265,32 @@ DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton";
 const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-    VariantProps<typeof dropdownButtonStyles>
->(({ className, children, position = "popper", ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      ref={ref}
-      className={cn(dropdownButtonStyles({}), className)}
-      position={position}
-      {...props}
-    >
-      <DropDownButtonScrollUpButton />
-      <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-      <DropDownButtonScrollDownButton />
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-));
+    VariantProps<typeof dropdownMenuStyles>
+>(
+  (
+    {
+      className,
+      children,
+      variant = "PresentationStyle",
+      position = "popper",
+      ...props
+    },
+    ref
+  ) => (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        ref={ref}
+        className={cn(dropdownMenuStyles({ variant }), className)}
+        position={position}
+        {...props}
+      >
+        <DropDownButtonScrollUpButton />
+        <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+        <DropDownButtonScrollDownButton />
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
+  )
+);
 DropDownButtonContent.displayName = "DropDownButtonContent";
 
 const DropDownButtonLabel = React.forwardRef<
