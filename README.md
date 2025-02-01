@@ -13,17 +13,17 @@ Welcome to the **TORCH Glare Components Library**! This library provides a colle
 
 To use the library, copy the required components into your project. Before doing so, follow these setup steps:
 
-### 1. Wrap Your App with `ThemeWrapper`
+### 1. Wrap Your App with `ThemeProvider`
 
-Ensure your application is wrapped with `ThemeWrapper` in `main.tsx` or `index.tsx`:
+Ensure your application is wrapped with `ThemeProvider` in `main.tsx` or `index.tsx`:
 
 ```tsx
-import { ThemeWrapper } from "./lib/providers/ThemeProvider";
+import { ThemeProvider } from "./lib/providers/ThemeProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <ThemeWrapper>
+  <ThemeProvider>
     <App />
-  </ThemeWrapper>
+  </ThemeProvider>
 );
 ```
 
