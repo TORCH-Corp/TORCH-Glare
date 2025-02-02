@@ -55,14 +55,7 @@ export const inputFieldStyles = cva(
         ],
       },
       fucus: {
-        true: [
-          "border-[--border-presentation-state-focus]",
-          "bg-[--background-presentation-form-field-primary]",
-          "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-          "hover:border-[--border-presentation-state-focus]",
-          "caret-[--border-presentation-state-focus]",
-          "hover:caret-[--border-presentation-state-focus]",
-        ],
+        true: "",
       },
       onTable: {
         true: ["border-transparent", "bg-transparent", "h-[26px]"],
@@ -79,6 +72,8 @@ export const inputFieldStyles = cva(
         true: [
           "border-[--border-presentation-action-disabled]",
           "bg-[--background-presentation-action-disabled]",
+          "hover:border-[--border-presentation-action-disabled]",
+          "hover:bg-[--background-presentation-action-disabled]",
         ],
       },
       size: {
@@ -95,21 +90,31 @@ export const inputFieldStyles = cva(
     },
     compoundVariants: [
       {
-        disabled: true,
+        fucus: true,
+        variant: "PresentationStyle",
         className: [
-          "border-[--border-presentation-action-disabled]",
-          "bg-[--background-presentation-action-disabled]",
-          "hover:border-[--border-presentation-action-disabled]",
-          "hover:bg-[--background-presentation-action-disabled]",
+          "border-[--border-presentation-state-focus]",
+          "bg-[--background-presentation-form-field-primary]",
+          "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+          "hover:border-[--border-presentation-state-focus]",
+          "caret-[--border-presentation-state-focus]",
+          "hover:caret-[--border-presentation-state-focus]",
+        ],
+      },
+      {
+        fucus: true,
+        variant: "SystemStyle",
+        className: [
+          "border-[--border-presentation-state-focus]",
+          "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+          "hover:border-[--border-presentation-state-focus]",
+          "caret-[--border-presentation-state-focus]",
+          "hover:caret-[--border-presentation-state-focus]",
         ],
       },
       {
         onTable: true,
         className: ["h-[26px]"],
-      },
-      {
-        variant: "PresentationStyle",
-        fucus: true,
       },
     ],
   }

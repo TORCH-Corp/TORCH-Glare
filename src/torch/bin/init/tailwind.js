@@ -71,22 +71,16 @@ export function tailwindInit() {
     let tailwindConfigObject = eval(tailwindConfigContent);
 
     // Modify the object as needed (example: adding a custom theme)
-    tailwindConfigObject.plugins = [
-      ...tailwindConfigObject.plugins,
-      require("tailwindcss-animate"),
-      require("tailwind-scrollbar-hide"),
-      function ({ addVariant }) {
-        addVariant("rtl", '&[dir="rtl"]');
-        addVariant("ltr", '&[dir="ltr"]');
-      },
-    ];
+    tailwindConfigObject.plugins = [...tailwindConfigObject.plugins, []];
 
     // Convert back to a string and write to file
-    let updatedConfigContent = `module.exports = ${JSON.stringify(
+    /*     let updatedConfigContent = `module.exports = ${JSON.stringify(
       tailwindConfigObject,
       null,
       2
-    )};`;
+    )};`; */
+
+    console.log(tailwindConfigObject, "tailwindConfigObject");
     fs.writeFileSync(tailwindConfigPath, updatedConfigContent);
 
     console.log("✅ Modified tailwind.config.js");
