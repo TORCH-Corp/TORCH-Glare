@@ -58,7 +58,7 @@ export const glareRadioLabelStyles = cva(
     "transition-[background,border-color,background-color] duration-200",
     "hover:bg-[--blue-sparkle-alpha-15] hover:border-[--border-presentation-state-focus]",
     "appearance-none",
-    "checked:border-[--background-presentation-state-information-primary] checked:hover:bg-transparent",
+    "checked:border-[--background-presentation-state-information-primary] checked:hover:bg-white checked:bg-white",
     "disabled:bg-[--background-presentation-action-disabled] disabled:border-[--border-presentation-global-primary]",
     "disabled:cursor-not-allowed",
   ],
