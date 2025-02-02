@@ -34,6 +34,7 @@ export default function RadioLabelExample() {
             key={size}
             id={`radio-${size}`}
             size={size}
+            name={`radio-label`}
           ></RadioLabel>
         </div>
       ))}

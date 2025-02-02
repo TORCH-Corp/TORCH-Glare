@@ -17,7 +17,28 @@ export function RadioCardExample() {
         RadioCard Preview
       </h1>
       <div className="flex flex-col gap-2 w-full max-w-[500px]">
-        <RadioCard id={"test23"} headerLabel={"RadioCard Header"} description={"this is a description for RadioCard"} >
+        <RadioCard
+          name={"radio-card"}
+          id={"test234"}
+          headerLabel={"RadioCard Header"}
+          description={"this is a description for RadioCard"}
+        >
+          <Button size={"S"}>do something</Button>
+        </RadioCard>
+        <RadioCard
+          name={"radio-card"}
+          id={"test235"}
+          headerLabel={"RadioCard Header"}
+          description={"this is a description for RadioCard"}
+        >
+          <Button size={"S"}>do something</Button>
+        </RadioCard>
+        <RadioCard
+          name={"radio-card"}
+          id={"test2378"}
+          headerLabel={"RadioCard Header"}
+          description={"this is a description for RadioCard"}
+        >
           <Button size={"S"}>do something</Button>
         </RadioCard>
       </div>

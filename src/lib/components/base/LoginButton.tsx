@@ -3,7 +3,7 @@ import { cn } from "./utils"; // Assuming you have a `cn` utility
 import { ButtonHTMLAttributes } from "react";
 
 const buttonVariants = cva(
-  "flex-1 w-full h-[42px] rounded-[8px] text-base font-medium flex justify-center items-center transition-all duration-250 ease-in-out border-none border border-1",
+  "w-full h-[42px] rounded-[8px] text-base font-medium flex justify-center items-center transition-all duration-250 ease-in-out border-none border border-1",
   {
     variants: {
       variant: {
