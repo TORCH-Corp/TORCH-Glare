@@ -30,336 +30,336 @@
         function ({ addComponents }) {
           addComponents({
             
-            "typography-display-large-bold": {
+            ".typography-display-large-bold": {
               fontSize: "34px",
               lineHeight: "120%",
               fontWeight: "700",
               letterSpacing: "-0.34px",
             },
             
-            "typography-display-large-semibold": {
+            ".typography-display-large-semibold": {
               fontSize: "34px",
               lineHeight: "120%",
               fontWeight: "590",
               letterSpacing: "-0.34px",
             },
             
-            "typography-display-large-medium": {
+            ".typography-display-large-medium": {
               fontSize: "34px",
               lineHeight: "120%",
               fontWeight: "510",
               letterSpacing: "-0.34px",
             },
             
-            "typography-display-large-regular": {
+            ".typography-display-large-regular": {
               fontSize: "34px",
               lineHeight: "120%",
               fontWeight: "400",
               letterSpacing: "-0.34px",
             },
             
-            "typography-display-medium-bold": {
+            ".typography-display-medium-bold": {
               fontSize: "28px",
               lineHeight: "120%",
               fontWeight: "700",
               letterSpacing: "-0.28px",
             },
             
-            "typography-display-medium-semibold": {
+            ".typography-display-medium-semibold": {
               fontSize: "28px",
               lineHeight: "120%",
               fontWeight: "590",
               letterSpacing: "-0.28px",
             },
             
-            "typography-display-medium-medium": {
+            ".typography-display-medium-medium": {
               fontSize: "28px",
               lineHeight: "120%",
               fontWeight: "510",
               letterSpacing: "-0.28px",
             },
             
-            "typography-display-medium-regular": {
+            ".typography-display-medium-regular": {
               fontSize: "28px",
               lineHeight: "120%",
               fontWeight: "400",
               letterSpacing: "-0.28px",
             },
             
-            "typography-display-small-bold": {
+            ".typography-display-small-bold": {
               fontSize: "22px",
               lineHeight: "120%",
               fontWeight: "700",
               letterSpacing: "-0.22px",
             },
             
-            "typography-display-small-semibold": {
+            ".typography-display-small-semibold": {
               fontSize: "22px",
               lineHeight: "120%",
               fontWeight: "590",
               letterSpacing: "-0.22px",
             },
             
-            "typography-display-small-medium": {
+            ".typography-display-small-medium": {
               fontSize: "22px",
               lineHeight: "120%",
               fontWeight: "510",
               letterSpacing: "-0.22px",
             },
             
-            "typography-display-small-regular": {
+            ".typography-display-small-regular": {
               fontSize: "22px",
               lineHeight: "120%",
               fontWeight: "400",
               letterSpacing: "-0.22px",
             },
             
-            "typography-headers-large-bold": {
+            ".typography-headers-large-bold": {
               fontSize: "20px",
               lineHeight: "132%",
               fontWeight: "700",
               letterSpacing: "-0.2px",
             },
             
-            "typography-headers-large-semibold": {
+            ".typography-headers-large-semibold": {
               fontSize: "20px",
               lineHeight: "132%",
               fontWeight: "590",
               letterSpacing: "-0.2px",
             },
             
-            "typography-headers-large-medium": {
+            ".typography-headers-large-medium": {
               fontSize: "20px",
               lineHeight: "132%",
               fontWeight: "510",
               letterSpacing: "-0.2px",
             },
             
-            "typography-headers-large-regular": {
+            ".typography-headers-large-regular": {
               fontSize: "20px",
               lineHeight: "132%",
               fontWeight: "400",
               letterSpacing: "-0.2px",
             },
             
-            "typography-headers-medium-bold": {
+            ".typography-headers-medium-bold": {
               fontSize: "18px",
               lineHeight: "132%",
               fontWeight: "700",
               letterSpacing: "-0.18px",
             },
             
-            "typography-headers-medium-semibold": {
+            ".typography-headers-medium-semibold": {
               fontSize: "18px",
               lineHeight: "132%",
               fontWeight: "590",
               letterSpacing: "-0.18px",
             },
             
-            "typography-headers-medium-medium": {
+            ".typography-headers-medium-medium": {
               fontSize: "18px",
               lineHeight: "132%",
               fontWeight: "510",
               letterSpacing: "-0.18px",
             },
             
-            "typography-headers-medium-regular": {
+            ".typography-headers-medium-regular": {
               fontSize: "18px",
               lineHeight: "132%",
               fontWeight: "400",
               letterSpacing: "-0.18px",
             },
             
-            "typography-headers-small-bold": {
+            ".typography-headers-small-bold": {
               fontSize: "16px",
               lineHeight: "132%",
               fontWeight: "700",
               letterSpacing: "-0.16px",
             },
             
-            "typography-headers-small-semibold": {
+            ".typography-headers-small-semibold": {
               fontSize: "16px",
               lineHeight: "132%",
               fontWeight: "590",
               letterSpacing: "-0.16px",
             },
             
-            "typography-headers-small-medium": {
+            ".typography-headers-small-medium": {
               fontSize: "16px",
               lineHeight: "132%",
               fontWeight: "510",
               letterSpacing: "-0.16px",
             },
             
-            "typography-headers-small-regular": {
+            ".typography-headers-small-regular": {
               fontSize: "16px",
               lineHeight: "132%",
               fontWeight: "400",
               letterSpacing: "-0.16px",
             },
             
-            "typography-labels-large-bold": {
+            ".typography-labels-large-bold": {
               fontSize: "11px",
               lineHeight: "142%",
               fontWeight: "700",
               letterSpacing: "0.22px",
             },
             
-            "typography-labels-large-semibold": {
+            ".typography-labels-large-semibold": {
               fontSize: "11px",
               lineHeight: "142%",
               fontWeight: "590",
               letterSpacing: "0.22px",
             },
             
-            "typography-labels-large-medium": {
+            ".typography-labels-large-medium": {
               fontSize: "11px",
               lineHeight: "142%",
               fontWeight: "510",
               letterSpacing: "0.22px",
             },
             
-            "typography-labels-large-regular": {
+            ".typography-labels-large-regular": {
               fontSize: "11px",
               lineHeight: "142%",
               fontWeight: "400",
               letterSpacing: "0.22px",
             },
             
-            "typography-labels-medium-bold": {
+            ".typography-labels-medium-bold": {
               fontSize: "10px",
               lineHeight: "142%",
               fontWeight: "700",
               letterSpacing: "0.2px",
             },
             
-            "typography-labels-medium-semibold": {
+            ".typography-labels-medium-semibold": {
               fontSize: "10px",
               lineHeight: "142%",
               fontWeight: "590",
               letterSpacing: "0.2px",
             },
             
-            "typography-labels-medium-medium": {
+            ".typography-labels-medium-medium": {
               fontSize: "10px",
               lineHeight: "142%",
               fontWeight: "510",
               letterSpacing: "0.2px",
             },
             
-            "typography-labels-medium-regular": {
+            ".typography-labels-medium-regular": {
               fontSize: "10px",
               lineHeight: "142%",
               fontWeight: "400",
               letterSpacing: "0.2px",
             },
             
-            "typography-labels-small-bold": {
+            ".typography-labels-small-bold": {
               fontSize: "9px",
               lineHeight: "142%",
               fontWeight: "700",
               letterSpacing: "0.18px",
             },
             
-            "typography-labels-small-semibold": {
+            ".typography-labels-small-semibold": {
               fontSize: "9px",
               lineHeight: "142%",
               fontWeight: "590",
               letterSpacing: "0.18px",
             },
             
-            "typography-labels-small-medium": {
+            ".typography-labels-small-medium": {
               fontSize: "9px",
               lineHeight: "142%",
               fontWeight: "510",
               letterSpacing: "0.18px",
             },
             
-            "typography-labels-small-regular": {
+            ".typography-labels-small-regular": {
               fontSize: "9px",
               lineHeight: "142%",
               fontWeight: "400",
               letterSpacing: "0.18px",
             },
             
-            "typography-body-large-bold": {
+            ".typography-body-large-bold": {
               fontSize: "16px",
               lineHeight: "148%",
               fontWeight: "700",
               
             },
             
-            "typography-body-large-semibold": {
+            ".typography-body-large-semibold": {
               fontSize: "16px",
               lineHeight: "148%",
               fontWeight: "590",
               
             },
             
-            "typography-body-large-medium": {
+            ".typography-body-large-medium": {
               fontSize: "16px",
               lineHeight: "148%",
               fontWeight: "510",
               
             },
             
-            "typography-body-large-regular": {
+            ".typography-body-large-regular": {
               fontSize: "16px",
               lineHeight: "147.5%",
               fontWeight: "400",
               
             },
             
-            "typography-body-medium-bold": {
+            ".typography-body-medium-bold": {
               fontSize: "14px",
               lineHeight: "148%",
               fontWeight: "700",
               
             },
             
-            "typography-body-medium-semibold": {
+            ".typography-body-medium-semibold": {
               fontSize: "14px",
               lineHeight: "148%",
               fontWeight: "590",
               
             },
             
-            "typography-body-medium-medium": {
+            ".typography-body-medium-medium": {
               fontSize: "14px",
               lineHeight: "148%",
               fontWeight: "510",
               
             },
             
-            "typography-body-medium-regular": {
+            ".typography-body-medium-regular": {
               fontSize: "14px",
               lineHeight: "147.5%",
               fontWeight: "400",
               
             },
             
-            "typography-body-small-bold": {
+            ".typography-body-small-bold": {
               fontSize: "12px",
               lineHeight: "148%",
               fontWeight: "700",
               
             },
             
-            "typography-body-small-semibold": {
+            ".typography-body-small-semibold": {
               fontSize: "12px",
               lineHeight: "148%",
               fontWeight: "590",
               
             },
             
-            "typography-body-small-medium": {
+            ".typography-body-small-medium": {
               fontSize: "12px",
               lineHeight: "148%",
               fontWeight: "510",
               
             },
             
-            "typography-body-small-regular": {
+            ".typography-body-small-regular": {
               fontSize: "12px",
               lineHeight: "147.5%",
               fontWeight: "400",
