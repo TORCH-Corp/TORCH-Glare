@@ -67,57 +67,28 @@ export function tailwindInit() {
     // Read the existing tailwind.config.js file as a string
     let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
 
-    // Check if the plugins section exists and modify it if needed
-    // Find the position of the plugins array and insert the new ones
-    const pluginsStart =
-      tailwindConfigContent.indexOf("plugins: [") + "plugins: [".length;
-    const pluginsEnd = tailwindConfigContent.indexOf("],", pluginsStart) + 1;
+    // Convert the string content into a JavaScript object
+    let tailwindConfigObject = eval(tailwindConfigContent);
 
-    let existingPlugins = tailwindConfigContent.substring(
-      pluginsStart,
-      pluginsEnd
-    );
+    // Modify the object as needed (example: adding a custom theme)
+    tailwindConfigObject.plugins = [
+      ...tailwindConfigObject.plugins,
+      require("tailwindcss-animate"),
+      require("tailwind-scrollbar-hide"),
+      function ({ addVariant }) {
+        addVariant("rtl", '&[dir="rtl"]');
+        addVariant("ltr", '&[dir="ltr"]');
+      },
+    ];
 
-    // Add the required Tailwind plugins (if not already present)
-    const newPlugins = `
-        require('tailwindcss-animate'),
-        require('tailwind-scrollbar-hide'),
-        function ({ addVariant }) {
-          addVariant("rtl", '&[dir="rtl"]');
-          addVariant("ltr", '&[dir="ltr"]');
-        },
-        function ({ addComponents }) {
-          addComponents({
-            ${typographyClasses
-              .map(
-                (typography) => `
-           " ${typography.className}": {
-              "fontSize": "${typography.fontSize}",
-              "lineHeight": "${typography.lineHeight}",
-              "fontWeight": "${typography.fontWeight}",
-               ${
-                 typography.letterSpacing
-                   ? `"letterSpacing": "${typography.letterSpacing}",`
-                   : ""
-               }
-            },
-            `
-              )
-              .join("")}
-          });
-        },
-      `;
+    // Convert back to a string and write to file
+    let updatedConfigContent = `module.exports = ${JSON.stringify(
+      tailwindConfigObject,
+      null,
+      2
+    )};`;
+    fs.writeFileSync(tailwindConfigPath, updatedConfigContent);
 
-    // Append the new plugins to the existing plugins array
-    if (!existingPlugins.includes("typography-display-large-bold")) {
-      tailwindConfigContent = tailwindConfigContent.replace(
-        "plugins: [",
-        `plugins: [${newPlugins}`
-      );
-    }
-
-    // Save the modified configuration back to the file
-    fs.writeFileSync(tailwindConfigPath, tailwindConfigContent);
     console.log("✅ Modified tailwind.config.js");
   }
 }

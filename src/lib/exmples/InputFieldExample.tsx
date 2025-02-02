@@ -12,7 +12,7 @@ export default function InputFieldExample() {
     <i className="ri-search-line"></i>,
   ];
   const [anotherSizes] = useState<any>(["S", "M"]);
-  const variants = ["default", "SystemStyle"];
+  const variants = ["PresentationStyle", "SystemStyle"];
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
 
@@ -39,7 +39,7 @@ export default function InputFieldExample() {
             >{`Variant: ${variant}, Size: ${size}`}</h2>
             <InputField
               size={size}
-              variant={variant === "default" ? undefined : variant}
+              variant={variant}
               icon={mockIcons[idx % mockIcons.length]}
               popoverChildren={
                 <PopoverItem

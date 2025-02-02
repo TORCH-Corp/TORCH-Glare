@@ -33,22 +33,23 @@ export const inputFieldStyles = cva(
     "flex-1",
     "flex-col",
     "typography-body-small-regular",
-    "border border-[--border-presentation-action-primary]",
-    "bg-[--background-presentation-form-field-primary]",
+    "border ",
     "transition-all duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-    "hover:bg-[--background-presentation-form-field-hover]",
-    "hover:border-[--border-presentation-action-hover]",
-    "hover:text-[--content-presentation-action-light-primary]",
-    "hover:caret-[--content-presentation-action-information-hover]",
   ],
   {
     variants: {
       variant: {
-        PresentationStyle: [""],
-        SystemStyle: [
-          "border-[--border-system-global-secondary]",
+        PresentationStyle: [
           "bg-[--background-presentation-form-field-primary]",
+          "border-[--border-presentation-action-primary]",
+          "hover:bg-[--background-presentation-form-field-hover]",
+          "hover:border-[--border-presentation-action-hover]",
+          "hover:text-[--content-presentation-action-light-primary]",
+        ],
+        SystemStyle: [
+          "bg-[--black-alpha-20]",
+          "border-[--border-system-global-primary]",
           "hover:border-[#9748FF]",
           "hover:bg-[--purple-alpha-10]",
         ],
@@ -176,7 +177,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       else forwardedRef.current = inputRef.current;
     }, [forwardedRef]);
     // TODO: make the user input visible when input is focused
-
     return (
       <Popover open={fucus}>
         <PopoverTrigger asChild>
@@ -188,7 +188,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
             }}
             className={cn(
               inputFieldStyles({
-                variant: variant,
+                variant,
                 fucus,
                 error: errorMessage !== undefined,
                 disabled: props.disabled,
