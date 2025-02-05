@@ -50,6 +50,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
           setFucus(false);
           props.onBlur && props.onBlur(e);
         }}
+        className={className}
         ref={ref}
         toolTipSide={toolTipSide}
         size={size}

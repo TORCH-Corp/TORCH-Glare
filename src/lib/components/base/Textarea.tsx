@@ -49,7 +49,7 @@ const textareaStyles = cva(
 // Define the prop types for the Textarea component
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  VariantProps<typeof textareaStyles> {
+    VariantProps<typeof textareaStyles> {
   label?: string; // Optional label text
   requiredLabel?: string; // Text for required field indicator
   secondaryLabel?: string; // Additional label text
@@ -72,10 +72,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ) => {
     return (
       <div
-        className={cn("flex gap-[4px]", {
-          "flex-col": direction === "column",
-          "flex-row items-start gap-[10px]": direction === "row",
-        })}
+        className={cn(
+          "flex gap-[4px]",
+          {
+            "flex-col": direction === "column",
+            "flex-row items-start gap-[10px]": direction === "row",
+          },
+          className
+        )}
       >
         <Label
           label={label}

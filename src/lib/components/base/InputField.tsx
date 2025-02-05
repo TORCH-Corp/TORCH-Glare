@@ -199,7 +199,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 disabled: props.disabled,
                 size: size,
                 onTable: onTable,
-              })
+              }),
+              className
             )}
           >
             <Tooltip

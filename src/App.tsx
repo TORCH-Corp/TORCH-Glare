@@ -1,6 +1,10 @@
 import Examples from "@/exmples";
 
 function App() {
-  return <Examples />;
+  return (
+    <div>
+      <Examples></Examples>
+    </div>
+  );
 }
 export default App;

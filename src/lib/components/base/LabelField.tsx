@@ -51,6 +51,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
         />
         <InputField
           {...props}
+          className={className}
           ref={ref}
           size={size}
           icon={icon}
