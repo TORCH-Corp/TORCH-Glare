@@ -25,6 +25,7 @@ const inputFieldStyles = cva(
         SystemStyle: [
           "placeholder:text-[#A0A0A0]",
           "hover:placeholder:text-[#A0A0A0]",
+          "text-white",
         ],
       },
       size: {

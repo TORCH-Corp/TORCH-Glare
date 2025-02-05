@@ -13,7 +13,7 @@ interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {
 
 const dropdownMenuStyles = cva(
   [
-    "p-1 h-fit",
+    "p-1 max-h-[200px]",
     "rounded-[8px]",
     "border",
     "min-w-[240px]",
@@ -39,6 +39,9 @@ const dropdownMenuStyles = cva(
           "bg-[--background-presentation-form-base]",
           "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
         ],
+      },
+      overlayBlur: {
+        true: ["h-fit"],
       },
       defaultVariants: {
         variant: "PresentationStyle",
@@ -82,18 +85,32 @@ const PopoverContent = React.forwardRef<
     ref
   ) => (
     <PopoverPrimitive.Portal>
-      <div className="relative z-[42]">
-        {overlayBlur && (
+      {overlayBlur ? (
+        <div className="relative z-[42]">
           <div className="fixed top-0 left-0 flex h-full w-full items-center flex-shrink-0 bg-[rgba(16,7,25,0.32)] backdrop-blur-[8px] transition-all duration-300"></div>
-        )}
+          <PopoverPrimitive.Content
+            ref={ref}
+            align={align}
+            sideOffset={sideOffset}
+            className={cn(
+              dropdownMenuStyles({ variant, overlayBlur }),
+              className
+            )}
+            {...props}
+          />
+        </div>
+      ) : (
         <PopoverPrimitive.Content
           ref={ref}
           align={align}
           sideOffset={sideOffset}
-          className={cn(dropdownMenuStyles({ variant }), className)}
+          className={cn(
+            dropdownMenuStyles({ variant, overlayBlur }),
+            className
+          )}
           {...props}
         />
-      </div>
+      )}
     </PopoverPrimitive.Portal>
   )
 );
