@@ -54,6 +54,10 @@ export default function FieldSectionExample() {
                 size={size !== "L" ? size : "M"}
                 placeholder="Input Field"
               />
+              <InputField
+                size={size !== "L" ? size : "M"}
+                placeholder="Input Field"
+              />
             </section>
           </FieldSection>
         </div>
