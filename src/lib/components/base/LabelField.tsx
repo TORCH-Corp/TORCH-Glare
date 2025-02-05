@@ -48,6 +48,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
           requiredLabel={requiredLabel}
           secondaryLabel={secondaryLabel}
           directions={labelDirections}
+          variant={variant}
         />
         <InputField
           {...props}

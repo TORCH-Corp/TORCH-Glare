@@ -49,7 +49,7 @@ export const inputFieldStyles = cva(
         ],
         SystemStyle: [
           "bg-[--black-alpha-20]",
-          "border-[--border-system-global-primary]",
+          "border-[#2C2D2E]",
           "hover:border-[#9748FF]",
           "hover:bg-[--purple-alpha-10]",
         ],
