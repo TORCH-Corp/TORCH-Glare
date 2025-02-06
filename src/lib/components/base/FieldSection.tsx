@@ -41,9 +41,7 @@ export function FieldSection({
       </div>
 
       {/* Flexible section that takes up the remaining space */}
-      <div className="flex flex-wrap items-end gap-[12px] overflow-hidden">
-        {children}
-      </div>
+      <div className="flex flex-wrap items-end gap-[12px]">{children}</div>
     </section>
   );
 }
