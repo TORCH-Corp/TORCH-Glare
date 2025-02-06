@@ -13,7 +13,7 @@ interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {
 
 const dropdownMenuStyles = cva(
   [
-    "p-1 max-h-[200px]",
+    "p-1 max-h-[200px] z-[1000]",
     "rounded-[8px]",
     "border",
     "min-w-[240px]",

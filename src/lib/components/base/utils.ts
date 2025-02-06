@@ -1,12 +1,17 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { MutableRefObject, RefObject, useEffect, useState } from "react";
+import {
+  Dispatch,
+  MutableRefObject,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
-
 
 // Extracted function to get the new width based on the mouse event
 export const calculateNewWidthFromMouse = (
@@ -101,4 +106,20 @@ export const useResize = (
     isResizing,
     handleStartResize,
   };
+};
+
+export const convertImageFileToDataUrl = async (
+  file: File | null,
+  setter: Dispatch<SetStateAction<string>>
+) => {
+  if (file && file.type.startsWith("image/")) {
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      const result = e.target?.result;
+      if (typeof result === "string") {
+        setter(result);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
 };
