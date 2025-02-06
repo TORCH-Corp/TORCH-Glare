@@ -29,8 +29,7 @@ import { cva } from "class-variance-authority";
 
 export const inputFieldStyles = cva(
   [
-    "flex ",
-    "flex-1",
+    "flex flex-1 min-w-0",
     "flex-col",
     "typography-body-small-regular",
     "border ",
@@ -49,6 +48,7 @@ export const inputFieldStyles = cva(
         ],
         SystemStyle: [
           "bg-[--black-alpha-20]",
+          "text-white",
           "border-[#2C2D2E]",
           "hover:border-[#9748FF]",
           "hover:bg-[--purple-alpha-10]",
@@ -208,7 +208,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               open={errorMessage !== undefined}
               text={errorMessage}
             >
-              <section className="flex flex-row flex-1 px-[4px] overflow-hidden relative">
+              <section className="flex flex-1  px-[4px] overflow-hidden relative">
                 {icon && (
                   <div
                     className={cn(
@@ -230,7 +230,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                   ref={inputRef}
                   className="group"
                 />
-
                 <div
                   className={cn(
                     "flex items-center justify-center h-full gap-1 py-1"

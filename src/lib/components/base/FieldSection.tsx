@@ -24,11 +24,12 @@ export function FieldSection({
     <section
       {...props}
       className={cn(
-        "flex flex-col gap-[12px] flex-1 border-t border-[--border-presentation-global-primary] py-[16px] px-[12px] w-full max-w-[1200px] sm:gap-[24px] sm:flex-row",
+        "grid grid-cols-[350px_1fr] gap-[12px] border-t border-[--border-presentation-global-primary] py-[16px] px-[12px] w-full max-w-[1200px] sm:gap-[24px]",
         className
       )}
     >
-      <section className="w-[350px] flex flex-col justify-start items-start gap-[8px]">
+      {/* Fixed width section for labels */}
+      <div className="flex flex-col gap-[8px]">
         <Label
           size={size}
           label={label}
@@ -37,11 +38,12 @@ export function FieldSection({
         />
         <Label size={size} secondaryLabel={secondaryLabel} />
         {childrenUnderLabel}
-      </section>
+      </div>
 
-      <section className="flex-1 flex content-end flex-row flex-wrap gap-[12px]">
+      {/* Flexible section that takes up the remaining space */}
+      <div className="flex flex-wrap items-end gap-[12px] overflow-hidden">
         {children}
-      </section>
+      </div>
     </section>
   );
 }
