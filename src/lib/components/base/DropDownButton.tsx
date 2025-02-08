@@ -150,7 +150,7 @@ export const dropdownButtonStyles = cva(
     "rounded-[4px]",
     "text-[--content-presentation-action-light-primary]",
     "typography-body-small-regular",
-    "[&_p]:px-[10px]",
+    "[&_p]:px-[10px] [&_p]:whitespace-nowrap",
     "group",
     "w-fit",
     "border",
@@ -193,7 +193,7 @@ export const dropdownButtonStyles = cva(
           "[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium",
         ],
         XL: [
-          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-large-medium",
+          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-small-regular",
         ],
       },
     },
@@ -241,7 +241,8 @@ const DropDownButtonTrigger = React.forwardRef<
           )}
           {...props}
         >
-          <p>{children}</p>
+          <p className={cn({ "text-[#A0A0A0]": !props.value })}>{children}</p>
+
           <Button
             as={"span"}
             buttonType="icon"
