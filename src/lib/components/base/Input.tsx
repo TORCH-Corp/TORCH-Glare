@@ -51,6 +51,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
   ({ focusSetter, className, variant, size, ...props }, ref) => {
     return (
       <input
+        autoComplete="off"
         {...props}
         className={cn(inputFieldStyles({ variant, size }), className)}
         onFocus={(e) => {
