@@ -1,5 +1,4 @@
-"use client";
-import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "./utils";
 
@@ -36,18 +35,8 @@ export const Alert: React.FC<Props> = ({
   className,
   ...props
 }) => {
-  const parentRef = useRef<HTMLDivElement>(null);
-  const [parentHeight, setParentHeight] = useState(0);
-
-  useEffect(() => {
-    if (parentRef.current) {
-      setParentHeight(parentRef.current.offsetHeight);
-    }
-  }, [parentRef]);
-
   return (
     <section
-      ref={parentRef}
       {...props}
       className={cn(
         glareAlert({
@@ -56,10 +45,7 @@ export const Alert: React.FC<Props> = ({
         className
       )}
     >
-      <section
-        style={{ height: `${parentHeight}px` }}
-        className="flex items-center justify-center min-w-[26px] min-h-[26px] h-full rounded-[4px] text-[18px]"
-      >
+      <section className="flex items-center justify-center min-w-[26px] min-h-[26px] h-full rounded-[4px] text-[18px]">
         {icon ? (
           icon
         ) : state === "error" ? (
