@@ -110,6 +110,7 @@ export const inputFieldStyles = cva(
           "hover:border-[--border-presentation-state-focus]",
           "caret-[--border-presentation-state-focus]",
           "hover:caret-[--border-presentation-state-focus]",
+          "hover:bg-[--black-alpha-20]",
         ],
       },
       {
