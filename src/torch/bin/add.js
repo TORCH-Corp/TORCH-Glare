@@ -66,6 +66,14 @@ export async function addComponent(component) {
   installDependencies(source);
 }
 
+function detectPackageManager() {
+  if (fs.existsSync(path.join(process.cwd(), "pnpm-lock.yaml"))) return "pnpm";
+  if (fs.existsSync(path.join(process.cwd(), "yarn.lock"))) return "yarn";
+  if (fs.existsSync(path.join(process.cwd(), "package-lock.json")))
+    return "npm";
+  return "npm"; // Default to npm if no lock file is found
+}
+
 function installDependencies(componentPath) {
   const packageJsonPath = path.join(process.cwd(), "package.json");
 
@@ -77,7 +85,10 @@ function installDependencies(componentPath) {
   }
 
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-  const installedDependencies = Object.keys(packageJson.dependencies || {});
+  const installedDependencies = new Set([
+    ...Object.keys(packageJson.dependencies || {}),
+    ...Object.keys(packageJson.devDependencies || {}), // Check devDependencies too
+  ]);
 
   // Read the component file
   const componentContent = fs.readFileSync(componentPath, "utf-8");
@@ -91,23 +102,31 @@ function installDependencies(componentPath) {
     const moduleName = match[1];
 
     // Skip relative imports (local files)
-    if (
-      !moduleName.startsWith(".") &&
-      !installedDependencies.includes(moduleName)
-    ) {
+    if (!moduleName.startsWith(".") && !installedDependencies.has(moduleName)) {
       dependenciesToInstall.add(moduleName);
     }
   }
 
   if (dependenciesToInstall.size > 0) {
+    const packageManager = detectPackageManager();
+    const installCommand =
+      packageManager === "pnpm"
+        ? `pnpm add ${[...dependenciesToInstall].join(" ")}`
+        : packageManager === "yarn"
+        ? `yarn add ${[...dependenciesToInstall].join(" ")}`
+        : `npm install ${[...dependenciesToInstall].join(" ")}`;
+
     console.log(
-      "📦 Installing missing dependencies:",
+      `📦 Installing missing dependencies using ${packageManager}:`,
       [...dependenciesToInstall].join(", ")
     );
-    execSync(`npm install ${[...dependenciesToInstall].join(" ")}`, {
-      stdio: "inherit",
-    });
-    console.log("✅ Dependencies installed successfully.");
+
+    try {
+      execSync(installCommand, { stdio: "inherit" });
+      console.log("✅ Dependencies installed successfully.");
+    } catch (error) {
+      console.error("❌ Error installing dependencies:", error.message);
+    }
   } else {
     console.log("✅ All dependencies are already installed.");
   }

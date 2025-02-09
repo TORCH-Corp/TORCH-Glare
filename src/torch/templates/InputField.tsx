@@ -29,39 +29,33 @@ import { cva } from "class-variance-authority";
 
 export const inputFieldStyles = cva(
   [
-    "flex ",
-    "flex-1",
+    "flex flex-1 min-w-0",
     "flex-col",
     "typography-body-small-regular",
-    "border border-[--border-presentation-action-primary]",
-    "bg-[--background-presentation-form-field-primary]",
+    "border ",
     "transition-all duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-    "hover:bg-[--background-presentation-form-field-hover]",
-    "hover:border-[--border-presentation-action-hover]",
-    "hover:text-[--content-presentation-action-light-primary]",
-    "hover:caret-[--content-presentation-action-information-hover]",
   ],
   {
     variants: {
       variant: {
-        PresentationStyle: [""],
-        SystemStyle: [
-          "border-[--border-system-global-secondary]",
+        PresentationStyle: [
           "bg-[--background-presentation-form-field-primary]",
+          "border-[--border-presentation-action-primary]",
+          "hover:bg-[--background-presentation-form-field-hover]",
+          "hover:border-[--border-presentation-action-hover]",
+          "hover:text-[--content-presentation-action-light-primary]",
+        ],
+        SystemStyle: [
+          "bg-[--black-alpha-20]",
+          "text-white",
+          "border-[#2C2D2E]",
           "hover:border-[#9748FF]",
           "hover:bg-[--purple-alpha-10]",
         ],
       },
       fucus: {
-        true: [
-          "border-[--border-presentation-state-focus]",
-          "bg-[--background-presentation-form-field-primary]",
-          "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-          "hover:border-[--border-presentation-state-focus]",
-          "caret-[--border-presentation-state-focus]",
-          "hover:caret-[--border-presentation-state-focus]",
-        ],
+        true: "",
       },
       onTable: {
         true: ["border-transparent", "bg-transparent", "h-[26px]"],
@@ -78,6 +72,8 @@ export const inputFieldStyles = cva(
         true: [
           "border-[--border-presentation-action-disabled]",
           "bg-[--background-presentation-action-disabled]",
+          "hover:border-[--border-presentation-action-disabled]",
+          "hover:bg-[--background-presentation-action-disabled]",
         ],
       },
       size: {
@@ -94,21 +90,32 @@ export const inputFieldStyles = cva(
     },
     compoundVariants: [
       {
-        disabled: true,
+        fucus: true,
+        variant: "PresentationStyle",
         className: [
-          "border-[--border-presentation-action-disabled]",
-          "bg-[--background-presentation-action-disabled]",
-          "hover:border-[--border-presentation-action-disabled]",
-          "hover:bg-[--background-presentation-action-disabled]",
+          "border-[--border-presentation-state-focus]",
+          "bg-[--background-presentation-form-field-primary]",
+          "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+          "hover:border-[--border-presentation-state-focus]",
+          "caret-[--border-presentation-state-focus]",
+          "hover:caret-[--border-presentation-state-focus]",
+        ],
+      },
+      {
+        fucus: true,
+        variant: "SystemStyle",
+        className: [
+          "border-[--border-presentation-state-focus]",
+          "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+          "hover:border-[--border-presentation-state-focus]",
+          "caret-[--border-presentation-state-focus]",
+          "hover:caret-[--border-presentation-state-focus]",
+          "hover:bg-[--black-alpha-20]",
         ],
       },
       {
         onTable: true,
         className: ["h-[26px]"],
-      },
-      {
-        variant: "PresentationStyle",
-        fucus: true,
       },
     ],
   }
@@ -176,7 +183,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       else forwardedRef.current = inputRef.current;
     }, [forwardedRef]);
     // TODO: make the user input visible when input is focused
-
     return (
       <Popover open={fucus}>
         <PopoverTrigger asChild>
@@ -188,13 +194,14 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
             }}
             className={cn(
               inputFieldStyles({
-                variant: variant,
+                variant,
                 fucus,
                 error: errorMessage !== undefined,
                 disabled: props.disabled,
                 size: size,
                 onTable: onTable,
-              })
+              }),
+              className
             )}
           >
             <Tooltip
@@ -202,7 +209,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               open={errorMessage !== undefined}
               text={errorMessage}
             >
-              <section className="flex flex-row flex-1 px-[4px] overflow-hidden relative">
+              <section className="flex flex-1  px-[4px] overflow-hidden relative">
                 {icon && (
                   <div
                     className={cn(
@@ -224,7 +231,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                   ref={inputRef}
                   className="group"
                 />
-
                 <div
                   className={cn(
                     "flex items-center justify-center h-full gap-1 py-1"

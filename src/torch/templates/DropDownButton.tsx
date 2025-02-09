@@ -2,11 +2,48 @@
 import React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { cn } from "./utils";
-import { dropdownMenuStyles } from "./DropdownMenu";
 import { cva, VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
+import { Tooltip } from "./Tooltip";
 
 // NOTE: radix select as DropDownButton
+
+export const dropdownMenuStyles = cva(
+  [
+    "p-1",
+    "rounded-[8px]",
+    "border",
+    "max-h-[200px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=closed]:animate-out",
+    "data-[state=closed]:fade-out-0",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+  ],
+  {
+    variants: {
+      variant: {
+        SystemStyle: [
+          "border-[--border-system-global-secondary]",
+          "bg-[--background-system-body-primary]",
+          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
+        ],
+        PresentationStyle: [
+          "border-[--border-presentation-global-primary]",
+          "bg-[--background-presentation-form-base]",
+          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
 
 export const MenuItemStyles = cva(
   [
@@ -109,21 +146,41 @@ export const MenuItemStyles = cva(
 
 export const dropdownButtonStyles = cva(
   [
-    "flex flex-row rounded-[4px] justify-between items-center outline-none border-none",
+    "flex flex-row rounded-[4px] justify-between items-center outline-none",
     "rounded-[4px]",
     "text-[--content-presentation-action-light-primary]",
     "typography-body-small-regular",
-    "[&_p]:px-[10px]",
+    "[&_p]:px-[10px] [&_p]:whitespace-nowrap",
     "group",
     "w-fit",
     "border",
-    "bg-[--background-presentation-form-field-primary]",
     "transition-all duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
     "hover:bg-[--background-presentation-form-field-hover]",
   ],
   {
     variants: {
+      variant: {
+        PresentationStyle: [
+          "bg-[--background-presentation-form-field-primary]",
+          "border-none",
+        ],
+        SystemStyle: [
+          "bg-[--black-alpha-20]",
+          "text-white",
+          "border-[#2C2D2E]",
+          "hover:border-[#9748FF]",
+          "hover:bg-[--purple-alpha-10]",
+        ],
+      },
+      error: {
+        true: [
+          "border-[--border-presentation-state-negative]",
+          "caret-[--border-presentation-state-negative]",
+          "hover:border-[--border-presentation-state-negative]",
+          "hover:caret-[--border-presentation-state-negative]",
+        ],
+      },
       size: {
         S: [
           "[&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium",
@@ -133,6 +190,9 @@ export const dropdownButtonStyles = cva(
         ],
         L: [
           "[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium",
+        ],
+        XL: [
+          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-small-regular [&_p]:px-[4px]",
         ],
       },
     },
@@ -151,39 +211,63 @@ const DropDownButtonValue = SelectPrimitive.Value;
 const DropDownButtonTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-    VariantProps<typeof dropdownButtonStyles>
->(({ className, children, size = "M", ...props }, ref) => {
-  return (
-    <SelectPrimitive.Trigger
-      ref={ref}
-      className={cn(dropdownButtonStyles({ size }), className)}
-      {...props}
-    >
-      <p>{children}</p>
-      <Button
-        as={"span"}
-        buttonType="icon"
-        className={cn(
-          [
-            "group-aria-expanded:bg-[--background-presentation-action-hover]",
-            "group-aria-expanded:text-white",
-          ],
-          {
-            "text-[12px]": size === "S",
-            "text-[16px]": size === "M",
-            "text-[18px]": size === "L",
-          }
-        )}
-      >
-        <i
+    VariantProps<typeof dropdownButtonStyles> & {
+      errors?: string;
+    }
+>(
+  (
+    {
+      className,
+      children,
+      size = "M",
+      variant = "PresentationStyle",
+      errors,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <Tooltip toolTipSide={"top"} open={errors !== undefined} text={errors}>
+        <SelectPrimitive.Trigger
+          ref={ref}
           className={cn(
-            "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180"
+            dropdownButtonStyles({
+              size,
+              variant,
+              error: errors !== undefined,
+            }),
+            className
           )}
-        />
-      </Button>
-    </SelectPrimitive.Trigger>
-  );
-});
+          {...props}
+        >
+          <p className={cn({ "text-[#A0A0A0]": !props.value })}>{children}</p>
+
+          <Button
+            as={"span"}
+            buttonType="icon"
+            className={cn(
+              [
+                "group-aria-expanded:bg-[--background-presentation-action-hover]",
+                "group-aria-expanded:text-white",
+              ],
+              {
+                "text-[12px]": size === "S",
+                "text-[16px]": size === "M",
+                "text-[28px]": size === "L" || size === "XL",
+              }
+            )}
+          >
+            <i
+              className={cn(
+                "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180"
+              )}
+            />
+          </Button>
+        </SelectPrimitive.Trigger>
+      </Tooltip>
+    );
+  }
+);
 DropDownButtonTrigger.displayName = "DropDownButtonTrigger";
 
 const DropDownButtonScrollUpButton = React.forwardRef<
@@ -273,21 +357,27 @@ const DropDownButtonItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
     VariantProps<typeof MenuItemStyles>
->(({ className, children, variant = "Default", active, ...props }, ref) => (
-  <SelectPrimitive.Item
-    ref={ref}
-    className={cn(
-      MenuItemStyles({
-        variant,
-        active,
-      }),
-      className
-    )}
-    {...props}
-  >
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-  </SelectPrimitive.Item>
-));
+>(
+  (
+    { className, children, size = "M", variant = "Default", active, ...props },
+    ref
+  ) => (
+    <SelectPrimitive.Item
+      ref={ref}
+      className={cn(
+        MenuItemStyles({
+          variant,
+          active,
+          size,
+        }),
+        className
+      )}
+      {...props}
+    >
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    </SelectPrimitive.Item>
+  )
+);
 
 DropDownButtonItem.displayName = "DropDownButtonItem";
 

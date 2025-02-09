@@ -1,12 +1,13 @@
 import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
 import { cva } from "class-variance-authority";
 import { RadioLabel } from "./RadioLabel";
+import { cn } from "./utils";
 
 export const glareRadioCard = cva(
   [
     "flex",
     "flex-col",
-    "justify-between",
+    "justify-start",
     "flex-1",
     "gap-2",
     "rounded-[12px]",
@@ -43,24 +44,30 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
 }
 
 export const RadioCard = forwardRef<HTMLInputElement, Props>(
-  ({ headerLabel, description, disabled, className, id, children, ...props }, ref) => {
+  (
+    { headerLabel, description, disabled, className, id, children, ...props },
+    ref
+  ) => {
     return (
       <label
         htmlFor={id}
-        className={glareRadioCard({
-          className,
-          disabled,
-        })}
+        className={cn(
+          glareRadioCard({
+            className,
+            disabled,
+          })
+        )}
       >
         <section
           className={"absolute top-0 left-0 w-full p-[10px] flex justify-end"}
         >
           <RadioLabel
+            {...props}
             size="M"
             ref={ref}
             id={id}
+            checked={props.checked}
             disabled={disabled}
-            {...props}
           />
         </section>
 

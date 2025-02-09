@@ -24,6 +24,7 @@ interface Props
   as?: React.ElementType;
   asChild?: boolean;
   size?: "S" | "M" | "L";
+  variant?: "SystemStyle" | "PresentationStyle";
 }
 
 export const Label = React.forwardRef<HTMLLabelElement, Props>(
@@ -36,6 +37,7 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
       size = "M",
       directions,
       className,
+      variant = "PresentationStyle",
       ...props
     },
     forwardedRef
@@ -49,11 +51,16 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
         {label && (
           <p
             className={cn(
-              "text-[--content-presentation-global-primary] text-start",
+              "text-start",
               {
                 "typography-body-small-regular": size === "S",
                 "typography-body-medium-regular": size === "M",
                 "typography-body-large-regular": size === "L",
+              },
+              {
+                "text-[--content-presentation-global-primary]":
+                  variant === "PresentationStyle",
+                "text-[#E5E5E5]": variant === "SystemStyle",
               }
             )}
           >

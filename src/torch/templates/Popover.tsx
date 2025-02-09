@@ -8,14 +8,14 @@ import { Slot } from "@radix-ui/react-slot";
 interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {
   variant?: "SystemStyle" | "PresentationStyle";
   className?: string;
+  overlayBlur?: boolean;
 }
 
 const dropdownMenuStyles = cva(
   [
-    "p-1",
+    "p-1 max-h-[200px] z-[1000]",
     "rounded-[8px]",
     "border",
-    "max-h-[200px]",
     "min-w-[240px]",
     "outline-none",
     "overflow-scroll",
@@ -40,6 +40,9 @@ const dropdownMenuStyles = cva(
           "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
         ],
       },
+      overlayBlur: {
+        true: ["h-fit"],
+      },
       defaultVariants: {
         variant: "PresentationStyle",
       },
@@ -49,7 +52,21 @@ const dropdownMenuStyles = cva(
 
 const Popover = PopoverPrimitive.Root;
 
-const PopoverTrigger = PopoverPrimitive.Trigger;
+const PopoverTrigger = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
+>((props, ref) => (
+  <PopoverPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "z-[20] transition-all duration-300 data-[state=open]:z-[49]",
+      props.className
+    )}
+    {...props}
+  />
+));
+
+PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName;
 
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
@@ -62,18 +79,38 @@ const PopoverContent = React.forwardRef<
       align = "center",
       sideOffset = 4,
       variant = "SystemStyle",
+      overlayBlur = false,
       ...props
     },
     ref
   ) => (
     <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Content
-        ref={ref}
-        align={align}
-        sideOffset={sideOffset}
-        className={cn(dropdownMenuStyles({ variant }), className)}
-        {...props}
-      />
+      {overlayBlur ? (
+        <div className="relative z-[42]">
+          <div className="fixed top-0 left-0 flex h-full w-full items-center flex-shrink-0 bg-[rgba(16,7,25,0.32)] backdrop-blur-[8px] transition-all duration-300"></div>
+          <PopoverPrimitive.Content
+            ref={ref}
+            align={align}
+            sideOffset={sideOffset}
+            className={cn(
+              dropdownMenuStyles({ variant, overlayBlur }),
+              className
+            )}
+            {...props}
+          />
+        </div>
+      ) : (
+        <PopoverPrimitive.Content
+          ref={ref}
+          align={align}
+          sideOffset={sideOffset}
+          className={cn(
+            dropdownMenuStyles({ variant, overlayBlur }),
+            className
+          )}
+          {...props}
+        />
+      )}
     </PopoverPrimitive.Portal>
   )
 );

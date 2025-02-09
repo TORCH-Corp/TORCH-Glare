@@ -1,24 +1,24 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils"; // Assuming you have a `cn` utility
 import { ButtonHTMLAttributes } from "react";
+import { LoadingIcon } from "./Button";
 
 const buttonVariants = cva(
-  "flex-1 w-full h-[42px] rounded-[8px] text-base font-medium flex justify-center items-center transition-all duration-250 ease-in-out border-none border border-1",
+  "w-full h-[42px] rounded-[8px] typography-body-large-regular flex justify-center items-center transition-all duration-250 ease-in-out border",
   {
     variants: {
       variant: {
         default: [
-          "bg-[var(--background-system-body-primary)]",
-          "text-[rgba(229,229,229,1)]",
-          "border-[var(--border-system-global-primary)]",
-          "hover:border-[var(--border-system-action-hover-primary)]",
-          "focus:border-[var(--border-system-action-hover-primary)]",
-          "active:border-[var(--border-system-action-hover-primary)]",
+          "bg-[--background-system-body-primary]",
+          "text-[--content-system-global-primary]",
+          "border-[--border-system-global-primary]",
+          "hover:border-[#9748FF]",
         ],
         noBg: [
           "bg-transparent",
-          "border-transparent",
-          "text-[rgba(229,229,229,1)]",
+          "border-[--border-system-global-primary]",
+          "text-[--content-system-global-primary]",
+          "hover:border-[#9748FF]",
           "no-underline",
         ],
       },
@@ -31,10 +31,23 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  isLoading?: boolean;
+}
 
-export function LoginButton({ variant, className, ...props }: ButtonProps) {
+export function LoginButton({
+  variant = "default",
+  className,
+  isLoading,
+  ...props
+}: ButtonProps) {
   return (
-    <button {...props} className={cn(buttonVariants({ variant, className }))} />
+    <button {...props} className={cn(buttonVariants({ variant, className }))}>
+      {isLoading ? (
+        <LoadingIcon className="w-[20px] h-[20px]" />
+      ) : (
+        props.children
+      )}
+    </button>
   );
 }
