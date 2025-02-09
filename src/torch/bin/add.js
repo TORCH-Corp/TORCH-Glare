@@ -9,6 +9,67 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const templatesDir = path.resolve(__dirname, "../templates");
 
+// main function to add a component within it's dependencies
+export async function addComponent(component, extension = "") {
+  // Get the config file
+  const config = getConfig();
+
+  // Get the list of available components as an array of strings
+  const availableComponents = fs
+    .readdirSync(templatesDir)
+    .map((file) => path.basename(file, extension));
+
+  // If no component is provided, show the list of available components in the console and ask the user to select one
+  if (!component) {
+    const selectedComponent = await showComponentsOptionsList(
+      availableComponents
+    );
+    component = selectedComponent;
+  }
+
+  // If the component is not available, exit
+  if (!availableComponents.includes(component)) {
+    console.error(`❌ Component "${component}" not found.`);
+    process.exit(1);
+  }
+
+  // if the user select a component, we get the path to the component
+  const { source, targetDir } = getComponentPath(component, extension, config);
+
+  // If the target directory does not exist, create it
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
+  }
+
+  // Get the path to the component in the target directory
+  const target = path.join(targetDir, `${component}${extension}`);
+
+  // Check if the source is a directory or a file and copy it to the target directory
+  if (fs.lstatSync(source).isDirectory()) {
+    // if it's a directory, we copy it to the target directory
+    console.log(`📂 Copying directory: ${source} to ${target}`);
+    copyDirectorySync(source, target);
+  } else {
+    // if it's a file, we copy it to the target directory
+    console.log(`📄 Copying file: ${source} to ${target}`);
+    fs.copyFileSync(source, target);
+    // install the dependencies
+    installDependencies(source);
+  }
+
+  console.log(`✅ ${component}${extension} has been added to ${config.path}!`);
+}
+
+// Detect the package manager used in the project
+function detectPackageManager() {
+  if (fs.existsSync(path.join(process.cwd(), "pnpm-lock.yaml"))) return "pnpm";
+  if (fs.existsSync(path.join(process.cwd(), "yarn.lock"))) return "yarn";
+  if (fs.existsSync(path.join(process.cwd(), "package-lock.json")))
+    return "npm";
+  return "npm"; // Default to npm if no lock file is found
+}
+
+// Show a plain text list of components
 export function listComponents() {
   if (!fs.existsSync(templatesDir)) {
     console.error("❌ Templates directory not found.");
@@ -17,7 +78,7 @@ export function listComponents() {
 
   const components = fs
     .readdirSync(templatesDir)
-    .map((file) => path.basename(file, ".tsx"));
+    .map((file) => path.basename(file));
 
   if (components.length === 0) {
     console.log("⚠️ No components available.");
@@ -27,70 +88,47 @@ export function listComponents() {
   }
 }
 
-export async function addComponent(component, extension = ".tsx") {
-  const config = getConfig();
-  const availableComponents = fs
-    .readdirSync(templatesDir)
-    .map((file) => path.basename(file, extension));
+// Show a list of components with options to select one
+async function showComponentsOptionsList(availableComponents) {
+  const { selectedComponent } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "selectedComponent",
+      message: "Which component would you like to add?",
+      choices: availableComponents,
+    },
+  ]);
+  return selectedComponent;
+}
 
-  if (!component) {
-    const { selectedComponent } = await inquirer.prompt([
-      {
-        type: "list",
-        name: "selectedComponent",
-        message: "Which component would you like to add?",
-        choices: availableComponents,
-      },
-    ]);
-    component = selectedComponent;
-  }
-
-  if (!availableComponents.includes(component)) {
-    console.error(`❌ Component "${component}" not found.`);
-    listComponents();
-    process.exit(1);
-  }
-
+// Get the path to the component
+function getComponentPath(component, extension, config) {
   const source = path.join(templatesDir, `${component}${extension}`);
   const normalizedPath = config.path.replace("@/", "");
   const targetDir = path.join(process.cwd(), normalizedPath);
-
-  if (!fs.existsSync(targetDir)) {
-    fs.mkdirSync(targetDir, { recursive: true });
-  }
-
-  const target = path.join(targetDir, `${component}${extension}`);
-  fs.copyFileSync(source, target);
-  console.log(`✅ ${component}${extension} has been added to ${config.path}!`);
-
-  installDependencies(source);
+  return { source, targetDir };
 }
 
-function detectPackageManager() {
-  if (fs.existsSync(path.join(process.cwd(), "pnpm-lock.yaml"))) return "pnpm";
-  if (fs.existsSync(path.join(process.cwd(), "yarn.lock"))) return "yarn";
-  if (fs.existsSync(path.join(process.cwd(), "package-lock.json")))
-    return "npm";
-  return "npm"; // Default to npm if no lock file is found
-}
-
-function installDependencies(componentPath) {
+// Get the installed dependencies of the current project
+function getCurrentInstalledDependencies() {
   const packageJsonPath = path.join(process.cwd(), "package.json");
-
+  // If no package.json is found, exit
   if (!fs.existsSync(packageJsonPath)) {
     console.error(
       "❌ No package.json found. Run `npm init` or `yarn init` first."
     );
     return;
   }
-
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
   const installedDependencies = new Set([
     ...Object.keys(packageJson.dependencies || {}),
     ...Object.keys(packageJson.devDependencies || {}), // Check devDependencies too
   ]);
+  return installedDependencies;
+}
 
-  // Read the component file
+// Get the dependencies to install from the component
+function getDependenciesToInstall(componentPath, installedDependencies) {
   const componentContent = fs.readFileSync(componentPath, "utf-8");
 
   // Extract imported modules
@@ -98,6 +136,7 @@ function installDependencies(componentPath) {
   let match;
   const dependenciesToInstall = new Set();
 
+  // Extract imported modules
   while ((match = importRegex.exec(componentContent)) !== null) {
     const moduleName = match[1];
 
@@ -107,6 +146,21 @@ function installDependencies(componentPath) {
     }
   }
 
+  return dependenciesToInstall;
+}
+
+// Install the dependencies of the component
+function installDependencies(componentPath) {
+  // Get the installed dependencies of the current project
+  const installedDependencies = getCurrentInstalledDependencies();
+
+  // Get the dependencies to install from the component
+  const dependenciesToInstall = getDependenciesToInstall(
+    componentPath,
+    installedDependencies
+  );
+
+  // If there are dependencies to install, install them
   if (dependenciesToInstall.size > 0) {
     const packageManager = detectPackageManager();
     const installCommand =
@@ -129,5 +183,28 @@ function installDependencies(componentPath) {
     }
   } else {
     console.log("✅ All dependencies are already installed.");
+  }
+}
+
+function copyDirectorySync(source, target) {
+  // Create the target directory if it doesn't exist
+  if (!fs.existsSync(target)) {
+    fs.mkdirSync(target, { recursive: true });
+  }
+
+  // Read the contents of the source directory
+  const items = fs.readdirSync(source, { withFileTypes: true });
+
+  for (const item of items) {
+    const sourcePath = path.join(source, item.name);
+    const targetPath = path.join(target, item.name);
+
+    if (item.isDirectory()) {
+      // Recursively copy subdirectories
+      copyDirectorySync(sourcePath, targetPath);
+    } else {
+      // Copy files
+      fs.copyFileSync(sourcePath, targetPath);
+    }
   }
 }

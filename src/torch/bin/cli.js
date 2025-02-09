@@ -27,7 +27,6 @@ program
   .name("torchcorp")
   .description("TorchCorp CLI for managing React components")
   .version("1.0.0");
-  
 
 program
   .command("init")
@@ -42,7 +41,7 @@ program
 program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
-  .action((component) => addComponent(component || null, ".tsx"));
+  .action((component) => addComponent(component || null, ""));
 
 program.parse(process.argv);
 
