@@ -2,7 +2,7 @@ import fs from "fs";
 import { tailwindInit } from "./tailwind.js";
 import { addComponent } from "../add.js";
 export async function initConfig(CONFIG_FILE) {
-  const defaultConfig = { path: "@/components" };
+  const defaultConfig = { path: "src/components" };
 
   if (!fs.existsSync(CONFIG_FILE)) {
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(defaultConfig, null, 2));

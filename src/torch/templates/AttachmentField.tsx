@@ -1,7 +1,7 @@
 import { forwardRef, InputHTMLAttributes } from "react";
-import { Button } from "../Button";
+import { Button } from "./Button";
 import { cva } from "class-variance-authority";
-import { cn } from "../utils";
+import { cn } from "./utils";
 
 const dropZoneStyles = cva(
   [

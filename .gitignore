@@ -28,3 +28,4 @@ pnpm-lock.yaml
 
 app/**
 app
+/src/components
