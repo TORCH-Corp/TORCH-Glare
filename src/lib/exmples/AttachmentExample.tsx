@@ -1,6 +1,6 @@
-import { AttachedPic } from "@/components/base/upload&download/AttachedPic";
+import { AttachedPic } from "@/components/AttachedPic";
 import { AttachmentField } from "@/components/base/upload&download/AttachmentField";
-import { PicContainer } from "@/components/base/upload&download/PicContainer";
+import { PicContainer } from "@/components/base/PicContainer";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useCallback, useState } from "react";
@@ -35,7 +35,12 @@ export default function AttachmentExample() {
       </h1>
       <div className="flex flex-col gap-2 w-full">
         <div className="flex gap-1 relative">
-          <PicContainer hasExpand onExpand={() => setIsPreviewOpen(true)}   {...getInputProps()} selectedImg={preview} />
+          <PicContainer
+            hasExpand
+            onExpand={() => setIsPreviewOpen(true)}
+            {...getInputProps()}
+            selectedImg={preview}
+          />
           <AttachmentField
             getRootProps={getRootProps}
             getInputProps={getInputProps}
@@ -43,7 +48,12 @@ export default function AttachmentExample() {
             secondaryLabel={"Drop an image"}
           />
           <div className="absolute right-0 bottom-0">
-            {isPreviewOpen && <AttachedPic onHide={() => setIsPreviewOpen(!isPreviewOpen)} src={preview} />}
+            {isPreviewOpen && (
+              <AttachedPic
+                onHide={() => setIsPreviewOpen(!isPreviewOpen)}
+                src={preview}
+              />
+            )}
           </div>
         </div>
       </div>
