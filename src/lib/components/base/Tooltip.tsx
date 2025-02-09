@@ -15,8 +15,7 @@ export enum ContentAlign {
 const tooltipStyles = cva("typography-body-medium-regular rounded-[4px] p-1", {
   variants: {
     variant: {
-      primary:
-        "bg-[--background-system-body-tertiary] text-[--content-system-global-primary]",
+      primary: "bg-[#252729] text-[#E5E5E5]",
     },
   },
   defaultVariants: {
@@ -26,7 +25,7 @@ const tooltipStyles = cva("typography-body-medium-regular rounded-[4px] p-1", {
 
 interface TooltipProps
   extends React.HTMLAttributes<HTMLSpanElement>,
-  VariantProps<typeof tooltipStyles> {
+    VariantProps<typeof tooltipStyles> {
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   toolTipSide?: ToolTipSide;
