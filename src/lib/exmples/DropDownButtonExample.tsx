@@ -11,7 +11,7 @@ import { useState } from "react";
 
 export default function DropDownButtonExample() {
   const { theme } = useTheme();
-  const [ButtonSizes] = useState<any>(["S", "M", "L"]);
+  const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
 
   return (
     <>

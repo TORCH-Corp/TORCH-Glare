@@ -71,9 +71,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           {...props}
         >
           {text}
-          {tip && (
-            <RadixTooltip.Arrow className="fill-[--background-system-body-tertiary]" />
-          )}
+          {tip && <RadixTooltip.Arrow className="fill-[#252729]" />}
         </RadixTooltip.Content>
       </RadixTooltip.Root>
     </TooltipProvider>

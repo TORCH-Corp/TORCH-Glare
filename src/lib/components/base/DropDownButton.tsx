@@ -154,7 +154,6 @@ export const dropdownButtonStyles = cva(
     "group",
     "w-fit",
     "border",
-    "bg-[--background-presentation-form-field-primary]",
     "transition-all duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
     "hover:bg-[--background-presentation-form-field-hover]",
