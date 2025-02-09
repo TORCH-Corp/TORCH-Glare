@@ -1,5 +1,5 @@
-import { AttachedPic } from "@/components/AttachedPic";
-import { AttachmentField } from "@/components/base/upload&download/AttachmentField";
+import { AttachedPic } from "@/components/base/AttachedPic";
+import { AttachmentField } from "@/components/base/AttachmentField";
 import { PicContainer } from "@/components/base/PicContainer";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
