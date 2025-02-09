@@ -24,7 +24,7 @@ export function FieldSection({
     <section
       {...props}
       className={cn(
-        "grid grid-cols-[350px_1fr] gap-[12px] border-t border-[--border-presentation-global-primary] py-[16px] px-[12px] w-full max-w-[1200px] sm:gap-[24px]",
+        "grid grid-cols-[350px_1fr] gap-[12px] border-t border-[--border-presentation-global-primary] py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] sm:gap-[24px]",
         className
       )}
     >
@@ -41,7 +41,7 @@ export function FieldSection({
       </div>
 
       {/* Flexible section that takes up the remaining space */}
-      <div className="flex flex-wrap items-end gap-[12px]">{children}</div>
+      <div className="flex flex-col items-end gap-[12px]">{children}</div>
     </section>
   );
 }

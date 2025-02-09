@@ -21,7 +21,7 @@ export default function FieldSectionExample() {
       </h1>
 
       {ButtonSizes.map((size: any) => (
-        <div key={size} className="">
+        <div key={size} className="flex-1">
           <h2 className="text-lg font-semibold">Size: {size}</h2>
           <FieldSection
             size={size}
@@ -37,28 +37,31 @@ export default function FieldSectionExample() {
               </>
             }
           >
-            <section className="flex flex-wrap flex-1 gap-[12px]">
-              <InputField
-                size={size !== "L" ? size : "M"}
-                placeholder="Input Field"
-              />
-              <InputField
-                size={size !== "L" ? size : "M"}
-                placeholder="Input Field"
-              />
-              <InputField
-                size={size !== "L" ? size : "M"}
-                placeholder="Input Field"
-              />
-              <InputField
-                size={size !== "L" ? size : "M"}
-                placeholder="Input Field"
-              />
-              <InputField
-                size={size !== "L" ? size : "M"}
-                placeholder="Input Field"
-              />
-            </section>
+            <InputField
+              size={size !== "L" ? size : "M"}
+              placeholder="Input Field"
+              className="w-full shrink-shrink-0"
+            />
+            <InputField
+              size={size !== "L" ? size : "M"}
+              placeholder="Input Field"
+              className="w-full shrink-shrink-0"
+            />
+            <InputField
+              size={size !== "L" ? size : "M"}
+              placeholder="Input Field"
+              className="w-full shrink-shrink-0"
+            />
+            <InputField
+              size={size !== "L" ? size : "M"}
+              placeholder="Input Field"
+              className="w-full shrink-shrink-0"
+            />
+            <InputField
+              size={size !== "L" ? size : "M"}
+              placeholder="Input Field"
+              className="w-full shrink-shrink-0"
+            />
           </FieldSection>
         </div>
       ))}
