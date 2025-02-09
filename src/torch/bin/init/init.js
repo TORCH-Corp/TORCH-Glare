@@ -14,5 +14,5 @@ export async function initConfig(CONFIG_FILE) {
   // Initialize Tailwind CSS config if not exists
   tailwindInit();
   // Add utils file
-  await addComponent("utils");
+  await addComponent("utils", ".ts");
 }

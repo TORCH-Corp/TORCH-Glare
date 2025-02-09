@@ -27,11 +27,11 @@ export function listComponents() {
   }
 }
 
-export async function addComponent(component) {
+export async function addComponent(component, extension = ".tsx") {
   const config = getConfig();
   const availableComponents = fs
     .readdirSync(templatesDir)
-    .map((file) => path.basename(file, ".tsx"));
+    .map((file) => path.basename(file, extension));
 
   if (!component) {
     const { selectedComponent } = await inquirer.prompt([
@@ -51,7 +51,7 @@ export async function addComponent(component) {
     process.exit(1);
   }
 
-  const source = path.join(templatesDir, `${component}.tsx`);
+  const source = path.join(templatesDir, `${component}${extension}`);
   const normalizedPath = config.path.replace("@/", "");
   const targetDir = path.join(process.cwd(), normalizedPath);
 
@@ -59,9 +59,9 @@ export async function addComponent(component) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  const target = path.join(targetDir, `${component}.tsx`);
+  const target = path.join(targetDir, `${component}${extension}`);
   fs.copyFileSync(source, target);
-  console.log(`✅ ${component}.tsx has been added to ${config.path}!`);
+  console.log(`✅ ${component}${extension} has been added to ${config.path}!`);
 
   installDependencies(source);
 }
