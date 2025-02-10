@@ -95,3 +95,6 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
     );
   }
 );
+
+
+RadioCard.displayName = "RadioCard"

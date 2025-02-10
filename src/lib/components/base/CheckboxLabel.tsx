@@ -54,7 +54,7 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-CheckboxLabel.displayName = "RadioLabel";
+CheckboxLabel.displayName = "CheckboxLabel";
 
 export const glareRadioLabelStyles = cva(
   [

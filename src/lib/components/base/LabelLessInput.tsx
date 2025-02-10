@@ -67,6 +67,8 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
   }
 );
 
+LabelLessInput.displayName = "LabelLessInput"
+
 export const LabelLessSection = ({
   fucus,
   label,
