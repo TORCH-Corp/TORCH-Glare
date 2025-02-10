@@ -35,7 +35,7 @@ export async function addComponent(component) {
         type: 'confirm',
         name: 'shouldReplace',
         message: `⚠️ Component "${component}" is already installed. Do you want to replace it?`,
-        default: false,
+        default: true,
       },
     ]);
 
