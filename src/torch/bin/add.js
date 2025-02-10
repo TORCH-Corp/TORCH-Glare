@@ -47,11 +47,9 @@ export async function addComponent(component) {
   // Check if the source is a directory or a file and copy it to the target directory
   if (fs.lstatSync(source).isDirectory()) {
     // if it's a directory, we copy it to the target directory
-    console.log(`📂 Copying directory: ${source} to ${target}`);
     copyDirectorySync(source, target);
   } else {
     // if it's a file, we copy it to the target directory
-    console.log(`📄 Copying file: ${source} to ${target}`);
     fs.copyFileSync(source, target);
     // install the dependencies
     installDependencies(source);
@@ -131,7 +129,7 @@ function getDependenciesToInstall(componentPath, installedDependencies) {
       !installedDependencies.has(moduleName) &&
       moduleName.slice(2) !== "utils"
     ) {
-      // if it's a relative import and it's not installed, install the component
+      // if it's a relative import install the component
       addComponent(moduleName.slice(2) + ".tsx");
     }
   }
@@ -198,6 +196,7 @@ function copyDirectorySync(source, target) {
     } else {
       // if the item is a file, we copy it to the target directory
       fs.copyFileSync(sourcePath, targetPath);
+      installDependencies(sourcePath);
     }
   }
 }
