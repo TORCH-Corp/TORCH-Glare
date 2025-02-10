@@ -1,4 +1,6 @@
-@import "./fonts/fonts.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   box-sizing: border-box;
@@ -8,15 +10,10 @@
 
 body {
   font-family: "SF-Pro";
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 10px;
-  background-color: black;
-  /*     background-color: rgb(192, 192, 192);
- */
+  background-color: #fff;
 }
 
 .app {

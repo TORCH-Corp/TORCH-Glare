@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 *.lock
-
+pnpm-lock.yaml
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -25,3 +25,7 @@ dist-ssr
 *.sw?
 
 *storybook.log
+
+app/**
+app
+/src/components

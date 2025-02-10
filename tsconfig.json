@@ -47,7 +47,8 @@
     "src",
     "src/lib",
     "./test/setup.ts",
-    "test/index.ts"
+    "test/index.ts",
+    "src/lib/components/base/labelfield/LabelField.tsx"
   ],
   "references": [
     {

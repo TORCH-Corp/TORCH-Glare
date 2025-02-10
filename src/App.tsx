@@ -1,16 +1,10 @@
-import { Label } from "./lib";
+import Examples from "@/exmples";
 
 function App() {
   return (
-    <Label
-      label="Haider"
-      name="Label"
-      component_size="L"
-      component_style="vertical"
-      required_label="Label2"
-      theme="System-Style"
-    />
+    <div>
+      <Examples></Examples>
+    </div>
   );
 }
-
 export default App;
