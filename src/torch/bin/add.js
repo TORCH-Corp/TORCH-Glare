@@ -10,14 +10,14 @@ const __dirname = path.dirname(__filename);
 const templatesDir = path.resolve(__dirname, "../templates");
 
 // main function to add a component within it's dependencies
-export async function addComponent(component, extension = "") {
+export async function addComponent(component) {
   // Get the config file
   const config = getConfig();
 
   // get the list of available components
   const availableComponents = fs
     .readdirSync(templatesDir)
-    .map((file) => path.basename(file, extension));
+    .map((file) => path.basename(file));
 
   // If the user doesn't provide a component, show the list of available components in the console and ask the user to select one
   if (!component) {
@@ -34,7 +34,7 @@ export async function addComponent(component, extension = "") {
   }
 
   // if the user select a component, we get the path to the component
-  const { source, targetDir } = getComponentPath(component, extension, config);
+  const { source, targetDir } = getComponentPath(component, config);
 
   // If the target directory does not exist, create it
   if (!fs.existsSync(targetDir)) {
@@ -42,7 +42,7 @@ export async function addComponent(component, extension = "") {
   }
 
   // Get the path to the component in the target directory
-  const target = path.join(targetDir, `${component}${extension}`);
+  const target = path.join(targetDir, `${component}`);
 
   // Check if the source is a directory or a file and copy it to the target directory
   if (fs.lstatSync(source).isDirectory()) {
@@ -57,7 +57,7 @@ export async function addComponent(component, extension = "") {
     installDependencies(source);
   }
 
-  console.log(`✅ ${component}${extension} has been added to ${config.path}!`);
+  console.log(`✅ ${component} has been added to ${config.path}!`);
 }
 
 // Detect the package manager used in the project
@@ -83,8 +83,8 @@ async function showComponentsOptionsList(availableComponents) {
 }
 
 // Get the path to the component and return the source and the target directory
-function getComponentPath(component, extension, config) {
-  const source = path.join(templatesDir, `${component}${extension}`);
+function getComponentPath(component, config) {
+  const source = path.join(templatesDir, `${component}`);
   const normalizedPath = config.path.replace("@/", "");
   const targetDir = path.join(process.cwd(), normalizedPath);
   return { source, targetDir };

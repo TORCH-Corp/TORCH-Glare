@@ -36,7 +36,7 @@ program
 program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
-  .action((component) => addComponent(component || null, ""));
+  .action((component) => addComponent(component || null));
 
 program.parse(process.argv);
 
