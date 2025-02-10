@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 import { typographyClasses } from "../utils.js";
 import { detectPackageManager } from "../add.js";
 
-const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.js");
+const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 
 function generateTypographyClasses() {
   return typographyClasses
@@ -89,7 +89,7 @@ function createTailwindConfig() {
   `;
 
   fs.writeFileSync(tailwindConfigPath, tailwindConfig);
-  console.log("✅ Created tailwind.config.js");
+  console.log("✅ Created tailwind.config.ts");
 }
 
 function modifyTailwindConfig() {
@@ -104,7 +104,7 @@ function modifyTailwindConfig() {
   }
 
   fs.writeFileSync(tailwindConfigPath, tailwindConfigContent);
-  console.log("✅ Modified tailwind.config.js");
+  console.log("✅ Modified tailwind.config.ts");
 }
 
 export function tailwindInit() {

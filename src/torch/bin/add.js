@@ -8,55 +8,63 @@ import { execSync } from "child_process";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const templatesDir = path.resolve(__dirname, "../templates");
-
+let disableLogs = false
 // main function to add a component within it's dependencies
+
 export async function addComponent(component) {
-  // Get the config file
   const config = getConfig();
+  const availableComponents = fs.readdirSync(templatesDir).map((file) => path.basename(file));
 
-  // get the list of available components
-  const availableComponents = fs
-    .readdirSync(templatesDir)
-    .map((file) => path.basename(file));
-
-  // If the user doesn't provide a component, show the list of available components in the console and ask the user to select one
   if (!component) {
-    const selectedComponent = await showComponentsOptionsList(
-      availableComponents
-    );
-    component = selectedComponent;
+    component = await showComponentsOptionsList(availableComponents);
   }
 
-  // If the component is not available, exit
   if (!availableComponents.includes(component)) {
     console.error(`❌ Component "${component}" not found.`);
     process.exit(1);
   }
 
-  // if the user select a component, we get the path to the component
   const { source, targetDir } = getComponentPath(component, config);
+  const target = path.join(targetDir, component);
 
-  // If the target directory does not exist, create it
+  // Check if component already exists
+  if (fs.existsSync(target)) {
+    disableLogs = true
+    const { shouldReplace } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'shouldReplace',
+        message: `⚠️ Component "${component}" is already installed. Do you want to replace it?`,
+        default: false,
+      },
+    ]);
+
+    if (!shouldReplace) {
+      !disableLogs && console.log(`❌ Skipping installation of "${component}".`);
+      return;
+    }
+
+    // Remove existing component before copying the new one
+    fs.rmSync(target, { recursive: true, force: true });
+    !disableLogs && console.log(`🔄 Replacing "${component}"...`);
+  }
+
+  // Ensure target directory exists
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  // Get the path to the component in the target directory
-  const target = path.join(targetDir, `${component}`);
-
-  // Check if the source is a directory or a file and copy it to the target directory
+  // Copy component (directory or file)
   if (fs.lstatSync(source).isDirectory()) {
-    // if it's a directory, we copy it to the target directory
     copyDirectorySync(source, target);
   } else {
-    // if it's a file, we copy it to the target directory
     fs.copyFileSync(source, target);
-    // install the dependencies
     installDependencies(source);
   }
 
-  console.log(`✅ ${component} has been added to ${config.path}!`);
+  !disableLogs && console.log(`✅ ${component} has been added to ${config.path}!`);
 }
+
 
 // Detect the package manager used in the project
 export function detectPackageManager() {
@@ -155,10 +163,10 @@ export function installDependencies(componentPath) {
       packageManager === "pnpm"
         ? `pnpm add ${[...dependenciesToInstall].join(" ")}`
         : packageManager === "yarn"
-        ? `yarn add ${[...dependenciesToInstall].join(" ")}`
-        : `npm install ${[...dependenciesToInstall].join(" ")}`;
+          ? `yarn add ${[...dependenciesToInstall].join(" ")}`
+          : `npm install ${[...dependenciesToInstall].join(" ")}`;
 
-    console.log(
+    !disableLogs && console.log(
       `📦 Installing missing dependencies using ${packageManager}:`,
       [...dependenciesToInstall].join(", ")
     );
@@ -166,12 +174,12 @@ export function installDependencies(componentPath) {
     // start the installation of the dependencies
     try {
       execSync(installCommand, { stdio: "inherit" });
-      console.log("✅ Dependencies installed successfully.");
+      !disableLogs && console.log("✅ Dependencies installed successfully.");
     } catch (error) {
       console.error("❌ Error installing dependencies:", error.message);
     }
   } else {
-    console.log("✅ All dependencies are already installed.");
+    !disableLogs && console.log("✅ All dependencies are already installed.");
   }
 }
 
