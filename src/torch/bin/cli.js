@@ -3,7 +3,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { Command } from "commander";
 import { initConfig } from "./init/init.js";
-import { addComponent, listComponents } from "./add.js";
+import { addComponent } from "./add.js";
 
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
@@ -32,11 +32,6 @@ program
   .command("init")
   .description("Initialize torch.json configuration file")
   .action(() => initConfig(CONFIG_FILE));
-
-program
-  .command("list")
-  .description("List available components")
-  .action(listComponents);
 
 program
   .command("add [component]")

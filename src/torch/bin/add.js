@@ -14,12 +14,12 @@ export async function addComponent(component, extension = "") {
   // Get the config file
   const config = getConfig();
 
-  // Get the list of available components as an array of strings
+  // get the list of available components
   const availableComponents = fs
     .readdirSync(templatesDir)
     .map((file) => path.basename(file, extension));
 
-  // If no component is provided, show the list of available components in the console and ask the user to select one
+  // If the user doesn't provide a component, show the list of available components in the console and ask the user to select one
   if (!component) {
     const selectedComponent = await showComponentsOptionsList(
       availableComponents
@@ -69,25 +69,6 @@ function detectPackageManager() {
   return "npm"; // Default to npm if no lock file is found
 }
 
-// Show a plain text list of components
-export function listComponents() {
-  if (!fs.existsSync(templatesDir)) {
-    console.error("❌ Templates directory not found.");
-    process.exit(1);
-  }
-
-  const components = fs
-    .readdirSync(templatesDir)
-    .map((file) => path.basename(file));
-
-  if (components.length === 0) {
-    console.log("⚠️ No components available.");
-  } else {
-    console.log("📦 Available components:");
-    components.forEach((comp) => console.log(`- ${comp}`));
-  }
-}
-
 // Show a list of components with options to select one
 async function showComponentsOptionsList(availableComponents) {
   const { selectedComponent } = await inquirer.prompt([
@@ -101,7 +82,7 @@ async function showComponentsOptionsList(availableComponents) {
   return selectedComponent;
 }
 
-// Get the path to the component
+// Get the path to the component and return the source and the target directory
 function getComponentPath(component, extension, config) {
   const source = path.join(templatesDir, `${component}${extension}`);
   const normalizedPath = config.path.replace("@/", "");
@@ -119,6 +100,8 @@ function getCurrentInstalledDependencies() {
     );
     return;
   }
+
+  // Get the installed dependencies from the package.json file and return a set of the dependencies
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
   const installedDependencies = new Set([
     ...Object.keys(packageJson.dependencies || {}),
@@ -175,6 +158,7 @@ function installDependencies(componentPath) {
       [...dependenciesToInstall].join(", ")
     );
 
+    // start the installation of the dependencies
     try {
       execSync(installCommand, { stdio: "inherit" });
       console.log("✅ Dependencies installed successfully.");
@@ -186,6 +170,7 @@ function installDependencies(componentPath) {
   }
 }
 
+// this function is used to copy a directory with all it's files and subdirectories
 function copyDirectorySync(source, target) {
   // Create the target directory if it doesn't exist
   if (!fs.existsSync(target)) {
@@ -199,11 +184,12 @@ function copyDirectorySync(source, target) {
     const sourcePath = path.join(source, item.name);
     const targetPath = path.join(target, item.name);
 
+    // if the item is a directory, we copy it recursively
     if (item.isDirectory()) {
       // Recursively copy subdirectories
       copyDirectorySync(sourcePath, targetPath);
     } else {
-      // Copy files
+      // if the item is a file, we copy it to the target directory
       fs.copyFileSync(sourcePath, targetPath);
     }
   }
