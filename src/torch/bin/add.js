@@ -59,7 +59,7 @@ export async function addComponent(component) {
 }
 
 // Detect the package manager used in the project
-function detectPackageManager() {
+export function detectPackageManager() {
   if (fs.existsSync(path.join(process.cwd(), "pnpm-lock.yaml"))) return "pnpm";
   if (fs.existsSync(path.join(process.cwd(), "yarn.lock"))) return "yarn";
   if (fs.existsSync(path.join(process.cwd(), "package-lock.json")))
@@ -81,7 +81,7 @@ async function showComponentsOptionsList(availableComponents) {
 }
 
 // Get the path to the component and return the source and the target directory
-function getComponentPath(component, config) {
+export function getComponentPath(component, config) {
   const source = path.join(templatesDir, `${component}`);
   const normalizedPath = config.path.replace("@/", "");
   const targetDir = path.join(process.cwd(), normalizedPath);
@@ -138,7 +138,7 @@ function getDependenciesToInstall(componentPath, installedDependencies) {
 }
 
 // Install the dependencies of the component
-function installDependencies(componentPath) {
+export function installDependencies(componentPath) {
   // Get the installed dependencies of the current project
   const installedDependencies = getCurrentInstalledDependencies();
 
@@ -176,7 +176,7 @@ function installDependencies(componentPath) {
 }
 
 // this function is used to copy a directory with all it's files and subdirectories
-function copyDirectorySync(source, target) {
+export function copyDirectorySync(source, target) {
   // Create the target directory if it doesn't exist
   if (!fs.existsSync(target)) {
     fs.mkdirSync(target, { recursive: true });

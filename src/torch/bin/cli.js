@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { Command } from "commander";
 import { initConfig } from "./init/init.js";
 import { addComponent } from "./add.js";
-
+import { updateInstalledComponents } from "./update.js";
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
 const CONFIG_FILE = "torch.json";
@@ -37,6 +37,11 @@ program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
   .action((component) => addComponent(component || null));
+
+program
+  .command("update")
+  .description("Update all installed components")
+  .action(() => updateInstalledComponents());
 
 program.parse(process.argv);
 

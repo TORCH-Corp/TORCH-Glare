@@ -1,5 +1,5 @@
 import fs from "fs";
-import { tailwindInit } from "./tailwind.js";
+import { tailwindInit } from "./tailwindInit.js";
 import { addComponent } from "../add.js";
 export async function initConfig(CONFIG_FILE) {
   const defaultConfig = { path: "src/components" };
