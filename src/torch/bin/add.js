@@ -123,9 +123,16 @@ function getDependenciesToInstall(componentPath, installedDependencies) {
   while ((match = importRegex.exec(componentContent)) !== null) {
     const moduleName = match[1];
 
-    // Skip relative imports (local files)
+    // if it's not a relative import and it's not installed, add it to the dependencies to install
     if (!moduleName.startsWith(".") && !installedDependencies.has(moduleName)) {
       dependenciesToInstall.add(moduleName);
+    } else if (
+      moduleName.startsWith(".") &&
+      !installedDependencies.has(moduleName) &&
+      moduleName.slice(2) !== "utils"
+    ) {
+      // if it's a relative import and it's not installed, install the component
+      addComponent(moduleName.slice(2) + ".tsx");
     }
   }
 
