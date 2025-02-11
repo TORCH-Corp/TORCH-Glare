@@ -36,7 +36,12 @@ program
 program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
-  .action((component) => addComponent(component || null));
+  .action((component) => addComponent(component + ".tsx" || null));
+
+program
+  .command("theme")
+  .description("Add a component interactively or install a specified one")
+  .action(() => addComponent("ThemeProvider"));
 
 program
   .command("update")
