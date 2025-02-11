@@ -1,6 +1,6 @@
 {
   "name": "torchcorp",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
