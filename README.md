@@ -78,6 +78,12 @@ export default {
     // Custom screen configurations
   },
   plugins: [
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar-hide'),
+    function ({ addVariant }) {
+      addVariant("rtl", '&[dir="rtl"]');
+      addVariant("ltr", '&[dir="ltr"]');
+    },
     function ({ addComponents }) {
       addComponents({
         // Full glare typography configuration classes should be here after run the init command.

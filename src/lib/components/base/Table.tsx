@@ -1,10 +1,10 @@
 import * as React from "react";
 import { cn } from "./utils";
 import { cva, VariantProps } from "class-variance-authority";
-import { useResize } from "./utils";
 import { useRef } from "react";
 import { Button } from "./Button";
 import { Checkbox } from "./CheckboxLabel";
+import { useResize } from "./usehooks";
 
 const tableHeadVariants = cva(
   [
@@ -137,11 +137,11 @@ TableRow.displayName = "TableRow";
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
-    TableHeadVariantsProps &
-    React.ButtonHTMLAttributes<HTMLButtonElement> & {
-      sortType?: "asc" | "desc" | undefined;
-      onSort?: () => void;
-    }
+  TableHeadVariantsProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    sortType?: "asc" | "desc" | undefined;
+    onSort?: () => void;
+  }
 >(
   (
     { className, size = "M", disabled, sortType, onSort, isDummy, ...props },

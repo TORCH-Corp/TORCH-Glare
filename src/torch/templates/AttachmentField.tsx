@@ -55,3 +55,5 @@ export const AttachmentField = forwardRef<HTMLInputElement, Props>(
     );
   }
 );
+
+AttachmentField.displayName = "AttachmentField"

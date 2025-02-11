@@ -144,7 +144,7 @@ const buttonVariants = cva(
 
 interface Props
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   is_loading?: boolean;
   disabled?: boolean;
   asChild?: boolean;
@@ -224,6 +224,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
   }
 );
 
+Button.displayName = "Button"
 interface IconProps {
   size?: "S" | "M" | "L" | null;
   className?: string;

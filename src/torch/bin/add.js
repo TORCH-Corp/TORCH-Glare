@@ -21,7 +21,7 @@ export async function addComponent(component) {
 
   if (!availableComponents.includes(component)) {
     console.error(`❌ Component "${component}" not found.`);
-    process.exit(1);
+    return;
   }
 
   const { source, targetDir } = getComponentPath(component, config);
