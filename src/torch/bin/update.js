@@ -5,10 +5,11 @@ import {
   copyDirectorySync,
   installDependencies,
   getComponentPath,
+  addComponent,
 } from "./add.js";
 import { tailwindInit } from "./init/tailwindInit.js";
 // Function to update all installed components
-export function updateInstalledComponents() {
+export async function updateInstalledComponents() {
   const config = getConfig();
   const normalizedPath = config.path.replace("@/", "");
   const installedComponentsDir = path.join(process.cwd(), normalizedPath);
@@ -50,6 +51,7 @@ export function updateInstalledComponents() {
     }
   });
   tailwindInit();
-
+  await addComponent("utils.ts");
+  await addComponent("usehooks.tsx");
   console.log("✅ All installed components have been updated.");
 }
