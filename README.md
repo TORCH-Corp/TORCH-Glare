@@ -15,7 +15,7 @@ Welcome to the **TORCH Glare Components Library**! This library provides a colle
 To install and manage components, use the **TorchCorp CLI**. First, initialize the library by running:
 
 ```sh
-npx torchcorp init
+npx torchcorp@latest init
 ```
 
 This creates a `torch.json` configuration file, which is required to manage components.
@@ -24,20 +24,20 @@ This creates a `torch.json` configuration file, which is required to manage comp
 To add a specific component, run:
 
 ```sh
-npx torchcorp add [component-name]
+npx torchcorp@latest add [component-name]
 ```
 
 Or, to add components interactively:
 
 ```sh
-npx torchcorp add
+npx torchcorp@latest add
 ```
 
 ### 2. Apply the Theme Provider
 Ensure your application is wrapped with `ThemeProvider`. Add it in `main.tsx` or `index.tsx`:
 
 ```tsx
-import { ThemeProvider } from "./lib/providers/ThemeProvider";
+import { ThemeProvider } from "./components";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <ThemeProvider>
@@ -49,7 +49,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 Alternatively, you can install the theme provider via CLI:
 
 ```sh
-npx torchcorp theme
+npx torchcorp@latest theme
 ```
 
 ### 3. Add Remix Icon Library
@@ -80,7 +80,7 @@ export default {
   plugins: [
     function ({ addComponents }) {
       addComponents({
-        // Full Tailwind configuration here
+        // Full glare typography configuration classes should be here after run the init command.
       });
     },
   ],
@@ -93,12 +93,12 @@ Once installed, import and use the components as needed:
 
 ```tsx
 import React from "react";
-import { Button } from "./lib/components/base/Button";
+import { Button } from "./components";
 
 const App = () => {
   return (
     <div>
-      <Button />
+      <Button >Hello.</Button>
     </div>
   );
 };
@@ -110,25 +110,25 @@ export default App;
 
 ### Initialize Configuration
 ```sh
-npx torchcorp init
+npx torchcorp@latest init
 ```
 Creates a `torch.json` configuration file.
 
 ### Add Components
 ```sh
-npx torchcorp add [component]
+npx torchcorp@latest add [component]
 ```
 Adds a specific component or runs an interactive prompt if no name is provided.
 
 ### Apply Theme Provider
 ```sh
-npx torchcorp theme
+npx torchcorp@latest theme
 ```
 Installs the `ThemeProvider`.
 
 ### Update Installed Components
 ```sh
-npx torchcorp update
+npx torchcorp@latest update
 ```
 Updates all installed components.
 
