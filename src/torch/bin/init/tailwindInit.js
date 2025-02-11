@@ -14,11 +14,10 @@ function generateTypographyClasses() {
           fontSize: "${typography.fontSize}",
           lineHeight: "${typography.lineHeight}",
           fontWeight: "${typography.fontWeight}",
-          ${
-            typography.letterSpacing
-              ? `letterSpacing: "${typography.letterSpacing}",`
-              : ""
-          }
+          ${typography.letterSpacing
+          ? `letterSpacing: "${typography.letterSpacing}",`
+          : ""
+        }
         },
       `
     )
@@ -27,7 +26,6 @@ function generateTypographyClasses() {
 
 function generatePlugins() {
   return `
-    plugins: [
       require('tailwindcss-animate'),
       require('tailwind-scrollbar-hide'),
       function ({ addVariant }) {
@@ -39,7 +37,6 @@ function generatePlugins() {
           ${generateTypographyClasses()}
         });
       },
-    ],
   `;
 }
 
@@ -49,8 +46,8 @@ function installDependencies() {
     packageManager === "pnpm"
       ? `pnpm add tailwindcss-animate tailwind-scrollbar-hide`
       : packageManager === "yarn"
-      ? `yarn add tailwindcss-animate tailwind-scrollbar-hide`
-      : `npm install tailwindcss-animate tailwind-scrollbar-hide`;
+        ? `yarn add tailwindcss-animate tailwind-scrollbar-hide`
+        : `npm install tailwindcss-animate tailwind-scrollbar-hide`;
 
   console.log(`📦 Installing missing dependencies of tailwindcss`);
   try {
@@ -84,7 +81,7 @@ function createTailwindConfig() {
         xl: "1280px",
         "2xl": "1536px",
       },
-      ${generatePlugins()}
+      plugins: [${generatePlugins()}],
     };
   `;
 
@@ -97,10 +94,17 @@ function modifyTailwindConfig() {
   let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
 
   if (!tailwindConfigContent.includes("typography-display-large-bold")) {
-    tailwindConfigContent = tailwindConfigContent.replace(
-      "plugins: [",
-      `plugins: [${generatePlugins()}`
-    );
+    if (!tailwindConfigContent.includes("plugins")) {
+      tailwindConfigContent = tailwindConfigContent.replace(
+        "],",
+        `],plugins: [${generatePlugins()}],`
+      );
+    } else {
+      tailwindConfigContent = tailwindConfigContent.replace(
+        "plugins: [",
+        `plugins: [${generatePlugins()}`
+      );
+    }
   }
 
   fs.writeFileSync(tailwindConfigPath, tailwindConfigContent);
