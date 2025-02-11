@@ -199,9 +199,9 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             size,
             is_loading,
             buttonType,
-            className,
             disabled,
-          })
+          }),
+          className
         )}
       >
         {asChild ? (
