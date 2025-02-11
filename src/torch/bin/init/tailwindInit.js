@@ -47,7 +47,7 @@ function installDependencies() {
       ? `pnpm add tailwindcss-animate tailwind-scrollbar-hide`
       : packageManager === "yarn"
         ? `yarn add tailwindcss-animate tailwind-scrollbar-hide`
-        : `npm install tailwindcss-animate tailwind-scrollbar-hide`;
+        : `npm install tailwindcss-animate@latest tailwind-scrollbar-hide@latest`;
 
   console.log(`📦 Installing missing dependencies of tailwindcss`);
   try {
@@ -90,10 +90,9 @@ function createTailwindConfig() {
 }
 
 function modifyTailwindConfig() {
-  console.log("⚠️ Tailwind config already exists, modifying...");
   let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
 
-  if (!tailwindConfigContent.includes("typography-display-large-bold")) {
+  if (!tailwindConfigContent.includes(".typography")) {
     if (!tailwindConfigContent.includes("plugins")) {
       tailwindConfigContent = tailwindConfigContent.replace(
         "],",
@@ -105,10 +104,10 @@ function modifyTailwindConfig() {
         `plugins: [${generatePlugins()}`
       );
     }
+    console.log("✅ Modified tailwind.config.ts");
   }
 
   fs.writeFileSync(tailwindConfigPath, tailwindConfigContent);
-  console.log("✅ Modified tailwind.config.ts");
 }
 
 export function tailwindInit() {

@@ -44,14 +44,11 @@ export async function updateInstalledComponents() {
       } else {
         fs.copyFileSync(source, target);
       }
-      installDependencies(source);
       console.log(`✅ ${component} updated.`);
     } else {
       console.log(`⚠️ Template for ${component} not found. Skipping...`);
     }
   });
   tailwindInit();
-  await addComponent("utils.ts");
-  await addComponent("usehooks.tsx");
   console.log("✅ All installed components have been updated.");
 }
