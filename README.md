@@ -1,21 +1,40 @@
 # TORCH Glare Components Library
 
-Welcome to the **TORCH Glare Components Library**! This library provides a collection of reusable React components to help you build user interfaces efficiently.
+Welcome to the **TORCH Glare Components Library**! This library provides a collection of reusable React components to help you build user interfaces efficiently. Additionally, a CLI tool (**TorchCorp CLI**) is available to streamline component management.
 
 ## Table of Contents
 
 1. [Installation](#installation)
 2. [Usage](#usage)
-3. [Contributing](#contributing)
-4. [License](#license)
+3. [CLI Commands](#cli-commands)
+4. [Contributing](#contributing)
+5. [License](#license)
 
 ## Installation
 
-To use the library, copy the required components into your project. Before doing so, follow these setup steps:
+To install and manage components, use the **TorchCorp CLI**. First, initialize the library by running:
 
-### 1. Wrap Your App with `ThemeProvider`
+```sh
+npx torchcorp init
+```
 
-Ensure your application is wrapped with `ThemeProvider` in `main.tsx` or `index.tsx`:
+This creates a `torch.json` configuration file, which is required to manage components.
+
+### 1. Add Components
+To add a specific component, run:
+
+```sh
+npx torchcorp add [component-name]
+```
+
+Or, to add components interactively:
+
+```sh
+npx torchcorp add
+```
+
+### 2. Apply the Theme Provider
+Ensure your application is wrapped with `ThemeProvider`. Add it in `main.tsx` or `index.tsx`:
 
 ```tsx
 import { ThemeProvider } from "./lib/providers/ThemeProvider";
@@ -27,9 +46,14 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 );
 ```
 
-### 2. Add Remix Icon Library
+Alternatively, you can install the theme provider via CLI:
 
-Include the following code in your `index.html` file to enable icon support:
+```sh
+npx torchcorp theme
+```
+
+### 3. Add Remix Icon Library
+Include the following in `index.html` for icon support:
 
 ```html
 <head>
@@ -40,29 +64,8 @@ Include the following code in your `index.html` file to enable icon support:
 </head>
 ```
 
-### 3. (Optional) Add SF-Pro Font
-
-To use the SF-Pro font, add these lines to your `index.html`:
-
-```html
-<head>
-  <link
-    rel="stylesheet"
-    href="https://cdn.statically.io/gh/TORCH-Corp/SF-PRO-FONT/main/font/fonts.css"
-  />
-  <link
-    rel="preload"
-    href="https://cdn.statically.io/gh/TORCH-Corp/SF-PRO-FONT/main/font/SF-Pro.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin
-  />
-</head>
-```
-
 ### 4. Configure Tailwind CSS
-
-Copy the full Tailwind configuration into your `tailwind.config.js` file:
+Ensure your `tailwind.config.js` file includes the correct setup:
 
 ```js
 /** @type {import('tailwindcss').Config} */
@@ -72,12 +75,12 @@ export default {
     extend: {},
   },
   screens: {
-    //...
+    // Custom screen configurations
   },
   plugins: [
     function ({ addComponents }) {
       addComponents({
-        // Full Tailwind configuration code goes here
+        // Full Tailwind configuration here
       });
     },
   ],
@@ -86,7 +89,7 @@ export default {
 
 ## Usage
 
-Once the setup is complete, you can start using the components in your project. Here’s an example of how to import and use a component:
+Once installed, import and use the components as needed:
 
 ```tsx
 import React from "react";
@@ -103,21 +106,47 @@ const App = () => {
 export default App;
 ```
 
+## CLI Commands
+
+### Initialize Configuration
+```sh
+npx torchcorp init
+```
+Creates a `torch.json` configuration file.
+
+### Add Components
+```sh
+npx torchcorp add [component]
+```
+Adds a specific component or runs an interactive prompt if no name is provided.
+
+### Apply Theme Provider
+```sh
+npx torchcorp theme
+```
+Installs the `ThemeProvider`.
+
+### Update Installed Components
+```sh
+npx torchcorp update
+```
+Updates all installed components.
+
 ## Contributing
 
-We welcome contributions to improve the library! Follow these steps to contribute:
+We welcome contributions! Follow these steps:
 
 1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Implement your changes and commit them with a clear message.
-4. Push your changes to your forked repository.
-5. Open a pull request to the main repository.
+2. Create a new branch.
+3. Implement your changes.
+4. Commit with a clear message.
+5. Push your changes and open a pull request.
 
 ### Contribution Guidelines
-
-- Follow the existing code style and conventions.
+- Follow existing code style.
 - Update documentation if necessary.
 
 ## License
 
 This project is licensed under the **MIT License**.
+
