@@ -1,4 +1,4 @@
-import { Datepicker } from "@/components/base/DatePicker";
+import { SlideDatePicker } from "@/components/base/SlideDatePicker";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect } from "react";
 
@@ -10,7 +10,7 @@ function App() {
   }, [])
   return (
     <div>
-      <Datepicker />
+      <SlideDatePicker variant="PresentationStyle" />
     </div>
   );
 }
