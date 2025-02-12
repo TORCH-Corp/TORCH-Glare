@@ -1,18 +1,19 @@
-import { ComponentProps, forwardRef, useCallback, useState } from 'react';
-import { getDaysInMonth } from 'date-fns'; // Import isLeapYear for additional validation
+import { ComponentProps, forwardRef, useState, useEffect } from 'react';
+import { getDaysInMonth } from 'date-fns';
 import Picker, { PickerValue } from 'torch-react-mobile-picker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
 
-// Helper function to get the number of days in a month using date-fns
 function getDayArray(year: number, month: number): string[] {
-  const dayCount = getDaysInMonth(new Date(year, month - 1)); // `month - 1` because JS months are 0-based
+  const dayCount = getDaysInMonth(new Date(year, month - 1));
   return Array.from({ length: dayCount }, (_, i) => String(i + 1).padStart(2, '0'));
 }
 
-interface SlideDatePickerProps extends ComponentProps<typeof InputField> { }
+interface SlideDatePickerProps extends ComponentProps<typeof InputField> {
+  onChange?: (e: any) => void;
+}
 
-export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>((props, ref) => {
+export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>(({ onChange, ...props }, forwardedRef) => {
   const today = new Date();
   const pickerValueData = {
     year: String(today.getFullYear()),
@@ -22,29 +23,32 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
   const [pickerValue, setPickerValue] = useState<PickerValue>(pickerValueData);
 
-  // Handle changes in the picker value
-  const handlePickerChange = useCallback((newValue: PickerValue, key: string) => {
-    let { year, month, day } = newValue;
-
-    // If the year or month changes, update the day to ensure it's valid
-    if (key === 'year' || key === 'month') {
-      const newDayArray = getDayArray(Number(year), Number(month));
-      day = newDayArray.includes(day as string) ? day : newDayArray[newDayArray.length - 1]; // Ensure the day is valid
-    }
-
-    setPickerValue({ year, month, day });
-  }, []);
-
-  // Generate the list of years, months, and days
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 150 }, (_, i) => `${currentYear - 100 + i}`);
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
   const days = getDayArray(Number(pickerValue.year), Number(pickerValue.month));
 
+  const handlePickerChange = (newValue: PickerValue, key: string) => {
+    let { year, month, day } = newValue;
+
+    if (key === 'year' || key === 'month') {
+      const newDayArray = getDayArray(Number(year), Number(month));
+      day = newDayArray.includes(day as string) ? day : newDayArray[newDayArray.length - 1];
+    }
+
+    const updatedValue = { year, month, day };
+    setPickerValue(updatedValue);
+
+    // Call the onChange callback with the updated value
+    if (onChange) {
+      onChange(updatedValue);
+    }
+  };
+
   return (
     <Popover>
       <PopoverTrigger>
-        <InputField ref={ref} {...props} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} readOnly />
+        <InputField {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} />
       </PopoverTrigger>
       <PopoverContent variant="SystemStyle" className="overflow-hidden w-[265px] flex justify-center items-center p-[6px] pt-[30px]">
         <div className="flex justify-evenly items-center w-full absolute top-0 py-[6px]">
@@ -88,4 +92,4 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
       </PopoverContent>
     </Popover>
   );
-})
+});
