@@ -4,20 +4,24 @@ import { useEffect, useRef, useState } from "react";
 import { getYear, getMonth, isSameDay } from "date-fns";
 import { Button } from "./Button";
 import { cn } from "./utils";
-import { DropDownButton, DropDownButtonContent, DropDownButtonItem, DropDownButtonTrigger, DropDownButtonValue } from "./DropDownButton";
-import { InputField } from "./InputField";
+import { cva } from "class-variance-authority";
 
 function range(start: number, end: number, step: number) {
   return Array.from({ length: Math.ceil((end - start) / step) }, (_, i) => start + i * step);
 }
 
 export function Datepicker() {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | any>(new Date());
   const years = range(1900, getYear(new Date()) * 1.05, 1);
   const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
   ];
+  const setChangeMonth = (monthIndex: any) => {
+    const newDate = startDate
+    startDate?.setMonth(monthIndex); // Set the month
+    setStartDate(newDate); // Update the state
+  };
   return (
     <>
       <DatePicker
@@ -56,32 +60,25 @@ export function Datepicker() {
                 <i className="ri-arrow-left-s-line"></i>
               </Button>
 
-              <div className="flex gap-1"  >
-                <DropDownButton onValueChange={(value) => changeMonth(months.indexOf(value))}>
-                  <DropDownButtonTrigger icon="ri-arrow-down-s-fill" className="h-[26px] [&_p]:!px-0 pl-[8px] pr-[4px] gap-1 [&_li]:!w-[12px] ] [&_li]:!bg-transparent [&_li]:!border-none [&_li]:!text-[--border-system-action-secondary-hover]" size={"S"} variant={"SystemStyle"} value={months[getMonth(date)]}>
-                    <DropDownButtonValue />
-                  </DropDownButtonTrigger>
-                  <DropDownButtonContent className="z-[1000]" variant={"SystemStyle"} >
-                    {months.map((month, i) => (
-                      <DropDownButtonItem className="!w-[125px]" size={"S"} variant={"SystemStyle"} key={month} value={month.toString()}  >
-                        {`${month} - ${i + 1}`}
-                      </DropDownButtonItem>
-                    ))}
-                  </DropDownButtonContent>
-                </DropDownButton>
+              <div className="flex gap-1 justify-center items-center"  >
+                <OptionsValue value={months[getMonth(date)]} options={
+                  months.map((month, i) => (
+                    <OptionsItem key={month} onClick={() => {
+                      changeMonth(months.indexOf(month))
+                      setChangeMonth(months.indexOf(month))
+                    }} >
+                      {`${month} - ${i + 1}`}
+                    </OptionsItem>
+                  ))
+                } />
 
-                <DropDownButton onValueChange={(value) => changeYear(parseInt(value, 10))}>
-                  <DropDownButtonTrigger icon="ri-arrow-down-s-fill" className="h-[26px] [&_p]:!px-0 pl-[8px] pr-[4px] gap-1 [&_li]:!w-[12px] [&_li]:!bg-transparent [&_li]:!border-none [&_li]:!text-[--border-system-action-secondary-hover]" variant={"SystemStyle"} value={getYear(date)} size={"S"}>
-                    <DropDownButtonValue />
-                  </DropDownButtonTrigger>
-                  <DropDownButtonContent className="z-[1000]" variant={"SystemStyle"} >
-                    {years.map((year) => (
-                      <DropDownButtonItem className="!w-[125px]" size={"S"} variant={"SystemStyle"} key={year} value={year.toString()}  >
-                        {year}
-                      </DropDownButtonItem>
-                    ))}
-                  </DropDownButtonContent>
-                </DropDownButton>
+                <OptionsValue value={getYear(date)} options={
+                  years.map((year) => (
+                    <OptionsItem key={year} onClick={() => changeYear(parseInt(year.toString(), 10))}>
+                      {year}
+                    </OptionsItem>
+                  ))
+                } />
               </div>
 
               <Button
@@ -125,3 +122,217 @@ export function Datepicker() {
   );
 }
 
+
+
+
+export const MenuItemStyles = cva(
+  [
+    "text-[--content-presentation-action-light-primary]",
+    "outline-none",
+    "border",
+    "border-transparent",
+    "flex",
+    "gap-[8px]",
+    "items-center",
+    "justify-start",
+    "text-overflow",
+    "overflow-hidden",
+    "px-[12px]",
+    "rounded-[4px]",
+    "transition-all",
+    "ease-in-out",
+    "duration-300",
+  ],
+  {
+    variants: {
+      variant: {
+        Default: [
+          "text-[--content-presentation-action-light-primary]",
+          "bg-[--background-presentation-action-dropdown-primary]",
+          "hover:bg-[--background-presentation-action-hover]",
+          "hover:text-[--content-presentation-action-hover]",
+          "focus:bg-[--background-presentation-action-selected]",
+          "focus:text-[--content-presentation-action-light-primary]",
+          "active:border-[--border-presentation-action-disabled]",
+          "active:bg-[--background-presentation-action-selected]",
+          "active:text-[--content-presentation-action-light-primary]",
+          "active:border-[--border-presentation-action-disabled]",
+          "disabled:text-[--content-presentation-state-disabled]",
+          "disabled:bg-[--white-00]",
+        ],
+        Warning: [
+          "bg-[--background-presentation-action-dropdown-primary]",
+          "text-[--content-presentation-state-information]",
+          "hover:bg-[--background-presentation-state-information-primary]",
+          "hover:text-[--content-presentation-action-hover]",
+        ],
+        Negative: [
+          "bg-[--background-presentation-action-dropdown-primary]",
+          "text-[--content-presentation-state-negative]",
+          "hover:bg-[--background-presentation-state-negative-primary]",
+          "hover:!text-[--content-presentation-action-hover]",
+          "focus:text-[--content-presentation-state-negative]",
+          "active:text-[--content-presentation-state-negative]",
+        ],
+        SystemStyle: [
+          "bg-[--background-system-body-primary]",
+          "text-[--content-system-global-primary]",
+          "hover:!bg-[--background-system-action-secondary-hover]",
+          "hover:!text-[--content-system-action-primary-hover]",
+          "hover:!border-[--border-system-action-primary-hover]",
+          "focus:bg-[--background-System-Action-Primary-Selected]",
+          "focus:border-transparent",
+          "active:border-transparent",
+          "active:bg-[--background-System-Action-Primary-Selected]",
+          "disabled:bg-[--background-system-body-secondary]",
+          "disabled:text-[--content-system-global-disabled]",
+        ],
+      },
+      size: {
+        S: ["typography-body-small-regular", "h-[24px]"],
+        M: ["typography-body-medium-regular", "h-[32px]"],
+      },
+
+      disabled: {
+        true: [
+          "text-[--content-presentation-state-disabled]",
+          "bg-[--white-00]",
+        ],
+      },
+
+      active: {
+        true: [
+          "bg-[--background-presentation-action-selected]",
+          "text-[--content-presentation-action-light-primary]",
+        ],
+      },
+
+      defaultVariants: {
+        variant: "Default",
+        size: "M",
+        active: false,
+        disabled: false,
+      },
+    },
+    compoundVariants: [
+      {
+        active: true,
+        variant: "Warning",
+        className: ["text-[--content-presentation-state-negative]"],
+      },
+    ],
+  }
+);
+export const dropdownMenuStyles = cva(
+  [
+    "p-1",
+    "rounded-[8px]",
+    "border",
+    "max-h-[200px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=closed]:animate-out",
+    "data-[state=closed]:fade-out-0",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+  ],
+  {
+    variants: {
+      variant: {
+        SystemStyle: [
+          "border-[--border-system-global-secondary]",
+          "bg-[--background-system-body-primary]",
+          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
+        ],
+        PresentationStyle: [
+          "border-[--border-presentation-global-primary]",
+          "bg-[--background-presentation-form-base]",
+          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
+
+
+const OptionsDropDown = (props: any) => {
+  return (
+    <div className={cn("absolute min-w-[100px] z-[20] top-[20px]", dropdownMenuStyles({ variant: "SystemStyle" }))}>
+      {props.children}
+    </div>
+  )
+}
+
+const OptionsItem = (props: any) => {
+  return (
+    <li {...props} className={cn(" whitespace-nowrap", MenuItemStyles({ variant: "SystemStyle", size: "S" }))}>
+      {props.children}
+    </li>
+  )
+}
+
+const OptionsValue = (props: any) => {
+  const [active, setActive] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        sectionRef.current &&
+        !sectionRef.current.contains(event.target as Node)
+      ) {
+        setActive(false);
+      } else {
+        setActive(true);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("pointerdown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("pointerdown", handleOutsideClick);
+    };
+  }, []);
+  return (
+    <div
+      ref={sectionRef}
+      className={cn([
+        "relative flex justify-center items-center",
+        "bg-[--black-alpha-20]",
+        "text-white",
+        "border-[#2C2D2E]",
+        "hover:border-[#9748FF]",
+        "hover:bg-[--purple-alpha-10]",
+        "typography-body-small-regular",
+        "border",
+        "transition-all duration-200 ease-in-out",
+        "h-[18px]",
+        "w-[50px]",
+        "rounded-[6px]",
+        "outline-none",
+        "p-1"
+      ])}>
+      <input {...props} className={cn([
+        "bg-[--black-alpha-20]",
+        "text-white",
+        "border-none",
+        "h-[18px]",
+        "min-w-[50px]",
+        "outline-none",
+        "p-1"
+      ],)} {...props} />
+      {
+        props.options && active &&
+        <OptionsDropDown >
+          {props.options}
+        </OptionsDropDown>
+      }
+    </div>
+  )
+}
