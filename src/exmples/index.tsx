@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import BadgeFieldExample from "./BadgeFieldExample";
 import CheckboxLabelExample from "./CheckboxLabelExample";
 import PasswordLevelExample from "./PasswordLevelExample";
+import SlideDatePickerExample from "./SlideDatePickerExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -80,6 +81,7 @@ export default function Examples() {
         <LabelLessInputExample />
         <PasswordLevelExample />
         <TextareaExample />
+        <SlideDatePickerExample />
         <AttachmentExample />
         <FieldSectionExample />
         <TableExample />

@@ -71,7 +71,7 @@ PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
-    LocalPopOverProps
+  LocalPopOverProps
 >(
   (
     {
@@ -116,26 +116,30 @@ const PopoverContent = React.forwardRef<
 );
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
-interface Props
-  extends HTMLAttributes<HTMLLIElement>,
-    VariantProps<typeof PopoverItemStyles> {
+// Define the Props interface with a generic type parameter
+interface Props<T extends React.ElementType = "li">
+  extends React.HTMLAttributes<HTMLElement>,
+  VariantProps<typeof PopoverItemStyles> {
   asChild?: boolean;
+  as?: T; // The `as` prop can be any valid HTML element or React component
 }
-const PopoverItem = function ({
+
+// Define the PopoverItem component with a generic type parameter
+const PopoverItem = <T extends React.ElementType = "li">({
   variant = "SystemStyle",
   size = "M",
   asChild,
   className,
   children,
   active,
+  as = "li" as T, // Default to "li" if `as` is not provided
   ...props
-}: Props) {
-  const Component = asChild ? Slot : "li";
+}: Props<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof Props<T>>) => {
+  const Component = asChild ? Slot : as;
 
-  // default
   return (
     <Component
-      {...props}
+      {...(props as React.ComponentPropsWithoutRef<T>)} // Spread the props dynamically
       className={cn(
         PopoverItemStyles({
           variant,
@@ -149,6 +153,7 @@ const PopoverItem = function ({
     </Component>
   );
 };
+
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverItem };
 
