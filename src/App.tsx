@@ -1,4 +1,3 @@
-import { Button } from "@/components/base/Button";
 import { SlideDatePicker } from "@/components/base/SlideDatePicker";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect } from "react";
@@ -9,7 +8,7 @@ function App() {
   useEffect(() => {
     updateTheme("dark")
   }, [])
-  const { register, control, getValues, handleSubmit } = useForm()
+  const { control, handleSubmit } = useForm()
 
   const onSubmit = (data: any) => {
     console.log(data.date);
@@ -20,7 +19,6 @@ function App() {
       <Controller
         name="date"
         control={control}
-        defaultValue={{ year: '2023', month: '01', day: '01' }}
         render={({ field }) => (
           <SlideDatePicker
             {...field}

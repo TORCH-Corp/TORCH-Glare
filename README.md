@@ -36,6 +36,12 @@ npx torchcorp@latest add
 ### 2. Apply the Theme Provider
 Ensure your application is wrapped with `ThemeProvider`. Add it in `main.tsx` or `index.tsx`:
 
+Run this command to add the `ThemeProvider` to your project.
+
+```sh
+npx torchcorp@latest theme
+```
+
 ```tsx
 import { ThemeProvider } from "./components";
 
@@ -46,11 +52,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 );
 ```
 
-Alternatively, you can install the theme provider via CLI:
 
-```sh
-npx torchcorp@latest theme
-```
 
 ### 3. Add Remix Icon Library
 Include the following in `index.html` for icon support:

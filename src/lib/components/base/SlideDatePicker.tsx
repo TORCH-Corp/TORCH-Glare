@@ -1,8 +1,9 @@
-import { ComponentProps, forwardRef, useState, useEffect } from 'react';
+import { ComponentProps, forwardRef, useState } from 'react';
 import { getDaysInMonth } from 'date-fns';
 import Picker, { PickerValue } from 'torch-react-mobile-picker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
+import { cn } from './utils';
 
 function getDayArray(year: number, month: number): string[] {
   const dayCount = getDaysInMonth(new Date(year, month - 1));
@@ -24,7 +25,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   const [pickerValue, setPickerValue] = useState<PickerValue>(pickerValueData);
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 150 }, (_, i) => `${currentYear - 100 + i}`);
+  const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
   const days = getDayArray(Number(pickerValue.year), Number(pickerValue.month));
 
@@ -41,12 +42,12 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
     // Call the onChange callback with the updated value
     if (onChange) {
-      onChange(updatedValue);
+      onChange(`${updatedValue.year}/${updatedValue.month}/${updatedValue.day}`);
     }
   };
 
   return (
-    <Popover>
+    <Popover open>
       <PopoverTrigger>
         <InputField {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} />
       </PopoverTrigger>
@@ -69,21 +70,27 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
         >
           <Picker.Column name="year">
             {years.map((year) => (
-              <Picker.Item key={year} value={year}>
+              <Picker.Item className={cn('transition-all ease-in-out delay-75', {
+                "scale-[0.85]": year !== pickerValue.year
+              })} key={year} value={year}>
                 <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{year}</div>
               </Picker.Item>
             ))}
           </Picker.Column>
           <Picker.Column name="month">
             {months.map((month) => (
-              <Picker.Item key={month} value={month}>
+              <Picker.Item className={cn('transition-all ease-in-out delay-75', {
+                "scale-[0.85]": month !== pickerValue.month
+              })} key={month} value={month}>
                 <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{month}</div>
               </Picker.Item>
             ))}
           </Picker.Column>
           <Picker.Column name="day">
             {days.map((day) => (
-              <Picker.Item key={day} value={day}>
+              <Picker.Item className={cn('transition-all ease-in-out delay-75', {
+                "scale-[0.85]": day !== pickerValue.day
+              })} key={day} value={day}>
                 <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{day}</div>
               </Picker.Item>
             ))}
