@@ -70,27 +70,21 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
         >
           <Picker.Column name="year">
             {years.map((year) => (
-              <Picker.Item className={cn('transition-all ease-in-out delay-75', {
-                "scale-[0.85]": year !== pickerValue.year
-              })} key={year} value={year}>
+              <Picker.Item className={cn('transition-all ease-in-out delay-75')} key={year} value={year}>
                 <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{year}</div>
               </Picker.Item>
             ))}
           </Picker.Column>
           <Picker.Column name="month">
             {months.map((month) => (
-              <Picker.Item className={cn('transition-all ease-in-out delay-75', {
-                "scale-[0.85]": month !== pickerValue.month
-              })} key={month} value={month}>
+              <Picker.Item key={month} value={month}>
                 <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{month}</div>
               </Picker.Item>
             ))}
           </Picker.Column>
           <Picker.Column name="day">
             {days.map((day) => (
-              <Picker.Item className={cn('transition-all ease-in-out delay-75', {
-                "scale-[0.85]": day !== pickerValue.day
-              })} key={day} value={day}>
+              <Picker.Item key={day} value={day}>
                 <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{day}</div>
               </Picker.Item>
             ))}
