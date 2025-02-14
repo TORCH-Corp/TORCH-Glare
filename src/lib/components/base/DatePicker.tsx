@@ -22,6 +22,11 @@ export function Datepicker() {
     startDate?.setMonth(monthIndex); // Set the month
     setStartDate(newDate); // Update the state
   };
+  const setChangeYear = (year: number) => {
+    const newDate = new Date(startDate); // Create a new Date object based on the current startDate
+    newDate.setFullYear(year); // Set the year
+    setStartDate(newDate); // Update the state
+  };
   return (
     <>
       <DatePicker
@@ -80,7 +85,11 @@ export function Datepicker() {
                     <OptionsItem
                       active={getYear(date) === year}
                       key={year}
-                      onClick={() => changeYear(parseInt(year.toString(), 10))}>
+                      onClick={() => {
+                        changeYear(year)
+                        setChangeYear(year); // This is your custom function
+                      }
+                      }>
                       {year}
                     </OptionsItem>
                   ))
