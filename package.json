@@ -40,6 +40,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "commander": "^13.1.0",
+    "date-fns": "^4.1.0",
     "inquirer": "^9.2.15",
     "react": "^18.2.0",
     "react-datepicker": "^8.0.0",

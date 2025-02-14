@@ -63,10 +63,13 @@ export function Datepicker() {
               <div className="flex gap-1 justify-center items-center"  >
                 <OptionsValue value={months[getMonth(date)]} options={
                   months.map((month, i) => (
-                    <OptionsItem key={month} onClick={() => {
-                      changeMonth(months.indexOf(month))
-                      setChangeMonth(months.indexOf(month))
-                    }} >
+                    <OptionsItem
+                      key={month}
+                      active={getMonth(date) === i}
+                      onClick={() => {
+                        changeMonth(months.indexOf(month))
+                        setChangeMonth(months.indexOf(month))
+                      }} >
                       {`${month} - ${i + 1}`}
                     </OptionsItem>
                   ))
@@ -74,7 +77,10 @@ export function Datepicker() {
 
                 <OptionsValue value={getYear(date)} options={
                   years.map((year) => (
-                    <OptionsItem key={year} onClick={() => changeYear(parseInt(year.toString(), 10))}>
+                    <OptionsItem
+                      active={getYear(date) === year}
+                      key={year}
+                      onClick={() => changeYear(parseInt(year.toString(), 10))}>
                       {year}
                     </OptionsItem>
                   ))
@@ -146,34 +152,6 @@ export const MenuItemStyles = cva(
   {
     variants: {
       variant: {
-        Default: [
-          "text-[--content-presentation-action-light-primary]",
-          "bg-[--background-presentation-action-dropdown-primary]",
-          "hover:bg-[--background-presentation-action-hover]",
-          "hover:text-[--content-presentation-action-hover]",
-          "focus:bg-[--background-presentation-action-selected]",
-          "focus:text-[--content-presentation-action-light-primary]",
-          "active:border-[--border-presentation-action-disabled]",
-          "active:bg-[--background-presentation-action-selected]",
-          "active:text-[--content-presentation-action-light-primary]",
-          "active:border-[--border-presentation-action-disabled]",
-          "disabled:text-[--content-presentation-state-disabled]",
-          "disabled:bg-[--white-00]",
-        ],
-        Warning: [
-          "bg-[--background-presentation-action-dropdown-primary]",
-          "text-[--content-presentation-state-information]",
-          "hover:bg-[--background-presentation-state-information-primary]",
-          "hover:text-[--content-presentation-action-hover]",
-        ],
-        Negative: [
-          "bg-[--background-presentation-action-dropdown-primary]",
-          "text-[--content-presentation-state-negative]",
-          "hover:bg-[--background-presentation-state-negative-primary]",
-          "hover:!text-[--content-presentation-action-hover]",
-          "focus:text-[--content-presentation-state-negative]",
-          "active:text-[--content-presentation-state-negative]",
-        ],
         SystemStyle: [
           "bg-[--background-system-body-primary]",
           "text-[--content-system-global-primary]",
@@ -213,14 +191,7 @@ export const MenuItemStyles = cva(
         active: false,
         disabled: false,
       },
-    },
-    compoundVariants: [
-      {
-        active: true,
-        variant: "Warning",
-        className: ["text-[--content-presentation-state-negative]"],
-      },
-    ],
+    }
   }
 );
 export const dropdownMenuStyles = cva(
@@ -245,15 +216,10 @@ export const dropdownMenuStyles = cva(
           "border-[--border-system-global-secondary]",
           "bg-[--background-system-body-primary]",
           "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
-        ],
-        PresentationStyle: [
-          "border-[--border-presentation-global-primary]",
-          "bg-[--background-presentation-form-base]",
-          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
-        ],
+        ]
       },
       defaultVariants: {
-        variant: "PresentationStyle",
+        variant: "SystemStyle",
       },
     },
   }
@@ -270,7 +236,7 @@ const OptionsDropDown = (props: any) => {
 
 const OptionsItem = (props: any) => {
   return (
-    <li {...props} className={cn(" whitespace-nowrap", MenuItemStyles({ variant: "SystemStyle", size: "S" }))}>
+    <li {...props} className={cn(" whitespace-nowrap", MenuItemStyles({ variant: "SystemStyle", active: props.active, size: "S" }))}>
       {props.children}
     </li>
   )
