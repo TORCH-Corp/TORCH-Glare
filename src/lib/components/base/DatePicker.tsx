@@ -30,6 +30,7 @@ export function Datepicker() {
   return (
     <>
       <DatePicker
+        dateFormat={"dd/MM/yyyy"}
         weekDayClassName={() => "hidden"}
         dayClassName={(date) => {
           const isCurrentMonth = getMonth(date) === getMonth(startDate || new Date());
@@ -59,26 +60,30 @@ export function Datepicker() {
                 className="hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover] focus:!border-transparent"
                 buttonType={"icon"}
                 size={"M"}
-                onClick={decreaseMonth}
+                onClick={() => {
+                  decreaseMonth()
+                  setChangeMonth(months.indexOf(months[getMonth(date)]))
+                }}
                 disabled={prevMonthButtonDisabled}
               >
                 <i className="ri-arrow-left-s-line"></i>
               </Button>
 
               <div className="flex gap-1 justify-center items-center"  >
-                <OptionsValue value={months[getMonth(date)]} options={
-                  months.map((month, i) => (
-                    <OptionsItem
-                      key={month}
-                      active={getMonth(date) === i}
-                      onClick={() => {
-                        changeMonth(months.indexOf(month))
-                        setChangeMonth(months.indexOf(month))
-                      }} >
-                      {`${month} - ${i + 1}`}
-                    </OptionsItem>
-                  ))
-                } />
+                <OptionsValue value={months[getMonth(date)].substring(0, 3)}
+                  options={
+                    months.map((month, i) => (
+                      <OptionsItem
+                        key={month}
+                        active={getMonth(date) === i}
+                        onClick={() => {
+                          changeMonth(months.indexOf(month))
+                          setChangeMonth(months.indexOf(month))
+                        }} >
+                        {`${month} - ${i + 1}`}
+                      </OptionsItem>
+                    ))
+                  } />
 
                 <OptionsValue value={getYear(date)} options={
                   years.map((year) => (
@@ -101,7 +106,7 @@ export function Datepicker() {
                 className="hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover] focus:!border-transparent"
                 buttonType={"icon"}
                 size={"M"}
-                onClick={increaseMonth}
+                onClick={() => { increaseMonth(); setChangeMonth(months.indexOf(months[getMonth(date)])) }}
                 disabled={nextMonthButtonDisabled}
               >
                 <i className="ri-arrow-right-s-line"></i>
@@ -291,16 +296,14 @@ const OptionsValue = (props: any) => {
         "w-[50px]",
         "rounded-[6px]",
         "outline-none",
-        "p-1"
+        "pl-[8px]"
       ])}>
       <input {...props} className={cn([
         "bg-[--black-alpha-20]",
         "text-white",
         "border-none",
-        "h-[18px]",
-        "min-w-[50px]",
+        "min-w-[30px]",
         "outline-none",
-        "p-1"
       ],)} {...props} />
       {
         props.options && active &&
