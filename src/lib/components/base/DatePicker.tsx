@@ -105,7 +105,7 @@ export const CustomDatePickerHeader = ({
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
   ];
-  const years = range(1900, getYear(new Date()) * 1.03, 1);
+  const years = range(1900, getYear(new Date()) * 1.05, 1);
 
   const setChangeMonth = (monthIndex: number) => {
     const newDate = new Date(date);
@@ -139,7 +139,6 @@ export const CustomDatePickerHeader = ({
               // Otherwise, just decrease the month
               newDate.setMonth(newDate.getMonth() - 1);
             }
-            onChange(newDate);
             setStartDate(newDate);
             changeMonth(newDate.getMonth());
             changeYear(newDate.getFullYear());
@@ -202,7 +201,6 @@ export const CustomDatePickerHeader = ({
               // Otherwise, just increase the month
               newDate.setMonth(newDate.getMonth() + 1);
             }
-            onChange(newDate);
             setStartDate(newDate);
             changeMonth(newDate.getMonth());
             changeYear(newDate.getFullYear());
