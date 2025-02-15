@@ -74,6 +74,12 @@ export const Datepicker = ({ onChange, dateFormat, customInput, placeholderText,
             border: none !important;
             background-color: transparent !important;
           }
+          
+          .react-datepicker__triangle{
+          fill:var(--background-system-body-base) !important;
+          color:var(--background-system-body-base) !important;
+          }
+
         `}
       </style>
     </>
@@ -142,6 +148,7 @@ export const CustomDatePickerHeader = ({
             setStartDate(newDate);
             changeMonth(newDate.getMonth());
             changeYear(newDate.getFullYear());
+            setChangeMonth(newDate.getMonth())
           }}
           disabled={prevMonthButtonDisabled}
           type="button"
@@ -203,6 +210,7 @@ export const CustomDatePickerHeader = ({
             }
             setStartDate(newDate);
             changeMonth(newDate.getMonth());
+            setChangeMonth(newDate.getMonth())
             changeYear(newDate.getFullYear());
           }}
           disabled={nextMonthButtonDisabled}
@@ -418,3 +426,26 @@ const OptionsValue = ({ inputClassName, options, ...props }: OptionsValueProps) 
     </div>
   )
 }
+
+
+// using with react-hook-form
+/* 
+ <form onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="dateOfBirth"
+        control={control}
+        render={() => (
+          <Datepicker
+            customInput={<InputField />}
+            placeholderText="Select date"
+            onChange={(e: any) => {
+              setValue("dateOfBirth", e, {
+                shouldDirty: true
+              });
+            }}
+          />
+        )}
+      />
+      <button>submit</button>
+    </form>
+*/

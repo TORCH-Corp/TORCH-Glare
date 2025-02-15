@@ -2,6 +2,7 @@ import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect } from "react";
 import { Controller, useForm } from 'react-hook-form'
 import { Datepicker } from "@/components/base/DatePicker";
+import { InputField } from "@/components/base/InputField";
 
 function App() {
 
@@ -10,7 +11,7 @@ function App() {
     updateTheme("dark")
   }, [])
 
-  const { control, handleSubmit } = useForm()
+  const { control, handleSubmit, setValue } = useForm()
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -19,12 +20,18 @@ function App() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Controller
-        name="date"
+        name="dateOfBirth"
         control={control}
         render={({ field }) => (
           <Datepicker
             {...field}
-            onChange={(value: Date) => field.onChange(value)}
+            customInput={<InputField />}
+            placeholderText="Select date"
+            onChange={(e: any) => {
+              setValue("dateOfBirth", e, {
+                shouldDirty: true
+              });
+            }}
           />
         )}
       />

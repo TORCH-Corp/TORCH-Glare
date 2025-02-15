@@ -148,6 +148,7 @@ export const CustomDatePickerHeader = ({
             setStartDate(newDate);
             changeMonth(newDate.getMonth());
             changeYear(newDate.getFullYear());
+            setChangeMonth(newDate.getMonth())
           }}
           disabled={prevMonthButtonDisabled}
           type="button"
@@ -209,6 +210,7 @@ export const CustomDatePickerHeader = ({
             }
             setStartDate(newDate);
             changeMonth(newDate.getMonth());
+            setChangeMonth(newDate.getMonth())
             changeYear(newDate.getFullYear());
           }}
           disabled={nextMonthButtonDisabled}
