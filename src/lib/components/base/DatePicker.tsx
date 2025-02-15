@@ -418,3 +418,26 @@ const OptionsValue = ({ inputClassName, options, ...props }: OptionsValueProps) 
     </div>
   )
 }
+
+
+// using with react-hook-form
+/* 
+ <form onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="dateOfBirth"
+        control={control}
+        render={() => (
+          <Datepicker
+            customInput={<InputField />}
+            placeholderText="Select date"
+            onChange={(e: any) => {
+              setValue("dateOfBirth", e, {
+                shouldDirty: true
+              });
+            }}
+          />
+        )}
+      />
+      <button>submit</button>
+    </form>
+*/

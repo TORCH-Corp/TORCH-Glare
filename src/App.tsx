@@ -1,8 +1,7 @@
 import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect } from "react";
 import { Controller, useForm } from 'react-hook-form'
-import { Datepicker } from "@/components/base/DatePicker";
-import { InputField } from "@/components/base/InputField";
+import { SlideDatePicker } from "@/components/base/SlideDatePicker";
 
 function App() {
 
@@ -11,7 +10,7 @@ function App() {
     updateTheme("dark")
   }, [])
 
-  const { control, setValue, handleSubmit } = useForm()
+  const { control, handleSubmit } = useForm()
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -20,17 +19,12 @@ function App() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Controller
-        name="dateOfBirth"
+        name="date"
         control={control}
-        render={() => (
-          <Datepicker
-            customInput={<InputField />}
-            placeholderText="Select date"
-            onChange={(e: any) => {
-              setValue("dateOfBirth", e, {
-                shouldDirty: true
-              });
-            }}
+        render={({ field }) => (
+          <SlideDatePicker
+            {...field}
+            onChange={(value: Date) => field.onChange(value)}
           />
         )}
       />

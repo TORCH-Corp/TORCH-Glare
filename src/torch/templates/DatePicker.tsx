@@ -53,16 +53,12 @@ export const Datepicker = ({ onChange, dateFormat, customInput, placeholderText,
           date,
           changeYear,
           changeMonth,
-          decreaseMonth,
-          increaseMonth,
           prevMonthButtonDisabled,
           nextMonthButtonDisabled,
         }) => <CustomDatePickerHeader
             date={date}
             changeMonth={changeMonth}
             changeYear={changeYear}
-            decreaseMonth={decreaseMonth}
-            increaseMonth={increaseMonth}
             prevMonthButtonDisabled={prevMonthButtonDisabled}
             nextMonthButtonDisabled={nextMonthButtonDisabled}
             onChange={onChange}
@@ -90,8 +86,6 @@ interface CustomDatePickerHeaderProps {
   date: Date;
   changeYear: (year: number) => void;
   changeMonth: (month: number) => void;
-  decreaseMonth: () => void;
-  increaseMonth: () => void;
   prevMonthButtonDisabled: boolean;
   nextMonthButtonDisabled: boolean;
   onChange: (date: Date) => void;
@@ -102,8 +96,6 @@ export const CustomDatePickerHeader = ({
   date,
   changeYear,
   changeMonth,
-  decreaseMonth,
-  increaseMonth,
   prevMonthButtonDisabled,
   nextMonthButtonDisabled,
   onChange,
@@ -113,7 +105,7 @@ export const CustomDatePickerHeader = ({
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
   ];
-  const years = range(1900, getYear(new Date()) * 1.03, 1);
+  const years = range(1900, getYear(new Date()) * 1.05, 1);
 
   const setChangeMonth = (monthIndex: number) => {
     const newDate = new Date(date);
@@ -138,12 +130,21 @@ export const CustomDatePickerHeader = ({
           buttonType={"icon"}
           size={"M"}
           onClick={() => {
-            decreaseMonth();
-            onChange(date);
-            setChangeMonth(date.getMonth());
-            setChangeYear(date.getFullYear());
+            const newDate = new Date(date);
+            if (newDate.getMonth() === 0) {
+              // If current month is January, go to December of the previous year
+              newDate.setFullYear(newDate.getFullYear() - 1);
+              newDate.setMonth(11); // December
+            } else {
+              // Otherwise, just decrease the month
+              newDate.setMonth(newDate.getMonth() - 1);
+            }
+            setStartDate(newDate);
+            changeMonth(newDate.getMonth());
+            changeYear(newDate.getFullYear());
           }}
           disabled={prevMonthButtonDisabled}
+          type="button"
         >
           <i className="ri-arrow-left-s-line"></i>
         </Button>
@@ -170,6 +171,7 @@ export const CustomDatePickerHeader = ({
             value={getYear(date)}
             options={years.map((year) => (
               <OptionsItem
+                id={year.toString()}
                 selected={getYear(date) === year}
                 key={year}
                 onClick={() => {
@@ -184,15 +186,24 @@ export const CustomDatePickerHeader = ({
         </div>
 
         <Button
+          type="button"
           variant={"PrimeStyle"}
           className="hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover] focus:!border-transparent"
           buttonType={"icon"}
           size={"M"}
           onClick={() => {
-            increaseMonth();
-            onChange(date);
-            setChangeMonth(date.getMonth());
-            setChangeYear(date.getFullYear());
+            const newDate = new Date(date);
+            if (newDate.getMonth() === 11) {
+              // If current month is December, go to January of the next year
+              newDate.setFullYear(newDate.getFullYear() + 1);
+              newDate.setMonth(0); // January
+            } else {
+              // Otherwise, just increase the month
+              newDate.setMonth(newDate.getMonth() + 1);
+            }
+            setStartDate(newDate);
+            changeMonth(newDate.getMonth());
+            changeYear(newDate.getFullYear());
           }}
           disabled={nextMonthButtonDisabled}
         >
@@ -200,14 +211,13 @@ export const CustomDatePickerHeader = ({
         </Button>
       </div>
 
-      <div className="flex justify-center items-center w-full gap-[19px] my-[6px]">
-        <p className="text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">Su</p>
-        <p className="text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">Mo</p>
-        <p className="text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">Tu</p>
-        <p className="text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">We</p>
-        <p className="text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">Th</p>
-        <p className="text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">Fr</p>
-        <p className="text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">Sa</p>
+      <div className="flex justify-center items-center w-full gap-[19px] my-[6px] [&>p]:text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">
+        {
+          ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((e) => {
+            return <p>{e}</p>
+
+          })
+        }
       </div>
     </div>
   );
@@ -312,12 +322,11 @@ export const dropdownMenuStyles = cva(
 
 const OptionsDropDown = ({ className, ...props }: any) => {
   return (
-    <div className={cn("absolute min-w-[100px] z-[20] top-[27px] left-0", dropdownMenuStyles({ variant: "SystemStyle" }), className)}>
+    <a className={cn("absolute min-w-[100px] z-[20] top-[27px] left-0", dropdownMenuStyles({ variant: "SystemStyle" }), className)}>
       {props.children}
-    </div>
+    </a>
   )
 }
-
 
 interface OptionsItemProps
   extends HTMLAttributes<HTMLLIElement> {
@@ -325,8 +334,18 @@ interface OptionsItemProps
 }
 
 const OptionsItem = ({ selected, ...props }: OptionsItemProps) => {
+
+  const ref = useRef<HTMLLIElement>(null);
+
+  // Scroll to the selected item when the dropdown is opened
+  useEffect(() => {
+    if (selected && ref.current) {
+      ref.current.scrollIntoView({ behavior: "auto", block: "center" });
+    }
+  }, [selected]);
+
   return (
-    <li {...props} className={cn(" whitespace-nowrap", MenuItemStyles({ variant: "SystemStyle", selected: selected, size: "S" }))}>
+    <li {...props} ref={ref} className={cn(" whitespace-nowrap", MenuItemStyles({ variant: "SystemStyle", selected: selected, size: "S" }))}>
       {props.children}
     </li>
   )
@@ -381,7 +400,7 @@ const OptionsValue = ({ inputClassName, options, ...props }: OptionsValueProps) 
         "pl-[8px]",
       ])}>
       <input {...props} className={cn([
-        "bg-[--black-alpha-20]",
+        "bg-transparent",
         "text-white",
         "h-[24px]",
         "border-none",
@@ -391,7 +410,8 @@ const OptionsValue = ({ inputClassName, options, ...props }: OptionsValueProps) 
       ], inputClassName)} {...props} readOnly />
       <i className="ri-arrow-down-s-fill text-[12px] text-[#9748FF] px-1"></i>
       {
-        <OptionsDropDown className={options && !active ? "opacity-0 z-[-1]" : ""} >
+        options && active &&
+        <OptionsDropDown  >
           {options}
         </OptionsDropDown>
       }
