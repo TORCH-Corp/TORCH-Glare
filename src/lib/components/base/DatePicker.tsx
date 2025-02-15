@@ -14,7 +14,7 @@ interface PickerProps {
   selected?: Date
   placeholderText?: string
   customInput?: any
-  onChange?: any
+  onChange: any
   dateFormat?: any
 }
 
