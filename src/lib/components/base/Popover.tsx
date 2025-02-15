@@ -2,7 +2,6 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { HTMLAttributes } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {

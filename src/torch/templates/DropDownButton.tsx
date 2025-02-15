@@ -14,7 +14,6 @@ export const dropdownMenuStyles = cva(
     "rounded-[8px]",
     "border",
     "max-h-[200px]",
-    "min-w-[240px]",
     "outline-none",
     "overflow-scroll",
     "data-[state=open]:animate-in",
@@ -211,9 +210,10 @@ const DropDownButtonValue = SelectPrimitive.Value;
 const DropDownButtonTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-    VariantProps<typeof dropdownButtonStyles> & {
-      errors?: string;
-    }
+  VariantProps<typeof dropdownButtonStyles> & {
+    errors?: string;
+    icon?: string
+  }
 >(
   (
     {
@@ -222,6 +222,7 @@ const DropDownButtonTrigger = React.forwardRef<
       size = "M",
       variant = "PresentationStyle",
       errors,
+      icon,
       ...props
     },
     ref
@@ -243,7 +244,7 @@ const DropDownButtonTrigger = React.forwardRef<
           <p className={cn({ "text-[#A0A0A0]": !props.value })}>{children}</p>
 
           <Button
-            as={"span"}
+            as={"li"}
             buttonType="icon"
             className={cn(
               [
@@ -259,7 +260,8 @@ const DropDownButtonTrigger = React.forwardRef<
           >
             <i
               className={cn(
-                "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180"
+                "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180",
+                { icon: icon }
               )}
             />
           </Button>
@@ -313,7 +315,7 @@ DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton";
 const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-    VariantProps<typeof dropdownMenuStyles>
+  VariantProps<typeof dropdownMenuStyles>
 >(
   (
     {
@@ -332,9 +334,7 @@ const DropDownButtonContent = React.forwardRef<
         position={position}
         {...props}
       >
-        <DropDownButtonScrollUpButton />
         <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-        <DropDownButtonScrollDownButton />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )
@@ -356,7 +356,7 @@ DropDownButtonLabel.displayName = "DropDownButtonLabel";
 const DropDownButtonItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
-    VariantProps<typeof MenuItemStyles>
+  VariantProps<typeof MenuItemStyles>
 >(
   (
     { className, children, size = "M", variant = "Default", active, ...props },
