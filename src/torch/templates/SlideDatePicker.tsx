@@ -9,8 +9,8 @@ function getDayArray(year: number, month: number): string[] {
   return Array.from({ length: dayCount }, (_, i) => String(i + 1).padStart(2, '0'));
 }
 
-interface SlideDatePickerProps extends ComponentProps<typeof InputField> {
-  onChange?: (e: any) => void;
+interface SlideDatePickerProps extends Omit<ComponentProps<typeof InputField>, 'onChange'> {
+  onChange?: (e: Date) => void;
 }
 
 export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>(({ onChange, ...props }, forwardedRef) => {
@@ -39,16 +39,19 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     const updatedValue = { year, month, day };
     setPickerValue(updatedValue);
 
-    // Call the onChange callback with the updated value
+    // Create a Date object from the updated value
+    const newDate = new Date(`${updatedValue.year}-${updatedValue.month}-${updatedValue.day}`);
+
+    // Call the onChange callback with the Date object
     if (onChange) {
-      onChange(`${updatedValue.year}/${updatedValue.month}/${updatedValue.day}`);
+      onChange(newDate);
     }
   };
 
   return (
     <Popover >
       <PopoverTrigger className='w-full flex-1' >
-        <InputField {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} />
+        <InputField {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} readOnly />
       </PopoverTrigger>
       <PopoverContent dir="ltr" variant={props.variant} className="overflow-hidden w-[265px] flex justify-center items-center p-[6px] pt-[30px]">
         <div className="flex justify-evenly items-center w-full absolute top-0 py-[6px]">
@@ -97,17 +100,17 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
 // using with react hook form lib
 /* 
-    <form onSubmit={handleSubmit(onSubmit)}>
+ <form onSubmit={handleSubmit(onSubmit)}>
       <Controller
         name="date"
         control={control}
         render={({ field }) => (
           <SlideDatePicker
             {...field}
-            onChange={(value) => field.onChange(value)}
+            onChange={(value: Date) => field.onChange(value)}
           />
         )}
       />
-      <button type="submit">Submit</button>
+      <button>submit</button>
     </form>
 */
