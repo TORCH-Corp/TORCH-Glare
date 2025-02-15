@@ -1,7 +1,7 @@
 import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect } from "react";
 import { Controller, useForm } from 'react-hook-form'
-import { SlideDatePicker } from "@/components/base/SlideDatePicker";
+import { Datepicker } from "@/components/base/DatePicker";
 
 function App() {
 
@@ -22,7 +22,7 @@ function App() {
         name="date"
         control={control}
         render={({ field }) => (
-          <SlideDatePicker
+          <Datepicker
             {...field}
             onChange={(value: Date) => field.onChange(value)}
           />

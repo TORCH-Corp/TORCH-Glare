@@ -74,6 +74,12 @@ export const Datepicker = ({ onChange, dateFormat, customInput, placeholderText,
             border: none !important;
             background-color: transparent !important;
           }
+          
+          .react-datepicker__triangle{
+          fill:var(--background-system-body-base) !important;
+          color:var(--background-system-body-base) !important;
+          }
+
         `}
       </style>
     </>
