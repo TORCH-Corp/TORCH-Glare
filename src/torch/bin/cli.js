@@ -6,6 +6,7 @@ import { initConfig } from "./init/init.js";
 import { addComponent } from "./addComponent.js";
 import { addHook } from "./addHooks.js";
 import { updateInstalledComponents } from "./update.js";
+import { addUtil } from "./addUtils.js";
 
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
@@ -43,7 +44,12 @@ program
 program
   .command("addhook [hook]")
   .description("Add a hook interactively or install a specified one")
-  .action((hook) => addHook(hook && `${hook}.tsx`));
+  .action((hook) => addHook(hook && `${hook}`));
+
+program
+  .command("addutil [util]")
+  .description("Add a hook interactively or install a specified one")
+  .action((util) => addUtil(util && `${util}.tsx`));
 
 program
   .command("theme")

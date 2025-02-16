@@ -1,6 +1,6 @@
 import { ComponentProps, forwardRef, useState } from 'react';
 import { getDaysInMonth } from 'date-fns';
-import Picker, { PickerValue } from '../../hooks/MobileSlidePicker';
+import Picker, { PickerValue } from '../hooks/MobileSlidePicker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
 

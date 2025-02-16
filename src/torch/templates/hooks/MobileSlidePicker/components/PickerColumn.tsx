@@ -1,5 +1,5 @@
 import { CSSProperties, HTMLProps, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { usePickerActions, usePickerData } from "./Picker"
+import { usePickerActions, usePickerData } from "./Picker.tsx"
 
 interface PickerColumnProps extends HTMLProps<HTMLDivElement> {
   name: string
@@ -84,7 +84,7 @@ function PickerColumn({
       setScrollerTranslate(height / 2 - itemHeight / 2 - nextActiveIndex * itemHeight)
     }
   }, [pickerActions, height, itemHeight, key, maxTranslate, minTranslate, options])
-  
+
   // Handle touch events
   const [startScrollerTranslate, setStartScrollerTranslate] = useState<number>(0)
   const [isMoving, setIsMoving] = useState<boolean>(false)

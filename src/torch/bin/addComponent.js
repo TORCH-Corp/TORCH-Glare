@@ -4,6 +4,8 @@ import inquirer from "inquirer";
 import { getConfig } from "./cli.js";
 import { execSync } from "child_process";
 import { fileURLToPath } from "url";
+import { addUtil } from "./addUtils.js";
+import { addHook } from "./addHooks.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -140,7 +142,7 @@ export function copyComponent(source, target, templatesDir, addFunction) {
     copyDirectorySync(source, target, templatesDir, addFunction);
   } else {
     fs.copyFileSync(source, target);
-    installDependencies(source, templatesDir, addFunction); // Pass addFunction here
+    installDependencies(source, addFunction); // Pass addFunction here
   }
 }
 
@@ -177,9 +179,10 @@ function getCurrentInstalledDependencies() {
  * Extract dependencies from a component file.
  * @param {string} componentPath - Path to the component file.
  * @param {Set<string>} installedDependencies - Set of installed dependencies.
+ * @param {function} addFunction - Function to make add operation
  * @returns {Set<string>} - Set of dependencies to install.
  */
-function getDependenciesToInstall(componentPath, installedDependencies, templatesDir, addFunction) {
+function getDependenciesToInstall(componentPath, installedDependencies, addFunction) {
   const componentContent = fs.readFileSync(componentPath, "utf-8");
   const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
   const dependenciesToInstall = new Set();
@@ -190,21 +193,31 @@ function getDependenciesToInstall(componentPath, installedDependencies, template
 
     if (!moduleName.startsWith(".") && !installedDependencies.has(moduleName)) {
       dependenciesToInstall.add(moduleName);
-    } else if (
-      moduleName.startsWith("../utils") &&
-      !installedDependencies.has(moduleName) &&
-      moduleName.slice(3, 8) !== "utils"
-    ) {
-      console.log(`📦 utils: ${moduleName.slice(3, 8)}`);
-      addFunction(moduleName.slice(2) + ".tsx", templatesDir); // Use addFunction here
     }
-    /*    else if (
-         moduleName.startsWith(".") &&
-         !installedDependencies.has(moduleName) &&
-         moduleName.slice(3) == "utils"
-       ) {
-         addFunction(moduleName.slice(2) + ".tsx", templatesDir); // Use addFunction here
-       } */
+
+    // install required utils.
+    else if (
+      moduleName.startsWith("../utils") &&
+      !installedDependencies.has(moduleName)
+    ) {
+      addUtil(moduleName.slice(9) + ".ts"); // Use addFunction here
+    }
+
+    // install required hooks.
+    else if (
+      moduleName.startsWith("../hooks") &&
+      !installedDependencies.has(moduleName)
+    ) {
+      console.log(moduleName);
+      addHook(moduleName.slice(9)); // Use addFunction here
+    }
+    // install required components
+    else if (
+      moduleName.startsWith("./") &&
+      !installedDependencies.has(moduleName)
+    ) {
+      addFunction(moduleName.slice(2) + ".tsx"); // Use addFunction here
+    }
   }
 
   return dependenciesToInstall;
@@ -213,12 +226,11 @@ function getDependenciesToInstall(componentPath, installedDependencies, template
  * Install dependencies for a component.
  * @param {string} componentPath - Path to the component file.
  */
-export function installDependencies(componentPath, templatesDir, addFunction) {
+export function installDependencies(componentPath, addFunction) {
   const installedDependencies = getCurrentInstalledDependencies();
   const dependenciesToInstall = getDependenciesToInstall(
     componentPath,
     installedDependencies,
-    templatesDir,
     addFunction // Pass addFunction here
   );
 
@@ -264,7 +276,7 @@ function getInstallCommand(packageManager, dependencies) {
  * @param {string} source - Source directory path.
  * @param {string} target - Target directory path.
  */
-export function copyDirectorySync(source, target, templatesDir, addFunction) {
+export function copyDirectorySync(source, target, addFunction) {
   if (!fs.existsSync(target)) {
     fs.mkdirSync(target, { recursive: true });
   }
@@ -275,10 +287,10 @@ export function copyDirectorySync(source, target, templatesDir, addFunction) {
     const targetPath = path.join(target, item.name);
 
     if (item.isDirectory()) {
-      copyDirectorySync(sourcePath, targetPath, templatesDir, addFunction);
+      copyDirectorySync(sourcePath, targetPath, addFunction);
     } else {
       fs.copyFileSync(sourcePath, targetPath);
-      installDependencies(sourcePath, templatesDir, addFunction); // Pass addFunction here
+      installDependencies(sourcePath, addFunction); // Pass addFunction here
     }
   }
 }
