@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 const buttonVariants = cva(
   "flex items-center justify-center  transition-[background,color] duration-200 ease-in-out border border-transparent outline-none [&-i]:!leading-0",

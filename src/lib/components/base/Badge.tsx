@@ -1,6 +1,6 @@
 import { ReactNode, HTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 export const badgeBase = cva(
   [

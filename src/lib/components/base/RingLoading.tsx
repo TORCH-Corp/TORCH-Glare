@@ -1,6 +1,6 @@
 import { HTMLAttributes } from "react";
 import { cva } from "class-variance-authority";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 export const loadingFrame = cva("relative flex justify-center items-center", {
   variants: {

@@ -38,7 +38,7 @@
         "./src/lib/styles/*"
       ],
       "@utils/*": [
-        "./src/lib/utils/*"
+        "src/lib/hooks/*"
       ]
     }
   },

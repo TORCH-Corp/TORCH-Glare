@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { Label } from "./Label";
 import { cva, VariantProps } from "class-variance-authority";
 

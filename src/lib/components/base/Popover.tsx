@@ -1,5 +1,5 @@
 import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Slot } from "@radix-ui/react-slot";

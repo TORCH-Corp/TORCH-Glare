@@ -1,5 +1,5 @@
 import { Switcher } from "@/components/base/Switcher";
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

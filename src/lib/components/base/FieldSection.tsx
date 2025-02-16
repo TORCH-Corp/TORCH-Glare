@@ -1,4 +1,4 @@
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { HTMLAttributes, ReactNode } from "react";
 import { Label } from "./Label";
 

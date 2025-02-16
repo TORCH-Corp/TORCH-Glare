@@ -1,7 +1,7 @@
 "use client";
 import { forwardRef, InputHTMLAttributes } from "react";
 import { cva } from "class-variance-authority";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 const inputFieldStyles = cva(
   [

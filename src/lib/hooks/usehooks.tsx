@@ -4,7 +4,7 @@ import {
     useEffect,
     useState,
 } from "react";
-import { calculateNewWidthFromMouse, calculateNewWidthFromTouch } from "./utils";
+import { calculateNewWidthFromMouse, calculateNewWidthFromTouch } from "../utils/utils";
 
 
 // Hook to handle resizing with RTL support

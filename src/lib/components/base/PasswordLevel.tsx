@@ -1,4 +1,4 @@
-import { cn } from "./utils"; // Assuming you have a `cn` utility
+import { cn } from "../../utils/utils"; // Assuming you have a `cn` utility
 import { HTMLAttributes, useEffect, useState } from "react";
 
 interface PassCheckProps extends HTMLAttributes<HTMLDivElement> {

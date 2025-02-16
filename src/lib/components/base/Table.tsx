@@ -1,10 +1,10 @@
 import * as React from "react";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import { useRef } from "react";
 import { Button } from "./Button";
 import { Checkbox } from "./CheckboxLabel";
-import { useResize } from "./usehooks";
+import { useResize } from "../../hooks/usehooks";
 
 const tableHeadVariants = cva(
   [

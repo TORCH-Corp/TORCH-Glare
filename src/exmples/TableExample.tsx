@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/base/Table";
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import {
   DndContext,

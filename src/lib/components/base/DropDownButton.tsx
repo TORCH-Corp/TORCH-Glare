@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 import { Tooltip } from "./Tooltip";

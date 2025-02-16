@@ -1,5 +1,5 @@
 import { LinkButton } from "@/components/base/LinkButton";
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "./utils"; // Assuming you have a `cn` utility
+import { cn } from "../../utils/utils"; // Assuming you have a `cn` utility
 import { ButtonHTMLAttributes } from "react";
 import { LoadingIcon } from "./Button";
 

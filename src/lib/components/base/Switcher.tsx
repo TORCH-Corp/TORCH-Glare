@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes } from "react";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { Label } from "./Label";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {

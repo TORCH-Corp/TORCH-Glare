@@ -1,7 +1,7 @@
 import { Badge } from "@/components/base/Badge";
 import { BadgeField } from "@/components/base/BadgeField";
 import { Button } from "@/components/base/Button";
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

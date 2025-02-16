@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { Input } from "./Input";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { ActionButton } from "./ActionButton";

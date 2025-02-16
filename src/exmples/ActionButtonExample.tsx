@@ -1,5 +1,5 @@
 import { ActionButton } from "@/components/base/ActionButton";
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

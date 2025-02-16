@@ -2,7 +2,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 export type ToolTipSide = "top" | "right" | "bottom" | "left";
 

@@ -1,7 +1,7 @@
 import { AttachedPic } from "@/components/base/AttachedPic";
 import { AttachmentField } from "@/components/base/AttachmentField";
 import { PicContainer } from "@/components/base/PicContainer";
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";

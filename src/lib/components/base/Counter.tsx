@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 // Glare counter base styles
 export const glareCounterStyles = cva(

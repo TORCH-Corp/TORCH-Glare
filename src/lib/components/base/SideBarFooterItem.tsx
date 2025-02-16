@@ -1,4 +1,4 @@
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import React, { ButtonHTMLAttributes } from "react";
 import { cva } from "class-variance-authority";
 

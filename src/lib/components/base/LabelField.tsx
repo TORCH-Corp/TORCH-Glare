@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { InputField } from "./InputField";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { Label } from "./Label";
 import { ToolTipSide } from "./Tooltip";
 

@@ -1,7 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 export const MenuItemStyles = cva(
   [

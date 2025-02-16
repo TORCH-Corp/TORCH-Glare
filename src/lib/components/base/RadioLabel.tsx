@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, forwardRef } from "react";
 import { Label } from "./Label";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 import { cva } from "class-variance-authority";
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {

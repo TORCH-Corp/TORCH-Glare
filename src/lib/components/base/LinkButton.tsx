@@ -1,6 +1,6 @@
 import React, { AnchorHTMLAttributes, SVGProps } from "react";
 import { cva } from "class-variance-authority";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 // Link button base styles
 export const linkButtonStyles = cva(

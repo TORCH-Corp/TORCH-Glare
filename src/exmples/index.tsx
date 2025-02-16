@@ -1,5 +1,5 @@
 import { useTheme } from "@/providers/ThemeProvider";
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/utils";
 import { Button } from "@/components/base/Button";
 import ActionButtonExample from "./ActionButtonExample";
 import ButtonExample from "./ButtonExample";

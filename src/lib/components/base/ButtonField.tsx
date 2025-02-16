@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from "react";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   withDivider?: boolean; // to display the divider line if you pass it see on figma design file

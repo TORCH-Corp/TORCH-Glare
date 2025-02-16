@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode } from "react";
 import { Button } from "./Button";
-import { cn } from "./utils";
+import { cn } from "../../utils/utils";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   src: any;
