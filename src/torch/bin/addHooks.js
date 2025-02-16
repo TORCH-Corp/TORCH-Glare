@@ -3,7 +3,7 @@ import path from "path";
 import inquirer from "inquirer";
 import { getConfig } from "./cli.js";
 import { fileURLToPath } from "url";
-import { installDependencies, ensureDirectoryExists } from "./addComponent.js";
+import { ensureDirectoryExists, getComponentPaths, copyComponent } from "./addComponent.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,7 +33,7 @@ export async function addHook(hook) {
         return;
     }
 
-    const { source, targetDir } = getHookPaths(hook, config, hooksTemplatesDir);
+    const { source, targetDir } = getComponentPaths(hook, config, hooksTemplatesDir, "hooks");
     const target = path.join(targetDir, hook);
 
     // Check if the hook already exists and handle replacement
@@ -45,7 +45,7 @@ export async function addHook(hook) {
     ensureDirectoryExists(targetDir);
 
     // Copy the hook (file) and install dependencies
-    copyHook(source, target, hooksTemplatesDir);
+    copyComponent(source, target, hooksTemplatesDir, addHook);
 
     !disableLogs && console.log(`✅ ${hook} has been added to ${config.path}!`);
 }
@@ -76,18 +76,6 @@ async function promptHookSelection(availableHooks) {
     return selectedHook;
 }
 
-/**
- * Get the source and target paths for the hook.
- * @param {string} hook - The name of the hook.
- * @param {object} config - Configuration object.
- * @returns {object} - Object containing source and target directory paths.
- */
-function getHookPaths(hook, config, hooksTemplatesDir) {
-    const source = path.join(hooksTemplatesDir, `${hook}`);
-    const normalizedPath = config.path.replace("@/", "");
-    const targetDir = path.join(process.cwd(), normalizedPath, "hooks"); // Store hooks in a "hooks" subdirectory
-    return { source, targetDir };
-}
 
 /**
  * Handle hook replacement if it already exists.
@@ -119,12 +107,3 @@ async function handleHookReplacement(hook, target) {
     return false;
 }
 
-/**
- * Copy a hook (file) and install its dependencies.
- * @param {string} source - The source path of the hook.
- * @param {string} target - The target path of the hook.
- */
-function copyHook(source, target, hooksTemplatesDir) {
-    fs.copyFileSync(source, target);
-    installDependencies(source, hooksTemplatesDir);
-}

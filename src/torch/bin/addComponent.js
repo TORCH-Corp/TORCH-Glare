@@ -34,7 +34,7 @@ export async function addComponent(component) {
     return;
   }
 
-  const { source, targetDir } = getComponentPaths(component, config, templatesDir);
+  const { source, targetDir } = getComponentPaths(component, config, templatesDir, "components");
   const target = path.join(targetDir, component);
 
   // Check if the component already exists and handle replacement
@@ -46,7 +46,7 @@ export async function addComponent(component) {
   ensureDirectoryExists(targetDir);
 
   // Copy the component (directory or file) and install dependencies
-  copyComponent(source, target, templatesDir);
+  copyComponent(source, target, templatesDir, addComponent);
 
   !disableLogs && console.log(`✅ ${component} has been added to ${config.path}!`);
 }
@@ -83,10 +83,10 @@ async function promptComponentSelection(availableComponents) {
  * @param {object} config - Configuration object.
  * @returns {object} - Object containing source and target directory paths.
  */
-export function getComponentPaths(component, config, templatesDir) {
+export function getComponentPaths(component, config, templatesDir, saveFolderName) {
   const source = path.join(templatesDir, `${component}`);
   const normalizedPath = config.path.replace("@/", "");
-  const targetDir = path.join(process.cwd(), normalizedPath);
+  const targetDir = path.join(process.cwd(), normalizedPath, saveFolderName);
   return { source, targetDir };
 }
 
@@ -135,12 +135,12 @@ export function ensureDirectoryExists(targetDir) {
  * @param {string} source - The source path of the component.
  * @param {string} target - The target path of the component.
  */
-function copyComponent(source, target, templatesDir) {
+export function copyComponent(source, target, templatesDir, addFunction) {
   if (fs.lstatSync(source).isDirectory()) {
-    copyDirectorySync(source, target, templatesDir);
+    copyDirectorySync(source, target, templatesDir, addFunction);
   } else {
     fs.copyFileSync(source, target);
-    installDependencies(source);
+    installDependencies(source, templatesDir, addFunction); // Pass addFunction here
   }
 }
 
@@ -179,7 +179,7 @@ function getCurrentInstalledDependencies() {
  * @param {Set<string>} installedDependencies - Set of installed dependencies.
  * @returns {Set<string>} - Set of dependencies to install.
  */
-function getDependenciesToInstall(componentPath, installedDependencies, templatesDir) {
+function getDependenciesToInstall(componentPath, installedDependencies, templatesDir, addFunction) {
   const componentContent = fs.readFileSync(componentPath, "utf-8");
   const importRegex = /import\s+.*?\s+from\s+['"]([^'"]+)['"]/g;
   const dependenciesToInstall = new Set();
@@ -195,20 +195,24 @@ function getDependenciesToInstall(componentPath, installedDependencies, template
       !installedDependencies.has(moduleName) &&
       moduleName.slice(2) !== "utils"
     ) {
-      addComponent(moduleName.slice(2) + ".tsx", templatesDir);
+      addFunction(moduleName.slice(2) + ".tsx", templatesDir); // Use addFunction here
     }
   }
 
   return dependenciesToInstall;
 }
-
 /**
  * Install dependencies for a component.
  * @param {string} componentPath - Path to the component file.
  */
-export function installDependencies(componentPath, templatesDir) {
+export function installDependencies(componentPath, templatesDir, addFunction) {
   const installedDependencies = getCurrentInstalledDependencies();
-  const dependenciesToInstall = getDependenciesToInstall(componentPath, installedDependencies, templatesDir);
+  const dependenciesToInstall = getDependenciesToInstall(
+    componentPath,
+    installedDependencies,
+    templatesDir,
+    addFunction // Pass addFunction here
+  );
 
   if (dependenciesToInstall.size > 0) {
     const packageManager = detectPackageManager();
@@ -229,7 +233,6 @@ export function installDependencies(componentPath, templatesDir) {
     !disableLogs && console.log("✅ All dependencies are already installed.");
   }
 }
-
 /**
  * Generate the installation command based on the package manager.
  * @param {string} packageManager - The package manager (pnpm, yarn, or npm).
@@ -253,7 +256,7 @@ function getInstallCommand(packageManager, dependencies) {
  * @param {string} source - Source directory path.
  * @param {string} target - Target directory path.
  */
-export function copyDirectorySync(source, target, templatesDir) {
+export function copyDirectorySync(source, target, templatesDir, addFunction) {
   if (!fs.existsSync(target)) {
     fs.mkdirSync(target, { recursive: true });
   }
@@ -264,10 +267,10 @@ export function copyDirectorySync(source, target, templatesDir) {
     const targetPath = path.join(target, item.name);
 
     if (item.isDirectory()) {
-      copyDirectorySync(sourcePath, targetPath, templatesDir);
+      copyDirectorySync(sourcePath, targetPath, templatesDir, addFunction);
     } else {
       fs.copyFileSync(sourcePath, targetPath);
-      installDependencies(sourcePath, templatesDir);
+      installDependencies(sourcePath, templatesDir, addFunction); // Pass addFunction here
     }
   }
 }
