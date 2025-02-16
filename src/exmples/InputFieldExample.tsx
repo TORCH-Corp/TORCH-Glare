@@ -1,7 +1,7 @@
-import { Button } from "@/components/base/Button";
+import { Button } from "@/components/Button";
 import { InputField } from "@/components/InputField";
-import { PopoverItem } from "@/components/base/Popover";
-import { cn } from "@/utils/utils";
+import { PopoverItem } from "@/components/Popover";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

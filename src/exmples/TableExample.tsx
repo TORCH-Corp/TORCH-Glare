@@ -1,4 +1,4 @@
-import { Badge } from "@/components/base/Badge";
+import { Badge } from "@/components/Badge";
 import {
   SubTableButton,
   Table,
@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/Table";
-import { cn } from "@/utils/utils";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import {
   DndContext,

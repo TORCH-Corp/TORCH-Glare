@@ -1,6 +1,6 @@
-import { Button } from "@/components/base/Button";
-import { RadioCard } from "@/components/base/RadioCard";
-import { cn } from "@/utils/utils";
+import { Button } from "@/components/Button";
+import { RadioCard } from "@/components/RadioCard";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export function RadioCardExample() {

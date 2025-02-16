@@ -1,6 +1,6 @@
-import { Button } from "@/components/base/Button";
-import { Tooltip } from "@/components/base/Tooltip";
-import { cn } from "@/utils/utils";
+import { Button } from "@/components/Button";
+import { Tooltip } from "@/components/Tooltip";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export default function TooltipExample() {
