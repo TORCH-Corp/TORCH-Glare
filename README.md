@@ -157,8 +157,8 @@ import { Button } from "./components";
 const App = () => {
   return (
     <div>
-      <Button data-theme="dark">Dark Theme Button</Button>
-      <Button data-theme="light">Light Theme Button</Button>
+      <Button theme="dark">Dark Theme Button</Button>
+      <Button theme="light">Light Theme Button</Button>
     </div>
   );
 };
