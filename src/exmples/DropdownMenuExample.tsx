@@ -37,7 +37,7 @@ export default function DropdownMenuExample() {
         <div className="flex gap-8">
           {ThemeVariants.map((variant: any) => (
             <div key={variant} className="flex flex-col items-center">
-              <DropdownMenu>
+              <DropdownMenu >
                 <DropdownMenuTrigger
                   className={cn("p-2 rounded-md bg-[var(--background-presentation-form-base)] border border-[var(--border-presentation-global-primary)] text-[var(--content-presentation-global-primary)]",
                     theme === "light" ? "text-black" : "text-white"

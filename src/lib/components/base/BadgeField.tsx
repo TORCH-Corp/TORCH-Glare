@@ -26,6 +26,7 @@ export interface Props
   badgesChildren?: ReactNode;
   label?: string;
   required?: boolean;
+  theme?: "dark" | "light" | "default"
 }
 
 export const inputFieldStyles = cva(
@@ -170,7 +171,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       toolTipSide,
       className,
       badgesChildren,
-      ...props
+      theme, ...props
     },
     forwardedRef
   ) => {
@@ -212,6 +213,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       <Popover open={fucus}>
         <PopoverTrigger asChild>
           <section
+            data-theme={theme}
             ref={sectionRef}
             onFocus={(e: any) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
@@ -299,6 +301,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
 
         {popoverChildren && (
           <PopoverContent
+            data-theme={theme}
             ref={popoverRef}
             style={{ width: dropDownListWidth }}
             onOpenAutoFocus={(e: any) => e.preventDefault()}

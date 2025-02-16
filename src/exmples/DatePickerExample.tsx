@@ -18,12 +18,12 @@ export default function DatePickerExample() {
           "text-white": theme === "dark",
         })}
       >
-        DatePicker Preview
+        SlideDatePicker Preview
       </h1>
 
       {/* Loop through variants and sizes */}
       {anotherSizes.map((size: any) =>
-        <div key={`${size}`} className="w-full">
+        <div key={`${size}`} className="">
           <h2
             className={cn("text-lg font-semibold", {
               "text-black": theme === "light",
@@ -31,7 +31,6 @@ export default function DatePickerExample() {
             })}
           >{`Size: ${size}`}</h2>
           <Datepicker
-            data-theme="dark"
             customInput={<InputField errorMessage={error ? "This is an error message" : undefined} size={size} />}
             onChange={(e: any) => console.log(e)} />
         </div>

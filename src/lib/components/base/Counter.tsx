@@ -34,12 +34,14 @@ interface Props
   extends HTMLAttributes<HTMLDivElement>,
   GlareCounterStylesProps {
   label: number; // label of the counter it should be a number
+  theme?: "dark" | "light" | "default"
 }
 
-export const Counter: React.FC<Props> = ({ label, variant, ...props }) => {
+export const Counter: React.FC<Props> = ({ theme, label, variant, ...props }) => {
   return (
     <section
       {...props}
+      data-theme={theme}
       className={cn(glareCounterStyles({ variant }), props.className)}
     >
       <p>{label}</p>

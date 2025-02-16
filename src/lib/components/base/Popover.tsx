@@ -70,7 +70,9 @@ PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
-  LocalPopOverProps
+  LocalPopOverProps & {
+    theme?: "dark" | "light" | "default"
+  }
 >(
   (
     {
@@ -79,13 +81,14 @@ const PopoverContent = React.forwardRef<
       sideOffset = 4,
       variant = "SystemStyle",
       overlayBlur = false,
+      theme,
       ...props
     },
     ref
   ) => (
     <PopoverPrimitive.Portal>
       {overlayBlur ? (
-        <div className="relative z-[42]">
+        <div className="relative z-[42]" data-theme={theme}>
           <div className="fixed top-0 left-0 flex h-full w-full items-center flex-shrink-0 bg-[rgba(16,7,25,0.32)] backdrop-blur-[8px] transition-all duration-300"></div>
           <PopoverPrimitive.Content
             ref={ref}
@@ -100,6 +103,7 @@ const PopoverContent = React.forwardRef<
         </div>
       ) : (
         <PopoverPrimitive.Content
+          data-theme={theme}
           ref={ref}
           align={align}
           sideOffset={sideOffset}

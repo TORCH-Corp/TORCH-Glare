@@ -6,16 +6,18 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   active: boolean;
   activeLabel?: string;
   disabledLabel?: string;
+  theme?: "dark" | "light" | "default";
 }
 
 export function Switcher({
   active,
   activeLabel,
   disabledLabel,
+  theme,
   ...props
 }: Props) {
   return (
-    <section className="flex justify-center items-center w-fit h-[28px] gap-[6px] overflow-hidden">
+    <section data-theme={theme} className="flex justify-center items-center w-fit h-[28px] gap-[6px] overflow-hidden">
       <button
         {...props}
         className={cn(

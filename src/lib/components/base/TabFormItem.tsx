@@ -95,16 +95,19 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   componentType: "top" | "side"; // component type and style see on the figma design file
   active?: boolean;
   buttonType?: "icon" | "button";
+  theme?: "dark" | "light" | "default";
 }
 
 const TabFormItem: React.FC<Props> = ({
   componentType,
   active,
   buttonType,
+  theme,
   ...props
 }) => {
   return (
     <button
+      data-theme={theme}
       {...props}
       className={cn(
         formBarItemStyles({ componentType, active, buttonType }),

@@ -7,7 +7,6 @@ import { useState } from "react";
 export default function SlideDatePickerExample() {
   const { theme } = useTheme();
   const [anotherSizes] = useState<any>(["S", "M"]);
-  const variants = ["PresentationStyle", "SystemStyle"];
   const [error, setError] = useState(false);
 
   return (
@@ -23,7 +22,7 @@ export default function SlideDatePickerExample() {
 
       {/* Loop through variants and sizes */}
       {anotherSizes.map((size: any) =>
-        <div data-theme="dark" key={`${size}`} className="">
+        <div key={`${size}`} className="">
           <h2
             className={cn("text-lg font-semibold", {
               "text-black": theme === "light",

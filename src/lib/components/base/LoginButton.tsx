@@ -31,18 +31,20 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
+  theme?: "dark" | "light" | "default"
 }
 
 export function LoginButton({
   variant = "default",
   className,
   isLoading,
+  theme,
   ...props
 }: ButtonProps) {
   return (
-    <button {...props} className={cn(buttonVariants({ variant, className }))}>
+    <button data-theme={theme} {...props} className={cn(buttonVariants({ variant, className }))}>
       {isLoading ? (
         <LoadingIcon className="w-[20px] h-[20px]" />
       ) : (

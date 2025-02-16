@@ -3,9 +3,10 @@ import { HTMLAttributes, useEffect, useState } from "react";
 
 interface PassCheckProps extends HTMLAttributes<HTMLDivElement> {
   value: string; // The password value to check
+  theme?: "dark" | "light" | "default"
 }
 
-export function PasswordLevel({ value, className, ...props }: PassCheckProps) {
+export function PasswordLevel({ theme, value, className, ...props }: PassCheckProps) {
   const [level, setLevel] = useState<number>(0);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ export function PasswordLevel({ value, className, ...props }: PassCheckProps) {
 
   return (
     <div
+      data-theme={theme}
       {...props}
       className={cn(
         "bg-[var(--background-system-body-secondary)] rounded-[4px] border border-solid border-[var(--border-system-global-primary)] p-[4px] grid grid-cols-3 gap-[4px] w-full min-w-[50px]",

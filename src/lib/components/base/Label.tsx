@@ -17,7 +17,7 @@ const labelComponentVariants = cva("flex", {
 
 interface Props
   extends LabelHTMLAttributes<HTMLLabelElement>,
-    VariantProps<typeof labelComponentVariants> {
+  VariantProps<typeof labelComponentVariants> {
   label?: ReactNode; // main label
   requiredLabel?: ReactNode; // normal text with required style
   secondaryLabel?: ReactNode; // normal text with secondary style
@@ -25,6 +25,7 @@ interface Props
   asChild?: boolean;
   size?: "S" | "M" | "L";
   variant?: "SystemStyle" | "PresentationStyle";
+  theme?: "dark" | "light" | "default"
 }
 
 export const Label = React.forwardRef<HTMLLabelElement, Props>(
@@ -38,12 +39,14 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
       directions,
       className,
       variant = "PresentationStyle",
+      theme,
       ...props
     },
     forwardedRef
   ) => {
     return (
       <label
+        data-theme={theme}
         className={cn(labelComponentVariants({ directions }), className)} // Merge generated and custom classNames
         ref={forwardedRef}
         {...props}

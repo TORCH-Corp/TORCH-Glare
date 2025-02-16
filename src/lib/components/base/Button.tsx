@@ -149,6 +149,7 @@ interface Props
   disabled?: boolean;
   asChild?: boolean;
   as?: React.ElementType;
+  theme?: "dark" | "light" | "default"
 }
 export const Button = forwardRef<HTMLButtonElement, Props>(
   (
@@ -161,6 +162,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       buttonType,
       className,
       disabled,
+      theme,
       children,
       ...props
     },
@@ -192,6 +194,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
     return (
       <Component
         {...props}
+        data-theme={theme}
         ref={ref}
         className={cn(
           buttonVariants({

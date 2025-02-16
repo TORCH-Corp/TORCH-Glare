@@ -24,6 +24,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   isDropAreaActive?: boolean;
   mainLabel: string;
   secondaryLabel: string;
+  theme?: "dark" | "light" | "default"
 }
 
 export const AttachmentField = forwardRef<HTMLInputElement, Props>(
@@ -33,6 +34,7 @@ export const AttachmentField = forwardRef<HTMLInputElement, Props>(
       getRootProps,
       isDropAreaActive,
       mainLabel,
+      theme,
       secondaryLabel,
       ...props
     }: Props,
@@ -40,6 +42,7 @@ export const AttachmentField = forwardRef<HTMLInputElement, Props>(
   ) => {
     return (
       <Button
+        theme={theme}
         component_style="PrimeContStyle"
         {...getRootProps?.()}
         className={cn(dropZoneStyles({ active: isDropAreaActive }))}

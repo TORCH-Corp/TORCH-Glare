@@ -4,6 +4,8 @@ import { cva } from "class-variance-authority";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   collapse?: boolean; // to collapse the item
+  theme?: "dark" | "light" | "default";
+
 }
 
 export const glareFeedbackItem = cva(
@@ -22,9 +24,10 @@ export const glareFeedbackItem = cva(
     },
   }
 );
-export const SideBarFooterItem: React.FC<Props> = ({ collapse, ...props }) => {
+export const SideBarFooterItem: React.FC<Props> = ({ theme, collapse, ...props }) => {
   return (
     <button
+      data-theme={theme}
       {...props}
       className={cn(glareFeedbackItem({ collapsed: collapse }))}
     >

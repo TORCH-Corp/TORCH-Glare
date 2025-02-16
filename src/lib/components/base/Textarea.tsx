@@ -49,11 +49,12 @@ const textareaStyles = cva(
 // Define the prop types for the Textarea component
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    VariantProps<typeof textareaStyles> {
+  VariantProps<typeof textareaStyles> {
   label?: string; // Optional label text
   requiredLabel?: string; // Text for required field indicator
   secondaryLabel?: string; // Additional label text
   direction?: "row" | "column";
+  theme?: "dark" | "light" | "default";
 }
 
 // Textarea component definition
@@ -66,12 +67,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       requiredLabel,
       secondaryLabel,
       direction = "row",
+      theme,
       ...props
     },
     ref
   ) => {
     return (
       <div
+        data-theme={theme}
         className={cn(
           "flex gap-[4px]",
           {

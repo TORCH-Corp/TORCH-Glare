@@ -29,12 +29,14 @@ export const linkButtonStyles = cva(
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
   size?: "S" | "M"; // this props will change the button style size see on figma design file
+  theme?: "dark" | "light" | "default"
 }
 
-export const LinkButton: React.FC<Props> = ({ size = "S", ...props }) => {
+export const LinkButton: React.FC<Props> = ({ theme, size = "S", ...props }) => {
   return (
     <a
       {...props}
+      data-theme={theme}
       className={cn(
         linkButtonStyles({
           size: size,

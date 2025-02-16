@@ -15,7 +15,7 @@ export enum ContentAlign {
 const tooltipStyles = cva("typography-body-medium-regular rounded-[4px] p-1", {
   variants: {
     variant: {
-      primary: "bg-[#252729] text-[#E5E5E5]",
+      primary: "bg-[--background-system-body-tertiary] text-[--content-system-global-primary]",
     },
   },
   defaultVariants: {
@@ -25,7 +25,7 @@ const tooltipStyles = cva("typography-body-medium-regular rounded-[4px] p-1", {
 
 interface TooltipProps
   extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof tooltipStyles> {
+  VariantProps<typeof tooltipStyles> {
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   toolTipSide?: ToolTipSide;
@@ -35,12 +35,14 @@ interface TooltipProps
   delay?: number;
   disabled?: boolean;
   text: ReactNode;
+  theme?: "dark" | "light" | "default"
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({
   children,
   open,
   text,
+  theme = "dark",
   onOpenChange,
   toolTipSide,
   contentAlign = ContentAlign.CENTER,
@@ -63,6 +65,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         </RadixTooltip.Trigger>
 
         <RadixTooltip.Content
+          data-theme={theme}
           sideOffset={2}
           side={toolTipSide}
           align={contentAlign}
@@ -71,7 +74,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           {...props}
         >
           {text}
-          {tip && <RadixTooltip.Arrow className="fill-[#252729]" />}
+          {tip && <RadixTooltip.Arrow className="fill-[--background-system-body-tertiary]" />}
         </RadixTooltip.Content>
       </RadixTooltip.Root>
     </TooltipProvider>

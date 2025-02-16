@@ -17,6 +17,7 @@ interface Props
   label?: string; // to show label
   required?: boolean; // to show required icon
   toolTipSide?: ToolTipSide;
+  theme?: "dark" | "light" | "default"
 }
 
 export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
@@ -31,6 +32,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
       variant,
       className,
       label,
+      theme,
       required,
       toolTipSide,
       ...props
@@ -42,6 +44,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
     return (
       <InputField
         {...props}
+        theme={theme}
         onFocus={(e) => {
           setFucus(true);
           props.onFocus && props.onFocus(e);

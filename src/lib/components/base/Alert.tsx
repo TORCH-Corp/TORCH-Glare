@@ -26,11 +26,13 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   label: ReactNode;
   state?: "info" | "warning" | "error" | "success";
   icon?: ReactNode;
+  theme?: "dark" | "light" | "default"
 }
 
 export const Alert: React.FC<Props> = ({
   label,
   state,
+  theme,
   icon,
   className,
   ...props
@@ -38,6 +40,7 @@ export const Alert: React.FC<Props> = ({
   return (
     <section
       {...props}
+      data-theme={theme}
       className={cn(
         glareAlert({
           state,

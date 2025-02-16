@@ -18,6 +18,7 @@ export interface Props
   secondaryLabel?: ReactNode; // normal text with secondary style
   labelDirections?: "vertical" | "horizontal"; // to change the direction of the label
   toolTipSide?: ToolTipSide;
+  theme?: "dark" | "light" | "default"
 }
 
 export const LabelField = forwardRef<HTMLInputElement, Props>(
@@ -28,6 +29,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
       secondaryLabel,
       size,
       variant,
+      theme,
       icon,
       childrenSide,
       popoverChildren,
@@ -42,7 +44,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <section className={cn("flex flex-col gap-1 flex-1 w-full", className)}>
+      <section data-theme={theme} className={cn("flex flex-col gap-1 flex-1 w-full", className)}>
         <Label
           label={label}
           requiredLabel={requiredLabel}
@@ -52,6 +54,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
         />
         <InputField
           {...props}
+          theme={theme}
           className={className}
           ref={ref}
           size={size}

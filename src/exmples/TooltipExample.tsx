@@ -17,7 +17,8 @@ export default function TooltipExample() {
         Tooltip Preview
       </h1>
       <div className="flex flex-col gap-2 w-full">
-        <Tooltip text={"Hello from the tooltip"}>
+        <Tooltip theme="light"
+          text={"Hello from the tooltip"}>
           <Button>Hover over me</Button>
         </Tooltip>
       </div>

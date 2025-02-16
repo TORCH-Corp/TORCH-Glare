@@ -44,6 +44,7 @@ export default function BadgeFieldExample() {
             })}
           >{`Size: ${size}`}</h2>
           <BadgeField
+            theme="dark"
             size={size}
             variant={"PresentationStyle"}
             badgesChildren={

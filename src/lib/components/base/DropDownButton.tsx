@@ -213,6 +213,7 @@ const DropDownButtonTrigger = React.forwardRef<
   VariantProps<typeof dropdownButtonStyles> & {
     errors?: string;
     icon?: string
+    theme?: "dark" | "light" | "default"
   }
 >(
   (
@@ -222,6 +223,7 @@ const DropDownButtonTrigger = React.forwardRef<
       size = "M",
       variant = "PresentationStyle",
       errors,
+      theme,
       icon,
       ...props
     },
@@ -230,6 +232,7 @@ const DropDownButtonTrigger = React.forwardRef<
     return (
       <Tooltip toolTipSide={"top"} open={errors !== undefined} text={errors}>
         <SelectPrimitive.Trigger
+          data-theme={theme}
           ref={ref}
           className={cn(
             dropdownButtonStyles({
@@ -315,7 +318,9 @@ DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton";
 const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-  VariantProps<typeof dropdownMenuStyles>
+  VariantProps<typeof dropdownMenuStyles> & {
+    theme?: "dark" | "light" | "default"
+  }
 >(
   (
     {
@@ -323,12 +328,14 @@ const DropDownButtonContent = React.forwardRef<
       children,
       variant = "PresentationStyle",
       position = "popper",
+      theme,
       ...props
     },
     ref
   ) => (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
+        data-theme={theme}
         ref={ref}
         className={cn(dropdownMenuStyles({ variant }), className)}
         position={position}

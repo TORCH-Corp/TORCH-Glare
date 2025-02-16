@@ -41,15 +41,17 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   description?: ReactNode;
   disabled?: boolean;
   children?: ReactNode;
+  theme?: "dark" | "light" | "default";
 }
 
 export const RadioCard = forwardRef<HTMLInputElement, Props>(
   (
-    { headerLabel, description, disabled, className, id, children, ...props },
+    { headerLabel, description, disabled, className, id, children, theme, ...props },
     ref
   ) => {
     return (
       <label
+        data-theme={theme}
         htmlFor={id}
         className={cn(
           glareRadioCard({
@@ -63,6 +65,7 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
         >
           <RadioLabel
             {...props}
+            theme={theme}
             size="M"
             ref={ref}
             id={id}
