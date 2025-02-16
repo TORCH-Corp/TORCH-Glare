@@ -56,8 +56,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   useEffect(() => {
     if (document) {
-      document.documentElement.setAttribute("data-theme", defaultTheme ? defaultTheme : theme);
-      document.documentElement.setAttribute("data-theme-mode", defaultThemeMode ? defaultThemeMode : themeMode);
+      document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.setAttribute("data-theme-mode", themeMode);
       localStorage.setItem("theme", theme);
       localStorage.setItem("theme-mode", themeMode);
     }
