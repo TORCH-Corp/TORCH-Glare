@@ -1,6 +1,6 @@
 import { Button } from "@/components/base/Button";
-import { Datepicker } from "@/components/base/DatePicker";
-import { InputField } from "@/components/base/InputField";
+import { Datepicker } from "@/components/DatePicker";
+import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";

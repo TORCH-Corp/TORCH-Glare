@@ -1,6 +1,6 @@
 import { Alert } from "@/components/base/Alert";
 import { FieldSection } from "@/components/base/FieldSection";
-import { InputField } from "@/components/base/InputField";
+import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";

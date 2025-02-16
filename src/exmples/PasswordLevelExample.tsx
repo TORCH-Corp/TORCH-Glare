@@ -1,4 +1,4 @@
-import { InputField } from "@/components/base/InputField";
+import { InputField } from "@/components/InputField";
 import { PasswordLevel } from "@/components/base/PasswordLevel";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";

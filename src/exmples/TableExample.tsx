@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/base/Table";
+} from "@/components/Table";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import {

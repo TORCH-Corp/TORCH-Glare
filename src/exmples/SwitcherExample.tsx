@@ -1,4 +1,4 @@
-import { Switcher } from "@/components/base/Switcher";
+import { Switcher } from "@/components/Switcher";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";

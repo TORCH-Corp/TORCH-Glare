@@ -1,4 +1,4 @@
-import { Textarea } from "@/components/base/Textarea";
+import { Textarea } from "@/components/Textarea";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";

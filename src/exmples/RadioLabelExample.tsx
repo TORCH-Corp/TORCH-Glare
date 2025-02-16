@@ -1,4 +1,4 @@
-import { RadioLabel } from "@/components/base/RadioLabel";
+import { RadioLabel } from "@/components/RadioLabel";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";

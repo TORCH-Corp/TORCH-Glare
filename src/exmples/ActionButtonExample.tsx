@@ -1,4 +1,4 @@
-import { ActionButton } from "@/components/base/ActionButton";
+import { ActionButton } from "@/components/ActionButton";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";

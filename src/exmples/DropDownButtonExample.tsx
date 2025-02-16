@@ -4,7 +4,7 @@ import {
   DropDownButtonItem,
   DropDownButtonTrigger,
   DropDownButtonValue,
-} from "@/components/base/DropDownButton";
+} from "@/components/DropDownButton";
 import { cn } from "@/utils/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
