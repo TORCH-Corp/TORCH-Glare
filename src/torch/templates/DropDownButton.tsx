@@ -244,7 +244,7 @@ const DropDownButtonTrigger = React.forwardRef<
           <p className={cn({ "text-[#A0A0A0]": !props.value })}>{children}</p>
 
           <Button
-            as={"li"}
+            as={"span"}
             buttonType="icon"
             className={cn(
               [

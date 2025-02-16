@@ -27,6 +27,7 @@ import BadgeFieldExample from "./BadgeFieldExample";
 import CheckboxLabelExample from "./CheckboxLabelExample";
 import PasswordLevelExample from "./PasswordLevelExample";
 import SlideDatePickerExample from "./SlideDatePickerExample";
+import DatePickerExample from "./DatePickerExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -82,6 +83,7 @@ export default function Examples() {
         <PasswordLevelExample />
         <TextareaExample />
         <SlideDatePickerExample />
+        <DatePickerExample />
         <AttachmentExample />
         <FieldSectionExample />
         <TableExample />

@@ -1,13 +1,13 @@
 import { Button } from "@/components/base/Button";
-import { SlideDatePicker } from "@/components/base/SlideDatePicker";
+import { Datepicker } from "@/components/base/DatePicker";
+import { InputField } from "@/components/base/InputField";
 import { cn } from "@/components/base/utils";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
-export default function SlideDatePickerExample() {
+export default function DatePickerExample() {
   const { theme } = useTheme();
   const [anotherSizes] = useState<any>(["S", "M"]);
-  const variants = ["PresentationStyle", "SystemStyle"];
   const [error, setError] = useState(false);
 
   return (
@@ -18,22 +18,22 @@ export default function SlideDatePickerExample() {
           "text-white": theme === "dark",
         })}
       >
-        SlideDatePicker Preview
+        DatePicker Preview
       </h1>
 
       {/* Loop through variants and sizes */}
       {anotherSizes.map((size: any) =>
-        <div data-theme="dark" key={`${size}`} className="">
+        <div key={`${size}`} className="w-full">
           <h2
             className={cn("text-lg font-semibold", {
               "text-black": theme === "light",
               "text-white": theme === "dark",
             })}
-          >{` Size: ${size}`}</h2>
-          <SlideDatePicker
-            size={size}
-            errorMessage={error ? "This is an error message" : undefined}
-          />
+          >{`Size: ${size}`}</h2>
+          <Datepicker
+            data-theme="dark"
+            customInput={<InputField errorMessage={error ? "This is an error message" : undefined} size={size} />}
+            onChange={(e: any) => console.log(e)} />
         </div>
       )}
 

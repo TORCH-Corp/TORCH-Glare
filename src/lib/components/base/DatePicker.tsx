@@ -34,6 +34,7 @@ export const Datepicker = ({ onChange, dateFormat, customInput, placeholderText,
           setStartDate(date)
           onChange && onChange(date)
         }}
+        wrapperClassName="w-full"
         selected={startDate}
         placeholderText={placeholderText}
         weekDayClassName={() => "hidden"}
@@ -48,7 +49,7 @@ export const Datepicker = ({ onChange, dateFormat, customInput, placeholderText,
             }
           );
         }}
-        calendarClassName="custom-datepicker bg-[--background-system-body-base] rounded-[12px] shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]"
+        calendarClassName="custom-datepicker border-none  bg-[--background-system-body-base] rounded-[12px] shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]"
         renderCustomHeader={({
           date,
           changeYear,
