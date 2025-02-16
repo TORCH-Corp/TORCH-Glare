@@ -16,16 +16,17 @@ interface PickerProps {
   customInput?: any
   onChange: any
   dateFormat?: any
+  theme?: "dark" | "light" | "default"
 }
 
-export const Datepicker = ({ onChange, dateFormat, customInput, placeholderText, selected, ...props }: PickerProps) => {
+export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, placeholderText, selected, ...props }: PickerProps) => {
 
   const [startDate, setStartDate] = useState<Date | any>(selected || new Date(Date.now()));
   useEffect(() => {
     onChange && onChange(startDate)
   }, [])
   return (
-    <>
+    <div data-theme={theme} >
       <DatePicker
         {...props}
         dateFormat={dateFormat}
@@ -83,7 +84,7 @@ export const Datepicker = ({ onChange, dateFormat, customInput, placeholderText,
 
         `}
       </style>
-    </>
+    </div>
   );
 }
 

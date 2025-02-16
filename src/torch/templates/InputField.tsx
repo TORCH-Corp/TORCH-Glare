@@ -23,6 +23,7 @@ export interface Props
   errorMessage?: string; // to show tooltip component when error_message not null
   onTable?: boolean; // to change the border style of the component when it is on table
   toolTipSide?: ToolTipSide;
+  theme?: "dark" | "light" | "default"
 }
 
 import { cva } from "class-variance-authority";
@@ -168,6 +169,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       onTable,
       variant = "PresentationStyle",
       toolTipSide,
+      theme,
       className,
       ...props
     },
@@ -187,6 +189,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       <Popover open={fucus}>
         <PopoverTrigger asChild>
           <section
+            data-theme={theme}
             onFocus={(e) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
               setFucus(true);
@@ -205,6 +208,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
             )}
           >
             <Tooltip
+              theme={theme}
               toolTipSide={toolTipSide}
               open={errorMessage !== undefined}
               text={errorMessage}
@@ -263,6 +267,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
 
         {popoverChildren && (
           <PopoverContent
+            theme={theme}
             onOpenAutoFocus={(e: any) => e.preventDefault()}
             onFocus={() => setFucus(true)}
             onBlur={() => setFucus(false)}

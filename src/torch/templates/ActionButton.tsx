@@ -23,6 +23,7 @@ interface Props
   disabled?: boolean;
   asChild?: boolean;
   as?: React.ElementType;
+  theme?: "dark" | "light" | "default"
 }
 export const ActionButton = function ({
   size,
@@ -30,10 +31,12 @@ export const ActionButton = function ({
   as: Tag = "button",
   className,
   children,
+  theme,
   ...props
 }: Props) {
   return (
     <Button
+      theme={theme}
       asChild={asChild}
       buttonType="icon"
       className={cn(

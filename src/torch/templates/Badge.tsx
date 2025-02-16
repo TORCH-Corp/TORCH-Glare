@@ -58,12 +58,13 @@ export const badgeBase = cva(
 
 interface BadgeProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "className">,
-    VariantProps<typeof badgeBase> {
+  VariantProps<typeof badgeBase> {
   label?: string;
   onUnselect?: () => void;
   isSelected?: boolean;
   badgeIcon?: ReactNode;
   className?: string;
+  theme?: "dark" | "light" | "default"
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -71,6 +72,7 @@ export const Badge: React.FC<BadgeProps> = ({
   onUnselect,
   isSelected,
   badgeIcon,
+  theme,
   size = "S",
   variant = "green",
   className,
@@ -79,6 +81,7 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       {...props}
+      data-theme={theme}
       className={cn(
         badgeBase({ size, variant }),
         {

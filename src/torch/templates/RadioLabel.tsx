@@ -9,12 +9,14 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   requiredLabel?: string;
   size?: "S" | "M" | "L";
   directions?: "vertical" | "horizontal";
+  theme?: "dark" | "light" | "default";
 }
 
 export const RadioLabel = forwardRef<HTMLInputElement, Props>(
   (
     {
       label,
+      theme,
       secondaryLabel,
       requiredLabel,
       size = "M",
@@ -26,6 +28,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
   ) => {
     return (
       <label
+        data-theme={theme}
         htmlFor={props.id}
         className={cn("flex items-center gap-1 group", props.className)}
       >

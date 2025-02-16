@@ -8,6 +8,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   requiredLabel?: ReactNode;
   size?: "S" | "M" | "L";
   childrenUnderLabel?: ReactNode;
+  theme?: "dark" | "light" | "default"
 }
 
 export function FieldSection({
@@ -16,6 +17,7 @@ export function FieldSection({
   secondaryLabel,
   requiredLabel,
   size,
+  theme,
   className,
   childrenUnderLabel,
   ...props
@@ -23,6 +25,7 @@ export function FieldSection({
   return (
     <section
       {...props}
+      data-theme={theme}
       className={cn(
         "grid grid-cols-[350px_1fr] gap-[12px] border-t border-[--border-presentation-global-primary] py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] sm:gap-[24px]",
         className

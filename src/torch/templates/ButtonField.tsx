@@ -3,17 +3,20 @@ import { cn } from "./utils";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   withDivider?: boolean; // to display the divider line if you pass it see on figma design file
+  theme?: "dark" | "light" | "default"
 }
 
 const ButtonField: React.FC<Props> = ({
   withDivider,
   className,
   children,
+  theme,
   ...props
 }) => {
   return (
     <section
       {...props}
+      data-theme={theme}
       className={cn("flex items-center gap-2 flex-1", className)}
     >
       {withDivider && (

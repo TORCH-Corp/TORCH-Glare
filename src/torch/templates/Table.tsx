@@ -52,9 +52,12 @@ type TableHeadVariantsProps = VariantProps<typeof tableHeadVariants>;
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLTableElement> & {
+    theme?: "dark" | "light" | "default";
+  }
+>(({ className, theme, ...props }, ref) => (
   <table
+    data-theme={theme}
     ref={ref}
     className={cn("overflow-scroll w-auto", className)}
     {...props}

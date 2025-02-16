@@ -10,6 +10,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   requiredLabel?: string;
   directions?: "vertical" | "horizontal";
   size?: "S" | "M" | "L";
+  theme?: "dark" | "light" | "default"
 }
 
 export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
@@ -21,6 +22,7 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
       requiredLabel,
       type = "checkbox",
       directions,
+      theme,
       size = "M",
       ...props
     },
@@ -29,6 +31,7 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
     return (
       <label
         htmlFor={id}
+        data-theme={theme}
         className={cn("flex items-center gap-1  group", props.className)}
       >
         <Checkbox

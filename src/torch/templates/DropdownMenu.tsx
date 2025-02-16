@@ -141,7 +141,9 @@ export const dropdownMenuStyles = cva(
 interface DropdownMenuProps {
   variant?: "SystemStyle" | "PresentationStyle";
   className?: string;
+  theme?: "dark" | "light" | "default"
 }
+
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -158,14 +160,15 @@ const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> &
-    DropdownMenuProps
+  DropdownMenuProps
 >(
   (
-    { className, sideOffset = 4, variant = "PresentationStyle", ...props },
+    { theme, className, sideOffset = 4, variant = "PresentationStyle", ...props },
     ref
   ) => (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
+        data-theme={theme}
         ref={ref}
         sideOffset={sideOffset}
         className={cn(dropdownMenuStyles({ variant }), className)}
@@ -259,7 +262,7 @@ DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 const DropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem> &
-    VariantProps<typeof MenuItemStyles>
+  VariantProps<typeof MenuItemStyles>
 >(
   (
     {
@@ -298,7 +301,7 @@ DropdownMenuCheckboxItem.displayName =
 const DropdownMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem> &
-    VariantProps<typeof MenuItemStyles>
+  VariantProps<typeof MenuItemStyles>
 >(
   (
     {
