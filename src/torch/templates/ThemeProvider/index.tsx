@@ -17,8 +17,16 @@ interface ThemeProps {
 
 export const ThemeContext = createContext<ThemeProps | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
+interface ThemeProviderProps {
+  children: ReactNode;
+  defaultTheme?: "light" | "dark" | "default";
+  defaultThemeMode?: "CSS" | "TORCH";
+}
+
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
+  defaultTheme = "default",
+  defaultThemeMode = "TORCH",
 }) => {
   const [theme, setTheme] = useState<"light" | "dark" | "default">(() => {
     if (typeof window !== "undefined" && document) {
@@ -26,14 +34,14 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
         (document.documentElement.getAttribute("data-theme") as
           | "light"
           | "dark"
-          | "default") || "default";
+          | "default") || defaultTheme;
       const storedTheme = localStorage.getItem("theme") as
         | "light"
         | "dark"
         | "default";
-      return storedTheme || mode || "default";
+      return storedTheme || mode || defaultTheme;
     }
-    return "default";
+    return defaultTheme;
   });
 
   const [themeMode, setThemeMode] = useState<"TORCH" | "CSS">(() => {
@@ -41,15 +49,15 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
       const storedThemeMode = localStorage.getItem("theme-mode") as
         | "TORCH"
         | "CSS";
-      return storedThemeMode || "TORCH";
+      return storedThemeMode || defaultThemeMode;
     }
-    return "TORCH";
+    return defaultThemeMode;
   });
 
   useEffect(() => {
     if (document) {
-      document.documentElement.setAttribute("data-theme", theme);
-      document.documentElement.setAttribute("data-theme-mode", themeMode);
+      document.documentElement.setAttribute("data-theme", defaultTheme ? defaultTheme : theme);
+      document.documentElement.setAttribute("data-theme-mode", defaultThemeMode ? defaultThemeMode : themeMode);
       localStorage.setItem("theme", theme);
       localStorage.setItem("theme-mode", themeMode);
     }

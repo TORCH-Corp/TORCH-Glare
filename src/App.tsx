@@ -1,15 +1,8 @@
-import { useTheme } from "@/providers/ThemeProvider";
-import { useEffect } from "react";
 import { Controller, useForm } from 'react-hook-form'
 import { Datepicker } from "@/components/base/DatePicker";
 import { InputField } from "@/components/base/InputField";
 
 function App() {
-
-  const { updateTheme } = useTheme()
-  useEffect(() => {
-    updateTheme("dark")
-  }, [])
 
   const { control, handleSubmit, setValue } = useForm()
 
@@ -18,25 +11,48 @@ function App() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="dateOfBirth"
-        control={control}
-        render={({ field }) => (
-          <Datepicker
-            {...field}
-            customInput={<InputField />}
-            placeholderText="Select date"
-            onChange={(e: any) => {
-              setValue("dateOfBirth", e, {
-                shouldDirty: true
-              });
-            }}
-          />
-        )}
-      />
-      <button>submit</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)} data-theme={"light"}>
+        <Controller
+          name="dateOfBirth"
+          control={control}
+          render={({ field }) => (
+            <Datepicker
+              {...field}
+              customInput={<InputField />}
+              placeholderText="Select date"
+              onChange={(e: any) => {
+                setValue("dateOfBirth", e, {
+                  shouldDirty: true
+                });
+              }}
+            />
+          )}
+        />
+        <button>submit</button>
+      </form>
+
+      <form onSubmit={handleSubmit(onSubmit)} >
+        <Controller
+          name="dateOfBirth"
+          control={control}
+          render={({ field }) => (
+            <Datepicker
+              {...field}
+              customInput={<InputField />}
+              placeholderText="Select date"
+              onChange={(e: any) => {
+                setValue("dateOfBirth", e, {
+                  shouldDirty: true
+                });
+              }}
+            />
+          )}
+        />
+        <button>submit</button>
+      </form>
+    </div>
+
   );
 }
 export default App;

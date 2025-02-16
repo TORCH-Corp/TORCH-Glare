@@ -4,7 +4,7 @@ import "./index.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <ThemeProvider>
+  <ThemeProvider defaultTheme="dark" defaultThemeMode="TORCH">
     <App />
   </ThemeProvider>
 );

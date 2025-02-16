@@ -7,8 +7,9 @@ Welcome to the **TORCH Glare Components Library**! This library provides a colle
 1. [Installation](#installation)
 2. [Usage](#usage)
 3. [CLI Commands](#cli-commands)
-4. [Contributing](#contributing)
-5. [License](#license)
+4. [Theming](#theming)
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ## Installation
 
@@ -139,6 +140,50 @@ Installs the `ThemeProvider`.
 npx torchcorp@latest update
 ```
 Updates all installed components.
+
+
+## Theming
+
+The TORCH Glare Components Library supports both light and dark themes. You can set a fixed theme for your components using the `data-theme` attribute.
+
+### Setting a Fixed Theme
+
+To apply a fixed theme (dark or light) to a component, add the `data-theme `attribute with the desired theme value:
+
+```tsx
+import React from "react";
+import { Button } from "./components";
+
+const App = () => {
+  return (
+    <div>
+      <Button data-theme="dark">Dark Theme Button</Button>
+      <Button data-theme="light">Light Theme Button</Button>
+    </div>
+  );
+};
+
+export default App;
+```
+
+### Global Theme
+
+To apply a theme globally, wrap your application with the `ThemeProvider` and set the optional `defaultTheme` props:
+
+
+```tsx
+import { ThemeProvider } from "./components";
+
+const App = () => {
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <ThemeProvider defaultTheme="light" defaultThemeMode="TORCH">
+    <App />
+  </ThemeProvider>
+);
+};
+
+export default App;
+```
 
 ## Contributing
 
