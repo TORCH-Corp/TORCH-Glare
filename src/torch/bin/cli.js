@@ -3,8 +3,10 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { Command } from "commander";
 import { initConfig } from "./init/init.js";
-import { addComponent } from "./add.js";
+import { addComponent } from "./addComponent.js";
+import { addHook } from "./addHooks.js";
 import { updateInstalledComponents } from "./update.js";
+
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
 const CONFIG_FILE = "torch.json";
@@ -31,17 +33,22 @@ program
 program
   .command("init")
   .description("Initialize torch.json configuration file")
-  .action(() => initConfig(CONFIG_FILE));
+  .action(() => initConfig(CONFIG_FILE, templatesDir));
 
 program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
-  .action((component) => addComponent(component && `${component}.tsx` || null));
+  .action((component) => addComponent(component && `${component}.tsx`));
+
+program
+  .command("addhook [hook]")
+  .description("Add a hook interactively or install a specified one")
+  .action((hook) => addHook(hook && `${hook}.tsx`));
 
 program
   .command("theme")
   .description("Add a component interactively or install a specified one")
-  .action(() => addComponent("ThemeProvider"));
+  .action(() => addComponent("ThemeProvider", templatesDir));
 
 program
   .command("update")

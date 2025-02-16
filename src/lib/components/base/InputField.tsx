@@ -30,7 +30,7 @@ import { cva } from "class-variance-authority";
 
 export const inputFieldStyles = cva(
   [
-    "flex flex-1 min-w-0",
+    "flex w-full min-w-0",
     "flex-col",
     "typography-body-small-regular",
     "border ",

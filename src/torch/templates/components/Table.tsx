@@ -4,7 +4,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { useRef } from "react";
 import { Button } from "./Button";
 import { Checkbox } from "./CheckboxLabel";
-import { useResize } from "./usehooks";
+import { useResize } from "../usehooks";
 
 const tableHeadVariants = cva(
   [
