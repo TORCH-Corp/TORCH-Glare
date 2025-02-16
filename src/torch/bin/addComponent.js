@@ -191,12 +191,20 @@ function getDependenciesToInstall(componentPath, installedDependencies, template
     if (!moduleName.startsWith(".") && !installedDependencies.has(moduleName)) {
       dependenciesToInstall.add(moduleName);
     } else if (
-      moduleName.startsWith(".") &&
+      moduleName.startsWith("../utils") &&
       !installedDependencies.has(moduleName) &&
-      moduleName.slice(2) !== "utils"
+      moduleName.slice(3, 8) !== "utils"
     ) {
+      console.log(`📦 utils: ${moduleName.slice(3, 8)}`);
       addFunction(moduleName.slice(2) + ".tsx", templatesDir); // Use addFunction here
     }
+    /*    else if (
+         moduleName.startsWith(".") &&
+         !installedDependencies.has(moduleName) &&
+         moduleName.slice(3) == "utils"
+       ) {
+         addFunction(moduleName.slice(2) + ".tsx", templatesDir); // Use addFunction here
+       } */
   }
 
   return dependenciesToInstall;
