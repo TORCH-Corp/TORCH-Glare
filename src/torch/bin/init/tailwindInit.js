@@ -28,11 +28,11 @@ function generatePlugins() {
   return `
       require('tailwindcss-animate'),
       require('tailwind-scrollbar-hide'),
-      function ({ addVariant }) {
+      function ({ addVariant }: any) {
         addVariant("rtl", '&[dir="rtl"]');
         addVariant("ltr", '&[dir="ltr"]');
       },
-      function ({ addComponents }) {
+      function ({ addComponents }: any) {
         addComponents({
           ${generateTypographyClasses()}
         });
@@ -60,7 +60,7 @@ function installDependencies() {
 
 function createTailwindConfig() {
   const tailwindConfig = `
-    /** @type {import('tailwindcss').Config} */
+    import type { Config } from "tailwindcss";
     export default {
       content: [
         "./app/**/*.{js,ts,jsx,tsx}",
@@ -82,7 +82,7 @@ function createTailwindConfig() {
         "2xl": "1536px",
       },
       plugins: [${generatePlugins()}],
-    };
+    }satisfies Config;
   `;
 
   fs.writeFileSync(tailwindConfigPath, tailwindConfig);
