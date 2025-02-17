@@ -1,3 +1,4 @@
+import { ProfileItem } from '@/components/ProfileItem';
 import Examples from './exmples';
 
 function App() {

@@ -14,6 +14,7 @@ export const dropdownMenuStyles = cva(
     "rounded-[8px]",
     "border",
     "max-h-[200px]",
+    "min-w-[240px]",
     "outline-none",
     "overflow-scroll",
     "data-[state=open]:animate-in",
