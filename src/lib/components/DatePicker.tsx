@@ -80,6 +80,7 @@ export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, 
           .react-datepicker__triangle{
           fill:var(--background-system-body-base) !important;
           color:var(--background-system-body-base) !important;
+          stroke:var(--background-system-body-base) !important;
           }
 
         `}

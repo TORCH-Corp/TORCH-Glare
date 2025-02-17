@@ -1,6 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Slot } from "@radix-ui/react-slot";
 
@@ -139,6 +139,14 @@ const PopoverItem = <T extends React.ElementType = "li">({
   ...props
 }: Props<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof Props<T>>) => {
   const Component = asChild ? Slot : as;
+  const ref = useRef<HTMLLIElement>(null);
+
+  // Scroll to the selected item when the dropdown is opened
+  useEffect(() => {
+    if (active && ref.current) {
+      ref.current.scrollIntoView({ behavior: "auto", block: "center" });
+    }
+  }, [active]);
 
   return (
     <Component
@@ -151,6 +159,8 @@ const PopoverItem = <T extends React.ElementType = "li">({
         }),
         className
       )}
+      /// <reference path="" />
+      ref={ref}
     >
       {children}
     </Component>
