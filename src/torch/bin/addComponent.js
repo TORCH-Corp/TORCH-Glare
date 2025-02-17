@@ -48,7 +48,7 @@ export async function addComponent(component) {
   ensureDirectoryExists(targetDir);
 
   // Copy the component (directory or file) and install dependencies
-  copyComponent(source, target, templatesDir, addComponent);
+  copyComponent(source, target, addComponent);
 
   !disableLogs && console.log(`✅ ${component} has been added to ${config.path}!`);
 }
@@ -137,9 +137,9 @@ export function ensureDirectoryExists(targetDir) {
  * @param {string} source - The source path of the component.
  * @param {string} target - The target path of the component.
  */
-export function copyComponent(source, target, templatesDir, addFunction) {
+export function copyComponent(source, target, addFunction) {
   if (fs.lstatSync(source).isDirectory()) {
-    copyDirectorySync(source, target, templatesDir, addFunction);
+    copyDirectorySync(source, target, addFunction);
   } else {
     fs.copyFileSync(source, target);
     installDependencies(source, addFunction); // Pass addFunction here
@@ -208,7 +208,6 @@ function getDependenciesToInstall(componentPath, installedDependencies, addFunct
       moduleName.startsWith("../hooks") &&
       !installedDependencies.has(moduleName)
     ) {
-      console.log(moduleName);
       addHook(moduleName.slice(9)); // Use addFunction here
     }
     // install required components

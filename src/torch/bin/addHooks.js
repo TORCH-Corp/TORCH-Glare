@@ -27,7 +27,7 @@ export async function addHook(hook) {
 
     // Validate if the hook exists in the hooks templates directory
     if (!availableHooks.includes(hook)) {
-        console.error(`❌ Hook "${hook}" not found.`);
+        // console.error(`❌ Hook "${hook}" not found.`);
         return;
     }
 
