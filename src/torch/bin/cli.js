@@ -42,14 +42,14 @@ program
   .action((component) => addComponent(component && `${component}.tsx`));
 
 program
-  .command("addhook [hook]")
+  .command("add-hook [hook]")
   .description("Add a hook interactively or install a specified one")
   .action((hook) => addHook(hook && `${hook}`));
 
 program
-  .command("addutil [util]")
+  .command("add-util [util]")
   .description("Add a hook interactively or install a specified one")
-  .action((util) => addUtil(util && `${util}.tsx`));
+  .action((util) => addUtil(util && `${util}.ts`));
 
 program
   .command("theme")
