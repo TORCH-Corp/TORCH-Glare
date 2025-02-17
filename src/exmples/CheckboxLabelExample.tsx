@@ -1,5 +1,5 @@
-import { CheckboxLabel } from "@/components/base/CheckboxLabel";
-import { cn } from "@/components/base/utils";
+import { CheckboxLabel } from "@/components/CheckboxLabel";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

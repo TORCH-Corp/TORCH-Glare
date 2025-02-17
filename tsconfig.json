@@ -30,25 +30,14 @@
       ],
       "@components/*": [
         "./src/lib/components/*"
-      ],
-      "@hooks/*": [
-        "./src/lib/hooks/*"
-      ],
-      "@styles/*": [
-        "./src/lib/styles/*"
-      ],
-      "@utils/*": [
-        "./src/lib/utils/*"
       ]
     }
   },
   "include": [
-    "./.storybook/**/*.ts",
     "src",
     "src/lib",
     "./test/setup.ts",
     "test/index.ts",
-    "src/lib/components/base/labelfield/LabelField.tsx"
   ],
   "references": [
     {

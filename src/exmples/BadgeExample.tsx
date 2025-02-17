@@ -1,5 +1,5 @@
-import { Badge } from "@/components/base/Badge";
-import { cn } from "@/components/base/utils";
+import { Badge } from "@/components/Badge";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

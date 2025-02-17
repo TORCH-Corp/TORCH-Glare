@@ -11,9 +11,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/base/DropdownMenu";
+} from "@/components/DropdownMenu";
 
-import { cn } from "@/components/base/utils";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

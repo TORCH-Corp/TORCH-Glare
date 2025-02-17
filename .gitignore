@@ -29,4 +29,4 @@ package-lock.json
 
 app/**
 app
-/src/components
+/src/torch-glare

@@ -1,5 +1,5 @@
-import Alert from "@/components/base/Alert";
-import { cn } from "@/components/base/utils";
+import Alert from "@/components/Alert";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

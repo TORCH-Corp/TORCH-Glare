@@ -1,6 +1,6 @@
 import { useTheme } from "@/providers/ThemeProvider";
-import { cn } from "@/components/base/utils";
-import { Button } from "@/components/base/Button";
+import { cn } from "@/utils/cn";
+import { Button } from "@/components/Button";
 import ActionButtonExample from "./ActionButtonExample";
 import ButtonExample from "./ButtonExample";
 import FieldSectionExample from "./FieldSectionExample";

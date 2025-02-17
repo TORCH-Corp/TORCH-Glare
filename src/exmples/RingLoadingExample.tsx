@@ -1,5 +1,5 @@
-import RingLoading from "@/components/base/RingLoading";
-import { cn } from "@/components/base/utils";
+import RingLoading from "@/components/RingLoading";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

@@ -1,6 +1,6 @@
-import { Button } from "@/components/base/Button";
-import ButtonField from "@/components/base/ButtonField";
-import { cn } from "@/components/base/utils";
+import { Button } from "@/components/Button";
+import ButtonField from "@/components/ButtonField";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

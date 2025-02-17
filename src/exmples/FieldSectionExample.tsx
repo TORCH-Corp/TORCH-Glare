@@ -1,7 +1,7 @@
-import { Alert } from "@/components/base/Alert";
-import { FieldSection } from "@/components/base/FieldSection";
-import { InputField } from "@/components/base/InputField";
-import { cn } from "@/components/base/utils";
+import { Alert } from "@/components/Alert";
+import { FieldSection } from "@/components/FieldSection";
+import { InputField } from "@/components/InputField";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

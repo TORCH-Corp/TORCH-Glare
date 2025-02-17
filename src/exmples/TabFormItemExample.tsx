@@ -1,5 +1,5 @@
-import TabFormItem from "@/components/base/TabFormItem";
-import { cn } from "@/components/base/utils";
+import TabFormItem from "@/components/TabFormItem";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 

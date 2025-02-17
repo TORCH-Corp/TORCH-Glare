@@ -3,8 +3,12 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { Command } from "commander";
 import { initConfig } from "./init/init.js";
-import { addComponent } from "./add.js";
+import { addComponent } from "./addComponent.js";
+import { addHook } from "./addHooks.js";
 import { updateInstalledComponents } from "./update.js";
+import { addUtil } from "./addUtils.js";
+import { addProvider } from "./addProvider.js";
+
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
 const CONFIG_FILE = "torch.json";
@@ -26,7 +30,7 @@ export function getConfig() {
 program
   .name("torchcorp")
   .description("TorchCorp CLI for managing React components")
-  .version("1.0.0");
+  .version("0.0.15");
 
 program
   .command("init")
@@ -36,16 +40,26 @@ program
 program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
-  .action((component) => addComponent(component && `${component}.tsx` || null));
+  .action((component) => addComponent(component && `${component}.tsx`));
 
 program
-  .command("theme")
-  .description("Add a component interactively or install a specified one")
-  .action(() => addComponent("ThemeProvider"));
+  .command("add-hook [hook]")
+  .description("Add a hook interactively or install a specified one")
+  .action((hook) => addHook(hook && `${hook}`));
+
+program
+  .command("add-util [util]")
+  .description("Add a utils interactively or install a specified one")
+  .action((util) => addUtil(util && `${util}.ts`));
+
+program
+  .command("add-provider [provider]")
+  .description("Add a provider interactively or install a specified one")
+  .action((provider) => addProvider(provider && `${provider}`));
 
 program
   .command("update")
-  .description("Update all installed components")
+  .description("Update everything installed")
   .action(() => updateInstalledComponents());
 
 program.parse(process.argv);

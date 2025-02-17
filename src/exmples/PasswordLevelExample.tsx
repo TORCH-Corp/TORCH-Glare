@@ -1,6 +1,6 @@
-import { InputField } from "@/components/base/InputField";
-import { PasswordLevel } from "@/components/base/PasswordLevel";
-import { cn } from "@/components/base/utils";
+import { InputField } from "@/components/InputField";
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
