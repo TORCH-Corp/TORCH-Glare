@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { getConfig } from "./cli.js";
-import { copyDirectorySync, getComponentPaths, installDependencies } from "./addComponent.js";
+import { addComponent, copyDirectorySync, getComponentPaths, installDependencies } from "./addComponent.js";
 import { tailwindInit } from "./init/tailwindInit.js";
 import { fileURLToPath } from "url";
 
@@ -103,7 +103,7 @@ function getInstalledItems(installedItemsDir) {
  * @param {string} type - The type of item (e.g., "components", "hooks", "utils").
  */
 function updateItem(item, config, type) {
-  const { source, targetDir } = getComponentPaths(item, config, templatesDir, type);
+  const { source, targetDir } = getComponentPaths(item, config, `${templatesDir}/${type}`, type);
   const target = path.join(targetDir, item);
 
   // Check if the item template exists
@@ -112,13 +112,13 @@ function updateItem(item, config, type) {
 
     // Copy the item (directory or file)
     if (fs.lstatSync(source).isDirectory()) {
-      copyDirectorySync(source, target);
+      copyDirectorySync(source, target, addComponent);
     } else {
       fs.copyFileSync(source, target);
     }
 
     // Install dependencies for the updated item
-    installDependencies(source, type);
+    // installDependencies(source, type);
 
     console.log(`✅ ${item} updated.`);
   } else {

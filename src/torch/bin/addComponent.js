@@ -213,6 +213,7 @@ function getDependenciesToInstall(componentPath, installedDependencies, addFunct
     // install required components
     else if (
       moduleName.startsWith("./") &&
+      !moduleName.startsWith("./components") &&
       !installedDependencies.has(moduleName)
     ) {
       addFunction(moduleName.slice(2) + ".tsx"); // Use addFunction here

@@ -19,7 +19,7 @@ To install and manage components, use the **TorchCorp CLI**. First, initialize t
 npx torchcorp@latest init
 ```
 
-This creates a `torch.json` configuration file, which is required to manage components.
+This creates a `torch.json` configuration file and `tailwindcss` configuration file or modify, which is required to manage components.
 
 ### 1. Add Components
 To add a specific component, run:
@@ -40,7 +40,7 @@ Ensure your application is wrapped with `ThemeProvider`. Add it in `main.tsx` or
 Run this command to add the `ThemeProvider` to your project.
 
 ```sh
-npx torchcorp@latest theme
+npx torchcorp@latest add-provider ThemeProvider
 ```
 
 ```tsx
@@ -68,7 +68,7 @@ Include the following in `index.html` for icon support:
 ```
 
 ### 4. Configure Tailwind CSS
-Ensure your `tailwind.config.js` file includes the correct setup:
+Ensure your `tailwind.config.ts` file includes the correct setup:
 
 ```js
 /** @type {import('tailwindcss').Config} */
@@ -129,26 +129,39 @@ npx torchcorp@latest add [component]
 ```
 Adds a specific component or runs an interactive prompt if no name is provided.
 
-### Apply Theme Provider
+### Add Hooks
 ```sh
-npx torchcorp@latest theme
+npx torchcorp@latest add-hook [hook]
 ```
-Installs the `ThemeProvider`.
+Adds a specific hook or runs an interactive prompt if no name is provided.
 
-### Update Installed Components
+### Add Utilities
+```sh
+npx torchcorp@latest add-util [util]
+```
+Adds a specific utility or runs an interactive prompt if no name is provided.
+
+### Providers
+```sh
+npx torchcorp@latest add-provider [provider]
+```
+Adds a specific provider or runs an interactive prompt if no name is provided.
+
+### Update Installed Resources
+
 ```sh
 npx torchcorp@latest update
 ```
-Updates all installed components.
+Updates all installed components, hooks, utilities, and providers.
 
 
 ## Theming
 
-The TORCH Glare Components Library supports both light and dark themes. You can set a fixed theme for your components using the `data-theme` attribute.
+The TORCH Glare Components Library supports both light and dark themes. You can set a fixed theme for your components using the `theme` attribute.
 
 ### Setting a Fixed Theme
 
-To apply a fixed theme (dark or light) to a component, add the `data-theme `attribute with the desired theme value:
+To apply a fixed theme (dark or light) to a component, add the `theme `attribute with the desired theme value:
 
 ```tsx
 import React from "react";

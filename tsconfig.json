@@ -30,20 +30,10 @@
       ],
       "@components/*": [
         "./src/lib/components/*"
-      ],
-      "@hooks/*": [
-        "./src/lib/hooks/*"
-      ],
-      "@styles/*": [
-        "./src/lib/styles/*"
-      ],
-      "@utils/*": [
-        "src/lib/hooks/*"
       ]
     }
   },
   "include": [
-    "./.storybook/**/*.ts",
     "src",
     "src/lib",
     "./test/setup.ts",

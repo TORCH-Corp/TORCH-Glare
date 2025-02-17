@@ -7,6 +7,7 @@ import { addComponent } from "./addComponent.js";
 import { addHook } from "./addHooks.js";
 import { updateInstalledComponents } from "./update.js";
 import { addUtil } from "./addUtils.js";
+import { addProvider } from "./addProvider.js";
 
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
@@ -29,12 +30,12 @@ export function getConfig() {
 program
   .name("torchcorp")
   .description("TorchCorp CLI for managing React components")
-  .version("1.0.0");
+  .version("0.0.15");
 
 program
   .command("init")
   .description("Initialize torch.json configuration file")
-  .action(() => initConfig(CONFIG_FILE, templatesDir));
+  .action(() => initConfig(CONFIG_FILE));
 
 program
   .command("add [component]")
@@ -48,17 +49,17 @@ program
 
 program
   .command("add-util [util]")
-  .description("Add a hook interactively or install a specified one")
+  .description("Add a utils interactively or install a specified one")
   .action((util) => addUtil(util && `${util}.ts`));
 
 program
-  .command("theme")
-  .description("Add a component interactively or install a specified one")
-  .action(() => addComponent("ThemeProvider", templatesDir));
+  .command("add-provider [provider]")
+  .description("Add a provider interactively or install a specified one")
+  .action((provider) => addProvider(provider && `${provider}`));
 
 program
   .command("update")
-  .description("Update all installed components")
+  .description("Update everything installed")
   .action(() => updateInstalledComponents());
 
 program.parse(process.argv);

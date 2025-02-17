@@ -1,7 +1,7 @@
 import fs from "fs";
 import { tailwindInit } from "./tailwindInit.js";
-import { addComponent } from "../addComponent.js";
-export async function initConfig(CONFIG_FILE, templatesDir) {
+import { addUtil } from "../addUtils.js";
+export async function initConfig(CONFIG_FILE) {
   const defaultConfig = { path: "src/" };
 
   if (!fs.existsSync(CONFIG_FILE)) {
@@ -14,6 +14,5 @@ export async function initConfig(CONFIG_FILE, templatesDir) {
   // Initialize Tailwind CSS config if not exists
   tailwindInit();
   // Add utils file
-  await addComponent("utils.ts", templatesDir);
-  await addComponent("usehooks.tsx", templatesDir);
+  await addUtil("cn.ts");
 }
