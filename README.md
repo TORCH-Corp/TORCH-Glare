@@ -13,6 +13,9 @@ Welcome to the **TORCH Glare Components Library**! This library provides a colle
 
 ## Installation
 
+
+### 1. Initialize Your Project.
+
 To install and manage components, use the **TorchCorp CLI**. First, initialize the library by running:
 
 ```sh
@@ -21,21 +24,9 @@ npx torchcorp@latest init
 
 This creates a `torch.json` configuration file and `tailwindcss` configuration file or modify, which is required to manage components.
 
-### 1. Add Components
-To add a specific component, run:
-
-```sh
-npx torchcorp@latest add [component-name]
-```
-
-Or, to add components interactively:
-
-```sh
-npx torchcorp@latest add
-```
 
 ### 2. Apply the Theme Provider
-Ensure your application is wrapped with `ThemeProvider`. Add it in `main.tsx` or `index.tsx`:
+Ensure your application is wrapped with `ThemeProvider`. Add it in `main.tsx` or `layout.tsx`:
 
 Run this command to add the `ThemeProvider` to your project.
 
@@ -53,48 +44,37 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 );
 ```
 
-
-
 ### 3. Add Remix Icon Library
-Include the following in `index.html` for icon support:
+Include the following in `index.html` or nextjs `layout.tsx` or meta data for icon support:
 
 ```html
+<html>
 <head>
   <link
     href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
     rel="stylesheet"
   />
 </head>
+<body></body>
+</html>
+
 ```
 
-### 4. Configure Tailwind CSS
-Ensure your `tailwind.config.ts` file includes the correct setup:
+### 4. Add Components
+To add a specific component, run:
 
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {},
-  },
-  screens: {
-    // Custom screen configurations
-  },
-  plugins: [
-    require('tailwindcss-animate'),
-    require('tailwind-scrollbar-hide'),
-    function ({ addVariant }) {
-      addVariant("rtl", '&[dir="rtl"]');
-      addVariant("ltr", '&[dir="ltr"]');
-    },
-    function ({ addComponents }) {
-      addComponents({
-        // Full glare typography configuration classes should be here after run the init command.
-      });
-    },
-  ],
-};
+```sh
+npx torchcorp@latest add [component-name]
 ```
+
+Or, to add components interactively:
+
+```sh
+npx torchcorp@latest add
+```
+
+
+
 
 ## Usage
 
@@ -121,7 +101,8 @@ export default App;
 ```sh
 npx torchcorp@latest init
 ```
-Creates a `torch.json` configuration file.
+- Creates a `torch.json` configuration file.
+- Create or modify `tailwind.config.ts` file for tailwind support.
 
 ### Add Components
 ```sh
