@@ -28,6 +28,7 @@ import CheckboxLabelExample from "./CheckboxLabelExample";
 import PasswordLevelExample from "./PasswordLevelExample";
 import SlideDatePickerExample from "./SlideDatePickerExample";
 import DatePickerExample from "./DatePickerExample";
+import Counter from "@/components/Counter";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -38,7 +39,7 @@ export default function Examples() {
 
   return (
     <div
-      className={cn("w-full flex justify-center pt-12 ", {
+      className={cn("w-full flex justify-center pt-12", {
         "bg-white": theme === "light",
         "bg-black": theme === "dark",
       })}
@@ -62,6 +63,7 @@ export default function Examples() {
           Change Direction
         </Button>
 
+        <Counter label={10}></Counter>
         <ActionButtonExample />
         <ButtonExample />
         <TabFormItemExample />

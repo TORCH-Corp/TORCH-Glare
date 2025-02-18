@@ -2,8 +2,6 @@ import Examples from './exmples';
 
 function App() {
 
-
-
   return (
     <Examples />
   );

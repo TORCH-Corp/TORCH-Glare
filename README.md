@@ -73,9 +73,6 @@ Or, to add components interactively:
 npx torchcorp@latest add
 ```
 
-
-
-
 ## Usage
 
 Once installed, import and use the components as needed:

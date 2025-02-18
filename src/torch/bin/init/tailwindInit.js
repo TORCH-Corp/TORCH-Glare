@@ -6,36 +6,16 @@ import { detectPackageManager } from "../addComponent.js";
 
 const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 
-function generateTypographyClasses() {
-  return typographyClasses
-    .map(
-      (typography) => `
-        "${typography.className}": {
-          fontSize: "${typography.fontSize}",
-          lineHeight: "${typography.lineHeight}",
-          fontWeight: "${typography.fontWeight}",
-          ${typography.letterSpacing
-          ? `letterSpacing: "${typography.letterSpacing}",`
-          : ""
-        }
-        },
-      `
-    )
-    .join("");
-}
+
 
 function generatePlugins() {
   return `
       require('tailwindcss-animate'),
       require('tailwind-scrollbar-hide'),
+      require('glare-typography'),
       function ({ addVariant }: any) {
         addVariant("rtl", '&[dir="rtl"]');
         addVariant("ltr", '&[dir="ltr"]');
-      },
-      function ({ addComponents }: any) {
-        addComponents({
-          ${generateTypographyClasses()}
-        });
       },
   `;
 }
@@ -44,10 +24,10 @@ function installDependencies() {
   const packageManager = detectPackageManager();
   const installCommand =
     packageManager === "pnpm"
-      ? `pnpm add tailwindcss-animate tailwind-scrollbar-hide`
+      ? `pnpm add tailwindcss-animate tailwind-scrollbar-hide glare-typography`
       : packageManager === "yarn"
-        ? `yarn add tailwindcss-animate tailwind-scrollbar-hide`
-        : `npm install tailwindcss-animate@latest tailwind-scrollbar-hide@latest`;
+        ? `yarn add tailwindcss-animate tailwind-scrollbar-hide glare-typography`
+        : `npm install tailwindcss-animate@latest tailwind-scrollbar-hide@latest glare-typography@latest`;
 
   console.log(`📦 Installing missing dependencies of tailwindcss`);
   try {
@@ -92,7 +72,7 @@ function createTailwindConfig() {
 function modifyTailwindConfig() {
   let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
 
-  if (!tailwindConfigContent.includes(".typography")) {
+  if (!tailwindConfigContent.includes("glare-typography")) {
     if (!tailwindConfigContent.includes("plugins")) {
       tailwindConfigContent = tailwindConfigContent.replace(
         "],",
