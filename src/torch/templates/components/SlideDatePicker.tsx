@@ -14,7 +14,7 @@ interface SlideDatePickerProps extends Omit<ComponentProps<typeof InputField>, '
   theme?: "dark" | "light" | "default";
 }
 
-export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>(({ theme, onChange, ...props }, forwardedRef) => {
+export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>(({ theme = "dark", onChange, ...props }, forwardedRef) => {
   const today = new Date();
   const pickerValueData = {
     year: String(today.getFullYear()),
@@ -26,9 +26,12 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
-  const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
+  const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ''));
   const days = getDayArray(Number(pickerValue.year), Number(pickerValue.month));
-
+  const monthsNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
   const handlePickerChange = (newValue: PickerValue, key: string) => {
     let { year, month, day } = newValue;
 
@@ -50,11 +53,11 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   };
 
   return (
-    <Popover >
+    <Popover>
       <PopoverTrigger data-theme={theme} className='w-full flex-1' >
         <InputField theme={theme} {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} readOnly />
       </PopoverTrigger>
-      <PopoverContent data-theme={theme} dir="ltr" variant={props.variant} className="overflow-hidden w-[265px] flex justify-center items-center p-[6px] pt-[30px]">
+      <PopoverContent data-theme={theme} dir="ltr" variant={props.variant} className="overflow-hidden w-[285px] flex justify-center items-center p-[6px] pt-[30px]">
         <div className="flex justify-evenly items-center w-full absolute top-0 py-[6px]">
           <p className="text-[--content-system-global-secondary] typography-headers-medium-regular">Year</p>
           <div className="flex justify-center items-center self-center">
@@ -79,9 +82,9 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
             ))}
           </Picker.Column>
           <Picker.Column name="month">
-            {months.map((month) => (
+            {months.map((month, i) => (
               <Picker.Item key={month} value={month}>
-                <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{month}</div>
+                <div className="typography-display-small-semibold flex gap-1 whitespace-nowrap text-[--content-presentation-action-light-primary]"> <p className='text-[--content-presentation-action-light-secondary]'>{monthsNames[i].substring(0, 3)} - </p>{month}</div>
               </Picker.Item>
             ))}
           </Picker.Column>
