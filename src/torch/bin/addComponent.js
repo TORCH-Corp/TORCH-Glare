@@ -14,8 +14,7 @@ const __dirname = path.dirname(__filename);
 
 // Define the path to the templates directory
 const templatesDir = path.resolve(__dirname, "../templates/components");
-// Flag to disable logs (used for conditional logging)
-let disableLogs = false;
+
 
 /**
  * Main function to add a component and its dependencies.
@@ -39,10 +38,9 @@ export async function addComponent(component) {
   const { source, targetDir } = getComponentPaths(component, config, templatesDir, "components");
   const target = path.join(targetDir, component);
 
-  // Check if the component already exists and handle replacement
-  if (await handleComponentReplacement(component, target)) {
-    return;
-  }
+  // replace the component
+  fs.rmSync(target, { recursive: true, force: true });
+  console.log(`🔄 Replacing "${component}"...`);
 
   // Ensure the target directory exists
   ensureDirectoryExists(targetDir);
@@ -50,7 +48,7 @@ export async function addComponent(component) {
   // Copy the component (directory or file) and install dependencies
   copyComponent(source, target, addComponent);
 
-  !disableLogs && console.log(`✅ ${component} has been added to ${config.path}!`);
+  console.log(`✅ ${component} has been added to ${config.path}!`);
 }
 
 /**
@@ -90,36 +88,6 @@ export function getComponentPaths(component, config, templatesDir, saveFolderNam
   const normalizedPath = config.path.replace("@/", "");
   const targetDir = path.join(process.cwd(), normalizedPath, saveFolderName);
   return { source, targetDir };
-}
-
-/**
- * Handle component replacement if it already exists.
- * @param {string} component - The name of the component.
- * @param {string} target - The target path of the component.
- * @returns {boolean} - True if the user skips replacement, false otherwise.
- */
-async function handleComponentReplacement(component, target) {
-  if (fs.existsSync(target)) {
-    disableLogs = true;
-    const { shouldReplace } = await inquirer.prompt([
-      {
-        type: "confirm",
-        name: "shouldReplace",
-        message: `⚠️ Component "${component}" is already installed. Do you want to replace it?`,
-        default: true,
-      },
-    ]);
-
-    if (!shouldReplace) {
-      !disableLogs && console.log(`❌ Skipping installation of "${component}".`);
-      return true;
-    }
-
-    // Remove the existing component
-    fs.rmSync(target, { recursive: true, force: true });
-    !disableLogs && console.log(`🔄 Replacing "${component}"...`);
-  }
-  return false;
 }
 
 /**
@@ -238,19 +206,19 @@ export function installDependencies(componentPath, addFunction) {
     const packageManager = detectPackageManager();
     const installCommand = getInstallCommand(packageManager, dependenciesToInstall);
 
-    !disableLogs && console.log(
+    console.log(
       `📦 Installing missing dependencies using ${packageManager}:`,
       [...dependenciesToInstall].join(", ")
     );
 
     try {
       execSync(installCommand, { stdio: "inherit" });
-      !disableLogs && console.log("✅ Dependencies installed successfully.");
+      console.log("✅ Dependencies installed successfully.");
     } catch (error) {
       console.error("❌ Error installing dependencies:", error.message);
     }
   } else {
-    !disableLogs && console.log("✅ All dependencies are already installed.");
+    console.log("✅ All dependencies are already installed.");
   }
 }
 /**
