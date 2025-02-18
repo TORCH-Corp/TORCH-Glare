@@ -11,7 +11,12 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "content-presentation-global-primary": 'var(--medium-red-900)',
+
+      }
+    },
   },
   screens: {
     sm: "600px",
@@ -24,6 +29,8 @@ export default {
     require('tailwindcss-animate'),
     require('tailwind-scrollbar-hide'),
     require('glare-typography'),
+    require('./tokents.cjs'),
+
     function ({ addVariant }: any) {
       addVariant("rtl", '&[dir="rtl"]');
       addVariant("ltr", '&[dir="ltr"]');

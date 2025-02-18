@@ -6,7 +6,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import './themes/index.css';
 
 interface ThemeProps {
   theme: "light" | "dark" | "default";
