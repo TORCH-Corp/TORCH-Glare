@@ -43,10 +43,10 @@ export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, 
           const isCurrentMonth = getMonth(date) === getMonth(startDate || new Date());
           const isSelected = startDate && isSameDay(date, startDate);
           return cn(
-            "w-[29px] h-[29px] bg-transparent rounded-[6px] border border-transparent text-[--content-system-global-disabled] text-[10px] leading-0 hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover]",
+            "w-[29px] h-[29px] bg-transparent rounded-[6px] border border-transparent !text-[--content-system-global-disabled] text-[10px] leading-0 hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover]",
             {
-              "bg-[--background-system-body-secondary] text-[--content-system-global-primary]": isCurrentMonth,
-              "border-[--border-system-action-secondary-hover] bg-[--background-system-action-secondary-hover] hover:!bg-[--background-system-action-secondary-hover]": isSelected,
+              "!bg-[--background-system-body-secondary] !text-[--content-system-global-primary]": isCurrentMonth,
+              "!border-[--border-system-action-secondary-hover] !bg-[--background-system-action-secondary-hover] hover:!bg-[--background-system-action-secondary-hover]": isSelected,
             }
           );
         }}
@@ -71,6 +71,13 @@ export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, 
       {/* Add a <style> tag to override the header styles */}
       <style>
         {`
+         .custom-datepicker {
+          background-color: var(--background-system-body-base) !important;
+          border: none !important;
+        }
+          .react-datepicker__day-names{
+          display:none !important;
+          }
           .custom-datepicker .react-datepicker__header {
             padding: 0 !important;
             border: none !important;
@@ -131,7 +138,7 @@ export const CustomDatePickerHeader = ({
   };
 
   return (
-    <div className="w-full flex justify-center items-center flex-col bg-[--background-system-body-base] h-full px-[6px] pt-[6px] rounded-[12px]">
+    <div dir="ltr" className="w-full flex justify-center items-center flex-col bg-[--background-system-body-base] h-full px-[6px] pt-[6px] rounded-[12px]">
       <div className="flex justify-between items-center flex-1 w-full">
         <Button
           variant={"PrimeStyle"}
@@ -222,7 +229,7 @@ export const CustomDatePickerHeader = ({
         </Button>
       </div>
 
-      <div className="flex justify-center items-center w-full gap-[19px] my-[6px] [&>p]:text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">
+      <div className="flex justify-center items-center w-full gap-[19px] mt-[10px] [&>p]:text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">
         {
           ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((e) => {
             return <p>{e}</p>

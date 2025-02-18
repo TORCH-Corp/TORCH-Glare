@@ -138,7 +138,7 @@ export const CustomDatePickerHeader = ({
   };
 
   return (
-    <div className="w-full flex justify-center items-center flex-col bg-[--background-system-body-base] h-full px-[6px] pt-[6px] rounded-[12px]">
+    <div dir="ltr" className="w-full flex justify-center items-center flex-col bg-[--background-system-body-base] h-full px-[6px] pt-[6px] rounded-[12px]">
       <div className="flex justify-between items-center flex-1 w-full">
         <Button
           variant={"PrimeStyle"}
