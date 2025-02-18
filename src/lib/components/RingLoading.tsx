@@ -29,17 +29,26 @@ export const loadingAnimationTextContainer = cva("", {
 });
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  size: "S" | "M" | "L"; // this is used to change the size style of the component
+  size?: "S" | "M" | "L"; // this is used to change the size style of the component
+  theme?: "light" | "dark" | "default";
 }
 
-export default function RingLoading({ size = "M", ...props }: Props) {
+export default function RingLoading({ className, theme = "light", size = "M", ...props }: Props) {
   return (
-    <section {...props} className={cn(loadingFrame({ size }))}>
-      <RingLoadingIcon
+    <section data-theme={theme} {...props} className={cn(loadingFrame({ size }), className)}>
+
+      {theme == "dark" ? <DarkRingLoadingIcon
         className={
           "w-full h-full animate-spin  bg-transparent object-cover object-center"
         }
       />
+        :
+        <RingLoadingIcon
+          className={
+            "w-full h-full animate-spin  bg-transparent object-cover object-center"
+          }
+        />
+      }
       <section
         className={cn(
           "absolute flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -51,7 +60,10 @@ export default function RingLoading({ size = "M", ...props }: Props) {
   );
 }
 
-const RingLoadingIcon = (props: HTMLAttributes<HTMLOrSVGElement>) => (
+
+
+
+const DarkRingLoadingIcon = (props: HTMLAttributes<HTMLOrSVGElement>) => (
   <svg
     {...props}
     id="e7Ze8cPfGzd1"
@@ -162,5 +174,20 @@ const RingLoadingIcon = (props: HTMLAttributes<HTMLOrSVGElement>) => (
       transform="translate(-8-8)"
       fill="url(#e7Ze8cPfGzd7-fill)"
     />
+  </svg>
+);
+
+
+
+const RingLoadingIcon = (props: HTMLAttributes<HTMLOrSVGElement>) => (
+  <svg {...props} width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M200 100C200 155.228 155.228 200 100 200C44.7715 200 0 155.228 0 100C0 44.7715 44.7715 0 100 0C155.228 0 200 44.7715 200 100ZM5 100C5 152.467 47.5329 195 100 195C152.467 195 195 152.467 195 100C195 47.5329 152.467 5 100 5C47.5329 5 5 47.5329 5 100Z" fill="black" fill-opacity="0.1" />
+    <path d="M197.5 100C198.881 100 200.003 98.8805 199.969 97.5002C199.662 85.22 197.094 73.0938 192.388 61.7317C187.362 49.5991 179.997 38.5752 170.711 29.2893C161.425 20.0035 150.401 12.6375 138.268 7.61205C126.906 2.90567 114.78 0.338305 102.5 0.031247C101.119 -0.00326585 100 1.11929 100 2.5C100 3.88071 101.12 4.99656 102.5 5.03289C114.123 5.33884 125.599 7.77635 136.355 12.2314C147.881 17.0056 158.354 24.0033 167.175 32.8249C175.997 41.6464 182.994 52.1191 187.769 63.6451C192.224 74.4006 194.661 85.8767 194.967 97.5002C195.003 98.8805 196.119 100 197.5 100Z" fill="url(#paint0_linear_10856_138364)" />
+    <defs>
+      <linearGradient id="paint0_linear_10856_138364" x1="3.4045" y1="-9.09091" x2="225.705" y2="19.8973" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#D500F9" />
+        <stop offset="1" stop-color="#5317FF" />
+      </linearGradient>
+    </defs>
   </svg>
 );

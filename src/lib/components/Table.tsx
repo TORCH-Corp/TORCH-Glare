@@ -61,7 +61,9 @@ const Table = React.forwardRef<
     ref={ref}
     className={cn("overflow-scroll w-auto", className)}
     {...props}
-  />
+  >
+    {props.children}
+  </table>
 ));
 Table.displayName = "Table";
 
@@ -268,11 +270,15 @@ const TableFooterButton = React.forwardRef<
   return (
     <TableRow
       className={cn(
-        "h-[40px] border-y hover:bg-[--background-presentation-table-acton-hover] hover:border-y-2 hover:border-[--border-presentation-table-action-hover]",
+        "h-[40px] relative group hover:bg-[--background-presentation-table-acton-hover]",
         className
       )}
     >
-      <TableCell colSpan={100}>
+      <TableCell
+        className={cn(
+          "before:absolute before:left-0 before:right-0 before:top-[0px] before:h-[2px] before:bg-transparent before:transition-all before:duration-200 before:ease-out group-hover:before:bg-[var(--border-presentation-table-action-hover)] after:absolute after:left-0 after:right-0 after:bottom-[0px] after:h-[2px] after:bg-transparent after:transition-all after:duration-200 after:ease-out group-hover:after:bg-[var(--border-presentation-table-action-hover)]",
+          className
+        )} colSpan={100}>
         <button
           ref={ref}
           {...props}
@@ -284,6 +290,7 @@ const TableFooterButton = React.forwardRef<
           {children}
         </button>
       </TableCell>
+
     </TableRow>
   );
 });
