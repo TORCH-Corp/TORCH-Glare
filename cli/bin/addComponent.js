@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the templates directory
-const templatesDir = path.resolve(__dirname, "../templates/components");
+const templatesDir = path.resolve(__dirname, "../../lib/components");
 
 
 /**

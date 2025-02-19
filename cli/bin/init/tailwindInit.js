@@ -1,7 +1,6 @@
 import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
-import { typographyClasses } from "../utils.js";
 import { detectPackageManager } from "../addComponent.js";
 
 const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");

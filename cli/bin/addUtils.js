@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the utils templates directory
-const utilsTemplatesDir = path.resolve(__dirname, "../templates/utils");
+const utilsTemplatesDir = path.resolve(__dirname, "../../lib/utils");
 
 
 /**

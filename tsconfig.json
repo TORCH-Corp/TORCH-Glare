@@ -36,6 +36,7 @@
   "include": [
     "src",
     "cli/",
+    "lib/",
     "src/lib",
     "./test/setup.ts",
     "test/index.ts",

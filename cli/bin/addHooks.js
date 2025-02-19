@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the hooks templates directory
-const hooksTemplatesDir = path.resolve(__dirname, "../templates/hooks");
+const hooksTemplatesDir = path.resolve(__dirname, "../../lib/hooks");
 
 
 /**
