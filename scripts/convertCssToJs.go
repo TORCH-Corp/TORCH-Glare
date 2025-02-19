@@ -11,7 +11,7 @@ import (
 func main() {
 	// Input and output file paths
 	cssFilePath := "/home/sajjad/TORCH-Glare/src/lib/providers/ThemeProvider/themes/themes/torch.css" // Replace with your CSS file path
-	jsFilePath := "output.js"                                                                                               // Replace with your desired JS file path
+	jsFilePath := "output.js" // Replace with your desired JS file path
 
 	// Read the CSS file
 	cssContent, err := os.ReadFile(cssFilePath)

@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const cliPath = path.join(__dirname, "src/torch/bin/cli.js");
+const cliPath = path.join(__dirname, "cli/bin/cli.js");
 console.log("Running CLI script:", cliPath);
 
 // Run the CLI script

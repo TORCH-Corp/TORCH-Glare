@@ -6,8 +6,8 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "files": [
-    "src/torch/bin",
-    "src/torch/templates"
+    "cli/bin",
+    "cli/templates"
   ],
   "bin": {
     "torchcorp": "./torch.js"

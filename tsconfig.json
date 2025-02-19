@@ -35,9 +35,11 @@
   },
   "include": [
     "src",
+    "cli/",
     "src/lib",
     "./test/setup.ts",
     "test/index.ts",
+    "cli",
   ],
   "references": [
     {
