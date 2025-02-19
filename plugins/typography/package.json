@@ -1,0 +1,19 @@
+{
+  "name": "glare-typography",
+  "version": "1.0.1",
+  "description": "A Tailwind CSS plugin for custom typography utilities.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tailwindcss",
+    "typography",
+    "plugin"
+  ],
+  "author": "TORCH Corp/Sajjad-iq",
+  "license": "MIT",
+  "peerDependencies": {
+    "tailwindcss": "^3.0.0"
+  }
+}

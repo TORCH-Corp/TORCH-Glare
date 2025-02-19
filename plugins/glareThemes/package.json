@@ -1,0 +1,19 @@
+{
+  "name": "glare-themes",
+  "version": "1.0.1",
+  "description": "A Tailwind CSS plugin for torch-glare themes utilities.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tailwindcss",
+    "themes",
+    "plugin"
+  ],
+  "author": "TORCH Corp/Sajjad-iq",
+  "license": "MIT",
+  "peerDependencies": {
+    "tailwindcss": "^3.0.0"
+  }
+}
