@@ -18,7 +18,7 @@ export const profileItemStyles = cva(
 interface ProfileItemProps extends HTMLAttributes<HTMLButtonElement> {
     label: ReactNode;
     selected?: boolean
-    icon?: ReactNode;
+    icon?: string;
     theme?: "dark" | "light" | "default";
     popoverChildren?: ReactNode
     overlayBlur?: boolean
@@ -59,7 +59,7 @@ export const ProfileItem: React.FC<ProfileItemProps> = ({
                     <div className="flex items-center gap-2">
                         <div className="flex items-center">
                             <span className="h-[28px] w-[2px] bg-transparent group-hover:bg-[#9748FF] group-hover:mr-[6px] transition-all ease-in-out duration-150"></span>
-                            <img className="w-[28px] h-[28px] rounded-full object-cover" src="https://static.vecteezy.com/system/resources/thumbnails/047/656/219/small/abstract-logo-design-for-any-corporate-brand-business-company-vector.jpg" alt="" />
+                            <img className="w-[28px] h-[28px] rounded-full object-cover" src={icon} alt="" />
                         </div>
 
                         <p

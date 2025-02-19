@@ -1,6 +1,5 @@
 import fs from "fs";
 import { tailwindInit } from "./tailwindInit.js";
-import { addUtil } from "../addUtils.js";
 export async function initConfig(CONFIG_FILE) {
   const defaultConfig = { path: "./" };
 
@@ -13,6 +12,4 @@ export async function initConfig(CONFIG_FILE) {
 
   // Initialize Tailwind CSS config if not exists
   tailwindInit();
-  // Add utils file
-  await addUtil("cn.ts");
 }
