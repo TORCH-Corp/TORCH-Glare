@@ -1,13 +1,13 @@
 {
   "name": "torchcorp",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
   "files": [
     "cli/bin",
-    "cli/templates"
+    "lib"
   ],
   "bin": {
     "torchcorp": "./torch.js"
