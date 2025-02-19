@@ -15,7 +15,7 @@ const CONFIG_FILE = "torch.json";
 
 export function getConfig() {
   if (!fs.existsSync(CONFIG_FILE)) {
-    console.error('❌ torch.json not found. Run "npx torchcorp init" first');
+    console.error('❌ torch.json not found. Run "npx torchcorp@latest init" first');
     process.exit(1);
   }
 

@@ -6,6 +6,15 @@ The `Button` component is a highly customizable and reusable React component tha
 
 ---
 
+
+## Installation
+
+To install the component run:
+
+```sh
+npx torchcorp@latest add Button
+```
+
 ## Features
 
 - **Variants**: Supports multiple visual styles (`PrimeStyle`, `BlueSecStyle`, `YelSecStyle`, etc.).
