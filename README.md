@@ -25,26 +25,7 @@ npx torchcorp@latest init
 This creates a `torch.json` configuration file and `tailwindcss` configuration file or modify, which is required to manage components.
 
 
-### 2. Apply the Theme Provider
-Ensure your application is wrapped with `ThemeProvider`. Add it in `main.tsx` or `layout.tsx`:
-
-Run this command to add the `ThemeProvider` to your project.
-
-```sh
-npx torchcorp@latest add-provider ThemeProvider
-```
-
-```tsx
-import { ThemeProvider } from "./components";
-
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
-);
-```
-
-### 3. Add Remix Icon Library
+### 2. Add Remix Icon Library
 Include the following in `index.html` or nextjs `layout.tsx` or meta data for icon support:
 
 ```html
@@ -60,7 +41,7 @@ Include the following in `index.html` or nextjs `layout.tsx` or meta data for ic
 
 ```
 
-### 4. Add Components
+### 3. Add Components
 To add a specific component, run:
 
 ```sh

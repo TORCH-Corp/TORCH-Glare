@@ -7,11 +7,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./features/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "background-presentation-table-acton-hover": 'var(--background-presentation-table-acton-hover)',
+      }
+    },
   },
   screens: {
     sm: "600px",
@@ -24,6 +28,9 @@ export default {
     require('tailwindcss-animate'),
     require('tailwind-scrollbar-hide'),
     require('glare-typography'),
+    require('glare-themes'),
+    require('glare-torch-mode'),
+
     function ({ addVariant }: any) {
       addVariant("rtl", '&[dir="rtl"]');
       addVariant("ltr", '&[dir="ltr"]');

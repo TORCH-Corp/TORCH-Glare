@@ -26,16 +26,14 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@/*": [
-        "./src/lib/*"
+        "./lib/*"
       ],
-      "@components/*": [
-        "./src/lib/components/*"
-      ]
     }
   },
   "include": [
     "src",
-    "src/lib",
+    "cli/",
+    "lib/",
     "./test/setup.ts",
     "test/index.ts",
   ],
