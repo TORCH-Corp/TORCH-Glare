@@ -21,23 +21,58 @@ function generatePlugins() {
   `;
 }
 
-function installDependencies() {
-  const packageManager = detectPackageManager();
-  const installCommand =
-    packageManager === "pnpm"
-      ? `pnpm add tailwindcss-animate tailwind-scrollbar-hide glare-typography glare-themes glare-torch-mode`
-      : packageManager === "yarn"
-        ? `yarn add tailwindcss-animate tailwind-scrollbar-hide glare-typography glare-themes glare-torch-mode`
-        : `npm install tailwindcss-animate@latest tailwind-scrollbar-hide@latest glare-typography@latest glare-themes glare-torch-mode`;
+/**
+ * Installs dependencies using the detected package manager.
+ * @param {string[]} dependencies - List of dependencies to install.
+ */
+function installDependencies(dependencies = []) {
+  if (!dependencies.length) {
+    console.warn("⚠️ No dependencies provided to install.");
+    return;
+  }
 
-  console.log(`📦 Installing missing dependencies of tailwindcss`);
+  // Detect the package manager
+  const packageManager = detectPackageManager();
+  console.log(`📦 Detected package manager: ${packageManager}`);
+
+  // Generate the install command based on the package manager
+  let installCommand;
+  switch (packageManager) {
+    case "pnpm":
+      installCommand = `pnpm add ${dependencies.join(" ")}`;
+      break;
+    case "yarn":
+      installCommand = `yarn add ${dependencies.join(" ")}`;
+      break;
+    case "npm":
+    default:
+      installCommand = `npm install ${dependencies.join(" ")}`;
+      break;
+  }
+
   try {
+    // Execute the install command
     execSync(installCommand, { stdio: "inherit" });
     console.log("✅ Dependencies installed successfully.");
   } catch (error) {
-    console.error("❌ Error installing dependencies:", error.message);
+    console.error("❌ Error installing dependencies:");
+    console.error(error.message);
+
+    // Provide additional troubleshooting tips
+    if (error.message.includes("EACCES")) {
+      console.error(
+        "💡 It seems you don't have permission to install packages globally. Try running the command with sudo or fix your npm permissions."
+      );
+    } else if (error.message.includes("not found")) {
+      console.error(
+        "💡 The package manager might not be installed. Please ensure it is installed and available in your PATH."
+      );
+    } else {
+      console.error("💡 Check your internet connection and try again.");
+    }
   }
 }
+
 
 function createTailwindConfig() {
   const tailwindConfig = `
@@ -50,7 +85,6 @@ function createTailwindConfig() {
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./features/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
-        "./app/**/*.{js,ts,jsx,tsx,mdx}",
       ],
       theme: {
         extend: {},
@@ -92,7 +126,14 @@ function modifyTailwindConfig() {
 }
 
 export function tailwindInit() {
-  installDependencies();
+  const dependencies = [
+    "tailwindcss-animate",
+    "tailwind-scrollbar-hide",
+    "glare-typography",
+    "glare-themes",
+    "glare-torch-mode",
+  ];
+  installDependencies(dependencies);
   if (!fs.existsSync(tailwindConfigPath)) {
     createTailwindConfig();
   } else {
