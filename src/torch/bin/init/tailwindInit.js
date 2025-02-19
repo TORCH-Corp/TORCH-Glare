@@ -10,9 +10,11 @@ const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 
 function generatePlugins() {
   return `
-      require('tailwindcss-animate'),
-      require('tailwind-scrollbar-hide'),
-      require('glare-typography'),
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar-hide'),
+    require('glare-typography'),
+    require('glare-themes'),
+    require('glare-torch-mode'),
       function ({ addVariant }: any) {
         addVariant("rtl", '&[dir="rtl"]');
         addVariant("ltr", '&[dir="ltr"]');
@@ -24,10 +26,10 @@ function installDependencies() {
   const packageManager = detectPackageManager();
   const installCommand =
     packageManager === "pnpm"
-      ? `pnpm add tailwindcss-animate tailwind-scrollbar-hide glare-typography`
+      ? `pnpm add tailwindcss-animate tailwind-scrollbar-hide glare-typography glare-themes glare-torch-mode`
       : packageManager === "yarn"
-        ? `yarn add tailwindcss-animate tailwind-scrollbar-hide glare-typography`
-        : `npm install tailwindcss-animate@latest tailwind-scrollbar-hide@latest glare-typography@latest`;
+        ? `yarn add tailwindcss-animate tailwind-scrollbar-hide glare-typography glare-themes glare-torch-mode`
+        : `npm install tailwindcss-animate@latest tailwind-scrollbar-hide@latest glare-typography@latest glare-themes glare-torch-mode`;
 
   console.log(`📦 Installing missing dependencies of tailwindcss`);
   try {
@@ -72,7 +74,7 @@ function createTailwindConfig() {
 function modifyTailwindConfig() {
   let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
 
-  if (!tailwindConfigContent.includes("glare-typography")) {
+  if (!tailwindConfigContent.includes("glare-typography") && !tailwindConfigContent.includes("glare-themes")) {
     if (!tailwindConfigContent.includes("plugins")) {
       tailwindConfigContent = tailwindConfigContent.replace(
         "],",

@@ -41,6 +41,8 @@
     "clsx": "^2.1.1",
     "commander": "^13.1.0",
     "date-fns": "^4.1.0",
+    "glare-themes": "^1.0.0",
+    "glare-torch-mode": "^1.0.0",
     "glare-typography": "^1.0.1",
     "inquirer": "^9.2.15",
     "react": "^18.2.0",

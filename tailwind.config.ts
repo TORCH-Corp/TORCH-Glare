@@ -13,7 +13,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        "content-presentation-global-primary": 'var(--medium-red-900)',
+        "background-presentation-table-acton-hover": 'var(--background-presentation-table-acton-hover)',
 
       }
     },
@@ -29,7 +29,8 @@ export default {
     require('tailwindcss-animate'),
     require('tailwind-scrollbar-hide'),
     require('glare-typography'),
-    require('./tokents.cjs'),
+    require('glare-themes'),
+    require('glare-torch-mode'),
 
     function ({ addVariant }: any) {
       addVariant("rtl", '&[dir="rtl"]');
