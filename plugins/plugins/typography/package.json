@@ -1,14 +1,14 @@
 {
-  "name": "glare-themes",
+  "name": "glare-typography",
   "version": "1.0.1",
-  "description": "A Tailwind CSS plugin for torch-glare themes utilities.",
-  "main": "index.js",
+  "description": "A Tailwind CSS plugin for custom typography utilities.",
+  "main": "index.js.cjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "tailwindcss",
-    "themes",
+    "typography",
     "plugin"
   ],
   "author": "TORCH Corp/Sajjad-iq",
