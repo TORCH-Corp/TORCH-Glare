@@ -11,7 +11,7 @@ export default function ActionButtonExample() {
     <>
       <h1
         className={cn(
-          "text-xl font-bold mb-8",
+          "text-xl font-bold mb-8 bg-bur",
           theme === "light" ? "text-black" : "text-white"
         )}
       >

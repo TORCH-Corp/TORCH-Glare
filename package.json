@@ -42,7 +42,7 @@
     "commander": "^13.1.0",
     "date-fns": "^4.1.0",
     "fast-glob": "^3.3.3",
-    "glare-themes": "^1.0.3",
+    "glare-themes": "^1.0.4",
     "glare-torch-mode": "^1.0.1",
     "glare-typography": "^1.0.2",
     "inquirer": "^9.2.15",

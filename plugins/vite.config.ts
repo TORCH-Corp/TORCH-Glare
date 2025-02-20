@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import path from "path";
 import glob from "fast-glob";
 
-const inputFiles = glob.sync("plugins/pluginsFile/**/index.js");
+const inputFiles = glob.sync("pluginsFile/**/index.js");
 
 // Debugging: Log found files
 if (inputFiles.length === 0) {
@@ -15,13 +15,13 @@ export default defineConfig({
     rollupOptions: {
       input: Object.fromEntries(
         inputFiles.map((file) => [
-          path.relative("plugins/pluginsFile", file).replace(/\/index\.js$/, ""), // Use folder name as key
+          path.relative("pluginsFile", file).replace(/\/index\.js$/, ""), // Use folder name as key
           path.resolve(file), // Absolute path to the file
         ])
       ),
       output: {
         format: "es", // ESM output
-        dir: "plugins", // Keep build files in plugin/
+        dir: "dist", // Keep build files in plugin/
         entryFileNames: "[name].cjs", // Use folder name as output file
         preserveModules: true, // Keep module structure
       },
