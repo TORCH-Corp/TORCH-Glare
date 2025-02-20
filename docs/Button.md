@@ -81,7 +81,7 @@ function App() {
 
 ```jsx
 <Button variant="BorderStyle" size="M" buttonType="icon">
-  <Icon />
+<i className="ri-add-line"></i>
 </Button>
 ```
 
@@ -158,7 +158,7 @@ function App() {
         Disabled
       </Button>
       <Button variant="BorderStyle" size="M" buttonType="icon">
-        <Icon />
+        <i className="ri-add-line"></i>
       </Button>
       <Button asChild>
         <a href="/">Link as Button</a>

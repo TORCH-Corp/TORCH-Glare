@@ -35,7 +35,6 @@ npx torchcorp@latest add ActionButton
 | as        | `React.ElementType`     | `button`  | Allows rendering the button as a different HTML element or React component. |
 | theme     | `dark`, `light`, `default` | `default` | Applies a theme to the button. |
 | className | `string`               | `-`       | Additional custom classes for the button. |
-| children  | `React.ReactNode`       | `-`       | Content to be displayed inside the button (typically an icon). |
 
 ---
 
@@ -45,12 +44,11 @@ npx torchcorp@latest add ActionButton
 
 ```jsx
 import { ActionButton } from "./ActionButton";
-import { Icon } from "./Icon"; // Example icon component
 
 function App() {
   return (
     <ActionButton size="M">
-      <Icon />
+       <i className="ri-add-line"></i>
     </ActionButton>
   );
 }
@@ -60,7 +58,7 @@ function App() {
 
 ```jsx
 <ActionButton size="XS">
-  <Icon />
+  <i className="ri-add-line"></i>
 </ActionButton>
 ```
 
@@ -68,7 +66,7 @@ function App() {
 
 ```jsx
 <ActionButton theme="dark" size="S">
-  <Icon />
+  <i className="ri-add-line"></i>
 </ActionButton>
 ```
 
@@ -77,7 +75,7 @@ function App() {
 ```jsx
 <ActionButton asChild>
   <a href="/">
-    <Icon />
+    <i className="ri-add-line"></i>
   </a>
 </ActionButton>
 ```
@@ -114,20 +112,20 @@ function App() {
   return (
     <div>
       <ActionButton size="XS">
-        <Icon />
+        <i className="ri-add-line"></i>
       </ActionButton>
       <ActionButton size="S">
-        <Icon />
+        <i className="ri-add-line"></i>
       </ActionButton>
       <ActionButton size="M">
-        <Icon />
+        <i className="ri-add-line"></i>
       </ActionButton>
       <ActionButton theme="dark" size="M">
-        <Icon />
+        <i className="ri-add-line"></i>
       </ActionButton>
       <ActionButton asChild>
         <a href="/">
-          <Icon />
+          <i className="ri-add-line"></i>
         </a>
       </ActionButton>
     </div>
