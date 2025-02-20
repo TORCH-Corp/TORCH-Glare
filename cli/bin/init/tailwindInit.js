@@ -37,16 +37,18 @@ function installDependencies(dependencies = []) {
 
   // Generate the install command based on the package manager
   let installCommand;
+  const latestDeps = dependencies.map(dep => `${dep}@latest`).join(" ");
+
   switch (packageManager) {
     case "pnpm":
-      installCommand = `pnpm add ${dependencies.join(" ")}`;
+      installCommand = `pnpm add ${latestDeps}`;
       break;
     case "yarn":
-      installCommand = `yarn add ${dependencies.join(" ")}`;
+      installCommand = `yarn add ${latestDeps}`;
       break;
     case "npm":
     default:
-      installCommand = `npm install ${dependencies.join(" ")}`;
+      installCommand = `npm install ${latestDeps}`;
       break;
   }
 

@@ -1,14 +1,17 @@
 {
-  "name": "glare-typography",
+  "name": "glare-torch-mode",
   "version": "1.0.1",
-  "description": "A Tailwind CSS plugin for custom typography utilities.",
-  "main": "index.js.cjs",
+  "description": "A Tailwind CSS plugin for make custom look to the Torch Glare components and for the deferent themes like dark, light, default themes.",
+  "main": "index.cjs",
+  "files": [
+    "index.cjs"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "tailwindcss",
-    "typography",
+    "themes",
     "plugin"
   ],
   "author": "TORCH Corp/Sajjad-iq",

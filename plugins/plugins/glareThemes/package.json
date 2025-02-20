@@ -1,8 +1,11 @@
 {
-  "name": "glare-torch-mode",
-  "version": "1.0.0",
-  "description": "A Tailwind CSS plugin for make custom look to the Torch Glare components and for the deferent themes like dark, light, default themes.",
-  "main": "index.js.cjs",
+  "name": "glare-themes",
+  "version": "1.0.3",
+  "description": "A Tailwind CSS plugin for torch-glare themes utilities.",
+  "main": "index.cjs",
+  "files": [
+    "index.cjs"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -25,7 +25,7 @@ export default {
     require('tailwindcss-animate'),
     require('tailwind-scrollbar-hide'),
     require('glare-typography'),
-    require('./plugins/tailwindPlugins/glareThemes/index.js.cjs'),
+    require('glare-themes'),
     require('glare-torch-mode'),
 
     function ({ addVariant }: any) {
