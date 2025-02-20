@@ -27,7 +27,6 @@ export default {
     require('glare-typography'),
     require('glare-themes'),
     require('glare-torch-mode'),
-    require('./colors.cjs'),
 
     function ({ addVariant }: any) {
       addVariant("rtl", '&[dir="rtl"]');
