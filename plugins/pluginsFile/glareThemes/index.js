@@ -314,7 +314,7 @@ const coreColors = {
     'light-blue-600': '#B0B4BBFF',
     'light-blue-700': '#969AA0FF',
 };
-const colors = {
+const tailwindVars = {
     ...coreColors,
     "border-presentation-table-dropdown": "var(--border-presentation-table-dropdown)",
     "background-presentation-cardbutton-ocean-primary": "var(--background-presentation-cardbutton-ocean-primary)",
@@ -1354,5 +1354,5 @@ module.exports = plugin(function ({ addBase }) {
 
     addBase(cssVariables);
 },
-    { theme: { extend: { colors } } });
+    { theme: { extend: { tailwindVars } } });
 
