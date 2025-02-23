@@ -64,7 +64,6 @@ export const formBarItemStyles = cva(
           "px-[8px]",
           "justify-start",
           "hover:bg-[--border-presentation-tab-sidebar-primary]",
-          "hover:border-[--border-presentation-tab-sidebar-primary]",
           "hover:px-[16px]",
           "focus:bg-[--background-presentation-tab-sidebar-selected] focus:hover:bg-[--background-presentation-tab-sidebar-selected]",
           "focus:text-[--content-presentation-action-dark-primary] focus:hover:text-[--content-presentation-action-dark-primary]",
@@ -108,22 +107,11 @@ export const formBarItemStyles = cva(
         ],
       },
       {
-        componentType: "side",
-        active: true,
-        className: [
-          "bg-[--background-presentation-tab-sidebar-selected] hover:bg-[--background-presentation-tab-sidebar-selected]",
-          "text-[--content-presentation-action-dark-primary] hover:text-[--content-presentation-action-dark-primary]",
-          "border-transparent hover:border-transparent",
-          "px-[8px] hover:px-[8px]",
-        ],
-      },
-      {
         componentType: "tree",
         active: true,
         className: [
           "bg-[--background-presentation-tab-topbar-selected] hover:bg-[--background-presentation-tab-topbar-selected]",
           "text-[var(--content-presentation-tab-action-selected)] hover:text-[var(--content-presentation-tab-action-selected)]",
-          "border-[var(--border-presentation-tab-topbar-selected)] hover:border-[var(--border-presentation-tab-topbar-selected)]",
         ],
       },
 

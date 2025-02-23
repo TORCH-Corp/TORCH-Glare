@@ -27,6 +27,9 @@ export const badgeBase = cva(
         M: "h-[26px] [&_i]:text-[16px] [&_p]:typography-body-medium-medium",
       },
       variant: {
+        highlight: ["h-[20px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
+          "bg-background-presentation-badge-gray border-transparent"
+        ],
         green:
           "border-[var(--border-presentation-badge-green)] bg-[var(--background-presentation-badge-green)] [&_i]:text-[var(--content-presentation-badge-green)]",
         greenLight:
@@ -92,7 +95,7 @@ export const Badge: React.FC<BadgeProps> = ({
     >
       <span className={"flex justify-center items-center"}>
         {!badgeIcon ? (
-          <i className="ri-circle-fill !text-[8px]"></i>
+          <i className={cn("ri-circle-fill !text-[8px]", { "hidden": variant === "highlight" })}></i>
         ) : (
           badgeIcon
         )}
