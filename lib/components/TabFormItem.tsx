@@ -63,7 +63,6 @@ export const formBarItemStyles = cva(
           "border",
           "px-[8px]",
           "justify-start",
-          "border-[--border-presentation-tab-sidebar-primary]",
           "hover:bg-[--border-presentation-tab-sidebar-primary]",
           "hover:border-[--border-presentation-tab-sidebar-primary]",
           "hover:px-[16px]",
@@ -119,7 +118,7 @@ export const formBarItemStyles = cva(
         ],
       },
       {
-        componentType: "top",
+        componentType: "tree",
         active: true,
         className: [
           "bg-[--background-presentation-tab-topbar-selected] hover:bg-[--background-presentation-tab-topbar-selected]",
