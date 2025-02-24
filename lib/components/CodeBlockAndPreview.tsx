@@ -9,14 +9,14 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     header: ReactNode
 }
 
-export const CodeBlockAndPreview = (props: Props) => {
+export const CodeBlockAndPreview = ({ previewComponent, header, code, ...props }: Props) => {
 
     const [preview, setPreview] = useState(true)
     return (
         <div {...props} className={cn("flex flex-col w-full gap-[16px]")}>
 
             <div className='flex w-full justify-between items-center border-b border-border-presentation-global-primary p-2'>
-                <p className='text-content-presentation-global-secondary  typography-headers-large-medium'>{props.header}</p>
+                <p className='text-content-presentation-global-secondary  typography-headers-large-medium'>{header}</p>
 
                 <div className='flex justify-between items-center flex-wrap gap-2'>
                     <div className='bg-border-presentation-global-primary h-[28px] w-[1px] rounded-sm' />
@@ -27,10 +27,10 @@ export const CodeBlockAndPreview = (props: Props) => {
             {
                 preview ?
                     <div className='bg-background-presentation-form-field-primary w-full flex justify-center items-center rounded-[6px] p-[16px] min-h-[230px] gap-2'>
-                        {props.previewComponent}
+                        {previewComponent}
                     </div> :
                     <Codeblock
-                        code={props.code}
+                        code={code}
                     />
             }
 

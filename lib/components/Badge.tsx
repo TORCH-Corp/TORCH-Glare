@@ -28,7 +28,7 @@ export const badgeBase = cva(
       },
       variant: {
         highlight: ["h-[20px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
-          "bg-background-presentation-badge-gray border-transparent"
+          "bg-background-presentation-badge-gray border-transparent px-[3px]"
         ],
         green:
           "border-[var(--border-presentation-badge-green)] bg-[var(--background-presentation-badge-green)] [&_i]:text-[var(--content-presentation-badge-green)]",
