@@ -45,17 +45,19 @@ const vscodeTheme = {
 interface Props extends ComponentProps<typeof CopyBlock> {
     className?: string
     code: any
+    language: string
+    showLineNumbers: boolean
 }
 
-export const Codeblock: React.FC<Partial<Props>> = (props) => {
+export const Codeblock: React.FC<Partial<Props>> = ({ showLineNumbers, language = "tsx", code, ...props }) => {
 
 
     return (
         <CopyBlock
             {...props} // Allow dynamic props usage
-            text={props.code}
-            language="tsx"
-            showLineNumbers={false}
+            text={code}
+            language={language}
+            showLineNumbers={showLineNumbers}
             theme={vscodeTheme}
             customStyle={{ padding: '16px', backgroundColor: 'var(--background-presentation-form-field-primary)', borderRadius: '6px' }}
         />

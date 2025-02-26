@@ -1,4 +1,4 @@
-import { cn } from '../utils/cn';
+import { cn } from '@/utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 import React from 'react'
@@ -13,7 +13,7 @@ const HeadingStyles = cva(" text-content-presentation-global-primary",
                 h3: "typography-display-medium-medium",
                 h4: "typography-display-small-medium",
                 h5: "typography-display-small-small",
-                h6: "typography-display-labels-medium",
+                h6: "typography-labels-medium-medium",
             },
 
         },

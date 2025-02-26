@@ -36,6 +36,8 @@ export const inputFieldStyles = cva(
     "border ",
     "transition-all duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+    "[&_i]:leading-[0px] leading-[0px]",
+
   ],
   {
     variants: {

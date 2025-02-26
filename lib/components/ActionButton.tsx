@@ -24,12 +24,21 @@ interface Props
   asChild?: boolean;
   as?: React.ElementType;
   theme?: "dark" | "light" | "default"
+  variant?: "PrimeStyle" |
+  "BlueSecStyle" |
+  "YelSecStyle" |
+  "RedSecStyle" |
+  "BorderStyle" |
+  "PrimeContStyle" |
+  "BlueContStyle" |
+  "RedContStyle"
 }
 export const ActionButton = function ({
   size,
   asChild,
   as: Tag = "button",
   className,
+  variant,
   children,
   theme,
   ...props
@@ -39,6 +48,7 @@ export const ActionButton = function ({
       theme={theme}
       asChild={asChild}
       buttonType="icon"
+      variant={variant}
       className={cn(
         buttonVariants({
           size,

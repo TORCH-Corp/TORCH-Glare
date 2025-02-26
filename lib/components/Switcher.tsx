@@ -46,8 +46,8 @@ export function Switcher({
             }
           )}
         >
-          <Label size="M" label={activeLabel} />
-          <Label size="M" label={disabledLabel} />
+          <Label className="h-[20px]" size="M" label={activeLabel} />
+          <Label className="h-[20px]" size="M" label={disabledLabel} />
         </section>
       )}
     </section>

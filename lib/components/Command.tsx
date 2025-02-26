@@ -6,7 +6,7 @@ import { cn } from '../utils/cn';
 
 interface Props extends HTMLAttributes<HTMLDivElement> { }
 
-export const InstallCode = ({ ...props }: Props) => {
+export const Command = ({ ...props }: Props) => {
 
     const [copied, setCopied] = useState(false);
     const handleCopyClick = useCallback(() => {
@@ -21,7 +21,7 @@ export const InstallCode = ({ ...props }: Props) => {
                 [
                     "flex gap-2 justify-between items-center w-full ",
                     "text-content-presentation-global-primary typography-body-large-regular",
-                    "bg-border-presentation-action-primary rounded-[6px] py-4 px-3",
+                    "bg-background-presentation-form-field-primary rounded-[6px] py-4 px-3 overflow-hidden",
                 ],
                 props.className
             )}

@@ -1,4 +1,3 @@
-
 import { HTMLAttributes } from 'react';
 import { cn } from '@/utils/cn';
 
@@ -17,7 +16,7 @@ export function Article({ transparent = true, ...props }: Props) {
             <div className={cn("flex ltr:pr-2 rtl:pl-2 items-start gap-2 self-stretch rounded-[0px_6px_6px_0px] bg-border-presentation-action-primary",
                 { "bg-transparent": transparent })}>
                 <div className="transition-all ease-in-out w-0.5 self-stretch bg-border-presentation-action-primary group-hover:bg-content-presentation-global-primary"></div>
-                <p className="flex py-1 gap-1 text-content-presentation-global-primary typography-body-large-regular">
+                <p className="flex justify-center items-center py-1 gap-1 text-content-presentation-global-primary typography-body-large-regular">
                     {props.children}
                 </p>
             </div>

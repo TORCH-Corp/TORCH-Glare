@@ -8,7 +8,7 @@ import { Tooltip } from "./Tooltip";
 
 // NOTE: radix select as DropDownButton
 
-export const dropdownMenuStyles = cva(
+export const dropdownButtonContentStyles = cva(
   [
     "p-1",
     "rounded-[8px]",
@@ -321,7 +321,7 @@ DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton";
 const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-  VariantProps<typeof dropdownMenuStyles> & {
+  VariantProps<typeof dropdownButtonContentStyles> & {
     theme?: "dark" | "light" | "default"
   }
 >(
@@ -340,7 +340,7 @@ const DropDownButtonContent = React.forwardRef<
       <SelectPrimitive.Content
         data-theme={theme}
         ref={ref}
-        className={cn(dropdownMenuStyles({ variant }), className)}
+        className={cn(dropdownButtonContentStyles({ variant }), className)}
         position={position}
         {...props}
       >

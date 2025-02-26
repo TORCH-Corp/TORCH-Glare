@@ -43,6 +43,8 @@ export const AttachmentField = forwardRef<HTMLInputElement, Props>(
     return (
       <Button
         theme={theme}
+        as="label"
+        id={props.id}
         component_style="PrimeContStyle"
         {...getRootProps?.()}
         className={cn(dropZoneStyles({ active: isDropAreaActive }))}
