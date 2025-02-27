@@ -38,34 +38,34 @@ export const inputFieldStyles = cva(
     "overflow-hidden",
     "justify-center",
     "typography-body-small-regular",
-    "border border-[--border-presentation-action-primary]",
-    "bg-[--background-presentation-form-field-primary]",
+    "border border-border-presentation-action-primary",
+    "bg-background-presentation-form-field-primary",
     "transition-[background,background-color,color,border,box-shadow] duration-100 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-    "hover:bg-[--background-presentation-form-field-hover]",
-    "hover:border-[--border-presentation-action-hover]",
-    "hover:text-[--content-presentation-action-light-primary]",
-    "hover:caret-[--content-presentation-action-information-hover]",
+    "hover:bg-background-presentation-form-field-hover",
+    "hover:border-border-presentation-action-hover",
+    "hover:text-content-presentation-action-light-primary",
+    "hover:caret-content-presentation-action-information-hover",
   ],
   {
     variants: {
       variant: {
         PresentationStyle: [""],
         SystemStyle: [
-          "border-[--border-system-global-secondary]",
-          "bg-[--background-presentation-form-field-primary]",
+          "border-border-system-global-secondary",
+          "bg-background-presentation-form-field-primary",
           "hover:border-[#9748FF]",
-          "hover:bg-[--purple-alpha-10]",
+          "hover:bg-purple-alpha-10",
         ],
       },
       fucus: {
         true: [
-          "border-[--border-presentation-state-focus]",
-          "bg-[--background-presentation-form-field-primary]",
+          "border-border-presentation-state-focus",
+          "bg-background-presentation-form-field-primary",
           "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-          "hover:border-[--border-presentation-state-focus]",
-          "caret-[--border-presentation-state-focus]",
-          "hover:caret-[--border-presentation-state-focus]",
+          "hover:border-border-presentation-state-focus",
+          "caret-border-presentation-state-focus",
+          "hover:caret-border-presentation-state-focus",
         ],
       },
       onTable: {
@@ -73,16 +73,16 @@ export const inputFieldStyles = cva(
       },
       error: {
         true: [
-          "border-[--border-presentation-state-negative]",
-          "caret-[--border-presentation-state-negative]",
-          "hover:border-[--border-presentation-state-negative]",
-          "hover:caret-[--border-presentation-state-negative]",
+          "border-border-presentation-state-negative",
+          "caret-border-presentation-state-negative",
+          "hover:border-border-presentation-state-negative",
+          "hover:caret-border-presentation-state-negative",
         ],
       },
       disabled: {
         true: [
-          "border-[--border-presentation-action-disabled]",
-          "bg-[--background-presentation-action-disabled]",
+          "border-border-presentation-action-disabled",
+          "bg-background-presentation-action-disabled",
         ],
       },
       size: {
@@ -102,10 +102,10 @@ export const inputFieldStyles = cva(
       {
         disabled: true,
         className: [
-          "border-[--border-presentation-action-disabled]",
-          "bg-[--background-presentation-action-disabled]",
-          "hover:border-[--border-presentation-action-disabled]",
-          "hover:bg-[--background-presentation-action-disabled]",
+          "border-border-presentation-action-disabled",
+          "bg-background-presentation-action-disabled",
+          "hover:border-border-presentation-action-disabled",
+          "hover:bg-background-presentation-action-disabled",
         ],
       },
       {
@@ -126,7 +126,7 @@ export const iconContainerStyles = cva(
     "transition-[background,background-color,border] duration-200 ease-in-out",
     "leading-0",
     "text-[16px]",
-    "text-[--content-presentation-action-light-secondary]",
+    "text-content-presentation-action-light-secondary",
   ],
   {
     variants: {

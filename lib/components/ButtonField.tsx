@@ -20,11 +20,11 @@ const ButtonField: React.FC<Props> = ({
       className={cn("flex items-center gap-2 flex-1", className)}
     >
       {withDivider && (
-        <div className="flex border-t border-solid border-[--border-presentation-global-primary] flex-1 px-2" />
+        <div className="flex border-t border-solid border-border-presentation-global-primary flex-1 px-2" />
       )}
       {children}
       {withDivider && (
-        <div className="flex border-t border-solid border-[--border-presentation-global-primary] flex-1 px-2" />
+        <div className="flex border-t border-solid border-border-presentation-global-primary flex-1 px-2" />
       )}
     </section>
   );

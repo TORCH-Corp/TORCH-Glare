@@ -9,15 +9,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: [
-          "bg-[--background-system-body-primary]",
-          "text-[--content-system-global-primary]",
-          "border-[--border-system-global-primary]",
+          "bg-background-system-body-primary",
+          "text-content-system-global-primary",
+          "border-border-system-global-primary",
           "hover:border-[#9748FF]",
         ],
         noBg: [
           "bg-transparent",
-          "border-[--border-system-global-primary]",
-          "text-[--content-system-global-primary]",
+          "border-border-system-global-primary",
+          "text-content-system-global-primary",
           "hover:border-[#9748FF]",
           "no-underline",
         ],

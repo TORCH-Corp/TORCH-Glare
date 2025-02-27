@@ -5,12 +5,12 @@ import { cn } from "../utils/cn";
 // Link button base styles
 export const linkButtonStyles = cva(
   [
-    "bg-[--background-presentation-action-link-primary] w-fit",
+    "bg-background-presentation-action-link-primary w-fit",
     "flex items-center justify-center",
     "rounded-[6px]",
     "p-[2px]",
-    "text-[--content-presentation-action-link]",
-    "hover:bg-[--background-presentation-action-link-hover] hover:px-[2px]",
+    "text-content-presentation-action-link",
+    "hover:bg-background-presentation-action-link-hover hover:px-[2px]",
     "transition-all duration-250 ease-in-out",
     "group", // Add group class here
   ],
@@ -48,7 +48,7 @@ export const LinkButton: React.FC<Props> = ({ theme, size = "S", ...props }) => 
       <div
         className={cn(
           "rounded-[4px]",
-          "bg-[--background-presentation-state-information-primary]",
+          "bg-background-presentation-state-information-primary",
           "transition-all duration-[100] ease-in-out",
           "h-0 w-0  p-0",
           "opacity-0 group-hover:opacity-100",

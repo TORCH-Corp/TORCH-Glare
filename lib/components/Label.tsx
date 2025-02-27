@@ -61,7 +61,7 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
                 "typography-body-large-regular": size === "L",
               },
               {
-                "text-[--content-presentation-global-primary]":
+                "text-content-presentation-global-primary":
                   variant === "PresentationStyle",
                 "text-[#E5E5E5]": variant === "SystemStyle",
               }
@@ -73,7 +73,7 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
         {secondaryLabel && (
           <p
             className={cn(
-              "text-[--content-presentation-global-secondary] text-start",
+              "text-content-presentation-global-secondary text-start",
               {
                 "typography-labels-small-regular": size === "S",
                 "typography-labels-medium-regular": size === "M",
@@ -87,7 +87,7 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
         {requiredLabel && (
           <p
             className={cn(
-              "text-[--content-presentation-state-negative] text-start",
+              "text-content-presentation-state-negative text-start",
               {
                 "typography-labels-small-medium": size === "S",
                 "typography-labels-medium-medium": size === "M",

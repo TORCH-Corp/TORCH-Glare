@@ -27,7 +27,7 @@ export function FieldSection({
       {...props}
       data-theme={theme}
       className={cn(
-        "grid grid-cols-[350px_1fr] gap-[12px] border-t border-[--border-presentation-global-primary] py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] sm:gap-[24px]",
+        "grid grid-cols-[350px_1fr] gap-[12px] border-t border-border-presentation-global-primary py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] sm:gap-[24px]",
         className
       )}
     >

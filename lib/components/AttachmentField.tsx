@@ -6,13 +6,13 @@ import { cn } from "../utils/cn";
 const dropZoneStyles = cva(
   [
     "w-full min-w-[200px] h-[65px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ",
-    "!border-[var(--border-presentation-action-borderstyle)] bg-[var(--background-presentation-badge-gray)]",
-    "hover:border-[var(--border-presentation-action-borderstyle)]  hover:bg-[var(--background-presentation-badge-gray)]",
+    "!border-border-presentation-action-borderstyle bg-background-presentation-badge-gray",
+    "hover:border-border-presentation-action-borderstyle  hover:bg-background-presentation-badge-gray",
   ],
   {
     variants: {
       active: {
-        true: "bg-[var(--background-presentation-action-hovercontstyle)] border-[var(--border-presentation-badge-gray)]",
+        true: "bg-background-presentation-action-hovercontstyle border-border-presentation-badge-gray",
       },
     },
   }
@@ -49,10 +49,10 @@ export const AttachmentField = forwardRef<HTMLInputElement, Props>(
         {...getRootProps?.()}
         className={cn(dropZoneStyles({ active: isDropAreaActive }))}
       >
-        <h1 className="text-[--content-presentation-action-light-primary] typography-body-large-medium">
+        <h1 className="text-content-presentation-action-light-primary typography-body-large-medium">
           {mainLabel}
         </h1>
-        <p className="text-[--content-presentation-action-light-secondary] typography-body-small-medium">
+        <p className="text-content-presentation-action-light-secondary typography-body-small-medium">
           {secondaryLabel}
         </p>
         <input ref={ref} {...props} {...getInputProps?.()} type="file" hidden />

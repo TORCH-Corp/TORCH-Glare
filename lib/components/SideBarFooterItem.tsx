@@ -12,8 +12,8 @@ export const glareFeedbackItem = cva(
   [
     "h-10 w-full flex justify-center items-center rounded px-2",
     "transition-all duration-200 ease-in-out border-none outline outline-1 outline-transparent bg-transparent",
-    "focus:bg-[var(--background-system-action-selected-primary)]",
-    "active:bg-[var(--background-system-action-selected-primary)]",
+    "focus:bg-background-system-action-selected-primary",
+    "active:bg-background-system-action-selected-primary",
     "hover:bg-[var(--background-system-action-hover-primary,#181323)]",
   ],
   {
