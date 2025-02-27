@@ -129,7 +129,7 @@ export function detectPackageManager() {
  * Get the installed dependencies from the project's package.json.
  * @returns {Set<string>} - Set of installed dependencies.
  */
-function getCurrentInstalledDependencies() {
+export function getCurrentInstalledDependencies() {
   const packageJsonPath = path.join(process.cwd(), "package.json");
   if (!fs.existsSync(packageJsonPath)) {
     console.error("❌ No package.json found. Run `npm init` or `yarn init` first.");
@@ -137,10 +137,17 @@ function getCurrentInstalledDependencies() {
   }
 
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-  return new Set([
+
+  const depsNames = new Set([
     ...Object.keys(packageJson.dependencies || {}),
     ...Object.keys(packageJson.devDependencies || {}),
   ]);
+
+  const depsNamesAndVersions = {
+    ...(packageJson.dependencies || {}),
+    ...(packageJson.devDependencies || {}),
+  };
+  return { depsNames, depsNamesAndVersions }
 }
 
 /**
@@ -195,10 +202,10 @@ function getDependenciesToInstall(componentPath, installedDependencies, addFunct
  * @param {string} componentPath - Path to the component file.
  */
 export function installDependencies(componentPath, addFunction) {
-  const installedDependencies = getCurrentInstalledDependencies();
+  const { depsNames } = getCurrentInstalledDependencies();
   const dependenciesToInstall = getDependenciesToInstall(
     componentPath,
-    installedDependencies,
+    depsNames,
     addFunction // Pass addFunction here
   );
 

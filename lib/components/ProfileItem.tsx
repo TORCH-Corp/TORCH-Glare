@@ -5,11 +5,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 
 // Define the base styles and variants using `cva`
 export const profileItemStyles = cva(
-    "flex items-center justify-between group w-full p-[6px] outline-none rounded-[8px] fucus:bg-[--background-system-action-primary-selected] active:bg-[--background-system-action-primary-selected] transition-all ease-in-out duration-150",
+    "flex items-center justify-between group w-full p-[6px] outline-none rounded-[8px] fucus:bg-background-system-action-primary-selected active:bg-background-system-action-primary-selected transition-all ease-in-out duration-150",
     {
         variants: {
             selected: {
-                true: "bg-[--background-system-action-primary-selected]",
+                true: "bg-background-system-action-primary-selected",
             }
         },
     }
@@ -64,7 +64,7 @@ export const ProfileItem: React.FC<ProfileItemProps> = ({
 
                         <p
                             className={cn(
-                                "typography-body-medium-medium text-[--content-system-global-primary]",
+                                "typography-body-medium-medium text-content-system-global-primary",
                             )}
                         >
                             {label}
@@ -72,7 +72,7 @@ export const ProfileItem: React.FC<ProfileItemProps> = ({
                     </div>
 
 
-                    <i className={cn("ri-arrow-down-s-line text-[18px] text-[--content-system-global-primary] group-hover:text-[#9748FF] transition-all ease-in-out duration-150", { "rotate-180": isOpen && popoverChildren })}></i>
+                    <i className={cn("ri-arrow-down-s-line text-[18px] text-content-system-global-primary group-hover:text-[#9748FF] transition-all ease-in-out duration-150", { "rotate-180": isOpen && popoverChildren })}></i>
                 </button>
             </PopoverTrigger>
             {

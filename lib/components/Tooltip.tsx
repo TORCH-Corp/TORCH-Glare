@@ -15,7 +15,7 @@ export enum ContentAlign {
 const tooltipStyles = cva("typography-body-medium-regular rounded-[4px] p-1", {
   variants: {
     variant: {
-      primary: "bg-[--background-system-body-tertiary] text-[--content-system-global-primary]",
+      primary: "bg-background-system-body-tertiary text-content-system-global-primary",
       highlight: "bg-gradient-to-r from-wavy-navy-900 to-wavy-navy-800 text-white"
     },
   },
@@ -75,7 +75,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           {...props}
         >
           {text}
-          {tip && <RadixTooltip.Arrow className={cn("fill-[--background-system-body-tertiary]", {
+          {tip && <RadixTooltip.Arrow className={cn("fill-background-system-body-tertiary", {
             "fill-wavy-navy-900": variant === "highlight"
           })} />}
         </RadixTooltip.Content>
