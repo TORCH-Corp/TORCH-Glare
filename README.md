@@ -14,15 +14,34 @@ Welcome to the **TORCH Glare Components Library**! This library provides a colle
 ## Installation
 
 
-### 1. Initialize Your Project.
+## 1. Initialize Your Project
 
-To install and manage components, use the **TorchCorp CLI**. First, initialize the library by running:
+To install the TORCH Glare Components Library, run the following command:
 
 ```sh
 npx torchcorp@latest init
 ```
 
-This creates a `torch.json` configuration file and `tailwindcss` configuration file or modify, which is required to manage components.
+This command will:
+- Create or modify the `tailwind.config.js` file to support Tailwind CSS for Tailwind versions less then 4.
+- Generate a `torch.json` file where you can customize the installation path for components.
+
+### Tailwind CSS Requirement
+Ensure that Tailwind CSS is installed in your project before running the initialization command.
+
+## 2. Add Essential Plugins for Tailwind CSS
+
+If you're using Tailwind CSS version 4 or above, add the following plugins to your global CSS file:
+
+```css
+@import "tailwindcss";
+/* Essential plugins */
+@plugin 'glare-typography';
+@plugin 'glare-themes';
+@plugin 'glare-torch-mode';
+@plugin 'tailwind-scrollbar-hide';
+@plugin 'tailwindcss-animate';
+```
 
 
 ### 2. Add Remix Icon Library
@@ -41,7 +60,17 @@ Include the following in `index.html` or nextjs `layout.tsx` or meta data for ic
 
 ```
 
-### 3. Add Components
+## 3. Configure Installation Path
+
+Adjust the `torch.json` file to specify where you want to install components:
+
+```json
+{
+  "path": "./src" // The directory where components will be installed
+}
+```
+
+### 4. Add Components
 To add a specific component, run:
 
 ```sh
@@ -174,4 +203,5 @@ We welcome contributions! Follow these steps:
 ## License
 
 This project is licensed under the **MIT License**.
+
 
