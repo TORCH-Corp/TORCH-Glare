@@ -212,7 +212,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             children as React.ReactElement,
             {},
             <>
-              {(children as React.ReactElement).props.children}
+              {(children as React.ReactElement<any>).props.children}
               {is_loading && <LoadingIcon size={size} />}
             </>
           )

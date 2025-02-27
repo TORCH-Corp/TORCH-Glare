@@ -152,7 +152,7 @@ const TableHead = React.forwardRef<
     { className, size = "M", disabled, sortType, onSort, isDummy, ...props },
     forwardedRef
   ) => {
-    const headRef = useRef<HTMLTableCellElement>(null);
+    const headRef = useRef<any>(null);
     const { width, handleStartResize } = useResize(headRef);
 
     // Combine refs using useEffect
