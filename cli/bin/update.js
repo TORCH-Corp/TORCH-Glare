@@ -4,7 +4,7 @@ import { getConfig } from "./cli.js";
 import { addComponent, copyDirectorySync, getComponentPaths, installDependencies } from "./addComponent.js";
 import { tailwindInit } from "./init/tailwindInit.js";
 import { fileURLToPath } from "url";
-
+import readline from "readline";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -13,11 +13,31 @@ const __dirname = path.dirname(__filename);
 
 // Define the path to the templates directory
 const templatesDir = path.resolve(__dirname, "../../lib");
+
 /**
  * Update all installed components, hooks, and utility files by syncing them with the latest templates.
  */
 export async function updateInstalledComponents() {
   const config = getConfig();
+
+  // Ask the user if they are sure about updating
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  const answer = await new Promise((resolve) => {
+    rl.question("Are you sure you want to update all installed components, hooks, and utils? (y/n): ", (input) => {
+      resolve(input.trim().toLowerCase());
+    });
+  });
+
+  rl.close();
+
+  if (answer !== "y") {
+    console.log("Update cancelled.");
+    return;
+  }
 
   // Update components
   await updateItems("components", config);
