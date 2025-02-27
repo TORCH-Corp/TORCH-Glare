@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
-import { detectPackageManager } from "../addComponent.js";
+import { detectPackageManager, getCurrentInstalledDependencies } from "../addComponent.js";
 
 const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 
@@ -87,6 +87,7 @@ function createTailwindConfig() {
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./features/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./layout/**/*.{js,ts,jsx,tsx,mdx}",
       ],
       theme: {
         extend: {},
@@ -127,6 +128,24 @@ function modifyTailwindConfig() {
   fs.writeFileSync(tailwindConfigPath, tailwindConfigContent);
 }
 
+
+/**
+ * Checks if the installed Tailwind CSS version is less than v4.
+ * @param {string} version - The version string of Tailwind CSS.
+ * @returns {boolean} - True if the version is less than v4, otherwise false.
+ */
+function isTailwindVersionLessThanV4(version) {
+  if (!version) {
+    console.warn("⚠️ Tailwind CSS is not installed.");
+    return false; // Assume it needs to be installed
+  }
+
+  // Extract the major version number
+  const majorVersion = parseInt(version.replace(/^[^0-9]*/, "").split(".")[0], 10);
+  return majorVersion < 4;
+}
+
+
 export function tailwindInit() {
   const dependencies = [
     "tailwindcss-animate",
@@ -136,9 +155,20 @@ export function tailwindInit() {
     "glare-torch-mode",
   ];
   installDependencies(dependencies);
-  if (!fs.existsSync(tailwindConfigPath)) {
-    createTailwindConfig();
-  } else {
-    modifyTailwindConfig();
+
+  const { depsNamesAndVersions } = getCurrentInstalledDependencies()
+  if (depsNamesAndVersions["tailwindcss"]) {
+    const tailwindVersion = depsNamesAndVersions["tailwindcss"]
+    if (isTailwindVersionLessThanV4(tailwindVersion)) {
+      if (!fs.existsSync(tailwindConfigPath)) {
+        createTailwindConfig();
+      } else {
+        modifyTailwindConfig();
+      }
+    }
   }
+
+
+
+
 }
