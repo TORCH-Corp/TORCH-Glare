@@ -8,6 +8,7 @@ import { addHook } from "./addHooks.js";
 import { updateInstalledComponents } from "./update.js";
 import { addUtil } from "./addUtils.js";
 import { addProvider } from "./addProvider.js";
+import { addLayout } from "./addLayout.js";
 
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
@@ -46,6 +47,11 @@ program
   .command("add-hook [hook]")
   .description("Add a hook interactively or install a specified one")
   .action((hook) => addHook(hook && `${hook}`));
+
+program
+  .command("add-layout [layout]")
+  .description("Add a Layout interactively or install a specified one")
+  .action((layout) => addLayout(layout && `${layout}`));
 
 program
   .command("add-util [util]")

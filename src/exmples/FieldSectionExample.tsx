@@ -1,5 +1,5 @@
 import { Alert } from "@/components/Alert";
-import { FieldSection } from "@/components/FieldSection";
+import { FieldSection } from "@/layouts/FieldSection";
 import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";

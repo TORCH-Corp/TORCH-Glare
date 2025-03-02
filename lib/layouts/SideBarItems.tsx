@@ -2,8 +2,8 @@ import { cn } from '@/utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, VariantProps } from 'class-variance-authority';
 import React, { ButtonHTMLAttributes, ReactNode } from 'react'
-import Counter from './Counter';
-import { Tooltip } from './Tooltip';
+import Counter from '../components/Counter';
+import { Tooltip } from '../components/Tooltip';
 
 const SideBarItemStyles = cva([
     "h-[40px] w-full px-[14px] flex gap-[6px] typography-body-small-medium justify-start items-center",
