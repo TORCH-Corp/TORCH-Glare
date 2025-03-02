@@ -6,7 +6,7 @@ import { cn } from "../utils/cn";
 const inputFieldStyles = cva(
   [
     "typography-body-small-regular",
-    "text-[--content-presentation-action-light-primary]",
+    "text-content-presentation-action-light-primary",
     "bg-transparent",
     "h-full",
     "px-[4px]",
@@ -16,7 +16,7 @@ const inputFieldStyles = cva(
     "transition-all duration-200 ease-in-out",
     "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)]",
     "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]",
-    "hover:placeholder:text-[--content-presentation-action-light-primary]",
+    "hover:placeholder:text-content-presentation-action-light-primary",
   ],
   {
     variants: {

@@ -29,13 +29,13 @@ const dropdownMenuStyles = cva(
     variants: {
       variant: {
         SystemStyle: [
-          "border-[--border-system-global-secondary]",
-          "bg-[--background-system-body-primary]",
+          "border-border-system-global-secondary",
+          "bg-background-system-body-primary",
           "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
         ],
         PresentationStyle: [
-          "border-[--border-presentation-global-primary]",
-          "bg-[--background-presentation-form-base]",
+          "border-border-presentation-global-primary",
+          "bg-background-presentation-form-base",
           "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
         ],
       },
@@ -172,7 +172,7 @@ export { Popover, PopoverTrigger, PopoverContent, PopoverItem };
 
 export const PopoverItemStyles = cva(
   [
-    "text-[--content-presentation-action-light-primary]",
+    "text-content-presentation-action-light-primary",
     "outline-none",
     "border",
     "border-transparent",
@@ -192,45 +192,45 @@ export const PopoverItemStyles = cva(
     variants: {
       variant: {
         Default: [
-          "text-[--content-presentation-action-light-primary]",
-          "bg-[--background-presentation-action-dropdown-primary]",
-          "hover:bg-[--background-presentation-action-hover]",
-          "hover:text-[--content-presentation-action-hover]",
-          "focus:bg-[--background-presentation-action-selected]",
-          "focus:text-[--content-presentation-action-light-primary]",
-          "active:border-[--border-presentation-action-disabled]",
-          "active:bg-[--background-presentation-action-selected]",
-          "active:text-[--content-presentation-action-light-primary]",
-          "active:border-[--border-presentation-action-disabled]",
-          "disabled:text-[--content-presentation-state-disabled]",
-          "disabled:bg-[--white-00]",
+          "text-content-presentation-action-light-primary",
+          "bg-background-presentation-action-dropdown-primary",
+          "hover:bg-background-presentation-action-hover",
+          "hover:text-content-presentation-action-hover",
+          "focus:bg-background-presentation-action-selected",
+          "focus:text-content-presentation-action-light-primary",
+          "active:border-border-presentation-action-disabled",
+          "active:bg-background-presentation-action-selected",
+          "active:text-content-presentation-action-light-primary",
+          "active:border-border-presentation-action-disabled",
+          "disabled:text-content-presentation-state-disabled",
+          "disabled:bg-white-00",
         ],
         Warning: [
-          "bg-[--background-presentation-action-dropdown-primary]",
-          "text-[--content-presentation-state-information]",
-          "hover:bg-[--background-presentation-state-information-primary]",
-          "hover:text-[--content-presentation-action-hover]",
+          "bg-background-presentation-action-dropdown-primary",
+          "text-content-presentation-state-information",
+          "hover:bg-background-presentation-state-information-primary",
+          "hover:text-content-presentation-action-hover",
         ],
         Negative: [
-          "bg-[--background-presentation-action-dropdown-primary]",
-          "text-[--content-presentation-state-negative]",
-          "hover:bg-[--background-presentation-state-negative-primary]",
-          "hover:!text-[--content-presentation-action-hover]",
-          "focus:text-[--content-presentation-state-negative]",
-          "active:text-[--content-presentation-state-negative]",
+          "bg-background-presentation-action-dropdown-primary",
+          "text-content-presentation-state-negative",
+          "hover:bg-background-presentation-state-negative-primary",
+          "hover:!text-content-presentation-action-hover",
+          "focus:text-content-presentation-state-negative",
+          "active:text-content-presentation-state-negative",
         ],
         SystemStyle: [
-          "bg-[--background-system-body-primary]",
-          "text-[--content-system-global-primary]",
-          "hover:!bg-[--background-system-action-secondary-hover]",
-          "hover:!text-[--content-system-action-primary-hover]",
-          "hover:!border-[--border-system-action-primary-hover]",
-          "focus:bg-[--background-System-Action-Primary-Selected]",
+          "bg-background-system-body-primary",
+          "text-content-system-global-primary",
+          "hover:!bg-background-system-action-secondary-hover",
+          "hover:!text-content-system-action-primary-hover",
+          "hover:!border-border-system-action-primary-hover",
+          "focus:bg-background-System-Action-Primary-Selected",
           "focus:border-transparent",
           "active:border-transparent",
-          "active:bg-[--background-System-Action-Primary-Selected]",
-          "disabled:bg-[--background-system-body-secondary]",
-          "disabled:text-[--content-system-global-disabled]",
+          "active:bg-background-System-Action-Primary-Selected",
+          "disabled:bg-background-system-body-secondary",
+          "disabled:text-content-system-global-disabled",
         ],
       },
       size: {
@@ -240,15 +240,15 @@ export const PopoverItemStyles = cva(
 
       disabled: {
         true: [
-          "text-[--content-presentation-state-disabled]",
-          "bg-[--white-00]",
+          "text-content-presentation-state-disabled",
+          "bg-white-00",
         ],
       },
 
       active: {
         true: [
-          "bg-[--background-presentation-action-selected]",
-          "text-[--content-presentation-action-light-primary]",
+          "bg-background-presentation-action-selected",
+          "text-content-presentation-action-light-primary",
         ],
       },
 
@@ -263,7 +263,7 @@ export const PopoverItemStyles = cva(
       {
         active: true,
         variant: "Warning",
-        className: ["text-[--content-presentation-state-negative]"],
+        className: ["text-content-presentation-state-negative"],
       },
     ],
   }

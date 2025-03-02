@@ -8,8 +8,8 @@ export const glareCounterStyles = cva(
     "flex justify-center items-center",
     "w-[14px] h-[14px]",
     "rounded-full",
-    "border border-[--background-system-body-primary]",
-    "bg-[--background-system-state-negative]",
+    "border border-background-system-body-primary",
+    "bg-background-system-state-negative",
     "text-[8px]",
     "text-white",
     "overflow-hidden",
@@ -18,7 +18,7 @@ export const glareCounterStyles = cva(
   {
     variants: {
       variant: {
-        default: "bg-[var(--background-system-state-negative)]",
+        default: "bg-background-system-state-negative",
       },
     },
     defaultVariants: {
