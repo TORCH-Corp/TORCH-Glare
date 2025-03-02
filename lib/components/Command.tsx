@@ -1,6 +1,6 @@
 "use client"; // Mark this component as a Client Component
 
-import React, { HTMLAttributes, useCallback, useState } from 'react';
+import { HTMLAttributes, useCallback, useState } from 'react';
 import { Button } from './Button';
 import { cn } from '../utils/cn';
 
