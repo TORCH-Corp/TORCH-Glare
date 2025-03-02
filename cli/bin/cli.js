@@ -51,7 +51,7 @@ program
 program
   .command("add-layout [layout]")
   .description("Add a Layout interactively or install a specified one")
-  .action((layout) => addLayout(layout && `${layout}`));
+  .action((layout) => addLayout(layout && `${layout}.tsx`));
 
 program
   .command("add-util [util]")

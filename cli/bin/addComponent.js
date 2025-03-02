@@ -187,11 +187,18 @@ function getDependenciesToInstall(componentPath, installedDependencies, addFunct
     }
     // install required components
     else if (
-      moduleName.startsWith("./") &&
-      !moduleName.startsWith("./components") &&
+      moduleName.startsWith("./") ||
+      !moduleName.startsWith("../components") &&
       !installedDependencies.has(moduleName)
     ) {
-      addFunction(moduleName.slice(2) + ".tsx"); // Use addFunction here
+      addComponent(moduleName.slice(2) + ".tsx"); // Use addFunction here
+    }
+    // install required for layouts components
+    else if (
+      moduleName.startsWith("../components") &&
+      !installedDependencies.has(moduleName)
+    ) {
+      addComponent(moduleName.slice(14) + ".tsx"); // Use addFunction here
     }
   }
 
