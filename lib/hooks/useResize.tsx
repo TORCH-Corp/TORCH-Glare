@@ -13,10 +13,9 @@ export const useResize = (
 ) => {
     const [width, setWidth] = useState<number>();
     const [isResizing, setIsResizing] = useState<boolean>(false);
+    const [isRTL, setIsRTL] = useState<boolean>(false);
 
-    // Determine the direction of the document
-    const htmlDir = document.documentElement.getAttribute("dir") || "ltr";
-    const isRtl = htmlDir === "rtl";
+
 
     // Start the resize process
     const handleStartResize = () => {
@@ -31,7 +30,7 @@ export const useResize = (
     // Handle mouse move events
     const handleMouseMove = (event: MouseEvent) => {
         if (!isResizing) return;
-        const newWidth = calculateNewWidthFromMouse(event, resizableRef, isRtl);
+        const newWidth = calculateNewWidthFromMouse(event, resizableRef, isRTL);
         setWidth(newWidth);
     };
 
@@ -39,9 +38,18 @@ export const useResize = (
     const handleTouchMove = (event: TouchEvent) => {
         if (!isResizing) return;
         event.preventDefault(); // Prevent scrolling or other touch-related behaviors
-        const newWidth = calculateNewWidthFromTouch(event, resizableRef, isRtl);
+        const newWidth = calculateNewWidthFromTouch(event, resizableRef, isRTL);
         setWidth(newWidth);
     };
+
+    useEffect(() => {
+        let htmlDir = ''
+        if (document) {
+            htmlDir = document.documentElement.getAttribute("dir") || "ltr"
+        }
+        // Determine the direction of the document
+        setIsRTL(htmlDir === "rtl");
+    }, []);
 
     useEffect(() => {
         if (!resizableRef.current) return;
@@ -59,7 +67,7 @@ export const useResize = (
             document.removeEventListener("touchmove", handleTouchMove);
             document.removeEventListener("touchend", handleStopResize);
         };
-    }, [isResizing, isRtl]); // Depend on `isRtl` to handle direction changes dynamically
+    }, [isResizing, isRTL]); // Depend on `isRtl` to handle direction changes dynamically
 
     return {
         width,

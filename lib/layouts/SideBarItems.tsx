@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, VariantProps } from 'class-variance-authority';
 import React, { ButtonHTMLAttributes, ReactNode } from 'react'

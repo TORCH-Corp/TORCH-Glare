@@ -1,6 +1,6 @@
 import { Codeblock } from '@/components/CodeBlock'
 import TabFormItem from '@/components/TabFormItem'
-import { cn } from '@/utils/cn'
+import { cn } from '../utils/cn'
 import { HTMLAttributes, ReactNode, useState } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

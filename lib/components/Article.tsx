@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 
 interface Props extends HTMLAttributes<HTMLTitleElement> {
