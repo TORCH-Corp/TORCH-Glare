@@ -43,14 +43,14 @@ export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, 
           const isCurrentMonth = getMonth(date) === getMonth(startDate || new Date());
           const isSelected = startDate && isSameDay(date, startDate);
           return cn(
-            "w-[29px] h-[29px] bg-transparent rounded-[6px] border border-transparent !text-content-system-global-disabled text-[10px] leading-0 hover:border-border-system-action-secondary-hover hover:!bg-background-system-action-primary-hover",
+            "w-[29px] h-[29px] bg-transparent rounded-[6px] border border-transparent !text-[--content-system-global-disabled] text-[10px] leading-0 hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover]",
             {
-              "!bg-background-system-body-secondary !text-content-system-global-primary": isCurrentMonth,
-              "!border-border-system-action-secondary-hover !bg-background-system-action-secondary-hover hover:!bg-background-system-action-secondary-hover": isSelected,
+              "!bg-[--background-system-body-secondary] !text-[--content-system-global-primary]": isCurrentMonth,
+              "!border-[--border-system-action-secondary-hover] !bg-[--background-system-action-secondary-hover] hover:!bg-[--background-system-action-secondary-hover]": isSelected,
             }
           );
         }}
-        calendarClassName="custom-datepicker border-none  bg-background-system-body-base rounded-[12px] shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]"
+        calendarClassName="custom-datepicker border-none  bg-[--background-system-body-base] rounded-[12px] shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]"
         renderCustomHeader={({
           date,
           changeYear,
@@ -138,11 +138,11 @@ export const CustomDatePickerHeader = ({
   };
 
   return (
-    <div dir="ltr" className="w-full flex justify-center items-center flex-col bg-background-system-body-base h-full px-[6px] pt-[6px] rounded-[12px]">
+    <div dir="ltr" className="w-full flex justify-center items-center flex-col bg-[--background-system-body-base] h-full px-[6px] pt-[6px] rounded-[12px]">
       <div className="flex justify-between items-center flex-1 w-full">
         <Button
           variant={"PrimeStyle"}
-          className="hover:border-border-system-action-secondary-hover hover:!bg-background-system-action-primary-hover focus:!border-transparent"
+          className="hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover] focus:!border-transparent"
           buttonType={"icon"}
           size={"M"}
           onClick={() => {
@@ -205,7 +205,7 @@ export const CustomDatePickerHeader = ({
         <Button
           type="button"
           variant={"PrimeStyle"}
-          className="hover:border-border-system-action-secondary-hover hover:!bg-background-system-action-primary-hover focus:!border-transparent"
+          className="hover:border-[--border-system-action-secondary-hover] hover:!bg-[--background-system-action-primary-hover] focus:!border-transparent"
           buttonType={"icon"}
           size={"M"}
           onClick={() => {
@@ -229,7 +229,7 @@ export const CustomDatePickerHeader = ({
         </Button>
       </div>
 
-      <div className="flex justify-center items-center w-full gap-[19px] mt-[10px] [&>p]:text-content-presentation-global-highlight-darkback typography-body-small-medium">
+      <div className="flex justify-center items-center w-full gap-[19px] mt-[10px] [&>p]:text-[--content-presentation-global-highlight-darkback] typography-body-small-medium">
         {
           ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((e) => {
             return <p>{e}</p>
@@ -244,7 +244,7 @@ export const CustomDatePickerHeader = ({
 
 export const MenuItemStyles = cva(
   [
-    "text-content-presentation-action-light-primary",
+    "text-[--content-presentation-action-light-primary]",
     "outline-none",
     "border",
     "border-transparent",
@@ -264,17 +264,17 @@ export const MenuItemStyles = cva(
     variants: {
       variant: {
         SystemStyle: [
-          "bg-background-system-body-primary",
-          "text-content-system-global-primary",
-          "hover:!bg-background-system-action-secondary-hover",
-          "hover:!text-content-system-action-primary-hover",
-          "hover:!border-border-system-action-primary-hover",
-          "focus:bg-background-System-Action-Primary-Selected",
+          "bg-[--background-system-body-primary]",
+          "text-[--content-system-global-primary]",
+          "hover:!bg-[--background-system-action-secondary-hover]",
+          "hover:!text-[--content-system-action-primary-hover]",
+          "hover:!border-[--border-system-action-primary-hover]",
+          "focus:bg-[--background-System-Action-Primary-Selected]",
           "focus:border-transparent",
           "active:border-transparent",
-          "active:bg-background-System-Action-Primary-Selected",
-          "disabled:bg-background-system-body-secondary",
-          "disabled:text-content-system-global-disabled",
+          "active:bg-[--background-System-Action-Primary-Selected]",
+          "disabled:bg-[--background-system-body-secondary]",
+          "disabled:text-[--content-system-global-disabled]",
         ],
       },
       size: {
@@ -284,15 +284,15 @@ export const MenuItemStyles = cva(
 
       disabled: {
         true: [
-          "text-content-presentation-state-disabled",
-          "bg-white-00",
+          "text-[--content-presentation-state-disabled]",
+          "bg-[--white-00]",
         ],
       },
 
       selected: {
         true: [
-          "bg-background-presentation-action-selected",
-          "text-content-presentation-action-light-primary",
+          "bg-[--background-presentation-action-selected]",
+          "text-[--content-presentation-action-light-primary]",
         ],
       },
 
@@ -324,8 +324,8 @@ export const dropdownMenuStyles = cva(
     variants: {
       variant: {
         SystemStyle: [
-          "border-border-system-global-secondary",
-          "bg-background-system-body-primary",
+          "border-[--border-system-global-secondary]",
+          "bg-[--background-system-body-primary]",
           "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
         ]
       },
@@ -403,11 +403,11 @@ const OptionsValue = ({ inputClassName, options, ...props }: OptionsValueProps) 
       ref={sectionRef}
       className={cn([
         "relative flex justify-between items-center",
-        "bg-black-alpha-20",
+        "bg-[--black-alpha-20]",
         "text-white",
         "border-[#2C2D2E]",
         "hover:border-[#9748FF]",
-        "hover:bg-purple-alpha-10",
+        "hover:bg-[--purple-alpha-10]",
         "typography-body-small-regular leading-0",
         "border",
         "transition-all duration-200 ease-in-out",

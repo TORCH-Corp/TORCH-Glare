@@ -15,12 +15,12 @@ export function AttachedPic({ theme, src, header, onHide, ...props }: Props) {
       {...props}
       data-theme={theme}
       className={cn(
-        " overflow-hidden flex flex-col items-center justify-center w-80 p-2 gap-2 rounded-md border shadow-md border-border-presentation-global-primary bg-background-presentation-form-base",
+        " overflow-hidden flex flex-col items-center justify-center w-80 p-2 gap-2 rounded-md border shadow-md border-[var(--border-presentation-global-primary)] bg-[var(--background-presentation-form-base)]",
         props.className
       )}
     >
       <section className="flex items-center justify-between w-full m-0">
-        <p className="m-0 text-content-presentation-global-primary typography-display-medium-semibold">
+        <p className="m-0 text-[var(--content-presentation-global-primary)] typography-display-medium-semibold">
           {header}
         </p>
         <Button theme={theme} onClick={onHide} size="M" buttonType="icon">

@@ -5,7 +5,7 @@ import { cn } from "../utils/cn";
 export const badgeBase = cva(
   [
     "px-[6px]",
-    "[&_p]:text-content-presentation-action-light-primary",
+    "[&_p]:text-[--content-presentation-action-light-primary]",
     "[&_i]:!leading-0",
     "flex",
     "justify-center",
@@ -31,25 +31,25 @@ export const badgeBase = cva(
           "bg-background-presentation-badge-gray border-transparent px-[3px]"
         ],
         green:
-          "border-border-presentation-badge-green bg-background-presentation-badge-green [&_i]:text-content-presentation-badge-green",
+          "border-[var(--border-presentation-badge-green)] bg-[var(--background-presentation-badge-green)] [&_i]:text-[var(--content-presentation-badge-green)]",
         greenLight:
-          "border-border-presentation-badge-green-light bg-background-presentation-badge-green-light [&_i]:text-content-presentation-badge-green-light",
+          "border-[var(--border-presentation-badge-green-light)] bg-[var(--background-presentation-badge-green-light)] [&_i]:text-[var(--content-presentation-badge-green-light)]",
         cocktailGreen:
-          "border-border-presentation-badge-cocktail-green bg-background-presentation-badge-cocktail-green [&_i]:text-content-presentation-badge-cocktail-green",
+          "border-[var(--border-presentation-badge-cocktail-green)] bg-[var(--background-presentation-badge-cocktail-green)] [&_i]:text-[var(--content-presentation-badge-cocktail-green)]",
         yellow:
-          "border-border-presentation-badge-yellow bg-background-presentation-badge-yellow [&_i]:text-content-presentation-badge-yellow",
+          "border-[var(--border-presentation-badge-yellow)] bg-[var(--background-presentation-badge-yellow)] [&_i]:text-[var(--content-presentation-badge-yellow)]",
         redOrange:
-          "border-border-presentation-badge-red-orange bg-background-presentation-badge-red-orange [&_i]:text-content-presentation-badge-red-orange",
+          "border-[var(--border-presentation-badge-red-orange)] bg-[var(--background-presentation-badge-red-orange)] [&_i]:text-[var(--content-presentation-badge-red-orange)]",
         redLight:
-          "border-border-presentation-badge-red bg-background-presentation-badge-red [&_i]:text-content-presentation-badge-red",
-        rose: "border-border-presentation-badge-rose bg-background-presentation-badge-rose [&_i]:text-content-presentation-badge-rose",
+          "border-[var(--border-presentation-badge-red)] bg-[var(--background-presentation-badge-red)] [&_i]:text-[var(--content-presentation-badge-red)]",
+        rose: "border-[var(--border-presentation-badge-rose)] bg-[var(--background-presentation-badge-rose)] [&_i]:text-[var(--content-presentation-badge-rose)]",
         purple:
-          "border-border-presentation-badge-purple bg-background-presentation-badge-purple [&_i]:text-content-presentation-badge-purple",
+          "border-[var(--border-presentation-badge-purple)] bg-[var(--background-presentation-badge-purple)] [&_i]:text-[var(--content-presentation-badge-purple)]",
         bluePurple:
-          "border-border-presentation-badge-blue-purple bg-background-presentation-badge-blue-purple [&_i]:text-content-presentation-badge-blue-purple",
-        blue: "border-border-presentation-badge-blue bg-background-presentation-badge-blue [&_i]:text-content-presentation-badge-blue",
-        navy: "border-border-presentation-badge-navy bg-background-presentation-badge-navy [&_i]:text-content-presentation-badge-navy",
-        gray: "border-border-presentation-badge-gray bg-background-presentation-badge-gray [&_i]:text-content-presentation-badge-gray",
+          "border-[var(--border-presentation-badge-blue-purple)] bg-[var(--background-presentation-badge-blue-purple)] [&_i]:text-[var(--content-presentation-badge-blue-purple)]",
+        blue: "border-[var(--border-presentation-badge-blue)] bg-[var(--background-presentation-badge-blue)] [&_i]:text-[var(--content-presentation-badge-blue)]",
+        navy: "border-[var(--border-presentation-badge-navy)] bg-[var(--background-presentation-badge-navy)] [&_i]:text-[var(--content-presentation-badge-navy)]",
+        gray: "border-[var(--border-presentation-badge-gray)] bg-[var(--background-presentation-badge-gray)] [&_i]:text-[var(--content-presentation-badge-gray)]",
       },
     },
     defaultVariants: {
@@ -82,7 +82,7 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   return (
-    <span
+    <div
       {...props}
       data-theme={theme}
       className={cn(
@@ -107,9 +107,9 @@ export const Badge: React.FC<BadgeProps> = ({
           onClick={onUnselect}
           className={" rounded-[2px] flex justify-center items-center "}
         >
-          <i className="ri-close-line  !text-content-presentation-action-light-primary"></i>
+          <i className="ri-close-line  !text-[--content-presentation-action-light-primary]"></i>
         </button>
       )}
-    </span>
+    </div>
   );
 };

@@ -65,28 +65,28 @@ export const glareRadioLabelStyles = cva(
     "h-[16px]",
     "rounded-[3px]",
     "border",
-    "border-border-presentation-action-checkbox-primary",
-    "bg-background-presentation-action-borderstyle",
+    "border-[--border-presentation-action-checkbox-primary]",
+    "bg-[--background-presentation-action-borderstyle]",
     "flex",
     "items-center",
     "justify-center",
     "transition-colors",
-    "group-hover:bg-blue-sparkle-alpha-15 group-hover:border-border-presentation-state-focus",
+    "group-hover:bg-[--blue-sparkle-alpha-15] group-hover:border-[--border-presentation-state-focus]",
   ],
   {
     variants: {
       checked: {
         true: [
-          "bg-background-presentation-state-information-primary border-transparent",
-          "group-hover:bg-background-presentation-state-information-primary group-hover:border-transparent",
+          "bg-[--background-presentation-state-information-primary] border-transparent",
+          "group-hover:bg-[--background-presentation-state-information-primary] group-hover:border-transparent",
         ],
       },
       disabled: {
         true: [
-          "border-border-presentation-global-primary",
-          "!bg-background-presentation-action-disabled",
+          "border-[--border-presentation-global-primary]",
+          "!bg-[--background-presentation-action-disabled]",
           "cursor-not-allowed",
-          "hover:!border-border-presentation-global-primary",
+          "hover:!border-[--border-presentation-global-primary]",
         ],
       },
     },

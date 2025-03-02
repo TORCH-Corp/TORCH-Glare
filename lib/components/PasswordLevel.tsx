@@ -24,7 +24,7 @@ export function PasswordLevel({ theme, value, className, ...props }: PassCheckPr
       data-theme={theme}
       {...props}
       className={cn(
-        "bg-background-system-body-secondary rounded-[4px] border border-solid border-border-system-global-primary p-[4px] grid grid-cols-3 gap-[4px] w-full min-w-[50px]",
+        "bg-background-system-body-secondary rounded-[4px] border border-solid border-border-system-global-primary p-[4px] grid grid-cols-3 gap-[4px] w-full ",
         className
       )}
     >

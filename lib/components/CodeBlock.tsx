@@ -43,7 +43,6 @@ const vscodeTheme = {
 
 
 interface Props extends ComponentProps<typeof CopyBlock> {
-    className?: string
     code: any
     language: string
     showLineNumbers: boolean
@@ -59,7 +58,7 @@ export const Codeblock: React.FC<Partial<Props>> = ({ showLineNumbers, language 
             language={language}
             showLineNumbers={showLineNumbers}
             theme={vscodeTheme}
-            customStyle={{ padding: '16px', backgroundColor: 'var(--background-presentation-form-field-primary)', borderRadius: '6px' }}
+            customStyle={{ padding: '16px', backgroundColor: 'var(--background-presentation-form-field-primary)', borderRadius: '6px', overflow: "hidden" }}
         />
     );
 };

@@ -27,7 +27,7 @@ var cssColors = {
 
 */
 
-func main() {
+func UpdateVars() {
 	// Define the input CSS file path
 	cssFilePath := "C:/Users/sajjad/Documents/projects/TORCH-Glare/dark.css"
 

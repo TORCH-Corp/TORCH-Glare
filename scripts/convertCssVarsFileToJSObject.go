@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func main() {
+func ConvertCssVarsFileToJSObject() {
 	// Input and output file paths
 	cssFilePath := "/home/sajjad/TORCH-Glare/src/lib/providers/ThemeProvider/themes/themes/torch.css" // Replace with your CSS file path
 	jsFilePath := "output.js"                                                                         // Replace with your desired JS file path

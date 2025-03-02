@@ -21,15 +21,15 @@ export function Switcher({
       <button
         {...props}
         className={cn(
-          "flex p-[2px] items-center w-[48px] h-[28px] rounded-full bg-background-presentation-switcher-disabled relative transition-all duration-200 overflow-hidden",
+          "flex p-[2px] items-center w-[48px] h-[28px] rounded-full bg-[var(--background-presentation-switcher-disabled)] relative transition-all duration-200 overflow-hidden",
           {
-            "bg-background-presentation-switcher-active": active,
+            "bg-[var(--background-presentation-switcher-active)]": active,
           }
         )}
       >
         <div
           className={cn(
-            "absolute left-[2px] w-[24px] h-[24px] rounded-full bg-background-presentation-switcher-knob shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_3px_8px_0px_rgba(0,0,0,0.15),0px_3px_1px_0px_rgba(0,0,0,0.06)] transition-all duration-200",
+            "absolute left-[2px] w-[24px] h-[24px] rounded-full bg-[var(--background-presentation-switcher-knob)] shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_3px_8px_0px_rgba(0,0,0,0.15),0px_3px_1px_0px_rgba(0,0,0,0.06)] transition-all duration-200",
             {
               "left-[22px]": active,
             }

@@ -17,18 +17,18 @@ export const glareRadioCard = cva(
     "duration-200",
     "relative",
     "p-[16px]",
-    "border-border-presentation-global-primary",
-    "bg-background-presentation-form-radiocard-base",
-    "hover:border-border-presentation-state-focus",
+    "border-[--border-presentation-global-primary]",
+    "bg-[--background-presentation-form-radiocard-base]",
+    "hover:border-[--border-presentation-state-focus]",
   ],
   {
     variants: {
       disabled: {
         true: [
-          "border-border-presentation-global-primary",
-          "!bg-background-presentation-action-disabled",
+          "border-[--border-presentation-global-primary]",
+          "!bg-[--background-presentation-action-disabled]",
           "cursor-not-allowed",
-          "hover:border-border-presentation-global-primary",
+          "hover:border-[--border-presentation-global-primary]",
         ],
       },
     },
@@ -76,7 +76,7 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
 
         <h1
           className={
-            "text-content-presentation-global-primary m-0 typography-headers-medium-semibold"
+            "text-[--content-presentation-global-primary] m-0 typography-headers-medium-semibold"
           }
         >
           {headerLabel}
@@ -86,7 +86,7 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
           {description && (
             <p
               className={
-                "text-content-presentation-global-primary m-0 typography-body-medium-semibold"
+                "text-[--content-presentation-global-primary] m-0 typography-body-medium-semibold"
               }
             >
               {description}

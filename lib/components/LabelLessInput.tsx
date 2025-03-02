@@ -87,7 +87,7 @@ export const LabelLessSection = ({
         className={cn([
           "px-[3px]",
           "typography-body-small-regular",
-          "text-content-presentation-global-primary",
+          "text-[--content-presentation-global-primary]",
           "flex",
           "items-center",
         ])}
@@ -97,27 +97,27 @@ export const LabelLessSection = ({
             "transition-all",
             "duration-300",
             "ease-in-out",
-            { "text-content-presentation-global-secondary": fucus },
+            { "text-[--content-presentation-global-secondary]": fucus },
             { "typography-labels-small-regular": fucus }
           )}
         >
           {label}
         </p>
         {required && (
-          <p className="text-content-presentation-state-negative">*</p>
+          <p className="text-[--content-presentation-state-negative]">*</p>
         )}
       </section>
       <span
         className={cn(
           "w-[1px]",
           "h-[12px]",
-          "bg-border-presentation-action-primary ",
+          "bg-[--border-presentation-action-primary] ",
           "transition-all",
           "duration-300",
           "ease-in-out",
           "rounded-full",
           { "h-[22px]": fucus },
-          { "bg-border-presentation-action-hover": fucus }
+          { "bg-[--border-presentation-action-hover]": fucus }
         )}
       />
     </section>

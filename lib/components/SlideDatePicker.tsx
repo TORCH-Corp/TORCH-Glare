@@ -59,17 +59,17 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
       </PopoverTrigger>
       <PopoverContent data-theme={theme} dir="ltr" variant={props.variant} className="overflow-hidden w-[285px] flex justify-center items-center p-[6px] pt-[30px]">
         <div className="flex justify-evenly items-center w-full absolute top-0 py-[6px]">
-          <p className="text-content-system-global-secondary typography-headers-medium-regular">Year</p>
+          <p className="text-[--content-system-global-secondary] typography-headers-medium-regular">Year</p>
           <div className="flex justify-center items-center self-center">
-            <span className="h-[13px] w-[1px] bg-border-system-global-secondary rounded-[3px]"></span>
-            <p className="text-content-system-global-secondary typography-headers-medium-regular px-[18px]">Month</p>
-            <span className="h-[13px] w-[1px] bg-border-system-global-secondary rounded-[3px]"></span>
+            <span className="h-[13px] w-[1px] bg-[--border-system-global-secondary] rounded-[3px]"></span>
+            <p className="text-[--content-system-global-secondary] typography-headers-medium-regular px-[18px]">Month</p>
+            <span className="h-[13px] w-[1px] bg-[--border-system-global-secondary] rounded-[3px]"></span>
           </div>
-          <p className="text-content-system-global-secondary typography-headers-medium-regular">Day</p>
+          <p className="text-[--content-system-global-secondary] typography-headers-medium-regular">Day</p>
         </div>
         <Picker
           className="flex-1"
-          selectContainerClassName="bg-background-system-body-tertiary z-[-1] rounded-[8px]"
+          selectContainerClassName="bg-[--background-system-body-tertiary] z-[-1] rounded-[8px]"
           value={pickerValue}
           onChange={handlePickerChange}
           wheelMode="natural"
@@ -77,21 +77,21 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
           <Picker.Column name="year" >
             {years.map((year) => (
               <Picker.Item key={year} value={year}>
-                <div className="typography-display-small-semibold text-content-presentation-action-light-primary">{year}</div>
+                <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{year}</div>
               </Picker.Item>
             ))}
           </Picker.Column>
           <Picker.Column name="month">
             {months.map((month, i) => (
               <Picker.Item key={month} value={month}>
-                <div className="typography-display-small-semibold flex gap-1 whitespace-nowrap text-content-presentation-action-light-primary"> <p className='text-content-presentation-action-light-secondary'>{monthsNames[i].substring(0, 3)} - </p>{month}</div>
+                <div className="typography-display-small-semibold flex gap-1 whitespace-nowrap text-[--content-presentation-action-light-primary]"> <p className='text-[--content-presentation-action-light-secondary]'>{monthsNames[i].substring(0, 3)} - </p>{month}</div>
               </Picker.Item>
             ))}
           </Picker.Column>
           <Picker.Column name="day">
             {days.map((day) => (
               <Picker.Item key={day} value={day}>
-                <div className="typography-display-small-semibold text-content-presentation-action-light-primary">{day}</div>
+                <div className="typography-display-small-semibold text-[--content-presentation-action-light-primary]">{day}</div>
               </Picker.Item>
             ))}
           </Picker.Column>

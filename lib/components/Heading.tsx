@@ -8,12 +8,12 @@ const HeadingStyles = cva(" text-content-presentation-global-primary",
     {
         variants: {
             size: {
-                h1: "typography-display-medium-medium",
-                h2: "typography-display-large-medium",
-                h3: "typography-display-medium-medium",
-                h4: "typography-display-small-medium",
-                h5: "typography-display-small-small",
-                h6: "typography-labels-medium-medium",
+                h1: "typography-display-large-semibold",
+                h2: "typography-display-medium-semibold",
+                h3: "typography-display-small-semibold",
+                h4: "typography-headers-large-semibold",
+                h5: "typography-headers-medium-semibold",
+                h6: "typography-headers-small-semibold",
             },
 
         },
@@ -34,7 +34,7 @@ export const Heading = ({
     asChild,
     as: Tag = "h1",
     theme,
-    size = "h3",
+    size = "h2",
     children,
     className,
     ...props
@@ -47,7 +47,7 @@ export const Heading = ({
             {...props}
             data-theme={theme}
             className={cn(HeadingStyles({ size }),
-                className
+                className, "typography-display-large-bold"
             )}
         >
             {children}

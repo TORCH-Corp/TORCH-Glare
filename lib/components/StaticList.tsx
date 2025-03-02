@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode } from 'react'
+import React, { HTMLAttributes, ReactNode } from 'react'
 import { Checkbox } from './CheckboxLabel'
 import { Radio } from './RadioLabel'
 
@@ -25,7 +25,7 @@ export const StaticListItem = ({ type, label, ...props }: ItemProps) => {
         <li {...props} className='w-full flex  items-center justify-center gap-2 overflow-hidden'>
             {type === "checkbox" && <Checkbox checked size='M' />}
             {type === "radio" && < Radio checked size='S' />}
-            <p className='typography-body-medium-semibold text-content-presentation-global-primary w-full whitespace-nowrap text-ellipsis overflow-hidden'>{label}</p>
+            <div className='typography-body-medium-semibold text-content-presentation-global-primary w-full whitespace-nowrap text-ellipsis overflow-hidden'>{label}</div>
             {props.children}
         </li>
     )

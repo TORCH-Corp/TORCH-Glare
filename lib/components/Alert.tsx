@@ -7,13 +7,13 @@ export const glareAlert = cva(
   {
     variants: {
       state: {
-        info: "bg-background-presentation-state-information-secondary [&>section]:bg-background-presentation-state-information-primary [&>section]:text-background-presentation-state-information-secondary",
+        info: "bg-[var(--background-presentation-state-information-secondary)] [&>section]:bg-[var(--background-presentation-state-information-primary)] [&>section]:text-[var(--background-presentation-state-information-secondary)]",
         warning:
-          "bg-background-presentation-state-warning-secondary [&>section]:bg-background-presentation-state-warning-primary [&>section]:text-background-presentation-state-warning-secondary",
+          "bg-[var(--background-presentation-state-warning-secondary)] [&>section]:bg-[var(--background-presentation-state-warning-primary)] [&>section]:text-[var(--background-presentation-state-warning-secondary)]",
         error:
-          "bg-background-presentation-state-negative-secondary [&>section]:bg-background-presentation-state-negative-primary [&>section]:text-background-presentation-state-negative-secondary",
+          "bg-[var(--background-presentation-state-negative-secondary)] [&>section]:bg-[var(--background-presentation-state-negative-primary)] [&>section]:text-[var(--background-presentation-state-negative-secondary)]",
         success:
-          "bg-background-presentation-state-success-secondary [&>section]:bg-background-presentation-state-success-primary [&>section]:text-background-presentation-state-success-secondary",
+          "bg-[var(--background-presentation-state-success-secondary)] [&>section]:bg-[var(--background-presentation-state-success-primary)] [&>section]:text-[var(--background-presentation-state-success-secondary)]",
       },
     },
     defaultVariants: {
@@ -61,7 +61,7 @@ export const Alert: React.FC<Props> = ({
       </section>
       <p
         className={
-          "p-1 word-break-all text-content-presentation-global-primary text-wrap text-start whitespace-pre-wrap text-sm"
+          "p-1 word-break-all text-[var(--content-presentation-global-primary)] text-wrap text-start whitespace-pre-wrap text-sm"
         }
       >
         {label}

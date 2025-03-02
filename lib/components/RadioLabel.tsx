@@ -56,13 +56,13 @@ export const glareRadioLabelStyles = cva(
     "h-[12px]",
     "rounded-full",
     "border",
-    "border-border-presentation-action-checkbox-primary",
-    "bg-background-presentation-action-borderstyle",
+    "border-[--border-presentation-action-checkbox-primary]",
+    "bg-[--background-presentation-action-borderstyle]",
     "transition-[background,border-color,background-color] duration-200",
-    "hover:bg-blue-sparkle-alpha-15 hover:border-border-presentation-state-focus",
+    "hover:bg-[--blue-sparkle-alpha-15] hover:border-[--border-presentation-state-focus]",
     "appearance-none",
-    "checked:border-background-presentation-state-information-primary checked:hover:bg-white checked:bg-white",
-    "disabled:bg-background-presentation-action-disabled disabled:border-border-presentation-global-primary",
+    "checked:border-[--background-presentation-state-information-primary] checked:hover:bg-white checked:bg-white",
+    "disabled:bg-[--background-presentation-action-disabled] disabled:border-[--border-presentation-global-primary]",
     "disabled:cursor-not-allowed",
   ],
   {
@@ -103,5 +103,4 @@ export const Radio = forwardRef<HTMLInputElement, Props>(
     );
   }
 );
-
 Radio.displayName = "Radio";

@@ -13,7 +13,7 @@ export const CodeBlockAndPreview = ({ previewComponent, header, code, ...props }
 
     const [preview, setPreview] = useState(true)
     return (
-        <div {...props} className={cn("flex flex-col w-full gap-[16px] overflow-hidden")}>
+        <div {...props} className={cn("flex flex-col w-full flex-1 gap-[16px] overflow-hidden")}>
 
             <div className='flex w-full justify-between items-center border-b border-border-presentation-global-primary p-2'>
                 <p className='text-content-presentation-global-secondary  typography-headers-large-medium whitespace-nowrap'>{header}</p>
@@ -26,7 +26,7 @@ export const CodeBlockAndPreview = ({ previewComponent, header, code, ...props }
             </div>
             {
                 preview ?
-                    <div className='bg-background-presentation-form-field-primary w-full flex justify-center items-center rounded-[6px] p-[16px] min-h-[230px] gap-2'>
+                    <div className={cn('bg-background-presentation-form-field-primary w-full flex-1  flex justify-center items-center rounded-[6px] p-[16px] min-h-[230px] gap-2 overflow-auto', props.className)}>
                         {previewComponent}
                     </div> :
                     <Codeblock

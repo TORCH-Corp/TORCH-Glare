@@ -4,19 +4,19 @@ import { cva, VariantProps } from "class-variance-authority";
 import { useRef } from "react";
 import { Button } from "./Button";
 import { Checkbox } from "./CheckboxLabel";
-import { useResize } from "../hooks/useResize.tsx";
+import { useResize } from "../hooks/useResize";
 
 const tableHeadVariants = cva(
   [
-    "text-content-presentation-global-primary",
+    "text-[--content-presentation-global-primary]",
     "px-[8px]",
     "w-full",
     "flex",
     "items-center",
     "justify-center",
     "text-start",
-    "hover:bg-background-presentation-action-hover",
-    "hover:text-content-presentation-action-hover",
+    "hover:bg-[--background-presentation-action-hover]",
+    "hover:text-[--content-presentation-action-hover]",
     "transition-[background-color,color]",
     "duration-200",
     "rounded-[3px]",
@@ -29,16 +29,16 @@ const tableHeadVariants = cva(
       },
       disabled: {
         true: [
-          "bg-background-presentation-table-row-disabled",
+          "bg-[--background-presentation-table-row-disabled]",
           "cursor-not-allowed",
-          "hover:bg-background-presentation-table-row-disabled",
-          "hover:text-content-presentation-global-primary",
+          "hover:bg-[--background-presentation-table-row-disabled]",
+          "hover:text-[--content-presentation-global-primary]",
         ],
       },
       isDummy: {
         true: [
           "hover:bg-transparent",
-          "hover:text-content-presentation-global-primary",
+          "hover:text-[--content-presentation-global-primary]",
         ],
       },
       defaultVariants: {
@@ -74,7 +74,7 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      "border border-b-[2px]  border-border-presentation-table-header bg-background-presentation-form-header shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
+      "border border-b-[2px]  border-[--border-presentation-table-header] bg-[--background-presentation-form-header] shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
       className
     )}
     {...props}
@@ -109,25 +109,25 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn([
-      "border-b border-border-presentation-table-header border-x-0  [&_button]:hover:opacity-100 hover:bg-background-presentation-table-row-hover transition-colors",
+      "border-b border-[--border-presentation-table-header] border-x-0  [&_button]:hover:opacity-100 hover:bg-[--background-presentation-table-row-hover] transition-colors",
       {
-        "bg-background-presentation-table-row-negative border-border-presentation-badge-red":
+        "bg-[--background-presentation-table-row-negative] border-[--border-presentation-badge-red]":
           state === "delete",
       },
       {
-        "bg-background-presentation-table-row-information border-border-presentation-badge-navy":
+        "bg-[--background-presentation-table-row-information] border-[--border-presentation-badge-navy]":
           state === "update",
       },
       {
-        "bg-background-presentation-table-row-success border-border-presentation-badge-green":
+        "bg-[--background-presentation-table-row-success] border-[--border-presentation-badge-green]":
           state === "add",
       },
       {
-        "bg-background-presentation-table-row-selected border-t  border-[2px] border-border-presentation-table-selected":
+        "bg-[--background-presentation-table-row-selected] border-t  border-[2px] border-[--border-presentation-table-selected]":
           state === "selected",
       },
       {
-        "bg-background-presentation-table-row-hover border-t  border-[2px] border-border-presentation-table-dropdown":
+        "bg-[--background-presentation-table-row-hover] border-t  border-[2px] border-[--border-presentation-table-dropdown]":
           state === "open",
       },
       className,
@@ -166,7 +166,7 @@ const TableHead = React.forwardRef<
       <th
         ref={headRef}
         className={cn(
-          "relative py-[2px] px-[2px] bg-background-presentation-form-header"
+          "relative py-[2px] px-[2px] bg-[--background-presentation-form-header]"
         )}
       >
         <div
@@ -187,7 +187,7 @@ const TableHead = React.forwardRef<
             {!isDummy && <SortButton onSort={onSort} sortType={sortType} />}
           </div>
         </div>
-        <button className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary">
+        <button className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-[--border-presentation-action-primary]">
           {!isDummy && (
             <ResizeIcon
               onMouseDown={handleStartResize}
@@ -211,9 +211,9 @@ const TableCell = React.forwardRef<
     ref={ref}
     className={cn(
       [
-        "h-[40px] text-content-presentation-action-light-primary",
+        "h-[40px] text-[--content-presentation-action-light-primary]",
         "typography-body-small-regular relative",
-        " border-l border-r border-border-presentation-table-header px-1",
+        " border-l border-r border-[--border-presentation-table-header] px-1",
         "break-all",
         "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
         "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
@@ -270,13 +270,13 @@ const TableFooterButton = React.forwardRef<
   return (
     <TableRow
       className={cn(
-        "h-[40px] relative group hover:bg-background-presentation-table-acton-hover",
+        "h-[40px] relative group hover:bg-[--background-presentation-table-acton-hover]",
         className
       )}
     >
       <TableCell
         className={cn(
-          "before:absolute before:left-0 before:right-0 before:top-[0px] before:h-[2px] before:bg-transparent before:transition-all before:duration-200 before:ease-out group-hover:before:bg-border-presentation-table-action-hover after:absolute after:left-0 after:right-0 after:bottom-[0px] after:h-[2px] after:bg-transparent after:transition-all after:duration-200 after:ease-out group-hover:after:bg-border-presentation-table-action-hover",
+          "before:absolute before:left-0 before:right-0 before:top-[0px] before:h-[2px] before:bg-transparent before:transition-all before:duration-200 before:ease-out group-hover:before:bg-[var(--border-presentation-table-action-hover)] after:absolute after:left-0 after:right-0 after:bottom-[0px] after:h-[2px] after:bg-transparent after:transition-all after:duration-200 after:ease-out group-hover:after:bg-[var(--border-presentation-table-action-hover)]",
           className
         )} colSpan={100}>
         <button
@@ -308,7 +308,7 @@ const SubTableButton = ({
   return (
     <Button
       className={cn(
-        "transition-opacity duration-200 opacity-0  border-none bg-transparent focus:bg-background-presentation-state-information-primary active:bg-background-presentation-state-information-primary",
+        "transition-opacity duration-200 opacity-0  border-none bg-transparent focus:bg-[--background-presentation-state-information-primary] active:bg-[--background-presentation-state-information-primary]",
         {
           "hover:bg-transparent hover:text-black focus:bg-transparent focus:text-black active:bg-transparent active:text-black":
             dummy,
@@ -381,11 +381,11 @@ const SortButton = ({
       onPointerDown={onSort}
     >
       {sortType === "asc" ? (
-        <i className="ri-arrow-up-line text-border-presentation-state-focus" />
+        <i className="ri-arrow-up-line text-[--border-presentation-state-focus]" />
       ) : sortType === "desc" ? (
-        <i className="ri-arrow-down-line text-border-presentation-state-focus" />
+        <i className="ri-arrow-down-line text-[--border-presentation-state-focus]" />
       ) : (
-        <i className="ri-arrow-up-down-line text-content-presentation-global-secondary" />
+        <i className="ri-arrow-up-down-line text-[--content-presentation-global-secondary]" />
       )}
     </button>
   );
