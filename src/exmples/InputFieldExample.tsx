@@ -38,6 +38,7 @@ export default function InputFieldExample() {
               })}
             >{`Variant: ${variant}, Size: ${size}`}</h2>
             <InputField
+              type="password"
               size={size}
               variant={variant}
               icon={mockIcons[idx % mockIcons.length]}

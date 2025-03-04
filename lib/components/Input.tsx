@@ -51,8 +51,17 @@ export const Input = forwardRef<HTMLInputElement, Props>(
   ({ focusSetter, className, variant, size, ...props }, ref) => {
     return (
       <input
-        autoComplete="off"
+        autoComplete="new-password"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        aria-autocomplete="none"
+        inputMode="none"
+        type="text"
+        role="presentation"
+        aria-haspopup="false"
         {...props}
+
         className={cn(inputFieldStyles({ variant, size }), className)}
         onFocus={(e) => {
           focusSetter && focusSetter(true);
