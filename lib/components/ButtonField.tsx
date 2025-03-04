@@ -3,7 +3,7 @@ import { cn } from "../utils/cn";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   withDivider?: boolean; // to display the divider line if you pass it see on figma design file
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 const ButtonField: React.FC<Props> = ({

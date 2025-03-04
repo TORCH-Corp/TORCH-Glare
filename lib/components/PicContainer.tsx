@@ -1,5 +1,6 @@
 import { InputHTMLAttributes, forwardRef } from 'react';
 import { cn } from '../utils/cn';
+import { Themes } from '../utils/types';
 
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,7 +9,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     onExpand?: () => void
     expandLabel?: string
     hasExpand?: boolean
-    theme?: "dark" | "light" | "default"
+    theme?: Themes
 }
 
 export const PicContainer = forwardRef<HTMLInputElement, Props>(({ theme, id, selectedImg, onExpand, expandLabel, hasExpand, ...props }, ref) => {

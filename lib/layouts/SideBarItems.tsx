@@ -72,8 +72,7 @@ interface Props
     VariantProps<typeof SideBarItemStyles> {
     asChild?: boolean;
     as?: React.ElementType;
-    theme?: "dark" | "light" | "default"
-    variant?: "default" | "secondary"
+    theme?: Themes    variant?: "default" | "secondary"
     iconOnly?: boolean
     active?: boolean
     disabled?: boolean
@@ -131,8 +130,7 @@ interface SideBarIconButtonProps
     VariantProps<typeof SideBarItemStyles> {
     asChild?: boolean;
     as?: React.ElementType;
-    theme?: "dark" | "light" | "default"
-    variant?: "default" | "secondary"
+    theme?: Themes    variant?: "default" | "secondary"
     active?: boolean
     count?: number
     message?: ReactNode

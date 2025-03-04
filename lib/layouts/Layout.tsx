@@ -83,7 +83,7 @@ export function SideBar({ children, headerChild, navigationChildren, iconButtons
 
 interface ChildProps
   extends HTMLAttributes<HTMLDivElement> {
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 const SideBarChildContainer = ({ theme, ...props }: ChildProps) => {

@@ -3,6 +3,7 @@ import { cn } from "../utils/cn";
 import React, { useEffect, useRef } from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Slot } from "@radix-ui/react-slot";
+import { Themes } from "../utils/types";
 
 interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {
   variant?: "SystemStyle" | "PresentationStyle";
@@ -71,7 +72,7 @@ const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
   LocalPopOverProps & {
-    theme?: "dark" | "light" | "default"
+    theme?: Themes
   }
 >(
   (

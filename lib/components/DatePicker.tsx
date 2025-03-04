@@ -5,6 +5,7 @@ import { getYear, getMonth, isSameDay } from "date-fns";
 import { Button } from "./Button";
 import { cn } from "../utils/cn";
 import { cva } from "class-variance-authority";
+import { Themes } from "../utils/types";
 
 function range(start: number, end: number, step: number) {
   return Array.from({ length: Math.ceil((end - start) / step) }, (_, i) => start + i * step);
@@ -16,7 +17,7 @@ interface PickerProps {
   customInput?: any
   onChange: any
   dateFormat?: any
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, placeholderText, selected, ...props }: PickerProps) => {

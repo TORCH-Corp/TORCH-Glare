@@ -2,6 +2,7 @@ import { LabelHTMLAttributes, ReactNode } from "react";
 import React from "react";
 import { cn } from "../utils/cn";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Themes } from "../utils/types";
 
 const labelComponentVariants = cva("flex", {
   variants: {
@@ -25,7 +26,7 @@ interface Props
   asChild?: boolean;
   size?: "S" | "M" | "L";
   variant?: "SystemStyle" | "PresentationStyle";
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const Label = React.forwardRef<HTMLLabelElement, Props>(

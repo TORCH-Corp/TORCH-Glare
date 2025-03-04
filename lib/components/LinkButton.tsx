@@ -1,6 +1,7 @@
 import React, { AnchorHTMLAttributes, SVGProps } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 // Link button base styles
 export const linkButtonStyles = cva(
@@ -29,7 +30,7 @@ export const linkButtonStyles = cva(
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
   size?: "S" | "M"; // this props will change the button style size see on figma design file
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const LinkButton: React.FC<Props> = ({ theme, size = "S", ...props }) => {

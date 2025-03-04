@@ -44,6 +44,7 @@ export default function BadgeFieldExample() {
             })}
           >{`Size: ${size}`}</h2>
           <BadgeField
+            icon={<i className="ri-add-line"></i>}
             theme="dark"
             size={size}
             variant={"PresentationStyle"}

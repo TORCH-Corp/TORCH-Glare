@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 // Glare counter base styles
 export const glareCounterStyles = cva(
@@ -34,7 +35,7 @@ interface Props
   extends HTMLAttributes<HTMLDivElement>,
   GlareCounterStylesProps {
   label: number; // label of the counter it should be a number
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const Counter: React.FC<Props> = ({ theme, label, variant, ...props }) => {

@@ -4,6 +4,7 @@ import { forwardRef, InputHTMLAttributes, ReactNode, useState } from "react";
 import { InputField } from "./InputField";
 import { ToolTipSide } from "./Tooltip";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -17,7 +18,7 @@ interface Props
   label?: string; // to show label
   required?: boolean; // to show required icon
   toolTipSide?: ToolTipSide;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const LabelLessInput = forwardRef<HTMLInputElement, Props>(

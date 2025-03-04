@@ -2,6 +2,7 @@ import React, { ButtonHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 import { cn } from "../utils/cn";
+import { ButtonVariant, Themes } from "../utils/types";
 
 const buttonVariants = cva("", {
   variants: {
@@ -16,6 +17,7 @@ const buttonVariants = cva("", {
   },
 });
 
+
 interface Props
   extends ButtonHTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof buttonVariants> {
@@ -23,15 +25,8 @@ interface Props
   disabled?: boolean;
   asChild?: boolean;
   as?: React.ElementType;
-  theme?: "dark" | "light" | "default"
-  variant?: "PrimeStyle" |
-  "BlueSecStyle" |
-  "YelSecStyle" |
-  "RedSecStyle" |
-  "BorderStyle" |
-  "PrimeContStyle" |
-  "BlueContStyle" |
-  "RedContStyle"
+  theme?: Themes
+  variant?: ButtonVariant
 }
 export const ActionButton = function ({
   size,
@@ -52,8 +47,8 @@ export const ActionButton = function ({
       className={cn(
         buttonVariants({
           size,
-          className,
         })
+        , className
       )}
       {...props}
     >

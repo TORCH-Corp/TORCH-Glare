@@ -1,9 +1,10 @@
+import { Themes } from "../utils/types";
 import { cn } from "../utils/cn"; // Assuming you have a `cn` utility
 import { HTMLAttributes, useEffect, useState } from "react";
 
 interface PassCheckProps extends HTMLAttributes<HTMLDivElement> {
   value: string; // The password value to check
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export function PasswordLevel({ theme, value, className, ...props }: PassCheckProps) {

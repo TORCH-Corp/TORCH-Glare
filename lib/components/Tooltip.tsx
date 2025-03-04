@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 export type ToolTipSide = "top" | "right" | "bottom" | "left";
 
@@ -36,7 +37,7 @@ interface TooltipProps
   delay?: number;
   disabled?: boolean;
   text: ReactNode;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({

@@ -5,6 +5,7 @@ import { cn } from "../utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 import { Tooltip } from "./Tooltip";
+import { Themes } from "../utils/types";
 
 // NOTE: radix select as DropDownButton
 
@@ -214,7 +215,7 @@ const DropDownButtonTrigger = React.forwardRef<
   VariantProps<typeof dropdownButtonStyles> & {
     errors?: string;
     icon?: string
-    theme?: "dark" | "light" | "default"
+    theme?: Themes
   }
 >(
   (
@@ -322,7 +323,7 @@ const DropDownButtonContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
   VariantProps<typeof dropdownButtonContentStyles> & {
-    theme?: "dark" | "light" | "default"
+    theme?: Themes
   }
 >(
   (

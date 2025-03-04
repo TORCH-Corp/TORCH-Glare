@@ -1,6 +1,7 @@
 import { ReactNode, HTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 export const badgeBase = cva(
   [
@@ -67,7 +68,7 @@ interface BadgeProps
   isSelected?: boolean;
   badgeIcon?: ReactNode;
   className?: string;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const Badge: React.FC<BadgeProps> = ({

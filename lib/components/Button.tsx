@@ -2,9 +2,10 @@ import React, { ButtonHTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../utils/cn";
+import { ButtonVariant, Themes } from "../utils/types";
 
 const buttonVariants = cva(
-  "flex items-center whitespace-nowrap justify-center  transition-[background,color] duration-200 ease-in-out border border-transparent outline-none [&-i]:!leading-0",
+  "flex items-center whitespace-nowrap justify-center  transition-[background,color] duration-200 ease-in-out border border-transparent outline-none [&-i]:!leading-none",
   {
     variants: {
       variant: {
@@ -148,8 +149,9 @@ interface Props
   is_loading?: boolean;
   disabled?: boolean;
   asChild?: boolean;
+  variant?: ButtonVariant;
   as?: React.ElementType;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 export const Button = forwardRef<HTMLButtonElement, Props>(
   (
@@ -195,6 +197,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       <Component
         {...props}
         data-theme={theme}
+        disabled={disabled}
         ref={ref}
         className={cn(
           buttonVariants({

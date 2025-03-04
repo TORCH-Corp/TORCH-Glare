@@ -1,12 +1,13 @@
 import { HTMLAttributes, ReactNode } from "react";
 import { Button } from "./Button";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   src: any;
   header?: ReactNode;
   onHide?: () => void;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export function AttachedPic({ theme, src, header, onHide, ...props }: Props) {

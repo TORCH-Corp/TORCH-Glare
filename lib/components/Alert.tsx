@@ -1,6 +1,7 @@
 import { HTMLAttributes, ReactNode } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 export const glareAlert = cva(
   "flex relative justify-start items-center rounded-[4px] min-h-26px w-fit pr-1 rtl:pl-1 rtl:pr-0 [&>section]:text-white",
@@ -22,11 +23,13 @@ export const glareAlert = cva(
   }
 );
 
+type AlertVariant = "success" | "error" | "warning" | "info";
+
 interface Props extends HTMLAttributes<HTMLDivElement> {
   label: ReactNode;
-  state?: "info" | "warning" | "error" | "success";
+  state?: AlertVariant;
   icon?: ReactNode;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const Alert: React.FC<Props> = ({

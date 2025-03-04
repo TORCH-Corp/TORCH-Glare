@@ -3,6 +3,7 @@ import { InputField } from "./InputField";
 import { cn } from "../utils/cn";
 import { Label } from "./Label";
 import { ToolTipSide } from "./Tooltip";
+import { Themes } from "../utils/types";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -18,7 +19,7 @@ export interface Props
   secondaryLabel?: ReactNode; // normal text with secondary style
   labelDirections?: "vertical" | "horizontal"; // to change the direction of the label
   toolTipSide?: ToolTipSide;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const LabelField = forwardRef<HTMLInputElement, Props>(

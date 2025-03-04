@@ -2,6 +2,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 export const MenuItemStyles = cva(
   [
@@ -141,7 +142,7 @@ export const dropdownMenuStyles = cva(
 interface DropdownMenuProps {
   variant?: "SystemStyle" | "PresentationStyle";
   className?: string;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 

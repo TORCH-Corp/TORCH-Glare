@@ -8,7 +8,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   requiredLabel?: ReactNode;
   size?: "S" | "M" | "L";
   childrenUnderLabel?: ReactNode;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export function FieldSection({

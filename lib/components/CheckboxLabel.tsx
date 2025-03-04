@@ -10,7 +10,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   requiredLabel?: string;
   directions?: "vertical" | "horizontal";
   size?: "S" | "M" | "L";
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(

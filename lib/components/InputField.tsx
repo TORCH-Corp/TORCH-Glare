@@ -23,10 +23,11 @@ export interface Props
   errorMessage?: string; // to show tooltip component when error_message not null
   onTable?: boolean; // to change the border style of the component when it is on table
   toolTipSide?: ToolTipSide;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 import { cva } from "class-variance-authority";
+import { Themes } from "../utils/types";
 
 export const inputFieldStyles = cva(
   [

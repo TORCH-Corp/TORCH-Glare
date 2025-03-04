@@ -13,6 +13,7 @@ import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { cva } from "class-variance-authority";
 import { LabelLessSection } from "./LabelLessInput";
+import { Themes } from "../utils/types";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -26,105 +27,94 @@ export interface Props
   badgesChildren?: ReactNode;
   label?: string;
   required?: boolean;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const inputFieldStyles = cva(
   [
-    "flex ",
-    "flex-1",
-    "flex-col",
-    "items-center",
-    "overflow-hidden",
-    "justify-center",
-    "typography-body-small-regular",
-    "border border-border-presentation-action-primary",
-    "bg-background-presentation-form-field-primary",
-    "transition-[background,background-color,color,border,box-shadow] duration-100 ease-in-out",
-    "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-    "hover:bg-background-presentation-form-field-hover",
-    "hover:border-border-presentation-action-hover",
-    "hover:text-content-presentation-action-light-primary",
-    "hover:caret-content-presentation-action-information-hover",
+    // Base styles
+    'flex',
+    'flex-1',
+    'flex-col',
+    'items-center',
+    'overflow-hidden',
+    'justify-center',
+    'typography-body-small-regular',
+    'border',
+    'transition-[background,background-color,color,border,box-shadow] duration-100 ease-in-out', // Simplified transition property
+    'hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
   ],
   {
     variants: {
       variant: {
-        PresentationStyle: [""],
+        PresentationStyle: [
+          'border-border-presentation-action-primary',
+          'bg-background-presentation-form-field-primary',
+          'hover:bg-background-presentation-form-field-hover',
+          'hover:border-border-presentation-action-hover',
+          'hover:text-content-presentation-action-light-primary',
+          'hover:caret-content-presentation-action-information-hover',
+        ],
         SystemStyle: [
-          "border-border-system-global-secondary",
-          "bg-background-presentation-form-field-primary",
-          "hover:border-[#9748FF]",
-          "hover:bg-purple-alpha-10",
+          'border-border-system-global-secondary',
+          'bg-background-presentation-form-field-primary',
+          'hover:border-[#9748FF]',
+          'hover:bg-purple-alpha-10',
         ],
       },
-      fucus: {
+      focus: {
         true: [
-          "border-border-presentation-state-focus",
-          "bg-background-presentation-form-field-primary",
-          "shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-          "hover:border-border-presentation-state-focus",
-          "caret-border-presentation-state-focus",
-          "hover:caret-border-presentation-state-focus",
+          'border-border-presentation-state-focus',
+          'bg-background-presentation-form-field-primary',
+          'shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
+          'hover:border-border-presentation-state-focus',
+          'caret-border-presentation-state-focus',
+          'hover:caret-border-presentation-state-focus',
         ],
       },
       onTable: {
-        true: ["border-transparent", "bg-transparent"],
+        true: ['border-transparent', 'bg-transparent', 'h-[26px]'], // Combined onTable styles
       },
       error: {
         true: [
-          "border-border-presentation-state-negative",
-          "caret-border-presentation-state-negative",
-          "hover:border-border-presentation-state-negative",
-          "hover:caret-border-presentation-state-negative",
+          'border-border-presentation-state-negative',
+          'caret-border-presentation-state-negative',
+          'hover:border-border-presentation-state-negative',
+          'hover:caret-border-presentation-state-negative',
         ],
       },
       disabled: {
         true: [
-          "border-border-presentation-action-disabled",
-          "bg-background-presentation-action-disabled",
+          'border-border-presentation-action-disabled',
+          'bg-background-presentation-action-disabled',
+          'hover:border-border-presentation-action-disabled', // Added hover styles for disabled state
+          'hover:bg-background-presentation-action-disabled',  // Added hover styles for disabled state
         ],
       },
       size: {
-        XS: ["rounded-[6px]"],
-        S: ["rounded-[6px]"],
-        M: ["rounded-[8px]"],
+        XS: ['rounded-[6px]'],
+        S: ['rounded-[6px]'],
+        M: ['rounded-[8px]'],
       },
     },
     defaultVariants: {
-      fucus: false,
+      focus: false,
       disabled: false,
       error: false,
       onTable: false,
-      size: "M",
+      size: 'M',
+      variant: 'PresentationStyle', // added default variant
     },
-    compoundVariants: [
-      {
-        disabled: true,
-        className: [
-          "border-border-presentation-action-disabled",
-          "bg-background-presentation-action-disabled",
-          "hover:border-border-presentation-action-disabled",
-          "hover:bg-background-presentation-action-disabled",
-        ],
-      },
-      {
-        onTable: true,
-        className: ["h-[26px]"],
-      },
-      {
-        variant: "PresentationStyle",
-        fucus: true,
-      },
-    ],
   }
 );
+
+
 
 export const iconContainerStyles = cva(
   [
     "flex items-center justify-center",
     "transition-[background,background-color,border] duration-200 ease-in-out",
-    "leading-0",
+    "leading-none",
     "text-[16px]",
     "text-content-presentation-action-light-secondary",
   ],
@@ -221,7 +211,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
             className={cn(
               inputFieldStyles({
                 variant: variant,
-                fucus,
+                focus: fucus,
                 error: errorMessage !== undefined,
                 disabled: props.disabled,
                 size: size,

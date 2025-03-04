@@ -2,6 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn"; // Assuming you have a `cn` utility
 import { ButtonHTMLAttributes } from "react";
 import { LoadingIcon } from "./Button";
+import { Themes } from "../utils/types";
 
 const buttonVariants = cva(
   "w-full h-[42px] rounded-[8px] typography-body-large-regular flex justify-center items-center transition-all duration-250 ease-in-out border",
@@ -33,7 +34,7 @@ export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export function LoginButton({

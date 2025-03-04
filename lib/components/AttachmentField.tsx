@@ -2,6 +2,7 @@ import { forwardRef, InputHTMLAttributes } from "react";
 import { Button } from "./Button";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
+import { Themes } from "../utils/types";
 
 const dropZoneStyles = cva(
   [
@@ -24,7 +25,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   isDropAreaActive?: boolean;
   mainLabel: string;
   secondaryLabel: string;
-  theme?: "dark" | "light" | "default"
+  theme?: Themes
 }
 
 export const AttachmentField = forwardRef<HTMLInputElement, Props>(

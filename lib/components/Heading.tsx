@@ -1,3 +1,4 @@
+import { Themes } from '../utils/types';
 import { cn } from '../utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
@@ -27,7 +28,7 @@ interface Props
     extends HTMLAttributes<HTMLHeadingElement> {
     asChild?: boolean;
     as?: React.ElementType;
-    theme?: "dark" | "light" | "default"
+    theme?: Themes
     size?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
 }
 export const Heading = ({
