@@ -1,4 +1,4 @@
-import { cn } from '../utils/cn';
+import { cn } from '@/utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, VariantProps } from 'class-variance-authority';
 import React, { ButtonHTMLAttributes, ReactNode } from 'react'
@@ -6,19 +6,19 @@ import Counter from '../components/Counter';
 import { Tooltip } from '../components/Tooltip';
 
 const SideBarItemStyles = cva([
-    "h-[40px] w-full px-[14px] flex gap-[6px] typography-body-small-medium justify-start items-center",
+    "h-[40px] w-full px-[8px] flex gap-[6px] typography-body-small-medium justify-start items-center",
     "text-content-system-global-primary border-l-[2px] rtl:border-r-[2px] border-transparent outline-none",
-    "hover:bg-white-alpha-075 hover:border-black-300 hover:text-content-system-action-primary-hover",
-    "rounded-r-[4px] text-start whitespace-nowrap"
+    "hover:bg-white-alpha-075 hover:border-black-300 hover:text-content-system-action-primary-hover hover:px-[14px]",
+    "rounded-r-[4px] text-start whitespace-nowrap transition-all duration-150 ease-in-out",
 
 ],
     {
         variants: {
             disabled: {
-                true: "text-content-system-global-disabled bg-transport hover:bg-transport fucus:bg-transport active:bg-transport"
+                true: "text-content-system-global-disabled bg-transparent hover:bg-transparent fucus:bg-transparent active:bg-transparent"
             },
             active: {
-                true: ""
+                true: "hover:px-[8px] !px-[8px]"
             },
             iconOnly: {
                 true: "w-[40px] justify-center overflow-hidden"
@@ -37,30 +37,28 @@ const SideBarItemStyles = cva([
                 active: true,
                 variant: "default",
                 className: [
-                    "bg-background-system-action-primary-hover border-border-system-action-primary-hover",
+                    "bg-background-system-action-primary-hover border-border-system-action-primary-hover !px-[8px] hover:px-[8px]",
                 ]
             },
             {
                 active: true,
                 variant: "secondary",
                 className: [
-                    "bg-wavy-navy-1000 border-border-system-action-field-hover-selected",
+                    "bg-wavy-navy-1000 border-border-system-action-field-hover-selected !px-[8px] hover:px-[8px]",
                 ]
             },
             {
-                active: true,
                 disabled: true,
                 variant: "secondary",
                 className: [
-                    "bg-transport hover:bg-transport focus:bg-transport active:bg-transport",
+                    "bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent hover:p-[8px] hover:text-content-system-global-disabled",
                 ]
             },
             {
-                active: true,
                 disabled: true,
                 variant: "default",
                 className: [
-                    "bg-transport hover:bg-transport focus:bg-transport active:bg-transport",
+                    "bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent hover:p-[8px] hover:text-content-system-global-disabled",
                 ]
             }
         ],

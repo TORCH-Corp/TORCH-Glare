@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode } from 'react'
+import React, { HTMLAttributes, ReactNode } from 'react'
 import { Checkbox } from './CheckboxLabel'
 import { Radio } from './RadioLabel'
 
