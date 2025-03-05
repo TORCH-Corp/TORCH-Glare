@@ -4,6 +4,7 @@ import { Button } from "@/components/Button";
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
+import { ActionButton } from "@/components/ActionButton";
 
 export default function BadgeFieldExample() {
   const { theme } = useTheme();
@@ -44,9 +45,11 @@ export default function BadgeFieldExample() {
             })}
           >{`Size: ${size}`}</h2>
           <BadgeField
-            icon={<i className="ri-add-line"></i>}
-            theme="dark"
             size={size}
+            icon={<i className="ri-add-line"></i>}
+            actionButton={
+              <ActionButton size={size}><i className="ri-add-line"></i></ActionButton>
+            }
             variant={"PresentationStyle"}
             badgesChildren={
               <>
@@ -102,7 +105,8 @@ export default function BadgeFieldExample() {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={`select a badge`}
-          />
+          >
+          </BadgeField>
         </div>
       ))}
 

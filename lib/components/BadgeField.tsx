@@ -12,7 +12,6 @@ import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { cva } from "class-variance-authority";
-import { LabelLessSection } from "./LabelLessInput";
 import { Themes } from "../utils/types";
 
 export interface Props
@@ -28,9 +27,10 @@ export interface Props
   label?: string;
   required?: boolean;
   theme?: Themes
+  actionButton?: ReactNode
 }
 
-export const inputFieldStyles = cva(
+export const mainContainerStyles = cva(
   [
     // Base styles
     'flex',
@@ -43,11 +43,13 @@ export const inputFieldStyles = cva(
     'border',
     'transition-[background,background-color,color,border,box-shadow] duration-100 ease-in-out', // Simplified transition property
     'hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
+    'leading-none'
   ],
   {
     variants: {
       variant: {
         PresentationStyle: [
+          'text-content-presentation-action-light-primary',
           'border-border-presentation-action-primary',
           'bg-background-presentation-form-field-primary',
           'hover:bg-background-presentation-form-field-hover',
@@ -87,8 +89,8 @@ export const inputFieldStyles = cva(
         true: [
           'border-border-presentation-action-disabled',
           'bg-background-presentation-action-disabled',
-          'hover:border-border-presentation-action-disabled', // Added hover styles for disabled state
-          'hover:bg-background-presentation-action-disabled',  // Added hover styles for disabled state
+          'hover:border-border-presentation-action-disabled',
+          'hover:bg-background-presentation-action-disabled',
         ],
       },
       size: {
@@ -108,45 +110,6 @@ export const inputFieldStyles = cva(
   }
 );
 
-
-
-export const iconContainerStyles = cva(
-  [
-    "flex items-center justify-center",
-    "transition-[background,background-color,border] duration-200 ease-in-out",
-    "leading-none",
-    "text-[16px]",
-    "text-content-presentation-action-light-secondary",
-  ],
-  {
-    variants: {
-      variant: {
-        SystemStyle: [""],
-        PresentationStyle: [""],
-      },
-      fucus: {
-        true: "",
-      },
-      size: {
-        XS: ["text-[16px]"],
-        S: ["text-[16px]"],
-        M: ["text-[18px]", "px-[2px]"],
-      },
-    },
-    compoundVariants: [
-      {
-        variant: "SystemStyle",
-        fucus: true,
-        className: ["text-white"],
-      },
-    ],
-    defaultVariants: {
-      size: "M",
-      variant: "PresentationStyle",
-    },
-  }
-);
-
 export const BadgeField = forwardRef<HTMLInputElement, Props>(
   (
     {
@@ -161,7 +124,10 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       toolTipSide,
       className,
       badgesChildren,
-      theme, ...props
+      actionButton,
+      theme,
+      children,
+      ...props
     },
     forwardedRef
   ) => {
@@ -171,33 +137,13 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
     const popoverRef = useRef<HTMLDivElement>(null);
     const [dropDownListWidth, setDropDownListWidth] = useState(0);
 
-    useEffect(() => {
-      if (!forwardedRef) return;
-      if (typeof forwardedRef === "function") forwardedRef(inputRef.current);
-      else forwardedRef.current = inputRef.current;
-    }, [forwardedRef]);
-
-    useEffect(() => {
-      const handleOutsideClick = (event: MouseEvent) => {
-        if (
-          sectionRef.current &&
-          !sectionRef.current.contains(event.target as Node) &&
-          !popoverRef.current?.contains(event.target as Node)
-        ) {
-          setFucus(false);
-        } else {
-          setFucus(true);
-          inputRef.current?.focus();
-        }
-      };
-
-      document.addEventListener("mousedown", handleOutsideClick);
-      document.addEventListener("pointerdown", handleOutsideClick);
-      return () => {
-        document.removeEventListener("mousedown", handleOutsideClick);
-        document.removeEventListener("pointerdown", handleOutsideClick);
-      };
-    }, []);
+    useInitialLoad({
+      forwardedRef,
+      inputRef,
+      sectionRef,
+      popoverRef,
+      setFucus,
+    });
 
     return (
       <Popover open={fucus}>
@@ -209,7 +155,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               setDropDownListWidth(e.currentTarget.offsetWidth);
             }}
             className={cn(
-              inputFieldStyles({
+              mainContainerStyles({
                 variant: variant,
                 focus: fucus,
                 error: errorMessage !== undefined,
@@ -227,63 +173,49 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               <section
                 className={cn(
                   [
-                    "gap-1 w-full ",
-                    " flex flex-row ",
-                    "overflow-hidden",
-                    "px-[4px] ",
+                    "gap-1 w-full relative",
+                    "flex flex-row flex-nowrap",
+                    "overflow-hidden justify-end",
+                    "p-[4px] h-fit items-center",
                   ],
                   {
-                    "content-start flex-wrap": fucus,
-                    "justify-start items-center ": !fucus,
-                    "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)] rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]":
-                      !fucus,
-                    "pl-2 rtl:pr-2 rtl:pl-1": size === "M" && !label,
-                  },
-
-                  {
-                    "py-[4px]":
-                      (fucus && size === "S") || (fucus && size === "XS"),
-                    "py-[7px]": fucus && size === "M",
+                    "flex-wrap justify-start": fucus,
                   }
                 )}
               >
-                {icon ||
-                  (label && (
-                    <div
-                      className={cn(
-                        iconContainerStyles({
-                          size: size,
-                          variant: variant,
-                          fucus: fucus,
-                        })
-                      )}
-                    >
-                      {icon}
-                      <LabelLessSection
-                        fucus={fucus}
-                        label={label}
-                        required={required}
-                      />
-                    </div>
-                  ))}
+                {icon && (
+                  <BadgeIconContainer size={size} variant={variant}>
+                    {icon}
+                  </BadgeIconContainer>
+                )}
 
                 {badgesChildren}
 
-                <Input
-                  {...props}
-                  variant={variant}
-                  onFocus={() => setFucus(true)}
-                  ref={inputRef}
-                  size={size}
-                  className={cn(
-                    "group p-0 flex-1 min-w-[100px] transition-none",
-                    {
-                      "h-[18px]": fucus && size === "XS",
-                      "h-[22px]": fucus && size === "S",
-                      "h-[26px]": fucus && size === "M",
-                    }
-                  )}
-                />
+                <div className="flex-1"> {/* Add a flex-1 container for Input */}
+                  <Input
+                    {...props}
+                    variant={variant}
+                    onFocus={() => setFucus(true)}
+                    ref={inputRef}
+                    size={size}
+                    className={cn(
+                      "p-0 min-w-[100px] w-full", // Added w-full to Input
+                      {
+                        "h-[18px]": size === "XS",
+                        "h-[22px]": size === "S",
+                        "h-[26px]": size === "M",
+                      }
+                    )}
+                  />
+                </div>
+
+                {
+                  actionButton && (
+                    <div > {/* Keep the ActionButton right aligned */}
+                      {actionButton}
+                    </div>
+                  )
+                }
               </section>
             </Tooltip>
           </section>
@@ -304,5 +236,74 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
     );
   }
 );
-
 BadgeField.displayName = "BadgeField";
+
+
+const BadgeIconContainer = ({ children, size = "M", variant = "PresentationStyle" }: Props) => {
+  return (
+    <div data-role="icon" className={cn(["flex items-center justify-center",
+      "transition-all duration-200 ease-in-out",
+      "leading-none",
+      "text-[16px]",
+      "text-content-presentation-action-light-secondary"],
+      {
+        "text-white": variant === "SystemStyle",
+        "text-[16px]": size === "S" || size === "XS",
+        "text-[18px] px-[2px]": size === "M",
+      }
+    )}>
+      {children}
+    </div>
+  )
+}
+
+
+const useInitialLoad = ({
+  forwardedRef,
+  inputRef,
+  sectionRef,
+  popoverRef,
+  setFucus,
+}: {
+  forwardedRef: React.Ref<HTMLInputElement> | ((instance: HTMLInputElement | null) => void);
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  sectionRef: React.RefObject<HTMLDivElement | null>;
+  popoverRef: React.RefObject<HTMLDivElement | null>;
+  setFucus: (value: boolean) => void;
+}) => {
+
+  // set the reference
+  useEffect(() => {
+    if (!forwardedRef) return;
+    if (typeof forwardedRef === "function") {
+      forwardedRef(inputRef.current);
+    } else {
+      forwardedRef.current = inputRef.current;
+    }
+  }, [forwardedRef, inputRef]);
+
+
+  // detect click outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        sectionRef.current &&
+        !sectionRef.current.contains(event.target as Node) &&
+        !popoverRef.current?.contains(event.target as Node)
+      ) {
+        setFucus(false);
+      } else {
+        setFucus(true);
+        inputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("pointerdown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("pointerdown", handleOutsideClick);
+    };
+  }, [sectionRef, popoverRef, setFucus, inputRef]);
+};
