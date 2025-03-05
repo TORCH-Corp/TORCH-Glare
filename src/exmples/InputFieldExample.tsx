@@ -30,7 +30,7 @@ export default function InputFieldExample() {
       {/* Loop through variants and sizes */}
       {anotherSizes.map((size: any) =>
         variants.map((variant: any, idx: any) => (
-          <div key={`${size}-${variant}`} className="">
+          <form autoComplete="off" key={`${size}-${variant}`} className="">
             <h2
               className={cn("text-lg font-semibold", {
                 "text-black": theme === "light",
@@ -55,7 +55,7 @@ export default function InputFieldExample() {
               onChange={(e) => setValue(e.target.value)}
               placeholder={`InputField`}
             />
-          </div>
+          </form>
         ))
       )}
 

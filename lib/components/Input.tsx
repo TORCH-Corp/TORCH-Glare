@@ -51,17 +51,8 @@ export const Input = forwardRef<HTMLInputElement, Props>(
   ({ focusSetter, className, variant, size, ...props }, ref) => {
     return (
       <input
-        autoComplete="new-password"
-        autoCorrect="off"
-        autoCapitalize="off"
-        spellCheck={false}
-        aria-autocomplete="none"
-        inputMode="none"
-        type="text"
-        role="presentation"
-        aria-haspopup="false"
         {...props}
-
+        autoComplete="off"
         className={cn(inputFieldStyles({ variant, size }), className)}
         onFocus={(e) => {
           focusSetter && focusSetter(true);
@@ -78,3 +69,15 @@ export const Input = forwardRef<HTMLInputElement, Props>(
 );
 
 Input.displayName = "Input"
+
+
+
+/* // solution to fix autofill issue
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-transition: "color 1000s ease-out, background-color 1000s ease-out";
+  -webkit-transition-delay: 1000s;
+}
+*/
