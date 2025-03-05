@@ -14,7 +14,7 @@ export default function ButtonExample() {
     "BlueContStyle",
     "RedContStyle",
   ]);
-  const [ButtonSizes] = useState<any>(["S", "M", "L"]);
+  const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
 
   const { theme } = useTheme();
 

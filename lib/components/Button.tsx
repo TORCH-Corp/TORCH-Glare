@@ -81,9 +81,10 @@ const buttonVariants = cva(
         ],
       },
       size: {
-        S: "h-[22px] px-[6px] typography-body-small-medium rounded-[4px]",
-        M: "h-[26px] px-[8px] typography-body-medium-medium rounded-[4px]",
-        L: "h-[28px] px-[15px] typography-body-large-medium rounded-[6px]",
+        S: "h-[22px] px-[6px] typography-body-small-medium rounded-[4px] [&_i]:text-[12px]",
+        M: "h-[28px] px-[14px] typography-body-large-medium rounded-[4px] [&_i]:text-[18px]",
+        L: "h-[34px] px-[22px] typography-body-large-medium rounded-[6px] [&_i]:text-[20px]",
+        XL: "h-[40px] px-[30px] typography-headers-medium-medium rounded-[6px] [&_i]:text-[22px]",
       },
       is_loading: {
         true: "",
@@ -132,12 +133,17 @@ const buttonVariants = cva(
       {
         buttonType: "icon",
         size: "M",
-        className: "w-[26px] h-[26px] p-0 leading-[0]",
+        className: "w-[28px] h-[28px] p-0 leading-[0]",
       },
       {
         buttonType: "icon",
         size: "L",
-        className: "w-[28px] h-[28px] p-0 leading-[0]",
+        className: "w-[34px] h-[34px] p-0 leading-[0]",
+      },
+      {
+        buttonType: "icon",
+        size: "XL",
+        className: "w-[40px] h-[40px] p-0 leading-[0]",
       },
     ],
   }
@@ -233,15 +239,16 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
 Button.displayName = "Button"
 
 export function LoadingIcon({ size, className }: {
-  size?: "S" | "M" | "L" | null;
+  size?: "S" | "M" | "L" | "XL" | null;
   className?: string;
 }) {
   const iconVariants = cva("animate-spin ", {
     variants: {
       size: {
         S: "w-[12px] h-[12px]",
-        M: "w-[14px] h-[14px]",
-        L: "w-[16px] h-[16px]",
+        M: "w-[18px] h-[18px]",
+        L: "w-[20px] h-[20px]",
+        XL: "w-[22px] h-[22px]"
       },
     },
     defaultVariants: {

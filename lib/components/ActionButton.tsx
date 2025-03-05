@@ -43,6 +43,11 @@ export const ActionButton = function ({
       theme={theme}
       asChild={asChild}
       buttonType="icon"
+      size={
+        size == "XS" ? "S" :
+          size == "S" ? "M" :
+            size == "M" ? "L" : "S"
+      }
       variant={variant}
       className={cn(
         buttonVariants({
