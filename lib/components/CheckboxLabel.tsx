@@ -2,6 +2,7 @@ import { InputHTMLAttributes, forwardRef, useState } from "react";
 import { Label } from "./Label";
 import { cn } from "../utils/cn";
 import { cva } from "class-variance-authority";
+import { Themes } from "../utils/types";
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
@@ -59,7 +60,7 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
 
 CheckboxLabel.displayName = "CheckboxLabel";
 
-export const glareRadioLabelStyles = cva(
+export const glareCheckBoxStyles = cva(
   [
     "w-[16px]",
     "h-[16px]",
@@ -119,7 +120,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
         />
         <div
           className={cn(
-            glareRadioLabelStyles({
+            glareCheckBoxStyles({
               disabled: props.disabled,
               checked,
             }),

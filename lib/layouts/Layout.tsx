@@ -1,3 +1,4 @@
+import { Themes } from "../utils/types";
 import { cn } from "../utils/cn";
 import { HTMLAttributes, ReactNode } from "react";
 

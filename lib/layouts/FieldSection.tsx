@@ -1,6 +1,7 @@
 import { cn } from "../utils/cn";
 import { HTMLAttributes, ReactNode } from "react";
 import { Label } from "../components/Label";
+import { Themes } from "../utils/types";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   label?: ReactNode;

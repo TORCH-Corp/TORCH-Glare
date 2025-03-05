@@ -1,10 +1,11 @@
 import { cn } from "../utils/cn";
 import React, { ButtonHTMLAttributes } from "react";
 import { cva } from "class-variance-authority";
+import { Themes } from "../utils/types";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   collapse?: boolean; // to collapse the item
-  theme?: "dark" | "light" | "default";
+  theme?: Themes
 
 }
 

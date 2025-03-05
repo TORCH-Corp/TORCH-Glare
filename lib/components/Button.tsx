@@ -231,12 +231,11 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
 );
 
 Button.displayName = "Button"
-interface IconProps {
+
+export function LoadingIcon({ size, className }: {
   size?: "S" | "M" | "L" | null;
   className?: string;
-}
-
-export function LoadingIcon({ size, className }: IconProps) {
+}) {
   const iconVariants = cva("animate-spin ", {
     variants: {
       size: {

@@ -50,7 +50,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
 
 RadioLabel.displayName = "RadioLabel";
 
-export const glareRadioLabelStyles = cva(
+const glareRadioStyles = cva(
   [
     "w-[12px]",
     "h-[12px]",
@@ -95,7 +95,7 @@ export const Radio = forwardRef<HTMLInputElement, Props>(
         id={props.id}
         type="radio"
         className={cn(
-          glareRadioLabelStyles({
+          glareRadioStyles({
             size,
           })
         )}

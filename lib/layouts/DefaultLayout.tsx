@@ -1,5 +1,6 @@
+import { Themes } from "../utils/types";
 import { cn } from "../utils/cn";
-import React, { HTMLAttributes, ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
 
 interface LayoutProps

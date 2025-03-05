@@ -4,6 +4,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 import React, { ButtonHTMLAttributes, ReactNode } from 'react'
 import Counter from '../components/Counter';
 import { Tooltip } from '../components/Tooltip';
+import { Themes } from '../utils/types';
 
 const SideBarItemStyles = cva([
     "h-[40px] w-full px-[8px] flex gap-[6px] typography-body-small-medium justify-start items-center",
@@ -72,7 +73,8 @@ interface Props
     VariantProps<typeof SideBarItemStyles> {
     asChild?: boolean;
     as?: React.ElementType;
-    theme?: Themes    variant?: "default" | "secondary"
+    theme?: Themes
+    variant?: "default" | "secondary"
     iconOnly?: boolean
     active?: boolean
     disabled?: boolean
@@ -130,7 +132,8 @@ interface SideBarIconButtonProps
     VariantProps<typeof SideBarItemStyles> {
     asChild?: boolean;
     as?: React.ElementType;
-    theme?: Themes    variant?: "default" | "secondary"
+    theme?: Themes
+    variant?: "default" | "secondary"
     active?: boolean
     count?: number
     message?: ReactNode

@@ -138,7 +138,7 @@ function App() {
 You can customize the appearance of the `RadioLabel` component by:
 
 *   **Providing a custom `className`:** This allows you to add or override the default styles with your own CSS.
-*   **Modifying the CVA styles:** Adjust the styles defined within the `glareRadioLabelStyles` variable to change the base styles and variants of the `Radio` input element.
+*   **Modifying the CVA styles:** Adjust the styles defined within the `glareRadioStyles` variable to change the base styles and variants of the `Radio` input element.
 *   **Theming:** Use the `theme` prop to switch between predefined color schemes.
 
 ---
