@@ -8,7 +8,7 @@ interface LayoutProps
 }
 export function DefaultLayout({ ...props }: LayoutProps) {
   return (
-    <div {...props} className="flex h-screen gap-[10px] bg-background-system-body-base md:p-[10px]">
+    <div {...props} className="flex h-screen gap-[10px] bg-background-system-body-base md:p-[16px]">
       {props.children}
     </div>
   );
@@ -89,7 +89,7 @@ interface ChildProps
   theme?: Themes
 }
 
-const SideBarChildContainer = ({ theme, ...props }: ChildProps) => {
+export const SideBarChildContainer = ({ theme, ...props }: ChildProps) => {
   return (
     <div {...props} data-theme={theme} className={cn("w-full py-2 bg-background-system-body-base pr-2", props.className)}>
       {props.children}
