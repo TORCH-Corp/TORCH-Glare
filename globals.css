@@ -23,23 +23,4 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000;
-}
-
-.app {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#root {
-  width: 100%;
-}
-
-.test {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
 }

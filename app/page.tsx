@@ -1,13 +1,12 @@
 'use client';
 import Examples from '../exmples';
 
-function App() {
+export default function page() {
 
   return (
     <Examples />
   );
 }
-export default App;
 
 
 // using with react hook form lib
