@@ -1,6 +1,5 @@
 import { Button } from "@/components/Button";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function ButtonExample() {
@@ -16,14 +15,13 @@ export default function ButtonExample() {
   ]);
   const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
 
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn("text-xl font-bold", {
-          "text-black": theme === "light",
-          "text-white": theme === "dark",
+          "text-content-system-global-primary": true
+
         })}
       >
         Button Variants Preview
@@ -34,7 +32,7 @@ export default function ButtonExample() {
           <h2
             className={cn(
               "text-lg font-semibold mb-4",
-              theme === "light" ? "text-black" : "text-white"
+              "text-content-system-global-primary"
             )}
           >
             {variant}
@@ -45,7 +43,7 @@ export default function ButtonExample() {
                 <span
                   className={cn(
                     "text-sm",
-                    theme === "light" ? "text-black" : "text-white"
+                    "text-content-system-global-primary"
                   )}
                 >
                   Size: {size}
@@ -67,7 +65,7 @@ export default function ButtonExample() {
                 <span
                   className={cn(
                     "text-sm",
-                    theme === "light" ? "text-black" : "text-white"
+                    "text-content-system-global-primary"
                   )}
                 >
                   Icon {size}
@@ -86,7 +84,7 @@ export default function ButtonExample() {
         <h2
           className={cn(
             "text-lg font-semibold mb-4",
-            theme === "light" ? "text-black" : "text-white"
+            "text-content-system-global-primary"
           )}
         >
           Loading State
@@ -105,7 +103,7 @@ export default function ButtonExample() {
         <h2
           className={cn(
             "text-lg font-semibold mb-4",
-            theme === "light" ? "text-black" : "text-white"
+            "text-content-system-global-primary"
           )}
         >
           Disabled State

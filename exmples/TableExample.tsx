@@ -12,7 +12,6 @@ import {
   TableRow,
 } from "@/components/Table";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import {
   DndContext,
   closestCenter,
@@ -31,7 +30,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 
 export default function TableExample() {
-  const { theme } = useTheme();
   const invoices = [
     {
       invoice: "INV001",
@@ -107,7 +105,7 @@ export default function TableExample() {
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         Table Preview

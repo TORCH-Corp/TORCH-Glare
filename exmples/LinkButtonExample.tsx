@@ -1,18 +1,16 @@
 import { LinkButton } from "@/components/LinkButton";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function LinkButtonExample() {
   const [sizes] = useState<any>(["S", "M"]);
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         LinkButton Preview
@@ -22,7 +20,7 @@ export default function LinkButtonExample() {
           <span
             className={cn(
               "text-sm",
-              theme === "light" ? "text-black" : "text-white"
+              "text-content-system-global-primary"
             )}
           >
             Size: {size}

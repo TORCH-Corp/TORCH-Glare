@@ -2,11 +2,9 @@ import { Button } from "@/components/Button";
 import { LabelLessInput } from "@/components/LabelLessInput";
 import { PopoverItem } from "@/components/Popover";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function LabelLessInputExample() {
-  const { theme } = useTheme();
 
   const [anotherSizes] = useState<any>(["S", "M"]);
   const [error, setError] = useState(false);
@@ -16,8 +14,8 @@ export default function LabelLessInputExample() {
     <>
       <h1
         className={cn("text-2xl", {
-          "text-black": theme === "light",
-          "text-white": theme === "dark",
+          "text-content-system-global-primary": true
+
         })}
       >
         LabelLessInput Preview
@@ -28,8 +26,8 @@ export default function LabelLessInputExample() {
         <div key={`${size}-labelLessInput`} className="">
           <h2
             className={cn("text-lg font-semibold", {
-              "text-black": theme === "light",
-              "text-white": theme === "dark",
+              "text-content-system-global-primary": true
+
             })}
           >
             {`Size: ${size}`}

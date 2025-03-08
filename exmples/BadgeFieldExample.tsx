@@ -2,12 +2,10 @@ import { Badge } from "@/components/Badge";
 import { BadgeField } from "@/components/BadgeField";
 import { Button } from "@/components/Button";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 import { ActionButton } from "@/components/ActionButton";
 
 export default function BadgeFieldExample() {
-  const { theme } = useTheme();
   const [badges, setBadges] = useState<any>([
     { label: "Badge 1", isSelected: true, variant: "green" },
     { label: "Badge 2", isSelected: true, variant: "navy" },
@@ -28,8 +26,8 @@ export default function BadgeFieldExample() {
     <>
       <h1
         className={cn("text-2xl", {
-          "text-black": theme === "light",
-          "text-white": theme === "dark",
+          "text-content-system-global-primary": true
+
         })}
       >
         BadgeField Preview
@@ -40,8 +38,8 @@ export default function BadgeFieldExample() {
         <div key={`${size}-badgeField`} className="">
           <h2
             className={cn("text-lg font-semibold", {
-              "text-black": theme === "light",
-              "text-white": theme === "dark",
+              "text-content-system-global-primary": true
+
             })}
           >{`Size: ${size}`}</h2>
           <BadgeField

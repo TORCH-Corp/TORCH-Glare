@@ -1,18 +1,16 @@
 import TabFormItem from "@/components/TabFormItem";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export function TabFormItemExample() {
   const [variants] = useState<any>(["top", "side"]);
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         TabFormItem Preview
@@ -22,7 +20,7 @@ export function TabFormItemExample() {
           <span
             className={cn(
               "text-sm",
-              theme === "light" ? "text-black" : "text-white"
+              "text-content-system-global-primary"
             )}
           >
             type: {variant}

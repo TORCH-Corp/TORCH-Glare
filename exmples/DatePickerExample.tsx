@@ -2,11 +2,9 @@ import { Button } from "@/components/Button";
 import { Datepicker } from "@/components/DatePicker";
 import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function DatePickerExample() {
-  const { theme } = useTheme();
   const [anotherSizes] = useState<any>(["S", "M"]);
   const [error, setError] = useState(false);
 
@@ -14,8 +12,8 @@ export default function DatePickerExample() {
     <>
       <h1
         className={cn("text-2xl", {
-          "text-black": theme === "light",
-          "text-white": theme === "dark",
+          "text-content-system-global-primary": true
+
         })}
       >
         SlideDatePicker Preview
@@ -26,8 +24,8 @@ export default function DatePickerExample() {
         <div key={`${size}`} className="">
           <h2
             className={cn("text-lg font-semibold", {
-              "text-black": theme === "light",
-              "text-white": theme === "dark",
+              "text-content-system-global-primary": true
+
             })}
           >{`Size: ${size}`}</h2>
           <Datepicker

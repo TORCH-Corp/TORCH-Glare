@@ -2,11 +2,9 @@ import { Button } from "@/components/Button";
 import { LabelField } from "@/components/LabelField";
 import { PopoverItem } from "@/components/Popover";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function LabelFieldExample() {
-  const { theme } = useTheme();
   const mockIcons = [
     <i className="ri-user-line"></i>,
     <i className="ri-search-line"></i>,
@@ -19,8 +17,8 @@ export default function LabelFieldExample() {
     <>
       <h1
         className={cn("text-2xl", {
-          "text-black": theme === "light",
-          "text-white": theme === "dark",
+          "text-content-system-global-primary": true
+
         })}
       >
         LabelField Preview
@@ -31,8 +29,8 @@ export default function LabelFieldExample() {
         <div key={`${size}-labelField`} className="">
           <h2
             className={cn("text-lg font-semibold", {
-              "text-black": theme === "light",
-              "text-white": theme === "dark",
+              "text-content-system-global-primary": true
+
             })}
           >{`Size: ${size}`}</h2>
           <LabelField

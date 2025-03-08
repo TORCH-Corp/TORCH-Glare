@@ -1,18 +1,16 @@
 import { ActionButton } from "@/components/ActionButton";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function ActionButtonExample() {
   const [sizes] = useState<any>(["XS", "S", "M"]);
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         Action Button Preview
@@ -22,7 +20,7 @@ export default function ActionButtonExample() {
           <span
             className={cn(
               "text-sm",
-              theme === "light" ? "text-black" : "text-white"
+              "text-content-system-global-primary"
             )}
           >
             Size: {size}

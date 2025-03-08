@@ -1,19 +1,17 @@
 import { InputField } from "@/components/InputField";
 import { PasswordLevel } from "@/components/PasswordLevel";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function PasswordLevelExample() {
   const [value, setValue] = useState<any>("");
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         PasswordLevel Preview
@@ -22,7 +20,7 @@ export default function PasswordLevelExample() {
         <span
           className={cn(
             "text-sm",
-            theme === "light" ? "text-black" : "text-white"
+            "text-content-system-global-primary"
           )}
         ></span>
         <InputField

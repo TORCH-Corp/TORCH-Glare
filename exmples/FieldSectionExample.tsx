@@ -2,19 +2,17 @@ import { Alert } from "@/components/Alert";
 import { FieldSection } from "@/layouts/FieldSection";
 import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function FieldSectionExample() {
   const [ButtonSizes] = useState<any>(["S", "M", "L"]);
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn("text-xl font-bold mb-4", {
-          "text-black": theme === "light",
-          "text-white": theme === "dark",
+          "text-content-system-global-primary": true
+
         })}
       >
         FieldSection Styles Preview

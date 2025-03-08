@@ -1,18 +1,16 @@
 import Alert from "@/components/Alert";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export function AlertExample() {
   const [variants] = useState<any>(["info", "warning", "error", "success"]);
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         Alert Preview
@@ -22,7 +20,7 @@ export function AlertExample() {
           <span
             className={cn(
               "text-sm",
-              theme === "light" ? "text-black" : "text-white"
+              "text-content-system-global-primary"
             )}
           >
             Variant: {variant}

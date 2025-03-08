@@ -6,11 +6,9 @@ import {
   DropDownButtonValue,
 } from "@/components/DropDownButton";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function DropDownButtonExample() {
-  const { theme } = useTheme();
   const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
 
   return (
@@ -18,7 +16,7 @@ export default function DropDownButtonExample() {
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         DropDownButton Preview

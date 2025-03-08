@@ -2,11 +2,9 @@ import { Button } from "@/components/Button";
 import { InputField } from "@/components/InputField";
 import { PopoverItem } from "@/components/Popover";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function InputFieldExample() {
-  const { theme } = useTheme();
   const mockIcons = [
     <i className="ri-user-line"></i>,
     <i className="ri-search-line"></i>,
@@ -20,8 +18,8 @@ export default function InputFieldExample() {
     <>
       <h1
         className={cn("text-2xl", {
-          "text-black": theme === "light",
-          "text-white": theme === "dark",
+          "text-content-system-global-primary": true
+
         })}
       >
         InputField Preview
@@ -33,8 +31,8 @@ export default function InputFieldExample() {
           <form autoComplete="off" key={`${size}-${variant}`} className="">
             <h2
               className={cn("text-lg font-semibold", {
-                "text-black": theme === "light",
-                "text-white": theme === "dark",
+                "text-content-system-global-primary": true
+
               })}
             >{`Variant: ${variant}, Size: ${size}`}</h2>
             <InputField

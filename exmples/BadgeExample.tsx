@@ -1,18 +1,16 @@
 import { Badge } from "@/components/Badge";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export function BadgeExample() {
   const [variants] = useState<any>(["green", "greenLight", "cocktailGreen", "yellow", 'redOrange', 'redLight', 'rose', 'purple', 'bluePurple', 'blue', 'navy', 'gray']);
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         Badge Preview
@@ -22,7 +20,7 @@ export function BadgeExample() {
           <span
             className={cn(
               "text-sm",
-              theme === "light" ? "text-black" : "text-white"
+              "text-content-system-global-primary"
             )}
           >
             Variant: {variant}

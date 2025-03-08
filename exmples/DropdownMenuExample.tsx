@@ -14,11 +14,9 @@ import {
 } from "@/components/DropdownMenu";
 
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from "react";
 
 export default function DropdownMenuExample() {
-  const { theme } = useTheme();
   const [ThemeVariants] = useState<"PresentationStyle" | "SystemStyle" | any>([
     "PresentationStyle",
     "SystemStyle",
@@ -29,7 +27,7 @@ export default function DropdownMenuExample() {
         <h2
           className={cn(
             "text-lg font-semibold mb-4",
-            theme === "light" ? "text-black" : "text-white"
+            "text-content-system-global-primary"
           )}
         >
           DropdownMenu Variants
@@ -40,7 +38,7 @@ export default function DropdownMenuExample() {
               <DropdownMenu >
                 <DropdownMenuTrigger
                   className={cn("p-2 rounded-md bg-[var(--background-presentation-form-base)] border border-[var(--border-presentation-global-primary)] text-[var(--content-presentation-global-primary)]",
-                    theme === "light" ? "text-black" : "text-white"
+                    "text-content-system-global-primary"
                   )}
                 >
                   SHOW {variant}

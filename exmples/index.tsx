@@ -1,4 +1,3 @@
-import { useTheme } from "@/providers/ThemeProvider";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/Button";
 import ActionButtonExample from "./ActionButtonExample";
@@ -29,6 +28,7 @@ import PasswordLevelExample from "./PasswordLevelExample";
 import SlideDatePickerExample from "./SlideDatePickerExample";
 import DatePickerExample from "./DatePickerExample";
 import Counter from "@/components/Counter";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -39,9 +39,8 @@ export default function Examples() {
 
   return (
     <div
-      className={cn("w-full flex justify-center pt-12", {
-        "bg-white": theme === "light",
-        "bg-black": theme === "dark",
+      className={cn("w-full flex justify-center pt-12 bg-background-system-body-primary", {
+
       })}
     >
       <section className="flex flex-col gap-8 p-4 max-w-[800px] overflow-hidden">

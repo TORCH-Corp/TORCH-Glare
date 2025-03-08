@@ -1,17 +1,15 @@
 import { Button } from "@/components/Button";
 import { Tooltip } from "@/components/Tooltip";
 import { cn } from "@/utils/cn";
-import { useTheme } from "@/providers/ThemeProvider";
 
 export default function TooltipExample() {
-  const { theme } = useTheme();
 
   return (
     <>
       <h1
         className={cn(
           "text-xl font-bold mb-8",
-          theme === "light" ? "text-black" : "text-white"
+          "text-content-system-global-primary"
         )}
       >
         Tooltip Preview
