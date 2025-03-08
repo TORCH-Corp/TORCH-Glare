@@ -1,4 +1,5 @@
-import Examples from './exmples';
+'use client';
+import Examples from '../exmples';
 
 function App() {
 
