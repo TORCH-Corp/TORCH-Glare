@@ -27,6 +27,5 @@ package-lock.json
 
 *storybook.log
 
-app/**
-app
-/src/torch-glare
+/torch-glare
+.next

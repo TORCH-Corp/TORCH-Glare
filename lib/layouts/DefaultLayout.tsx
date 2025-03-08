@@ -69,7 +69,7 @@ export function SideBar({ children, headerChild, navigationChildren, iconButtons
                       <SideBarChildContainer key={index}>{child}</SideBarChildContainer>
                     ))
                   ) : (
-                    <SideBarChildContainer>{navigationChildren}</SideBarChildContainer>
+                    navigationChildren
                   )}
                   <SideBarChildContainer className="h-full" />
                 </div>

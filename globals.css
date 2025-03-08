@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@plugin 'glare-typography';
+@plugin 'glare-themes';
+@plugin 'glare-torch-mode';
+@plugin 'tailwind-scrollbar-hide';
+@plugin 'tailwindcss-animate';
+
+* {
+  box-sizing: border-box;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-transition: "color 1000s ease-out, background-color 1000s ease-out";
+  -webkit-transition-delay: 1000s;
+}
+
+body {
+  font-family: "SF-Pro";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
