@@ -195,7 +195,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
             data-theme={theme}
             onFocus={(e) => {
               setDropDownListWidth(e.currentTarget.offsetWidth);
-              setFucus(true);
+              setFucus(!fucus);
               inputRef.current?.focus();
             }}
             className={cn(
@@ -245,21 +245,19 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 >
                   {childrenSide}
                   {popoverChildren && (
-                    <ActionButton asChild size={onTable ? "XS" : size}>
-                      <i>
-                        <i
-                          className={cn(
-                            "ri-arrow-down-s-line",
-                            "transition-[transform]",
-                            "duration-400",
-                            "ease-in-out",
-                            { "rotate-180": fucus },
-                            { "text-[16px]": size === "S" || onTable },
-                            { "text-[26px]": size === "M" && !onTable },
-                            { "text-white": variant === "SystemStyle" }
-                          )}
-                        />
-                      </i>
+                    <ActionButton size={onTable ? "XS" : size}>
+                      <i
+                        className={cn(
+                          "ri-arrow-down-s-line",
+                          "transition-[transform,rotate]",
+                          "duration-200",
+                          "ease-in-out",
+                          { "rotate-180": fucus },
+                          { "!text-[16px]": size === "S" || onTable },
+                          { "!text-[26px]": size === "M" && !onTable },
+                          { "text-white": variant === "SystemStyle" }
+                        )}
+                      />
                     </ActionButton>
                   )}
                 </div>
