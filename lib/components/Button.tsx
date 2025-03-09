@@ -14,32 +14,32 @@ const buttonVariants = cva(
           "text-content-presentation-action-light-primary",
           "hover:bg-background-presentation-action-hover",
           "hover:text-content-presentation-action-hover",
-          "focus:border focus:border-border-presentation-state-focus",
-          "active:border active:border-border-presentation-state-focus",
+          "focus:lg:focus:md:border lg:focus:md:border-border-presentation-state-focus", // Focus style only for medium screens and above
+          "active:bg-background-presentation-action-hover active:text-content-presentation-action-hover",
         ],
         BlueSecStyle: [
           "bg-background-presentation-action-secondary",
           "text-content-presentation-action-light-primary",
           "hover:bg-background-presentation-state-information-primary",
           "hover:text-content-presentation-action-hover",
-          "focus:border focus:border-border-presentation-state-focus",
-          "active:border active:border-border-presentation-state-focus",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-state-information-primary active:text-content-presentation-action-hover",
         ],
         YelSecStyle: [
           "bg-background-presentation-action-secondary",
           "text-content-presentation-action-light-primary",
           "hover:bg-background-presentation-state-warning-primary",
           "hover:text-content-presentation-action-light-primary",
-          "focus:border focus:border-border-presentation-state-focus",
-          "active:border active:border-border-presentation-state-focus",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-state-warning-primary active:text-content-presentation-action-light-primary",
         ],
         RedSecStyle: [
           "bg-background-presentation-action-secondary",
           "text-content-presentation-action-light-primary",
           "hover:bg-background-presentation-state-negative-primary",
           "hover:text-content-presentation-action-hover",
-          "focus:border focus:border-border-presentation-state-focus",
-          "active:border active:border-border-presentation-state-focus",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-state-negative-primary active:text-content-presentation-action-hover",
         ],
         BorderStyle: [
           "text-content-presentation-action-light-primary",
@@ -47,10 +47,10 @@ const buttonVariants = cva(
           "bg-background-presentation-action-borderstyle",
           "hover:bg-background-presentation-action-hover",
           "hover:text-content-presentation-action-hover",
-          "focus:border focus:border-border-presentation-state-focus",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
           "focus:text-content-presentation-action-light-primary",
           "focus:hover:text-content-presentation-action-hover",
-          "active:border active:border-border-presentation-state-focus",
+          "active:bg-background-presentation-action-hover active:text-content-presentation-action-hover",
         ],
         PrimeContStyle: [
           "text-content-presentation-action-light-primary",
@@ -59,7 +59,7 @@ const buttonVariants = cva(
           "hover:text-content-presentation-action-light-primary",
           "focus:border focus:border-border-presentation-state-focus",
           "focus:bg-background-presentation-action-borderstyle",
-          "active:border active:border-border-presentation-state-focus",
+          "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-light-primary",
         ],
         BlueContStyle: [
           "text-content-presentation-action-light-primary",
@@ -68,16 +68,16 @@ const buttonVariants = cva(
           "hover:text-content-presentation-action-information-hover",
           "focus:border focus:border-border-presentation-state-focus",
           "focus:bg-background-presentation-action-borderstyle",
-          "active:border active:border-border-presentation-state-focus",
+          "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-information-hover",
         ],
         RedContStyle: [
           "text-content-presentation-action-light-primary",
           "border-transparent bg-transparent",
           "hover:bg-background-presentation-action-contstyle-hover",
           "hover:text-content-presentation-action-negative-hover",
-          "focus:border focus:border-border-presentation-state-focus",
-          "focus:bg-background-presentation-action-borderstyle",
-          "active:border active:border-border-presentation-state-focus",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "focus:lg:bg-background-presentation-action-borderstyle",
+          "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-negative-hover",
         ],
       },
       size: {
@@ -90,7 +90,7 @@ const buttonVariants = cva(
         true: "",
       },
       disabled: {
-        true: "",
+        true: "cursor-not-allowed",
       },
       buttonType: {
         button: "",
@@ -111,8 +111,8 @@ const buttonVariants = cva(
           "text-content-presentation-action-hover",
           "hover:bg-background-presentation-action-hover",
           "hover:text-content-presentation-action-hover",
-          "focus:border focus:border-transparent",
-          "active:border active:border-transparent",
+          "focus:lg:border focus:lg:border-transparent",
+          "active:bg-background-presentation-action-hover active:text-content-presentation-action-hover",
         ],
       },
       {
@@ -122,7 +122,7 @@ const buttonVariants = cva(
           "pointer-events-none",
           "bg-background-presentation-action-disabled",
           "text-content-presentation-state-disabled",
-          "border-border-presentation-state-disabled",
+          "border-transparent",
         ],
       },
       {
@@ -248,7 +248,7 @@ export function LoadingIcon({ size, className }: {
         S: "w-[12px] h-[12px]",
         M: "w-[18px] h-[18px]",
         L: "w-[20px] h-[20px]",
-        XL: "w-[22px] h-[22px]"
+        XL: "w-[20px] h-[20px]"
       },
     },
     defaultVariants: {
