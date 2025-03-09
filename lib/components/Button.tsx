@@ -9,6 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // fucus styles for medium screens and above
         PrimeStyle: [
           "bg-background-presentation-action-secondary",
           "text-content-presentation-action-light-primary",
@@ -48,8 +49,8 @@ const buttonVariants = cva(
           "hover:bg-background-presentation-action-hover",
           "hover:text-content-presentation-action-hover",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "focus:text-content-presentation-action-light-primary",
-          "focus:hover:text-content-presentation-action-hover",
+          "focus:lg:text-content-presentation-action-light-primary",
+          "focus:hover:lg:text-content-presentation-action-hover",
           "active:bg-background-presentation-action-hover active:text-content-presentation-action-hover",
         ],
         PrimeContStyle: [
@@ -57,8 +58,8 @@ const buttonVariants = cva(
           "border-transparent bg-transparent",
           "hover:bg-background-presentation-action-contstyle-hover",
           "hover:text-content-presentation-action-light-primary",
-          "focus:border focus:border-border-presentation-state-focus",
-          "focus:bg-background-presentation-action-borderstyle",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "focus:lg:bg-background-presentation-action-borderstyle",
           "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-light-primary",
         ],
         BlueContStyle: [
@@ -66,8 +67,8 @@ const buttonVariants = cva(
           "border-transparent bg-transparent",
           "hover:bg-background-presentation-action-contstyle-hover",
           "hover:text-content-presentation-action-information-hover",
-          "focus:border focus:border-border-presentation-state-focus",
-          "focus:bg-background-presentation-action-borderstyle",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "focus:lg:bg-background-presentation-action-borderstyle",
           "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-information-hover",
         ],
         RedContStyle: [
