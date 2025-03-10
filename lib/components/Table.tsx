@@ -184,7 +184,7 @@ const TableHead = React.forwardRef<
             })}
           >
             {props.children}
-            {!isDummy && <SortButton onSort={onSort} sortType={sortType} />}
+            {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
           </div>
         </div>
         <button className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary">

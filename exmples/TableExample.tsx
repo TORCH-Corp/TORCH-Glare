@@ -192,7 +192,6 @@ const SortableHeader = ({
 
   return (
     <TableHead
-      onSort={() => console.log("sort")}
       {...props}
       ref={setNodeRef}
       style={style}
