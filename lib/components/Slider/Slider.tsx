@@ -65,7 +65,7 @@ export const setContainerStyles = (
 
 type PropType = {
     loop?: boolean
-    slideCount: number
+    slideCount: string[]
     perspective: 'left' | 'right'
 }
 
@@ -79,9 +79,9 @@ export const IosPickerItem: React.FC<PropType> = (props) => {
         watchSlides: false
     })
     const rootNodeRef = useRef<HTMLDivElement>(null)
-    const totalRadius = slideCount * WHEEL_ITEM_RADIUS
+    const totalRadius = slideCount.length * WHEEL_ITEM_RADIUS
     const rotationOffset = loop ? 0 : WHEEL_ITEM_RADIUS
-    const slides = Array.from(Array(slideCount).keys())
+    const slides = slideCount
 
     const inactivateEmblaTransform = useCallback(
         (emblaApi: EmblaCarouselType) => {
@@ -99,11 +99,11 @@ export const IosPickerItem: React.FC<PropType> = (props) => {
 
     const rotateWheel = useCallback(
         (emblaApi: EmblaCarouselType) => {
-            const rotation = slideCount * WHEEL_ITEM_RADIUS - rotationOffset
+            const rotation = (slideCount.length) * WHEEL_ITEM_RADIUS - rotationOffset
             const wheelRotation = rotation * emblaApi.scrollProgress()
             setContainerStyles(emblaApi, wheelRotation)
             emblaApi.slideNodes().forEach((_, index) => {
-                setSlideStyles(emblaApi, index, loop, slideCount, totalRadius)
+                setSlideStyles(emblaApi, index, loop, slideCount.length, totalRadius)
             })
         },
         [slideCount, rotationOffset, totalRadius]
@@ -139,9 +139,9 @@ export const IosPickerItem: React.FC<PropType> = (props) => {
                     ref={emblaRef}
                 >
                     <div className="embla__ios-picker__container">
-                        {slides.map((_, index) => (
-                            <div className="embla__ios-picker__slide" key={index}>
-                                {index}
+                        {slides.map((value, index) => (
+                            <div className="embla__ios-picker__slide" key={value}>
+                                {value}
                             </div>
                         ))}
                     </div>

@@ -27,7 +27,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   const [pickerValue, setPickerValue] = useState<PickerValue>(pickerValueData);
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
+  const years = Array.from({ length: 150 }, (_, i) => `${currentYear - 100 + i}`);
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ''));
   const days = getDayArray(Number(pickerValue.year), Number(pickerValue.month));
   const monthsNames = [
@@ -80,11 +80,15 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
           }}
         >
           <IosPickerItem
-            slideCount={24}
+            slideCount={years}
             perspective="left"
           />
           <IosPickerItem
-            slideCount={60}
+            slideCount={months}
+            perspective="left"
+          />
+          <IosPickerItem
+            slideCount={days}
             perspective="right"
           />
         </div>
