@@ -36,6 +36,7 @@ export function RadioCardExample() {
           id={"test2378"}
           headerLabel={"RadioCard Header"}
           description={"this is a description for RadioCard"}
+          checked
         >
           <Button size={"S"}>do something</Button>
         </RadioCard>

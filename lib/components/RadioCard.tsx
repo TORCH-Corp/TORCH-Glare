@@ -23,6 +23,9 @@ export const glareRadioCard = cva(
   ],
   {
     variants: {
+      checked: {
+        true: ""
+      },
       disabled: {
         true: [
           "border-border-presentation-global-primary",
@@ -32,6 +35,15 @@ export const glareRadioCard = cva(
         ],
       },
     },
+    compoundVariants: [
+      {
+        checked: true,
+        className: [
+          "border-border-presentation-global-primary",
+          "hover:border-border-presentation-global-primary",
+        ],
+      }
+    ]
   }
 );
 
@@ -57,6 +69,7 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
           glareRadioCard({
             className,
             disabled,
+            checked: props.checked
           })
         )}
       >
