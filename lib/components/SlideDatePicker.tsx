@@ -1,8 +1,10 @@
 import { ComponentProps, forwardRef, useState } from 'react';
 import { getDaysInMonth } from 'date-fns';
-import Picker, { PickerValue } from '../hooks/MobileSlidePicker';
+import { PickerValue } from '../hooks/MobileSlidePicker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
+import { IosPickerItem } from './Slider/Slider';
+import './Slider/styles.css'
 
 function getDayArray(year: number, month: number): string[] {
   const dayCount = getDaysInMonth(new Date(year, month - 1));
@@ -53,7 +55,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   };
 
   return (
-    <Popover>
+    <Popover open>
       <PopoverTrigger data-theme={theme} className='w-full flex-1' >
         <InputField theme={theme} {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} readOnly />
       </PopoverTrigger>
@@ -67,35 +69,25 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
           </div>
           <p className="text-content-system-global-secondary typography-headers-medium-regular">Day</p>
         </div>
-        <Picker
-          className="flex-1"
-          selectContainerClassName="bg-background-system-body-tertiary z-[-1] rounded-[8px]"
-          value={pickerValue}
-          onChange={handlePickerChange}
-          wheelMode="natural"
+        <div className='absolute inset-0 w-full h-full flex justify-center items-center z-0 p-[6px]'>
+          <div className='w-full h-[42px] rounded-[8px] bg-background-system-body-tertiary mt-[23px]'></div>
+        </div>
+
+        <div className="embla"
+          style={{
+            maskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
+            WebkitMaskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
+          }}
         >
-          <Picker.Column name="year" >
-            {years.map((year) => (
-              <Picker.Item key={year} value={year}>
-                <div className="typography-display-small-semibold text-content-presentation-action-light-primary">{year}</div>
-              </Picker.Item>
-            ))}
-          </Picker.Column>
-          <Picker.Column name="month">
-            {months.map((month, i) => (
-              <Picker.Item key={month} value={month}>
-                <div className="typography-display-small-semibold flex gap-1 whitespace-nowrap text-content-presentation-action-light-primary"> <p className='text-content-presentation-action-light-secondary'>{monthsNames[i].substring(0, 3)} - </p>{month}</div>
-              </Picker.Item>
-            ))}
-          </Picker.Column>
-          <Picker.Column name="day">
-            {days.map((day) => (
-              <Picker.Item key={day} value={day}>
-                <div className="typography-display-small-semibold text-content-presentation-action-light-primary">{day}</div>
-              </Picker.Item>
-            ))}
-          </Picker.Column>
-        </Picker>
+          <IosPickerItem
+            slideCount={24}
+            perspective="left"
+          />
+          <IosPickerItem
+            slideCount={60}
+            perspective="right"
+          />
+        </div>
       </PopoverContent>
     </Popover>
   );

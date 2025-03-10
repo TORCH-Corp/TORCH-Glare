@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function SlideDatePickerExample() {
-  const [anotherSizes] = useState<any>(["S", "M"]);
+  const [anotherSizes] = useState<any>(["M"]);
   const [error, setError] = useState(false);
 
   return (
