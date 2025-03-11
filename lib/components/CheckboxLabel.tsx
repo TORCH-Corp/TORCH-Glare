@@ -1,3 +1,4 @@
+'use client';
 import { InputHTMLAttributes, forwardRef, useState } from "react";
 import { Label } from "./Label";
 import { cn } from "../utils/cn";
