@@ -1,6 +1,6 @@
-import { ComponentProps, forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import { ComponentProps, forwardRef, useState } from 'react';
 import { getDaysInMonth } from 'date-fns';
-import { PickerValue } from '../hooks/MobileSlidePicker';
+import Picker, { PickerValue } from '../hooks/MobileSlidePicker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
 
@@ -25,7 +25,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   const [pickerValue, setPickerValue] = useState<PickerValue>(pickerValueData);
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 150 }, (_, i) => `${currentYear - 100 + i}`);
+  const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ''));
   const days = getDayArray(Number(pickerValue.year), Number(pickerValue.month));
   const monthsNames = [
@@ -53,7 +53,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   };
 
   return (
-    <Popover open>
+    <Popover>
       <PopoverTrigger data-theme={theme} className='w-full flex-1' >
         <InputField theme={theme} {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} readOnly />
       </PopoverTrigger>
@@ -67,55 +67,35 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
           </div>
           <p className="text-content-system-global-secondary typography-headers-medium-regular">Day</p>
         </div>
-        <div className='absolute inset-0 w-full h-full flex justify-center items-center z-0 p-[6px]'>
-          <div className='w-full h-[42px] rounded-[8px] bg-background-system-body-tertiary mt-[23px]'></div>
-        </div>
-
-        <div className="relative flex w-full h-[300px] max-w-full mx-auto text-white"
-          style={{
-            maskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
-            WebkitMaskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
-          }}
+        <Picker
+          className="flex-1"
+          selectContainerClassName="bg-background-system-body-tertiary z-[-1] rounded-[8px]"
+          value={pickerValue}
+          onChange={handlePickerChange}
+          wheelMode="natural"
         >
-          <IosPickerItem
-            slideData={years}
-            perspective="left"
-          >
-            {
-              years.map((value, index) => (
-                <SliderItem key={value}>
-                  {value}
-                </SliderItem>
-              ))
-            }
-          </IosPickerItem>
-          <IosPickerItem
-            slideData={months}
-            perspective="left"
-          >
-            {
-              months.map((value, index) => (
-                <SliderItem key={value}>
-                  {
-                    `${monthsNames[Number(value) - 1].substring(0, 3)}-${value}`
-                  }
-                </SliderItem>
-              ))
-            }
-          </IosPickerItem>
-          <IosPickerItem
-            slideData={days}
-            perspective="right"
-          >
-            {
-              days.map((value, index) => (
-                <SliderItem key={value}>
-                  {value}
-                </SliderItem>
-              ))
-            }
-          </IosPickerItem>
-        </div>
+          <Picker.Column name="year" >
+            {years.map((year) => (
+              <Picker.Item key={year} value={year}>
+                <div className="typography-display-small-semibold text-content-presentation-action-light-primary">{year}</div>
+              </Picker.Item>
+            ))}
+          </Picker.Column>
+          <Picker.Column name="month">
+            {months.map((month, i) => (
+              <Picker.Item key={month} value={month}>
+                <div className="typography-display-small-semibold flex gap-1 whitespace-nowrap text-content-presentation-action-light-primary"> <p className='text-content-presentation-action-light-secondary'>{monthsNames[i].substring(0, 3)} - </p>{month}</div>
+              </Picker.Item>
+            ))}
+          </Picker.Column>
+          <Picker.Column name="day">
+            {days.map((day) => (
+              <Picker.Item key={day} value={day}>
+                <div className="typography-display-small-semibold text-content-presentation-action-light-primary">{day}</div>
+              </Picker.Item>
+            ))}
+          </Picker.Column>
+        </Picker>
       </PopoverContent>
     </Popover>
   );
@@ -138,161 +118,3 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
       <button>submit</button>
     </form>
 */
-
-
-
-import { EmblaCarouselType } from 'embla-carousel'
-import useEmblaCarousel from 'embla-carousel-react'
-
-const CIRCLE_DEGREES = 360
-const WHEEL_ITEM_SIZE = 32
-const WHEEL_ITEM_COUNT = 18
-const WHEEL_ITEMS_IN_VIEW = 8
-const WHEEL_ITEM_RADIUS = CIRCLE_DEGREES / WHEEL_ITEM_COUNT
-const IN_VIEW_DEGREES = WHEEL_ITEM_RADIUS * WHEEL_ITEMS_IN_VIEW
-const WHEEL_RADIUS = Math.round(
-  WHEEL_ITEM_SIZE / 2 / Math.tan(Math.PI / WHEEL_ITEM_COUNT)
-)
-
-const isInView = (wheelLocation: number, slidePosition: number): boolean =>
-  Math.abs(wheelLocation - slidePosition) < IN_VIEW_DEGREES
-
-const setSlideStyles = (
-  emblaApi: EmblaCarouselType,
-  index: number,
-  loop: boolean,
-  slideData: number,
-  totalRadius: number
-): void => {
-  const slideNode = emblaApi.slideNodes()[index]
-  const wheelLocation = emblaApi.scrollProgress() * totalRadius
-  const positionDefault = emblaApi.scrollSnapList()[index] * totalRadius
-  const positionLoopStart = positionDefault + totalRadius
-  const positionLoopEnd = positionDefault - totalRadius
-
-  let inView = false
-  let angle = index * -WHEEL_ITEM_RADIUS
-
-  if (isInView(wheelLocation, positionDefault)) {
-    inView = true
-  }
-
-  if (loop && isInView(wheelLocation, positionLoopEnd)) {
-    inView = true
-    angle = -CIRCLE_DEGREES + (slideData - index) * WHEEL_ITEM_RADIUS
-  }
-
-  if (loop && isInView(wheelLocation, positionLoopStart)) {
-    inView = true
-    angle = -(totalRadius % CIRCLE_DEGREES) - index * WHEEL_ITEM_RADIUS
-  }
-
-  if (inView) {
-    slideNode.style.opacity = '1'
-    slideNode.style.transform = `translateY(-${index * 100}%) rotateX(${angle}deg) translateZ(${WHEEL_RADIUS}px)`
-  } else {
-    slideNode.style.opacity = '0'
-    slideNode.style.transform = 'none'
-  }
-}
-
-const setContainerStyles = (
-  emblaApi: EmblaCarouselType,
-  wheelRotation: number
-): void => {
-  emblaApi.containerNode().style.transform = `translateZ(${0}px) rotateX(${wheelRotation}deg)`
-}
-
-interface PropType extends React.HTMLAttributes<HTMLDivElement> {
-  loop?: boolean
-  slideData: string[]
-  perspective: 'left' | 'right'
-}
-
-const IosPickerItem: React.FC<PropType> = ({ slideData, perspective, loop = false, ...props }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop,
-    axis: 'y',
-    dragFree: true,
-    containScroll: false,
-    watchSlides: false
-  })
-  const rootNodeRef = useRef<HTMLDivElement>(null)
-  const totalRadius = slideData.length * WHEEL_ITEM_RADIUS
-  const rotationOffset = loop ? 0 : WHEEL_ITEM_RADIUS
-
-  const inactivateEmblaTransform = useCallback(
-    (emblaApi: EmblaCarouselType) => {
-      if (!emblaApi) return
-      const { translate, slideLooper } = emblaApi.internalEngine()
-      translate.clear()
-      translate.toggleActive(false)
-      slideLooper.loopPoints.forEach(({ translate }) => {
-        translate.clear()
-        translate.toggleActive(false)
-      })
-    },
-    []
-  )
-
-  const rotateWheel = useCallback(
-    (emblaApi: EmblaCarouselType) => {
-      const rotation = (slideData.length) * WHEEL_ITEM_RADIUS - rotationOffset
-      const wheelRotation = rotation * emblaApi.scrollProgress()
-      setContainerStyles(emblaApi, wheelRotation)
-      emblaApi.slideNodes().forEach((_, index) => {
-        setSlideStyles(emblaApi, index, loop, slideData.length, totalRadius)
-      })
-    },
-    [slideData, rotationOffset, totalRadius]
-  )
-
-  useEffect(() => {
-    if (!emblaApi) return
-
-    emblaApi.on('pointerUp', (emblaApi) => {
-      const { scrollTo, target, location } = emblaApi.internalEngine()
-      const diffToTarget = target.get() - location.get()
-      const factor = Math.abs(diffToTarget) < WHEEL_ITEM_SIZE / 2.5 ? 10 : 0.1
-      const distance = diffToTarget * factor
-      scrollTo.distance(distance, true)
-    })
-
-    emblaApi.on('scroll', rotateWheel)
-
-    emblaApi.on('reInit', (emblaApi) => {
-      inactivateEmblaTransform(emblaApi)
-      rotateWheel(emblaApi)
-    })
-
-    inactivateEmblaTransform(emblaApi)
-    rotateWheel(emblaApi)
-  }, [emblaApi, inactivateEmblaTransform, rotateWheel])
-
-  return (
-    <div {...props} className="flex items-center justify-center w-[90px] h-full text-[1.8rem]">
-      <div className="min-w-full h-full flex items-center justify-center overflow-hidden touch-pan-x" ref={rootNodeRef}>
-        <div
-          className={`w-[75px] h-[32px] perspective-[3200px] select-none ${perspective === 'left'
-            ? '[perspective-origin:calc(50%+130px)]'
-            : '[perspective-origin:calc(50%-130px)]'
-            }`}
-          ref={emblaRef}
-        >
-          <div className="w-full h-full [transform-style:preserve-3d] will-change-transform scroll-smooth">
-            {props.children}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-interface SliderItemType extends React.HTMLAttributes<HTMLDivElement> { }
-const SliderItem = (props: SliderItemType) => {
-  return (
-    <div className="w-full h-full text-[19px] text-center flex items-center justify-center [backface-visibility:hidden] opacity-0" {...props}>
-      {props.children}
-    </div>
-  )
-}

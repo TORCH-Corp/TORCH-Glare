@@ -29,6 +29,7 @@ import SlideDatePickerExample from "./SlideDatePickerExample";
 import DatePickerExample from "./DatePickerExample";
 import Counter from "@/components/Counter";
 import { useTheme } from "@/providers/ThemeProvider";
+import IosDatePickerExample from "./IosDatePicerExample";
 
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
@@ -84,6 +85,7 @@ export default function Examples() {
         <PasswordLevelExample />
         <TextareaExample />
         <SlideDatePickerExample />
+        <IosDatePickerExample />
         <DatePickerExample />
         <AttachmentExample />
         <FieldSectionExample />
