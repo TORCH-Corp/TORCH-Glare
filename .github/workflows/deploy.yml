@@ -46,31 +46,36 @@ jobs:
       - name: Install missing dependencies
         run: pnpm add vite
         
-      - name: Setup and test SSH connection
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+        
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           
-          # Configure SSH to not check host keys
-          cat > ~/.ssh/config << 'EOF'
-          Host *
+          # Configure SSH with proper options
+          cat > ~/.ssh/config << EOF
+          Host ${{ secrets.SERVER_HOST }}
             StrictHostKeyChecking no
             UserKnownHostsFile=/dev/null
+            IdentitiesOnly yes
           EOF
           
           # Debug the key format
           echo "=== Key fingerprint ==="
           ssh-keygen -l -f ~/.ssh/id_rsa || echo "Invalid key format"
-          
-          # Try direct connection with verbose output
-          echo "=== Testing SSH connection ==="
-          ssh -v ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "echo Connection test" || echo "Connection failed"
+        
+      - name: Test SSH connection
+        run: |
+          echo "=== Testing SSH connection with password ==="
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o IdentitiesOnly=yes ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "echo Connection test successful"
         continue-on-error: true
         
-      - name: Deploy using SSH command directly
+      - name: Deploy using SSH with password
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "cd /home/admin/Torch-Glare-Website && git pull && pnpm install --no-frozen-lockfile && pnpm build && pm2 restart glare-website || pm2 start npm --name 'glare-website' -- run start"
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o IdentitiesOnly=yes ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "cd /home/admin/Torch-Glare-Website && git pull && pnpm install --no-frozen-lockfile && pnpm build && pm2 restart glare-website || pm2 start npm --name 'glare-website' -- run start"
         
       - name: Health check
         run: |
