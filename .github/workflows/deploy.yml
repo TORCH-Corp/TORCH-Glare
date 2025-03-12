@@ -44,74 +44,44 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       
       - name: Install missing dependencies
-        run: |
-          pnpm add embla-carousel embla-carousel-react
-          pnpm add -D @types/react-dom
+        run: pnpm add vite
         
-      - name: Fix TypeScript import extensions
+      - name: Setup and test SSH connection
         run: |
-          # More thorough fix for import extensions
-          find ./src ./lib -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' || true
-          find ./app -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' || true
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           
-      - name: Set consistent Next.js version
+          # Configure SSH to not check host keys
+          cat > ~/.ssh/config << 'EOF'
+          Host *
+            StrictHostKeyChecking no
+            UserKnownHostsFile=/dev/null
+          EOF
+          
+          # Debug the key format
+          echo "=== Key fingerprint ==="
+          ssh-keygen -l -f ~/.ssh/id_rsa || echo "Invalid key format"
+          
+          # Try direct connection with verbose output
+          echo "=== Testing SSH connection ==="
+          ssh -v ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "echo Connection test" || echo "Connection failed"
+        continue-on-error: true
+        
+      - name: Deploy using SSH command directly
         run: |
-          # Use exact same Next.js version as remote server
-          pnpm add next@15.1.7
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "cd /home/admin/Torch-Glare-Website && git pull && pnpm install --no-frozen-lockfile && pnpm build && pm2 restart glare-website || pm2 start npm --name 'glare-website' -- run start"
         
-      - name: Update TypeScript config
-        run: |
-          # Allow importing TypeScript extensions
-          if [ -f tsconfig.json ]; then
-            sed -i 's/"compilerOptions": {/"compilerOptions": {\n    "allowImportingTsExtensions": true,/g' tsconfig.json
-          fi
-        
-      - name: Lint code
-        run: pnpm lint || true
-        
-      - name: Build project
-        run: pnpm build
-        
-      - name: Deploy to server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT || '22' }}
-          script: |
-            cd /home/admin/Torch-Glare-Website
-            git pull
-            if ! command -v pnpm &> /dev/null; then
-              npm install -g pnpm
-            fi
-            pnpm install --no-frozen-lockfile
-            pnpm add embla-carousel embla-carousel-react
-            pnpm add -D @types/react-dom
-            
-            # Fix TypeScript import extensions on server
-            find ./src ./lib -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' 2>/dev/null || true
-            find ./app -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' 2>/dev/null || true
-            
-            pnpm build
-            pm2 restart glare-website || pm2 start npm --name "glare-website" -- run start
-            
       - name: Health check
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT || '22' }}
-          script: |
-            sleep 10
-            if ! curl -s -f http://localhost:3000 > /dev/null; then
-              echo "Health check failed! Application is not responding."
-              echo "Deployment failed at $(date)" >> /home/admin/deploy-errors.log
-              exit 1
-            else
-              echo "Deployment successful at $(date)" >> /home/admin/deploy-success.log
-            fi
+        run: |
+          sleep 10
+          curl -s -f http://${{ secrets.SERVER_HOST }}:3000 > /dev/null
+          if [ $? -eq 0 ]; then
+            echo "Deployment successful!"
+          else
+            echo "Health check failed! Application is not responding."
+            exit 1
+          fi
             
   notify:
     needs: deploy
