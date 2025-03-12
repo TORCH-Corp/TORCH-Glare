@@ -36,9 +36,10 @@ interface SideBarProps
   iconButtons?: ReactNode
   headerChild?: ReactNode
   navigationChildren?: ReactNode
+  footerChildren?: ReactNode
   children?: ReactNode
 }
-export function SideBar({ children, headerChild, navigationChildren, iconButtons, ...props }: SideBarProps) {
+export function SideBar({ children, footerChildren, headerChild, navigationChildren, iconButtons, ...props }: SideBarProps) {
   return (
     <aside
       {...props}
@@ -62,18 +63,26 @@ export function SideBar({ children, headerChild, navigationChildren, iconButtons
               </div>
 
               {/* Navigation Section */}
-              <div className="scrollbar-hide overflow-scroll h-full flex flex-col flex-grow rounded-br-lg rtl:rounded-bl-lg rtl:rounded-br-none">
-                <div className="flex flex-col flex-grow gap-[1px]">
-                  {Array.isArray(navigationChildren) ? (
-                    navigationChildren.map((child, index) => (
-                      <SideBarChildContainer key={index}>{child}</SideBarChildContainer>
-                    ))
-                  ) : (
-                    navigationChildren
-                  )}
-                  <SideBarChildContainer className="h-full" />
+              <div className="scrollbar-hide h-full gap-[1px]  overflow-scroll grid grid-rows-[1fr_auto] grid-cols-1 rounded-br-lg rtl:rounded-bl-lg rtl:rounded-br-none">
+                <div className="flex flex-col h-full  overflow-scroll scrollbar-hide"
+                >
+                  <div className="flex flex-col gap-[1px] overflow-scroll scrollbar-hide">
+                    {Array.isArray(navigationChildren) ? (
+                      navigationChildren.map((child, index) => (
+                        <SideBarChildContainer key={index}>{child}</SideBarChildContainer>
+                      ))
+                    ) : (
+                      navigationChildren
+                    )}
+                  </div>
+                  <SideBarChildContainer className="flex-1" />
                 </div>
+
+                <SideBarChildContainer className="p-1 pt-[8px]">
+                  {footerChildren}
+                </SideBarChildContainer>
               </div>
+
             </div>
           </>
         )}
