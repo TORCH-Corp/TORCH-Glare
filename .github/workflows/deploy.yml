@@ -43,8 +43,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
       
-      - name: Install missing dependency
-        run: pnpm add embla-carousel-react
+      - name: Install missing dependencies
+        run: pnpm add embla-carousel embla-carousel-react
         
       - name: Lint code
         run: pnpm lint || true
@@ -66,7 +66,7 @@ jobs:
               npm install -g pnpm
             fi
             pnpm install --no-frozen-lockfile
-            pnpm add embla-carousel-react
+            pnpm add embla-carousel embla-carousel-react
             pnpm build
             pm2 restart glare-website || pm2 start npm --name "glare-website" -- run start
             
