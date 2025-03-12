@@ -11,28 +11,29 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const glareFeedbackItem = cva(
   [
-    "h-10 w-full flex justify-center items-center rounded px-2",
-    "transition-all duration-200 ease-in-out border-none outline outline-1 outline-transparent bg-transparent",
-    "focus:bg-background-system-action-selected-primary",
-    "active:bg-background-system-action-selected-primary",
-    "hover:bg-[var(--background-system-action-hover-primary,#181323)]",
+    "h-[40px] w-full flex justify-center items-center  px-2 ",
+    "text-content-system-global-primary typography-body-small-medium ",
+    "border border-transparent outline-none bg-background-system-body-base",
+    "hover:bg-background-system-action-primary-hover hover:border-border-system-action-primary-hover hover:rounded-[4px]",
+    "focus:bg-background-system-action-primary-selected",
+    "active:bg-background-system-action-primary-hover active:border-border-system-action-primary-hover active:rounded-[4px]",
+    "transition-all duration-200 ease-in-out",
   ],
   {
     variants: {
       collapsed: {
-        true: "w-10 !important",
+        true: "w-10",
       },
     },
   }
 );
-export const SideBarFooterItem: React.FC<Props> = ({ theme, collapse, ...props }) => {
+export const SideBarFooterItem: React.FC<Props> = ({ theme, collapse = false, ...props }) => {
   return (
     <button
       data-theme={theme}
       {...props}
-      className={cn(glareFeedbackItem({ collapsed: collapse }))}
+      className={cn(glareFeedbackItem({ collapsed: collapse }), props.className)}
     >
-      {props.children}
     </button>
   );
 };

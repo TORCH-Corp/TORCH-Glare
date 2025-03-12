@@ -1,6 +1,6 @@
 import { Themes } from "../utils/types";
 import { cn } from "../utils/cn";
-import { HTMLAttributes, ReactNode } from "react";
+import React, { HTMLAttributes, ReactNode } from "react";
 
 
 interface LayoutProps
@@ -8,7 +8,7 @@ interface LayoutProps
 }
 export function DefaultLayout({ ...props }: LayoutProps) {
   return (
-    <div {...props} className="flex h-screen gap-[10px] bg-background-system-body-base md:p-[16px]">
+    <div {...props} className="flex h-screen gap-[10px] bg-background-system-body-base lg:p-[16px]">
       {props.children}
     </div>
   );
@@ -42,7 +42,7 @@ export function SideBar({ children, headerChild, navigationChildren, iconButtons
   return (
     <aside
       {...props}
-      className={cn("hidden w-[265px] p-1 flex-shrink-0 items-start rounded-xl bg-background-system-body-tertiary shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)] h-full md:flex", props.className)}
+      className={cn("hidden w-[265px] p-1 flex-shrink-0 items-start rounded-xl bg-background-system-body-tertiary shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)] h-full lg:flex", props.className)}
     >
       <div className={cn("grid grid-rows-[56px_1fr] w-full rounded-lg border border-border-system-global-primary h-full gap-[1px]", {
         "flex": children
