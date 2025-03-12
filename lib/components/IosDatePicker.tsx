@@ -4,8 +4,9 @@ import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
 
 interface PickerValue {
-    [key: string]: string | number
+    [key: string]: string | number;
 }
+
 function getDayArray(year: number, month: number): string[] {
     const dayCount = getDaysInMonth(new Date(year, month - 1));
     return Array.from({ length: dayCount }, (_, i) => String(i + 1).padStart(2, '0'));
@@ -16,130 +17,124 @@ interface IosDatePickerProps extends Omit<ComponentProps<typeof InputField>, 'on
     theme?: "dark" | "light" | "default";
 }
 
-export const IosDatePicker = forwardRef<HTMLInputElement, IosDatePickerProps>(({ theme = "dark", onChange, ...props }, forwardedRef) => {
-    const today = new Date();
-    const pickerValueData = {
-        year: String(today.getFullYear()),
-        month: String(today.getMonth() + 1).padStart(2, '0'),
-        day: String(today.getDate()).padStart(2, '0'),
-    };
+export const IosDatePicker = forwardRef<HTMLInputElement, IosDatePickerProps>(
+    ({ theme = "dark", onChange, ...props }, forwardedRef) => {
+        const today = new Date();
 
-    const [pickerValue, setPickerValue] = useState<PickerValue>(pickerValueData);
+        const [year, setYear] = useState(String(today.getFullYear()));
+        const [month, setMonth] = useState(String(today.getMonth() + 1).padStart(2, '0'));
+        const [day, setDay] = useState(String(today.getDate()).padStart(2, '0'));
 
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 150 }, (_, i) => `${currentYear - 100 + i}`);
-    const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ''));
-    const days = getDayArray(Number(pickerValue.year), Number(pickerValue.month));
-    const monthsNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December",
-    ];
-    const handlePickerChange = (newValue: Partial<PickerValue>, key: string) => {
-        // Create a copy of the current pickerValue
-        const updatedValue: any = { ...pickerValue, ...newValue };
+        const currentYear = new Date().getFullYear();
+        const years = Array.from({ length: 150 }, (_, i) => `${currentYear - 100 + i}`);
+        const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
+        const days = getDayArray(Number(year), Number(month));
+        const monthsNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December",
+        ];
 
-        // If the year or month changes, recalculate the days
-        if (key === 'year' || key === 'month') {
-            const newDayArray = getDayArray(Number(updatedValue.year), Number(updatedValue.month));
-            updatedValue.day = newDayArray.includes(updatedValue.day as string)
-                ? updatedValue.day
-                : newDayArray[newDayArray.length - 1]; // Ensure the day is valid
-        }
+        // Update handlers for each state separately
+        const handleYearChange = (value: string) => {
+            setYear(value);
+            const newDays = getDayArray(Number(value), Number(month));
+            if (!newDays.includes(day)) {
+                setDay(newDays[newDays.length - 1]);
+            }
+            triggerOnChange(value, month, day);
+        };
 
-        // Update the state with the new value
-        setPickerValue(updatedValue);
+        const handleMonthChange = (value: string) => {
+            setMonth(value);
+            const newDays = getDayArray(Number(year), Number(value));
+            if (!newDays.includes(day)) {
+                setDay(newDays[newDays.length - 1]);
+            }
+            triggerOnChange(year, value, day);
+        };
 
-        // Create a Date object from the updated value
-        const newDate = new Date(`${updatedValue.year}-${updatedValue.month}-${updatedValue.day}`);
+        const handleDayChange = (value: string) => {
+            setDay(value);
+            triggerOnChange(year, month, value);
+        };
 
-        // Call the onChange callback with the Date object
-        if (onChange) {
-            onChange(newDate);
-        }
-    };
+        // Function to trigger onChange callback
+        const triggerOnChange = (y: string, m: string, d: string) => {
+            if (onChange) {
+                onChange(new Date(`${y}-${m}-${d}`));
+            }
+        };
 
-    console.log(pickerValue)
-
-    return (
-        <Popover open>
-            <PopoverTrigger data-theme={theme} className='w-full flex-1' >
-                <InputField theme={theme} {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} readOnly />
-            </PopoverTrigger>
-            <PopoverContent data-theme={theme} dir="ltr" variant={props.variant} className="overflow-hidden w-[285px] flex justify-center items-center p-[6px] pt-[30px]">
-                <div className="flex justify-evenly items-center w-full absolute top-0 py-[6px]">
-                    <p className="text-content-system-global-secondary typography-headers-medium-regular">Year</p>
-                    <div className="flex justify-center items-center self-center">
-                        <span className="h-[13px] w-[1px] bg-border-system-global-secondary rounded-[3px]"></span>
-                        <p className="text-content-system-global-secondary typography-headers-medium-regular px-[18px]">Month</p>
-                        <span className="h-[13px] w-[1px] bg-border-system-global-secondary rounded-[3px]"></span>
+        return (
+            <Popover open>
+                <PopoverTrigger data-theme={theme} className='w-full flex-1'>
+                    <InputField
+                        theme={theme}
+                        {...props}
+                        ref={forwardedRef}
+                        value={`${year}/${month}/${day}`}
+                        readOnly
+                    />
+                </PopoverTrigger>
+                <PopoverContent data-theme={theme} dir="ltr" variant={props.variant} className="overflow-hidden w-[285px] flex justify-center items-center p-[6px] pt-[30px]">
+                    <div className="flex justify-evenly items-center w-full absolute top-0 py-[6px]">
+                        <p className="text-content-system-global-secondary typography-headers-medium-regular">Year</p>
+                        <div className="flex justify-center items-center self-center">
+                            <span className="h-[13px] w-[1px] bg-border-system-global-secondary rounded-[3px]"></span>
+                            <p className="text-content-system-global-secondary typography-headers-medium-regular px-[18px]">Month</p>
+                            <span className="h-[13px] w-[1px] bg-border-system-global-secondary rounded-[3px]"></span>
+                        </div>
+                        <p className="text-content-system-global-secondary typography-headers-medium-regular">Day</p>
                     </div>
-                    <p className="text-content-system-global-secondary typography-headers-medium-regular">Day</p>
-                </div>
-                <div className='absolute inset-0 w-full h-full flex justify-center items-center z-0 p-[6px]'>
-                    <div className='w-full h-[42px] rounded-[8px] bg-background-system-body-tertiary mt-[23px]'></div>
-                </div>
+                    <div className='absolute inset-0 w-full h-full flex justify-center items-center z-0 p-[6px]'>
+                        <div className='w-full h-[42px] rounded-[8px] bg-background-system-body-tertiary mt-[23px]'></div>
+                    </div>
 
-                <div className="relative flex w-full h-[300px] max-w-full mx-auto text-white"
-                    style={{
-                        maskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
-                        WebkitMaskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
-                    }}
-                >
-                    <IosPickerItem
-                        onValueSelect={(value) => {
-                            console.log(value, 'year')
-                            handlePickerChange({ ...pickerValue, year: value }, 'year')
+                    <div
+                        className="relative flex w-full h-[300px] max-w-full mx-auto text-white"
+                        style={{
+                            maskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
+                            WebkitMaskImage: 'linear-gradient(to top, transparent, transparent 10%, white 50%, white 19%, transparent 75%, transparent)',
                         }}
-                        slideData={years}
-                        perspective="left"
                     >
-                        {
-                            years.map((value, index) => (
+                        <IosPickerItem
+                            onValueSelect={handleYearChange}
+                            slideData={years}
+                            perspective="left"
+                            selectedValue={year}
+                        >
+                            {years.map((value) => (
+                                <SliderItem key={value}>{value}</SliderItem>
+                            ))}
+                        </IosPickerItem>
+                        <IosPickerItem
+                            onValueSelect={handleMonthChange}
+                            slideData={months}
+                            perspective="left"
+                            selectedValue={month}
+                        >
+                            {months.map((value) => (
                                 <SliderItem key={value}>
-                                    {value}
+                                    {`${monthsNames[Number(value) - 1].substring(0, 3)}-${value}`}
                                 </SliderItem>
-                            ))
-                        }
-                    </IosPickerItem>
-                    <IosPickerItem
-                        onValueSelect={(value) => {
-                            console.log(value, 'month')
-                            handlePickerChange({ ...pickerValue, month: value }, 'month')
-                        }}
-                        slideData={months}
-                        perspective="left"
-                    >
-                        {
-                            months.map((value, index) => (
-                                <SliderItem key={value}>
-                                    {
-                                        `${monthsNames[Number(value) - 1].substring(0, 3)}-${value}`
-                                    }
-                                </SliderItem>
-                            ))
-                        }
-                    </IosPickerItem>
-                    <IosPickerItem
-                        slideData={days}
-                        onValueSelect={(value) => {
-                            console.log(value, 'day')
-                        }}
-                        perspective="right"
-                    >
-                        {
-                            days.map((value, index) => (
-                                <SliderItem key={value}>
-                                    {value}
-                                </SliderItem>
-                            ))
-                        }
-                    </IosPickerItem>
-                </div>
-            </PopoverContent>
-        </Popover>
-    );
-});
-
+                            ))}
+                        </IosPickerItem>
+                        <IosPickerItem
+                            onValueSelect={handleDayChange}
+                            slideData={getDayArray(Number(year), Number(month))}
+                            perspective="right"
+                            selectedValue={day}
+                        >
+                            {getDayArray(Number(year), Number(month)).map((value) => (
+                                <SliderItem key={`${value}-days`}>{value}</SliderItem>
+                            ))}
+                        </IosPickerItem>
+                    </div>
+                </PopoverContent>
+            </Popover>
+        );
+    }
+);
 
 // using with react hook form lib
 /* 
@@ -167,7 +162,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 const CIRCLE_DEGREES = 360;
 const WHEEL_ITEM_SIZE = 32;
 const WHEEL_ITEM_COUNT = 18;
-const WHEEL_ITEMS_IN_VIEW = 8;
+const WHEEL_ITEMS_IN_VIEW = 4;
 const WHEEL_ITEM_RADIUS = CIRCLE_DEGREES / WHEEL_ITEM_COUNT;
 const IN_VIEW_DEGREES = WHEEL_ITEM_RADIUS * WHEEL_ITEMS_IN_VIEW;
 const WHEEL_RADIUS = Math.round(
@@ -180,6 +175,7 @@ const isInView = (wheelLocation: number, slidePosition: number): boolean =>
 interface PropType extends HTMLAttributes<HTMLDivElement> {
     loop?: boolean;
     slideData: string[];
+    selectedValue: any
     perspective: 'left' | 'right';
     onValueSelect?: (value: string) => void; // Callback to pass the selected value to the parent
 }
@@ -188,6 +184,7 @@ const IosPickerItem: React.FC<PropType> = ({
     onValueSelect,
     slideData,
     perspective,
+    selectedValue,
     loop = false,
     ...props
 }) => {
@@ -203,7 +200,7 @@ const IosPickerItem: React.FC<PropType> = ({
     const [totalRadius, setTotalRadius] = useState(slideData.length * WHEEL_ITEM_RADIUS);
     const [rotationOffset, setRotationOffset] = useState(loop ? 0 : WHEEL_ITEM_RADIUS);
 
-    // Update totalRadius and rotationOffset when slideData or loop changes
+    // Update totalRadius and rotationOffset when data or loop changes
     useEffect(() => {
         setTotalRadius(slideData.length * WHEEL_ITEM_RADIUS);
         setRotationOffset(loop ? 0 : WHEEL_ITEM_RADIUS);
@@ -223,6 +220,9 @@ const IosPickerItem: React.FC<PropType> = ({
         []
     );
 
+    console.log(slideData.length)
+
+
     const rotateWheel = useCallback(
         (emblaApi: EmblaCarouselType) => {
             const rotation = slideData.length * WHEEL_ITEM_RADIUS - rotationOffset;
@@ -240,7 +240,7 @@ const IosPickerItem: React.FC<PropType> = ({
             emblaApi: EmblaCarouselType,
             index: number,
             loop: boolean,
-            slideDataLength: number,
+            dataLength: number,
             totalRadius: number
         ) => {
             const slideNode = emblaApi.slideNodes()[index];
@@ -258,7 +258,7 @@ const IosPickerItem: React.FC<PropType> = ({
 
             if (loop && isInView(wheelLocation, positionLoopEnd)) {
                 inView = true;
-                angle = -CIRCLE_DEGREES + (slideDataLength - index) * WHEEL_ITEM_RADIUS;
+                angle = -CIRCLE_DEGREES + (dataLength - index) * WHEEL_ITEM_RADIUS;
             }
 
             if (loop && isInView(wheelLocation, positionLoopStart)) {
@@ -285,7 +285,7 @@ const IosPickerItem: React.FC<PropType> = ({
                 onValueSelect(selectedValue); // Pass the selected value to the parent
             }
         },
-        [slideData, onValueSelect]
+        [slideData]
     );
 
     useEffect(() => {
@@ -305,13 +305,11 @@ const IosPickerItem: React.FC<PropType> = ({
         emblaApi.on('reInit', (emblaApi) => {
             inactivateEmblaTransform(emblaApi);
             rotateWheel(emblaApi);
-            handleSelection(emblaApi); // Initialize the selected value
         });
 
         inactivateEmblaTransform(emblaApi);
         rotateWheel(emblaApi);
-        handleSelection(emblaApi); // Initialize the selected value
-    }, [emblaApi, inactivateEmblaTransform,]);
+    }, [emblaApi]);
 
     return (
         <div {...props} className="flex items-center justify-center w-[90px] h-full text-[1.8rem]">
@@ -323,7 +321,7 @@ const IosPickerItem: React.FC<PropType> = ({
                         }`}
                     ref={emblaRef}
                 >
-                    <div className="w-full h-full [transform-style:preserve-3d] will-change-transform scroll-smooth">
+                    <div className="flex flex-col w-full h-full [transform-style:preserve-3d] will-change-transform scroll-smooth">
                         {props.children}
                     </div>
                 </div>
