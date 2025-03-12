@@ -44,11 +44,13 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       
       - name: Install missing dependencies
-        run: pnpm add embla-carousel embla-carousel-react
+        run: |
+          pnpm add embla-carousel embla-carousel-react
+          pnpm add -D @types/react-dom
         
       - name: Fix TypeScript import extensions
         run: |
-          find ./src -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g'
+          find ./src -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g' || true
           find ./lib -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g' || true
         
       - name: Lint code
@@ -72,6 +74,7 @@ jobs:
             fi
             pnpm install --no-frozen-lockfile
             pnpm add embla-carousel embla-carousel-react
+            pnpm add -D @types/react-dom
             
             # Fix TypeScript import extensions on server
             find ./src -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g' || true
