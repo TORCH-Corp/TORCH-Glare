@@ -46,6 +46,11 @@ jobs:
       - name: Install missing dependencies
         run: pnpm add embla-carousel embla-carousel-react
         
+      - name: Fix TypeScript import extensions
+        run: |
+          find ./src -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g'
+          find ./lib -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g' || true
+        
       - name: Lint code
         run: pnpm lint || true
         
@@ -67,6 +72,11 @@ jobs:
             fi
             pnpm install --no-frozen-lockfile
             pnpm add embla-carousel embla-carousel-react
+            
+            # Fix TypeScript import extensions on server
+            find ./src -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g' || true
+            find ./lib -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from "\(.*\)\.tsx"/from "\1"/g' || true
+            
             pnpm build
             pm2 restart glare-website || pm2 start npm --name "glare-website" -- run start
             
