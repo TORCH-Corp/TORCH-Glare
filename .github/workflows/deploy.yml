@@ -1,12 +1,12 @@
-name: Deploy to Production
+name: Deploy from Dev to Main
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
   workflow_dispatch:
 
 jobs:
-  deploy:
+  merge_and_deploy:
     runs-on: ubuntu-latest
     environment: Production
     steps:
@@ -14,7 +14,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
+          
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+      - name: Merge Dev to Main
+        run: |
+          git checkout main
+          git merge origin/dev --no-edit
+          git push origin main
+          
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -63,19 +74,29 @@ jobs:
             IdentitiesOnly yes
           EOF
           
-          # Debug the key format
-          echo "=== Key fingerprint ==="
-          ssh-keygen -l -f ~/.ssh/id_rsa || echo "Invalid key format"
-        
-      - name: Test SSH connection
+      - name: Deploy to server (clone or pull)
         run: |
-          echo "=== Testing SSH connection with password ==="
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o IdentitiesOnly=yes ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "echo Connection test successful"
-        continue-on-error: true
-        
-      - name: Deploy using SSH with password
-        run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o IdentitiesOnly=yes ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "cd /home/admin/Torch-Glare-Website && git pull && pnpm install --no-frozen-lockfile && pnpm build && pm2 restart glare-website || pm2 start npm --name 'glare-website' -- run start"
+          REPO_URL="https://github.com/your-org/TORCH-Glare.git"  # Replace with your actual repo URL
+          
+          # SSH to server and clone/pull repo, then build and deploy
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o IdentitiesOnly=yes ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "
+            if [ ! -d '/home/admin/TORCH-Glare' ]; then
+              # Clone repo if it doesn't exist
+              git clone $REPO_URL /home/admin/TORCH-Glare
+              cd /home/admin/TORCH-Glare
+            else
+              # Pull latest changes if repo exists
+              cd /home/admin/TORCH-Glare
+              git pull origin main
+            fi
+            
+            # Install dependencies and build
+            pnpm install --no-frozen-lockfile
+            pnpm build
+            
+            # Start or restart the application
+            pm2 restart torch-glare || pm2 start npm --name 'torch-glare' -- run start
+          "
         
       - name: Health check
         run: |
@@ -89,7 +110,7 @@ jobs:
           fi
             
   notify:
-    needs: deploy
+    needs: merge_and_deploy
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -98,8 +119,8 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: deployments
-          SLACK_COLOR: ${{ needs.deploy.result == 'success' && 'good' || 'danger' }}
-          SLACK_TITLE: Deployment ${{ needs.deploy.result == 'success' && 'Successful' || 'Failed' }}
-          SLACK_MESSAGE: 'Torch-Glare-Website deployment to production ${{ needs.deploy.result }}'
+          SLACK_COLOR: ${{ needs.merge_and_deploy.result == 'success' && 'good' || 'danger' }}
+          SLACK_TITLE: Deployment ${{ needs.merge_and_deploy.result == 'success' && 'Successful' || 'Failed' }}
+          SLACK_MESSAGE: 'TORCH-Glare dev to main deployment ${{ needs.merge_and_deploy.result }}'
           SLACK_FOOTER: 'GitHub Actions'
         if: env.SLACK_WEBHOOK != ''
