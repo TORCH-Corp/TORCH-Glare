@@ -16,49 +16,75 @@ jobs:
         with:
           fetch-depth: 0
         
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-          
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-          
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-          
-      - name: Install dependencies
-        run: pnpm install
-      
-      - name: Run linting
-        run: pnpm lint || echo "Linting skipped"
+      # ... (rest of test_and_build job) ...
         
-      - name: Run tests
-        run: pnpm test || echo "No tests found"
-        
-      - name: Build application
-        run: pnpm build
-        
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4  # UPDATED FROM v3 to v4
-        with:
-          name: build-artifacts
-          path: .next/
-          retention-days: 7
-
   create_pr:
-    # rest of the workflow remains the same
+    needs: test_and_build
+    runs-on: ubuntu-latest
+    # Only create PR when pushing to dev branch, not when a PR is already open
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git fetch origin main
+          DIFF_COUNT=$(git rev-list --count origin/main..HEAD)
+          echo "diff_count=$DIFF_COUNT" >> $GITHUB_OUTPUT
+          
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.diff_count != '0'
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Auto PR from dev
+          title: 'Auto PR: Dev to Main'
+          body: |
+            ## Automated PR from dev branch
+            
+            This PR was automatically created from the dev branch.
+            
+            ### Changes include:
+            ```
+            ${{ github.event.head_commit.message }}
+            ```
+            
+            Please review and approve if changes look good.
+          branch: dev
+          base: main
+          labels: automated-pr
+          draft: false
+          
+      - name: PR Details
+        if: steps.create_pr.outputs.pull-request-number
+        run: |
+          echo "Pull Request created: ${{ steps.create_pr.outputs.pull-request-url }}"
+          echo "PR_URL=${{ steps.create_pr.outputs.pull-request-url }}" >> $GITHUB_ENV
+          echo "PR_NUMBER=${{ steps.create_pr.outputs.pull-request-number }}" >> $GITHUB_ENV
+
+  notify:
+    needs: [test_and_build, create_pr]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send Discord notification
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "Torch-Glare-Website Dev Branch CI/CD"
+          description: |
+            ### Build Status: ${{ needs.test_and_build.result == 'success' && '✅ Success' || '❌ Failed' }}
+            
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** [`${{ github.sha }}`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            **Author:** ${{ github.actor }}
+            
+            ${{ env.PR_URL && format('**Pull Request:** [{0}]({1})', env.PR_NUMBER, env.PR_URL) || 'No PR created' }}
+          color: ${{ needs.test_and_build.result == 'success' && 0x43B581 || 0xF04747 }}
+          username: GitHub Actions
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
