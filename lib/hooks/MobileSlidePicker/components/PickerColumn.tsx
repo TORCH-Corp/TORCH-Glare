@@ -1,5 +1,5 @@
 import { CSSProperties, HTMLProps, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { usePickerActions, usePickerData } from "./Picker.tsx"
+import { usePickerActions, usePickerData } from "./Picker"
 
 interface PickerColumnProps extends HTMLProps<HTMLDivElement> {
   name: string
