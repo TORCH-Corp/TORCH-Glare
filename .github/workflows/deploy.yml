@@ -2,19 +2,19 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [ main ]  h
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: Production  
+    environment: Production
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Fetch all history for proper versioning
-      
+          fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -46,10 +46,10 @@ jobs:
       - name: Install missing dependency
         run: pnpm add embla-carousel-react
         
-      - name: Lint code  
+      - name: Lint code
         run: pnpm lint || true
         
-      - name: Build project  
+      - name: Build project
         run: pnpm build
         
       - name: Deploy to server
@@ -62,12 +62,11 @@ jobs:
           script: |
             cd /home/admin/Torch-Glare-Website
             git pull
-            # Install pnpm if not already installed
             if ! command -v pnpm &> /dev/null; then
               npm install -g pnpm
             fi
-            pnpm install --no-frozen-lockfile  # Match local behavior
-            pnpm add embla-carousel-react  # Also install missing dependency on server
+            pnpm install --no-frozen-lockfile
+            pnpm add embla-carousel-react
             pnpm build
             pm2 restart glare-website || pm2 start npm --name "glare-website" -- run start
             
@@ -79,12 +78,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT || '22' }}
           script: |
-            # Wait for application to start
             sleep 10
-            # Check if application is responding 
             if ! curl -s -f http://localhost:3000 > /dev/null; then
               echo "Health check failed! Application is not responding."
-              # Log the error
               echo "Deployment failed at $(date)" >> /home/admin/deploy-errors.log
               exit 1
             else
@@ -105,5 +101,4 @@ jobs:
           SLACK_TITLE: Deployment ${{ needs.deploy.result == 'success' && 'Successful' || 'Failed' }}
           SLACK_MESSAGE: 'Torch-Glare-Website deployment to production ${{ needs.deploy.result }}'
           SLACK_FOOTER: 'GitHub Actions'
-        # Only run if SLACK_WEBHOOK is configured
         if: env.SLACK_WEBHOOK != ''
