@@ -44,35 +44,9 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       
       - name: Install missing dependencies
-        run: |
-          pnpm add embla-carousel embla-carousel-react
-          pnpm add -D @types/react-dom
+        run: pnpm add vite
         
-      - name: Fix TypeScript import extensions
-        run: |
-          # More thorough fix for import extensions
-          find ./src ./lib -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' || true
-          find ./app -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' || true
-          
-      - name: Set consistent Next.js version
-        run: |
-          # Use exact same Next.js version as remote server
-          pnpm add next@15.1.7
-        
-      - name: Update TypeScript config
-        run: |
-          # Allow importing TypeScript extensions
-          if [ -f tsconfig.json ]; then
-            sed -i 's/"compilerOptions": {/"compilerOptions": {\n    "allowImportingTsExtensions": true,/g' tsconfig.json
-          fi
-        
-      - name: Lint code
-        run: pnpm lint || true
-        
-      - name: Build project
-        run: pnpm build
-        
-      - name: Deploy to server
+      - name: Deploy to server directly
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -86,13 +60,8 @@ jobs:
               npm install -g pnpm
             fi
             pnpm install --no-frozen-lockfile
-            pnpm add embla-carousel embla-carousel-react
-            pnpm add -D @types/react-dom
             
-            # Fix TypeScript import extensions on server
-            find ./src ./lib -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' 2>/dev/null || true
-            find ./app -type f -name "*.tsx" -o -name "*.ts" | xargs sed -i 's/from ['"'"'"]\(.*\)\.tsx['"'"'"]/from "\1"/g' 2>/dev/null || true
-            
+            # Use the server's build which is known to work
             pnpm build
             pm2 restart glare-website || pm2 start npm --name "glare-website" -- run start
             
