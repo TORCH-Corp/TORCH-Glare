@@ -1,0 +1,100 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]  # Adjust if you use a different branch
+  workflow_dispatch:    # Allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+          
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+          
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Lint code
+        run: pnpm lint || true
+        
+      - name: Build project
+        run: pnpm build
+        
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT || '22' }}
+          script: |
+            cd /home/admin/Torch-Glare-Website
+            git pull
+            pnpm install --frozen-lockfile
+            pnpm build
+            pm2 restart glare-website || pm2 start npm --name "glare-website" -- run start
+            
+      - name: Health check
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT || '22' }}
+          script: |
+            # Wait for application to start
+            sleep 10
+            # Check if application is responding 
+            if ! curl -s -f http://localhost:3000 > /dev/null; then
+              echo "Health check failed! Application is not responding."
+              # Log the error
+              echo "Deployment failed at $(date)" >> /home/admin/deploy-errors.log
+              exit 1
+            else
+              echo "Deployment successful at $(date)" >> /home/admin/deploy-success.log
+            fi
+            
+  notify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify deployment status
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_COLOR: ${{ needs.deploy.result == 'success' && 'good' || 'danger' }}
+          SLACK_TITLE: Deployment ${{ needs.deploy.result == 'success' && 'Successful' || 'Failed' }}
+          SLACK_MESSAGE: 'Torch-Glare-Website deployment to production ${{ needs.deploy.result }}'
+          SLACK_FOOTER: 'GitHub Actions'
+        # Only run if SLACK_WEBHOOK is configured
+        if: env.SLACK_WEBHOOK != ''
