@@ -44,6 +44,7 @@
     "embla-carousel": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "fast-glob": "^3.3.3",
+    "framer-motion": "^12.5.0",
     "glare-themes": "^1.0.5",
     "glare-torch-mode": "^1.0.2",
     "glare-typography": "^1.0.4",
