@@ -16,6 +16,7 @@ const tableHeadVariants = cva(
     "items-center",
     "justify-center",
     "text-start",
+    "bg-transparent",
     "hover:bg-background-presentation-action-hover",
     "hover:text-content-presentation-action-hover",
     "transition-[background-color,color]",
@@ -60,7 +61,7 @@ const Table = React.forwardRef<
   <table
     data-theme={theme}
     ref={ref}
-    className={cn("overflow-scroll w-auto [border-collapse:separate] border-spacing-0 ", className)}
+    className={cn("overflow-hidden w-auto [border-collapse:separate] border-spacing-0", className)}
     {...props}
 
   >
@@ -76,7 +77,7 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      " bg-background-presentation-form-header shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
+      "shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
       className
     )}
     {...props}
@@ -148,6 +149,7 @@ const TableHead = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     sortType?: "asc" | "desc" | undefined;
     onSort?: () => void;
+    isDummy?: boolean;
   }
 >(
   (
@@ -168,7 +170,7 @@ const TableHead = React.forwardRef<
       <th
         ref={headRef}
         className={cn(
-          "relative py-[2px] px-[2px] bg-background-presentation-form-header border-b-[2px]  border-border-presentation-table-header"
+          "relative py-[2px] px-[2px] border-b-[2px]  border-border-presentation-table-header"
         )}
       >
         <div
@@ -189,14 +191,15 @@ const TableHead = React.forwardRef<
             {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
           </div>
         </div>
-        <button className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary">
-          {!isDummy && (
+        {!isDummy && (
+          <button className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary">
             <ResizeIcon
               onMouseDown={handleStartResize}
               onTouchStart={handleStartResize}
             />
-          )}
-        </button>
+          </button>
+        )}
+
       </th>
     );
   }
@@ -219,6 +222,7 @@ const TableCell = React.forwardRef<
         "border-r  border-b border-border-presentation-table-header px-1 rtl:border-l rtl:border-r-0",
         "break-all",
       ],
+      { "border-x-0": isDummy },
       className
     )}
     {...props}
