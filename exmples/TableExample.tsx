@@ -110,65 +110,67 @@ export default function TableExample() {
       >
         Table Preview
       </h1>
+      <div className="overflow-auto">
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead isDummy></TableHead>
-            <TableHead isDummy>
-              <TableCheckbox id="checkbox-12" />
-            </TableHead>
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={columns.map((col) => col.id)}
-                strategy={horizontalListSortingStrategy}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead isDummy></TableHead>
+              <TableHead isDummy>
+                <TableCheckbox id="checkbox-12" />
+              </TableHead>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
               >
-                {columns.map((column) => (
-                  <SortableHeader key={column.id} id={column.id}>
-                    {column.label}
-                  </SortableHeader>
-                ))}
-              </SortableContext>
-            </DndContext>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell isDummy>
-                <SubTableButton />
-              </TableCell>
-              <TableCell isDummy>
-                <TableCheckbox id={`${invoice.invoice}-checkbox`} />
-              </TableCell>
-              {columns.map((column) => (
-                <TableCell key={column.id}>
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                  <Badge label={invoice[column.id as keyof typeof invoice]} />
-                </TableCell>
-              ))}
-              <TableCell isDummy style={{ width: "100vw" }}></TableCell>
+                <SortableContext
+                  items={columns.map((col) => col.id)}
+                  strategy={horizontalListSortingStrategy}
+                >
+                  {columns.map((column) => (
+                    <SortableHeader key={column.id} id={column.id}>
+                      {column.label}
+                    </SortableHeader>
+                  ))}
+                </SortableContext>
+              </DndContext>
             </TableRow>
-          ))}
-        </TableBody>
+          </TableHeader>
+          <TableBody>
+            {invoices.map((invoice) => (
+              <TableRow key={invoice.invoice}>
+                <TableCell isDummy>
+                  <SubTableButton />
+                </TableCell>
+                <TableCell isDummy>
+                  <TableCheckbox id={`${invoice.invoice}-checkbox`} />
+                </TableCell>
+                {columns.map((column) => (
+                  <TableCell key={column.id}>
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                    <Badge label={invoice[column.id as keyof typeof invoice]} />
+                  </TableCell>
+                ))}
+                <TableCell isDummy style={{ width: "100vw" }}></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
 
-        <TableFooter>
-          <TableFooterButton>
-            <i className="ri-add-line"></i> Add
-          </TableFooterButton>
-        </TableFooter>
-      </Table>
+          <TableFooter>
+            <TableFooterButton>
+              <i className="ri-add-line"></i> Add
+            </TableFooterButton>
+          </TableFooter>
+        </Table>
+      </div>
     </>
   );
 }

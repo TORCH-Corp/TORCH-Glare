@@ -60,8 +60,9 @@ const Table = React.forwardRef<
   <table
     data-theme={theme}
     ref={ref}
-    className={cn("overflow-scroll w-auto", className)}
+    className={cn("overflow-scroll w-auto [border-collapse:separate] border-spacing-0 ", className)}
     {...props}
+
   >
     {props.children}
   </table>
@@ -75,7 +76,7 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      "border border-b-[2px]  border-border-presentation-table-header bg-background-presentation-form-header shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
+      " bg-background-presentation-form-header shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
       className
     )}
     {...props}
@@ -110,7 +111,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn([
-      "border-b border-border-presentation-table-header border-x-0  [&_button]:hover:opacity-100 hover:bg-background-presentation-table-row-hover transition-colors",
+      "[&_button]:hover:opacity-100 hover:bg-background-presentation-table-row-hover transition-colors",
       {
         "bg-background-presentation-table-row-negative border-border-presentation-badge-red":
           state === "delete",
@@ -124,11 +125,11 @@ const TableRow = React.forwardRef<
           state === "add",
       },
       {
-        "bg-background-presentation-table-row-selected border-t  border-[2px] border-border-presentation-table-selected":
+        "bg-background-presentation-table-row-selected border-t border-[2px] border-border-presentation-table-selected":
           state === "selected",
       },
       {
-        "bg-background-presentation-table-row-hover border-t  border-[2px] border-border-presentation-table-dropdown":
+        "bg-background-presentation-table-row-hover border-t border-[2px] border-border-presentation-table-dropdown":
           state === "open",
       },
       className,
@@ -167,7 +168,7 @@ const TableHead = React.forwardRef<
       <th
         ref={headRef}
         className={cn(
-          "relative py-[2px] px-[2px] bg-background-presentation-form-header"
+          "relative py-[2px] px-[2px] bg-background-presentation-form-header border-b-[2px]  border-border-presentation-table-header"
         )}
       >
         <div
@@ -206,18 +207,17 @@ const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement> & {
     isDummy?: boolean;
+    childrenClassName?: string;
   }
->(({ className, isDummy, ...props }, ref) => (
+>(({ className, childrenClassName, isDummy, ...props }, ref) => (
   <td
     ref={ref}
     className={cn(
       [
         "h-[40px] text-content-presentation-action-light-primary",
         "typography-body-small-regular relative",
-        " border-l border-r border-border-presentation-table-header px-1",
+        "border-r  border-b border-border-presentation-table-header px-1 rtl:border-l rtl:border-r-0",
         "break-all",
-        "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
-        "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
       ],
       className
     )}
@@ -226,9 +226,9 @@ const TableCell = React.forwardRef<
     <div
       className={cn(
         "flex justify-start items-center gap-1 w-[200px] min-w-full overflow-hidden",
-        { "w-auto justify-center": isDummy },
-        className
-      )}
+        "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
+        "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
+        { "w-auto justify-center": isDummy }, childrenClassName)}
     >
       {props.children}
     </div>
@@ -271,15 +271,15 @@ const TableFooterButton = React.forwardRef<
   return (
     <TableRow
       className={cn(
-        "h-[40px] relative group hover:bg-background-presentation-table-acton-hover",
+        "h-[40px] overflow-hidden",
         className
       )}
     >
       <TableCell
-        className={cn(
-          "before:absolute before:left-0 before:right-0 before:top-[0px] before:h-[2px] before:bg-transparent before:transition-all before:duration-200 before:ease-out group-hover:before:bg-border-presentation-table-action-hover after:absolute after:left-0 after:right-0 after:bottom-[0px] after:h-[2px] after:bg-transparent after:transition-all after:duration-200 after:ease-out group-hover:after:bg-border-presentation-table-action-hover",
-          className
-        )} colSpan={100}>
+        className={
+          "border-t-2 border-b-2 border-transparent hover:border-border-presentation-table-action-hover  hover:bg-background-presentation-table-acton-hover"}
+        colSpan={100}
+      >
         <button
           ref={ref}
           {...props}
@@ -287,15 +287,13 @@ const TableFooterButton = React.forwardRef<
             "overflow-hidden w-full flex items-center justify-start gap-2 typography-body-medium-semibold [&_i]:text-[20px]",
             className
           )}
-        >
-          {children}
-        </button>
+        >{children}</button>
       </TableCell>
-
     </TableRow>
   );
 });
 TableFooterButton.displayName = "TableFooterButton";
+
 
 const SubTableButton = ({
   isActive,
