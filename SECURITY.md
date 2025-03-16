@@ -8,7 +8,7 @@ We release patches for security vulnerabilities for the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.6.0 - 1.6.4 | :white_check_mark: |
+| 1.6.0 - 1.6.5 | :white_check_mark: |
 | < 1.6.0 | :x:                |
 
 ## Reporting a Vulnerability
