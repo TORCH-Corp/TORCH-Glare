@@ -216,7 +216,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               open={errorMessage !== undefined}
               text={errorMessage}
             >
-              <section className="flex flex-1  px-[4px] overflow-hidden relative">
+              <section className="flex flex-1 items-center  px-[4px] overflow-hidden relative">
                 {icon && (
                   <div
                     className={cn(

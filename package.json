@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "next build --no-lint",
-    "deploy": "publish --access public"
+    "deploy": "publish --access public",
+    "update": "node ./scripts/updateCompoents.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
