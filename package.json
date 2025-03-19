@@ -18,6 +18,7 @@
     "deploy": "publish --access public"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.6",
     "commander": "^13.1.0",
     "inquirer": "^9.2.15"
   },

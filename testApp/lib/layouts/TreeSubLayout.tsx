@@ -4,10 +4,6 @@ import TabFormItem from "@/components/TabFormItem";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
 import { useActiveTreeItem } from "@/hooks/useActiveTreeItem";
-import { motion } from "framer-motion";
-import { ActionButton } from "@/components/ActionButton";
-import { ReactNode, useState } from "react";
-import { useClickOutside } from "../hooks/useClickOutside";
 
 interface TreeItem {
   id: string;
@@ -25,13 +21,9 @@ export type PathConfig = {
 export default function TreeSubLayout({
   children,
   treeData,
-  sideBarChildren,
-  phoneNavigationChildren
 }: {
   children: React.ReactNode;
   treeData: PathConfig;
-  sideBarChildren?: ReactNode;
-  phoneNavigationChildren?: ReactNode
 }) {
   const pathname = usePathname();
   const allIds = treeData[pathname].TabsTree?.flatMap((item) => [
@@ -39,44 +31,22 @@ export default function TreeSubLayout({
     ...(item.subTree?.map((sub) => sub.id) || []),
   ]);
   const { activeId } = useActiveTreeItem(allIds);
-  const [isOpen, setIsOpen] = useState(false);
-  const sidebarRef = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
+
 
   return (
     <div
       className={cn(
-        "flex gap-[2px] h-full  bg-[linear-gradient(130deg,var(--blue-sparkle-600)_0px,rgba(44,45,46,1)_50%)] overflow-hidden transition-all ease-in-out delay-150 lg:bg-none lg:rounded-2",
-        { "gap-0": !isOpen }
+        "flex gap-[2px] h-full overflow-hidden transition-all ease-in-out delay-150 lg:bg-none lg:rounded-2 ",
       )}
     >
-      {/* Sidebar with Framer Motion Animation */}
-      <motion.div
-        ref={sidebarRef}
-        initial={{ width: 0, opacity: 0 }}
-        animate={{ width: isOpen ? 300 : 0, opacity: isOpen ? 1 : 0 }}
-        exit={{ width: 0, opacity: 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="h-full overflow-hidden bg-background-system-body-base lg:hidden"
-      >
-        <div className="flex flex-col h-full p-[10px]">
-          {sideBarChildren}
-        </div>
-      </motion.div>
-
-      <div className="grid grid-rows-[92px_1fr] h-full flex-1 gap-[2px] rounded-2 flex-shrink-0 min-w-[300px] lg:grid-rows-[64px_1fr]">
+      <div className="grid grid-rows-[60px_1fr] h-full flex-1 gap-[2px] rounded-2 flex-shrink-0 min-w-[300px]">
         <HeaderPage
           title={treeData[pathname]?.pageHeader}
           subTitle={treeData[pathname]?.subTitle}
-          phoneChildren={
-            <div className="w-full flex justify-between items-center">
-              <ActionButton onClick={() => setIsOpen(!isOpen)} variant="PrimeContStyle" size={"M"}><i className="ri-menu-2-line text-[22px]"></i></ActionButton>
-              {phoneNavigationChildren}
-            </div>
-          }
         />
-        <div className="grid grid-cols-[1fr] overflow-hidden rounded-b-[6px] xl:grid-cols-[1fr_300px]">
+        <div className="grid grid-cols-[1fr] overflow-hidden lg:rounded-b-[6px] xl:grid-cols-[1fr_300px]">
           <div className="scrollbar-hide overflow-scroll scroll-smooth bg-background-system-body-base h-full">
-            <div className="overflow-scroll scroll-smooth bg-[#B2D0FF0D] h-full w-full p-[12px]">
+            <div className="overflow-scroll scrollbar-hide scroll-smooth bg-[#B2D0FF0D] h-full w-full p-[12px]">
               {children}
             </div>
           </div>
@@ -170,7 +140,6 @@ export function HeaderPage({
   title,
   subTitle,
   children,
-  phoneChildren,
   type = "start",
   className,
 }: {
@@ -179,32 +148,30 @@ export function HeaderPage({
   children?: React.ReactNode;
   type?: "space-between" | "start";
   className?: string;
-  phoneChildren?: ReactNode
 }) {
   return (
     <div
-      className={cn("w-full h-full transition-all duration-300 ease-in-out lg:rounded-[8px_8px_0px_0px] bg-background-system-body-base", className)}
+      className={cn("w-full h-fit transition-all duration-300 ease-in-out  lg:rounded-[8px_8px_0px_0px] lg:z-auto",
+        "bg-[linear-gradient(90deg,var(--blue-sparkle-600)_0px,rgba(44,45,46,1)_190px)] lg:bg-background-system-body-base",
+        "pb-[2px] lg:pb-0",
+        className)}
     >
-      <div className="w-full h-full flex flex-col rounded-[6px_6px_0px_0px] transition-all duration-300 ease-in-out bg-gradient-to-b from-background-system-body-base to-background-system-body-secondary bg-opacity-82 lg:bg-none">
-        <div className="lg:hidden px-[12px] my-[8px] flex justify-start items-center overflow-y-scroll">
-          {phoneChildren}
+      <div className="w-full h-full flex flex-col justify-center items-start rounded-[6px_6px_0px_0px] transition-all duration-300 ease-in-out lg:bg-none lg:bg-background-system-body-base   lg:h-fit">
+        <div className="lg:hidden w-full bg-background-system-body-base px-[12px] h-[52px] flex justify-start items-center overflow-y-scroll border-b-[2px] border-[#2c2d2e]">
         </div>
         <div
           className={cn(
-            `flex h-fit rtl:pr-4 ltr:pl-4 relative gap-2 w-fit items-center lg:py-[16px]`,
+            `flex h-fit relative gap-2  items-center w-full lg:w-fit `,
+            "bg-background-system-body-secondary lg:bg-transparent",
+            "h-[52px] px-[16px]  lg:py-[16px] rtl:pr-4 ltr:pl-4 lg:h-[60px]",
             className
           )}
         >
-          <div
-            className="absolute top-0 w-[300px] rounded-t-[6px] z-10 lg:h-[60px] 
-            ltr:left-0 ltr:lg:bg-[linear-gradient(148deg,#0D0F4E_0%,#000_48.68%)]
-            rtl:right-0 rtl:lg:bg-[linear-gradient(-148deg,#0D0F4E_0%,#000_48.68%)]"
-          ></div>
-          <h1 className="text-content-system-global-primary whitespace-nowrap  typography-display-large-semibold z-20 text-left lg:typography-display-medium-regular lg:uppercase">
+          <h1 className="text-content-system-global-primary whitespace-nowrap leading-none typography-display-large-semibold z-20 text-left lg:typography-display-medium-regular lg:uppercase">
             {title}
           </h1>
-          <p className="self-end hidden sm:block text-content-presentation-global-secondary typography-headers-medium-regular z-20 lg:uppercase">{subTitle}</p>
-          <div className="h-[24px] hidden w-[1px] bg-border-presentation-global-primary z-20 lg:block"></div>
+          <p className="hidden mb-[-6px] sm:block text-content-presentation-global-secondary typography-headers-medium-regular z-20 lg:uppercase">{subTitle}</p>
+          <div className="h-[24px] hidden w-[1px] bg-border-presentation-global-primary z-20 sm:block"></div>
         </div>
         <div
           className={cn(
@@ -215,7 +182,6 @@ export function HeaderPage({
           {children}
         </div>
       </div>
-      <div className="w-full h-0.5 "></div>
     </div>
   );
 }
