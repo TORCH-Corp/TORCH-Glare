@@ -19,7 +19,6 @@
     "update": "node ./scripts/updateCompoents.js"
   },
   "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.6",
     "commander": "^13.1.0",
     "inquirer": "^9.2.15"
   },
