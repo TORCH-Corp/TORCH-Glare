@@ -1,5 +1,5 @@
 {
-  "name": "torchcorp",
+  "name": "glare-cli",
   "version": "1.6.6",
   "type": "module",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "lib"
   ],
   "bin": {
-    "torchcorp": "./torch.js"
+    "glare-cli": "./glare-cli.js"
   },
   "publishConfig": {
     "access": "public"

@@ -29,9 +29,9 @@ export function getConfig() {
 }
 
 program
-  .name("torchcorp")
-  .description("TorchCorp CLI for managing React components")
-  .version("0.0.15");
+  .name("glare-cli")
+  .description("Glare CLI for managing React components")
+  .version("0.0.0");
 
 program
   .command("init")
