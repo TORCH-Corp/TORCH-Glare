@@ -16,9 +16,9 @@ export const SearchField = forwardRef<HTMLInputElement, SearchProps>(
                     type="text"
                     variant="SystemStyle"
                     size="M"
-                    className="h-[54px] rounded-[12px] p-[15px] border-border-system-global-primary bg-[rgba(0,0,0,0.60)]"
+                    className="h-[54px] rounded-[9px] p-[15px] border-border-system-global-primary bg-[rgba(0,0,0,0.60)]"
                     icon={
-                        <SearchInputPlaceholder secondaryPlaceholder={secondaryPlaceholder} Searchplaceholder={Searchplaceholder} />
+                        <SearchInputPlaceholder value={props.value} secondaryPlaceholder={secondaryPlaceholder} Searchplaceholder={Searchplaceholder} />
                     }
                 />
             </div>
@@ -29,14 +29,20 @@ export const SearchField = forwardRef<HTMLInputElement, SearchProps>(
 SearchField.displayName = " SearchField"; // Set displayName for debugging
 
 
-function SearchInputPlaceholder({ Searchplaceholder, secondaryPlaceholder }: { Searchplaceholder?: ReactNode, secondaryPlaceholder?: ReactNode }) {
+function SearchInputPlaceholder({ Searchplaceholder, secondaryPlaceholder, value }: { Searchplaceholder?: ReactNode, secondaryPlaceholder?: ReactNode, value: any }) {
     return (
         <div className="flex gap-[10px] justify-center items-center ">
             <i className="ri-search-2-line text-[24px] text-[#E5E5E5]"></i>
-            <div className="flex gap-[5px] justify-center items-center">
-                <p className="text-content-system-global-primary  typography-headers-medium-regular leading-none opacity-[0.8] ">{Searchplaceholder}</p>
-                <p className="text-content-system-global-primary  typography-body-medium-medium leading-none opacity-30 mix-blend-luminosity">{secondaryPlaceholder}</p>
-            </div>
+
+            {
+                value == "" ? (
+                    <div className="flex gap-[5px] justify-center items-center">
+                        <p className="text-content-system-global-primary  typography-headers-medium-regular leading-none opacity-[0.8] ">{Searchplaceholder}</p>
+                        <p className="text-content-system-global-primary  typography-body-medium-medium leading-none opacity-30 mix-blend-luminosity">{secondaryPlaceholder}</p>
+                    </div>
+                ) : null
+            }
+
         </div>
     )
 }
