@@ -232,8 +232,9 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 )}
                 <Input
                   {...props}
+                  onFocus={() => setFucus(true)}
+                  onBlur={() => setFucus(false)}
                   variant={variant}
-                  focusSetter={setFucus}
                   size={size}
                   ref={inputRef}
                   className="group"
@@ -269,10 +270,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
         {popoverChildren && (
           <PopoverContent
             theme={theme}
-            onOpenAutoFocus={(e: any) => e.preventDefault()}
-            onFocus={() => setFucus(true)}
-            onBlur={() => setFucus(false)}
             variant={variant}
+            onOpenAutoFocus={(e: any) => e.preventDefault()}
             style={{ width: dropDownListWidth }}
           >
             {popoverChildren}

@@ -36,18 +36,58 @@ export default function InputFieldExample() {
               })}
             >{`Variant: ${variant}, Size: ${size}`}</h2>
             <InputField
-              type="password"
               size={size}
               variant={variant}
               icon={mockIcons[idx % mockIcons.length]}
               popoverChildren={
-                <PopoverItem
-                  variant={variant == "SystemStyle" ? "SystemStyle" : "Default"}
-                  size={size}
-                >
-                  Dropdown Content
-                </PopoverItem>
-              }
+                [
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                  "Dropdown Content",
+                ].map((item, index) => (
+                  <PopoverItem
+                    key={index}
+                    variant={variant == "SystemStyle" ? "SystemStyle" : "Default"}
+                    size={size}
+                    onClick={() => setValue("Dropdown Content" + index)}
+                  >
+                    {item}
+                  </PopoverItem>
+                ))}
               errorMessage={error ? "This is an error message" : undefined}
               value={value}
               onChange={(e) => setValue(e.target.value)}

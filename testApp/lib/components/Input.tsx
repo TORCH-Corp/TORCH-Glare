@@ -42,24 +42,21 @@ const inputFieldStyles = cva(
 );
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
-  focusSetter?: (focus: boolean) => void;
   variant?: "SystemStyle" | "PresentationStyle";
   size?: "XS" | "S" | "M";
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(
-  ({ focusSetter, className, variant, size, ...props }, ref) => {
+  ({ className, variant, size, ...props }, ref) => {
     return (
       <input
         {...props}
         autoComplete="off"
         className={cn(inputFieldStyles({ variant, size }), className)}
         onFocus={(e) => {
-          focusSetter && focusSetter(true);
           props.onFocus && props.onFocus(e);
         }}
         onBlur={(e) => {
-          focusSetter && focusSetter(false);
           props.onBlur && props.onBlur(e);
         }}
         ref={ref}
