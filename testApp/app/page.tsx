@@ -1,10 +1,13 @@
 'use client';
 import Examples from '../exmples';
+import StatusAlertDialogExample from '../exmples/StatusAlertDialogExample';
 
 export default function page() {
 
   return (
-    <Examples />
+    <div className='flex flex-col gap-2 w-full'>
+      <Examples />
+    </div>
   );
 }
 

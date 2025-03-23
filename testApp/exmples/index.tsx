@@ -30,7 +30,8 @@ import DatePickerExample from "./DatePickerExample";
 import Counter from "@/components/Counter";
 import { useTheme } from "@/providers/ThemeProvider";
 import IosDatePickerExample from "./IosDatePicerExample";
-
+import AlertDialogExample from "./AlertDialogExample";
+import StatusAlertDialogExample from "./StatusAlertDialogExample";
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
 
@@ -91,6 +92,8 @@ export default function Examples() {
         <FieldSectionExample />
         <TableExample />
         <RingLoadingExample />
+        <AlertDialogExample />
+        <StatusAlertDialogExample />
         <div className="my-10"></div>
       </section>
     </div>
