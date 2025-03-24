@@ -163,6 +163,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 size: size,
                 onTable: onTable,
               })
+              ,
+              className
             )}
           >
             <Tooltip

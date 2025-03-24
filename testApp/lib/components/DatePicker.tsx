@@ -18,6 +18,8 @@ interface PickerProps {
   onChange: any
   dateFormat?: any
   theme?: Themes
+  className?: string
+  [key: string]: any
 }
 
 export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, placeholderText, selected, ...props }: PickerProps) => {
@@ -27,7 +29,7 @@ export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, 
     onChange && onChange(startDate)
   }, [])
   return (
-    <div data-theme={theme} >
+    <div className={cn("w-full", props.className)} data-theme={theme} >
       <DatePicker
         {...props}
         dateFormat={dateFormat}
