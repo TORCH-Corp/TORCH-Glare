@@ -11,6 +11,8 @@ import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { ActionButton } from "./ActionButton";
+import { Themes } from "../utils/types";
+import { Icon, Input, InputGroup, Trilling } from "./InputGroup";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -24,8 +26,7 @@ export interface Props
   toolTipSide?: ToolTipSide;
   theme?: Themes
 }
-import { Themes } from "../utils/types";
-import { Icon, Input, InputGroup, Trilling } from "./InputGroup";
+
 
 export const InputField = forwardRef<HTMLInputElement, Props>(
   (
@@ -44,8 +45,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
     },
     forwardedRef
   ) => {
-    const [fucus, setFucus] = useState(false);
-    const [dropDownListWidth, setDropDownListWidth] = useState(0);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [PopoverWidth, setPopoverWidth] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -55,7 +56,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
     }, [forwardedRef]);
     // TODO: make the user input visible when input is focused
     return (
-      <Popover open={fucus}>
+      <Popover open={isPopoverOpen}>
         <Tooltip
           theme={theme}
           toolTipSide={toolTipSide}
@@ -68,8 +69,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 size={size}
                 data-theme={theme}
                 onFocus={(e) => {
-                  setDropDownListWidth(e.currentTarget.offsetWidth);
-                  setFucus(!fucus);
+                  setPopoverWidth(e.currentTarget.offsetWidth);
+                  setIsPopoverOpen(!isPopoverOpen);
                   inputRef.current?.focus();
                 }}
               >
@@ -83,11 +84,11 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                   data-error={errorMessage !== undefined}
                   data-table-input={onTable}
                   onFocus={(e) => {
-                    setFucus(true)
+                    setIsPopoverOpen(true)
                     props.onFocus?.(e)
                   }}
                   onBlur={(e) => {
-                    setFucus(false)
+                    setIsPopoverOpen(false)
                     props.onBlur?.(e)
                   }}
                   variant={variant}
@@ -98,7 +99,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 <Trilling >
                   {childrenSide}
                   {popoverChildren && (
-                    <DropDownActionButton size={size} variant={variant} fucus={fucus} />
+                    <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} />
                   )}
                 </Trilling>
               </InputGroup>
@@ -113,7 +114,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               theme={theme}
               variant={variant}
               onOpenAutoFocus={(e: any) => e.preventDefault()}
-              style={{ width: dropDownListWidth }}
+              style={{ width: PopoverWidth }}
             >
               {popoverChildren}
             </PopoverContent>
@@ -126,10 +127,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
 
 InputField.displayName = "InputField";
 
-
-
-
-const DropDownActionButton = ({ size, variant, fucus }: { size: "S" | "M", variant: "SystemStyle" | "PresentationStyle", fucus: boolean }) => {
+const PopoverActionButton = ({ size, variant, isPopoverOpen }: { size: "S" | "M", variant: "SystemStyle" | "PresentationStyle", isPopoverOpen: boolean }) => {
   return (
     <ActionButton size={size}>
       <i
@@ -138,7 +136,7 @@ const DropDownActionButton = ({ size, variant, fucus }: { size: "S" | "M", varia
           "transition-[transform,rotate]",
           "duration-200",
           "ease-in-out",
-          { "rotate-180": fucus },
+          { "rotate-180": isPopoverOpen },
           { "!text-[16px]": size === "S" },
           { "!text-[26px]": size === "M" },
           { "text-white": variant === "SystemStyle" }
