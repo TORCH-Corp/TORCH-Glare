@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes } from 'react'
+import React, { forwardRef, HTMLAttributes, InputHTMLAttributes } from 'react'
 import { cn } from '../utils/cn'
 import { cva } from 'class-variance-authority';
 
@@ -60,15 +60,18 @@ export const inputGroupStyles = cva(
     }
 );
 
-interface InputGroupProps extends Omit<InputHTMLAttributes<HTMLDivElement>, "size"> {
+interface InputGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "size"> {
     size?: 'S' | 'M';
     variant?: 'PresentationStyle' | 'SystemStyle';
+    ref?: any
+    className?: string;
 }
 
-export const InputGroup = ({ size = 'M', variant = "PresentationStyle", ...props }: InputGroupProps) => {
+export const InputGroup = ({ size = 'M', variant = "PresentationStyle", ref, className, ...props }: InputGroupProps) => {
     return (
         <div
-            className={cn(inputGroupStyles({ size, variant }))}
+            className={cn(inputGroupStyles({ size, variant }), className)}
+            ref={ref}
             {...props}>
         </div>
     )
@@ -80,9 +83,10 @@ interface IconProps {
     children: React.ReactNode;
     size?: 'S' | 'M';
     variant?: 'PresentationStyle' | 'SystemStyle';
+    className?: string;
 }
 
-export const Icon = ({ children, size = 'M', variant = 'PresentationStyle' }: IconProps) => {
+export const Icon = ({ children, size = 'M', variant = 'PresentationStyle', className }: IconProps) => {
     return (
         <div
             className={cn(
@@ -92,6 +96,7 @@ export const Icon = ({ children, size = 'M', variant = 'PresentationStyle' }: Ic
                 size === 'S' && "text-[16px]",
                 size === 'M' && "text-[18px] px-[2px]",
                 variant === 'SystemStyle' && '[&:has(+input[data-focus="true"])]:text-white',
+                className
             )}>
             {children}
         </div>
@@ -101,12 +106,14 @@ export const Icon = ({ children, size = 'M', variant = 'PresentationStyle' }: Ic
 
 interface TrillingProps {
     children: React.ReactNode;
+    className?: string;
 }
-export const Trilling = ({ children }: TrillingProps) => {
+export const Trilling = ({ children, className }: TrillingProps) => {
     return (
         <div
             className={cn(
-                "flex items-center justify-center h-full gap-1 py-1"
+                "flex items-center justify-center h-full gap-1 py-1",
+                className
             )}
         >
             {children}
