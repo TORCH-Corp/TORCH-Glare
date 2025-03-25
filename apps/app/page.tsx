@@ -1,11 +1,12 @@
 'use client';
+import { Icon, Input, InputGroup } from '@/components/InputGroup';
 import Examples from '../exmples';
-import StatusAlertDialogExample from '../exmples/StatusAlertDialogExample';
+import { InputField } from '@/components/InputField';
 
 export default function page() {
 
   return (
-    <div className='flex flex-col gap-2 w-full'>
+    <div className='flex justify-center items-center flex-col gap-2 w-full h-screen'>
       <Examples />
     </div>
   );
@@ -14,17 +15,12 @@ export default function page() {
 
 // using with react hook form lib
 /*
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="date"
-        control={control}
-        render={({ field }) => (
-          <SlideDatePicker
-            {...field}
-            onChange={(value) => field.onChange(value)}
-          />
-        )}
-      />
-      <button type="submit">Submit</button>
-    </form>
+     <InputGroup >
+        <Icon>
+          <i className="ri-mail-ai-line"></i>
+        </Icon>
+        <Input />
+      </InputGroup>
+
+      <InputField icon={<i className="ri-mail-ai-line"></i>} />
 */

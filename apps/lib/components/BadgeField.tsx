@@ -7,12 +7,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { Input } from "./Input";
 import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { cva } from "class-variance-authority";
 import { Themes } from "../utils/types";
+import { Input } from "./InputGroup";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
