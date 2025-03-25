@@ -4,7 +4,7 @@ import { Themes } from '../utils/types';
 
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-    id: string;
+    id?: string;
     selectedImg: any
     onExpand?: () => void
     expandLabel?: string

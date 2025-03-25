@@ -61,7 +61,7 @@ export const badgeBase = cva(
 );
 
 interface BadgeProps
-  extends Omit<HTMLAttributes<HTMLSpanElement>, "className">,
+  extends Omit<HTMLAttributes<HTMLButtonElement>, "className">,
   VariantProps<typeof badgeBase> {
   label?: string;
   onUnselect?: () => void;
@@ -83,7 +83,7 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   return (
-    <div
+    <button
       {...props}
       data-theme={theme}
       className={cn(
@@ -104,13 +104,22 @@ export const Badge: React.FC<BadgeProps> = ({
 
       <p className="px-[3px] whitespace-nowrap">{label}</p>
       {isSelected && (
-        <button
+        <span
           onClick={onUnselect}
-          className={" rounded-[2px] flex justify-center items-center "}
+          className="rounded-[2px] flex justify-center items-center"
+          tabIndex={0}
+          role="button"
+          aria-label="Remove badge"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onUnselect?.();
+            }
+          }}
         >
-          <i className="ri-close-line  !text-content-presentation-action-light-primary"></i>
-        </button>
+          <i className="ri-close-line !text-content-presentation-action-light-primary"></i>
+        </span>
       )}
-    </div>
+    </button>
   );
 };

@@ -201,7 +201,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                     ref={inputRef}
                     size={size}
                     className={cn(
-                      "p-0 min-w-[100px] w-full", // Added w-full to Input
+                      "min-w-[100px] w-full", // Added w-full to Input
                       {
                         "h-[18px]": size === "XS",
                         "h-[22px]": size === "S",
