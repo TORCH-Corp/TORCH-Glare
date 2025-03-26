@@ -1,6 +1,4 @@
-import { AttachedPic } from "@/components/AttachedPic";
-import { AttachmentField } from "@/components/AttachmentField";
-import { PicContainer } from "@/components/PicContainer";
+import { AttachmentImagePreview, ImageAttachment } from "@/components/ImageAttachment";
 import { cn } from "@/utils/cn";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -32,22 +30,20 @@ export default function AttachmentExample() {
         Attachment Preview
       </h1>
       <div className="flex flex-col gap-2 w-full">
-        <div className="flex gap-1 relative">
-          <PicContainer
-            hasExpand
-            onExpand={() => setIsPreviewOpen(true)}
-            {...getInputProps()}
-            selectedImg={preview}
-          />
-          <AttachmentField
+        <div className="flex gap-1 relative" >
+          <ImageAttachment
             getRootProps={getRootProps}
-            getInputProps={getInputProps}
+            {...getInputProps()}
+            onExpand={() => setIsPreviewOpen(true)}
+            uploadedImage={preview}
+            expandLabel={"Expand Pic"}
             mainLabel={"Drop Here"}
             secondaryLabel={"Drop an image"}
+
           />
           <div className="absolute right-0 bottom-0">
             {isPreviewOpen && (
-              <AttachedPic
+              <AttachmentImagePreview
                 onHide={() => setIsPreviewOpen(!isPreviewOpen)}
                 src={preview}
               />
