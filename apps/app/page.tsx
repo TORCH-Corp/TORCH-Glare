@@ -1,12 +1,10 @@
 'use client';
-import { Icon, Input, InputGroup } from '@/components/InputGroup';
 import Examples from '../exmples';
-import { InputField } from '@/components/InputField';
 
 export default function page() {
 
   return (
-    <div className='flex justify-center items-center flex-col gap-2 w-full h-screen'>
+    <div className='w-full '>
       <Examples />
     </div>
   );
