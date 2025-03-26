@@ -7,12 +7,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { Input } from "./Input";
 import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
-import { cva } from "class-variance-authority";
 import { Themes } from "../utils/types";
+import { Icon, Input, InputGroup, Trilling } from "./InputGroup";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -30,85 +29,6 @@ export interface Props
   actionButton?: ReactNode
 }
 
-export const mainContainerStyles = cva(
-  [
-    // Base styles
-    'flex',
-    'flex-1',
-    'flex-col',
-    'items-center',
-    'overflow-hidden',
-    'justify-center',
-    'typography-body-small-regular',
-    'border',
-    'transition-[background,background-color,color,border,box-shadow] duration-100 ease-in-out', // Simplified transition property
-    'hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
-    'leading-none'
-  ],
-  {
-    variants: {
-      variant: {
-        PresentationStyle: [
-          'text-content-presentation-action-light-primary',
-          'border-border-presentation-action-primary',
-          'bg-background-presentation-form-field-primary',
-          'hover:bg-background-presentation-form-field-hover',
-          'hover:border-border-presentation-action-hover',
-          'hover:text-content-presentation-action-light-primary',
-          'hover:caret-content-presentation-action-information-hover',
-        ],
-        SystemStyle: [
-          'border-border-system-global-secondary',
-          'bg-background-presentation-form-field-primary',
-          'hover:border-[#9748FF]',
-          'hover:bg-purple-alpha-10',
-        ],
-      },
-      focus: {
-        true: [
-          'border-border-presentation-state-focus',
-          'bg-background-presentation-form-field-primary',
-          'shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
-          'hover:border-border-presentation-state-focus',
-          'caret-border-presentation-state-focus',
-          'hover:caret-border-presentation-state-focus',
-        ],
-      },
-      onTable: {
-        true: ['border-transparent', 'bg-transparent', 'h-[26px]'], // Combined onTable styles
-      },
-      error: {
-        true: [
-          'border-border-presentation-state-negative',
-          'caret-border-presentation-state-negative',
-          'hover:border-border-presentation-state-negative',
-          'hover:caret-border-presentation-state-negative',
-        ],
-      },
-      disabled: {
-        true: [
-          'border-border-presentation-action-disabled',
-          'bg-background-presentation-action-disabled',
-          'hover:border-border-presentation-action-disabled',
-          'hover:bg-background-presentation-action-disabled',
-        ],
-      },
-      size: {
-        XS: ['rounded-[6px]'],
-        S: ['rounded-[6px]'],
-        M: ['rounded-[8px]'],
-      },
-    },
-    defaultVariants: {
-      focus: false,
-      disabled: false,
-      error: false,
-      onTable: false,
-      size: 'M',
-      variant: 'PresentationStyle', // added default variant
-    },
-  }
-);
 
 export const BadgeField = forwardRef<HTMLInputElement, Props>(
   (
@@ -131,7 +51,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
     },
     forwardedRef
   ) => {
-    const [fucus, setFucus] = useState(false);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const sectionRef = useRef<HTMLDivElement>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
@@ -142,86 +62,70 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       inputRef,
       sectionRef,
       popoverRef,
-      setFucus,
+      setIsPopoverOpen,
     });
 
     return (
-      <Popover open={fucus}>
-        <PopoverTrigger asChild>
-          <section
-            data-theme={theme}
-            ref={sectionRef}
-            onFocus={(e: any) => {
-              setDropDownListWidth(e.currentTarget.offsetWidth);
-            }}
-            className={cn(
-              mainContainerStyles({
-                variant: variant,
-                focus: fucus,
-                error: errorMessage !== undefined,
-                disabled: props.disabled,
-                size: size,
-                onTable: onTable,
-              })
-              ,
-              className
-            )}
-          >
-            <Tooltip
-              toolTipSide={toolTipSide}
-              open={errorMessage !== undefined}
-              text={errorMessage}
+      <Popover open={isPopoverOpen}>
+        <Tooltip
+          toolTipSide={toolTipSide}
+          open={errorMessage !== undefined}
+          text={errorMessage}
+        >
+          <PopoverTrigger asChild>
+            <InputGroup
+              data-theme={theme}
+              variant={variant}
+              ref={sectionRef}
+              onFocus={(e: any) => {
+                setDropDownListWidth(e.currentTarget.offsetWidth);
+                setIsPopoverOpen(true);
+              }}
+              className={cn(
+                [
+                  "flex gap-1 flex-row w-full relative p-1",
+                  "flex-nowrap",
+                  "overflow-hidden justify-end",
+                  "h-fit items-center",
+                ],
+                {
+                  "flex-wrap justify-start": isPopoverOpen,
+                }
+              )}
             >
-              <section
+              {icon && (
+                <Icon size={size === "XS" ? "S" : size} variant={variant}>
+                  {icon}
+                </Icon>
+              )}
+
+              {badgesChildren}
+
+              <Input
+                {...props}
+                variant={variant}
+                onFocus={() => setIsPopoverOpen(true)}
+                ref={inputRef}
+                size={size}
                 className={cn(
-                  [
-                    "gap-1 w-full relative",
-                    "flex flex-row flex-nowrap",
-                    "overflow-hidden justify-end",
-                    "p-[4px] h-fit items-center",
-                  ],
+                  "min-w-[100px] w-full", // Added w-full to Input
                   {
-                    "flex-wrap justify-start": fucus,
+                    "h-[18px]": size === "XS",
+                    "h-[22px]": size === "S",
+                    "h-[24px]": size === "M",
                   }
                 )}
-              >
-                {icon && (
-                  <BadgeIconContainer size={size} variant={variant}>
-                    {icon}
-                  </BadgeIconContainer>
-                )}
-
-                {badgesChildren}
-
-                <div className="flex-1"> {/* Add a flex-1 container for Input */}
-                  <Input
-                    {...props}
-                    variant={variant}
-                    onFocus={() => setFucus(true)}
-                    ref={inputRef}
-                    size={size}
-                    className={cn(
-                      "min-w-[100px] w-full", // Added w-full to Input
-                      {
-                        "h-[18px]": size === "XS",
-                        "h-[22px]": size === "S",
-                        "h-[26px]": size === "M",
-                      }
-                    )}
-                  />
-                </div>
-
-                {
-                  actionButton && (
-                    <div > {/* Keep the ActionButton right aligned */}
-                      {actionButton}
-                    </div>
-                  )
-                }
-              </section>
-            </Tooltip>
-          </section>
-        </PopoverTrigger>
+              />
+              {
+                actionButton && (
+                  <Trilling className="py-0" > {/* Keep the ActionButton right aligned */}
+                    {actionButton}
+                  </Trilling>
+                )
+              }
+            </InputGroup>
+          </PopoverTrigger>
+        </Tooltip>
 
         {popoverChildren && (
           <PopoverContent
@@ -241,37 +145,18 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
 BadgeField.displayName = "BadgeField";
 
 
-const BadgeIconContainer = ({ children, size = "M", variant = "PresentationStyle" }: Props) => {
-  return (
-    <div data-role="icon" className={cn(["flex items-center justify-center",
-      "transition-all duration-200 ease-in-out",
-      "leading-none",
-      "text-[16px]",
-      "text-content-presentation-action-light-secondary"],
-      {
-        "text-white": variant === "SystemStyle",
-        "text-[16px]": size === "S" || size === "XS",
-        "text-[18px] px-[2px]": size === "M",
-      }
-    )}>
-      {children}
-    </div>
-  )
-}
-
-
 const useInitialLoad = ({
   forwardedRef,
   inputRef,
   sectionRef,
   popoverRef,
-  setFucus,
+  setIsPopoverOpen,
 }: {
   forwardedRef: React.Ref<HTMLInputElement> | ((instance: HTMLInputElement | null) => void);
   inputRef: React.RefObject<HTMLInputElement | null>;
   sectionRef: React.RefObject<HTMLDivElement | null>;
   popoverRef: React.RefObject<HTMLDivElement | null>;
-  setFucus: (value: boolean) => void;
+  setIsPopoverOpen: (value: boolean) => void;
 }) => {
 
   // set the reference
@@ -293,9 +178,9 @@ const useInitialLoad = ({
         !sectionRef.current.contains(event.target as Node) &&
         !popoverRef.current?.contains(event.target as Node)
       ) {
-        setFucus(false);
+        setIsPopoverOpen(false);
       } else {
-        setFucus(true);
+        setIsPopoverOpen(true);
         inputRef.current?.focus();
       }
     };
@@ -307,5 +192,5 @@ const useInitialLoad = ({
       document.removeEventListener("mousedown", handleOutsideClick);
       document.removeEventListener("pointerdown", handleOutsideClick);
     };
-  }, [sectionRef, popoverRef, setFucus, inputRef]);
+  }, [sectionRef, popoverRef, setIsPopoverOpen, inputRef]);
 };

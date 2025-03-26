@@ -48,11 +48,11 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
         theme={theme}
         onFocus={(e) => {
           setFucus(true);
-          props.onFocus && props.onFocus(e);
+          props.onFocus?.(e);
         }}
         onBlur={(e) => {
           setFucus(false);
-          props.onBlur && props.onBlur(e);
+          props.onBlur?.(e);
         }}
         className={className}
         ref={ref}
