@@ -12,7 +12,7 @@ import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { ActionButton } from "./ActionButton";
 import { Themes } from "../utils/types";
-import { Icon, Input, InputGroup, Trilling } from "./InputGroup";
+import { Icon, Input, Group, Trilling } from "./Input";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -65,10 +65,11 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
         >
           <PopoverTrigger asChild>
             <div>
-              <InputGroup
+              <Group
                 error={errorMessage !== undefined}
                 onTable={onTable}
                 size={size}
+                variant={variant}
                 data-theme={theme}
                 onFocus={(e) => {
                   setPopoverWidth(e.currentTarget.offsetWidth);
@@ -92,8 +93,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                     setIsPopoverOpen(false)
                     props.onBlur?.(e)
                   }}
-                  variant={variant}
-                  size={size}
                   ref={inputRef}
                 />
 
@@ -103,7 +102,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                     <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} />
                   )}
                 </Trilling>
-              </InputGroup>
+              </Group>
             </div>
           </PopoverTrigger>
         </Tooltip>

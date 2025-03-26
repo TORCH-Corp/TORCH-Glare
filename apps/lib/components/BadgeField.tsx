@@ -11,7 +11,7 @@ import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Themes } from "../utils/types";
-import { Icon, Input, InputGroup, Trilling } from "./InputGroup";
+import { Icon, Input, Group, Trilling } from "./Input";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -73,11 +73,12 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           text={errorMessage}
         >
           <PopoverTrigger asChild>
-            <InputGroup
+            <Group
               error={errorMessage !== undefined}
               onTable={onTable}
               data-theme={theme}
               variant={variant}
+              size={size === "XS" ? "S" : size}
               ref={sectionRef}
               onFocus={(e: any) => {
                 setDropDownListWidth(e.currentTarget.offsetWidth);
@@ -97,7 +98,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               )}
             >
               {icon && (
-                <Icon size={size === "XS" ? "S" : size} variant={variant}>
+                <Icon  >
                   {icon}
                 </Icon>
               )}
@@ -106,16 +107,14 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
 
               <Input
                 {...props}
-                variant={variant}
                 onFocus={() => setIsPopoverOpen(true)}
                 ref={inputRef}
-                size={size}
                 className={cn(
                   "min-w-[100px] w-full", // Added w-full to Input
                   {
-                    "h-[18px]": size === "XS",
-                    "h-[22px]": size === "S",
-                    "h-[24px]": size === "M",
+                    "!h-[18px]": size === "XS",
+                    "!h-[22px]": size === "S",
+                    "!h-[24px]": size === "M",
                   }
                 )}
               />
@@ -126,7 +125,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   </Trilling>
                 )
               }
-            </InputGroup>
+            </Group>
           </PopoverTrigger>
         </Tooltip>
 

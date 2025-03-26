@@ -2,7 +2,7 @@ import React, { forwardRef, HTMLAttributes, InputHTMLAttributes } from 'react'
 import { cn } from '../utils/cn'
 import { cva } from 'class-variance-authority';
 
-export const inputGroupStyles = cva(
+export const GroupStyles = cva(
     [
         "flex w-full min-w-0 px-1 justify-center items-center",
         "typography-body-small-regular",
@@ -43,11 +43,15 @@ export const inputGroupStyles = cva(
                     'focus-within:caret-border-presentation-state-focus',
                     'focus-within:hover:caret-border-presentation-state-focus',
                     'focus-within:hover:bg-black-alpha-20',
+                    "[&_div[data-role='icon']]:focus-within:text-white",
+                    "[&_input]:placeholder:text-[#A0A0A0]",
+                    "[&_input]:hover:placeholder:text-[#A0A0A0]",
+                    "[&_input]:text-white"
                 ],
             },
             size: {
-                S: ["h-[30px]", "rounded-[6px]"],
-                M: ["h-[40px]", "rounded-[8px]"],
+                S: ["h-[30px]", "rounded-[6px] [&_input]:h-[30px] [&_div[data-role='icon']]:text-[16px]"],
+                M: ["h-[40px]", "rounded-[8px] [&_input]:h-[40px] [&_div[data-role='icon']]:text-[18px] [&_div[data-role='icon']]:px-[2px]"],
             },
             error: {
                 true: [
@@ -78,10 +82,10 @@ interface InputGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "size"> {
     className?: string;
 }
 
-export const InputGroup = ({ size = 'M', variant = "PresentationStyle", error = false, onTable = false, ref, className, ...props }: InputGroupProps) => {
+export const Group = ({ size = 'M', variant = "PresentationStyle", error = false, onTable = false, ref, className, ...props }: InputGroupProps) => {
     return (
         <div
-            className={cn(inputGroupStyles({ size, variant, error, onTable }), className)}
+            className={cn(GroupStyles({ size, variant, error, onTable }), className)}
             ref={ref}
             {...props}>
         </div>
@@ -92,23 +96,18 @@ export const InputGroup = ({ size = 'M', variant = "PresentationStyle", error = 
 
 interface IconProps {
     children: React.ReactNode;
-    size?: 'S' | 'M';
-    variant?: 'PresentationStyle' | 'SystemStyle';
     className?: string;
 }
 
-export const Icon = ({ children, size = 'M', variant = 'PresentationStyle', className }: IconProps) => {
+export const Icon = ({ children, className }: IconProps) => {
     return (
         <div
             className={cn(
                 "flex items-center justify-center",
                 "transition-all duration-200 ease-in-out",
                 "leading-0 text-content-presentation-action-light-secondary",
-                size === 'S' && "text-[16px]",
-                size === 'M' && "text-[18px] px-[2px]",
-                variant === 'SystemStyle' && 'group-focus-within:text-white',
                 className
-            )}>
+            )} data-role="icon">
             {children}
         </div>
     );
@@ -136,12 +135,10 @@ export const Trilling = ({ children, className }: TrillingProps) => {
 
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
-    variant?: "SystemStyle" | "PresentationStyle";
-    size?: "XS" | "S" | "M";
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-    ({ className, variant = "PresentationStyle", size = "M", ...props }, ref) => {
+    ({ className, ...props }, ref) => {
         return (
             <input
                 {...props}
@@ -160,19 +157,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)]",
                     "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]",
                     "hover:placeholder:text-content-presentation-action-light-primary",
-
-                    // Size variants
-                    size === "XS" && "h-[26px] rounded-[6px]",
-                    size === "S" && "h-[30px] rounded-[6px]",
-                    size === "M" && "h-[40px] rounded-[8px]",
-
-                    // Variant styles
-                    variant === "SystemStyle" && [
-                        "placeholder:text-[#A0A0A0]",
-                        "hover:placeholder:text-[#A0A0A0]",
-                        "text-white"
-                    ],
-
                     className
                 )}
                 ref={ref}

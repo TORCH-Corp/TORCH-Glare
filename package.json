@@ -1,5 +1,5 @@
 {
-  "name": "glare-cli",
+  "name": "glare-ui",
   "version": "1.6.0",
   "type": "module",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "lib"
   ],
   "bin": {
-    "glare-cli": "./glare-cli.js"
+    "glare-ui": "./glare-ui.js"
   },
   "publishConfig": {
     "access": "public"

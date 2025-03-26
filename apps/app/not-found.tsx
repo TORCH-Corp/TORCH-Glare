@@ -1,4 +1,3 @@
-import { Article } from "@/components/Article";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -240,11 +239,11 @@ export default function NotFound() {
 
         {/* Error message */}
         <div className="space-y-2 relative z-10">
-          <Article transparent className="max-w-md mx-auto">
+          <article className="max-w-md mx-auto">
             Sorry, we couldn&apos;t find the page you&apos;re looking for.
             <br />
             Perhaps you&apos;ve mistyped the URL or the page has been moved.
-          </Article>
+          </article>
         </div>
 
         {/* Action buttons */}

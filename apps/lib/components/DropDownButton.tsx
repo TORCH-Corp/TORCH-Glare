@@ -145,7 +145,7 @@ export const MenuItemStyles = cva(
   }
 );
 
-export const dropdownButtonStyles = cva(
+export const dropdownTriggerStyles = cva(
   [
     "flex flex-row rounded-[4px] justify-between items-center outline-none",
     "rounded-[4px]",
@@ -212,7 +212,7 @@ const DropDownButtonValue = SelectPrimitive.Value;
 const DropDownButtonTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-  VariantProps<typeof dropdownButtonStyles> & {
+  VariantProps<typeof dropdownTriggerStyles> & {
     errors?: string;
     icon?: string
     theme?: Themes
@@ -237,7 +237,7 @@ const DropDownButtonTrigger = React.forwardRef<
           data-theme={theme}
           ref={ref}
           className={cn(
-            dropdownButtonStyles({
+            dropdownTriggerStyles({
               size,
               variant,
               error: errors !== undefined,
