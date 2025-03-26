@@ -64,7 +64,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
         errorMessage={errorMessage}
         onTable={onTable}
         icon={
-          <LabelLessSection fucus={fucus} label={label} required={required} />
+          <Label fucus={fucus} label={label} required={required} />
         }
       />
     );
@@ -73,7 +73,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
 
 LabelLessInput.displayName = "LabelLessInput"
 
-export const LabelLessSection = ({
+const Label = ({
   fucus,
   label,
   required,

@@ -38,7 +38,7 @@ Checkbox.displayName = "Checkbox";
 
 
 
-export const glareCheckBoxStyles = cva(
+const glareCheckBoxStyles = cva(
   [
     "w-[16px]",
     "h-[16px]",

@@ -2,6 +2,7 @@
 import { InputHTMLAttributes, forwardRef } from "react";
 import { cn } from "../utils/cn";
 import { cva } from "class-variance-authority";
+import { Themes } from "../utils/types";
 
 
 const glareRadioStyles = cva(
@@ -36,12 +37,14 @@ const glareRadioStyles = cva(
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "children"> {
   size?: "S" | "M" | "L";
   children?: React.ReactNode;
+  theme?: Themes
+  radioClassName?: string;
 }
 
 export const Radio = forwardRef<HTMLInputElement, Props>(
-  ({ size = "M", className, children, ...props }, ref) => {
+  ({ size = "M", className, children, theme, radioClassName, ...props }, ref) => {
     return (
-      <label htmlFor={props.id} className={cn("flex items-center justify-start gap-1", className)}>
+      <label data-theme={theme} htmlFor={props.id} className={cn("flex items-center justify-start gap-1", className)}>
         <input
           {...props}
           onChange={(e) => {
@@ -53,7 +56,9 @@ export const Radio = forwardRef<HTMLInputElement, Props>(
           className={cn(
             glareRadioStyles({
               size,
+
             }),
+            radioClassName
           )}
         />
         {children}

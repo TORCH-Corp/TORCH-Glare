@@ -84,13 +84,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 setDropDownListWidth(e.currentTarget.offsetWidth);
                 setIsPopoverOpen(true);
               }}
-              className={cn(
-                [
-                  "flex gap-1 flex-row w-full relative p-1",
-                  "flex-nowrap",
-                  "overflow-hidden justify-end",
-                  "h-fit items-center",
-                ],
+              className={cn("flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-end h-fit items-center",
                 {
                   "flex-wrap justify-start": isPopoverOpen,
                 },

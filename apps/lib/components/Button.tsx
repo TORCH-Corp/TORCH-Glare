@@ -204,7 +204,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       <Component
         {...props}
         data-theme={theme}
-        disabled={disabled}
+        disabled={disabled || is_loading}
         ref={ref}
         className={cn(
           buttonVariants({

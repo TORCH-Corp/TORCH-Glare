@@ -124,7 +124,7 @@ const AlertDialogLabel = React.forwardRef<
             {...props}
         >
             <p >
-                <strong className={cn("")}>{firstWord}</strong>
+                <strong >{firstWord}</strong>
                 {restOfTitle.length > 0 && ' ' + restOfTitle}
             </p>
         </AlertDialogPrimitive.Title>
