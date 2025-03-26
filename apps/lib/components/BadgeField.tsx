@@ -112,7 +112,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   {
                     "h-[18px]": size === "XS",
                     "h-[22px]": size === "S",
-                    "h-[26px]": size === "M",
+                    "h-[24px]": size === "M",
                   }
                 )}
               />
