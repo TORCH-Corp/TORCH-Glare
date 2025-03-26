@@ -25,6 +25,7 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
       type = "checkbox",
       directions,
       theme,
+      className,
       size = "M",
       ...props
     },
@@ -34,7 +35,7 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
       <label
         htmlFor={id}
         data-theme={theme}
-        className={cn("flex items-center gap-1  group", props.className)}
+        className={cn("flex items-center gap-1  group", className)}
       >
         <Checkbox
           {...props}

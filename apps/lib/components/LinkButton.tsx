@@ -33,7 +33,7 @@ interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
   theme?: Themes
 }
 
-export const LinkButton: React.FC<Props> = ({ theme, size = "S", ...props }) => {
+export const LinkButton: React.FC<Props> = ({ theme, size = "S", className, ...props }) => {
   return (
     <a
       {...props}
@@ -42,7 +42,7 @@ export const LinkButton: React.FC<Props> = ({ theme, size = "S", ...props }) => 
         linkButtonStyles({
           size: size,
         }),
-        props.className
+        className
       )}
     >
       <p className="px-[3px]">{props.children}</p>

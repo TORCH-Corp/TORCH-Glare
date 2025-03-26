@@ -10,14 +10,14 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: Themes
 }
 
-export function AttachedPic({ theme, src, header, onHide, ...props }: Props) {
+export function AttachedPic({ theme, src, header, onHide, className, ...props }: Props) {
   return (
     <section
       {...props}
       data-theme={theme}
       className={cn(
         " overflow-hidden flex flex-col items-center justify-center w-80 p-2 gap-2 rounded-md border shadow-md border-border-presentation-global-primary bg-background-presentation-form-base",
-        props.className
+        className
       )}
     >
       <section className="flex items-center justify-between w-full m-0">

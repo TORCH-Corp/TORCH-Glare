@@ -72,7 +72,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           side={toolTipSide}
           align={contentAlign}
           avoidCollisions={avoidCollisions}
-          className={cn(tooltipStyles({ variant, className }))}
+          className={cn(tooltipStyles({ variant }), className)}
           {...props}
         >
           {text}

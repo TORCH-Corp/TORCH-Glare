@@ -45,14 +45,14 @@ interface Props extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof Tree
     childrenContainerClassName?: string
 }
 
-export const TreeDropDown = ({ childrenContainerClassName, variant = "secondary", treeLabel, open, theme, ...props }: Props) => {
+export const TreeDropDown = ({ childrenContainerClassName, className, variant = "secondary", treeLabel, open, theme, ...props }: Props) => {
     const [isActive, setIsActive] = useState(open);
     useEffect(() => {
         setIsActive(open)
     }, [open])
     return (
-        <div {...props} className={cn("flex h-fit flex-col transition-all ease-in-out duration-500")}>
-            <div onClick={() => setIsActive(!isActive)} data-theme={theme} className={cn(TreeDropDownVariants({ variant, active: isActive }), props.className)}>
+        <div {...props} className={cn("flex h-fit flex-col transition-all ease-in-out duration-500",)}>
+            <div onClick={() => setIsActive(!isActive)} data-theme={theme} className={cn(TreeDropDownVariants({ variant, active: isActive }), className)}>
                 <button className={cn("outline-none border-none flex-0 leading-0 transition-transform ease-in-out flex justify-center items-center bg-background-system-body-tertiary h-[28px] w-[28px] rounded-full text-[20px] text-content-system-global-primary", { "rotate-180": isActive })}>
                     <i className={cn("leading-none ri-arrow-down-s-line ")}></i>
                 </button>

@@ -89,7 +89,7 @@ const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody ref={ref} className={cn("", className)} {...props}>
+  <tbody ref={ref} className={className} {...props}>
     {props.children}
   </tbody>
 ));
@@ -99,7 +99,7 @@ const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tfoot ref={ref} className={cn("", className)} {...props} />
+  <tfoot ref={ref} className={cn(className)} {...props} />
 ));
 TableFooter.displayName = "TableFooter";
 
@@ -133,8 +133,7 @@ const TableRow = React.forwardRef<
         "bg-background-presentation-table-row-hover border-t border-[2px] border-border-presentation-table-dropdown":
           state === "open",
       },
-      className,
-    ])}
+    ], className)}
     {...props}
   >
     {props.children}
@@ -170,7 +169,7 @@ const TableHead = React.forwardRef<
       <th
         ref={headRef}
         className={cn(
-          "relative py-[2px] px-[2px] border-b-[2px]  border-border-presentation-table-header"
+          "relative py-[2px] px-[2px] border-b-[2px]  border-border-presentation-table-header",
         )}
       >
         <div
@@ -211,6 +210,7 @@ const TableCell = React.forwardRef<
   React.TdHTMLAttributes<HTMLTableCellElement> & {
     isDummy?: boolean;
     childrenClassName?: string;
+    className?: string;
   }
 >(({ className, childrenClassName, isDummy, ...props }, ref) => (
   <td

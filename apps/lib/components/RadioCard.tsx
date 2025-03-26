@@ -67,10 +67,10 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
         htmlFor={id}
         className={cn(
           glareRadioCard({
-            className,
             disabled,
             checked: props.checked
-          })
+          }),
+          className
         )}
       >
         <section

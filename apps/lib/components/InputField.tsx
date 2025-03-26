@@ -66,6 +66,8 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
           <PopoverTrigger asChild>
             <div>
               <InputGroup
+                error={errorMessage !== undefined}
+                onTable={onTable}
                 size={size}
                 data-theme={theme}
                 onFocus={(e) => {
@@ -73,6 +75,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                   setIsPopoverOpen(!isPopoverOpen);
                   inputRef.current?.focus();
                 }}
+                className={className}
               >
                 {icon && (
                   <Icon>
@@ -81,8 +84,6 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 )}
                 <Input
                   {...props}
-                  data-error={errorMessage !== undefined}
-                  data-table-input={onTable}
                   onFocus={(e) => {
                     setIsPopoverOpen(true)
                     props.onFocus?.(e)

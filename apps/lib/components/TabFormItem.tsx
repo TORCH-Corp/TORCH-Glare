@@ -134,6 +134,7 @@ const TabFormItem: React.FC<Props> = ({
   buttonType,
   theme,
   asChild,
+  className,
   as: Tag = "button",
   ...props
 }) => {
@@ -146,7 +147,7 @@ const TabFormItem: React.FC<Props> = ({
       {...props}
       className={cn(
         formBarItemStyles({ componentType, active, buttonType }),
-        props.className
+        className
       )}
     >
       {props.children}

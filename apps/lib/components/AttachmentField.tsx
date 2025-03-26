@@ -37,6 +37,7 @@ export const AttachmentField = forwardRef<HTMLInputElement, Props>(
       mainLabel,
       theme,
       secondaryLabel,
+      className,
       ...props
     }: Props,
     ref
@@ -48,7 +49,7 @@ export const AttachmentField = forwardRef<HTMLInputElement, Props>(
         id={props.id}
         component_style="PrimeContStyle"
         {...getRootProps?.()}
-        className={cn(dropZoneStyles({ active: isDropAreaActive }))}
+        className={cn(dropZoneStyles({ active: isDropAreaActive }), className)}
       >
         <h1 className="text-content-presentation-action-light-primary typography-body-large-medium">
           {mainLabel}

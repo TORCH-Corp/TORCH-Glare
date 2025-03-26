@@ -23,6 +23,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
       size = "M",
       type = "radio",
       directions,
+      className,
       ...props
     },
     ref
@@ -31,7 +32,7 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
       <label
         data-theme={theme}
         htmlFor={props.id}
-        className={cn("flex items-center gap-1 group", props.className)}
+        className={cn("flex items-center gap-1 group", className)}
       >
         <Radio {...props} checked={props.checked} size={size} ref={ref} />
         {label && (
@@ -85,7 +86,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
 }
 
 export const Radio = forwardRef<HTMLInputElement, Props>(
-  ({ size = "M", ...props }, ref) => {
+  ({ size = "M", className, ...props }, ref) => {
     return (
       <input
         {...props}
@@ -98,7 +99,8 @@ export const Radio = forwardRef<HTMLInputElement, Props>(
         className={cn(
           glareRadioStyles({
             size,
-          })
+          }),
+          className
         )}
       />
     );

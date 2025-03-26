@@ -12,9 +12,9 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     theme?: Themes
 }
 
-export const PicContainer = forwardRef<HTMLInputElement, Props>(({ theme, id, selectedImg, onExpand, expandLabel, hasExpand, ...props }, ref) => {
+export const PicContainer = forwardRef<HTMLInputElement, Props>(({ theme, id, selectedImg, onExpand, expandLabel, hasExpand, className, ...props }, ref) => {
     return (
-        <section data-theme={theme} className={cn("flex items-center justify-center w-[65px] h-[65px] rounded-md relative overflow-hidden border-none  group", props.className)}>
+        <section data-theme={theme} className={cn("flex items-center justify-center w-[65px] h-[65px] rounded-md relative overflow-hidden border-none  group", className)}>
             <input
                 {...props}
                 ref={ref}

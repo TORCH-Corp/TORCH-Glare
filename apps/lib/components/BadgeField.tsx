@@ -74,6 +74,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
         >
           <PopoverTrigger asChild>
             <InputGroup
+              error={errorMessage !== undefined}
+              onTable={onTable}
               data-theme={theme}
               variant={variant}
               ref={sectionRef}
@@ -90,7 +92,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 ],
                 {
                   "flex-wrap justify-start": isPopoverOpen,
-                }
+                },
+                className
               )}
             >
               {icon && (

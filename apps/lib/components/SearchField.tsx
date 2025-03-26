@@ -1,5 +1,6 @@
 import { forwardRef, ReactNode } from "react";
 import { Props, InputField } from "./InputField";
+import { cn } from "../utils/cn";
 
 interface SearchProps extends Props {
     Searchplaceholder?: ReactNode
@@ -7,9 +8,9 @@ interface SearchProps extends Props {
 }
 // Use InputField types in the SearchInput component
 export const SearchField = forwardRef<HTMLInputElement, SearchProps>(
-    ({ Searchplaceholder, secondaryPlaceholder, ...props }, forwardedRef) => {
+    ({ Searchplaceholder, secondaryPlaceholder, className, ...props }, forwardedRef) => {
         return (
-            <div className="mb-[10px] w-full h-fit justify-center items-center rounded-[12px] p-[3px] bg-[rgba(106,112,144,0.60)] shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)] backdrop-blur-[21px]">
+            <div className={cn("mb-[10px] w-full h-fit justify-center items-center rounded-[12px] p-[3px] bg-[rgba(106,112,144,0.60)] shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)] backdrop-blur-[21px]", className)}>
                 <InputField
                     {...props}
                     ref={forwardedRef}

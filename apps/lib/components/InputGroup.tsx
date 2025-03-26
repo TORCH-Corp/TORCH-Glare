@@ -10,17 +10,10 @@ export const inputGroupStyles = cva(
         "transition-all duration-200 ease-in-out",
         "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
         "[&_i]:leading-[0px] leading-[0px]",
-        '[&:has(input[data-error="true"])]:border-border-presentation-state-negative',
-        '[&:has(input[data-error="true"])]:caret-border-presentation-state-negative',
-        '[&:has(input[data-error="true"])]:hover:border-border-presentation-state-negative',
-        '[&:has(input[data-error="true"])]:hover:caret-border-presentation-state-negative',
         '[&:has(input[disabled="true"])]:!border-border-presentation-action-disabled',
         '[&:has(input[disabled="true"])]:!bg-background-presentation-action-disabled',
         '[&:has(input[disabled="true"])]:hover:border-border-presentation-action-disabled',
         '[&:has(input[disabled="true"])]:hover:bg-background-presentation-action-disabled',
-        '[&:has(input[data-table-input="true"])]:border-transparent',
-        '[&:has(input[data-table-input="true"])]:bg-transparent',
-        '[&:has(input[data-table-input="true"])]:h-[26px]',
     ],
     {
         variants: {
@@ -31,12 +24,12 @@ export const inputGroupStyles = cva(
                     "hover:bg-background-presentation-form-field-hover",
                     "hover:border-border-presentation-action-hover",
                     "hover:text-content-presentation-action-light-primary",
-                    '[&:has(input[data-focus="true"])]:border-border-presentation-state-focus',
-                    '[&:has(input[data-focus="true"])]:bg-background-presentation-form-field-primary',
-                    '[&:has(input[data-focus="true"])]:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
-                    '[&:has(input[data-focus="true"])]:hover:border-border-presentation-state-focus',
-                    '[&:has(input[data-focus="true"])]:caret-border-presentation-state-focus',
-                    '[&:has(input[data-focus="true"])]:hover:caret-border-presentation-state-focus',
+                    'focus-within:border-border-presentation-state-focus',
+                    'focus-within:bg-background-presentation-form-field-primary',
+                    'focus-within:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
+                    'focus-within:hover:border-border-presentation-state-focus',
+                    'focus-within:caret-border-presentation-state-focus',
+                    'focus-within:hover:caret-border-presentation-state-focus',
                 ],
                 SystemStyle: [
                     "bg-black-alpha-20",
@@ -44,33 +37,51 @@ export const inputGroupStyles = cva(
                     "border-[#2C2D2E]",
                     "hover:border-[#9748FF]",
                     "hover:bg-purple-alpha-10",
-                    '[&:has(input[data-focus="true"])]:border-border-presentation-state-focus',
-                    '[&:has(input[data-focus="true"])]:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
-                    '[&:has(input[data-focus="true"])]:hover:border-border-presentation-state-focus',
-                    '[&:has(input[data-focus="true"])]:caret-border-presentation-state-focus',
-                    '[&:has(input[data-focus="true"])]:hover:caret-border-presentation-state-focus',
-                    '[&:has(input[data-focus="true"])]:hover:bg-black-alpha-20',
+                    'focus-within:border-border-presentation-state-focus',
+                    'focus-within:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
+                    'focus-within:hover:border-border-presentation-state-focus',
+                    'focus-within:caret-border-presentation-state-focus',
+                    'focus-within:hover:caret-border-presentation-state-focus',
+                    'focus-within:hover:bg-black-alpha-20',
                 ],
             },
             size: {
                 S: ["h-[30px]", "rounded-[6px]"],
                 M: ["h-[40px]", "rounded-[8px]"],
             },
+            error: {
+                true: [
+                    "border-border-presentation-state-negative",
+                    "caret-border-presentation-state-negative",
+                    "hover:border-border-presentation-state-negative",
+                    "hover:caret-border-presentation-state-negative",
+                ],
+            },
+            onTable: {
+                true: [
+                    'border-transparent',
+                    'bg-transparent',
+                    'h-[26px]',
+                ],
+            },
         },
+
     }
 );
 
 interface InputGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "size"> {
     size?: 'S' | 'M';
     variant?: 'PresentationStyle' | 'SystemStyle';
+    error?: boolean;
+    onTable?: boolean;
     ref?: any
     className?: string;
 }
 
-export const InputGroup = ({ size = 'M', variant = "PresentationStyle", ref, className, ...props }: InputGroupProps) => {
+export const InputGroup = ({ size = 'M', variant = "PresentationStyle", error = false, onTable = false, ref, className, ...props }: InputGroupProps) => {
     return (
         <div
-            className={cn(inputGroupStyles({ size, variant }), className)}
+            className={cn(inputGroupStyles({ size, variant, error, onTable }), className)}
             ref={ref}
             {...props}>
         </div>
@@ -95,7 +106,7 @@ export const Icon = ({ children, size = 'M', variant = 'PresentationStyle', clas
                 "leading-0 text-content-presentation-action-light-secondary",
                 size === 'S' && "text-[16px]",
                 size === 'M' && "text-[18px] px-[2px]",
-                variant === 'SystemStyle' && '[&:has(+input[data-focus="true"])]:text-white',
+                variant === 'SystemStyle' && 'group-focus-within:text-white',
                 className
             )}>
             {children}
@@ -164,15 +175,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
                     className
                 )}
-                onFocus={(e) => {
-                    e.currentTarget.setAttribute('data-focus', 'true');
-                    props.onFocus && props.onFocus(e);
-                }}
-                onBlur={(e) => {
-                    e.currentTarget.setAttribute('data-focus', 'false');
-                    props.onBlur && props.onBlur(e);
-                }}
-                data-focus="false"
                 ref={ref}
             />
         );

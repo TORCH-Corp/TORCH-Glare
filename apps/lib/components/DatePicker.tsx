@@ -22,14 +22,14 @@ interface PickerProps {
   [key: string]: any
 }
 
-export const Datepicker = ({ theme = "dark", onChange, dateFormat, customInput, placeholderText, selected, ...props }: PickerProps) => {
+export const Datepicker = ({ theme = "dark", onChange, className, dateFormat, customInput, placeholderText, selected, ...props }: PickerProps) => {
 
   const [startDate, setStartDate] = useState<Date | any>(selected || new Date(Date.now()));
   useEffect(() => {
     onChange && onChange(startDate)
   }, [])
   return (
-    <div className={cn("w-full", props.className)} data-theme={theme} >
+    <div className={cn("w-full", className)} data-theme={theme} >
       <DatePicker
         {...props}
         dateFormat={dateFormat}
