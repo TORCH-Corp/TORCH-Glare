@@ -119,19 +119,19 @@ Adds a specific component or runs an interactive prompt if no name is provided.
 
 ### Add Hooks
 ```sh
-npx torch-glare@latest add-hook [hook]
+npx torch-glare@latest hook [hook]
 ```
 Adds a specific hook or runs an interactive prompt if no name is provided.
 
 ### Add Utilities
 ```sh
-npx torch-glare@latest add-util [util]
+npx torch-glare@latest util [util]
 ```
 Adds a specific utility or runs an interactive prompt if no name is provided.
 
 ### Providers
 ```sh
-npx torch-glare@latest add-provider [provider]
+npx torch-glare@latest provider [provider]
 ```
 Adds a specific provider or runs an interactive prompt if no name is provided.
 

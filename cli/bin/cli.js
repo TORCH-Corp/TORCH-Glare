@@ -44,22 +44,22 @@ program
   .action((component) => addComponent(component && `${component}.tsx`));
 
 program
-  .command("add-hook [hook]")
+  .command("hook [hook]")
   .description("Add a hook interactively or install a specified one")
   .action((hook) => addHook(hook && `${hook}`));
 
 program
-  .command("add-layout [layout]")
+  .command("layout [layout]")
   .description("Add a Layout interactively or install a specified one")
   .action((layout) => addLayout(layout && `${layout}.tsx`));
 
 program
-  .command("add-util [util]")
+  .command("util [util]")
   .description("Add a utils interactively or install a specified one")
   .action((util) => addUtil(util && `${util}.ts`));
 
 program
-  .command("add-provider [provider]")
+  .command("provider [provider]")
   .description("Add a provider interactively or install a specified one")
   .action((provider) => addProvider(provider && `${provider}`));
 
