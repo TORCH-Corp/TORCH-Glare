@@ -15,8 +15,7 @@
   },
   "scripts": {
     "build": "next build --no-lint",
-    "deploy": "publish --access public",
-    "update": "node ./scripts/updateCompoents.js"
+    "deploy": "node ./scripts/publish/index.js"
   },
   "dependencies": {
     "commander": "^13.1.0",
