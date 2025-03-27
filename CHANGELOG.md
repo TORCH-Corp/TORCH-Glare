@@ -24,4 +24,10 @@
 - `AttachmentField` component name changed to `ImageAttachment`
 - `ButtonField` component name changed to `ActionsGroup`
 
+- `CLI` command name changed from `torchcorp` to `torch-glare`
+- `CLI` config file name changed from `torch.json` to `glare.json`
+- `CLI` `add-hook` command changed to `hook`
+- `CLI` `add-util` command changed to `util`
+- `CLI` `add-provider` command changed to `provider`
+
 and many more bug fixes and improvements and cleanup the code base.
