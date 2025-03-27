@@ -14,10 +14,11 @@ export function Switcher({
   activeLabel,
   disabledLabel,
   theme,
+  className,
   ...props
 }: Props) {
   return (
-    <section data-theme={theme} className="flex justify-center items-center w-fit h-[28px] gap-[6px] overflow-hidden">
+    <section data-theme={theme} className={cn("flex justify-center items-center w-fit h-[28px] gap-[6px] overflow-hidden", className)}>
       <button
         {...props}
         className={cn(

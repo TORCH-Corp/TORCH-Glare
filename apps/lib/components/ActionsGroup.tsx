@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: Themes
 }
 
-const ButtonField: React.FC<Props> = ({
+const ActionsGroup: React.FC<Props> = ({
   withDivider,
   className,
   children,
@@ -31,4 +31,4 @@ const ButtonField: React.FC<Props> = ({
   );
 };
 
-export default ButtonField;
+export default ActionsGroup;

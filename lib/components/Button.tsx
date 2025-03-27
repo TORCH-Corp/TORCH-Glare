@@ -4,7 +4,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../utils/cn";
 import { ButtonVariant, Themes } from "../utils/types";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "flex items-center whitespace-nowrap justify-center  transition-[background,color] duration-200 ease-in-out border border-transparent outline-none leading-none [&-i]:!leading-none",
   {
     variants: {
@@ -204,7 +204,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       <Component
         {...props}
         data-theme={theme}
-        disabled={disabled}
+        disabled={disabled || is_loading}
         ref={ref}
         className={cn(
           buttonVariants({

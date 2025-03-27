@@ -1,14 +1,14 @@
 import {
-  DropDownButton,
-  DropDownButtonContent,
-  DropDownButtonItem,
-  DropDownButtonTrigger,
-  DropDownButtonValue,
-} from "@/components/DropDownButton";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/Select";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
-export default function DropDownButtonExample() {
+export default function SelectExample() {
   const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
 
   return (
@@ -19,28 +19,28 @@ export default function DropDownButtonExample() {
           "text-content-system-global-primary"
         )}
       >
-        DropDownButton Preview
+        Select Preview
       </h1>
       <div className="flex flex-col gap-8 w-full">
         {ButtonSizes.map((size: any) => (
           <div key={size}>
             <p className="text-lg font-semibold my-2">Size: {size}</p>
-            <DropDownButton key={size}>
-              <DropDownButtonTrigger size={size}>
-                <DropDownButtonValue placeholder="Select a fruit" />
-              </DropDownButtonTrigger>
-              <DropDownButtonContent>
-                <DropDownButtonItem value="apple">Apple</DropDownButtonItem>
-                <DropDownButtonItem value="banana">Banana</DropDownButtonItem>
-                <DropDownButtonItem value="blueberry">
+            <Select key={size}>
+              <SelectTrigger size={size}>
+                <SelectValue placeholder="Select a fruit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="apple">Apple</SelectItem>
+                <SelectItem value="banana">Banana</SelectItem>
+                <SelectItem value="blueberry">
                   Blueberry
-                </DropDownButtonItem>
-                <DropDownButtonItem value="grapes">Grapes</DropDownButtonItem>
-                <DropDownButtonItem value="pineapple">
+                </SelectItem>
+                <SelectItem value="grapes">Grapes</SelectItem>
+                <SelectItem value="pineapple">
                   Pineapple
-                </DropDownButtonItem>
-              </DropDownButtonContent>
-            </DropDownButton>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         ))}
       </div>

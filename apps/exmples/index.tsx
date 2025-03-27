@@ -27,10 +27,10 @@ import CheckboxLabelExample from "./CheckboxLabelExample";
 import PasswordLevelExample from "./PasswordLevelExample";
 import SlideDatePickerExample from "./SlideDatePickerExample";
 import DatePickerExample from "./DatePickerExample";
-import Counter from "@/components/Counter";
+import Counter from "@/components/CountBadge";
 import { useTheme } from "@/providers/ThemeProvider";
 import IosDatePickerExample from "./IosDatePicerExample";
-import FieldAlertDialogExample from "./FieldAlertDialogExample";
+import AlertDialogExample from "./AlertDialogExample";
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
 
@@ -91,7 +91,7 @@ export default function Examples() {
         <FieldSectionExample />
         <TableExample />
         <RingLoadingExample />
-        <FieldAlertDialogExample />
+        <AlertDialogExample />
         <div className="my-10"></div>
       </section>
     </div>

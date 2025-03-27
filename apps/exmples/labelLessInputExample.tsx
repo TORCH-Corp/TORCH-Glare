@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { LabelLessInput } from "@/components/LabelLessInput";
+import { InnerLabelField } from "@/components/InnerLabelField";
 import { PopoverItem } from "@/components/Popover";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export default function LabelLessInputExample() {
 
         })}
       >
-        LabelLessInput Preview
+        InnerLabelField Preview
       </h1>
 
       {/* Loop through sizes and variants */}
@@ -34,7 +34,7 @@ export default function LabelLessInputExample() {
           </h2>
 
           {/* Render the LabelLessInput component for each size and variant */}
-          <LabelLessInput
+          <InnerLabelField
             label={`Label`}
             required
             toolTipSide={"top"}
@@ -47,7 +47,7 @@ export default function LabelLessInputExample() {
             errorMessage={error ? "This is an error message" : undefined}
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder={`labelless input`}
+            placeholder={`InnerLabelField input`}
           />
         </div>
       ))}

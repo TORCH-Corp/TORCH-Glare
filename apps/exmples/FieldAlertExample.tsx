@@ -1,4 +1,4 @@
-import FieldAlert from "@/components/FieldFieldAlert";
+import { FieldHint } from "@/components/FieldHint";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
@@ -25,10 +25,10 @@ export function FieldAlertExample() {
           >
             Variant: {variant}
           </span>
-          <FieldAlert
-            label={`FieldAlert with variant: ${variant}`}
+          <FieldHint
+            label={`FieldHint with variant: ${variant}`}
             state={variant}
-          ></FieldAlert>
+          ></FieldHint>
         </div>
       ))}
     </>

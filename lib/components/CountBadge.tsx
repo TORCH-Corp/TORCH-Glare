@@ -39,7 +39,7 @@ interface Props
   className?: string
 }
 
-export const Counter: React.FC<Props> = ({ theme, label, variant, className, ...props }) => {
+export const CountBadge: React.FC<Props> = ({ theme, label, variant, className, ...props }) => {
   return (
     <section
       {...props}
@@ -51,4 +51,4 @@ export const Counter: React.FC<Props> = ({ theme, label, variant, className, ...
   );
 };
 
-export default Counter;
+export default CountBadge;

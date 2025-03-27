@@ -21,7 +21,7 @@ interface Props
   theme?: Themes
 }
 
-export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
+export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
   (
     {
       size = "S",
@@ -48,11 +48,11 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
         theme={theme}
         onFocus={(e) => {
           setFucus(true);
-          props.onFocus && props.onFocus(e);
+          props.onFocus?.(e);
         }}
         onBlur={(e) => {
           setFucus(false);
-          props.onBlur && props.onBlur(e);
+          props.onBlur?.(e);
         }}
         className={className}
         ref={ref}
@@ -64,16 +64,16 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
         errorMessage={errorMessage}
         onTable={onTable}
         icon={
-          <LabelLessSection fucus={fucus} label={label} required={required} />
+          <Label fucus={fucus} label={label} required={required} />
         }
       />
     );
   }
 );
 
-LabelLessInput.displayName = "LabelLessInput"
+InnerLabelField.displayName = "LabelLessInput"
 
-export const LabelLessSection = ({
+const Label = ({
   fucus,
   label,
   required,

@@ -16,7 +16,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   theme?: Themes
 }
 
-export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
+export const LabeledCheckBox = forwardRef<HTMLInputElement, Props>(
   (
     {
       id,
@@ -61,5 +61,5 @@ export const CheckboxLabel = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-CheckboxLabel.displayName = "CheckboxLabel";
+LabeledCheckBox.displayName = "LabeledCheckBox";
 

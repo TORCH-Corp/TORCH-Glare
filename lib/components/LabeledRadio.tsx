@@ -12,7 +12,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   theme?: "dark" | "light" | "default";
 }
 
-export const RadioLabel = forwardRef<HTMLInputElement, Props>(
+export const LabeledRadio = forwardRef<HTMLInputElement, Props>(
   (
     {
       label,
@@ -42,4 +42,4 @@ export const RadioLabel = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-RadioLabel.displayName = "RadioLabel";
+LabeledRadio.displayName = "LabeledRadio";

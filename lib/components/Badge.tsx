@@ -31,23 +31,15 @@ export const badgeBase = cva(
         highlight: ["h-[20px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
           "bg-background-presentation-badge-gray border-transparent px-[3px]"
         ],
-        green:
-          "border-border-presentation-badge-green bg-background-presentation-badge-green [&_i]:text-content-presentation-badge-green",
-        greenLight:
-          "border-border-presentation-badge-green-light bg-background-presentation-badge-green-light [&_i]:text-content-presentation-badge-green-light",
-        cocktailGreen:
-          "border-border-presentation-badge-cocktail-green bg-background-presentation-badge-cocktail-green [&_i]:text-content-presentation-badge-cocktail-green",
-        yellow:
-          "border-border-presentation-badge-yellow bg-background-presentation-badge-yellow [&_i]:text-content-presentation-badge-yellow",
-        redOrange:
-          "border-border-presentation-badge-red-orange bg-background-presentation-badge-red-orange [&_i]:text-content-presentation-badge-red-orange",
-        redLight:
-          "border-border-presentation-badge-red bg-background-presentation-badge-red [&_i]:text-content-presentation-badge-red",
+        green: "border-border-presentation-badge-green bg-background-presentation-badge-green [&_i]:text-content-presentation-badge-green",
+        greenLight: "border-border-presentation-badge-green-light bg-background-presentation-badge-green-light [&_i]:text-content-presentation-badge-green-light",
+        cocktailGreen: "border-border-presentation-badge-cocktail-green bg-background-presentation-badge-cocktail-green [&_i]:text-content-presentation-badge-cocktail-green",
+        yellow: "border-border-presentation-badge-yellow bg-background-presentation-badge-yellow [&_i]:text-content-presentation-badge-yellow",
+        redOrange: "border-border-presentation-badge-red-orange bg-background-presentation-badge-red-orange [&_i]:text-content-presentation-badge-red-orange",
+        redLight: "border-border-presentation-badge-red bg-background-presentation-badge-red [&_i]:text-content-presentation-badge-red",
         rose: "border-border-presentation-badge-rose bg-background-presentation-badge-rose [&_i]:text-content-presentation-badge-rose",
-        purple:
-          "border-border-presentation-badge-purple bg-background-presentation-badge-purple [&_i]:text-content-presentation-badge-purple",
-        bluePurple:
-          "border-border-presentation-badge-blue-purple bg-background-presentation-badge-blue-purple [&_i]:text-content-presentation-badge-blue-purple",
+        purple: "border-border-presentation-badge-purple bg-background-presentation-badge-purple [&_i]:text-content-presentation-badge-purple",
+        bluePurple: "border-border-presentation-badge-blue-purple bg-background-presentation-badge-blue-purple [&_i]:text-content-presentation-badge-blue-purple",
         blue: "border-border-presentation-badge-blue bg-background-presentation-badge-blue [&_i]:text-content-presentation-badge-blue",
         navy: "border-border-presentation-badge-navy bg-background-presentation-badge-navy [&_i]:text-content-presentation-badge-navy",
         gray: "border-border-presentation-badge-gray bg-background-presentation-badge-gray [&_i]:text-content-presentation-badge-gray",
@@ -60,8 +52,7 @@ export const badgeBase = cva(
   }
 );
 
-interface BadgeProps
-  extends Omit<HTMLAttributes<HTMLSpanElement>, "className">,
+interface BadgeProps extends HTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof badgeBase> {
   label?: string;
   onUnselect?: () => void;
@@ -83,7 +74,7 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   return (
-    <div
+    <span
       {...props}
       data-theme={theme}
       className={cn(
@@ -94,23 +85,32 @@ export const Badge: React.FC<BadgeProps> = ({
         className
       )}
     >
-      <span className={"flex justify-center items-center"}>
+      <div className={"flex justify-center items-center"}>
         {!badgeIcon ? (
           <i className={cn("ri-circle-fill !text-[8px]", { "hidden": variant === "highlight" })}></i>
         ) : (
           badgeIcon
         )}
-      </span>
+      </div>
 
       <p className="px-[3px] whitespace-nowrap">{label}</p>
       {isSelected && (
         <button
           onClick={onUnselect}
-          className={" rounded-[2px] flex justify-center items-center "}
+          className="rounded-[2px] flex justify-center items-center cursor-pointer"
+          tabIndex={0}
+          role="button"
+          aria-label="Remove badge"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onUnselect?.();
+            }
+          }}
         >
-          <i className="ri-close-line  !text-content-presentation-action-light-primary"></i>
+          <i className="ri-close-line !text-content-presentation-action-light-primary"></i>
         </button>
       )}
-    </div>
+    </span>
   );
 };

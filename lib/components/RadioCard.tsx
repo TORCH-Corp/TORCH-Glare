@@ -1,53 +1,11 @@
 import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
 import { cva } from "class-variance-authority";
-import { RadioLabel } from "./RadioLabel";
 import { cn } from "../utils/cn";
+import { Radio } from "./Radio";
+import { Card, CardContent, CardDescription, CardHeader } from "./Card";
 
-export const glareRadioCard = cva(
-  [
-    "flex",
-    "flex-col",
-    "justify-start",
-    "flex-1",
-    "gap-2",
-    "rounded-[12px]",
-    "border",
-    "transition-all",
-    "ease-in-out",
-    "duration-200",
-    "relative",
-    "p-[16px]",
-    "border-border-presentation-global-primary",
-    "bg-background-presentation-form-radiocard-base",
-    "hover:border-border-presentation-state-focus",
-  ],
-  {
-    variants: {
-      checked: {
-        true: ""
-      },
-      disabled: {
-        true: [
-          "border-border-presentation-global-primary",
-          "!bg-background-presentation-action-disabled",
-          "cursor-not-allowed",
-          "hover:border-border-presentation-global-primary",
-        ],
-      },
-    },
-    compoundVariants: [
-      {
-        checked: true,
-        className: [
-          "border-border-presentation-global-primary",
-          "hover:border-border-presentation-global-primary",
-        ],
-      }
-    ]
-  }
-);
 
-interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   headerLabel?: ReactNode;
   id: string;
   description?: ReactNode;
@@ -62,23 +20,27 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <label
+      <Card
         data-theme={theme}
         htmlFor={id}
         className={cn(
-          glareRadioCard({
-            className,
-            disabled,
-            checked: props.checked
-          })
+          "relative border-border-presentation-global-primary group",
+          // Disabled state
+          disabled && "!bg-background-presentation-action-disabled",
+          disabled && "cursor-not-allowed",
+          disabled && "hover:border-border-presentation-global-primary",
+          // Checked state
+          props.checked && "border-border-presentation-global-primary",
+          props.checked && "hover:border-border-presentation-global-primary"
         )}
       >
         <section
           className={"absolute top-0 left-0 w-full p-[10px] flex justify-end"}
         >
-          <RadioLabel
+          <Radio
             {...props}
             theme={theme}
+            radioClassName="group-hover:border-border-presentation-state-focus"
             size="M"
             ref={ref}
             id={id}
@@ -87,27 +49,19 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
           />
         </section>
 
-        <h1
-          className={
-            "text-content-presentation-global-primary m-0 typography-headers-medium-semibold"
-          }
-        >
+        <CardHeader >
           {headerLabel}
-        </h1>
+        </CardHeader>
 
-        <section className={"flex gap-1 flex-col items-start"}>
+        <CardContent >
           {description && (
-            <p
-              className={
-                "text-content-presentation-global-primary m-0 typography-body-medium-semibold"
-              }
-            >
+            <CardDescription >
               {description}
-            </p>
+            </CardDescription>
           )}
           {children}
-        </section>
-      </label>
+        </CardContent>
+      </Card>
     );
   }
 );

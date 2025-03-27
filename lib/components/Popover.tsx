@@ -55,13 +55,15 @@ const Popover = PopoverPrimitive.Root;
 
 const PopoverTrigger = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
->((props, ref) => (
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger> & {
+    className?: string
+  }
+>(({ className, ...props }, ref) => (
   <PopoverPrimitive.Trigger
     ref={ref}
     className={cn(
       "z-[20] transition-all duration-300 data-[state=open]:z-[49]",
-      props.className
+      className
     )}
     {...props}
   />

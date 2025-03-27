@@ -32,7 +32,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: Themes
 }
 
-export const FieldAlert: React.FC<Props> = ({
+export const FieldHint: React.FC<Props> = ({
   label,
   state,
   theme,
@@ -55,7 +55,7 @@ export const FieldAlert: React.FC<Props> = ({
         {icon ? (
           icon
         ) : state === "error" ? (
-          <i className="ri-FieldAlert-fill"></i>
+          <i className="ri-alert-fill"></i>
         ) : state === "success" ? (
           <i className="ri-checkbox-circle-fill"></i>
         ) : (
@@ -73,4 +73,4 @@ export const FieldAlert: React.FC<Props> = ({
   );
 };
 
-export default FieldAlert;
+export default FieldHint;

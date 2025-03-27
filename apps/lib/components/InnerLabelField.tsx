@@ -21,7 +21,7 @@ interface Props
   theme?: Themes
 }
 
-export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
+export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
   (
     {
       size = "S",
@@ -71,7 +71,7 @@ export const LabelLessInput = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-LabelLessInput.displayName = "LabelLessInput"
+InnerLabelField.displayName = "LabelLessInput"
 
 const Label = ({
   fucus,
