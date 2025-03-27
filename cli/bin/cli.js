@@ -12,25 +12,25 @@ import { addLayout } from "./addLayout.js";
 
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
-const CONFIG_FILE = "torch.json";
+const CONFIG_FILE = "glare.json";
 
 export function getConfig() {
   if (!fs.existsSync(CONFIG_FILE)) {
-    console.error('❌ torch.json not found. Run "npx torchcorp@latest init" first');
+    console.error('❌ glare.json not found. Run "npx torch-glare@latest init" first');
     process.exit(1);
   }
 
   try {
     return JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
   } catch (error) {
-    console.error("❌ Error reading torch.json:", error.message);
+    console.error("❌ Error reading glare.json:", error.message);
     process.exit(1);
   }
 }
 
 program
-  .name("glare-ui")
-  .description("Glare UI for managing React components")
+  .name("torch-glare")
+  .description("Torch Glare for managing React components")
   .version("0.0.0");
 
 program

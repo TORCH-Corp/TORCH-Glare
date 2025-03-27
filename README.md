@@ -1,6 +1,6 @@
 # TORCH Glare Components Library
 
-Welcome to the **TORCH Glare Components Library**! This library provides a collection of reusable React components to help you build user interfaces efficiently. Additionally, a CLI tool (**glare-ui CLI**) is available to streamline component management.
+Welcome to the **TORCH Glare Components Library**! This library provides a collection of reusable React components to help you build user interfaces efficiently. Additionally, a CLI tool (**torch-glare CLI**) is available to streamline component management.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ Welcome to the **TORCH Glare Components Library**! This library provides a colle
 To install the TORCH Glare Components Library, run the following command:
 
 ```sh
-npx glare-ui@latest init
+npx torch-glare@latest init
 ```
 
 This command will:
@@ -62,7 +62,7 @@ Include the following in `index.html` or nextjs `layout.tsx` or meta data for ic
 
 ## 3. Configure Installation Path
 
-Adjust the `torch.json` file to specify where you want to install components:
+Adjust the `glare.json` file to specify where you want to install components:
 
 ```json
 {
@@ -74,13 +74,13 @@ Adjust the `torch.json` file to specify where you want to install components:
 To add a specific component, run:
 
 ```sh
-npx glare-ui@latest add [component-name]
+npx torch-glare@latest add [component-name]
 ```
 
 Or, to add components interactively:
 
 ```sh
-npx glare-ui@latest add
+npx torch-glare@latest add
 ```
 
 ## Usage
@@ -106,39 +106,39 @@ export default App;
 
 ### Initialize Configuration
 ```sh
-npx glare-ui@latest init
+npx torch-glare@latest init
 ```
 - Creates a `torch.json` configuration file.
 - Create or modify `tailwind.config.ts` file for tailwind support.
 
 ### Add Components
 ```sh
-npx glare-ui@latest add [component]
+npx torch-glare@latest add [component]
 ```
 Adds a specific component or runs an interactive prompt if no name is provided.
 
 ### Add Hooks
 ```sh
-npx glare-ui@latest add-hook [hook]
+npx torch-glare@latest add-hook [hook]
 ```
 Adds a specific hook or runs an interactive prompt if no name is provided.
 
 ### Add Utilities
 ```sh
-npx glare-ui@latest add-util [util]
+npx torch-glare@latest add-util [util]
 ```
 Adds a specific utility or runs an interactive prompt if no name is provided.
 
 ### Providers
 ```sh
-npx glare-ui@latest add-provider [provider]
+npx torch-glare@latest add-provider [provider]
 ```
 Adds a specific provider or runs an interactive prompt if no name is provided.
 
 ### Update Installed Resources
 
 ```sh
-npx glare-ui@latest update
+npx torch-glare@latest update
 ```
 Updates all installed components, hooks, utilities, and providers.
 
