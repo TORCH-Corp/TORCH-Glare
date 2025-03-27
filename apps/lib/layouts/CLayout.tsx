@@ -186,7 +186,7 @@ interface Props
   active?: boolean
   disabled?: boolean
 }
-const SideBarItem = ({ active, disabled, iconOnly, asChild, as: Tag = "button", theme, variant, ...props }: Props) => {
+const SideBarItem = ({ active, disabled, iconOnly, asChild, as: Tag = "span", theme, variant, ...props }: Props) => {
   const Component = asChild ? Slot : Tag;
 
   return (

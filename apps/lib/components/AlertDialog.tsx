@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
+import * as FieldAlertDialogPrimitive from "@radix-ui/react-FieldAlert-dialog"
 
 import { cn } from "../utils/cn"
 import { buttonVariants } from "./Button"
@@ -24,17 +24,17 @@ const StatusTextStyle = cva("", {
 });
 
 
-const AlertDialog = AlertDialogPrimitive.Root
+const FieldAlertDialog = FieldAlertDialogPrimitive.Root
 
-const AlertDialogTrigger = AlertDialogPrimitive.Trigger
+const FieldAlertDialogTrigger = FieldAlertDialogPrimitive.Trigger
 
-const AlertDialogPortal = AlertDialogPrimitive.Portal
+const FieldAlertDialogPortal = FieldAlertDialogPrimitive.Portal
 
-const AlertDialogOverlay = React.forwardRef<
-    React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
+const FieldAlertDialogOverlay = React.forwardRef<
+    React.ElementRef<typeof FieldAlertDialogPrimitive.Overlay>,
+    React.ComponentPropsWithoutRef<typeof FieldAlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-    <AlertDialogPrimitive.Overlay
+    <FieldAlertDialogPrimitive.Overlay
         className={cn(
             "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
             className
@@ -43,17 +43,17 @@ const AlertDialogOverlay = React.forwardRef<
         ref={ref}
     />
 ))
-AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
+FieldAlertDialogOverlay.displayName = FieldAlertDialogPrimitive.Overlay.displayName
 
-const AlertDialogContent = React.forwardRef<
-    React.ElementRef<typeof AlertDialogPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
+const FieldAlertDialogContent = React.forwardRef<
+    React.ElementRef<typeof FieldAlertDialogPrimitive.Content>,
+    React.ComponentPropsWithoutRef<typeof FieldAlertDialogPrimitive.Content> & {
         variant?: "info" | "success" | "warning" | "error" | "default"
     }
 >(({ className, variant = "default", ...props }, ref) => (
-    <AlertDialogPortal>
-        <AlertDialogOverlay />
-        <AlertDialogPrimitive.Content
+    <FieldAlertDialogPortal>
+        <FieldAlertDialogOverlay />
+        <FieldAlertDialogPrimitive.Content
             ref={ref}
             className={cn(StatusTextStyle({ variant }),
                 "text-content-presentation-global-primary max-w-[800px] !m-1 sm:m-0",
@@ -63,11 +63,11 @@ const AlertDialogContent = React.forwardRef<
             )}
             {...props}
         />
-    </AlertDialogPortal>
+    </FieldAlertDialogPortal>
 ))
-AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
+FieldAlertDialogContent.displayName = FieldAlertDialogPrimitive.Content.displayName
 
-const AlertDialogHeader = ({
+const FieldAlertDialogHeader = ({
     className,
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
@@ -79,9 +79,9 @@ const AlertDialogHeader = ({
         {...props}
     />
 )
-AlertDialogHeader.displayName = "AlertDialogHeader"
+FieldAlertDialogHeader.displayName = "FieldAlertDialogHeader"
 
-const AlertDialogFooter = ({
+const FieldAlertDialogFooter = ({
     className,
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
@@ -93,23 +93,23 @@ const AlertDialogFooter = ({
         {...props}
     />
 )
-AlertDialogFooter.displayName = "AlertDialogFooter"
+FieldAlertDialogFooter.displayName = "FieldAlertDialogFooter"
 
-const AlertDialogTitle = React.forwardRef<
-    React.ElementRef<typeof AlertDialogPrimitive.Title>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
+const FieldAlertDialogTitle = React.forwardRef<
+    React.ElementRef<typeof FieldAlertDialogPrimitive.Title>,
+    React.ComponentPropsWithoutRef<typeof FieldAlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-    <AlertDialogPrimitive.Title
+    <FieldAlertDialogPrimitive.Title
         ref={ref}
         className={cn("typography-display-medium-semibold", className)}
         {...props}
     />
 ))
-AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName
+FieldAlertDialogTitle.displayName = FieldAlertDialogPrimitive.Title.displayName
 
-const AlertDialogLabel = React.forwardRef<
-    React.ElementRef<typeof AlertDialogPrimitive.Title>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title> & {
+const FieldAlertDialogLabel = React.forwardRef<
+    React.ElementRef<typeof FieldAlertDialogPrimitive.Title>,
+    React.ComponentPropsWithoutRef<typeof FieldAlertDialogPrimitive.Title> & {
         title: string
     }
 >(({ className, title, ...props }, ref) => {
@@ -118,7 +118,7 @@ const AlertDialogLabel = React.forwardRef<
     const restOfTitle = words.slice(1).join(' ');
 
     return (
-        <AlertDialogPrimitive.Title
+        <FieldAlertDialogPrimitive.Title
             ref={ref}
             className={cn("text-lg font-semibold", className)}
             {...props}
@@ -127,16 +127,16 @@ const AlertDialogLabel = React.forwardRef<
                 <strong >{firstWord}</strong>
                 {restOfTitle.length > 0 && ' ' + restOfTitle}
             </p>
-        </AlertDialogPrimitive.Title>
+        </FieldAlertDialogPrimitive.Title>
     )
 })
-AlertDialogLabel.displayName = "AlertDialogLabel"
+FieldAlertDialogLabel.displayName = "FieldAlertDialogLabel"
 
-const AlertDialogDescription = React.forwardRef<
-    React.ElementRef<typeof AlertDialogPrimitive.Description>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
+const FieldAlertDialogDescription = React.forwardRef<
+    React.ElementRef<typeof FieldAlertDialogPrimitive.Description>,
+    React.ComponentPropsWithoutRef<typeof FieldAlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
-    <AlertDialogPrimitive.Description
+    <FieldAlertDialogPrimitive.Description
         data-description=""
         ref={ref}
         className={cn("bg-background-presentation-form-base border border-border-presentation-global-primary p-2 rounded-[8px]"
@@ -146,14 +146,14 @@ const AlertDialogDescription = React.forwardRef<
         {...props}
     >
         {props.children}
-    </AlertDialogPrimitive.Description>
+    </FieldAlertDialogPrimitive.Description>
 ))
-AlertDialogDescription.displayName =
-    AlertDialogPrimitive.Description.displayName
+FieldAlertDialogDescription.displayName =
+    FieldAlertDialogPrimitive.Description.displayName
 
-const AlertDialogAction = React.forwardRef<
-    React.ElementRef<typeof AlertDialogPrimitive.Action>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action> & {
+const FieldAlertDialogAction = React.forwardRef<
+    React.ElementRef<typeof FieldAlertDialogPrimitive.Action>,
+    React.ComponentPropsWithoutRef<typeof FieldAlertDialogPrimitive.Action> & {
         size?: "M" | "S" | "L" | "XL"
         variant?: ButtonVariant
         buttonType?: "button" | "icon"
@@ -163,17 +163,17 @@ const AlertDialogAction = React.forwardRef<
     variant = "BorderStyle",
     buttonType = "button",
     ...props }, ref) => (
-    <AlertDialogPrimitive.Action
+    <FieldAlertDialogPrimitive.Action
         ref={ref}
         className={cn(buttonVariants({ variant: variant, size: size, buttonType: buttonType }), className)}
         {...props}
     />
 ))
-AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
+FieldAlertDialogAction.displayName = FieldAlertDialogPrimitive.Action.displayName
 
-const AlertDialogCancel = React.forwardRef<
-    React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel> & {
+const FieldAlertDialogCancel = React.forwardRef<
+    React.ElementRef<typeof FieldAlertDialogPrimitive.Cancel>,
+    React.ComponentPropsWithoutRef<typeof FieldAlertDialogPrimitive.Cancel> & {
         size?: "M" | "S" | "L" | "XL"
         variant?: ButtonVariant
         buttonType?: "button" | "icon"
@@ -183,7 +183,7 @@ const AlertDialogCancel = React.forwardRef<
     variant = "RedSecStyle",
     buttonType = "icon",
     ...props }, ref) => (
-    <AlertDialogPrimitive.Cancel
+    <FieldAlertDialogPrimitive.Cancel
         ref={ref}
         className={cn(
             buttonVariants({ variant: variant, size: size, buttonType: buttonType }),
@@ -193,19 +193,19 @@ const AlertDialogCancel = React.forwardRef<
         {...props}
     />
 ))
-AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName
+FieldAlertDialogCancel.displayName = FieldAlertDialogPrimitive.Cancel.displayName
 
 export {
-    AlertDialog,
-    AlertDialogPortal,
-    AlertDialogOverlay,
-    AlertDialogTrigger,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogFooter,
-    AlertDialogTitle,
-    AlertDialogLabel,
-    AlertDialogDescription,
-    AlertDialogAction,
-    AlertDialogCancel,
+    FieldAlertDialog,
+    FieldAlertDialogPortal,
+    FieldAlertDialogOverlay,
+    FieldAlertDialogTrigger,
+    FieldAlertDialogContent,
+    FieldAlertDialogHeader,
+    FieldAlertDialogFooter,
+    FieldAlertDialogTitle,
+    FieldAlertDialogLabel,
+    FieldAlertDialogDescription,
+    FieldAlertDialogAction,
+    FieldAlertDialogCancel,
 }

@@ -6,7 +6,7 @@ import FieldSectionExample from "./FieldSectionExample";
 import DropdownMenuExample from "./DropdownMenuExample";
 import InputFieldExample from "./InputFieldExample";
 import LabelLessInputExample from "./labelLessInputExample";
-import { AlertExample } from "./AlertExample";
+import { FieldAlertExample } from "./FieldAlertExample";
 import { BadgeExample } from "./BadgeExample";
 import { ButtonFieldExample } from "./ButtonFieldExample";
 import LabelFieldExample from "./LabelFieldExample";
@@ -30,7 +30,7 @@ import DatePickerExample from "./DatePickerExample";
 import Counter from "@/components/Counter";
 import { useTheme } from "@/providers/ThemeProvider";
 import IosDatePickerExample from "./IosDatePicerExample";
-import AlertDialogExample from "./AlertDialogExample";
+import FieldAlertDialogExample from "./FieldAlertDialogExample";
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
 
@@ -69,7 +69,7 @@ export default function Examples() {
         <TabFormItemExample />
         <LinkButtonExample />
         <TooltipExample />
-        <AlertExample />
+        <FieldAlertExample />
         <BadgeExample />
         <CheckboxLabelExample />
         <RadioLabelExample />
@@ -91,7 +91,7 @@ export default function Examples() {
         <FieldSectionExample />
         <TableExample />
         <RingLoadingExample />
-        <AlertDialogExample />
+        <FieldAlertDialogExample />
         <div className="my-10"></div>
       </section>
     </div>

@@ -1,9 +1,9 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogLabel, AlertDialogTitle, AlertDialogTrigger } from "@/components/AlertDialog";
+import { FieldAlertDialog, FieldAlertDialogAction, FieldAlertDialogCancel, FieldAlertDialogContent, FieldAlertDialogDescription, FieldAlertDialogHeader, FieldAlertDialogLabel, FieldAlertDialogTitle, FieldAlertDialogTrigger } from "@/components/FieldAlertDialog";
 import { Button } from "@/components/Button";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
-export default function AlertDialogExample() {
+export default function FieldAlertDialogExample() {
   const [variant] = useState<any>(["info", "success", "warning", "error", "default"]);
 
   return (
@@ -14,32 +14,32 @@ export default function AlertDialogExample() {
           "text-content-system-global-primary"
         )}
       >
-        StatusAlertDialog Preview
+        StatusFieldAlertDialog Preview
       </h1>
       {
         variant.map((item: any) => (
           <div className="flex flex-col gap-2 w-full">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
+            <FieldAlertDialog>
+              <FieldAlertDialogTrigger asChild>
                 <Button variant="BorderStyle">{`Show Dialog type  ${item}`}</Button>
-              </AlertDialogTrigger>
+              </FieldAlertDialogTrigger>
 
-              <AlertDialogContent variant={item} >
-                <AlertDialogHeader>
-                  <AlertDialogTitle >
-                    <AlertDialogLabel title="Are you sure?" />
-                  </AlertDialogTitle>
+              <FieldAlertDialogContent variant={item} >
+                <FieldAlertDialogHeader>
+                  <FieldAlertDialogTitle >
+                    <FieldAlertDialogLabel title="Are you sure?" />
+                  </FieldAlertDialogTitle>
                   <div className="flex justify-center items-center gap-2">
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                    <FieldAlertDialogAction>Continue</FieldAlertDialogAction>
                     <span className="w-[1px] h-[28px] bg-border-presentation-action-disabled rounded-sm"></span>
-                    <AlertDialogCancel> <i className="ri-close-line"></i></AlertDialogCancel>
+                    <FieldAlertDialogCancel> <i className="ri-close-line"></i></FieldAlertDialogCancel>
                   </div>
-                </AlertDialogHeader>
-                <AlertDialogDescription  >
+                </FieldAlertDialogHeader>
+                <FieldAlertDialogDescription  >
                   you cant undo this action if you click on continue.
-                </AlertDialogDescription>
-              </AlertDialogContent>
-            </AlertDialog>
+                </FieldAlertDialogDescription>
+              </FieldAlertDialogContent>
+            </FieldAlertDialog>
           </div>
         ))
       }

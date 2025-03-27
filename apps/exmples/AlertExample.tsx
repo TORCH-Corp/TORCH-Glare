@@ -1,8 +1,8 @@
-import Alert from "@/components/Alert";
+import FieldAlert from "@/components/FieldFieldAlert";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
-export function AlertExample() {
+export function FieldAlertExample() {
   const [variants] = useState<any>(["info", "warning", "error", "success"]);
 
   return (
@@ -13,7 +13,7 @@ export function AlertExample() {
           "text-content-system-global-primary"
         )}
       >
-        Alert Preview
+        FieldAlert Preview
       </h1>
       {variants.map((variant: any) => (
         <div key={variant} className="flex flex-col gap-2 w-full">
@@ -25,10 +25,10 @@ export function AlertExample() {
           >
             Variant: {variant}
           </span>
-          <Alert
-            label={`Alert with variant: ${variant}`}
+          <FieldAlert
+            label={`FieldAlert with variant: ${variant}`}
             state={variant}
-          ></Alert>
+          ></FieldAlert>
         </div>
       ))}
     </>

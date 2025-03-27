@@ -54,7 +54,7 @@ function Example() {
 import Counter from "@/components/Counter";
 
 function Example() {
-  return <Counter label={20} className="my-custom-class" onClick={() => alert('Clicked!')} />;
+  return <Counter label={20} className="my-custom-class" onClick={() => FieldAlert('Clicked!')} />;
 }
 ```
 

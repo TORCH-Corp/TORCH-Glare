@@ -74,7 +74,7 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   return (
-    <button
+    <span
       {...props}
       data-theme={theme}
       className={cn(
@@ -85,17 +85,17 @@ export const Badge: React.FC<BadgeProps> = ({
         className
       )}
     >
-      <span className={"flex justify-center items-center"}>
+      <div className={"flex justify-center items-center"}>
         {!badgeIcon ? (
           <i className={cn("ri-circle-fill !text-[8px]", { "hidden": variant === "highlight" })}></i>
         ) : (
           badgeIcon
         )}
-      </span>
+      </div>
 
       <p className="px-[3px] whitespace-nowrap">{label}</p>
       {isSelected && (
-        <span
+        <button
           onClick={onUnselect}
           className="rounded-[2px] flex justify-center items-center cursor-pointer"
           tabIndex={0}
@@ -109,8 +109,8 @@ export const Badge: React.FC<BadgeProps> = ({
           }}
         >
           <i className="ri-close-line !text-content-presentation-action-light-primary"></i>
-        </span>
+        </button>
       )}
-    </button>
+    </span>
   );
 };
