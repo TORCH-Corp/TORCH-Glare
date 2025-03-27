@@ -40,21 +40,26 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
     },
     ref
   ) => {
-    const [fucus, setFucus] = useState(false);
+    const [focus, setFocus] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(!props.value);
 
     return (
       <InputField
         {...props}
         theme={theme}
         onFocus={(e) => {
-          setFucus(true);
+          setFocus(true);
           props.onFocus?.(e);
         }}
         onBlur={(e) => {
-          setFucus(false);
+          setFocus(false);
           props.onBlur?.(e);
         }}
-        className={className}
+        onChange={(e) => {
+          setIsEmpty(!e.target.value);
+          props.onChange?.(e);
+        }}
+        className={cn(className, "group")}
         ref={ref}
         toolTipSide={toolTipSide}
         size={size}
@@ -64,7 +69,14 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
         errorMessage={errorMessage}
         onTable={onTable}
         icon={
-          <Label fucus={fucus} label={label} required={required} />
+          <Label
+            focus={focus}
+            isEmpty={isEmpty}
+            label={label}
+            required={required}
+            disabled={props.disabled}
+            error={!errorMessage}
+          />
         }
       />
     );
@@ -81,21 +93,28 @@ InnerLabelField.displayName = "LabelLessInput"
 // TODO: Active on Error when input is empty
 
 const Label = ({
-  fucus,
+
+  focus,
+  isEmpty,
   label,
   required,
+  disabled,
+  error,
 }: {
-  fucus: boolean;
+  focus: boolean;
+  isEmpty: boolean;
   label?: string;
   required?: boolean;
+  disabled?: boolean;
+  error?: boolean;
 }) => {
   return (
     <section className="flex items-center">
       <section
         className={cn([
           "px-[3px]",
-          "typography-body-small-regular",
-          "text-content-presentation-global-primary",
+          "typography-labels-small-regular",
+          "text-content-presentation-global-secondary",
           "flex",
           "items-center",
         ])}
@@ -105,8 +124,11 @@ const Label = ({
             "transition-all",
             "duration-300",
             "ease-in-out",
-            { "text-content-presentation-global-secondary": fucus },
-            { "typography-labels-small-regular": fucus }
+            "group-hover:text-content-presentation-global-primary group-hover:typography-body-small-regular",
+            { "text-content-presentation-global-primary typography-body-small-regular": isEmpty },
+            { "text-content-presentation-global-primary typography-body-small-regular": focus && isEmpty },
+            { "text-content-presentation-global-primary typography-body-small-regular": error && isEmpty },
+            { "text-content-presentation-global-primary typography-body-small-regular": disabled && isEmpty },
           )}
         >
           {label}
@@ -124,8 +146,8 @@ const Label = ({
           "duration-300",
           "ease-in-out",
           "rounded-full",
-          { "h-[22px]": fucus },
-          { "bg-border-presentation-action-hover": fucus }
+          "group-hover:bg-border-presentation-action-hover",
+          "group-hover:h-[22px]",
         )}
       />
     </section>
