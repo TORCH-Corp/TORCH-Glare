@@ -29,8 +29,8 @@ export function getConfig() {
 }
 
 program
-  .name("glare-cli")
-  .description("Glare CLI for managing React components")
+  .name("glare-ui")
+  .description("Glare UI for managing React components")
   .version("0.0.0");
 
 program
