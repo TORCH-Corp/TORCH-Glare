@@ -1,4 +1,4 @@
-import { LabeledCheckBox } from "@/components/LabeledCheckBox";
+import { Checkbox } from "@/components/Checkbox";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
@@ -25,14 +25,13 @@ export default function CheckboxLabelExample() {
           >
             Size: {size}
           </span>
-          <LabeledCheckBox
-            requiredLabel="Required"
-            secondaryLabel="Secondary Label"
-            label={"Label"}
+          <Checkbox
             key={size}
             id={`checkbox-${size}`}
             size={size}
-          ></LabeledCheckBox>
+          >
+            <span>Label</span>
+          </Checkbox>
         </div>
       ))}
     </>

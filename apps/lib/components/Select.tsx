@@ -257,17 +257,16 @@ const SelectTrigger = React.forwardRef<
               [
                 "group-aria-expanded:bg-background-presentation-action-hover",
                 "group-aria-expanded:text-white",
-              ],
-              {
-                "text-[12px]": size === "S",
-                "text-[16px]": size === "M",
-                "text-[28px]": size === "L" || size === "XL",
-              }
+              ]
             )}
           >
             <i
               className={cn(
                 "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180",
+                { "!text-[12px]": size === "S" },
+                { "!text-[16px]": size === "M" },
+                { "!text-[18px]": size === "L" },
+                { "!text-[26px]": size === "XL" },
                 { icon: icon }
               )}
             />
