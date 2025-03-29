@@ -1,4 +1,4 @@
-import RingLoading from "@/components/RingLoading";
+import { SpinLoading } from "@/components/SpinLoading";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
@@ -25,7 +25,7 @@ export default function RingLoadingExample() {
           >
             Size: {size}
           </span>
-          <RingLoading size={size}>
+          <SpinLoading size={size}>
             <span
               className={cn(
                 "text-sm",
@@ -34,7 +34,7 @@ export default function RingLoadingExample() {
             >
               But Anything Here
             </span>
-          </RingLoading>
+          </SpinLoading>
         </div>
       ))}
     </>
