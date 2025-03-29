@@ -31,3 +31,8 @@
 - `CLI` `add-provider` command changed to `provider`
 
 and many more bug fixes and improvements and cleanup the code base.
+
+
+## 1.0.2
+
+small bug fixes and improvements.
