@@ -5,9 +5,9 @@ export async function initConfig(CONFIG_FILE) {
 
   if (!fs.existsSync(CONFIG_FILE)) {
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(defaultConfig, null, 2));
-    console.log("✅ Created torch.json configuration file");
+    console.log("✅ Created glare.json configuration file");
   } else {
-    console.log("⚠️ torch.json already exists, skipping creation.");
+    console.log("⚠️ glare.json already exists, skipping creation.");
   }
 
   // Initialize Tailwind CSS config if not exists

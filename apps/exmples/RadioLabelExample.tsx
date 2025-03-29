@@ -1,4 +1,4 @@
-import { RadioLabel } from "@/components/RadioLabel";
+import { LabeledRadio } from "@/components/LabeledRadio";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
@@ -13,7 +13,7 @@ export default function RadioLabelExample() {
           "text-content-system-global-primary"
         )}
       >
-        RadioLabel Preview
+        LabeledRadio Preview
       </h1>
       {sizes.map((size: any) => (
         <div key={size} className="flex flex-col gap-2 w-full">
@@ -25,7 +25,7 @@ export default function RadioLabelExample() {
           >
             Size: {size}
           </span>
-          <RadioLabel
+          <LabeledRadio
             requiredLabel="Required"
             secondaryLabel="Secondary Label"
             label={"Label"}
@@ -33,7 +33,7 @@ export default function RadioLabelExample() {
             id={`radio-${size}`}
             size={size}
             name={`radio-label`}
-          ></RadioLabel>
+          ></LabeledRadio>
         </div>
       ))}
     </>

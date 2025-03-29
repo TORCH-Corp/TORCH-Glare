@@ -1,6 +1,6 @@
 {
-  "name": "glare-ui",
-  "version": "1.6.0",
+  "name": "torch-glare",
+  "version": "1.0.2",
   "type": "module",
   "license": "MIT",
   "files": [
@@ -8,15 +8,14 @@
     "lib"
   ],
   "bin": {
-    "glare-ui": "./glare-ui.js"
+    "torch-glare": "./torch-glare.js"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "next build --no-lint",
-    "deploy": "publish --access public",
-    "update": "node ./scripts/updateCompoents.js"
+    "deploy": "node ./scripts/publish/index.js"
   },
   "dependencies": {
     "commander": "^13.1.0",

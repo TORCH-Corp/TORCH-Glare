@@ -56,7 +56,7 @@ export const TreeDropDown = ({ childrenContainerClassName, className, variant = 
                 <button className={cn("outline-none border-none flex-0 leading-0 transition-transform ease-in-out flex justify-center items-center bg-background-system-body-tertiary h-[28px] w-[28px] rounded-full text-[20px] text-content-system-global-primary", { "rotate-180": isActive })}>
                     <i className={cn("leading-none ri-arrow-down-s-line ")}></i>
                 </button>
-                <p className={cn("text-content-system-global-primary typography-body-medium-medium transition-all ease-in-out duration-100 flex-1")}>{treeLabel}</p>
+                <div className={cn("text-content-system-global-primary typography-body-medium-medium transition-all ease-in-out duration-100 flex-1")}>{treeLabel}</div>
             </div>
             <div className={cn("mt-0 pl-[22px] relative overflow-auto scrollbar-hide transition-all duration-500 ease-in-out", {
                 "max-h-[20000px] mt-1": isActive, "max-h-0": !isActive,

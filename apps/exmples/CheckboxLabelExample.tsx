@@ -1,4 +1,4 @@
-import { CheckboxLabel } from "@/components/CheckboxLabel";
+import { Checkbox } from "@/components/Checkbox";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
@@ -13,7 +13,7 @@ export default function CheckboxLabelExample() {
           "text-content-system-global-primary"
         )}
       >
-        CheckboxLabel Preview
+        LabeledCheckBox Preview
       </h1>
       {sizes.map((size: any) => (
         <div key={size} className="flex flex-col gap-2 w-full">
@@ -25,14 +25,13 @@ export default function CheckboxLabelExample() {
           >
             Size: {size}
           </span>
-          <CheckboxLabel
-            requiredLabel="Required"
-            secondaryLabel="Secondary Label"
-            label={"Label"}
+          <Checkbox
             key={size}
             id={`checkbox-${size}`}
             size={size}
-          ></CheckboxLabel>
+          >
+            <span>Label</span>
+          </Checkbox>
         </div>
       ))}
     </>

@@ -9,7 +9,7 @@ import { Themes } from "../utils/types";
 
 // NOTE: radix select as DropDownButton
 
-export const dropdownButtonContentStyles = cva(
+export const SelectContentStyles = cva(
   [
     "p-1",
     "rounded-[8px]",
@@ -203,13 +203,13 @@ export const dropdownTriggerStyles = cva(
   }
 );
 
-const DropDownButton = SelectPrimitive.Root;
+const Select = SelectPrimitive.Root;
 
-const DropDownButtonGroup = SelectPrimitive.Group;
+const SelectGroup = SelectPrimitive.Group;
 
-const DropDownButtonValue = SelectPrimitive.Value;
+const SelectValue = SelectPrimitive.Value;
 
-const DropDownButtonTrigger = React.forwardRef<
+const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
   VariantProps<typeof dropdownTriggerStyles> & {
@@ -257,17 +257,16 @@ const DropDownButtonTrigger = React.forwardRef<
               [
                 "group-aria-expanded:bg-background-presentation-action-hover",
                 "group-aria-expanded:text-white",
-              ],
-              {
-                "text-[12px]": size === "S",
-                "text-[16px]": size === "M",
-                "text-[28px]": size === "L" || size === "XL",
-              }
+              ]
             )}
           >
             <i
               className={cn(
                 "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180",
+                { "!text-[12px]": size === "S" },
+                { "!text-[16px]": size === "M" },
+                { "!text-[18px]": size === "L" },
+                { "!text-[26px]": size === "XL" },
                 { icon: icon }
               )}
             />
@@ -277,9 +276,9 @@ const DropDownButtonTrigger = React.forwardRef<
     );
   }
 );
-DropDownButtonTrigger.displayName = "DropDownButtonTrigger";
+SelectTrigger.displayName = "SelectTrigger";
 
-const DropDownButtonScrollUpButton = React.forwardRef<
+const SelectScrollUpButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
 >(({ className, ...props }, ref) => (
@@ -297,9 +296,9 @@ const DropDownButtonScrollUpButton = React.forwardRef<
     />
   </SelectPrimitive.ScrollUpButton>
 ));
-DropDownButtonScrollUpButton.displayName = "DropDownButtonScrollUpButton";
+SelectScrollUpButton.displayName = "SelectScrollUpButton";
 
-const DropDownButtonScrollDownButton = React.forwardRef<
+const SelectScrollDownButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollDownButton>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
 >(({ className, ...props }, ref) => (
@@ -317,12 +316,12 @@ const DropDownButtonScrollDownButton = React.forwardRef<
     />
   </SelectPrimitive.ScrollDownButton>
 ));
-DropDownButtonScrollDownButton.displayName = "DropDownButtonScrollDownButton";
+SelectScrollDownButton.displayName = "SelectScrollDownButton";
 
-const DropDownButtonContent = React.forwardRef<
+const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-  VariantProps<typeof dropdownButtonContentStyles> & {
+  VariantProps<typeof SelectContentStyles> & {
     theme?: Themes
   }
 >(
@@ -341,7 +340,7 @@ const DropDownButtonContent = React.forwardRef<
       <SelectPrimitive.Content
         data-theme={theme}
         ref={ref}
-        className={cn(dropdownButtonContentStyles({ variant }), className)}
+        className={cn(SelectContentStyles({ variant }), className)}
         position={position}
         {...props}
       >
@@ -350,9 +349,9 @@ const DropDownButtonContent = React.forwardRef<
     </SelectPrimitive.Portal>
   )
 );
-DropDownButtonContent.displayName = "DropDownButtonContent";
+SelectContent.displayName = "SelectContent";
 
-const DropDownButtonLabel = React.forwardRef<
+const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
@@ -362,9 +361,9 @@ const DropDownButtonLabel = React.forwardRef<
     {...props}
   />
 ));
-DropDownButtonLabel.displayName = "DropDownButtonLabel";
+SelectLabel.displayName = "SelectLabel";
 
-const DropDownButtonItem = React.forwardRef<
+const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
   VariantProps<typeof MenuItemStyles>
@@ -390,9 +389,9 @@ const DropDownButtonItem = React.forwardRef<
   )
 );
 
-DropDownButtonItem.displayName = "DropDownButtonItem";
+SelectItem.displayName = "SelectItem";
 
-const DropDownButtonSeparator = React.forwardRef<
+const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
@@ -402,17 +401,17 @@ const DropDownButtonSeparator = React.forwardRef<
     {...props}
   />
 ));
-DropDownButtonSeparator.displayName = "DropDownButtonSeparator";
+SelectSeparator.displayName = "SelectSeparator";
 
 export {
-  DropDownButton,
-  DropDownButtonGroup,
-  DropDownButtonValue,
-  DropDownButtonTrigger,
-  DropDownButtonContent,
-  DropDownButtonLabel,
-  DropDownButtonItem,
-  DropDownButtonSeparator,
-  DropDownButtonScrollUpButton,
-  DropDownButtonScrollDownButton,
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
 };

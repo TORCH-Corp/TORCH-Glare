@@ -6,7 +6,7 @@ import FieldSectionExample from "./FieldSectionExample";
 import DropdownMenuExample from "./DropdownMenuExample";
 import InputFieldExample from "./InputFieldExample";
 import LabelLessInputExample from "./labelLessInputExample";
-import { AlertExample } from "./AlertExample";
+import { FieldAlertExample } from "./FieldAlertExample";
 import { BadgeExample } from "./BadgeExample";
 import { ButtonFieldExample } from "./ButtonFieldExample";
 import LabelFieldExample from "./LabelFieldExample";
@@ -27,7 +27,7 @@ import CheckboxLabelExample from "./CheckboxLabelExample";
 import PasswordLevelExample from "./PasswordLevelExample";
 import SlideDatePickerExample from "./SlideDatePickerExample";
 import DatePickerExample from "./DatePickerExample";
-import Counter from "@/components/Counter";
+import Counter from "@/components/CountBadge";
 import { useTheme } from "@/providers/ThemeProvider";
 import IosDatePickerExample from "./IosDatePicerExample";
 import AlertDialogExample from "./AlertDialogExample";
@@ -69,7 +69,7 @@ export default function Examples() {
         <TabFormItemExample />
         <LinkButtonExample />
         <TooltipExample />
-        <AlertExample />
+        <FieldAlertExample />
         <BadgeExample />
         <CheckboxLabelExample />
         <RadioLabelExample />

@@ -1,10 +1,9 @@
-import { Button } from "@/components/Button";
-import ButtonField from "@/components/ActionsGroup";
+import { FieldHint } from "@/components/FieldHint";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
-export function ButtonFieldExample() {
-  const [variants] = useState<any>([true, false]);
+export function FieldAlertExample() {
+  const [variants] = useState<any>(["info", "warning", "error", "success"]);
 
   return (
     <>
@@ -14,7 +13,7 @@ export function ButtonFieldExample() {
           "text-content-system-global-primary"
         )}
       >
-        ButtonField Preview
+        FieldAlert Preview
       </h1>
       {variants.map((variant: any) => (
         <div key={variant} className="flex flex-col gap-2 w-full">
@@ -24,15 +23,12 @@ export function ButtonFieldExample() {
               "text-content-system-global-primary"
             )}
           >
-            {variant ? "With Divider" : "Without Divider"}
+            Variant: {variant}
           </span>
-          <div className="flex gap-2 items-start">
-            <ButtonField withDivider={variant} >
-              <Button>OPTION 1</Button>
-              <Button>OPTION 2</Button>
-              <Button>OPTION 3</Button>
-            </ButtonField>
-          </div>
+          <FieldHint
+            label={`FieldHint with variant: ${variant}`}
+            state={variant}
+          ></FieldHint>
         </div>
       ))}
     </>

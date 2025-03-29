@@ -1,4 +1,4 @@
-import { Alert } from "@/components/Alert";
+import { FieldHint } from "@/components/FieldHint";
 import { FieldSection } from "@/layouts/FieldSection";
 import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/cn";
@@ -28,10 +28,10 @@ export default function FieldSectionExample() {
             requiredLabel={`Required`}
             childrenUnderLabel={
               <>
-                <Alert label={"Warning"} state={"warning"}></Alert>
-                <Alert label={"Error"} state={"error"}></Alert>
-                <Alert label={"Info"} state={"info"}></Alert>
-                <Alert label={"Success"} state={"success"}></Alert>
+                <FieldHint label={"Warning"} state={"warning"}></FieldHint>
+                <FieldHint label={"Error"} state={"error"}></FieldHint>
+                <FieldHint label={"Info"} state={"info"}></FieldHint>
+                <FieldHint label={"Success"} state={"success"}></FieldHint>
               </>
             }
           >

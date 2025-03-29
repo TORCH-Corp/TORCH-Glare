@@ -1,10 +1,36 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { ReactNode } from "react";
-import * as RadixTooltip from "@radix-ui/react-tooltip";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip"
+import React from "react";
 
+
+const TooltipProvider = TooltipPrimitive.Provider
+
+const ToolTipRoot = TooltipPrimitive.Root
+
+const TooltipTrigger = TooltipPrimitive.Trigger
+
+const TooltipContent = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
+>(({ className, sideOffset = 4, ...props }, ref) => (
+  <TooltipPrimitive.Portal>
+    <TooltipPrimitive.Content
+      ref={ref}
+      sideOffset={sideOffset}
+      className={cn(
+        "z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-tooltip-content-transform-origin]",
+        className
+      )}
+      {...props}
+    />
+  </TooltipPrimitive.Portal>
+))
+TooltipContent.displayName = TooltipPrimitive.Content.displayName
+
+const TooltipArrow = TooltipPrimitive.Arrow
 export type ToolTipSide = "top" | "right" | "bottom" | "left";
 
 export enum ContentAlign {
@@ -40,7 +66,7 @@ interface TooltipProps
   theme?: Themes
 }
 
-export const Tooltip: React.FC<TooltipProps> = ({
+const Tooltip: React.FC<TooltipProps> = ({
   children,
   open,
   text,
@@ -57,30 +83,29 @@ export const Tooltip: React.FC<TooltipProps> = ({
 }) => {
   return (
     <TooltipProvider>
-      <RadixTooltip.Root
-        delayDuration={delay}
-        {...(typeof open !== "undefined" && { open })}
-        {...(onOpenChange && { onOpenChange })}
-      >
-        <RadixTooltip.Trigger aria-label="Open tooltip" asChild>
+      <ToolTipRoot delayDuration={delay} {...(typeof open !== "undefined" && { open })} {...(onOpenChange && { onOpenChange })}>
+        <TooltipTrigger aria-label="Open tooltip" asChild>
           {children}
-        </RadixTooltip.Trigger>
+        </TooltipTrigger>
 
-        <RadixTooltip.Content
+        <TooltipContent
           data-theme={theme}
           sideOffset={2}
           side={toolTipSide}
           align={contentAlign}
           avoidCollisions={avoidCollisions}
-          className={cn(tooltipStyles({ variant }), className)}
+          className={cn(tooltipStyles({ variant, className }))}
           {...props}
         >
           {text}
-          {tip && <RadixTooltip.Arrow className={cn("fill-background-system-body-tertiary", {
+          {tip && <TooltipArrow className={cn("fill-background-system-body-tertiary", {
             "fill-wavy-navy-900": variant === "highlight"
           })} />}
-        </RadixTooltip.Content>
-      </RadixTooltip.Root>
+        </TooltipContent>
+      </ToolTipRoot>
     </TooltipProvider>
   );
 };
+
+
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipArrow, ToolTipRoot }

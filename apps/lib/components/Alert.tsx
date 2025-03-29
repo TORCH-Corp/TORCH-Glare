@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 
-export const glareAlert = cva(
+export const glareFieldAlert = cva(
   "flex relative justify-start items-center rounded-[4px] min-h-26px w-fit pr-1 rtl:pl-1 rtl:pr-0 [&>section]:text-white",
   {
     variants: {
@@ -23,16 +23,16 @@ export const glareAlert = cva(
   }
 );
 
-type AlertVariant = "success" | "error" | "warning" | "info";
+type FieldAlertVariant = "success" | "error" | "warning" | "info";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   label: ReactNode;
-  state?: AlertVariant;
+  state?: FieldAlertVariant;
   icon?: ReactNode;
   theme?: Themes
 }
 
-export const Alert: React.FC<Props> = ({
+export const FieldHint: React.FC<Props> = ({
   label,
   state,
   theme,
@@ -45,7 +45,7 @@ export const Alert: React.FC<Props> = ({
       {...props}
       data-theme={theme}
       className={cn(
-        glareAlert({
+        glareFieldAlert({
           state,
         }),
         className
@@ -73,4 +73,4 @@ export const Alert: React.FC<Props> = ({
   );
 };
 
-export default Alert;
+export default FieldHint;

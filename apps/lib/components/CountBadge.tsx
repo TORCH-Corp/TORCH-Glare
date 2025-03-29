@@ -36,18 +36,23 @@ interface Props
   GlareCounterStylesProps {
   label: number; // label of the counter it should be a number
   theme?: Themes
+  className?: string
 }
 
-export const Counter: React.FC<Props> = ({ theme, label, variant, ...props }) => {
+<<<<<<<< HEAD:apps/lib/components/CountBadge.tsx
+export const CountBadge: React.FC<Props> = ({ theme, label, variant, className, ...props }) => {
+========
+export const Counter: React.FC<Props> = ({ theme, label, variant, className, ...props }) => {
+>>>>>>>> main:apps/lib/components/Counter.tsx
   return (
     <section
       {...props}
       data-theme={theme}
-      className={cn(glareCounterStyles({ variant }), props.className)}
+      className={cn(glareCounterStyles({ variant }), className)}
     >
       <p>{label}</p>
     </section>
   );
 };
 
-export default Counter;
+export default CountBadge;

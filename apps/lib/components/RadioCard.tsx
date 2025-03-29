@@ -1,5 +1,4 @@
 import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
-import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Radio } from "./Radio";
 import { Card, CardContent, CardDescription, CardHeader } from "./Card";
@@ -22,7 +21,7 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
     return (
       <Card
         data-theme={theme}
-        htmlFor={id}
+        asChild
         className={cn(
           "relative border-border-presentation-global-primary group",
           // Disabled state
@@ -34,33 +33,36 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
           props.checked && "hover:border-border-presentation-global-primary"
         )}
       >
-        <section
-          className={"absolute top-0 left-0 w-full p-[10px] flex justify-end"}
+        <label htmlFor={id}
         >
-          <Radio
-            {...props}
-            theme={theme}
-            radioClassName="group-hover:border-border-presentation-state-focus"
-            size="M"
-            ref={ref}
-            id={id}
-            checked={props.checked}
-            disabled={disabled}
-          />
-        </section>
+          <section
+            className={"absolute top-0 left-0 w-full p-[10px] flex justify-end"}
+          >
+            <Radio
+              {...props}
+              theme={theme}
+              radioClassName="group-hover:border-border-presentation-state-focus"
+              size="M"
+              ref={ref}
+              id={id}
+              checked={props.checked}
+              disabled={disabled}
+            />
+          </section>
 
-        <CardHeader >
-          {headerLabel}
-        </CardHeader>
+          <CardHeader >
+            {headerLabel}
+          </CardHeader>
 
-        <CardContent >
-          {description && (
-            <CardDescription >
-              {description}
-            </CardDescription>
-          )}
-          {children}
-        </CardContent>
+          <CardContent >
+            {description && (
+              <CardDescription >
+                {description}
+              </CardDescription>
+            )}
+            {children}
+          </CardContent>
+        </label >
       </Card>
     );
   }

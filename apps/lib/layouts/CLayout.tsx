@@ -3,7 +3,7 @@ import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import { cva, VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
-import Counter from "../components/Counter";
+import Counter from "../components/CountBadge";
 import { Tooltip } from "../components/Tooltip";
 
 interface LayoutProps
@@ -186,7 +186,7 @@ interface Props
   active?: boolean
   disabled?: boolean
 }
-const SideBarItem = ({ active, disabled, iconOnly, asChild, as: Tag = "button", theme, variant, ...props }: Props) => {
+const SideBarItem = ({ active, disabled, iconOnly, asChild, as: Tag = "span", theme, variant, ...props }: Props) => {
   const Component = asChild ? Slot : Tag;
 
   return (

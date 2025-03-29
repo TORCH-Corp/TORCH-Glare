@@ -24,7 +24,7 @@ interface ProfileItemProps extends HTMLAttributes<HTMLButtonElement> {
     overlayBlur?: boolean
 }
 
-export const ProfileItem: React.FC<ProfileItemProps> = ({
+export const ProfileMenu: React.FC<ProfileItemProps> = ({
     label,
     selected,
     icon,
