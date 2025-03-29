@@ -21,7 +21,8 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
     return (
       <Card
         data-theme={theme}
-        asChild
+        htmlFor={id}
+        as="label"
         className={cn(
           "relative border-border-presentation-global-primary group",
           // Disabled state
@@ -30,39 +31,37 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
           disabled && "hover:border-border-presentation-global-primary",
           // Checked state
           props.checked && "border-border-presentation-global-primary",
-          props.checked && "hover:border-border-presentation-global-primary"
+          props.checked && "hover:border-border-presentation-global-primary",
+          className
         )}
       >
-        <label htmlFor={id}
+        <section
+          className={"absolute top-0 left-0 w-full p-[10px] flex justify-end"}
         >
-          <section
-            className={"absolute top-0 left-0 w-full p-[10px] flex justify-end"}
-          >
-            <Radio
-              {...props}
-              theme={theme}
-              radioClassName="group-hover:border-border-presentation-state-focus"
-              size="M"
-              ref={ref}
-              id={id}
-              checked={props.checked}
-              disabled={disabled}
-            />
-          </section>
+          <Radio
+            {...props}
+            theme={theme}
+            radioClassName="group-hover:border-border-presentation-state-focus"
+            size="M"
+            ref={ref}
+            id={id}
+            checked={props.checked}
+            disabled={disabled}
+          />
+        </section>
 
-          <CardHeader >
-            {headerLabel}
-          </CardHeader>
+        <CardHeader >
+          {headerLabel}
+        </CardHeader>
 
-          <CardContent >
-            {description && (
-              <CardDescription >
-                {description}
-              </CardDescription>
-            )}
-            {children}
-          </CardContent>
-        </label >
+        <CardContent >
+          {description && (
+            <CardDescription >
+              {description}
+            </CardDescription>
+          )}
+          {children}
+        </CardContent>
       </Card>
     );
   }
