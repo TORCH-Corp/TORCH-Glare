@@ -1,7 +1,8 @@
-import React, { AnchorHTMLAttributes, SVGProps } from "react";
+import React, { AnchorHTMLAttributes, HTMLAttributes, SVGProps } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
+import { Slot } from "@radix-ui/react-slot";
 
 // Link button base styles
 export const linkButtonStyles = cva(
@@ -28,14 +29,17 @@ export const linkButtonStyles = cva(
   }
 );
 
-interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
+interface Props extends HTMLAttributes<HTMLAnchorElement | HTMLSpanElement> {
   size?: "S" | "M"; // this props will change the button style size see on figma design file
   theme?: Themes
+  asChild?: boolean
+  href?: string
 }
 
-export const LinkButton: React.FC<Props> = ({ theme, size = "S", className, ...props }) => {
+export const LinkButton: React.FC<Props> = ({ theme, className, size = "S", asChild, ...props }) => {
+  const Component = asChild ? Slot : props.href ? "a" : "span";
   return (
-    <a
+    <Component
       {...props}
       data-theme={theme}
       className={cn(
@@ -45,7 +49,7 @@ export const LinkButton: React.FC<Props> = ({ theme, size = "S", className, ...p
         className
       )}
     >
-      <p className="px-[3px]">{props.children}</p>
+      <div className="px-[3px]">{props.children}</div>
       <div
         className={cn(
           "rounded-[4px]",
@@ -67,7 +71,7 @@ export const LinkButton: React.FC<Props> = ({ theme, size = "S", className, ...p
           })}
         />
       </div>
-    </a>
+    </Component>
   );
 };
 

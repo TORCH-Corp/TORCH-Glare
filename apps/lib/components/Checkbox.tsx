@@ -11,25 +11,43 @@ interface CheckBoxProps
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
-  ({ size = "M", ...props }, ref) => {
+  ({ size = "M", children, ...props }, ref) => {
     const [checked, setChecked] = useState(props.checked);
     return (
-      <label htmlFor={props.id} className="flex items-center justify-center gap-1">
-        <input
-          {...props}
-          children={null}
-          id={props.id}
-          onChange={(e) => {
-            props.onChange?.(e);
-            setChecked(e.target.checked);
-          }}
-          type="checkbox"
-          hidden
-          ref={ref}
-        />
-        <CheckboxIcon size={size} checked={checked} disabled={props.disabled} />
-        {props.children}
-      </label>
+      children ?
+        <label htmlFor={props.id} className="flex items-center justify-center gap-1">
+          <input
+            {...props}
+            children={null}
+            id={props.id}
+            onChange={(e) => {
+              props.onChange?.(e);
+              setChecked(e.target.checked);
+            }}
+            type="checkbox"
+            hidden
+            ref={ref}
+          />
+          <CheckboxIcon size={size} checked={checked} disabled={props.disabled} />
+          {children}
+        </label>
+        :
+        <div>
+          <input
+            {...props}
+            children={null}
+            id={props.id}
+            onChange={(e) => {
+              props.onChange?.(e);
+              setChecked(e.target.checked);
+            }}
+            type="checkbox"
+            hidden
+            ref={ref}
+          />
+          <CheckboxIcon size={size} checked={checked} disabled={props.disabled} />
+        </div>
+
     );
   }
 );

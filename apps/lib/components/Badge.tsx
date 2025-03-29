@@ -93,7 +93,7 @@ export const Badge: React.FC<BadgeProps> = ({
         )}
       </div>
 
-      <p className="px-[3px] whitespace-nowrap">{label}</p>
+      <div className="px-[3px] whitespace-nowrap">{label}</div>
       {isSelected && (
         <button
           onClick={onUnselect}
