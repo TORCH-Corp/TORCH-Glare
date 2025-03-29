@@ -11,30 +11,33 @@ interface LayoutProps
 }
 function Layout({ ...props }: LayoutProps) {
   return (
-    <section {...props} className="flex h-screen gap-[10px] bg-background-system-body-base lg:p-[16px]">
+    <div {...props} className="flex h-[100dvh] flex-1 lg:gap-[10px] bg-background-system-body-base lg:p-[16px]">
       {props.children}
-    </section>
+    </div>
   );
 }
 
-
-interface BodyProps
+interface ContentProps
   extends HTMLAttributes<HTMLDivElement> {
 }
-function Body({ ...props }: BodyProps) {
+function Body({ ...props }: ContentProps) {
   return (
-    <main {...props} className={cn("flex flex-grow flex-1 overflow-hidden", props.className)}>
-      <div className="flex lg:rounded-xl bg-background-system-body-tertiary shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)] flex-1 flex-grow lg:p-1">
+    <main {...props} className={cn("flex flex-grow flex-1 overflow-y-auto", props.className)}>
+      <div className="flex lg:rounded-[12px] bg-background-system-body-tertiary shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)] flex-1 flex-grow lg:p-1">
         <div
-          className="lg:rounded-lg flex-1 flex-grow overflow-scroll  scrollbar-hide lg:p-[2px] lg:bg-[linear-gradient(130deg,var(--blue-sparkle-600)_0px,rgba(44,45,46,1)_46px)]"
+          className="relative lg:rounded-lg flex-1 flex-grow overflow-scroll  scrollbar-hide lg:p-[2px] lg:bg-[linear-gradient(143deg,var(--blue-sparkle-600)_0px,rgba(44,45,46,1)_55px)]"
         >
+          <div
+            className="absolute top-[2px] w-[170px] rounded-t-[6px] z-10 lg:h-[60px] 
+            left-[2px] ltr:lg:bg-[linear-gradient(132deg,#0D0F4E_0%,#000_50%)]
+            rtl:right-[2px] rtl:left-[unset] rtl:lg:bg-[linear-gradient(-132deg,#0D0F4E_0%,#000_50%)]"
+          ></div>
           {props.children}
         </div>
       </div>
     </main>
   );
 }
-
 
 interface SideBarProps
   extends HTMLAttributes<HTMLDivElement> {
@@ -97,6 +100,7 @@ function SideBar({ children, footerChildren, headerChild, navigationChildren, ic
 }
 
 
+
 interface ChildProps
   extends HTMLAttributes<HTMLDivElement> {
   theme?: Themes
@@ -109,6 +113,7 @@ const SideBarChildContainer = ({ theme, ...props }: ChildProps) => {
     </div>
   )
 }
+
 
 
 const SideBarItemStyles = cva([
@@ -186,11 +191,11 @@ interface Props
   active?: boolean
   disabled?: boolean
 }
-const SideBarItem = ({ active, disabled, iconOnly, asChild, as: Tag = "span", theme, variant, ...props }: Props) => {
+const SideBarItem = ({ active, disabled, iconOnly, asChild, as: Tag = "span", theme, className, variant, ...props }: Props) => {
   const Component = asChild ? Slot : Tag;
 
   return (
-    <Component  {...props} data-theme={theme} disabled={disabled} className={cn(SideBarItemStyles({ variant, iconOnly, active, disabled }), props.className)}>
+    <Component  {...props} data-theme={theme} disabled={disabled} className={cn(SideBarItemStyles({ variant, iconOnly, active, disabled }), className)}>
 
     </Component>
   )
@@ -247,13 +252,13 @@ interface SideBarIconButtonProps
   disabled?: boolean
 }
 
-const SideBarIconButton = ({ count, active, asChild, message, as: Tag = "button", theme, variant, ...props }: SideBarIconButtonProps) => {
+const SideBarIconButton = ({ count, active, asChild, message, as: Tag = "button", theme, variant, className, ...props }: SideBarIconButtonProps) => {
   const Component = asChild ? Slot : Tag;
 
   return (
     message ?
       <Tooltip variant={"highlight"} text={message} toolTipSide='left' className='z-[1000]'>
-        <Component {...props} data-theme={theme} className={cn(SideBarIconButtonStyles({ variant, active }))}>
+        <Component {...props} data-theme={theme} className={cn(SideBarIconButtonStyles({ variant, active }), className)}>
           {props.children}
           {count && <Counter className=' absolute top-[2px] right-[2px]' label={count} />}
         </Component>
@@ -301,14 +306,14 @@ const glareFeedbackItemStyle = cva(
 
 
 const SideBarFooterItem: React.FC<SideBarFooterItemProps> = ({ asChild,
-  as: Tag = "button", theme, variant, ...props }) => {
+  as: Tag = "button", theme, variant, className, ...props }) => {
   const Component = asChild ? Slot : Tag;
 
   return (
     <Component
       data-theme={theme}
       {...props}
-      className={cn(glareFeedbackItemStyle({ variant }), props.className)}
+      className={cn(glareFeedbackItemStyle({ variant }), className)}
     >
     </Component>
   );

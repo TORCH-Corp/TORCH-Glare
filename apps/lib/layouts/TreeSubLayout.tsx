@@ -36,10 +36,10 @@ export default function TreeSubLayout({
   return (
     <div
       className={cn(
-        "flex gap-[2px] h-full overflow-hidden transition-all ease-in-out delay-150 lg:bg-none lg:rounded-2 ",
+        "flex  h-full overflow-hidden transition-all ease-in-out delay-150 lg:bg-none lg:rounded-2 ",
       )}
     >
-      <div className="grid grid-rows-[60px_1fr] h-full flex-1 gap-[2px] rounded-2 flex-shrink-0 min-w-[300px]">
+      <div className="grid grid-rows-[auto_1fr] h-full flex-1 lg:gap-[2px] rounded-2 flex-shrink-0 min-w-[300px]">
         <HeaderPage
           title={treeData[pathname]?.pageHeader}
           subTitle={treeData[pathname]?.subTitle}

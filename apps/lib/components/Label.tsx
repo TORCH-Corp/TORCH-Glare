@@ -55,14 +55,14 @@ export const Label = React.forwardRef<HTMLDivElement, Props>(
         {label && (
           <p
             className={cn(
-              "text-start !leading-none",
+              "text-start",
               {
                 "typography-body-small-regular": size === "S",
                 "typography-body-medium-regular": size === "M",
                 "typography-body-large-regular": size === "L",
               },
               {
-                "text-content-presentation-global-primary ":
+                "text-content-presentation-global-primary":
                   variant === "PresentationStyle",
                 "text-[#E5E5E5]": variant === "SystemStyle",
               }
@@ -74,7 +74,7 @@ export const Label = React.forwardRef<HTMLDivElement, Props>(
         {secondaryLabel && (
           <p
             className={cn(
-              "text-content-presentation-global-secondary text-start !leading-none",
+              "text-content-presentation-global-secondary text-start",
               {
                 "typography-labels-small-regular": size === "S",
                 "typography-labels-medium-regular": size === "M",
@@ -88,7 +88,7 @@ export const Label = React.forwardRef<HTMLDivElement, Props>(
         {requiredLabel && (
           <p
             className={cn(
-              "text-content-presentation-state-negative text-start !leading-none",
+              "text-content-presentation-state-negative text-start",
               {
                 "typography-labels-small-medium": size === "S",
                 "typography-labels-medium-medium": size === "M",

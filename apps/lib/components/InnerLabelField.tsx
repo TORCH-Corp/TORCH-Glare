@@ -48,19 +48,11 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
         {...props}
         theme={theme}
         onFocus={(e) => {
-<<<<<<<< HEAD:apps/lib/components/InnerLabelField.tsx
           setFocus(true);
           props.onFocus?.(e);
         }}
         onBlur={(e) => {
           setFocus(false);
-========
-          setFucus(true);
-          props.onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setFucus(false);
->>>>>>>> main:apps/lib/components/LabelLessInput.tsx
           props.onBlur?.(e);
         }}
         onChange={(e) => {
@@ -77,7 +69,6 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
         errorMessage={errorMessage}
         onTable={onTable}
         icon={
-<<<<<<<< HEAD:apps/lib/components/InnerLabelField.tsx
           <Label
             focus={focus}
             isEmpty={isEmpty}
@@ -86,9 +77,6 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
             disabled={props.disabled}
             error={!errorMessage}
           />
-========
-          <Label fucus={fucus} label={label} required={required} />
->>>>>>>> main:apps/lib/components/LabelLessInput.tsx
         }
       />
     );
@@ -97,7 +85,6 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
 
 InnerLabelField.displayName = "LabelLessInput"
 
-<<<<<<<< HEAD:apps/lib/components/InnerLabelField.tsx
 
 // TODO: Active label when input is empty
 // TODO: Active on Hover
@@ -109,10 +96,6 @@ const Label = ({
 
   focus,
   isEmpty,
-========
-const Label = ({
-  fucus,
->>>>>>>> main:apps/lib/components/LabelLessInput.tsx
   label,
   required,
   disabled,
