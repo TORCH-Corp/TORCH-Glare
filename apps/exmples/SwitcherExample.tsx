@@ -1,4 +1,4 @@
-import { Switcher } from "@/components/Switcher";
+import { Switch } from "@/components/Switch";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
@@ -16,8 +16,11 @@ export default function SwitcherExample() {
         Switcher Preview
       </h1>
       <div className="flex flex-col gap-2 w-full">
-        <Switcher onClick={() => setISActive(!isActive)} active={isActive} activeLabel="ON" disabledLabel="OFF">
-        </Switcher>
+        <Switch
+          checked={isActive}
+          onCheckedChange={setISActive}
+        >
+        </Switch>
       </div>
     </>
   );
