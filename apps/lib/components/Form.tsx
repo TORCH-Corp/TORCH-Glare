@@ -14,6 +14,8 @@ import {
 
 import { cn } from "../utils/cn"
 import { Label } from "./Label"
+import { Themes } from "@/utils/types"
+import { ReactNode } from "react"
 const Form = FormProvider
 
 type FormFieldContextValue<
@@ -87,7 +89,19 @@ FormItem.displayName = "FormItem"
 
 const FormLabel = React.forwardRef<
     React.ElementRef<typeof LabelPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+    React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
+        label?: ReactNode; // main label
+        requiredLabel?: ReactNode; // normal text with required style
+        secondaryLabel?: ReactNode; // normal text with secondary style
+        as?: React.ElementType;
+        asChild?: boolean;
+        size?: "S" | "M" | "L";
+        variant?: "SystemStyle" | "PresentationStyle";
+        theme?: Themes
+        labelsClassName?: string;
+        labelDirections?: "vertical" | "horizontal";
+        childrenDirections?: "vertical" | "horizontal";
+    }
 >(({ className, ...props }, ref) => {
     const { error, formItemId } = useFormField()
 

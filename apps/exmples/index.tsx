@@ -31,6 +31,7 @@ import Counter from "@/components/CountBadge";
 import { useTheme } from "@/providers/ThemeProvider";
 import IosDatePickerExample from "./IosDatePicerExample";
 import AlertDialogExample from "./AlertDialogExample";
+import FormExample from "./FormExample";
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
 
@@ -92,6 +93,7 @@ export default function Examples() {
         <TableExample />
         <RingLoadingExample />
         <AlertDialogExample />
+        <FormExample />
         <div className="my-10"></div>
       </section>
     </div>
