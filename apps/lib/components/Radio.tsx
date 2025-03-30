@@ -68,7 +68,8 @@ export const Radio = forwardRef<HTMLInputElement, Props>(
             glareRadioStyles({
               size,
             }),
-            radioClassName
+            radioClassName,
+            className
           )}
         />
     );
