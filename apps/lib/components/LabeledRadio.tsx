@@ -8,7 +8,6 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   secondaryLabel?: string;
   requiredLabel?: string;
   size?: "S" | "M" | "L";
-  directions?: "vertical" | "horizontal";
   theme?: "dark" | "light" | "default";
 }
 
@@ -21,21 +20,21 @@ export const LabeledRadio = forwardRef<HTMLInputElement, Props>(
       requiredLabel,
       size = "M",
       type = "radio",
-      directions,
       className,
+      name,
+      id,
       ...props
     },
     ref
   ) => {
     return (
-      <Radio {...props} data-theme={theme} checked={props.checked} size={size} ref={ref} >
+      <Radio id={id} name={name} {...props} data-theme={theme} checked={props.checked} size={size} ref={ref} >
         <Label
-          htmlFor={props.id}
+          as={"div"}
           label={label}
           secondaryLabel={secondaryLabel}
           requiredLabel={requiredLabel}
           size={size}
-          directions={directions}
         />
       </Radio>
     );
