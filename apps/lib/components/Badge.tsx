@@ -6,7 +6,7 @@ import { Themes } from "../utils/types";
 export const badgeBase = cva(
   [
     "px-[6px]",
-    "[&_p]:text-content-presentation-action-light-primary",
+    "[&_div]:text-content-presentation-action-light-primary",
     "[&_i]:!leading-0",
     "flex",
     "justify-center",
@@ -23,12 +23,12 @@ export const badgeBase = cva(
   {
     variants: {
       size: {
-        XS: "h-[18px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
-        S: "h-[22px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
-        M: "h-[26px] [&_i]:text-[16px] [&_p]:typography-body-medium-medium",
+        XS: "h-[18px] [&_i]:text-[12px] [&_div]:typography-body-small-medium",
+        S: "h-[22px] [&_i]:text-[12px] [&_div]:typography-body-small-medium",
+        M: "h-[26px] [&_i]:text-[16px] [&_div]:typography-body-medium-medium",
       },
       variant: {
-        highlight: ["h-[20px] [&_i]:text-[12px] [&_p]:typography-body-small-medium",
+        highlight: ["h-[20px] [&_i]:text-[12px] [&_div]:typography-body-small-medium",
           "bg-background-presentation-badge-gray border-transparent px-[3px]"
         ],
         green: "border-border-presentation-badge-green bg-background-presentation-badge-green [&_i]:text-content-presentation-badge-green",

@@ -1,15 +1,41 @@
-import { ButtonHTMLAttributes } from "react";
+'use client'
 import { cn } from "../utils/cn";
-import { Label } from "./Label";
+import * as SwitchPrimitives from "@radix-ui/react-switch"
+import React from "react";
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+const Switch = React.forwardRef<
+  React.ElementRef<typeof SwitchPrimitives.Root>,
+  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
+>(({ className, ...props }, ref) => (
+  <SwitchPrimitives.Root
+    className={cn(
+      "peer inline-flex w-[48px] h-[28px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-background-presentation-switcher-active data-[state=unchecked]:bg-background-presentation-switcher-disabled",
+      className
+    )}
+    {...props}
+    ref={ref}
+  >
+    <SwitchPrimitives.Thumb
+      className={cn(
+        "pointer-events-none block w-[24px] h-[24px] rounded-full bg-background-presentation-switcher-knob shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-[22px] data-[state=unchecked]:translate-x-0"
+      )}
+    />
+  </SwitchPrimitives.Root>
+))
+Switch.displayName = SwitchPrimitives.Root.displayName
+
+export { Switch }
+
+
+
+/* interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   active: boolean;
   activeLabel?: string;
   disabledLabel?: string;
   theme?: "dark" | "light" | "default";
 }
 
-export function Switcher({
+function Switchers({
   active,
   activeLabel,
   disabledLabel,
@@ -53,4 +79,4 @@ export function Switcher({
       )}
     </section>
   );
-}
+} */

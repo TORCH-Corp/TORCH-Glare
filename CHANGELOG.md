@@ -36,3 +36,8 @@ and many more bug fixes and improvements and cleanup the code base.
 ## 1.0.2
 
 small bug fixes and improvements.
+
+## 1.0.3
+
+### Changed
+- `Switcher` changed to `Switch` component to make building custom switches easier using `@radix-ui/react-switch` component.
