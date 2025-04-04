@@ -4,6 +4,7 @@ import { FormControl, FormDescription, FormLabel, FormMessage } from '@/componen
 import { FormItem } from '@/components/Form';
 import { useForm } from 'react-hook-form';
 import { InputField } from '@/components/InputField';
+import Examples from '../exmples';
 
 export default function page() {
 
@@ -18,7 +19,7 @@ export default function page() {
   }
   return (
     <div className='w-full '>
-      <Form {...form}>
+      {/*    <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
             control={form.control}
@@ -36,7 +37,9 @@ export default function page() {
           />
           <button type='submit'>Submit</button>
         </form>
-      </Form>
+      </Form> */}
+
+      <Examples />
     </div>
   );
 }

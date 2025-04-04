@@ -27,7 +27,7 @@ export default function AlertDialogExample() {
               <AlertDialogContent variant={item} >
                 <AlertDialogHeader>
                   <AlertDialogTitle >
-                    <AlertDialogLabel title="Are you sure?" />
+                    <AlertDialogLabel title="are you sure?" />
                   </AlertDialogTitle>
                   <div className="flex justify-center items-center gap-2">
                     <AlertDialogAction>Continue</AlertDialogAction>
