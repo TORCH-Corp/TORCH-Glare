@@ -1,14 +1,14 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { Command } from "commander";
-import { initConfig } from "./init/init.js";
-import { addComponent } from "./addComponent.js";
-import { addHook } from "./addHooks.js";
-import { updateInstalledComponents } from "./update.js";
-import { addUtil } from "./addUtils.js";
-import { addProvider } from "./addProvider.js";
-import { addLayout } from "./addLayout.js";
+import { add } from "../src/commands/add";
+import { initConfig } from "../src/commands/init";
+import { addHook } from "../src/commands/hook";
+import { addLayout } from "../src/commands/layout";
+import { addUtil } from "../src/commands/utils";
+import { addProvider } from "../src/commands/provider";
+import { updateInstalledComponents } from "../src/commands/update";
 
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);
@@ -22,7 +22,7 @@ export function getConfig() {
 
   try {
     return JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ Error reading glare.json:", error.message);
     process.exit(1);
   }
@@ -41,7 +41,7 @@ program
 program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
-  .action((component) => addComponent(component && `${component}.tsx`));
+  .action((component) => add(component && `${component}.tsx`));
 
 program
   .command("hook [hook]")

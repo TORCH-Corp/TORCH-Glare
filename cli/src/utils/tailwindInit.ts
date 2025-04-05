@@ -1,7 +1,8 @@
 import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
-import { detectPackageManager, getCurrentInstalledDependencies } from "../addComponent.js";
+import { detectPackageManager } from "./detectPackageManager";
+import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies";
 
 const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 
@@ -25,7 +26,7 @@ function generatePlugins() {
  * Installs dependencies using the detected package manager.
  * @param {string[]} dependencies - List of dependencies to install.
  */
-function installDependencies(dependencies = []) {
+function installDependencies(dependencies: string[] = []) {
   if (!dependencies.length) {
     console.warn("⚠️ No dependencies provided to install.");
     return;
@@ -56,7 +57,7 @@ function installDependencies(dependencies = []) {
     // Execute the install command
     execSync(installCommand, { stdio: "inherit" });
     console.log("✅ Dependencies installed successfully.");
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ Error installing dependencies:");
     console.error(error.message);
 
@@ -134,7 +135,7 @@ function modifyTailwindConfig() {
  * @param {string} version - The version string of Tailwind CSS.
  * @returns {boolean} - True if the version is less than v4, otherwise false.
  */
-function isTailwindVersionLessThanV4(version) {
+function isTailwindVersionLessThanV4(version: string | undefined): boolean {
   if (!version) {
     console.warn("⚠️ Tailwind CSS is not installed.");
     return false; // Assume it needs to be installed
@@ -146,7 +147,7 @@ function isTailwindVersionLessThanV4(version) {
 }
 
 
-export function tailwindInit() {
+export function tailwindInit(): void {
   const dependencies = [
     "tailwindcss-animate",
     "tailwind-scrollbar-hide",
@@ -156,9 +157,9 @@ export function tailwindInit() {
   ];
   installDependencies(dependencies);
 
-  const { depsNamesAndVersions } = getCurrentInstalledDependencies()
+  const { depsNamesAndVersions } = getCurrentInstalledDependencies();
   if (depsNamesAndVersions["tailwindcss"]) {
-    const tailwindVersion = depsNamesAndVersions["tailwindcss"]
+    const tailwindVersion = depsNamesAndVersions["tailwindcss"];
     if (isTailwindVersionLessThanV4(tailwindVersion)) {
       if (!fs.existsSync(tailwindConfigPath)) {
         createTailwindConfig();
@@ -167,8 +168,4 @@ export function tailwindInit() {
       }
     }
   }
-
-
-
-
 }

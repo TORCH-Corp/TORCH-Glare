@@ -1,21 +1,23 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "./cli.js";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists, getComponentPaths, copyComponent } from "./addComponent.js";
+import { copyComponent } from "../utils/copyComponent.ts";
 import inquirer from "inquirer";
+import { getConfig } from "../../bin/cli.ts";
+import { getComponentPaths } from "../utils/getComponentPaths.ts";
+import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the layouts templates directory
-const layoutsTemplatesDir = path.resolve(__dirname, "../../lib/layouts");
+const layoutsTemplatesDir = path.resolve(__dirname, "../../../lib/layouts");
 
 /**
  * Main function to add a layout and its dependencies.
  * @param {string} layout - The name of the layout to add.
  */
-export async function addLayout(layout) {
+export async function addLayout(layout?: string): Promise<void> {
     const config = getConfig();
     const availableLayouts = getAvailableLayouts(layoutsTemplatesDir);
 
@@ -39,7 +41,7 @@ export async function addLayout(layout) {
     ensureDirectoryExists(targetDir);
 
     // Copy the layout (file) and install dependencies
-    copyComponent(source, target, addLayout);
+    copyComponent(source, target);
 
     console.log(`✅ ${layout} has been added to ${config.path}!`);
 }
@@ -49,7 +51,7 @@ export async function addLayout(layout) {
  * @param {string} layoutsTemplatesDir - Path to the layouts templates directory.
  * @returns {string[]} - Array of layout names.
  */
-function getAvailableLayouts(layoutsTemplatesDir) {
+function getAvailableLayouts(layoutsTemplatesDir: string): string[] {
     return fs.readdirSync(layoutsTemplatesDir).map((file) => path.basename(file));
 }
 
@@ -58,7 +60,7 @@ function getAvailableLayouts(layoutsTemplatesDir) {
  * @param {string[]} availableLayouts - Array of available layouts.
  * @returns {string} - The selected layout.
  */
-async function promptLayoutSelection(availableLayouts) {
+async function promptLayoutSelection(availableLayouts: string[]): Promise<string> {
     const { selectedLayout } = await inquirer.prompt([
         {
             type: "list",

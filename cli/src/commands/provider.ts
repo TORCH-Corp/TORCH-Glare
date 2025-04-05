@@ -1,23 +1,25 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "./cli.js";
+import { getConfig } from "../../bin/cli.ts";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists, getComponentPaths, copyComponent } from "./addComponent.js";
+import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.ts";
+import { getComponentPaths } from "../utils/getComponentPaths.ts";
+import { copyComponent } from "../utils/copyComponent.ts";
 import inquirer from "inquirer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the provider templates directory
-const providerTemplatesDir = path.resolve(__dirname, "../../lib/providers");
+const providerTemplatesDir: string = path.resolve(__dirname, "../../../lib/providers");
 
 /**
  * Main function to add a provider and its dependencies.
  * @param {string} provider - The name of the provider to add.
  */
-export async function addProvider(provider) {
+export async function addProvider(provider?: string): Promise<void> {
     const config = getConfig();
-    const availableProviders = getAvailableProviders(providerTemplatesDir);
+    const availableProviders: string[] = getAvailableProviders(providerTemplatesDir);
 
     // If no provider is provided, prompt the user to select one
     if (!provider) {
@@ -32,14 +34,14 @@ export async function addProvider(provider) {
 
     // Get the path and create the target directory
     const { source, targetDir } = getComponentPaths(provider, config, providerTemplatesDir, "providers");
-    const target = path.join(targetDir, provider);
+    const target: string = path.join(targetDir, provider);
     fs.rmSync(target, { recursive: true, force: true });
 
     // Ensure the target directory exists
     ensureDirectoryExists(targetDir);
 
     // Copy the provider (file or directory) and install dependencies
-    copyComponent(source, target, addProvider);
+    copyComponent(source, target);
 
     console.log(`✅ ${provider} has been added to ${config.path}!`);
 }
@@ -49,7 +51,7 @@ export async function addProvider(provider) {
  * @param {string} providerTemplatesDir - Path to the provider templates directory.
  * @returns {string[]} - Array of provider names.
  */
-function getAvailableProviders(providerTemplatesDir) {
+function getAvailableProviders(providerTemplatesDir: string): string[] {
     return fs.readdirSync(providerTemplatesDir).map((file) => path.basename(file));
 }
 
@@ -58,7 +60,7 @@ function getAvailableProviders(providerTemplatesDir) {
  * @param {string[]} availableProviders - Array of available providers.
  * @returns {string} - The selected provider.
  */
-async function promptProviderSelection(availableProviders) {
+async function promptProviderSelection(availableProviders: string[]): Promise<string> {
     const { selectedProvider } = await inquirer.prompt([
         {
             type: "list",

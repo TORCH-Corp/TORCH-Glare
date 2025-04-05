@@ -1,0 +1,58 @@
+{
+    "compilerOptions": {
+        /* Basic Options */
+        "target": "ES2020", // Target modern JavaScript
+        "module": "NodeNext", // Use Node.js module system
+        "lib": [
+            "ES2020",
+            "ESNext" // ESNext for modern features in Node.js
+        ],
+        "declaration": true, // Generate declaration files (.d.ts)
+        "declarationMap": true, // Generate source maps for declarations
+        "sourceMap": true, // Generate source maps for debugging
+        "outDir": "./dist", // Output directory for compiled JS files
+        "rootDir": "./cli/src", // Root directory for your CLI source files
+        "composite": true, // Enable composite project for faster builds
+        "incremental": true, // Enable incremental builds for faster compilation
+        /* Strict Type-Checking */
+        "strict": true, // Enable all strict type-checking options
+        "noImplicitAny": true, // Disallow the usage of `any` type
+        "strictNullChecks": true, // Ensures null and undefined are distinct types
+        "strictFunctionTypes": true, // Ensures function argument types are strictly checked
+        "strictBindCallApply": true, // Ensures the types of `bind`, `call`, and `apply` are checked
+        "strictPropertyInitialization": true, // Ensures class properties are initialized
+        "noImplicitThis": true, // Disallows the usage of `this` with an implicit `any`
+        "alwaysStrict": true, // Ensures that every file is in strict mode
+        /* Additional Checks */
+        "noUnusedLocals": true, // Disallows unused local variables
+        "noUnusedParameters": true, // Disallows unused function parameters
+        "noImplicitReturns": true, // Disallows implicit return types
+        "noFallthroughCasesInSwitch": true, // Disallows fallthrough in switch cases
+        "noUncheckedIndexedAccess": true, // Ensures safe access to indexed properties
+        /* Module Resolution */
+        "moduleResolution": "NodeNext", // Uses Node.js module resolution strategy
+        "esModuleInterop": true, // Allows default imports from CommonJS modules
+        "allowSyntheticDefaultImports": true, // Enables synthetic default imports
+        "resolveJsonModule": true, // Allows importing JSON files as modules
+        "isolatedModules": true, // Ensures single file transpiling for better compatibility with various tools
+        /* Path Aliases (if needed) */
+        "baseUrl": ".", // Base directory for relative imports
+        "paths": {
+            "@commands/*": [
+                "./cli/src/commands/*"
+            ], // Path alias for commands
+            "@utils/*": [
+                "./cli/src/utils/*"
+            ] // Path alias for utilities
+        }
+    },
+    /* Include only CLI-related source files */
+    "include": [
+        "cli/src/**/*" // Include all TypeScript files in the CLI folder
+    ],
+    /* Exclude node_modules and build artifacts */
+    "exclude": [
+        "node_modules", // Exclude node_modules folder
+        "dist" // Exclude the build output folder
+    ]
+}

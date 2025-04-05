@@ -1,24 +1,25 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "./cli.js";
+import { getConfig } from "../../bin/cli.ts";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists, getComponentPaths, copyComponent } from "./addComponent.js";
+import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.ts";
+import { getComponentPaths } from "../utils/getComponentPaths.ts";
+import { copyComponent } from "../utils/copyComponent.ts";
 import inquirer from "inquirer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the utils templates directory
-const utilsTemplatesDir = path.resolve(__dirname, "../../lib/utils");
-
+const utilsTemplatesDir: string = path.resolve(__dirname, "../../../lib/utils");
 
 /**
  * Main function to add a utility file and its dependencies.
  * @param {string} util - The name of the utility file to add.
  */
-export async function addUtil(util) {
+export async function addUtil(util?: string): Promise<void> {
     const config = getConfig();
-    const availableUtils = getAvailableUtils(utilsTemplatesDir);
+    const availableUtils: string[] = getAvailableUtils(utilsTemplatesDir);
 
     // If no utility file is provided, prompt the user to select one
     if (!util) {
@@ -33,7 +34,7 @@ export async function addUtil(util) {
 
     // get the path and create the create the target directory
     const { source, targetDir } = getComponentPaths(util, config, utilsTemplatesDir, "utils");
-    const target = path.join(targetDir, util);
+    const target: string = path.join(targetDir, util);
 
     fs.rmSync(target, { recursive: true, force: true });
 
@@ -41,7 +42,7 @@ export async function addUtil(util) {
     ensureDirectoryExists(targetDir);
 
     // Copy the utility file and install dependencies
-    copyComponent(source, target, addUtil);
+    copyComponent(source, target);
 
     console.log(`✅ ${util} has been added to ${config.path}!`);
 }
@@ -51,17 +52,16 @@ export async function addUtil(util) {
  * @param {string} utilsTemplatesDir - Path to the utils templates directory.
  * @returns {string[]} - Array of utility file names.
  */
-function getAvailableUtils(utilsTemplatesDir) {
+function getAvailableUtils(utilsTemplatesDir: string): string[] {
     return fs.readdirSync(utilsTemplatesDir).map((file) => path.basename(file));
 }
-
 
 /**
  * Prompt the user to select a utility file from a list.
  * @param {string[]} availableUtils - Array of available utility files.
  * @returns {string} - The selected utility file.
  */
-async function promptUtilSelection(availableUtils) {
+async function promptUtilSelection(availableUtils: string[]): Promise<string> {
     const { selectedUtil } = await inquirer.prompt([
         {
             type: "list",

@@ -1,0 +1,38 @@
+import { execSync } from "child_process";
+import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies";
+import { detectPackageManager } from "./detectPackageManager";
+import { getDependenciesToInstall } from "./getDependenciesToInstall";
+import { getInstallCommand } from "./getInstallCommand";
+
+/**
+ * Install dependencies for a component.
+ * @param {string} componentPath - Path to the component file.
+ */
+export function installDependencies(
+    componentPath: string,
+): void {
+    const { depsNames } = getCurrentInstalledDependencies();
+    const dependenciesToInstall = getDependenciesToInstall(
+        componentPath,
+        depsNames,
+    );
+
+    if (dependenciesToInstall.size > 0) {
+        const packageManager = detectPackageManager();
+        const installCommand = getInstallCommand(packageManager, dependenciesToInstall);
+
+        console.log(
+            `📦 Installing missing dependencies using ${packageManager}:`,
+            [...dependenciesToInstall].join(", ")
+        );
+
+        try {
+            execSync(installCommand, { stdio: "inherit" });
+            console.log("✅ Dependencies installed successfully.");
+        } catch (error) {
+            console.error("❌ Error installing dependencies:", (error as Error).message);
+        }
+    } else {
+        console.log("✅ All dependencies are already installed.");
+    }
+}
