@@ -1,11 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { copyComponent } from "../utils/copyComponent.js";
+import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 import inquirer from "inquirer";
-import { getConfig } from "../../bin/index.js";
+import { getConfig } from "../utils/getConfig.js";
 import { getComponentPaths } from "../utils/getComponentPaths.js";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
+import { CONFIG_FILE } from "./init.js";
+import { Config } from "../types/main.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,7 +20,7 @@ const layoutsTemplatesDir = path.resolve(__dirname, "../../../lib/layouts");
  * @param {string} layout - The name of the layout to add.
  */
 export async function addLayout(layout?: string): Promise<void> {
-    const config = getConfig();
+    const config = getConfig(CONFIG_FILE) as Config;
     const availableLayouts = getAvailableLayouts(layoutsTemplatesDir);
 
     // If no layout is provided, prompt the user to select one
@@ -41,7 +43,7 @@ export async function addLayout(layout?: string): Promise<void> {
     ensureDirectoryExists(targetDir);
 
     // Copy the layout (file) and install dependencies
-    copyComponent(source, target);
+    copyComponentsRecursively(source, target);
 
     console.log(`✅ ${layout} has been added to ${config.path}!`);
 }

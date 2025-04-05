@@ -1,10 +1,12 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "../../bin/index.js";
+import { getConfig } from "../utils/getConfig.js";
+import { CONFIG_FILE } from "./init.js";
+import { Config } from "../types/main.js";
 import { fileURLToPath } from "url";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
 import { getComponentPaths } from "../utils/getComponentPaths.js";
-import { copyComponent } from "../utils/copyComponent.js";
+import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 import inquirer from "inquirer";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,7 +20,7 @@ const providerTemplatesDir: string = path.resolve(__dirname, "../../../lib/provi
  * @param {string} provider - The name of the provider to add.
  */
 export async function addProvider(provider?: string): Promise<void> {
-    const config = getConfig();
+    const config = getConfig(CONFIG_FILE) as Config;
     const availableProviders: string[] = getAvailableProviders(providerTemplatesDir);
 
     // If no provider is provided, prompt the user to select one
@@ -41,7 +43,7 @@ export async function addProvider(provider?: string): Promise<void> {
     ensureDirectoryExists(targetDir);
 
     // Copy the provider (file or directory) and install dependencies
-    copyComponent(source, target);
+    copyComponentsRecursively(source, target);
 
     console.log(`✅ ${provider} has been added to ${config.path}!`);
 }

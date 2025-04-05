@@ -5,7 +5,10 @@ interface GlareConfig {
     path: string;
 }
 
-export async function initConfig(CONFIG_FILE: string): Promise<void> {
+export const CONFIG_FILE = "glare.json";
+
+
+export async function initConfig(): Promise<void> {
     const defaultConfig: GlareConfig = { path: "./" };
 
     if (!fs.existsSync(CONFIG_FILE)) {

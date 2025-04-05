@@ -4,8 +4,10 @@ import { fileURLToPath } from "url";
 import inquirer from "inquirer";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
 import { getComponentPaths } from "../utils/getComponentPaths.js";
-import { getConfig } from "../../bin/index.js";
-import { copyComponent } from "../utils/copyComponent.js";
+import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
+import { getConfig } from "../utils/getConfig.js";
+import { CONFIG_FILE } from "./init.js";
+import { Config } from "../types/main.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,7 +20,7 @@ const hooksTemplatesDir: string = path.resolve(__dirname, "../../../lib/hooks");
  * @param {string} hook - The name of the hook to add.
  */
 export async function addHook(hook?: string): Promise<void> {
-    const config = getConfig();
+    const config = getConfig(CONFIG_FILE) as Config;
     const availableHooks: string[] = getAvailableHooks(hooksTemplatesDir);
 
     // If no hook is provided, prompt the user to select one
@@ -41,7 +43,7 @@ export async function addHook(hook?: string): Promise<void> {
     ensureDirectoryExists(targetDir);
 
     // Copy the hook (file) and install dependencies
-    copyComponent(source, target);
+    copyComponentsRecursively(source, target);
 
     console.log(`✅ ${hook} has been added to ${config.path}!`);
 }

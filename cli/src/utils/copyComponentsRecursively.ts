@@ -1,6 +1,24 @@
-import * as fs from "fs";
-import path from "path";
 import { installDependencies } from "./installDependencies.js";
+import fs from "fs";
+import path from "path";
+
+/**
+ * Copy a component (directory or file) and install its dependencies.
+ * @param {string} source - The source path of the component.
+ * @param {string} target - The target path of the component.
+ */
+export function copyComponentsRecursively(
+    source: string,
+    target: string,
+): void {
+    if (fs.lstatSync(source).isDirectory()) {
+        copyDirectorySync(source, target);
+    } else {
+        fs.copyFileSync(source, target);
+        installDependencies(source);
+    }
+}
+
 
 /**
  * Copy a directory and its contents recursively.
@@ -15,7 +33,7 @@ export function copyDirectorySync(
         fs.mkdirSync(target, { recursive: true });
     }
 
-    const items = require('fs').readdirSync(source, { withFileTypes: true });
+    const items = fs.readdirSync(source, { withFileTypes: true });
     for (const item of items) {
         const sourcePath = path.join(source, item.name);
         const targetPath = path.join(target, item.name);

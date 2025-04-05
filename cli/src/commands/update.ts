@@ -1,11 +1,13 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "../../bin/index.js";
-import { copyDirectorySync } from "../utils/copyDirectorySync.js";
+import { getConfig } from "../utils/getConfig.js";
+import { CONFIG_FILE } from "./init.js";
+import { Config } from "../types/main.js";
 import { getComponentPaths } from "../utils/getComponentPaths.js";
 import { tailwindInit } from "../utils/tailwindInit.js";
 import { fileURLToPath } from "url";
 import readline from "readline";
+import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -19,7 +21,7 @@ const templatesDir = path.resolve(__dirname, "../../../lib");
  * Update all installed components, hooks, and utility files by syncing them with the latest templates.
  */
 export async function updateInstalledComponents(): Promise<void> {
-    const config = getConfig();
+    const config = getConfig(CONFIG_FILE) as Config;
 
     // Ask the user if they are sure about updating
     const rl = readline.createInterface({
@@ -128,22 +130,5 @@ function updateItem(item: string, config: any, type: string): void {
     const { source, targetDir } = getComponentPaths(item, config, `${templatesDir}/${type}`, type);
     const target = path.join(targetDir, item);
 
-    // Check if the item template exists
-    if (fs.existsSync(source)) {
-        console.log(`🔄 Updating ${item}...`);
-
-        // Copy the item (directory or file)
-        if (fs.lstatSync(source).isDirectory()) {
-            copyDirectorySync(source, target);
-        } else {
-            fs.copyFileSync(source, target);
-        }
-
-        // Install dependencies for the updated item
-        // installDependencies(source, type);
-
-        console.log(`✅ ${item} updated.`);
-    } else {
-        console.log(`⚠️ Template for ${item} not found. Skipping...`);
-    }
+    copyComponentsRecursively(source, target);
 }

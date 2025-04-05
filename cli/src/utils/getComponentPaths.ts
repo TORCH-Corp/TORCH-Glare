@@ -5,6 +5,8 @@ import { Config } from "../types/main";
  * Get the source and target paths for the component.
  * @param {string} component - The name of the component.
  * @param {object} config - Configuration object.
+ * @param {string} templatesDir - The path to the templates directory.
+ * @param {string} saveFolderName - The name of the folder to save the component.
  * @returns {object} - Object containing source and target directory paths.
  */
 export function getComponentPaths(

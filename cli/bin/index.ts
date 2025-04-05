@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-import fs from "fs";
-import { fileURLToPath } from "url";
 import { Command } from "commander";
 import { add } from "../src/commands/add.js";
 import { initConfig } from "../src/commands/init.js";
@@ -11,22 +9,6 @@ import { addProvider } from "../src/commands/provider.js";
 import { updateInstalledComponents } from "../src/commands/update.js";
 
 const program = new Command();
-const __filename = fileURLToPath(import.meta.url);
-const CONFIG_FILE = "glare.json";
-
-export function getConfig() {
-  if (!fs.existsSync(CONFIG_FILE)) {
-    console.error('❌ glare.json not found. Run "npx torch-glare@latest init" first');
-    process.exit(1);
-  }
-
-  try {
-    return JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
-  } catch (error: any) {
-    console.error("❌ Error reading glare.json:", error.message);
-    process.exit(1);
-  }
-}
 
 program
   .name("torch-glare")
@@ -36,7 +18,7 @@ program
 program
   .command("init")
   .description("Initialize torch.json configuration file")
-  .action(() => initConfig(CONFIG_FILE));
+  .action(() => initConfig());
 
 program
   .command("add [component]")
@@ -69,5 +51,3 @@ program
   .action(() => updateInstalledComponents());
 
 program.parse(process.argv);
-
-export { CONFIG_FILE, __filename };

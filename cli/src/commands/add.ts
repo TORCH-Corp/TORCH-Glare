@@ -1,13 +1,14 @@
 import path from "path";
 import inquirer from "inquirer";
-import { getConfig } from "../../bin/index.js";
 import { fileURLToPath } from "url";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
 import { getComponentPaths } from "../utils/getComponentPaths.js";
 import { Config } from "../types/main";
-import { copyComponent } from "../utils/copyComponent.js";
+import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 import { getAvailableFiles } from "../utils/getAvailableFiles.js";
 import { isComponentExists } from "../utils/isComponentExists.js";
+import { getConfig } from "../utils/getConfig.js";
+import { CONFIG_FILE } from "./init.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -24,7 +25,7 @@ const templatesDir = path.resolve(__dirname, "../../../lib/components");
  * @param {string} component - The name of the component to add.
  */
 export async function add(component?: string, replace: boolean = false): Promise<void> {
-    const config = getConfig() as Config;
+    const config = getConfig(CONFIG_FILE) as Config;
     const availableComponents = getAvailableFiles(templatesDir);
 
     // If no component is provided, prompt the user to select one
@@ -51,7 +52,7 @@ export async function add(component?: string, replace: boolean = false): Promise
     ensureDirectoryExists(targetDir);
 
     // Copy the component (directory or file) and install dependencies
-    copyComponent(source, target);
+    copyComponentsRecursively(source, target);
 
     console.log(`✅ ${component} has been added to ${config.path}!`);
 }

@@ -30,3 +30,5 @@ package-lock.json
 /torch-glare
 .next
 /lib
+glare.json
+tsconfig.tsbuildinfo
