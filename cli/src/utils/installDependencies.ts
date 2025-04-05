@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies.js";
 import { detectPackageManager } from "./detectPackageManager.js";
-import { getDependenciesToInstall } from "./getDependenciesToInstall.js";
+import { getDependenciesAndInstallNestedComponents } from "./getDependenciesAndInstallNestedComponents.js";
 import { getInstallCommand } from "./getInstallCommand.js";
 
 /**
@@ -12,7 +12,7 @@ export function installDependencies(
     componentPath: string,
 ): void {
     const { depsNames } = getCurrentInstalledDependencies();
-    const dependenciesToInstall = getDependenciesToInstall(
+    const dependenciesToInstall = getDependenciesAndInstallNestedComponents(
         componentPath,
         depsNames,
     );

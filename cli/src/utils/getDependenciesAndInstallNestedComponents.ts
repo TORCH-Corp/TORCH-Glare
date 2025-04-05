@@ -4,14 +4,13 @@ import { addHook } from "../commands/hook.js";
 import { add } from "../commands/add.js";
 
 /**
- * Extract dependencies from a component file.
+ * Extract nested components and dependencies from a component file.
  * @param {string} componentPath - Path to the component file.
  * @param {Set<string>} installedDependencies - Set of installed dependencies.
- * @param {function} addFunction - Function to make add operation
  * @returns {Set<string>} - Set of dependencies to install.
  */
 
-export function getDependenciesToInstall(
+export function getDependenciesAndInstallNestedComponents(
     componentPath: string,
     installedDependencies: Set<string>,
 ): Set<string> {
