@@ -5,7 +5,7 @@ import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
 import { fileURLToPath } from "url";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { getInstallPaths } from "../utils/getInstallPaths.js";
 import inquirer from "inquirer";
 import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 
@@ -35,7 +35,7 @@ export async function addUtil(util?: string): Promise<void> {
     }
 
     // get the path and create the create the target directory
-    const { source, targetDir } = getComponentPaths(util, config, utilsTemplatesDir, "utils");
+    const { source, targetDir } = getInstallPaths(util, config, utilsTemplatesDir, "utils");
     const target: string = path.join(targetDir, util);
 
     fs.rmSync(target, { recursive: true, force: true });

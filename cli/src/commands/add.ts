@@ -2,7 +2,7 @@ import path from "path";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { getInstallPaths } from "../utils/getInstallPaths.js";
 import { Config } from "../types/main";
 import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 import { getAvailableFiles } from "../utils/getAvailableFiles.js";
@@ -39,7 +39,7 @@ export async function add(component?: string, replace: boolean = false): Promise
         return;
     }
 
-    const { source, targetDir } = getComponentPaths(component, config, templatesDir, "components");
+    const { source, targetDir } = getInstallPaths(component, config, templatesDir, "components");
     const target = path.join(targetDir, component);
 
     // Check if component already exists

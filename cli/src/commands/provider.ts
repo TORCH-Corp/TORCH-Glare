@@ -5,7 +5,7 @@ import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
 import { fileURLToPath } from "url";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { getInstallPaths } from "../utils/getInstallPaths.js";
 import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 import inquirer from "inquirer";
 
@@ -35,7 +35,7 @@ export async function addProvider(provider?: string): Promise<void> {
     }
 
     // Get the path and create the target directory
-    const { source, targetDir } = getComponentPaths(provider, config, providerTemplatesDir, "providers");
+    const { source, targetDir } = getInstallPaths(provider, config, providerTemplatesDir, "providers");
     const target: string = path.join(targetDir, provider);
     fs.rmSync(target, { recursive: true, force: true });
 

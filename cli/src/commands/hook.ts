@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import inquirer from "inquirer";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { getInstallPaths } from "../utils/getInstallPaths.js";
 import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 import { getConfig } from "../utils/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
@@ -35,7 +35,7 @@ export async function addHook(hook?: string): Promise<void> {
     }
 
     // get the path and create the create the target directory
-    const { source, targetDir } = getComponentPaths(hook, config, hooksTemplatesDir, "hooks");
+    const { source, targetDir } = getInstallPaths(hook, config, hooksTemplatesDir, "hooks");
     const target: string = path.join(targetDir, hook);
     fs.rmSync(target, { recursive: true, force: true });
 

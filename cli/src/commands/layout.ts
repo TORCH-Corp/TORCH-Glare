@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
 import inquirer from "inquirer";
 import { getConfig } from "../utils/getConfig.js";
-import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { getInstallPaths } from "../utils/getInstallPaths.js";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
@@ -35,7 +35,7 @@ export async function addLayout(layout?: string): Promise<void> {
     }
 
     // get the path and create the create the target directory
-    const { source, targetDir } = getComponentPaths(layout, config, layoutsTemplatesDir, "layouts");
+    const { source, targetDir } = getInstallPaths(layout, config, layoutsTemplatesDir, "layouts");
     const target = path.join(targetDir, layout);
     fs.rmSync(target, { recursive: true, force: true });
 

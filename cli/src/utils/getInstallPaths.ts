@@ -9,7 +9,7 @@ import { Config } from "../types/main";
  * @param {string} saveFolderName - The name of the folder to save the component.
  * @returns {object} - Object containing source and target directory paths.
  */
-export function getComponentPaths(
+export function getInstallPaths(
     component: string,
     config: Config,
     templatesDir: string,

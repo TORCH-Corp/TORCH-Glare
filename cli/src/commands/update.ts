@@ -3,7 +3,7 @@ import path from "path";
 import { getConfig } from "../utils/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
-import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { getInstallPaths } from "../utils/getInstallPaths.js";
 import { tailwindInit } from "../utils/tailwindInit.js";
 import { fileURLToPath } from "url";
 import readline from "readline";
@@ -127,7 +127,7 @@ function getInstalledItems(installedItemsDir: string): string[] {
  * @param {string} type - The type of item (e.g., "components", "hooks", "utils").
  */
 function updateItem(item: string, config: any, type: string): void {
-    const { source, targetDir } = getComponentPaths(item, config, `${templatesDir}/${type}`, type);
+    const { source, targetDir } = getInstallPaths(item, config, `${templatesDir}/${type}`, type);
     const target = path.join(targetDir, item);
 
     copyComponentsRecursively(source, target);
