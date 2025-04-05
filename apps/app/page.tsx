@@ -19,7 +19,7 @@ export default function page() {
   }
   return (
     <div className='w-full '>
-      {/*    <Form {...form}>
+      <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
             control={form.control}
@@ -37,10 +37,10 @@ export default function page() {
           />
           <button type='submit'>Submit</button>
         </form>
-      </Form> */}
+      </Form>
 
-      <Examples />
-    </div>
+      {/*     <Examples />
+ */}    </div>
   );
 }
 

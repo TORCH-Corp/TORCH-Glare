@@ -20,7 +20,7 @@ const templatesDir = path.resolve(__dirname, "../../lib/components");
  * Main function to add a component and its dependencies.
  * @param {string} component - The name of the component to add.
  */
-export async function addComponent(component) {
+export async function addComponent(component, replace = false) {
   const config = getConfig();
   const availableComponents = getAvailableComponents(templatesDir);
 
@@ -38,9 +38,11 @@ export async function addComponent(component) {
   const { source, targetDir } = getComponentPaths(component, config, templatesDir, "components");
   const target = path.join(targetDir, component);
 
-  // replace the component
-  fs.rmSync(target, { recursive: true, force: true });
-  console.log(`🔄 Replacing "${component}"...`);
+  // Check if component already exists
+  if (componentExists(target) && !replace) {
+    console.log(`⚠️ Component "${component}" already exists.`);
+    return;
+  }
 
   // Ensure the target directory exists
   ensureDirectoryExists(targetDir);
@@ -49,6 +51,15 @@ export async function addComponent(component) {
   copyComponent(source, target, addComponent);
 
   console.log(`✅ ${component} has been added to ${config.path}!`);
+}
+
+/**
+ * Check if a component exists at the specified path.
+ * @param {string} targetPath - Path to check for component existence.
+ * @returns {boolean} - True if component exists, false otherwise.
+ */
+function componentExists(targetPath) {
+  return fs.existsSync(targetPath);
 }
 
 /**
@@ -183,7 +194,7 @@ function getDependenciesToInstall(componentPath, installedDependencies, addFunct
       moduleName.startsWith("../hooks") &&
       !installedDependencies.has(moduleName)
     ) {
-      addHook(moduleName.slice(9)); // Use addFunction here
+      addHook(moduleName.slice(9) + ".tsx"); // Use addFunction here
     }
     // install required components
     else if (
