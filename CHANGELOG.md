@@ -37,7 +37,12 @@ and many more bug fixes and improvements and cleanup the code base.
 
 small bug fixes and improvements.
 
-## 1.0.3
+## 1.0.4
 
 ### Changed
 - `Switcher` changed to `Switch` component to make building custom switches easier using `@radix-ui/react-switch` component.
+
+### Added
+- `Form` component Added to make building custom forms easier using `react-hook-form` and `zod` for validation.
+
+- `CLI` `replace` flag added to `addComponent` command to prevent adding the component if it already exists.

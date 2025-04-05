@@ -8,18 +8,19 @@ interface CheckBoxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   size?: "S" | "M" | "L";
   children?: React.ReactNode;
+  id?: string;
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
-  ({ size = "M", children, ...props }, ref) => {
+  ({ size = "M", children, id, ...props }, ref) => {
     const [checked, setChecked] = useState(props.checked);
     return (
       children ?
-        <label htmlFor={props.id} className="flex items-center justify-center gap-1">
+        <label htmlFor={id} className="flex items-center justify-center gap-1">
           <input
             {...props}
             children={null}
-            id={props.id}
+            id={id}
             onChange={(e) => {
               props.onChange?.(e);
               setChecked(e.target.checked);
@@ -36,7 +37,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
           <input
             {...props}
             children={null}
-            id={props.id}
+            id={id}
             onChange={(e) => {
               props.onChange?.(e);
               setChecked(e.target.checked);

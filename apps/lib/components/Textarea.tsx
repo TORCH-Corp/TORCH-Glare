@@ -88,7 +88,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           label={label}
           requiredLabel={requiredLabel}
           secondaryLabel={secondaryLabel}
-          directions={direction === "row" ? "vertical" : "horizontal"}
+          labelDirections={direction === "row" ? "vertical" : "horizontal"}
           className={cn({
             "pt-[9px]": direction === "row",
           })}

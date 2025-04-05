@@ -18,6 +18,7 @@ export interface Props
   requiredLabel?: ReactNode; // normal text with required style
   secondaryLabel?: ReactNode; // normal text with secondary style
   labelDirections?: "vertical" | "horizontal"; // to change the direction of the label
+  childrenDirections?: "vertical" | "horizontal"; // to change the direction of the children
   toolTipSide?: ToolTipSide;
   theme?: Themes
 }
@@ -38,6 +39,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
       onTable,
       className,
       labelDirections,
+      childrenDirections,
       toolTipSide,
 
       ...props
@@ -45,14 +47,15 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <section data-theme={theme} className={cn("flex flex-col gap-1 flex-1 w-full", className)}>
-        <Label
-          label={label}
-          requiredLabel={requiredLabel}
-          secondaryLabel={secondaryLabel}
-          directions={labelDirections}
-          variant={variant}
-        />
+      <Label
+        data-theme={theme}
+        label={label}
+        requiredLabel={requiredLabel}
+        secondaryLabel={secondaryLabel}
+        labelDirections={labelDirections}
+        childrenDirections={childrenDirections}
+        variant={variant}
+      >
         <InputField
           {...props}
           theme={theme}
@@ -67,7 +70,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
           errorMessage={errorMessage}
           onTable={onTable}
         />
-      </section>
+      </Label>
     );
   }
 );

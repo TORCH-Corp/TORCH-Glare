@@ -39,17 +39,21 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "ch
   children?: React.ReactNode;
   theme?: Themes
   radioClassName?: string;
+  id?: string;
+  name?: string;
 }
 
 export const Radio = forwardRef<HTMLInputElement, Props>(
-  ({ size = "M", className, children, theme, radioClassName, ...props }, ref) => {
+  ({ size = "M", className, children, theme, radioClassName, id, name, ...props }, ref) => {
     return (
       children ?
-        <label data-theme={theme} htmlFor={props.id} className={cn("flex items-center justify-start gap-1", className)}>
+        <label data-theme={theme} htmlFor={id} className={cn("flex items-center justify-start gap-1", className)}>
           <input
             {...props}
             ref={ref}
             type="radio"
+            id={id}
+            name={name}
             className={cn(
               glareRadioStyles({
                 size,
@@ -63,6 +67,8 @@ export const Radio = forwardRef<HTMLInputElement, Props>(
         <input
           {...props}
           ref={ref}
+          id={id}
+          name={name}
           type="radio"
           className={cn(
             glareRadioStyles({

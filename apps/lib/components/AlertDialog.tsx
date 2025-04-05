@@ -123,7 +123,7 @@ const AlertDialogLabel = React.forwardRef<
             className={cn("text-lg font-semibold", className)}
             {...props}
         >
-            <p >
+            <p className="first-letter:uppercase" >
                 <strong >{firstWord}</strong>
                 {restOfTitle.length > 0 && ' ' + restOfTitle}
             </p>
