@@ -10,8 +10,8 @@
         "declaration": true, // Generate declaration files (.d.ts)
         "declarationMap": true, // Generate source maps for declarations
         "sourceMap": true, // Generate source maps for debugging
-        "outDir": "./dist", // Output directory for compiled JS files
-        "rootDir": "./cli/src", // Root directory for your CLI source files
+        "outDir": "./dist",
+        "rootDir": "./cli",
         "composite": true, // Enable composite project for faster builds
         "incremental": true, // Enable incremental builds for faster compilation
         /* Strict Type-Checking */
@@ -36,19 +36,10 @@
         "resolveJsonModule": true, // Allows importing JSON files as modules
         "isolatedModules": true, // Ensures single file transpiling for better compatibility with various tools
         /* Path Aliases (if needed) */
-        "baseUrl": ".", // Base directory for relative imports
-        "paths": {
-            "@commands/*": [
-                "./cli/src/commands/*"
-            ], // Path alias for commands
-            "@utils/*": [
-                "./cli/src/utils/*"
-            ] // Path alias for utilities
-        }
     },
     /* Include only CLI-related source files */
     "include": [
-        "cli/src/**/*" // Include all TypeScript files in the CLI folder
+        "cli/**/*" // Include all TypeScript files in the CLI folder
     ],
     /* Exclude node_modules and build artifacts */
     "exclude": [

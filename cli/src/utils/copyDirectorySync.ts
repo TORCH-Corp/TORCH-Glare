@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import path from "path";
-import { installDependencies } from "./installDependencies";
+import { installDependencies } from "./installDependencies.js";
 
 /**
  * Copy a directory and its contents recursively.

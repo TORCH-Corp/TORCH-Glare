@@ -1,8 +1,8 @@
 import { execSync } from "child_process";
-import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies";
-import { detectPackageManager } from "./detectPackageManager";
-import { getDependenciesToInstall } from "./getDependenciesToInstall";
-import { getInstallCommand } from "./getInstallCommand";
+import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies.js";
+import { detectPackageManager } from "./detectPackageManager.js";
+import { getDependenciesToInstall } from "./getDependenciesToInstall.js";
+import { getInstallCommand } from "./getInstallCommand.js";
 
 /**
  * Install dependencies for a component.

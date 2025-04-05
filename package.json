@@ -9,13 +9,13 @@
     "lib"
   ],
   "bin": {
-    "torch-glare": "./dist/index.js"
+    "torch-glare": "dist/bin/index.js"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "deploy": "node ./scripts/publish/index.js"
   },
   "dependencies": {

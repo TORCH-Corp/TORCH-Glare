@@ -1,6 +1,6 @@
-import { installDependencies } from "../utils/installDependencies.ts";
+import { installDependencies } from "../utils/installDependencies.js";
 import fs from "fs";
-import { copyDirectorySync } from "./copyDirectorySync.ts";
+import { copyDirectorySync } from "./copyDirectorySync.js";
 
 /**
  * Copy a component (directory or file) and install its dependencies.

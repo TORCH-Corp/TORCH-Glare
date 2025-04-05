@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
-import { detectPackageManager } from "./detectPackageManager";
-import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies";
+import { detectPackageManager } from "./detectPackageManager.js";
+import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies.js";
 
 const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 

@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "../../bin/cli.ts";
-import { copyDirectorySync } from "../utils/copyDirectorySync.ts";
-import { getComponentPaths } from "../utils/getComponentPaths.ts";
-import { tailwindInit } from "../utils/tailwindInit.ts";
+import { getConfig } from "../../bin/index.js";
+import { copyDirectorySync } from "../utils/copyDirectorySync.js";
+import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { tailwindInit } from "../utils/tailwindInit.js";
 import { fileURLToPath } from "url";
 import readline from "readline";
 

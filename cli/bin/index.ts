@@ -1,14 +1,14 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { Command } from "commander";
-import { add } from "../src/commands/add";
-import { initConfig } from "../src/commands/init";
-import { addHook } from "../src/commands/hook";
-import { addLayout } from "../src/commands/layout";
-import { addUtil } from "../src/commands/utils";
-import { addProvider } from "../src/commands/provider";
-import { updateInstalledComponents } from "../src/commands/update";
+import { add } from "../src/commands/add.js";
+import { initConfig } from "../src/commands/init.js";
+import { addHook } from "../src/commands/hook.js";
+import { addLayout } from "../src/commands/layout.js";
+import { addUtil } from "../src/commands/utils.js";
+import { addProvider } from "../src/commands/provider.js";
+import { updateInstalledComponents } from "../src/commands/update.js";
 
 const program = new Command();
 const __filename = fileURLToPath(import.meta.url);

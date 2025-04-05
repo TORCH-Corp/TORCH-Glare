@@ -1,13 +1,13 @@
 import path from "path";
 import inquirer from "inquirer";
-import { getConfig } from "../../bin/cli.ts";
+import { getConfig } from "../../bin/index.js";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.ts";
-import { getComponentPaths } from "../utils/getComponentPaths.ts";
-import { Config } from "../types/main.ts";
-import { copyComponent } from "../utils/copyComponent.ts";
-import { getAvailableFiles } from "../utils/getAvailableFiles.ts";
-import { isComponentExists } from "../utils/isComponentExists.ts";
+import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
+import { getComponentPaths } from "../utils/getComponentPaths.js";
+import { Config } from "../types/main";
+import { copyComponent } from "../utils/copyComponent.js";
+import { getAvailableFiles } from "../utils/getAvailableFiles.js";
+import { isComponentExists } from "../utils/isComponentExists.js";
 
 const __filename = fileURLToPath(import.meta.url);
 

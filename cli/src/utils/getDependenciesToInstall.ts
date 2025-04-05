@@ -1,7 +1,7 @@
 import * as fs from "fs";
-import { addUtil } from "../commands/utils";
-import { addHook } from "../commands/hook";
-import { add } from "../commands/add";
+import { addUtil } from "../commands/utils.js";
+import { addHook } from "../commands/hook.js";
+import { add } from "../commands/add.js";
 
 /**
  * Extract dependencies from a component file.
