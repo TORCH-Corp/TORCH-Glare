@@ -50,5 +50,7 @@ small bug fixes and improvements.
 
 ### Changed
 - `CLI` use typescript instead of javascript to make it more robust and easier to maintain.
+- `Radio` component changed to use `@radix-ui/react-radio-group` component.
+- `Checkbox` component changed to use `@radix-ui/react-checkbox` component.
 
 
