@@ -1,4 +1,5 @@
 import { LabeledRadio } from "@/components/LabeledRadio";
+import { Radio, RadioGroup } from "@/components/Radio";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
@@ -15,7 +16,18 @@ export default function RadioLabelExample() {
       >
         LabeledRadio Preview
       </h1>
-      {sizes.map((size: any) => (
+      <RadioGroup>
+        {sizes.map((size: any, idx: number) => (
+
+          <LabeledRadio label={`Label ${size}`} id={`radio-${size}`} key={idx} value={size} />
+        ))}
+      </RadioGroup>
+    </>
+  );
+}
+
+
+/* 
         <div key={size} className="flex flex-col gap-2 w-full">
           <span
             className={cn(
@@ -35,7 +47,4 @@ export default function RadioLabelExample() {
             name={`radio-label`}
           ></LabeledRadio>
         </div>
-      ))}
-    </>
-  );
-}
+*/

@@ -29,7 +29,8 @@ interface Props
   theme?: Themes
   labelsClassName?: string;
   labelDirections?: "vertical" | "horizontal";
-  childrenDirections?: "vertical" | "horizontal";
+  childrenDirections?: "vertical" | "horizontal"
+  reverseChildren?: boolean;
 }
 
 export const Label = React.forwardRef<HTMLLabelElement, Props>(
@@ -42,6 +43,7 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
       size = "M",
       labelDirections = "horizontal",
       childrenDirections = "vertical",
+      reverseChildren = false,
       className,
       labelsClassName,
       variant = "PresentationStyle",
@@ -59,9 +61,11 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
       <Component
         data-theme={theme}
         ref={forwardedRef}
-        className={cn(className, "flex", {
+        className={cn(className, "flex flex-0 w-fit", {
           "flex-col justify-start items-start gap-1": childrenDirections === "vertical",
           "flex-row justify-start items-center gap-1": childrenDirections === "horizontal",
+          "flex-row-reverse": reverseChildren && childrenDirections === "horizontal",
+          "flex-col-reverse": reverseChildren && childrenDirections === "vertical",
         })}
         {...props}
       >
