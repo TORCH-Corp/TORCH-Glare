@@ -1,14 +1,14 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
+import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
 import inquirer from "inquirer";
-import { getConfig } from "../utils/getConfig.js";
-import { getInstallPaths } from "../utils/getInstallPaths.js";
-import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
+import { getConfig } from "../shared/getConfig.js";
+import { getInstallPaths } from "../shared/getInstallPaths.js";
+import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
-
+import { isFileExists } from "../shared/isFileExists.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -18,9 +18,10 @@ const layoutsTemplatesDir = path.resolve(__dirname, "../../../lib/layouts");
 /**
  * Main function to add a layout and its dependencies.
  * @param {string} layout - The name of the layout to add.
+ * @param {boolean} replace - Whether to replace the existing layout.
  */
-export async function addLayout(layout?: string): Promise<void> {
-    const config = getConfig(CONFIG_FILE) as Config;
+export async function addLayout(layout?: string, replace: boolean = false): Promise<void> {
+    const targetFile = getConfig(CONFIG_FILE) as Config;
     const availableLayouts = getAvailableLayouts(layoutsTemplatesDir);
 
     // If no layout is provided, prompt the user to select one
@@ -35,17 +36,20 @@ export async function addLayout(layout?: string): Promise<void> {
     }
 
     // get the path and create the create the target directory
-    const { source, targetDir } = getInstallPaths(layout, config, layoutsTemplatesDir, "layouts");
-    const target = path.join(targetDir, layout);
-    fs.rmSync(target, { recursive: true, force: true });
-
+    const { source, targetDir } = getInstallPaths(layout, targetFile, layoutsTemplatesDir, "layouts");
     // Ensure the target directory exists
     ensureDirectoryExists(targetDir);
 
-    // Copy the layout (file) and install dependencies
-    copyComponentsRecursively(source, target);
+    // Check if layout already exists
+    if (isFileExists(targetDir) && !replace) {
+        console.log(`⚠️ Layout "${layout}" already exists.`);
+        return;
+    }
 
-    console.log(`✅ ${layout} has been added to ${config.path}!`);
+    // Copy the layout (file) and install dependencies
+    copyComponentsRecursively(source, targetDir);
+
+    console.log(`✅ ${layout} has been added to ${targetFile.path}!`);
 }
 
 /**

@@ -142,7 +142,7 @@ function isTailwindVersionLessThanV4(version: string | undefined): boolean {
   }
 
   // Extract the major version number
-  const majorVersion = parseInt(version.replace(/^[^0-9]*/, "").split(".")[0], 10);
+  const majorVersion = parseInt(version?.replace(/^[^0-9]*/, "").split(".")[0] || "3", 10);
   return majorVersion < 4;
 }
 

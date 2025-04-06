@@ -1,5 +1,5 @@
 import path from "path";
-import { Config } from "../types/main";
+import { Config } from "../types/main.js";
 
 /**
  * Get the source and target paths for the component.

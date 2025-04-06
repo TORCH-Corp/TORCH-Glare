@@ -1,14 +1,14 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "../utils/getConfig.js";
+import { getConfig } from "../shared/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getInstallPaths } from "../utils/getInstallPaths.js";
+import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
+import { getInstallPaths } from "../shared/getInstallPaths.js";
 import inquirer from "inquirer";
-import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
-
+import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
+import { isFileExists } from "../shared/isFileExists.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -18,9 +18,10 @@ const utilsTemplatesDir: string = path.resolve(__dirname, "../../../lib/utils");
 /**
  * Main function to add a utility file and its dependencies.
  * @param {string} util - The name of the utility file to add.
+* @param {boolean} replace - Whether to replace the existing utility file.
  */
-export async function addUtil(util?: string): Promise<void> {
-    const config = getConfig(CONFIG_FILE) as Config;
+export async function addUtil(util?: string, replace: boolean = false): Promise<void> {
+    const targetFile = getConfig(CONFIG_FILE) as Config;
     const availableUtils: string[] = getAvailableUtils(utilsTemplatesDir);
 
     // If no utility file is provided, prompt the user to select one
@@ -35,7 +36,7 @@ export async function addUtil(util?: string): Promise<void> {
     }
 
     // get the path and create the create the target directory
-    const { source, targetDir } = getInstallPaths(util, config, utilsTemplatesDir, "utils");
+    const { source, targetDir } = getInstallPaths(util, targetFile, utilsTemplatesDir, "utils");
     const target: string = path.join(targetDir, util);
 
     fs.rmSync(target, { recursive: true, force: true });
@@ -43,10 +44,16 @@ export async function addUtil(util?: string): Promise<void> {
     // Ensure the target directory exists
     ensureDirectoryExists(targetDir);
 
+    // Check if utility file already exists
+    if (isFileExists(targetDir) && !replace) {
+        console.log(`⚠️ Utility file "${util}" already exists.`);
+        return;
+    }
+
     // Copy the utility file and install dependencies
     copyComponentsRecursively(source, target);
 
-    console.log(`✅ ${util} has been added to ${config.path}!`);
+    console.log(`✅ ${util} has been added to ${targetFile.path}!`);
 }
 
 /**

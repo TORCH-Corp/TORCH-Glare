@@ -5,7 +5,6 @@
   "license": "MIT",
   "files": [
     "dist",
-    "cli",
     "lib"
   ],
   "bin": {
@@ -23,6 +22,8 @@
     "inquirer": "^9.2.15"
   },
   "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^22.14.0",
     "typescript": "^5.0.0"
   }
 }

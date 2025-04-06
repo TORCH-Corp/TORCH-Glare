@@ -2,12 +2,13 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import inquirer from "inquirer";
-import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getInstallPaths } from "../utils/getInstallPaths.js";
-import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
-import { getConfig } from "../utils/getConfig.js";
+import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
+import { getInstallPaths } from "../shared/getInstallPaths.js";
+import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
+import { getConfig } from "../shared/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
+import { isFileExists } from "../shared/isFileExists.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,9 +19,10 @@ const hooksTemplatesDir: string = path.resolve(__dirname, "../../../lib/hooks");
 /**
  * Main function to add a hook and its dependencies.
  * @param {string} hook - The name of the hook to add.
+ * @param {boolean} replace - Whether to replace the existing hook.
  */
-export async function addHook(hook?: string): Promise<void> {
-    const config = getConfig(CONFIG_FILE) as Config;
+export async function addHook(hook?: string, replace: boolean = false): Promise<void> {
+    const targetFile = getConfig(CONFIG_FILE) as Config;
     const availableHooks: string[] = getAvailableHooks(hooksTemplatesDir);
 
     // If no hook is provided, prompt the user to select one
@@ -35,17 +37,19 @@ export async function addHook(hook?: string): Promise<void> {
     }
 
     // get the path and create the create the target directory
-    const { source, targetDir } = getInstallPaths(hook, config, hooksTemplatesDir, "hooks");
-    const target: string = path.join(targetDir, hook);
-    fs.rmSync(target, { recursive: true, force: true });
-
+    const { source, targetDir } = getInstallPaths(hook, targetFile, hooksTemplatesDir, "hooks");
     // Ensure the target directory exists
     ensureDirectoryExists(targetDir);
 
+    // Check if hook already exists
+    if (isFileExists(targetDir) && !replace) {
+        console.log(`⚠️ Hook "${hook}" already exists.`);
+        return;
+    }
     // Copy the hook (file) and install dependencies
-    copyComponentsRecursively(source, target);
+    copyComponentsRecursively(source, targetDir);
 
-    console.log(`✅ ${hook} has been added to ${config.path}!`);
+    console.log(`✅ ${hook} has been added to ${targetFile.path}!`);
 }
 
 /**
@@ -54,7 +58,7 @@ export async function addHook(hook?: string): Promise<void> {
  * @returns {string[]} - Array of hook names.
  */
 function getAvailableHooks(hooksTemplatesDir: string): string[] {
-    return fs.readdirSync(hooksTemplatesDir).map((file) => path.basename(file));
+    return fs.readdirSync(hooksTemplatesDir).map((file: string) => path.basename(file));
 }
 
 /**

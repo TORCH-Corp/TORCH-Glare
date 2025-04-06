@@ -1,13 +1,14 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "../utils/getConfig.js";
+import { getConfig } from "../shared/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getInstallPaths } from "../utils/getInstallPaths.js";
-import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
+import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
+import { getInstallPaths } from "../shared/getInstallPaths.js";
+import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
 import inquirer from "inquirer";
+import { isFileExists } from "../shared/isFileExists.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,9 +19,10 @@ const providerTemplatesDir: string = path.resolve(__dirname, "../../../lib/provi
 /**
  * Main function to add a provider and its dependencies.
  * @param {string} provider - The name of the provider to add.
+* @param {boolean} replace - Whether to replace the existing provider.
  */
-export async function addProvider(provider?: string): Promise<void> {
-    const config = getConfig(CONFIG_FILE) as Config;
+export async function addProvider(provider?: string, replace: boolean = false): Promise<void> {
+    const targetFile = getConfig(CONFIG_FILE) as Config;
     const availableProviders: string[] = getAvailableProviders(providerTemplatesDir);
 
     // If no provider is provided, prompt the user to select one
@@ -35,17 +37,20 @@ export async function addProvider(provider?: string): Promise<void> {
     }
 
     // Get the path and create the target directory
-    const { source, targetDir } = getInstallPaths(provider, config, providerTemplatesDir, "providers");
-    const target: string = path.join(targetDir, provider);
-    fs.rmSync(target, { recursive: true, force: true });
-
+    const { source, targetDir } = getInstallPaths(provider, targetFile, providerTemplatesDir, "providers");
     // Ensure the target directory exists
     ensureDirectoryExists(targetDir);
 
-    // Copy the provider (file or directory) and install dependencies
-    copyComponentsRecursively(source, target);
+    // Check if provider already exists
+    if (isFileExists(targetDir) && !replace) {
+        console.log(`⚠️ Provider "${provider}" already exists.`);
+        return;
+    }
 
-    console.log(`✅ ${provider} has been added to ${config.path}!`);
+    // Copy the provider (file or directory) and install dependencies
+    copyComponentsRecursively(source, targetDir);
+
+    console.log(`✅ ${provider} has been added to ${targetFile.path}!`);
 }
 
 /**

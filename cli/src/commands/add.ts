@@ -1,13 +1,13 @@
 import path from "path";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists } from "../utils/ensureDirectoryExists.js";
-import { getInstallPaths } from "../utils/getInstallPaths.js";
-import { Config } from "../types/main";
-import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
-import { getAvailableFiles } from "../utils/getAvailableFiles.js";
-import { isComponentExists } from "../utils/isComponentExists.js";
-import { getConfig } from "../utils/getConfig.js";
+import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
+import { getInstallPaths } from "../shared/getInstallPaths.js";
+import { Config } from "../types/main.js";
+import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
+import { getAvailableFiles } from "../shared/getAvailableFiles.js";
+import { isFileExists } from "../shared/isFileExists.js";
+import { getConfig } from "../shared/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,10 +22,11 @@ const templatesDir = path.resolve(__dirname, "../../../lib/components");
 
 /**
  * Main function to add a component and its dependencies.
- * @param {string} component - The name of the component to add.
+ * @param {string} component - The name of the component to add.    
+ * @param {boolean} replace - Whether to replace the existing component.
  */
 export async function add(component?: string, replace: boolean = false): Promise<void> {
-    const config = getConfig(CONFIG_FILE) as Config;
+    const targetFile = getConfig(CONFIG_FILE) as Config;
     const availableComponents = getAvailableFiles(templatesDir);
 
     // If no component is provided, prompt the user to select one
@@ -39,11 +40,10 @@ export async function add(component?: string, replace: boolean = false): Promise
         return;
     }
 
-    const { source, targetDir } = getInstallPaths(component, config, templatesDir, "components");
-    const target = path.join(targetDir, component);
+    const { source, targetDir } = getInstallPaths(component, targetFile, templatesDir, "components");
 
     // Check if component already exists
-    if (isComponentExists(target) && !replace) {
+    if (isFileExists(targetDir) && !replace) {
         console.log(`⚠️ Component "${component}" already exists.`);
         return;
     }
@@ -52,9 +52,9 @@ export async function add(component?: string, replace: boolean = false): Promise
     ensureDirectoryExists(targetDir);
 
     // Copy the component (directory or file) and install dependencies
-    copyComponentsRecursively(source, target);
+    copyComponentsRecursively(source, targetDir);
 
-    console.log(`✅ ${component} has been added to ${config.path}!`);
+    console.log(`✅ ${component} has been added to ${targetFile.path}!`);
 }
 
 

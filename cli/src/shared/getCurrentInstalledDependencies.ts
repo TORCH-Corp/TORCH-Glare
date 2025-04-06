@@ -1,5 +1,5 @@
 import path from "path";
-import { DependenciesInfo } from "../types/main";
+import { DependenciesInfo } from "../types/main.js";
 import * as fs from "fs";
 /**
  * Get the installed dependencies from the project's package.json.

@@ -1,5 +1,5 @@
 import fs from "fs";
-import { tailwindInit } from "../utils/tailwindInit.js";
+import { tailwindInit } from "../shared/tailwindInit.js";
 
 interface GlareConfig {
     path: string;

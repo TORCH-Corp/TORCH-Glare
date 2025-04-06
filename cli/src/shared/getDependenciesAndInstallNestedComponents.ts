@@ -4,7 +4,7 @@ import { addHook } from "../commands/hook.js";
 import { add } from "../commands/add.js";
 
 /**
- * Extract nested components and dependencies from a component file.
+ * this function used to read the component file and collect dependencies and copy nested components.
  * @param {string} componentPath - Path to the component file.
  * @param {Set<string>} installedDependencies - Set of installed dependencies.
  * @returns {Set<string>} - Set of dependencies to install.
@@ -22,35 +22,40 @@ export function getDependenciesAndInstallNestedComponents(
     while ((match = importRegex.exec(componentContent)) !== null) {
         const moduleName = match[1];
 
-        if (!moduleName.startsWith(".") && !installedDependencies.has(moduleName)) {
+        // get dependencies from the component
+        if (moduleName && !moduleName.startsWith(".") && !installedDependencies.has(moduleName)) {
             dependenciesToInstall.add(moduleName);
         }
 
-        // install required utils.
+        // install component required utils.
         else if (
+            moduleName &&
             moduleName.startsWith("../utils") &&
             !installedDependencies.has(moduleName)
         ) {
             addUtil(moduleName.slice(9) + ".ts");
         }
 
-        // install required hooks.
+        // install component required hooks.
         else if (
+            moduleName &&
             moduleName.startsWith("../hooks") &&
             !installedDependencies.has(moduleName)
         ) {
             addHook(moduleName.slice(9) + ".tsx");
         }
-        // install required components
+        // install required nested components
         else if (
-            moduleName.startsWith("./") ||
-            !moduleName.startsWith("../components") &&
+            moduleName &&
+            (moduleName.startsWith("./") ||
+                !moduleName.startsWith("../components")) &&
             !installedDependencies.has(moduleName)
         ) {
             add(moduleName.slice(2) + ".tsx");
         }
         // install required for layouts components
         else if (
+            moduleName &&
             moduleName.startsWith("../components") &&
             !installedDependencies.has(moduleName)
         ) {

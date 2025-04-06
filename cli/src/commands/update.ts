@@ -1,13 +1,14 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "../utils/getConfig.js";
+import { getConfig } from "../shared/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
-import { getInstallPaths } from "../utils/getInstallPaths.js";
-import { tailwindInit } from "../utils/tailwindInit.js";
+import { getInstallPaths } from "../shared/getInstallPaths.js";
+import { tailwindInit } from "../shared/tailwindInit.js";
 import { fileURLToPath } from "url";
 import readline from "readline";
-import { copyComponentsRecursively } from "../utils/copyComponentsRecursively.js";
+import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
+import { getAvailableFiles } from "../shared/getAvailableFiles.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -21,7 +22,7 @@ const templatesDir = path.resolve(__dirname, "../../../lib");
  * Update all installed components, hooks, and utility files by syncing them with the latest templates.
  */
 export async function updateInstalledComponents(): Promise<void> {
-    const config = getConfig(CONFIG_FILE) as Config;
+    const targetFile = getConfig(CONFIG_FILE) as Config;
 
     // Ask the user if they are sure about updating
     const rl = readline.createInterface({
@@ -43,13 +44,13 @@ export async function updateInstalledComponents(): Promise<void> {
     }
 
     // Update components
-    await updateItems("components", config);
+    await updateItems("components", targetFile);
 
     // Update hooks
-    await updateItems("hooks", config);
+    await updateItems("hooks", targetFile);
 
     // Update utils
-    await updateItems("utils", config);
+    await updateItems("utils", targetFile);
 
     // Reinitialize Tailwind CSS configuration
     tailwindInit();
@@ -70,7 +71,7 @@ async function updateItems(type: string, config: any): Promise<void> {
     }
 
     // Get the list of installed items
-    const installedItems = getInstalledItems(installedItemsDir);
+    const installedItems = getAvailableFiles(installedItemsDir);
 
     // Exit if there are no items to update
     if (installedItems.length === 0) {
@@ -111,14 +112,6 @@ function checkIfItemsExist(installedItemsDir: string, type: string): boolean {
     return true;
 }
 
-/**
- * Get the list of installed items.
- * @param {string} installedItemsDir - Path to the installed items directory.
- * @returns {string[]} - Array of installed item names.
- */
-function getInstalledItems(installedItemsDir: string): string[] {
-    return fs.readdirSync(installedItemsDir).map((file) => path.basename(file));
-}
 
 /**
  * Update a single item (component, hook, or utility file) by syncing it with the latest template.
@@ -128,7 +121,5 @@ function getInstalledItems(installedItemsDir: string): string[] {
  */
 function updateItem(item: string, config: any, type: string): void {
     const { source, targetDir } = getInstallPaths(item, config, `${templatesDir}/${type}`, type);
-    const target = path.join(targetDir, item);
-
-    copyComponentsRecursively(source, target);
+    copyComponentsRecursively(source, targetDir);
 }

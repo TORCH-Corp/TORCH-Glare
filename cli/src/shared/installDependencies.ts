@@ -11,14 +11,21 @@ import { getInstallCommand } from "./getInstallCommand.js";
 export function installDependencies(
     componentPath: string,
 ): void {
+    // get current installed dependencies on your package.json
     const { depsNames } = getCurrentInstalledDependencies();
+
+    // get dependencies used in the component and it's nested components.
+    // also copy component to the target directory with it's nested components.
     const dependenciesToInstall = getDependenciesAndInstallNestedComponents(
         componentPath,
         depsNames,
     );
 
+    // if there are dependencies to install, install them
     if (dependenciesToInstall.size > 0) {
+        // detect package manager
         const packageManager = detectPackageManager();
+        // get full install command
         const installCommand = getInstallCommand(packageManager, dependenciesToInstall);
 
         console.log(
@@ -26,6 +33,7 @@ export function installDependencies(
             [...dependenciesToInstall].join(", ")
         );
 
+        // execute install command
         try {
             execSync(installCommand, { stdio: "inherit" });
             console.log("✅ Dependencies installed successfully.");
