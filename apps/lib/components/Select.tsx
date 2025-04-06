@@ -368,6 +368,7 @@ const PopoverTriggerStyles = cva(
     "border",
     "transition-all duration-200 ease-in-out",
     "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+    "focus:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
   ],
   {
     variants: {
