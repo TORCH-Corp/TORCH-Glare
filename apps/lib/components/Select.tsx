@@ -7,202 +7,6 @@ import { Button } from "./Button";
 import { Tooltip } from "./Tooltip";
 import { Themes } from "../utils/types";
 
-// NOTE: radix select as DropDownButton
-
-export const SelectContentStyles = cva(
-  [
-    "p-1",
-    "rounded-[8px]",
-    "border",
-    "max-h-[200px]",
-    "min-w-[240px]",
-    "outline-none",
-    "overflow-scroll",
-    "data-[state=open]:animate-in",
-    "data-[state=closed]:animate-out",
-    "data-[state=closed]:fade-out-0",
-    "data-[state=open]:fade-in-0",
-    "overflow-x-hidden",
-    "scrollbar-hide",
-  ],
-  {
-    variants: {
-      variant: {
-        SystemStyle: [
-          "border-border-system-global-secondary",
-          "bg-background-system-body-primary",
-          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
-        ],
-        PresentationStyle: [
-          "border-border-presentation-global-primary",
-          "bg-background-presentation-form-base",
-          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
-        ],
-      },
-      defaultVariants: {
-        variant: "PresentationStyle",
-      },
-    },
-  }
-);
-
-export const MenuItemStyles = cva(
-  [
-    "text-content-presentation-action-light-primary",
-    "outline-none",
-    "border",
-    "border-transparent",
-    "flex",
-    "gap-[8px]",
-    "items-center",
-    "justify-start",
-    "text-overflow",
-    "overflow-hidden",
-    "px-[12px]",
-    "rounded-[4px]",
-    "transition-all",
-    "ease-in-out",
-    "duration-300",
-  ],
-  {
-    variants: {
-      variant: {
-        Default: [
-          "text-content-presentation-action-light-primary",
-          "bg-background-presentation-action-dropdown-primary",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-action-hover",
-          "focus:bg-background-presentation-action-selected",
-          "focus:text-content-presentation-action-light-primary",
-          "active:border-border-presentation-action-disabled",
-          "active:bg-background-presentation-action-selected",
-          "active:text-content-presentation-action-light-primary",
-          "active:border-border-presentation-action-disabled",
-          "disabled:text-content-presentation-state-disabled",
-          "disabled:bg-white-00",
-        ],
-        Warning: [
-          "bg-background-presentation-action-dropdown-primary",
-          "text-content-presentation-state-information",
-          "hover:bg-background-presentation-state-information-primary",
-          "hover:text-content-presentation-action-hover",
-        ],
-        Negative: [
-          "bg-background-presentation-action-dropdown-primary",
-          "text-content-presentation-state-negative",
-          "hover:bg-background-presentation-state-negative-primary",
-          "hover:!text-content-presentation-action-hover",
-          "focus:text-content-presentation-state-negative",
-          "active:text-content-presentation-state-negative",
-        ],
-        SystemStyle: [
-          "bg-background-system-body-primary",
-          "text-content-system-global-primary",
-          "hover:!bg-background-system-action-secondary-hover",
-          "hover:!text-content-system-action-primary-hover",
-          "hover:!border-border-system-action-primary-hover",
-          "focus:bg-background-System-Action-Primary-Selected",
-          "focus:border-transparent",
-          "active:border-transparent",
-          "active:bg-background-System-Action-Primary-Selected",
-          "disabled:bg-background-system-body-secondary",
-          "disabled:text-content-system-global-disabled",
-        ],
-      },
-      size: {
-        S: ["typography-body-small-regular", "h-[24px]"],
-        M: ["typography-body-medium-regular", "h-[32px]"],
-      },
-
-      disabled: {
-        true: [
-          "text-content-presentation-state-disabled",
-          "bg-white-00",
-        ],
-      },
-
-      active: {
-        true: [
-          "bg-background-presentation-action-selected",
-          "text-content-presentation-action-light-primary",
-        ],
-      },
-
-      defaultVariants: {
-        variant: "SystemStyle",
-        size: "M",
-        active: false,
-        disabled: false,
-      },
-    },
-    compoundVariants: [
-      {
-        active: true,
-        variant: "Warning",
-        className: ["text-content-presentation-state-negative"],
-      },
-    ],
-  }
-);
-
-export const dropdownTriggerStyles = cva(
-  [
-    "flex flex-row rounded-[4px] justify-between items-center outline-none",
-    "rounded-[4px]",
-    "[&_span]:text-content-presentation-action-light-primary",
-    "typography-body-small-regular",
-    "[&_p]:px-[10px] [&_p]:whitespace-nowrap",
-    "group",
-    "w-fit",
-    "border",
-    "transition-all duration-200 ease-in-out",
-    "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-  ],
-  {
-    variants: {
-      variant: {
-        PresentationStyle: [
-          "bg-background-presentation-form-field-primary",
-          "hover:bg-background-presentation-form-field-hover",
-          "border-none",
-        ],
-        SystemStyle: [
-          "bg-black-alpha-20",
-          "text-white",
-          "border-[#2C2D2E]",
-          "hover:border-[#9748FF]",
-          "hover:bg-purple-alpha-10",
-        ],
-      },
-      error: {
-        true: [
-          "border-border-presentation-state-negative",
-          "caret-border-presentation-state-negative",
-          "hover:border-border-presentation-state-negative",
-          "hover:caret-border-presentation-state-negative",
-        ],
-      },
-      size: {
-        S: [
-          "[&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium",
-        ],
-        M: [
-          "[&_span]:h-[26px] [&_span]:w-[26px] [&_p]:typography-body-medium-medium",
-        ],
-        L: [
-          "[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium",
-        ],
-        XL: [
-          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-small-regular [&_p]:px-[4px]",
-        ],
-      },
-    },
-    defaultVariants: {
-      size: "M",
-    },
-  }
-);
-
 const Select = SelectPrimitive.Root;
 
 const SelectGroup = SelectPrimitive.Group;
@@ -212,7 +16,7 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-  VariantProps<typeof dropdownTriggerStyles> & {
+  VariantProps<typeof PopoverTriggerStyles> & {
     errors?: string;
     icon?: string
     theme?: Themes
@@ -237,7 +41,7 @@ const SelectTrigger = React.forwardRef<
           data-theme={theme}
           ref={ref}
           className={cn(
-            dropdownTriggerStyles({
+            PopoverTriggerStyles({
               size,
               variant,
               error: errors !== undefined,
@@ -366,7 +170,7 @@ SelectLabel.displayName = "SelectLabel";
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
-  VariantProps<typeof MenuItemStyles>
+  VariantProps<typeof SelectItemStyles>
 >(
   (
     { className, children, size = "M", variant = "Default", active, ...props },
@@ -375,7 +179,7 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        MenuItemStyles({
+        SelectItemStyles({
           variant,
           active,
           size,
@@ -415,3 +219,200 @@ export {
   SelectScrollUpButton,
   SelectScrollDownButton,
 };
+
+
+// NOTE: radix select as DropDownButton
+
+const SelectContentStyles = cva(
+  [
+    "p-1",
+    "rounded-[8px]",
+    "border",
+    "max-h-[200px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=closed]:animate-out",
+    "data-[state=closed]:fade-out-0",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+  ],
+  {
+    variants: {
+      variant: {
+        SystemStyle: [
+          "border-border-system-global-secondary",
+          "bg-background-system-body-primary",
+          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
+        ],
+        PresentationStyle: [
+          "border-border-presentation-global-primary",
+          "bg-background-presentation-form-base",
+          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
+
+const SelectItemStyles = cva(
+  [
+    "text-content-presentation-action-light-primary",
+    "outline-none",
+    "border",
+    "border-transparent",
+    "flex",
+    "gap-[8px]",
+    "items-center",
+    "justify-start",
+    "text-overflow",
+    "overflow-hidden",
+    "px-[12px]",
+    "rounded-[4px]",
+    "transition-all",
+    "ease-in-out",
+    "duration-300",
+
+  ],
+  {
+    variants: {
+      variant: {
+        Default: [
+          "text-content-presentation-action-light-primary",
+          "bg-background-presentation-action-dropdown-primary",
+          "hover:bg-background-presentation-action-hover",
+          "hover:text-content-presentation-action-hover",
+          "focus:bg-background-presentation-action-hover",
+          "focus:text-content-presentation-action-hover",
+          "disabled:text-content-presentation-state-disabled",
+          "disabled:bg-white-00",
+        ],
+        Warning: [
+          "text-content-presentation-state-information",
+          "hover:bg-background-presentation-state-information-primary",
+          "focus:bg-background-presentation-state-information-primary",
+          "focus:text-content-presentation-action-hover",
+          "hover:text-content-presentation-action-hover",
+        ],
+        Negative: [
+          "text-content-presentation-state-negative",
+          "hover:bg-background-presentation-state-negative-primary",
+          "hover:text-content-presentation-action-hover",
+          "focus:bg-background-presentation-state-negative-primary",
+          "focus:text-content-presentation-action-hover",
+          "active:text-content-presentation-state-negative",
+        ],
+        SystemStyle: [
+          "bg-background-system-body-primary",
+          "text-content-system-global-primary",
+          "hover:bg-background-system-action-secondary-hover",
+          "hover:text-content-system-action-primary-hover",
+          "hover:border-border-system-action-primary-hover",
+          "focus:bg-background-system-action-secondary-hover",
+          "focus:text-content-system-action-primary-hover",
+          "focus:border-border-system-action-primary-hover",
+          "disabled:bg-background-system-body-secondary",
+          "disabled:text-content-system-global-disabled",
+        ],
+      },
+      size: {
+        S: ["typography-body-small-regular", "h-[24px]"],
+        M: ["typography-body-medium-regular", "h-[32px]"],
+      },
+
+      disabled: {
+        true: [
+          "text-content-presentation-state-disabled",
+          "bg-white-00",
+        ],
+      },
+
+      active: {
+        true: [
+          "bg-background-presentation-action-selected",
+          "text-content-presentation-action-light-primary",
+        ],
+      },
+
+      defaultVariants: {
+        variant: "Default",
+        size: "M",
+        active: false,
+        disabled: false,
+      },
+    },
+    compoundVariants: [
+      {
+        active: true,
+        variant: "Warning",
+        className: ["text-content-presentation-state-negative"],
+      },
+    ],
+  }
+);
+
+const PopoverTriggerStyles = cva(
+  [
+    "flex flex-row rounded-[4px] justify-between items-center outline-none",
+    "rounded-[4px]",
+    "[&_span]:text-content-presentation-action-light-primary",
+    "typography-body-small-regular",
+    "[&_p]:px-[10px] [&_p]:whitespace-nowrap",
+    "group",
+    "w-fit",
+    "border",
+    "transition-all duration-200 ease-in-out",
+    "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+  ],
+  {
+    variants: {
+      variant: {
+        PresentationStyle: [
+          "bg-background-presentation-form-field-primary",
+          "hover:bg-background-presentation-form-field-hover",
+          "focus:bg-background-presentation-form-field-hover",
+          "border-none",
+        ],
+        SystemStyle: [
+          "bg-black-alpha-20",
+          "text-white",
+          "border-[#2C2D2E]",
+          "hover:border-[#9748FF]",
+          "hover:bg-purple-alpha-10",
+          "focus:border-[#9748FF]",
+          "focus:bg-purple-alpha-10",
+        ],
+      },
+      error: {
+        true: [
+          "border-border-presentation-state-negative",
+          "caret-border-presentation-state-negative",
+          "hover:border-border-presentation-state-negative",
+          "hover:caret-border-presentation-state-negative",
+        ],
+      },
+      size: {
+        S: [
+          "[&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium",
+        ],
+        M: [
+          "[&_span]:h-[26px] [&_span]:w-[26px] [&_p]:typography-body-medium-medium",
+        ],
+        L: [
+          "[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium",
+        ],
+        XL: [
+          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-small-regular [&_p]:px-[4px]",
+        ],
+      },
+    },
+    defaultVariants: {
+      size: "M",
+    },
+  }
+);
