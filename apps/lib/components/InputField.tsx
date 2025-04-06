@@ -64,46 +64,44 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
           text={errorMessage}
         >
           <PopoverTrigger asChild>
-            <div>
-              <Group
-                error={errorMessage !== undefined}
-                onTable={onTable}
-                size={size}
-                variant={variant}
-                data-theme={theme}
+            <Group
+              error={errorMessage !== undefined}
+              onTable={onTable}
+              size={size}
+              variant={variant}
+              data-theme={theme}
+              onFocus={(e) => {
+                setPopoverWidth(e.currentTarget.offsetWidth);
+                setIsPopoverOpen(!isPopoverOpen);
+                inputRef.current?.focus();
+              }}
+              className={className}
+            >
+              {icon && (
+                <Icon>
+                  {icon}
+                </Icon>
+              )}
+              <Input
+                {...props}
                 onFocus={(e) => {
-                  setPopoverWidth(e.currentTarget.offsetWidth);
-                  setIsPopoverOpen(!isPopoverOpen);
-                  inputRef.current?.focus();
+                  setIsPopoverOpen(true)
+                  props.onFocus?.(e)
                 }}
-                className={className}
-              >
-                {icon && (
-                  <Icon>
-                    {icon}
-                  </Icon>
-                )}
-                <Input
-                  {...props}
-                  onFocus={(e) => {
-                    setIsPopoverOpen(true)
-                    props.onFocus?.(e)
-                  }}
-                  onBlur={(e) => {
-                    setIsPopoverOpen(false)
-                    props.onBlur?.(e)
-                  }}
-                  ref={inputRef}
-                />
+                onBlur={(e) => {
+                  setIsPopoverOpen(false)
+                  props.onBlur?.(e)
+                }}
+                ref={inputRef}
+              />
 
-                <Trilling >
-                  {childrenSide}
-                  {popoverChildren && (
-                    <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} />
-                  )}
-                </Trilling>
-              </Group>
-            </div>
+              <Trilling >
+                {childrenSide}
+                {popoverChildren && (
+                  <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} />
+                )}
+              </Trilling>
+            </Group>
           </PopoverTrigger>
         </Tooltip>
 

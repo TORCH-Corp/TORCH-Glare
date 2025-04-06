@@ -41,8 +41,14 @@ small bug fixes and improvements.
 
 ### Changed
 - `Switcher` changed to `Switch` component to make building custom switches easier using `@radix-ui/react-switch` component.
-
+- `CLI` `replace` flag added to `addComponent` command to prevent adding the component if it already exists.
 ### Added
 - `Form` component Added to make building custom forms easier using `react-hook-form` and `zod` for validation.
 
-- `CLI` `replace` flag added to `addComponent` command to prevent adding the component if it already exists.
+
+## 1.0.5
+
+### Changed
+- `CLI` use typescript instead of javascript to make it more robust and easier to maintain.
+
+

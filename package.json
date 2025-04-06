@@ -4,17 +4,17 @@
   "type": "module",
   "license": "MIT",
   "files": [
-    "cli/bin",
+    "dist",
     "lib"
   ],
   "bin": {
-    "torch-glare": "./torch-glare.js"
+    "torch-glare": "dist/bin/index.js"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "next build --no-lint",
+    "build": "tsc -b",
     "deploy": "node ./scripts/publish/index.js"
   },
   "dependencies": {
@@ -22,7 +22,8 @@
     "inquirer": "^9.2.15"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^22.14.0",
+    "typescript": "^5.0.0"
   }
 }

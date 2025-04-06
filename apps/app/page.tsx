@@ -39,8 +39,9 @@ export default function page() {
         </form>
       </Form>
 
-      {/*     <Examples />
- */}    </div>
+      <Examples />
+    </div>
+
   );
 }
 

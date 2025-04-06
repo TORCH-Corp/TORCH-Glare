@@ -1,22 +1,27 @@
 import fs from "fs";
 import path from "path";
-import { getConfig } from "./cli.js";
 import { fileURLToPath } from "url";
-import { ensureDirectoryExists, getComponentPaths, copyComponent } from "./addComponent.js";
+import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
 import inquirer from "inquirer";
-
+import { getConfig } from "../shared/getConfig.js";
+import { getInstallPaths } from "../shared/getInstallPaths.js";
+import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
+import { CONFIG_FILE } from "./init.js";
+import { Config } from "../types/main.js";
+import { isFileExists } from "../shared/isFileExists.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the layouts templates directory
-const layoutsTemplatesDir = path.resolve(__dirname, "../../lib/layouts");
+const layoutsTemplatesDir = path.resolve(__dirname, "../../../lib/layouts");
 
 /**
  * Main function to add a layout and its dependencies.
  * @param {string} layout - The name of the layout to add.
+ * @param {boolean} replace - Whether to replace the existing layout.
  */
-export async function addLayout(layout) {
-    const config = getConfig();
+export async function addLayout(layout?: string, replace: boolean = false): Promise<void> {
+    const targetFile = getConfig(CONFIG_FILE) as Config;
     const availableLayouts = getAvailableLayouts(layoutsTemplatesDir);
 
     // If no layout is provided, prompt the user to select one
@@ -31,17 +36,20 @@ export async function addLayout(layout) {
     }
 
     // get the path and create the create the target directory
-    const { source, targetDir } = getComponentPaths(layout, config, layoutsTemplatesDir, "layouts");
-    const target = path.join(targetDir, layout);
-    fs.rmSync(target, { recursive: true, force: true });
-
+    const { source, targetDir } = getInstallPaths(layout, targetFile, layoutsTemplatesDir, "layouts");
     // Ensure the target directory exists
     ensureDirectoryExists(targetDir);
 
-    // Copy the layout (file) and install dependencies
-    copyComponent(source, target, addLayout);
+    // Check if layout already exists
+    if (isFileExists(targetDir) && !replace) {
+        console.log(`⚠️ Layout "${layout}" already exists.`);
+        return;
+    }
 
-    console.log(`✅ ${layout} has been added to ${config.path}!`);
+    // Copy the layout (file) and install dependencies
+    copyComponentsRecursively(source, targetDir);
+
+    console.log(`✅ ${layout} has been added to ${targetFile.path}!`);
 }
 
 /**
@@ -49,7 +57,7 @@ export async function addLayout(layout) {
  * @param {string} layoutsTemplatesDir - Path to the layouts templates directory.
  * @returns {string[]} - Array of layout names.
  */
-function getAvailableLayouts(layoutsTemplatesDir) {
+function getAvailableLayouts(layoutsTemplatesDir: string): string[] {
     return fs.readdirSync(layoutsTemplatesDir).map((file) => path.basename(file));
 }
 
@@ -58,7 +66,7 @@ function getAvailableLayouts(layoutsTemplatesDir) {
  * @param {string[]} availableLayouts - Array of available layouts.
  * @returns {string} - The selected layout.
  */
-async function promptLayoutSelection(availableLayouts) {
+async function promptLayoutSelection(availableLayouts: string[]): Promise<string> {
     const { selectedLayout } = await inquirer.prompt([
         {
             type: "list",
