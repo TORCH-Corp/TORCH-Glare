@@ -41,6 +41,7 @@ export default function page() {
 
       <Examples />
     </div>
+
   );
 }
 
