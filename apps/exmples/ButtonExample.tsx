@@ -48,8 +48,8 @@ export default function ButtonExample() {
                 >
                   Size: {size}
                 </span>
-                <Button variant={variant} size={size}>
-                  Button
+                <Button asChild variant={variant} size={size}>
+                  <a href="#">Button </a>
                 </Button>
               </div>
             ))}
@@ -93,6 +93,7 @@ export default function ButtonExample() {
           {ButtonSizes.map((size: any) => (
             <Button key={size} size={size} is_loading>
               Loading
+              <i className="ri-add-circle-fill"></i>
             </Button>
           ))}
         </div>

@@ -1,7 +1,7 @@
 'use client'
 import { forwardRef } from "react";
 import { Label } from "./Label";
-import { Radio, RadioGroup } from "./Radio";
+import { Radio } from "./Radio";
 import { cn } from "../utils/cn";
 interface Props extends Omit<React.ComponentProps<typeof Radio>, "size"> {
   label?: string;

@@ -88,7 +88,7 @@ export const buttonVariants = cva(
         XL: "h-[40px] px-[30px] typography-headers-medium-medium rounded-[6px] [&_i]:text-[22px]",
       },
       is_loading: {
-        true: "",
+        true: "[&_i]:hidden",
       },
       disabled: {
         true: "cursor-not-allowed",
@@ -179,27 +179,6 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
   ) => {
     const Component = asChild ? Slot : Tag;
 
-    const wrapTextContent = (children: React.ReactNode) => {
-      if (Array.isArray(children)) {
-        return children.map((child, index) => {
-          if (typeof child === "string" && child.trim() !== "") {
-            return (
-              <p key={index} className="px-[3px]">
-                {child}
-              </p>
-            );
-          }
-          return child;
-        });
-      }
-
-      if (children && typeof children === "string" && children.trim() !== "") {
-        return <p className="px-[3px]">{children}</p>;
-      }
-
-      return children;
-    };
-
     return (
       <Component
         {...props}
@@ -221,16 +200,17 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
           React.cloneElement(
             children as React.ReactElement,
             {},
-            <>
+            <div className="px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0">
               {(children as React.ReactElement<any>).props.children}
               {is_loading && <LoadingIcon size={size} />}
-            </>
+            </div>
           )
         ) : (
-          <>
-            {wrapTextContent(children)}
+          <div className="px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0"
+          >
+            {children}
             {is_loading && <LoadingIcon size={size} />}
-          </>
+          </div>
         )}
       </Component>
     );
@@ -238,6 +218,8 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
 );
 
 Button.displayName = "Button"
+
+
 
 export function LoadingIcon({ size, className }: {
   size?: "S" | "M" | "L" | "XL" | null;
