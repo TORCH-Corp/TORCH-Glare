@@ -6,50 +6,12 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Slot } from "@radix-ui/react-slot";
 import { Themes } from "../utils/types";
 
-interface LocalPopOverProps extends VariantProps<typeof dropdownMenuStyles> {
+interface LocalPopOverProps extends VariantProps<typeof popoverStyles> {
   variant?: "SystemStyle" | "PresentationStyle";
   className?: string;
   overlayBlur?: boolean;
 }
 
-const dropdownMenuStyles = cva(
-  [
-    "p-1 max-h-[200px] z-[1000]",
-    "rounded-[8px]",
-    "border",
-    "min-w-[240px]",
-    "outline-none",
-    "overflow-scroll",
-    "data-[state=open]:animate-in",
-    "data-[state=closed]:animate-out",
-    "data-[state=closed]:fade-out-0",
-    "data-[state=open]:fade-in-0",
-    "scrollbar-hide",
-    "overflow-x-hidden",
-  ],
-  {
-    variants: {
-      variant: {
-        SystemStyle: [
-          "border-border-system-global-secondary",
-          "bg-background-system-body-primary",
-          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
-        ],
-        PresentationStyle: [
-          "border-border-presentation-global-primary",
-          "bg-background-presentation-form-base",
-          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
-        ],
-      },
-      overlayBlur: {
-        true: ["h-fit"],
-      },
-      defaultVariants: {
-        variant: "PresentationStyle",
-      },
-    },
-  }
-);
 
 const Popover = PopoverPrimitive.Root;
 
@@ -99,7 +61,7 @@ const PopoverContent = React.forwardRef<
             align={align}
             sideOffset={sideOffset}
             className={cn(
-              dropdownMenuStyles({ variant, overlayBlur }),
+              popoverStyles({ variant, overlayBlur }),
               className
             )}
             {...props}
@@ -112,7 +74,7 @@ const PopoverContent = React.forwardRef<
           align={align}
           sideOffset={sideOffset}
           className={cn(
-            dropdownMenuStyles({ variant, overlayBlur }),
+            popoverStyles({ variant, overlayBlur }),
             className
           )}
           {...props}
@@ -174,7 +136,9 @@ const PopoverItem = <T extends React.ElementType = "li">({
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverItem };
 
-export const PopoverItemStyles = cva(
+
+
+const PopoverItemStyles = cva(
   [
     "text-content-presentation-action-light-primary",
     "outline-none",
@@ -191,6 +155,7 @@ export const PopoverItemStyles = cva(
     "transition-all",
     "ease-in-out",
     "duration-300",
+
   ],
   {
     variants: {
@@ -200,39 +165,35 @@ export const PopoverItemStyles = cva(
           "bg-background-presentation-action-dropdown-primary",
           "hover:bg-background-presentation-action-hover",
           "hover:text-content-presentation-action-hover",
-          "focus:bg-background-presentation-action-selected",
-          "focus:text-content-presentation-action-light-primary",
-          "active:border-border-presentation-action-disabled",
-          "active:bg-background-presentation-action-selected",
-          "active:text-content-presentation-action-light-primary",
-          "active:border-border-presentation-action-disabled",
+          "focus:bg-background-presentation-action-hover",
+          "focus:text-content-presentation-action-hover",
           "disabled:text-content-presentation-state-disabled",
           "disabled:bg-white-00",
         ],
         Warning: [
-          "bg-background-presentation-action-dropdown-primary",
           "text-content-presentation-state-information",
           "hover:bg-background-presentation-state-information-primary",
+          "focus:bg-background-presentation-state-information-primary",
+          "focus:text-content-presentation-action-hover",
           "hover:text-content-presentation-action-hover",
         ],
         Negative: [
-          "bg-background-presentation-action-dropdown-primary",
           "text-content-presentation-state-negative",
           "hover:bg-background-presentation-state-negative-primary",
-          "hover:!text-content-presentation-action-hover",
-          "focus:text-content-presentation-state-negative",
+          "hover:text-content-presentation-action-hover",
+          "focus:bg-background-presentation-state-negative-primary",
+          "focus:text-content-presentation-action-hover",
           "active:text-content-presentation-state-negative",
         ],
         SystemStyle: [
           "bg-background-system-body-primary",
           "text-content-system-global-primary",
-          "hover:!bg-background-system-action-secondary-hover",
-          "hover:!text-content-system-action-primary-hover",
-          "hover:!border-border-system-action-primary-hover",
-          "focus:bg-background-System-Action-Primary-Selected",
-          "focus:border-transparent",
-          "active:border-transparent",
-          "active:bg-background-System-Action-Primary-Selected",
+          "hover:bg-background-system-action-secondary-hover",
+          "hover:text-content-system-action-primary-hover",
+          "hover:border-border-system-action-primary-hover",
+          "focus:bg-background-system-action-secondary-hover",
+          "focus:text-content-system-action-primary-hover",
+          "focus:border-border-system-action-primary-hover",
           "disabled:bg-background-system-body-secondary",
           "disabled:text-content-system-global-disabled",
         ],
@@ -270,5 +231,44 @@ export const PopoverItemStyles = cva(
         className: ["text-content-presentation-state-negative"],
       },
     ],
+  }
+);
+
+const popoverStyles = cva(
+  [
+    "p-1 max-h-[200px] z-[1000]",
+    "rounded-[8px]",
+    "border",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=closed]:animate-out",
+    "data-[state=closed]:fade-out-0",
+    "data-[state=open]:fade-in-0",
+    "scrollbar-hide",
+    "overflow-x-hidden",
+  ],
+  {
+    variants: {
+      variant: {
+        SystemStyle: [
+          "border-border-system-global-secondary",
+          "bg-background-system-body-primary",
+          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
+        ],
+        PresentationStyle: [
+          "border-border-presentation-global-primary",
+          "bg-background-presentation-form-base",
+          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+        ],
+      },
+      overlayBlur: {
+        true: ["h-fit"],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
   }
 );
