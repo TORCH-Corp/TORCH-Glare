@@ -3,6 +3,48 @@ import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Slot } from "@radix-ui/react-slot";
 
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  componentType: "top" | "side" | "tree"; // component type and style see on the figma design file
+  active?: boolean;
+  buttonType?: "icon" | "button";
+  theme?: "dark" | "light" | "default";
+  asChild?: boolean;
+  as?: React.ElementType;
+}
+
+
+const TabFormItem: React.FC<Props> = ({
+  componentType,
+  active,
+  buttonType,
+  theme,
+  asChild,
+  className,
+  as: Tag = "button",
+  ...props
+}) => {
+
+  const Component = asChild ? Slot : Tag;
+
+  return (
+    <Component
+      data-theme={theme}
+      {...props}
+      className={cn(
+        formBarItemStyles({ componentType, active, buttonType }),
+        className
+      )}
+    >
+      {props.children}
+    </Component>
+  );
+};
+
+export default TabFormItem;
+
+
+
+
 export const formBarItemStyles = cva(
   [
     "flex",
@@ -118,41 +160,3 @@ export const formBarItemStyles = cva(
     ],
   }
 );
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  componentType: "top" | "side" | "tree"; // component type and style see on the figma design file
-  active?: boolean;
-  buttonType?: "icon" | "button";
-  theme?: "dark" | "light" | "default";
-  asChild?: boolean;
-  as?: React.ElementType;
-}
-
-
-const TabFormItem: React.FC<Props> = ({
-  componentType,
-  active,
-  buttonType,
-  theme,
-  asChild,
-  className,
-  as: Tag = "button",
-  ...props
-}) => {
-
-  const Component = asChild ? Slot : Tag;
-
-  return (
-    <Component
-      data-theme={theme}
-      {...props}
-      className={cn(
-        formBarItemStyles({ componentType, active, buttonType }),
-        className
-      )}
-    >
-      {props.children}
-    </Component>
-  );
-};
-
-export default TabFormItem;
