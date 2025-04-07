@@ -206,8 +206,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             </div>
           )
         ) : (
-          <div className="px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0"
-          >
+          <div className="px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0">
             {children}
             {is_loading && <LoadingIcon size={size} />}
           </div>
