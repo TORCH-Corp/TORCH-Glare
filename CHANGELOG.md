@@ -53,4 +53,9 @@ small bug fixes and improvements.
 - `Radio` component changed to use `@radix-ui/react-radio-group` component.
 - `Checkbox` component changed to use `@radix-ui/react-checkbox` component.
 
+## Added
+
+- `Divider` component to make separation between components.
+- `Skeleton` component for loading pages.
+
 
