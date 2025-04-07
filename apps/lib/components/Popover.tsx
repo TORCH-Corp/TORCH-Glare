@@ -101,7 +101,7 @@ const PopoverItem = <T extends React.ElementType = "li">({
   className,
   children,
   active,
-  as = "li" as T, // Default to "li" if `as` is not provided
+  as = "button" as T, // Default to "li" if `as` is not provided
   ...props
 }: Props<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof Props<T>>) => {
   const Component = asChild ? Slot : as;
@@ -144,7 +144,7 @@ const PopoverItemStyles = cva(
     "outline-none",
     "border",
     "border-transparent",
-    "flex",
+    "flex w-full",
     "gap-[8px]",
     "items-center",
     "justify-start",

@@ -116,7 +116,7 @@ const Label = ({
       >
         <p
           className={cn(
-            "transition-all",
+            "transition-all !leading-none",
             "duration-300",
             "ease-in-out",
             "group-hover:text-content-presentation-global-primary group-hover:typography-body-small-regular",
