@@ -54,6 +54,7 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
           id={props.id}
           variant="PrimeContStyle"
           className={cn(dropZoneStyles({ active: isDropAreaActive }), className)}
+          containerClassName="flex-col"
         >
           <h1 className="text-content-presentation-action-light-primary typography-body-large-medium">
             {mainLabel}

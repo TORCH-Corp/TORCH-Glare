@@ -159,6 +159,7 @@ interface Props
   variant?: ButtonVariant;
   as?: React.ElementType;
   theme?: Themes
+  containerClassName?: string
 }
 export const Button = forwardRef<HTMLButtonElement, Props>(
   (
@@ -173,6 +174,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       disabled,
       theme,
       children,
+      containerClassName,
       ...props
     },
     ref
@@ -200,13 +202,13 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
           React.cloneElement(
             children as React.ReactElement,
             {},
-            <div className="px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0">
+            <div className={cn("px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0", containerClassName)}>
               {(children as React.ReactElement<any>).props.children}
               {is_loading && <LoadingIcon size={size} />}
             </div>
           )
         ) : (
-          <div className="px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0">
+          <div className={cn("px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0", containerClassName)}>
             {children}
             {is_loading && <LoadingIcon size={size} />}
           </div>

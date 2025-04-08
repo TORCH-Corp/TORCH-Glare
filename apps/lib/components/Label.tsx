@@ -61,7 +61,7 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
       <Component
         data-theme={theme}
         ref={forwardedRef}
-        className={cn(className, "flex flex-0 w-fit", {
+        className={cn(className, "flex flex-0 w-fit [&_p]:!leading-none", {
           "flex-col justify-start items-start gap-1": childrenDirections === "vertical",
           "flex-row justify-start items-center gap-1": childrenDirections === "horizontal",
           "flex-row-reverse": reverseChildren && childrenDirections === "horizontal",
