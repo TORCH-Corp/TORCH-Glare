@@ -1,13 +1,12 @@
 'use client';
+import { AspectRatio } from "@/components/AspectRatio-dev";
 import Examples from "../exmples";
 
 export default function page() {
 
 
   return (
-    <div className='w-full bg-black h-screen'>
-      <Examples />
-    </div>
+    <Examples />
 
   );
 }
