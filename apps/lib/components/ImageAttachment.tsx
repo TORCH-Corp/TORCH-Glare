@@ -103,7 +103,7 @@ const ExpandableImage = ({ theme, previewSrc, expandLabel, placeholderLabel = "U
   }, [previewSrc]);
 
   return (
-    <section style={props.style} data-theme={theme} className={cn("flex items-center justify-center rounded-md relative overflow-hidden border-none group h-[65px]  max-w-[130px]", className)}>
+    <section style={props.style} data-theme={theme} className={cn("flex items-center justify-center rounded-md relative overflow-hidden border-none group h-[65px]  max-w-[180px]", className)}>
       {previewSrc ? <SelectedImg aspectRatio={aspectRatio} src={previewSrc} /> : <PlaceHolder label={placeholderLabel} />}
 
       {
