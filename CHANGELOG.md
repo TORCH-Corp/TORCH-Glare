@@ -57,5 +57,7 @@ small bug fixes and improvements.
 
 - `Divider` component to make separation between components.
 - `Skeleton` component for loading pages.
-
+- `Toggle` component for toggling between two states.
+- `Avatar` component for displaying user profile pictures.
+- `InputOTP` component for displaying OTP input fields.
 
