@@ -54,7 +54,6 @@ small bug fixes and improvements.
 - `Checkbox` component changed to use `@radix-ui/react-checkbox` component.
 
 ## Added
-
 - `Divider` component to make separation between components.
 - `Skeleton` component for loading pages.
 - `Toggle` component for toggling between two states.

@@ -11,9 +11,7 @@ export default function page() {
 
   return (
     <div className="flex flex-col gap-4 bg-black w-full h-full">
-      <Toggle value={"hlkklh"} >
-        B
-      </Toggle>
+      <Examples />
     </div>
 
 
