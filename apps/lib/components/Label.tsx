@@ -7,7 +7,7 @@ import { Themes } from "../utils/types";
 const labelComponentVariants = cva("flex", {
   variants: {
     labelDirections: {
-      vertical: "flex-col justify-start items-start",
+      vertical: "flex-col justify-start items-start gap-1",
       horizontal: "flex-row justify-start items-center gap-1",
     },
   },
