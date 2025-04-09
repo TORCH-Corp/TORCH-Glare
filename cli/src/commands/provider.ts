@@ -42,7 +42,7 @@ export async function addProvider(provider?: string, replace: boolean = false): 
     ensureDirectoryExists(targetDir);
 
     // Check if provider already exists
-    if (isFileExists(targetDir) && !replace) {
+    if (isFileExists(targetDir, provider) && !replace) {
         console.log(`⚠️ Provider "${provider}" already exists.`);
         return;
     }

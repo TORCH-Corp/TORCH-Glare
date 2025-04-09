@@ -7,18 +7,20 @@ import path from "path";
  * @param {string} source - The source path of the component.
  * @param {string} target - The target path of the component.
  */
-export function copyComponentsRecursively(
-    source: string,
-    target: string,
-): void {
+export function copyComponentsRecursively(source: string, target: string): void {
     if (fs.lstatSync(source).isDirectory()) {
         copyDirectorySync(source, target);
     } else {
-        fs.copyFileSync(source, target);
+        let finalTarget = target;
+
+        if (fs.existsSync(target) && fs.lstatSync(target).isDirectory()) {
+            finalTarget = path.join(target, path.basename(source));
+        }
+
+        fs.copyFileSync(source, finalTarget);
         installDependencies(source);
     }
 }
-
 
 /**
  * Copy a directory and its contents recursively.

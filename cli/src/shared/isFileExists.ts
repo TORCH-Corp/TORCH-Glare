@@ -5,6 +5,6 @@ import * as fs from "fs";
  * @param {string} targetPath - Path to check for file existence.
  * @returns {boolean} - True if file exists, false otherwise.
  */
-export function isFileExists(targetPath: string): boolean {
-    return fs.existsSync(targetPath);
+export function isFileExists(targetPath: string, component: string): boolean {
+    return fs.existsSync(`${targetPath}/${component}`);
 }

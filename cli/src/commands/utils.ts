@@ -45,7 +45,7 @@ export async function addUtil(util?: string, replace: boolean = false): Promise<
     ensureDirectoryExists(targetDir);
 
     // Check if utility file already exists
-    if (isFileExists(targetDir) && !replace) {
+    if (isFileExists(targetDir, util) && !replace) {
         console.log(`⚠️ Utility file "${util}" already exists.`);
         return;
     }

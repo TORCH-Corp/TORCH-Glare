@@ -41,7 +41,7 @@ export async function addLayout(layout?: string, replace: boolean = false): Prom
     ensureDirectoryExists(targetDir);
 
     // Check if layout already exists
-    if (isFileExists(targetDir) && !replace) {
+    if (isFileExists(targetDir, layout) && !replace) {
         console.log(`⚠️ Layout "${layout}" already exists.`);
         return;
     }

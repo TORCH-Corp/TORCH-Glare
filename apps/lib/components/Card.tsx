@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import React, { HTMLAttributes } from 'react'
 import { Slot } from "@radix-ui/react-slot";
 
