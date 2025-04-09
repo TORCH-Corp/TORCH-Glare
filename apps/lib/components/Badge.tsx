@@ -7,7 +7,7 @@ export const badgeBase = cva(
   [
     "px-[6px]",
     "[&_div]:text-content-presentation-action-light-primary",
-    "[&_i]:!leading-0",
+    "[&_i]:!leading-none",
     "flex",
     "justify-center",
     "items-center",
