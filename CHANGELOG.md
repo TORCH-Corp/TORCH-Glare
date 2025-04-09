@@ -46,7 +46,7 @@ small bug fixes and improvements.
 - `Form` component Added to make building custom forms easier using `react-hook-form` and `zod` for validation.
 
 
-## 1.0.6
+## 1.0.7
 
 ### Changed
 - `CLI` use typescript instead of javascript to make it more robust and easier to maintain.
