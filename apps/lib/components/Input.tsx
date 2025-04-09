@@ -2,77 +2,6 @@ import React, { forwardRef, HTMLAttributes, InputHTMLAttributes } from 'react'
 import { cn } from '../utils/cn'
 import { cva } from 'class-variance-authority';
 
-export const GroupStyles = cva(
-    [
-        "flex w-full min-w-0 px-1 justify-center items-center",
-        "typography-body-small-regular",
-        "border",
-        "transition-all duration-200 ease-in-out",
-        "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
-        "[&_i]:leading-[0px] leading-[0px]",
-        '[&:has(input[disabled="true"])]:!border-border-presentation-action-disabled',
-        '[&:has(input[disabled="true"])]:!bg-background-presentation-action-disabled',
-        '[&:has(input[disabled="true"])]:hover:border-border-presentation-action-disabled',
-        '[&:has(input[disabled="true"])]:hover:bg-background-presentation-action-disabled',
-    ],
-    {
-        variants: {
-            variant: {
-                PresentationStyle: [
-                    "bg-background-presentation-form-field-primary",
-                    "border-border-presentation-action-primary",
-                    "hover:bg-background-presentation-form-field-hover",
-                    "hover:border-border-presentation-action-hover",
-                    "hover:text-content-presentation-action-light-primary",
-                    'focus-within:border-border-presentation-state-focus',
-                    'focus-within:bg-background-presentation-form-field-primary',
-                    'focus-within:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
-                    'focus-within:hover:border-border-presentation-state-focus',
-                    'focus-within:caret-border-presentation-state-focus',
-                    'focus-within:hover:caret-border-presentation-state-focus',
-                ],
-                SystemStyle: [
-                    "bg-black-alpha-20",
-                    "text-white",
-                    "border-[#2C2D2E]",
-                    "hover:border-[#9748FF]",
-                    "hover:bg-purple-alpha-10",
-                    'focus-within:border-border-presentation-state-focus',
-                    'focus-within:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
-                    'focus-within:hover:border-border-presentation-state-focus',
-                    'focus-within:caret-border-presentation-state-focus',
-                    'focus-within:hover:caret-border-presentation-state-focus',
-                    'focus-within:hover:bg-black-alpha-20',
-                    "[&_div[data-role='icon']]:focus-within:text-white",
-                    "[&_input]:placeholder:text-[#A0A0A0]",
-                    "[&_input]:hover:placeholder:text-[#A0A0A0]",
-                    "[&_input]:text-white"
-                ],
-            },
-            size: {
-                S: ["h-[30px]", "rounded-[6px] [&_input]:h-[30px] [&_div[data-role='icon']]:text-[16px]"],
-                M: ["h-[40px]", "rounded-[8px] [&_input]:h-[40px] [&_div[data-role='icon']]:text-[18px] [&_div[data-role='icon']]:px-[2px]"],
-            },
-            error: {
-                true: [
-                    "border-border-presentation-state-negative",
-                    "caret-border-presentation-state-negative",
-                    "hover:border-border-presentation-state-negative",
-                    "hover:caret-border-presentation-state-negative",
-                ],
-            },
-            onTable: {
-                true: [
-                    'border-transparent',
-                    'bg-transparent',
-                    'h-[26px]',
-                ],
-            },
-        },
-
-    }
-);
-
 interface InputGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "size"> {
     size?: 'S' | 'M';
     variant?: 'PresentationStyle' | 'SystemStyle';
@@ -145,7 +74,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 autoComplete="off"
                 className={cn(
                     // Base styles
-                    "typography-body-small-regular",
+                    "typography-body-large-regular",
                     "text-content-presentation-action-light-primary",
                     "bg-transparent",
                     "h-full",
@@ -177,3 +106,75 @@ input:-webkit-autofill:active {
   -webkit-transition-delay: 1000s;
 }
 */
+
+
+export const GroupStyles = cva(
+    [
+        "flex w-full min-w-0 px-1 pe-[3px] justify-center items-center",
+        "typography-body-small-regular",
+        "border",
+        "transition-all duration-200 ease-in-out",
+        "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+        "[&_i]:leading-[0px] leading-[0px]",
+        '[&:has(input[disabled="true"])]:!border-border-presentation-action-disabled',
+        '[&:has(input[disabled="true"])]:!bg-background-presentation-action-disabled',
+        '[&:has(input[disabled="true"])]:hover:border-border-presentation-action-disabled',
+        '[&:has(input[disabled="true"])]:hover:bg-background-presentation-action-disabled',
+    ],
+    {
+        variants: {
+            variant: {
+                PresentationStyle: [
+                    "bg-background-presentation-form-field-primary",
+                    "border-border-presentation-action-primary",
+                    "hover:bg-background-presentation-form-field-hover",
+                    "hover:border-border-presentation-action-hover",
+                    "hover:text-content-presentation-action-light-primary",
+                    'focus-within:border-border-presentation-state-focus',
+                    'focus-within:bg-background-presentation-form-field-primary',
+                    'focus-within:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
+                    'focus-within:hover:border-border-presentation-state-focus',
+                    'focus-within:caret-border-presentation-state-focus',
+                    'focus-within:hover:caret-border-presentation-state-focus',
+                ],
+                SystemStyle: [
+                    "bg-black-alpha-20",
+                    "text-white",
+                    "border-[#2C2D2E]",
+                    "hover:border-[#9748FF]",
+                    "hover:bg-purple-alpha-10",
+                    'focus-within:border-border-presentation-state-focus',
+                    'focus-within:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]',
+                    'focus-within:hover:border-border-presentation-state-focus',
+                    'focus-within:caret-border-presentation-state-focus',
+                    'focus-within:hover:caret-border-presentation-state-focus',
+                    'focus-within:hover:bg-black-alpha-20',
+                    "[&_div[data-role='icon']]:focus-within:text-white",
+                    "[&_input]:placeholder:text-[#A0A0A0]",
+                    "[&_input]:hover:placeholder:text-[#A0A0A0]",
+                    "[&_input]:text-white"
+                ],
+            },
+            size: {
+                S: ["h-[30px]", "rounded-[6px] [&_input]:h-[30px] [&_div[data-role='icon']]:text-[16px]"],
+                M: ["h-[40px]", "rounded-[8px] [&_input]:h-[40px] [&_div[data-role='icon']]:text-[18px] [&_div[data-role='icon']]:px-[2px]"],
+            },
+            error: {
+                true: [
+                    "border-border-presentation-state-negative",
+                    "caret-border-presentation-state-negative",
+                    "hover:border-border-presentation-state-negative",
+                    "hover:caret-border-presentation-state-negative",
+                ],
+            },
+            onTable: {
+                true: [
+                    'border-transparent',
+                    'bg-transparent',
+                    'h-[26px]',
+                ],
+            },
+        },
+
+    }
+);

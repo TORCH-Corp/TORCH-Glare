@@ -86,11 +86,6 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
 InnerLabelField.displayName = "LabelLessInput"
 
 
-// TODO: Active label when input is empty
-// TODO: Active on Hover
-// TODO: Active on Focus when input is empty
-// TODO: Active on Disabled when input is empty
-// TODO: Active on Error when input is empty
 
 const Label = ({
 
@@ -121,7 +116,7 @@ const Label = ({
       >
         <p
           className={cn(
-            "transition-all",
+            "transition-all !leading-none",
             "duration-300",
             "ease-in-out",
             "group-hover:text-content-presentation-global-primary group-hover:typography-body-small-regular",

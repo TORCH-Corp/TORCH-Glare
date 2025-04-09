@@ -43,12 +43,14 @@ export async function add(component?: string, replace: boolean = false): Promise
     const { source, targetDir } = getInstallPaths(component, targetFile, templatesDir, "components");
 
     // Check if component already exists
-    if (isFileExists(targetDir) && !replace) {
+    if (isFileExists(targetDir, component) && !replace) {
         console.log(`⚠️ Component "${component}" already exists.`);
         return;
     }
 
     // Ensure the target directory exists
+    // if the directory is not exists, create it
+
     ensureDirectoryExists(targetDir);
 
     // Copy the component (directory or file) and install dependencies

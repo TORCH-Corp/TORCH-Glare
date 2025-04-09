@@ -1,21 +1,22 @@
-import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 import { cn } from "../utils/cn";
-import { Radio } from "./Radio";
+import { Radio, RadioGroup } from "./Radio";
 import { Card, CardContent, CardDescription, CardHeader } from "./Card";
 
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props extends Omit<React.ComponentProps<typeof Radio>, "size" | "value"> {
   headerLabel?: ReactNode;
   id: string;
   description?: ReactNode;
   disabled?: boolean;
   children?: ReactNode;
   theme?: "dark" | "light" | "default";
+  value: string;
 }
 
 export const RadioCard = forwardRef<HTMLInputElement, Props>(
   (
-    { headerLabel, description, disabled, className, id, children, theme, ...props },
+    { headerLabel, description, disabled, className, id, children, theme, value, ...props },
     ref
   ) => {
     return (
@@ -24,14 +25,12 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
         htmlFor={id}
         as="label"
         className={cn(
-          "relative border-border-presentation-global-primary group",
+          "relative [&>button]:data-[state=checked]:!border-none",
+          '[&:has(button[data-state="checked"])]:border-border-presentation-state-focus',
           // Disabled state
           disabled && "!bg-background-presentation-action-disabled",
           disabled && "cursor-not-allowed",
           disabled && "hover:border-border-presentation-global-primary",
-          // Checked state
-          props.checked && "border-border-presentation-global-primary",
-          props.checked && "hover:border-border-presentation-global-primary",
           className
         )}
       >
@@ -40,12 +39,9 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
         >
           <Radio
             {...props}
-            theme={theme}
-            radioClassName="group-hover:border-border-presentation-state-focus"
+            value={value}
             size="M"
-            ref={ref}
             id={id}
-            checked={props.checked}
             disabled={disabled}
           />
         </section>

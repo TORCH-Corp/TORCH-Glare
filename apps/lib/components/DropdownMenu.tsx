@@ -4,140 +4,6 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 
-export const MenuItemStyles = cva(
-  [
-    "text-content-presentation-action-light-primary",
-    "outline-none",
-    "border",
-    "border-transparent",
-    "flex",
-    "gap-[8px]",
-    "items-center",
-    "justify-start",
-    "text-overflow",
-    "overflow-hidden",
-    "px-[12px]",
-    "rounded-[4px]",
-    "transition-all",
-    "ease-in-out",
-    "duration-300",
-  ],
-  {
-    variants: {
-      variant: {
-        Default: [
-          "text-content-presentation-action-light-primary",
-          "bg-background-presentation-action-dropdown-primary",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-action-hover",
-          "focus:bg-background-presentation-action-selected",
-          "focus:text-content-presentation-action-light-primary",
-          "active:border-border-presentation-action-disabled",
-          "active:bg-background-presentation-action-selected",
-          "active:text-content-presentation-action-light-primary",
-          "active:border-border-presentation-action-disabled",
-          "disabled:text-content-presentation-state-disabled",
-          "disabled:bg-white-00",
-        ],
-        Warning: [
-          "bg-background-presentation-action-dropdown-primary",
-          "text-content-presentation-state-information",
-          "hover:bg-background-presentation-state-information-primary",
-          "hover:text-content-presentation-action-hover",
-        ],
-        Negative: [
-          "bg-background-presentation-action-dropdown-primary",
-          "text-content-presentation-state-negative",
-          "hover:bg-background-presentation-state-negative-primary",
-          "hover:!text-content-presentation-action-hover",
-          "focus:text-content-presentation-state-negative",
-          "active:text-content-presentation-state-negative",
-        ],
-        SystemStyle: [
-          "bg-background-system-body-primary",
-          "text-content-system-global-primary",
-          "hover:!bg-background-system-action-secondary-hover",
-          "hover:!text-content-system-action-primary-hover",
-          "hover:!border-border-system-action-primary-hover",
-          "focus:bg-background-System-Action-Primary-Selected",
-          "focus:border-transparent",
-          "active:border-transparent",
-          "active:bg-background-System-Action-Primary-Selected",
-          "disabled:bg-background-system-body-secondary",
-          "disabled:text-content-system-global-disabled",
-        ],
-      },
-      size: {
-        S: ["typography-body-small-regular", "h-[24px]"],
-        M: ["typography-body-medium-regular", "h-[32px]"],
-      },
-
-      disabled: {
-        true: [
-          "text-content-presentation-state-disabled",
-          "bg-white-00",
-        ],
-      },
-
-      active: {
-        true: [
-          "bg-background-presentation-action-selected",
-          "text-content-presentation-action-light-primary",
-        ],
-      },
-
-      defaultVariants: {
-        variant: "Default",
-        size: "M",
-        active: false,
-        disabled: false,
-      },
-    },
-    compoundVariants: [
-      {
-        active: true,
-        variant: "Warning",
-        className: ["text-content-presentation-state-negative"],
-      },
-    ],
-  }
-);
-export const dropdownMenuStyles = cva(
-  [
-    "p-1",
-    "rounded-[8px]",
-    "border",
-    "max-h-[200px]",
-    "min-w-[240px]",
-    "outline-none",
-    "overflow-scroll",
-    "data-[state=open]:animate-in",
-    "data-[state=closed]:animate-out",
-    "data-[state=closed]:fade-out-0",
-    "data-[state=open]:fade-in-0",
-    "overflow-x-hidden",
-    "scrollbar-hide",
-  ],
-  {
-    variants: {
-      variant: {
-        SystemStyle: [
-          "border-border-system-global-secondary",
-          "bg-background-system-body-primary",
-          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
-        ],
-        PresentationStyle: [
-          "border-border-presentation-global-primary",
-          "bg-background-presentation-form-base",
-          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
-        ],
-      },
-      defaultVariants: {
-        variant: "PresentationStyle",
-      },
-    },
-  }
-);
 
 interface DropdownMenuProps {
   variant?: "SystemStyle" | "PresentationStyle";
@@ -397,3 +263,137 @@ export {
   DropdownMenuShortcut,
   DropdownMenuItem,
 };
+
+
+
+export const MenuItemStyles = cva(
+  [
+    "text-content-presentation-action-light-primary",
+    "outline-none",
+    "border",
+    "border-transparent",
+    "flex",
+    "gap-[8px]",
+    "items-center",
+    "justify-start",
+    "text-overflow",
+    "overflow-hidden",
+    "px-[12px]",
+    "rounded-[4px]",
+    "transition-all",
+    "ease-in-out",
+    "duration-300",
+
+  ],
+  {
+    variants: {
+      variant: {
+        Default: [
+          "text-content-presentation-action-light-primary",
+          "bg-background-presentation-action-dropdown-primary",
+          "hover:bg-background-presentation-action-hover",
+          "hover:text-content-presentation-action-hover",
+          "focus:bg-background-presentation-action-hover",
+          "focus:text-content-presentation-action-hover",
+          "disabled:text-content-presentation-state-disabled",
+          "disabled:bg-white-00",
+        ],
+        Warning: [
+          "text-content-presentation-state-information",
+          "hover:bg-background-presentation-state-information-primary",
+          "focus:bg-background-presentation-state-information-primary",
+          "focus:text-content-presentation-action-hover",
+          "hover:text-content-presentation-action-hover",
+        ],
+        Negative: [
+          "text-content-presentation-state-negative",
+          "hover:bg-background-presentation-state-negative-primary",
+          "hover:text-content-presentation-action-hover",
+          "focus:bg-background-presentation-state-negative-primary",
+          "focus:text-content-presentation-action-hover",
+          "active:text-content-presentation-state-negative",
+        ],
+        SystemStyle: [
+          "bg-background-system-body-primary",
+          "text-content-system-global-primary",
+          "hover:bg-background-system-action-secondary-hover",
+          "hover:text-content-system-action-primary-hover",
+          "hover:border-border-system-action-primary-hover",
+          "focus:bg-background-system-action-secondary-hover",
+          "focus:text-content-system-action-primary-hover",
+          "focus:border-border-system-action-primary-hover",
+          "disabled:bg-background-system-body-secondary",
+          "disabled:text-content-system-global-disabled",
+        ],
+      },
+      size: {
+        S: ["typography-body-small-regular", "h-[24px]"],
+        M: ["typography-body-medium-regular", "h-[32px]"],
+      },
+
+      disabled: {
+        true: [
+          "text-content-presentation-state-disabled",
+          "bg-white-00",
+        ],
+      },
+
+      active: {
+        true: [
+          "bg-background-presentation-action-selected",
+          "text-content-presentation-action-light-primary",
+        ],
+      },
+
+      defaultVariants: {
+        variant: "Default",
+        size: "M",
+        active: false,
+        disabled: false,
+      },
+    },
+    compoundVariants: [
+      {
+        active: true,
+        variant: "Warning",
+        className: ["text-content-presentation-state-negative"],
+      },
+    ],
+  }
+);
+export const dropdownMenuStyles = cva(
+  [
+    "p-1",
+    "rounded-[8px]",
+    "border",
+    "max-h-[200px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=closed]:animate-out",
+    "data-[state=closed]:fade-out-0",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+  ],
+  {
+    variants: {
+      variant: {
+        SystemStyle: [
+          "border-border-system-global-secondary",
+          "bg-background-system-body-primary",
+          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
+        ],
+        PresentationStyle: [
+          "border-border-presentation-global-primary",
+          "bg-background-presentation-form-base",
+          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);

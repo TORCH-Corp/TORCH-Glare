@@ -66,7 +66,7 @@ export const IosDatePicker = forwardRef<HTMLInputElement, IosDatePickerProps>(
         };
 
         return (
-            <Popover open>
+            <Popover>
                 <PopoverTrigger data-theme={theme} className='w-full flex-1'>
                     <InputField
                         theme={theme}

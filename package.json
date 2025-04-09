@@ -1,6 +1,6 @@
 {
   "name": "torch-glare",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "type": "module",
   "license": "MIT",
   "files": [
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "deploy": "node ./scripts/publish/index.js"
+    "deploy": "tsc && node ./scripts/publish/index.js"
   },
   "dependencies": {
     "commander": "^13.1.0",

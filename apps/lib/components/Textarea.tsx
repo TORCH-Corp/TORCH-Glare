@@ -2,17 +2,17 @@ import * as React from "react";
 import { cn } from "../utils/cn";
 import { Label } from "./Label";
 import { cva, VariantProps } from "class-variance-authority";
+import { Input } from "./Input";
 
 // Define the styles for the textarea using cva
 const textareaStyles = cva(
   [
-    "w-full",
     "border",
     "rounded-[4px]",
     "px-[8px]",
     "py-[12px]",
     "outline-none",
-    "typography-body-small-regular",
+    "typography-body-large-regular",
     "!min-h-[36px]",
     "transition-[border,background-color,color,caret-color,box-shadow]",
     "ease-in-out",
@@ -30,6 +30,7 @@ const textareaStyles = cva(
     "disabled:text-border-presentation-action-disabled",
     "disabled:cursor-not-allowed",
     "disabled:placeholder-border-presentation-action-disabled",
+    "field-sizing-content w-full min-w-[100px] max-w-[100%]"
   ],
   {
     variants: {

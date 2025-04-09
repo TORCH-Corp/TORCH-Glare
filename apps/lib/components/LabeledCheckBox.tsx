@@ -1,12 +1,10 @@
 'use client';
-import { InputHTMLAttributes, forwardRef, useState } from "react";
+import { forwardRef } from "react";
 import { Label } from "./Label";
-import { cn } from "../utils/cn";
-import { cva } from "class-variance-authority";
 import { Themes } from "../utils/types";
 import { Checkbox } from "./Checkbox";
-
-interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+import { cn } from "../utils/cn";
+interface Props extends Omit<React.ComponentProps<typeof Checkbox>, "size"> {
   label: string;
   id: string;
   secondaryLabel?: string;
@@ -15,7 +13,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   theme?: Themes
 }
 
-export const LabeledCheckBox = forwardRef<HTMLInputElement, Props>(
+export const LabeledCheckBox = forwardRef<HTMLButtonElement, Props>(
   (
     {
       id,
@@ -31,23 +29,24 @@ export const LabeledCheckBox = forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <Checkbox
-        {...props}
-        id={id}
-        disabled={props.disabled}
-        type={type}
+      <Label
+        label={label}
+        labelDirections="horizontal"
+        childrenDirections="horizontal"
+        secondaryLabel={secondaryLabel}
+        requiredLabel={requiredLabel}
         size={size}
-        ref={ref}
+        className={cn(className)}
+        reverseChildren
       >
-        <Label
-          className="leading-none"
-          label={label}
-          as={"div"}
-          secondaryLabel={secondaryLabel}
-          requiredLabel={requiredLabel}
-          size={size}
+        <Checkbox
+          {...props}
+          size={size === "L" ? "M" : size}
+          ref={ref}
         />
-      </Checkbox>
+      </Label>
+
+
     );
   }
 );

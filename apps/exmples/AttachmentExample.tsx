@@ -1,23 +1,38 @@
-import { AttachmentImagePreview, ImageAttachment } from "@/components/ImageAttachment";
+import { AlertDialogAction } from "@/components/AlertDialog";
+import { Button } from "@/components/Button";
+import { AttachmentImagePreview, ExpandableImage, ImageAttachment } from "@/components/ImageAttachment";
 import { cn } from "@/utils/cn";
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { useRef, useState } from "react";
+
 
 export default function AttachmentExample() {
   const [preview, setPreview] = useState<string | null>(null);
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
+  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
+
+  // Add a ref to access the file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    console.log(file);
+    if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setPreview(reader.result as string); // Set the image preview URL
+        setPreview(reader.result as string);
       };
-      reader.readAsDataURL(file); // Read the file as a data URL
+      reader.readAsDataURL(file);
     }
-  }, []);
+  }
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+
+  // Create a reset handler that clears both preview and file input
+  const handleReset = () => {
+    setPreview('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <>
@@ -30,26 +45,31 @@ export default function AttachmentExample() {
         Attachment Preview
       </h1>
       <div className="flex flex-col gap-2 w-full">
-        <div className="flex gap-1 relative" >
-          <ImageAttachment
-            getRootProps={getRootProps}
-            {...getInputProps()}
-            onExpand={() => setIsPreviewOpen(true)}
-            uploadedImage={preview}
-            expandLabel={"Expand Pic"}
-            mainLabel={"Drop Here"}
-            secondaryLabel={"Drop an image"}
 
-          />
-          <div className="absolute right-0 bottom-0">
-            {isPreviewOpen && (
-              <AttachmentImagePreview
-                onHide={() => setIsPreviewOpen(!isPreviewOpen)}
-                src={preview}
-              />
-            )}
-          </div>
-        </div>
+        <ImageAttachment
+          id={'upload-simple-example'}
+          onChange={handleFileChange}
+          mainLabel={"Click To Upload"}
+          secondaryLabel={"Upload an image"}
+          expandLabel={"Expand Pic"}
+          ref={fileInputRef}
+          style={{
+            aspectRatio: 1 / 1
+          }}
+        >
+          <ExpandableImage
+            previewSrc={preview}
+            expandLabel={"Expand Pic"}
+          >
+            <AttachmentImagePreview
+              src={preview}
+            >
+              <AlertDialogAction asChild>
+                <Button onClick={handleReset}>Reset</Button>
+              </AlertDialogAction>
+            </AttachmentImagePreview>
+          </ExpandableImage>
+        </ImageAttachment>
       </div>
     </>
   );

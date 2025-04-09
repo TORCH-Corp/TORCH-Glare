@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { OTPInput, OTPInputContext } from "input-otp"
-import { cn } from "@/utils/cn"
+import { cn } from "../utils/cn"
 
 
 const InputOTP = React.forwardRef<
@@ -39,9 +39,24 @@ const InputOTPSlot = React.forwardRef<
     return (
         <div
             ref={ref}
+            data-slot="input-otp-slot"
+            data-active={isActive}
             className={cn(
-                "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-                isActive && "z-10 ring-1 ring-ring",
+                "relative mx-1 flex items-center justify-center text-content-presentation-global-primary",
+                "min-w-[40px] h-[40px]", // Size M by default
+                "border rounded-[8px]",
+                "transition-all duration-200 ease-in-out",
+                "bg-background-presentation-form-field-primary",
+                "border-border-presentation-action-primary",
+                "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+                "hover:bg-background-presentation-form-field-hover",
+                "hover:border-border-presentation-action-hover",
+                // Active/Focus styles
+                "data-[active=true]:border-border-presentation-state-focus",
+                "data-[active=true]:bg-background-presentation-form-field-primary",
+                "data-[active=true]:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
+                // Typography
+                "typography-body-small-regular",
                 className
             )}
             {...props}
@@ -49,7 +64,7 @@ const InputOTPSlot = React.forwardRef<
             {char}
             {hasFakeCaret && (
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                    <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
+                    <div className="animate-caret-blink bg-border-presentation-state-focus h-4 w-px duration-1000" />
                 </div>
             )}
         </div>

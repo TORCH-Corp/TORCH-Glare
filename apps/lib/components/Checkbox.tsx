@@ -1,123 +1,49 @@
 'use client';
-import { InputHTMLAttributes, forwardRef, useState } from "react";
 import { cn } from "../utils/cn";
 import { cva } from "class-variance-authority";
-
-
-interface CheckBoxProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
-  size?: "S" | "M" | "L";
-  children?: React.ReactNode;
-  id?: string;
-}
-
-export const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
-  ({ size = "M", children, id, ...props }, ref) => {
-    const [checked, setChecked] = useState(props.checked);
-    return (
-      children ?
-        <label htmlFor={id} className="flex items-center justify-center gap-1">
-          <input
-            {...props}
-            children={null}
-            id={id}
-            onChange={(e) => {
-              props.onChange?.(e);
-              setChecked(e.target.checked);
-            }}
-            type="checkbox"
-            hidden
-            ref={ref}
-          />
-          <CheckboxIcon size={size} checked={checked} disabled={props.disabled} />
-          {children}
-        </label>
-        :
-        <div>
-          <input
-            {...props}
-            children={null}
-            id={id}
-            onChange={(e) => {
-              props.onChange?.(e);
-              setChecked(e.target.checked);
-            }}
-            type="checkbox"
-            hidden
-            ref={ref}
-          />
-          <CheckboxIcon size={size} checked={checked} disabled={props.disabled} />
-        </div>
-
-    );
-  }
-);
-
-Checkbox.displayName = "Checkbox";
-
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
+import React from "react";
 
 
 const glareCheckBoxStyles = cva(
   [
-    "w-[16px]",
-    "h-[16px]",
-    "rounded-[3px]",
-    "border",
-    "border-border-presentation-action-checkbox-primary",
+    "peer shrink-0 shadow focus-visible:outline-none rounded-[3px]",
+    "flex items-center justify-center transition-colors",
+    "border border-border-presentation-action-checkbox-primary",
     "bg-background-presentation-action-borderstyle",
-    "flex",
-    "items-center",
-    "justify-center",
-    "transition-colors",
-    "group-hover:bg-blue-sparkle-alpha-15 group-hover:border-border-presentation-state-focus",
+    "focus:bg-blue-sparkle-alpha-15 focus:border-border-presentation-state-focus",
+    'disabled:bg-background-presentation-state-information-primary disabled:border-transparent disabled:cursor-not-allowed',
+    "data-[state=checked]:bg-blue-sparkle-600 data-[state=checked]:border-blue-sparkle-600",
+    "hover:border-border-presentation-action-hover",
   ],
   {
     variants: {
-      checked: {
-        true: [
-          "bg-background-presentation-state-information-primary border-transparent",
-          "group-hover:bg-background-presentation-state-information-primary group-hover:border-transparent",
-        ],
+      size: {
+        S: ["w-[14px] h-[14px]"],
+        M: ["w-[16px] h-[16px]"],
       },
-      disabled: {
-        true: [
-          "border-border-presentation-global-primary",
-          "!bg-background-presentation-action-disabled",
-          "cursor-not-allowed",
-          "hover:!border-border-presentation-global-primary",
-        ],
-      },
-    },
-    defaultVariants: {
-      disabled: false,
-    },
+    }
   }
 );
 
 
-const CheckboxIcon = ({ size, checked, disabled }: { size: "S" | "M" | "L", checked?: boolean, disabled?: boolean }) => {
-  return (
-    <div
-      className={cn(
-        glareCheckBoxStyles({
-          disabled: disabled,
-          checked,
-        }),
-        {
-          "w-[14px] h-[14px]": size === "S",
-          "w-[16px] h-[16px]": size === "M" || size === "L",
-        }
-      )}
+export const Checkbox = React.forwardRef<
+  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & { size?: "S" | "M" }
+>(({ className, size = "M", ...props }, ref) => (
+  <CheckboxPrimitive.Root
+    ref={ref}
+    className={cn(
+      glareCheckBoxStyles({ size }),
+      className
+    )}
+    {...props}
+  >
+    <CheckboxPrimitive.Indicator
     >
-      <i
-        className={cn(
-          "ri-check-line",
-          "text-white transition-opacity opacity-0",
-          {
-            "opacity-100": checked,
-          }
-        )}
-      />
-    </div>
-  )
-};
+      <i className="ri-check-line text-white" />
+    </CheckboxPrimitive.Indicator>
+  </CheckboxPrimitive.Root>
+))
+Checkbox.displayName = CheckboxPrimitive.Root.displayName
+

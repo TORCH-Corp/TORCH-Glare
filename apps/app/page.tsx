@@ -1,44 +1,16 @@
 'use client';
-import { Form, FormField } from '@/components/Form';
-import { FormControl, FormDescription, FormLabel, FormMessage } from '@/components/Form';
-import { FormItem } from '@/components/Form';
-import { useForm } from 'react-hook-form';
-import { InputField } from '@/components/InputField';
-import Examples from '../exmples';
+import { InputOTPSeparator } from "@/components/InputOTP";
+import { InputOTP } from "@/components/InputOTP";
+import { InputOTPSlot } from "@/components/InputOTP";
+import { InputOTPGroup } from "@/components/InputOTP";
+import Examples from "../exmples";
+import { Toggle } from "@/components/Toggle";
 
 export default function page() {
 
-  const form = useForm({
-    defaultValues: {
-      username: '',
-    },
-  });
 
-  const handleSubmit = (data: any) => {
-    console.log(data);
-  }
   return (
-    <div className='w-full '>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel />
-                <FormControl>
-                  <InputField {...field} />
-                </FormControl>
-                <FormDescription />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <button type='submit'>Submit</button>
-        </form>
-      </Form>
-
+    <div className="flex flex-col gap-4 bg-black w-full h-full">
       <Examples />
     </div>
 

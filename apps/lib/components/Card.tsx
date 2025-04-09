@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import React, { HTMLAttributes } from 'react'
 import { Slot } from "@radix-ui/react-slot";
 
@@ -19,6 +19,7 @@ export const Card = ({ className, htmlFor, asChild, as: Tag = "section", ...prop
             "border-border-presentation-global-primary",
             "bg-background-presentation-form-radiocard-base",
             "hover:border-border-presentation-state-focus",
+            "focus:border-border-presentation-state-focus",
             className
         )} />
     )
@@ -30,27 +31,27 @@ interface GeneralProps extends HTMLAttributes<HTMLHeadingElement> { }
 
 export const CardHeader = ({ className, ...props }: GeneralProps) => {
     return (
-        <h1
+        <div
             {...props}
             className={cn(
                 "text-content-presentation-global-primary m-0 typography-headers-medium-semibold",
                 className
             )}
         >
-        </h1>
+        </div>
     )
 }
 
 export const CardDescription = ({ className, ...props }: GeneralProps) => {
     return (
-        <article
+        <div
             {...props}
             className={cn(
                 "text-content-presentation-global-primary m-0 typography-body-medium-semibold",
                 className
             )}
         >
-        </article>
+        </div>
     )
 }
 

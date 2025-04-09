@@ -46,9 +46,18 @@ small bug fixes and improvements.
 - `Form` component Added to make building custom forms easier using `react-hook-form` and `zod` for validation.
 
 
-## 1.0.5
+## 1.0.6
 
 ### Changed
 - `CLI` use typescript instead of javascript to make it more robust and easier to maintain.
+- `Radio` component changed to use `@radix-ui/react-radio-group` component.
+- `Checkbox` component changed to use `@radix-ui/react-checkbox` component.
+
+### Added
+- `Divider` component to make separation between components.
+- `Skeleton` component for loading pages.
+- `Toggle` component for toggling between two states.
+- `Avatar` component for displaying user profile pictures.
+- `InputOTP` component for displaying OTP input fields.
 
 

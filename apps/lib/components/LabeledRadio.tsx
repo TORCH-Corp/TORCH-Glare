@@ -1,17 +1,18 @@
 'use client'
-import { InputHTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
 import { Label } from "./Label";
 import { Radio } from "./Radio";
-
-interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+import { cn } from "../utils/cn";
+interface Props extends Omit<React.ComponentProps<typeof Radio>, "size"> {
   label?: string;
   secondaryLabel?: string;
   requiredLabel?: string;
   size?: "S" | "M" | "L";
   theme?: "dark" | "light" | "default";
+  name?: string;
 }
 
-export const LabeledRadio = forwardRef<HTMLInputElement, Props>(
+export const LabeledRadio = forwardRef<HTMLButtonElement, Props>(
   (
     {
       label,
@@ -28,15 +29,19 @@ export const LabeledRadio = forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <Radio id={id} name={name} {...props} data-theme={theme} checked={props.checked} size={size} ref={ref} >
-        <Label
-          as={"div"}
-          label={label}
-          secondaryLabel={secondaryLabel}
-          requiredLabel={requiredLabel}
-          size={size}
-        />
-      </Radio>
+      <Label
+        label={label}
+        secondaryLabel={secondaryLabel}
+        requiredLabel={requiredLabel}
+        size={size === "L" ? "M" : size}
+        labelDirections="horizontal"
+        childrenDirections="horizontal"
+        className={cn(className)}
+        id={id}
+        reverseChildren
+      >
+        <Radio id={id}  {...props} data-theme={theme} ref={ref} />
+      </Label>
     );
   }
 );

@@ -42,7 +42,7 @@ export async function addHook(hook?: string, replace: boolean = false): Promise<
     ensureDirectoryExists(targetDir);
 
     // Check if hook already exists
-    if (isFileExists(targetDir) && !replace) {
+    if (isFileExists(targetDir, hook) && !replace) {
         console.log(`⚠️ Hook "${hook}" already exists.`);
         return;
     }

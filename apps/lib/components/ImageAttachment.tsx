@@ -1,4 +1,4 @@
-import { forwardRef, HTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
+import { forwardRef, HTMLAttributes, InputHTMLAttributes, ReactNode, useEffect, useState } from "react";
 import { Button } from "./Button";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
@@ -45,7 +45,8 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <section className="flex items-center justify-center w-full gap-1">
+      <section
+        className="flex items-center justify-center gap-1">
         {children}
         <Button
           {...getRootProps?.()}
@@ -54,6 +55,7 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
           id={props.id}
           variant="PrimeContStyle"
           className={cn(dropZoneStyles({ active: isDropAreaActive }), className)}
+          containerClassName="flex-col"
         >
           <h1 className="text-content-presentation-action-light-primary typography-body-large-medium">
             {mainLabel}
@@ -86,9 +88,23 @@ interface ExpandableImageProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ExpandableImage = ({ theme, previewSrc, expandLabel, placeholderLabel = "Upload Image", className, ...props }: ExpandableImageProps) => {
+  // Calculate the aspect ratio of the image
+  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
+  useEffect(() => {
+    if (!previewSrc) return;
+    const img = new Image();
+    img.onload = () => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      const ratio = width / height;
+      setAspectRatio(ratio);
+    };
+    img.src = previewSrc;
+  }, [previewSrc]);
+
   return (
-    <section data-theme={theme} className={cn("flex items-center justify-center w-[65px] h-[65px] rounded-md relative overflow-hidden border-none  group", className)}>
-      {previewSrc ? <SelectedImg src={previewSrc} /> : <PlaceHolder label={placeholderLabel} />}
+    <section style={props.style} data-theme={theme} className={cn("flex items-center justify-center rounded-md relative overflow-hidden border-none group h-[65px]  max-w-[180px]", className)}>
+      {previewSrc ? <SelectedImg aspectRatio={aspectRatio} src={previewSrc} /> : <PlaceHolder label={placeholderLabel} />}
 
       {
         previewSrc && (
@@ -119,7 +135,7 @@ const ExpandableImage = ({ theme, previewSrc, expandLabel, placeholderLabel = "U
 function PlaceHolder({ label }: any) {
   return (
     <section className={cn([
-      'w-full h-full gap-[2px] flex flex-col justify-center items-center px-1',
+      'w-[65px] h-full gap-[2px] flex flex-col justify-center items-center px-1 ',
       ' rounded-lg border-2 border-dashed',
       ' border-border-presentation-badge-blue-purple',
       ' bg-background-presentation-badge-blue-purple',
@@ -134,12 +150,12 @@ function PlaceHolder({ label }: any) {
 
 
 
-function SelectedImg({ src }: any) {
+function SelectedImg({ src, aspectRatio }: any) {
   return (
-    <section className='bg-white rounded-md border  border-border-presentation-global-primary'>
-      <img src={src} className='w-full h-full object-cover object-center' />
+    <section style={{ aspectRatio: aspectRatio }} className='bg-white w-full h-full rounded-md border border-border-presentation-global-primary shrink-0'>
+      <img src={src} className='object-center object-cover h-full w-full' />
     </section>
-  )
+  );
 }
 
 

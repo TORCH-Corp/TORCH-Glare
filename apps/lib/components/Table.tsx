@@ -7,48 +7,7 @@ import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
 import { useResize } from "../hooks/useResize";
 
-const tableHeadVariants = cva(
-  [
-    "text-content-presentation-global-primary",
-    "px-[8px]",
-    "w-full",
-    "flex",
-    "items-center",
-    "justify-center",
-    "text-start",
-    "bg-transparent",
-    "hover:bg-background-presentation-action-hover",
-    "hover:text-content-presentation-action-hover",
-    "transition-[background-color,color]",
-    "duration-200",
-    "rounded-[3px]",
-  ],
-  {
-    variants: {
-      size: {
-        S: "h-[20px] min-w-[20px] typography-body-small-semibold",
-        M: "h-[32px] min-w-[32px] typography-body-medium-semibold",
-      },
-      disabled: {
-        true: [
-          "bg-background-presentation-table-row-disabled",
-          "cursor-not-allowed",
-          "hover:bg-background-presentation-table-row-disabled",
-          "hover:text-content-presentation-global-primary",
-        ],
-      },
-      isDummy: {
-        true: [
-          "hover:bg-transparent",
-          "hover:text-content-presentation-global-primary",
-        ],
-      },
-      defaultVariants: {
-        size: "M",
-      },
-    },
-  }
-);
+
 
 type TableHeadVariantsProps = VariantProps<typeof tableHeadVariants>;
 
@@ -241,8 +200,8 @@ const TableCell = React.forwardRef<
 TableCell.displayName = "TableCell";
 
 const TableCheckbox = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & {
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
     id: string;
   }
 >(({ className, id, ...props }, ref) => {
@@ -393,3 +352,49 @@ const SortButton = ({
     </button>
   );
 };
+
+
+
+
+const tableHeadVariants = cva(
+  [
+    "text-content-presentation-global-primary",
+    "px-[8px]",
+    "w-full",
+    "flex",
+    "items-center",
+    "justify-center",
+    "text-start",
+    "bg-transparent",
+    "hover:bg-background-presentation-action-hover",
+    "hover:text-content-presentation-action-hover",
+    "transition-[background-color,color]",
+    "duration-200",
+    "rounded-[3px]",
+  ],
+  {
+    variants: {
+      size: {
+        S: "h-[20px] min-w-[20px] typography-body-small-semibold",
+        M: "h-[32px] min-w-[32px] typography-body-medium-semibold",
+      },
+      disabled: {
+        true: [
+          "bg-background-presentation-table-row-disabled",
+          "cursor-not-allowed",
+          "hover:bg-background-presentation-table-row-disabled",
+          "hover:text-content-presentation-global-primary",
+        ],
+      },
+      isDummy: {
+        true: [
+          "hover:bg-transparent",
+          "hover:text-content-presentation-global-primary",
+        ],
+      },
+      defaultVariants: {
+        size: "M",
+      },
+    },
+  }
+);

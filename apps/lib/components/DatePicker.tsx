@@ -47,6 +47,7 @@ export const Datepicker = ({ theme = "dark", onChange, className, dateFormat, cu
           const isSelected = startDate && isSameDay(date, startDate);
           return cn(
             "w-[29px] h-[29px] bg-transparent rounded-[6px] border border-transparent !text-content-system-global-disabled text-[10px] leading-0 hover:border-border-system-action-secondary-hover hover:!bg-background-system-action-primary-hover",
+            "focus:border-border-system-action-secondary-hover focus:!bg-background-system-action-primary-hover outline-none",
             {
               "!bg-background-system-body-secondary !text-content-system-global-primary": isCurrentMonth,
               "!border-border-system-action-secondary-hover !bg-background-system-action-secondary-hover hover:!bg-background-system-action-secondary-hover": isSelected,
