@@ -13,7 +13,7 @@ const program = new Command();
 program
   .name("torch-glare")
   .description("Torch Glare for managing React components")
-  .version("0.0.0");
+  .version("1.0.7");
 
 program
   .command("init")

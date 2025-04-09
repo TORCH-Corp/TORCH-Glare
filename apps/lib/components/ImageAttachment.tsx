@@ -46,7 +46,8 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
   ) => {
     return (
       <section
-        className="flex items-center justify-center gap-1">
+
+        className={cn("flex items-center justify-center gap-1 w-full", className)}>
         {children}
         <Button
           {...getRootProps?.()}
@@ -54,7 +55,8 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
           as="label"
           id={props.id}
           variant="PrimeContStyle"
-          className={cn(dropZoneStyles({ active: isDropAreaActive }), className)}
+
+          className={cn(dropZoneStyles({ active: isDropAreaActive }))}
           containerClassName="flex-col"
         >
           <h1 className="text-content-presentation-action-light-primary typography-body-large-medium">

@@ -3,20 +3,14 @@ import path from "path";
 import { getConfig } from "../shared/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
 import { Config } from "../types/main.js";
-import { getInstallPaths } from "../shared/getInstallPaths.js";
 import { tailwindInit } from "../shared/tailwindInit.js";
-import { fileURLToPath } from "url";
 import readline from "readline";
-import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
 import { getAvailableFiles } from "../shared/getAvailableFiles.js";
-
-const __filename = fileURLToPath(import.meta.url);
-
-// Get the current file and directory paths
-const __dirname = path.dirname(__filename);
-
-// Define the path to the templates directory
-const templatesDir = path.resolve(__dirname, "../../../lib");
+import { add } from "./add.js";
+import { addHook } from "./hook.js";
+import { addUtil } from "./utils.js";
+import { addProvider } from "./provider.js";
+import { addLayout } from "./layout.js";
 
 /**
  * Update all installed components, hooks, and utility files by syncing them with the latest templates.
@@ -52,6 +46,12 @@ export async function updateInstalledComponents(): Promise<void> {
     // Update utils
     await updateItems("utils", targetFile);
 
+    // Update providers
+    await updateItems("providers", targetFile);
+
+    // Update layouts
+    await updateItems("layouts", targetFile);
+
     // Reinitialize Tailwind CSS configuration
     tailwindInit();
     console.log("✅ All installed items have been updated.");
@@ -83,7 +83,26 @@ async function updateItems(type: string, config: any): Promise<void> {
 
     // Update each installed item
     installedItems.forEach((item) => {
-        updateItem(item, config, type);
+        switch (type) {
+            case "components":
+                add(item, true);
+                break;
+            case "hooks":
+                addHook(item, true);
+                break;
+            case "utils":
+                addUtil(item, true);
+                break;
+            case "providers":
+                addProvider(item, true);
+                break;
+            case "layouts":
+                addLayout(item, true);
+                break;
+            default:
+                console.log(`❌ Unknown item type: ${type}`);
+                break;
+        }
     });
 }
 
@@ -112,14 +131,3 @@ function checkIfItemsExist(installedItemsDir: string, type: string): boolean {
     return true;
 }
 
-
-/**
- * Update a single item (component, hook, or utility file) by syncing it with the latest template.
- * @param {string} item - The name of the item to update.
- * @param {object} config - Configuration object.
- * @param {string} type - The type of item (e.g., "components", "hooks", "utils").
- */
-function updateItem(item: string, config: any, type: string): void {
-    const { source, targetDir } = getInstallPaths(item, config, `${templatesDir}/${type}`, type);
-    copyComponentsRecursively(source, targetDir);
-}

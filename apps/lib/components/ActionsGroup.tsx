@@ -19,7 +19,7 @@ const ActionsGroup: React.FC<Props> = ({
     <section
       {...props}
       data-theme={theme}
-      className={cn("flex items-center gap-2 flex-1", className)}
+      className={cn("flex items-center gap-2 w-full", className)}
     >
       {withDivider && (
         <Divider />

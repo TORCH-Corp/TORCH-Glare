@@ -1,6 +1,5 @@
 import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { InputField } from "./InputField";
-import { cn } from "../utils/cn";
 import { Label } from "./Label";
 import { ToolTipSide } from "./Tooltip";
 import { Themes } from "../utils/types";
@@ -55,11 +54,11 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
         labelDirections={labelDirections}
         childrenDirections={childrenDirections}
         variant={variant}
+        className={className}
       >
         <InputField
           {...props}
           theme={theme}
-          className={className}
           ref={ref}
           size={size}
           icon={icon}

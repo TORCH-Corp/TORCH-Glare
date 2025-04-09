@@ -74,33 +74,21 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     ref
   ) => {
     return (
-      <div
-        data-theme={theme}
-        className={cn(
-          "flex gap-[4px]",
-          {
-            "flex-col": direction === "column",
-            "flex-row items-start gap-[10px]": direction === "row",
-          },
-          className
-        )}
+      <Label
+        label={label}
+        requiredLabel={requiredLabel}
+        secondaryLabel={secondaryLabel}
+        labelDirections={direction === "row" ? "vertical" : "horizontal"}
+        childrenDirections={direction === "row" ? "horizontal" : "vertical"}
+        size={"M"}
+        className={cn(className)}
       >
-        <Label
-          label={label}
-          requiredLabel={requiredLabel}
-          secondaryLabel={secondaryLabel}
-          labelDirections={direction === "row" ? "vertical" : "horizontal"}
-          className={cn({
-            "pt-[9px]": direction === "row",
-          })}
-          size={"M"}
-        />
         <textarea
-          className={cn(textareaStyles({ state }), className)}
+          className={cn(textareaStyles({ state }))}
           ref={ref}
           {...props}
         />
-      </div>
+      </Label>
     );
   }
 );
