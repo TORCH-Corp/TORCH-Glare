@@ -116,7 +116,7 @@ export function LoadingIcon({ size, className }: {
 
 
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "flex items-center whitespace-nowrap justify-center  transition-[background,color] duration-200 ease-in-out border border-transparent outline-none leading-none [&-i]:!leading-none",
   {
     variants: {
