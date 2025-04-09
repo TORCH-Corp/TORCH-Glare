@@ -60,3 +60,4 @@ small bug fixes and improvements.
 - `Avatar` component for displaying user profile pictures.
 - `InputOTP` component for displaying OTP input fields.
 
+

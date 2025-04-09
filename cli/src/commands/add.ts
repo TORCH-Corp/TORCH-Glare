@@ -50,6 +50,7 @@ export async function add(component?: string, replace: boolean = false): Promise
 
     // Ensure the target directory exists
     // if the directory is not exists, create it
+
     ensureDirectoryExists(targetDir);
 
     // Copy the component (directory or file) and install dependencies

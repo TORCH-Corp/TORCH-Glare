@@ -21,7 +21,6 @@ export function copyComponentsRecursively(source: string, target: string): void 
         installDependencies(source);
     }
 }
-
 /**
  * Copy a directory and its contents recursively.
  * @param {string} source - Source directory path.
