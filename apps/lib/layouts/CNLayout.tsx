@@ -120,7 +120,7 @@ const SideBarItemStyles = cva([
   "h-[40px] w-full px-[8px] flex gap-[6px] typography-body-small-medium justify-start items-center",
   "text-content-system-global-primary border-l-[2px] rtl:border-r-[2px] border-transparent outline-none",
   "hover:bg-white-alpha-075 hover:border-black-300 hover:text-content-system-action-primary-hover hover:px-[14px]",
-  "rounded-r-[4px] text-start whitespace-nowrap transition-all duration-150 ease-in-out",
+  "rounded-r-[4px] text-start whitespace-nowrap transition-all duration-150 ease-in-out cursor-pointer",
 
 ],
   {
@@ -205,7 +205,7 @@ const SideBarItem = ({ active, disabled, iconOnly, asChild, as: Tag = "span", th
 const SideBarIconButtonStyles = cva([
   "h-[36px] w-[36px] flex  text-content-system-global-primary text-[20px] justify-center items-center rounded-[8px] border border-transparent outline-none",
   "fucus:bg-border-system-action-primary-Hover active:bg-border-system-action-primary-Hover",
-  "transition-all duration-200 ease-in-out flex-shrink-0 m-[5px] relative",
+  "transition-all duration-200 ease-in-out flex-shrink-0 m-[5px] relative cursor-pointer",
 ],
   {
     variants: {

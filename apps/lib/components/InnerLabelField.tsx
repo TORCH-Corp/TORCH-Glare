@@ -24,7 +24,7 @@ interface Props
 export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
   (
     {
-      size = "S",
+      size = "M",
       icon,
       childrenSide,
       popoverChildren,
