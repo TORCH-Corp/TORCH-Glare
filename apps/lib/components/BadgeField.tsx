@@ -128,7 +128,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
             data-theme={theme}
             ref={popoverRef}
             style={{ width: dropDownListWidth }}
-            onOpenAutoFocus={(e: any) => e.preventDefault()}
             variant={variant}
           >
             {popoverChildren}
