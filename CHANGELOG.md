@@ -60,4 +60,8 @@ small bug fixes and improvements.
 - `Avatar` component for displaying user profile pictures.
 - `InputOTP` component for displaying OTP input fields.
 
+## 1.0.8
+
+### Changed
+- `InnerLabelField` component size prop changed to `M` by default.
 
