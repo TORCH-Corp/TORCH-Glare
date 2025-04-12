@@ -171,7 +171,6 @@ export const GroupStyles = cva(
                 true: [
                     'border-transparent',
                     'bg-transparent',
-                    'h-[26px]',
                 ],
             },
         },

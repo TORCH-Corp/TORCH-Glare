@@ -3,7 +3,7 @@ import { cn } from "../utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
 import { HTMLAttributes, ReactNode, useEffect, useState } from "react";
 
-const TreeDropDownVariants = cva(["flex px-[6px] h-[40px] gap-2 justify-start items-center w-full",
+const TreeDropDownVariants = cva(["cursor-pointer flex px-[6px] h-[40px] gap-2 justify-start items-center w-full",
     "text-content-system-global-primary border-l-[2px] rtl:border-r-[2px] border-transparent outline-none",
     "hover:bg-white-alpha-075 hover:border-black-300 hover:text-content-system-action-primary-hover hover:gap-[14px]",
     "rounded-r-[4px] text-start whitespace-nowrap transition-all duration-150 ease-in-out",
@@ -53,10 +53,10 @@ export const TreeDropDown = ({ childrenContainerClassName, className, variant = 
     return (
         <div {...props} className={cn("flex h-fit flex-col transition-all ease-in-out duration-500",)}>
             <div onClick={() => setIsActive(!isActive)} data-theme={theme} className={cn(TreeDropDownVariants({ variant, active: isActive }), className)}>
-                <button className={cn("outline-none border-none flex-0 leading-0 transition-transform ease-in-out flex justify-center items-center bg-background-system-body-tertiary h-[28px] w-[28px] rounded-full text-[20px] text-content-system-global-primary", { "rotate-180": isActive })}>
+                <button className={cn("cursor-pointer outline-none border-none flex-0 leading-0 transition-transform ease-in-out flex justify-center items-center bg-background-system-body-tertiary h-[28px] w-[28px] rounded-full text-[20px] text-content-system-global-primary", { "rotate-180": isActive })}>
                     <i className={cn("leading-none ri-arrow-down-s-line ")}></i>
                 </button>
-                <div className={cn("text-content-system-global-primary typography-body-medium-medium transition-all ease-in-out duration-100 flex-1")}>{treeLabel}</div>
+                <div className={cn("text-content-system-global-primary typography-body-medium-medium transition-all ease-in-out duration-100 flex-1 cursor-pointer")}>{treeLabel}</div>
             </div>
             <div className={cn("mt-0 pl-[22px] relative overflow-auto scrollbar-hide transition-all duration-500 ease-in-out", {
                 "max-h-[20000px] mt-1": isActive, "max-h-0": !isActive,

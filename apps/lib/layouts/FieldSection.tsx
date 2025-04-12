@@ -47,7 +47,7 @@ export function FieldSection({
             size={size}
             label={label}
             requiredLabel={requiredLabel}
-            directions={"horizontal"}
+            labelDirections={"horizontal"}
           />
         )}
 
