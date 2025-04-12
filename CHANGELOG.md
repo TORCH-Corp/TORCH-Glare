@@ -64,4 +64,5 @@ small bug fixes and improvements.
 
 ### Changed
 - `InnerLabelField` component size prop changed to `M` by default.
+- `BadgeField` component refactored to use `useTagSelection` hook to handle the tag selection and the search and filter and keyboard navigation functionality.
 
