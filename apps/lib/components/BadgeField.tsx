@@ -56,7 +56,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
   ) => {
     const [dropDownListWidth, setDropDownListWidth] = useState(0);
     const popoverContentRef = useRef<HTMLDivElement>(null);
-
+    const inputRef = useRef<HTMLInputElement | null>(null);
     // this is used to close the popover when the user clicks outside the input group
     const inputGroupRef = useClickOutside((e) => {
       if (
@@ -79,7 +79,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       focusedPopoverIndex,
       isPopoverOpen,
       setIsPopoverOpen,
-    } = useTagSelection({ Tags: tags, onTagsChange: onValueChange });
+    } = useTagSelection({ Tags: tags, onTagsChange: onValueChange, inputRef });
 
     return (
       <Popover open={isPopoverOpen}>
@@ -88,12 +88,15 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           open={errorMessage !== undefined}
           text={errorMessage}
         >
-          <PopoverTrigger asChild>
+          <PopoverTrigger asChild
+          >
             <Group
               error={errorMessage !== undefined}
               onTable={onTable}
               data-theme={theme}
               variant={variant}
+              tabIndex={isPopoverOpen ? 0 : -1}
+              onKeyDown={handleKeyDown}
               size={size === "XS" ? "S" : size}
               ref={inputGroupRef}
               onFocus={(e: any) => {
@@ -138,8 +141,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   setFocusedTagIndex(null);
                   setIsPopoverOpen(true)
                 }}
-                onKeyDown={handleKeyDown}
-                ref={forwardedRef}
+                ref={inputRef}
                 className={cn(
                   "min-w-[100px] w-full", // Added w-full to Input
                   {
@@ -165,6 +167,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           ref={popoverContentRef}
           style={{ width: dropDownListWidth }}
           variant={variant}
+          onKeyDown={handleKeyDown}
         >
           <>
             {filteredTags.length > 0 ? (
@@ -175,7 +178,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   variant={tag.variant as any}
                   label={tag.name}
                   onClick={() => handleSelectTag(tag.id)}
-                  className={`${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""}`}
+                  className={`outline-none  ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""} ${index !== 0 ? "mt-1" : ""}`}
                   tabIndex={focusedPopoverIndex === index ? 0 : -1}
                 />
               ))

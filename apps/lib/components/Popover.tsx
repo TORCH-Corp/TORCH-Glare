@@ -236,7 +236,7 @@ const PopoverItemStyles = cva(
 
 const popoverStyles = cva(
   [
-    "p-1 max-h-[200px] z-[1000]",
+    "p-1 max-h-[200px] z-[1000] shrink-0",
     "rounded-[8px]",
     "border",
     "min-w-[240px]",

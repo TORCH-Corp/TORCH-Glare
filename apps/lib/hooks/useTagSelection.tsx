@@ -11,10 +11,12 @@ export interface Tag {
 
 export const useTagSelection = ({
     Tags,
-    onTagsChange
+    onTagsChange,
+    inputRef
 }: {
     Tags: Tag[],
-    onTagsChange?: (selectedTags: Tag[]) => void
+    onTagsChange?: (selectedTags: Tag[]) => void,
+    inputRef?: React.RefObject<HTMLInputElement | null>
 }) => {
     // Initialize with available tags (excluding any initially selected ones)
     const [tags, setTags] = useState<Tag[]>(Tags);
@@ -97,6 +99,8 @@ export const useTagSelection = ({
             setIsPopoverOpen(true);
             setFocusedPopoverIndex(0);
             setFocusedTagIndex(null);
+        } else {
+            inputRef?.current?.focus();
         }
     };
 
@@ -126,6 +130,8 @@ export const useTagSelection = ({
             e.preventDefault();
             setIsPopoverOpen(false);
             setFocusedPopoverIndex(null);
+        } else {
+            inputRef?.current?.focus();
         }
     };
 
@@ -137,6 +143,8 @@ export const useTagSelection = ({
             e.preventDefault();
             setIsPopoverOpen(true);
             setFocusedPopoverIndex(0);
+        } else {
+            inputRef?.current?.focus();
         }
     };
 
