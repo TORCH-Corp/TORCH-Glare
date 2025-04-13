@@ -77,7 +77,7 @@ const InputOTPSeparator = React.forwardRef<
     React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
     <div ref={ref} role="separator" {...props}>
-        <i className="ri-subtract-line"></i>
+        <i className="ri-subtract-line text-border-presentation-global-primary"></i>
     </div>
 ))
 InputOTPSeparator.displayName = "InputOTPSeparator"
