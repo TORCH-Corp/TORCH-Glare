@@ -32,7 +32,7 @@ const TabFormItem: React.FC<Props> = ({
       {...props}
       className={cn(
         formBarItemStyles({ componentType, active, buttonType }),
-        className
+        className,
       )}
     >
       {props.children}

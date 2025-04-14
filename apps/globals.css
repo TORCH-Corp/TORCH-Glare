@@ -1,10 +1,6 @@
-@import "tailwindcss";
-
-@plugin 'glare-typography';
-@plugin 'glare-themes';
-@plugin 'glare-torch-mode';
-@plugin 'tailwind-scrollbar-hide';
-@plugin 'tailwindcss-animate';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   box-sizing: border-box;

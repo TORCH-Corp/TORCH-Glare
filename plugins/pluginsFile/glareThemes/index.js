@@ -570,7 +570,7 @@ const tailwindVars = {
     "content-presentation-cardbutton-green-header": "var(--content-presentation-cardbutton-green-header)",
 };
 
-module.exports = plugin(function ({ addBase }) {
+module.exports = plugin(function ({ addBase, matchUtilities }) {
 
     const darkTheme = {
         '[data-theme="dark"]': {
@@ -1353,6 +1353,5 @@ module.exports = plugin(function ({ addBase }) {
     }
 
     addBase(cssVariables);
-},
-    { theme: { extend: { tailwindVars } } });
+});
 
