@@ -56,10 +56,10 @@ module.exports = {
 
 // usage
 CreatePluginFile({
-    coreColorsPath: "./css files/coreColors.css", // path to the core colors file
-    darkModeCssVarsPath: "./css files/dark.css", // path to the dark mode css file
-    lightModeCssVarsPath: "./css files/light.css", // path to the light mode css file
-    defaultModeCssVarsPath: "./css files/default.css", // path to the default mode css file
+    coreColorsPath: "./coreColors.css", // path to the core colors file
+    darkModeCssVarsPath: "./dark.css", // path to the dark mode css file
+    lightModeCssVarsPath: "./light.css", // path to the light mode css file
+    defaultModeCssVarsPath: "./default.css", // path to the default mode css file
 })
 
 
