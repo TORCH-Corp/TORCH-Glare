@@ -15,6 +15,5 @@
     "plugin"
   ],
   "author": "TORCH Corp/Sajjad-iq",
-  "license": "MIT",
-  "peerDependencies": {}
+  "license": "MIT"
 }

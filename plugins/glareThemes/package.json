@@ -15,8 +15,5 @@
     "plugin"
   ],
   "author": "TORCH Corp/Sajjad-iq",
-  "license": "MIT",
-  "dependencies": {
-    "glare-themes": "^1.0.5"
-  }
+  "license": "MIT"
 }
