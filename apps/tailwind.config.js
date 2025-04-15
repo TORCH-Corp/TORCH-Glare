@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import { plugin as themePlugin, tailwindVars } from 'glare-themes'
+
 module.exports = {
     content: [
         "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -15,7 +17,7 @@ module.exports = {
         require('tailwindcss-animate'),
         require('tailwind-scrollbar-hide'),
         require('glare-typography'),
-        require('glare-themes'),
+        themePlugin,
         require('glare-torch-mode'),
         function ({ addVariant }) {
             addVariant("rtl", '&[dir="rtl"]');

@@ -37,6 +37,10 @@
         "allowSyntheticDefaultImports": true, // Enables synthetic default imports
         "resolveJsonModule": true, // Allows importing JSON files as modules
         "isolatedModules": true, // Ensures single file transpiling for better compatibility with various tools
+        "typeRoots": [
+            "./node_modules/@types",
+            "./node_modules"
+        ],
         "types": [
             "node"
         ],

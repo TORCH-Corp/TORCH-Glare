@@ -1,6 +1,6 @@
 {
   "name": "glare-themes",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "A Tailwind CSS plugin for torch-glare themes utilities.",
   "main": "index.cjs",
   "files": [
