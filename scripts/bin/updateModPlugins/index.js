@@ -22,10 +22,10 @@ const CreateModePluginFile = (filesPath) => {
 module.exports = plugin(function ({ addBase }) {
     // create css vars for tailwind base
     const mode = {
-        'root':  ${JSON.stringify(modeCssVars, null, 2)},
+        ':root':  ${JSON.stringify(modeCssVars, null, 2)},
     }
     const coreColors = {
-        'root':  ${JSON.stringify(coreColorsVars, null, 2)},
+        ':root':  ${JSON.stringify(coreColorsVars, null, 2)},
     }
         
     addBase(mode)

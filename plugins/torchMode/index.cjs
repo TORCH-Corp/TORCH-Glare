@@ -2,7 +2,7 @@ const plugin = require('tailwindcss/plugin');
 module.exports = plugin(function ({ addBase }) {
     // create css vars for tailwind base
     const mode = {
-        'root': {
+        ':root': {
             "--background-presentation-default-table-row-selected": "#4200FF0D",
             "--background-presentation-default-form-tabs-grmid": "#F9F9F900",
             "--background-presentation-light-form-tabs-grmid": "#F9F9F900",
@@ -804,7 +804,7 @@ module.exports = plugin(function ({ addBase }) {
         },
     }
     const coreColors = {
-        'root': {
+        ':root': {
             "--purple-100": "#F5EEFFFF",
             "--purple-200": "#EBDCFFFF",
             "--purple-300": "#D8BAFFFF",
