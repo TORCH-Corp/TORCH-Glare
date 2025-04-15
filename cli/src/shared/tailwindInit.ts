@@ -10,10 +10,10 @@ const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 
 function generatePlugins() {
   return `
+    themePlugin,
     require('tailwindcss-animate'),
     require('tailwind-scrollbar-hide'),
     require('glare-typography'),
-    require('glare-themes'),
     require('glare-torch-mode'),
       function ({ addVariant }: any) {
         addVariant("rtl", '&[dir="rtl"]');
@@ -80,6 +80,7 @@ function installDependencies(dependencies: string[] = []) {
 function createTailwindConfig() {
   const tailwindConfig = `
     import type { Config } from "tailwindcss";
+    const { plugin: themePlugin, tailwindVars } = require('glare-themes')
     export default {
       content: [
         "./app/**/*.{js,ts,jsx,tsx}",
@@ -91,7 +92,11 @@ function createTailwindConfig() {
         "./layout/**/*.{js,ts,jsx,tsx,mdx}",
       ],
       theme: {
-        extend: {},
+        extend: {
+          colors: {
+            ...tailwindVars,
+          },
+        },
       },
       screens: {
         sm: "600px",
@@ -166,6 +171,9 @@ export function tailwindInit(): void {
       } else {
         modifyTailwindConfig();
       }
+    } else {
+      console.error("✅ Tailwind CSS version is greater than v4 Not Supported");
+      return;
     }
   }
 }
