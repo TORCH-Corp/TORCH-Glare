@@ -17,47 +17,47 @@ var cssColors = {
   },
 */
 
-const fs = require('fs');
-const path = require('path');
+import fs from "fs";
+
 
 function updateVars() {
-    // Define the input CSS file path
-    const cssFilePath = "C:/Users/sajjad/Documents/projects/TORCH-Glare/dark.css";
+  // Define the input CSS file path
+  const cssFilePath = "/home/sajjad/TORCH-Glare/index.css";
 
-    try {
-        // Read the CSS file
-        const cssContent = fs.readFileSync(cssFilePath, 'utf8');
+  try {
+    // Read the CSS file
+    const cssContent = fs.readFileSync(cssFilePath, 'utf8');
 
-        // Regex to match CSS variables
-        const regex = /--([^:]+):\s*([^;]+);/g;
+    // Regex to match CSS variables
+    const regex = /--([^:]+):\s*([^;]+);/g;
 
-        // Create a map to store the variables
-        const vars = {};
+    // Create a map to store the variables
+    const vars = {};
 
-        // Find all matches in the CSS content
-        let match;
-        while ((match = regex.exec(cssContent)) !== null) {
-            // Store the variable name as the key and the value as `var(--variable-name)`
-            vars[match[1]] = `var(--${match[1]})`;
-        }
-
-        // Define the output JavaScript file path
-        const jsFilePath = "colors.js";
-
-        // Create the JavaScript content
-        let jsContent = "const colors = {\n";
-        for (const [key, value] of Object.entries(vars)) {
-            jsContent += `  "${key}": "${value}",\n`;
-        }
-        jsContent += "};\n";
-
-        // Write to the JavaScript file
-        fs.writeFileSync(jsFilePath, jsContent);
-
-        console.log(`JavaScript file '${jsFilePath}' created successfully!`);
-    } catch (error) {
-        console.error(`Error: ${error.message}`);
+    // Find all matches in the CSS content
+    let match;
+    while ((match = regex.exec(cssContent)) !== null) {
+      // Store the variable name as the key and the value as `var(--variable-name)`
+      vars[match[1]] = `var(--${match[1]})`;
     }
+
+    // Define the output JavaScript file path
+    const jsFilePath = "colors.js";
+
+    // Create the JavaScript content
+    let jsContent = "const colors = {\n";
+    for (const [key, value] of Object.entries(vars)) {
+      jsContent += `  "${key}": "${value}",\n`;
+    }
+    jsContent += "};\n";
+
+    // Write to the JavaScript file
+    fs.writeFileSync(jsFilePath, jsContent);
+
+    console.log(`JavaScript file '${jsFilePath}' created successfully!`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
 }
 
 // Execute the function
