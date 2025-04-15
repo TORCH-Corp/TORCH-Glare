@@ -54,15 +54,25 @@ small bug fixes and improvements.
 - `Checkbox` component changed to use `@radix-ui/react-checkbox` component.
 
 ### Added
+
+#### New Components
 - `Divider` component to make separation between components.
 - `Skeleton` component for loading pages.
 - `Toggle` component for toggling between two states.
 - `Avatar` component for displaying user profile pictures.
 - `InputOTP` component for displaying OTP input fields.
 
+
 ## 1.0.8
 
 ### Changed
 - `InnerLabelField` component size prop changed to `M` by default.
 - `BadgeField` component refactored to use `useTagSelection` hook to handle the tag selection and the search and filter and keyboard navigation functionality.
+
+
+### Added
+
+#### New Scripts
+- `updateModPlugins` script to automatically update the mode plugins.
+- `updateThemePlugin` script to automatically update the theme plugin.
 
