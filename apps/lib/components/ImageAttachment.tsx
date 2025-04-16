@@ -7,7 +7,7 @@ import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogCancel 
 
 const dropZoneStyles = cva(
   [
-    "w-full min-w-[200px] h-[65px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ",
+    "w-full  h-[65px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ",
     "!border-border-presentation-action-borderstyle bg-background-presentation-badge-gray",
     "hover:border-border-presentation-action-borderstyle  hover:bg-background-presentation-badge-gray",
   ],
@@ -60,7 +60,7 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
           <h1 className="text-content-presentation-action-light-primary typography-body-large-medium">
             {mainLabel}
           </h1>
-          <p className="text-content-presentation-action-light-secondary typography-body-small-medium">
+          <p className="text-content-presentation-action-light-secondary typography-body-small-medium text-wrap whitespace-pre-wrap text-center">
             {secondaryLabel}
           </p>
           <input ref={ref} {...props} type="file" hidden />
