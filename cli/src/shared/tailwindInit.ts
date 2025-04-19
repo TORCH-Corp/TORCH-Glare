@@ -80,7 +80,7 @@ function installDependencies(dependencies: string[] = []) {
 function createTailwindConfig() {
   const tailwindConfig = `
     import type { Config } from "tailwindcss";
-    const { plugin: themePlugin, tailwindVars } = require('glare-themes')
+    const { plugin: themePlugin, tailwindVars } = require('mapping-color-system')
     export default {
       content: [
         "./app/**/*.{js,ts,jsx,tsx}",
@@ -116,7 +116,7 @@ function createTailwindConfig() {
 function modifyTailwindConfig() {
   let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
 
-  if (!tailwindConfigContent.includes("glare-typography") && !tailwindConfigContent.includes("glare-themes")) {
+  if (!tailwindConfigContent.includes("glare-typography") && !tailwindConfigContent.includes("mapping-color-system")) {
     if (!tailwindConfigContent.includes("plugins")) {
       tailwindConfigContent = tailwindConfigContent.replace(
         "],",
@@ -157,7 +157,7 @@ export function tailwindInit(): void {
     "tailwindcss-animate",
     "tailwind-scrollbar-hide",
     "glare-typography",
-    "glare-themes",
+    "mapping-color-system",
     "glare-torch-mode",
   ];
   installDependencies(dependencies);

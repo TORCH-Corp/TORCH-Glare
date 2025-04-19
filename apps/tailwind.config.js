@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { plugin as themePlugin, tailwindVars } from 'glare-themes'
+import { plugin as themePlugin, tailwindVars } from 'mapping-color-system'
 
 module.exports = {
     content: [

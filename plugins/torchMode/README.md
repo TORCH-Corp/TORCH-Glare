@@ -4,7 +4,7 @@ A **Tailwind CSS plugin** that provides custom styling for **Torch Glare** compo
 
 ### Important !!
 
-this mode plugin must be used with themes plugin example :glare-themes package, see in this example :
+this mode plugin must be used with themes plugin example :mapping-color-system package, see in this example :
 
 ```ts
 import type { Config } from "tailwindcss";
@@ -16,7 +16,7 @@ export default {
   theme: {
   },
   plugins: [
-    require('glare-themes'),// important
+    require('mapping-color-system'),// important
     require('glare-torch-mode'), 
   ],
 } satisfies Config;
@@ -45,7 +45,7 @@ Add the plugin to your **tailwind.config.js** file:
 
 module.exports = {
   plugins: [
-    require('glare-themes'),// important
+    require('mapping-color-system'),// important
     require('glare-torch-mode')
   ],
 };

@@ -68,11 +68,12 @@ small bug fixes and improvements.
 ### Changed
 - `InnerLabelField` component size prop changed to `M` by default.
 - `BadgeField` component refactored to use `useTagSelection` hook to handle the tag selection and the search and filter and keyboard navigation functionality.
+- `glare-themes` tailwindcss plugin name changed to `mapping-color-system`
 
 
 ### Added
 
 #### New Scripts
 - `updateModPlugins` script to automatically update the mode plugins.
-- `updateThemePlugin` script to automatically update the theme plugin.
+- `updateMappingPlugin` script to automatically update the mappingColorSystem plugin.
 
