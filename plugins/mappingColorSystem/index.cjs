@@ -845,7 +845,7 @@ const themePlugin = plugin(function ({ addBase }) {
 
 module.exports = {
     plugin: themePlugin,
-    tailwindVars: {
+    mappingVars: {
         "purple-100": "var(--purple-100)",
         "purple-200": "var(--purple-200)",
         "purple-300": "var(--purple-300)",

@@ -1,6 +1,6 @@
 {
   "name": "mapping-color-system",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Tailwind CSS plugin for mapping system for tailwindcss. ",
   "main": "index.cjs",
   "files": [

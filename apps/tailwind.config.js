@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { plugin as themePlugin, tailwindVars } from 'mapping-color-system'
+import { plugin as plugin, mappingVars } from 'mapping-color-system'
 
 module.exports = {
     content: [
@@ -9,7 +9,7 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                ...tailwindVars,
+                ...mappingVars,
             },
         },
     },
@@ -17,7 +17,7 @@ module.exports = {
         require('tailwindcss-animate'),
         require('tailwind-scrollbar-hide'),
         require('glare-typography'),
-        themePlugin,
+        plugin,
         require('glare-torch-mode'),
         function ({ addVariant }) {
             addVariant("rtl", '&[dir="rtl"]');
