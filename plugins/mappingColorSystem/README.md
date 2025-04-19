@@ -18,7 +18,7 @@ export default {
   theme: {
   },
   plugins: [
-    require('glare-themes'),
+    require('mapping-color-system'),
     require('glare-torch-mode'), // important
   ],
 } satisfies Config;
@@ -37,13 +37,13 @@ To install and configure the plugin, follow these steps:
 Install the plugin via npm:
 
 ```bash
-npm install glare-themes
+npm install mapping-color-system
 ```
 
 Or using Yarn:
 
 ```bash
-yarn add glare-themes
+yarn add mapping-color-system
 ```
 
 ## Usage
@@ -53,7 +53,7 @@ Add the plugin to your `tailwind.config.js` file:
 ```js,
 module.exports = {
   plugins: [
-    require('glare-themes'),
+    require('mapping-color-system'),
     require('glare-torch-mode'), // important
   ]
 }

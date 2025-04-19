@@ -1,4 +1,4 @@
-import { copyRecursive } from "./copyRecursive.js";
+import { copyRecursive } from "../../utils/copyRecursive.js";
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';

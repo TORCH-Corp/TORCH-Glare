@@ -1,7 +1,7 @@
 {
-  "name": "glare-themes",
-  "version": "1.0.5",
-  "description": "A Tailwind CSS plugin for torch-glare themes utilities.",
+  "name": "mapping-color-system",
+  "version": "1.0.1",
+  "description": "A Tailwind CSS plugin for mapping system for tailwindcss. ",
   "main": "index.cjs",
   "files": [
     "index.cjs"
@@ -15,8 +15,5 @@
     "plugin"
   ],
   "author": "TORCH Corp/Sajjad-iq",
-  "license": "MIT",
-  "dependencies": {
-    "glare-themes": "^1.0.5"
-  }
+  "license": "MIT"
 }

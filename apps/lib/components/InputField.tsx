@@ -98,7 +98,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               <Trilling >
                 {childrenSide}
                 {popoverChildren && (
-                  <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} />
+                  <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} disabled={props.disabled} />
                 )}
               </Trilling>
             </Group>
@@ -107,7 +107,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
 
 
         {
-          popoverChildren && (
+          (popoverChildren && !props.disabled) && (
             <PopoverContent
               theme={theme}
               variant={variant}
@@ -125,16 +125,16 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
 
 InputField.displayName = "InputField";
 
-const PopoverActionButton = ({ size, variant, isPopoverOpen }: { size: "S" | "M", variant: "SystemStyle" | "PresentationStyle", isPopoverOpen: boolean }) => {
+const PopoverActionButton = ({ size, variant, isPopoverOpen, disabled }: { size: "S" | "M", variant: "SystemStyle" | "PresentationStyle", isPopoverOpen: boolean, disabled?: boolean }) => {
   return (
-    <ActionButton size={size}>
+    <ActionButton disabled={disabled} size={size}>
       <i
         className={cn(
           "ri-arrow-down-s-line",
           "transition-[transform,rotate]",
           "duration-200",
           "ease-in-out",
-          { "rotate-180": isPopoverOpen },
+          { "rotate-180": (isPopoverOpen && !disabled) },
           { "!text-[16px]": size === "S" },
           { "!text-[26px]": size === "M" },
           { "text-white": variant === "SystemStyle" }

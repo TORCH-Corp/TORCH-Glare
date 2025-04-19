@@ -54,6 +54,8 @@ small bug fixes and improvements.
 - `Checkbox` component changed to use `@radix-ui/react-checkbox` component.
 
 ### Added
+
+#### New Components
 - `Divider` component to make separation between components.
 - `Skeleton` component for loading pages.
 - `Toggle` component for toggling between two states.
@@ -65,4 +67,18 @@ small bug fixes and improvements.
 ### Changed
 - `InnerLabelField` component size prop changed to `M` by default.
 - `BadgeField` component refactored to use `useTagSelection` hook to handle the tag selection and the search and filter and keyboard navigation functionality.
+
+## 1.0.8
+
+### Changed
+- `InnerLabelField` component size prop changed to `M` by default.
+- `BadgeField` component refactored to use `useTagSelection` hook to handle the tag selection and the search and filter and keyboard navigation functionality.
+- `glare-themes` tailwindcss plugin name changed to `mapping-color-system`
+
+
+### Added
+
+#### New Scripts
+- `updateModPlugins` script to automatically update the mode plugins.
+- `updateMappingPlugin` script to automatically update the mappingColorSystem plugin.
 

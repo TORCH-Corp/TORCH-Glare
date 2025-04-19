@@ -116,10 +116,10 @@ export const GroupStyles = cva(
         "transition-all duration-200 ease-in-out",
         "hover:shadow-[0px_1px_6px_0px_rgba(0,0,0,0.30)]",
         "[&_i]:leading-[0px] leading-[0px]",
-        '[&:has(input[disabled="true"])]:!border-border-presentation-action-disabled',
-        '[&:has(input[disabled="true"])]:!bg-background-presentation-action-disabled',
-        '[&:has(input[disabled="true"])]:hover:border-border-presentation-action-disabled',
-        '[&:has(input[disabled="true"])]:hover:bg-background-presentation-action-disabled',
+        '[&:has(input[disabled])]:!border-border-presentation-action-disabled',
+        '[&:has(input[disabled])]:!bg-background-presentation-action-disabled',
+        '[&:has(input[disabled])]:hover:border-border-presentation-action-disabled',
+        '[&:has(input[disabled])]:hover:bg-background-presentation-action-disabled',
     ],
     {
         variants: {

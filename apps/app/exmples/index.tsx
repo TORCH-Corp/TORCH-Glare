@@ -41,11 +41,11 @@ export default function Examples() {
 
   return (
     <div
-      className={cn("w-full flex justify-center pt-12 bg-background-system-body-primary", {
+      className={cn("w-full flex justify-center pt-12", {
 
       })}
     >
-      <section className="flex flex-col gap-8 p-4 max-w-[800px] overflow-hidden">
+      <section className="flex flex-col gap-8 p-4 max-w-[800px] overflow-hidden bg-background-system-body-primary">
         <Button
           className="fixed top-[10px] right-[10px]"
           onClick={() => updateTheme(theme === "light" ? "dark" : "light")}

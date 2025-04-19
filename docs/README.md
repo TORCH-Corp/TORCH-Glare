@@ -37,7 +37,7 @@ If you're using Tailwind CSS version 4 or above, add the following plugins to yo
 @import "tailwindcss";
 /* Essential plugins */
 @plugin 'glare-typography';
-@plugin 'glare-themes';
+@plugin 'mapping-color-system';
 @plugin 'glare-torch-mode';
 @plugin 'tailwind-scrollbar-hide';
 @plugin 'tailwindcss-animate';
