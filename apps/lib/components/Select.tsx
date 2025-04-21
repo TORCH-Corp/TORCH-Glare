@@ -227,9 +227,8 @@ const SelectContentStyles = cva(
   [
     "p-1",
     "rounded-[8px]",
-    "border",
-    "max-h-[200px]",
     "min-w-[240px]",
+    "border",
     "outline-none",
     "overflow-scroll",
     "data-[state=open]:animate-in",
@@ -238,6 +237,7 @@ const SelectContentStyles = cva(
     "data-[state=open]:fade-in-0",
     "overflow-x-hidden",
     "scrollbar-hide",
+    "z-[1000]",
   ],
   {
     variants: {
@@ -408,7 +408,7 @@ const PopoverTriggerStyles = cva(
           "[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium",
         ],
         XL: [
-          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-small-regular [&_p]:px-[4px]",
+          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-large-regular [&_p]:px-[4px]",
         ],
       },
     },
