@@ -58,7 +58,7 @@ export function FieldSection({
       </div>
 
       {/* Flexible section that takes up the remaining space */}
-      <div className="flex flex-col items-end gap-[12px]">{children}</div>
+      <div className="grid grid-cols-1 place-items-end gap-[12px]">{children}</div>
     </section>
   );
 }
