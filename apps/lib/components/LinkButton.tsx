@@ -49,7 +49,7 @@ export const LinkButton: React.FC<Props> = ({ theme, className, size = "S", asCh
         className
       )}
     >
-      <div className="px-[3px]">{props.children}</div>
+      <div className="px-[3px] whitespace-nowrap break-keep">{props.children}</div>
       <div
         className={cn(
           "rounded-[4px]",
