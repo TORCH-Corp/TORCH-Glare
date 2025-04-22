@@ -7,10 +7,39 @@ import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependenci
 const tailwindConfigPath = path.join(process.cwd(), "tailwind.config.ts");
 
 
+export function tailwindInit(): void {
+  const dependencies = [
+    "tailwindcss-animate",
+    "tailwind-scrollbar-hide",
+    "glare-typography",
+    "mapping-color-system",
+    "glare-torch-mode",
+  ];
+  installDependencies(dependencies);
+
+  const { depsNamesAndVersions } = getCurrentInstalledDependencies();
+  if (depsNamesAndVersions["tailwindcss"]) {
+    const tailwindVersion = depsNamesAndVersions["tailwindcss"];
+    if (isTailwindVersionLessThanV4(tailwindVersion)) {
+      if (!fs.existsSync(tailwindConfigPath)) {
+        createTailwindConfig();
+      } else {
+        modifyTailwindConfig();
+      }
+    } else {
+      console.error("✅ Tailwind CSS version is greater than v4 Not Supported");
+      return;
+    }
+  }
+}
+
+
+
+
 
 function generatePlugins() {
   return `
-    themePlugin,
+    plugin,
     require('tailwindcss-animate'),
     require('tailwind-scrollbar-hide'),
     require('glare-typography'),
@@ -80,7 +109,7 @@ function installDependencies(dependencies: string[] = []) {
 function createTailwindConfig() {
   const tailwindConfig = `
     import type { Config } from "tailwindcss";
-    const { plugin: themePlugin, tailwindVars } = require('mapping-color-system')
+    const { plugin, mappingVars } = require('mapping-color-system')
     export default {
       content: [
         "./app/**/*.{js,ts,jsx,tsx}",
@@ -94,7 +123,7 @@ function createTailwindConfig() {
       theme: {
         extend: {
           colors: {
-            ...tailwindVars,
+            ...mappingVars,
           },
         },
       },
@@ -113,25 +142,41 @@ function createTailwindConfig() {
   console.log("✅ Created tailwind.config.ts");
 }
 
+
 function modifyTailwindConfig() {
-  let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
+  try {
+    // Read the current content
+    let tailwindConfigContent = fs.readFileSync(tailwindConfigPath, "utf-8");
+    console.log("📄 Read tailwind.config.ts file successfully");
 
-  if (!tailwindConfigContent.includes("glare-typography") && !tailwindConfigContent.includes("mapping-color-system")) {
-    if (!tailwindConfigContent.includes("plugins")) {
-      tailwindConfigContent = tailwindConfigContent.replace(
-        "],",
-        `],plugins: [${generatePlugins()}],`
-      );
-    } else {
-      tailwindConfigContent = tailwindConfigContent.replace(
-        "plugins: [",
-        `plugins: [${generatePlugins()}`
-      );
+
+
+    // Make a backup of the original content for debugging
+    const originalContent = tailwindConfigContent;
+
+    // if required plugins are not installed, add them
+    if (!tailwindConfigContent.includes("glare-typography")) {
+      console.log("🔄 Adding plugins to tailwind config...");
+      tailwindConfigContent = modifyPlugins(tailwindConfigContent);
     }
-    console.log("✅ Modified tailwind.config.ts");
-  }
 
-  fs.writeFileSync(tailwindConfigPath, tailwindConfigContent);
+    // if required mapping variables are not installed, add them
+    if (!tailwindConfigContent.includes("mappingVars")) {
+      console.log("🔄 Adding mapping variables to tailwind config...");
+      tailwindConfigContent = AddVariablesColors(tailwindConfigContent);
+    }
+
+    // Check if content was actually modified
+    if (originalContent === tailwindConfigContent) {
+      console.log("⚠️ No changes were made to the tailwind config");
+    } else {
+      // Write the modified content back to the file
+      fs.writeFileSync(tailwindConfigPath, tailwindConfigContent);
+      console.log("✅ Modified tailwind.config.ts successfully");
+    }
+  } catch (error) {
+    console.error("❌ Error modifying tailwind.config.ts:", error);
+  }
 }
 
 
@@ -152,28 +197,82 @@ function isTailwindVersionLessThanV4(version: string | undefined): boolean {
 }
 
 
-export function tailwindInit(): void {
-  const dependencies = [
-    "tailwindcss-animate",
-    "tailwind-scrollbar-hide",
-    "glare-typography",
-    "mapping-color-system",
-    "glare-torch-mode",
-  ];
-  installDependencies(dependencies);
-
-  const { depsNamesAndVersions } = getCurrentInstalledDependencies();
-  if (depsNamesAndVersions["tailwindcss"]) {
-    const tailwindVersion = depsNamesAndVersions["tailwindcss"];
-    if (isTailwindVersionLessThanV4(tailwindVersion)) {
-      if (!fs.existsSync(tailwindConfigPath)) {
-        createTailwindConfig();
-      } else {
-        modifyTailwindConfig();
-      }
+const modifyPlugins = (tailwindConfigContent: string): string => {
+  try {
+    console.log("start modify plugins");
+    if (!tailwindConfigContent.includes("plugins")) {
+      // If no plugins array exists at all
+      return tailwindConfigContent.replace(
+        /}(\s*)satisfies(\s*)Config;/,
+        `},\n  plugins: [${generatePlugins()}]$1satisfies$2Config;`
+      );
     } else {
-      console.error("✅ Tailwind CSS version is greater than v4 Not Supported");
-      return;
+      // If plugins array exists but doesn't have our plugins
+      return tailwindConfigContent.replace(
+        /plugins\s*:\s*\[/,
+        `plugins: [${generatePlugins()}`
+      );
     }
+  } catch (error) {
+    console.error("❌ Error modifying plugins:", error);
+    return tailwindConfigContent; // Return unchanged if error
+  }
+}
+
+
+const AddVariablesColors = (tailwindConfigContent: string): string => {
+  try {
+    // Check if mappingVars import exists, add if not
+    if (!tailwindConfigContent.includes("mappingVars")) {
+      if (tailwindConfigContent.includes("const { plugin }")) {
+        // Update existing plugin import to include mappingVars
+        tailwindConfigContent = tailwindConfigContent.replace(
+          "const { plugin }",
+          "const { plugin, mappingVars }"
+        );
+      } else {
+        // Add the import if it doesn't exist
+        tailwindConfigContent = tailwindConfigContent.replace(
+          "import type { Config } from",
+          "const { plugin, mappingVars } = require('mapping-color-system')\nimport type { Config } from"
+        );
+      }
+    }
+
+    // Add colors configuration
+    if (!tailwindConfigContent.includes("colors:")) {
+      // If theme.extend exists but no colors
+      if (tailwindConfigContent.includes("extend:")) {
+        tailwindConfigContent = tailwindConfigContent.replace(
+          /extend\s*:\s*{/,
+          "extend: {\n          colors: {\n            ...mappingVars,\n          },"
+        );
+      }
+      // If theme exists but no extend
+      else if (tailwindConfigContent.includes("theme:")) {
+        tailwindConfigContent = tailwindConfigContent.replace(
+          /theme\s*:\s*{/,
+          "theme: {\n        extend: {\n          colors: {\n            ...mappingVars,\n          },\n        },"
+        );
+      }
+      // If no theme at all
+      else {
+        tailwindConfigContent = tailwindConfigContent.replace(
+          /content\s*:\s*\[/,
+          "theme: {\n        extend: {\n          colors: {\n            ...mappingVars,\n          },\n        },\n      },\n      content: ["
+        );
+      }
+    } else if (!tailwindConfigContent.includes("...mappingVars")) {
+      // If colors exists but mappingVars not added
+      tailwindConfigContent = tailwindConfigContent.replace(
+        /colors\s*:\s*{/,
+        "colors: {\n            ...mappingVars,"
+      );
+    }
+
+    return tailwindConfigContent;
+  } catch (error) {
+    console.error("❌ Error adding mapping variables:", error);
+    return tailwindConfigContent; // Return unchanged if error
   }
 }

@@ -12,7 +12,7 @@ const glareCheckBoxStyles = cva(
     "border border-border-presentation-action-checkbox-primary",
     "bg-background-presentation-action-borderstyle",
     "focus:bg-blue-sparkle-alpha-15 focus:border-border-presentation-state-focus",
-    'disabled:bg-background-presentation-state-information-primary disabled:border-transparent disabled:cursor-not-allowed',
+    'disabled:bg-background-presentation-action-disabled disabled:border-border-presentation-action-disabled disabled:cursor-not-allowed',
     "data-[state=checked]:bg-blue-sparkle-600 data-[state=checked]:border-blue-sparkle-600",
     "hover:border-border-presentation-action-hover",
   ],

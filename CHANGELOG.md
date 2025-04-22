@@ -82,3 +82,4 @@ small bug fixes and improvements.
 - `updateModPlugins` script to automatically update the mode plugins.
 - `updateMappingPlugin` script to automatically update the mappingColorSystem plugin.
 
+and fix tailwindcss issues.

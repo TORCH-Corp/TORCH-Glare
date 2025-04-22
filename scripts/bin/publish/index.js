@@ -8,8 +8,8 @@ import { execSync } from "child_process";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const sourceDir = path.resolve(__dirname, '../../apps/lib');
-const destDir = path.resolve(__dirname, '../../lib');
+const sourceDir = path.resolve(__dirname, '../../../apps/lib');
+const destDir = path.resolve(__dirname, '../../../lib');
 
 // Ensure the destination directory exists 
 if (!fs.existsSync(destDir)) {

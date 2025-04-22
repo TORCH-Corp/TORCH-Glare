@@ -49,15 +49,14 @@ export const LinkButton: React.FC<Props> = ({ theme, className, size = "S", asCh
         className
       )}
     >
-      <div className="px-[3px]">{props.children}</div>
+      <div className="px-[3px] whitespace-nowrap break-keep">{props.children}</div>
       <div
         className={cn(
           "rounded-[4px]",
           "bg-background-presentation-state-information-primary",
           "transition-all duration-[100] ease-in-out",
           "h-0 w-0  p-0",
-          "opacity-0 group-hover:opacity-100",
-          "p-[3px]",
+          "opacity-0 group-hover:opacity-100 group-hover:p-[3px]",
           {
             "group-hover:w-[20px] group-hover:h-[20px]": size === "S",
             "group-hover:w-[22px] group-hover:h-[22px]": size === "M",
