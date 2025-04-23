@@ -78,3 +78,10 @@ small bug fixes and improvements.
 - `updateMappingPlugin` script to automatically update the mappingColorSystem plugin.
 
 and fix tailwindcss issues.
+
+
+## 1.1.0
+
+### Changed
+- `AlertDialog` popover position changed to `center` by default.
+- `BadgeField` component refactored to use handle single select functionality.
