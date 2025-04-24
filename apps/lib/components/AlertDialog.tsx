@@ -4,7 +4,7 @@ import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
 import { cn } from "../utils/cn"
-import { buttonVariants } from "./Button"
+import { Button, buttonVariants } from "./Button"
 import { ButtonVariant } from "../utils/types"
 import { cva } from "class-variance-authority"
 
@@ -59,7 +59,7 @@ const AlertDialogContent = React.forwardRef<
                 StatusTextStyle({ variant }),
                 "fixed left-[50%] top-[50%] z-50 grid w-full max-w-[800px] translate-x-[-50%] translate-y-[-50%]",
                 "gap-2 rounded-[16px] border-2 border-border-presentation-global-primary",
-                "bg-background-presentation-body-overlay-primary p-4",
+                "bg-background-presentation-body-overlay-primary p-[12px]",
                 "text-content-presentation-global-primary",
                 "shadow-lg duration-200",
                 "data-[state=open]:animate-in data-[state=closed]:animate-out",
@@ -151,7 +151,7 @@ const AlertDialogDescription = React.forwardRef<
             "typography-body-large-medium",
             "bg-background-presentation-form-base",
             "border border-border-presentation-global-primary",
-            "rounded-[8px] p-3 sm:p-6",
+            "rounded-[8px] p-[24px_48px_48px_48px]",
             className
         )}
         {...props}
@@ -175,8 +175,10 @@ const AlertDialogAction = React.forwardRef<
     <AlertDialogPrimitive.Action
         ref={ref}
         className={cn(buttonVariants({ variant: variant, size: size, buttonType: buttonType }), className)}
-        {...props}
-    />
+        asChild
+    >
+        <Button size={size} variant={variant} buttonType={buttonType} {...props} />
+    </AlertDialogPrimitive.Action>
 ))
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
