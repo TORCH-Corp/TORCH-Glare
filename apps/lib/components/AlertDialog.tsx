@@ -128,11 +128,11 @@ const AlertDialogLabel = React.forwardRef<
     return (
         <AlertDialogPrimitive.Title
             ref={ref}
-            className={cn("text-lg font-semibold", className)}
+            className={cn("typography-display-medium-semibold", className)}
             {...props}
         >
-            <p className="first-letter:uppercase" >
-                <strong >{firstWord}</strong>
+            <p className="first-letter:uppercase typography-display-medium-semibold" >
+                <strong className="typography-display-medium-semibold" >{firstWord}</strong>
                 {restOfTitle.length > 0 && ' ' + restOfTitle}
             </p>
         </AlertDialogPrimitive.Title>
@@ -147,14 +147,15 @@ const AlertDialogDescription = React.forwardRef<
     <AlertDialogPrimitive.Description
         data-description=""
         ref={ref}
-        className={cn("bg-background-presentation-form-base border border-border-presentation-global-primary p-2 rounded-[8px]"
-            , "p-[12px_8px_12px_8px] sm:p-[24px_48px_48px_48px] typography-body-large-medium",
-            className)}
-
+        className={cn(
+            "typography-body-large-medium",
+            "bg-background-presentation-form-base",
+            "border border-border-presentation-global-primary",
+            "rounded-[8px] p-3 sm:p-6",
+            className
+        )}
         {...props}
-    >
-        {props.children}
-    </AlertDialogPrimitive.Description>
+    />
 ))
 AlertDialogDescription.displayName =
     AlertDialogPrimitive.Description.displayName
