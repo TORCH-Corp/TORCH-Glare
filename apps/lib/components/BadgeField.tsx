@@ -94,7 +94,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
             <Group
               error={errorMessage !== undefined}
               onTable={onTable}
-              data-theme={theme}
               variant={variant}
               tabIndex={isPopoverOpen ? 0 : -1}
               onKeyDown={handleKeyDown}
@@ -103,9 +102,9 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               onFocus={(e: any) => {
                 setDropDownListWidth(e.currentTarget.offsetWidth);
               }}
-              className={cn("flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-start h-fit items-center",
+              className={cn("flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-start  items-center",
                 {
-                  "flex-wrap justify-start": isPopoverOpen && !singleSelect,
+                  "flex-wrap justify-start h-fit": isPopoverOpen && !singleSelect,
                 },
                 className
               )}
@@ -164,7 +163,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
         </Tooltip>
 
         <PopoverContent
-          data-theme={theme}
           ref={popoverContentRef}
           style={{ width: dropDownListWidth }}
           variant={variant}
