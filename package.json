@@ -5,7 +5,8 @@
   "license": "MIT",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "docs"
   ],
   "bin": {
     "torch-glare": "dist/bin/index.js"
