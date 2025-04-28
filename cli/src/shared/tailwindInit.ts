@@ -1,12 +1,14 @@
 import { execSync } from "child_process";
 import { detectPackageManager } from "./detectPackageManager.js";
-
+import path from "path";
+import fs from "fs";
 export function tailwindInit(): void {
+  const LessThanV4 = IsTailwindLessThanV4()
   const dependencies = [
     "tailwindcss-animate",
     "tailwind-scrollbar-hide",
     "glare-typography",
-    "mapping-color-system",
+    LessThanV4 ? "mapping-color-system" : "mapping-color-system-v4",
     "glare-torch-mode",
   ];
   installDependencies(dependencies);
@@ -29,7 +31,7 @@ function installDependencies(dependencies: string[] = []) {
 
   // Generate the install command based on the package manager
   let installCommand;
-  const latestDeps = dependencies.map(dep => `${dep}`).join(" ");
+  const latestDeps = dependencies.map(dep => `${dep}@latest`).join(" ");
 
   switch (packageManager) {
     case "pnpm":
@@ -72,5 +74,16 @@ function installDependencies(dependencies: string[] = []) {
       console.error("💡 Check your internet connection and try again.");
     }
   }
+}
+
+
+const IsTailwindLessThanV4 = () => {
+  const packageJson = fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8');
+  const parsedJson = JSON.parse(packageJson) as any;
+
+  const tailwindVersion = parsedJson.devDependencies?.['tailwindcss'];
+  if (!tailwindVersion) return false;
+
+  return tailwindVersion.startsWith('^3') || tailwindVersion.startsWith('3')
 }
 
