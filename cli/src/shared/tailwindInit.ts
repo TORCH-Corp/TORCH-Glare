@@ -31,7 +31,7 @@ function installDependencies(dependencies: string[] = []) {
 
   // Generate the install command based on the package manager
   let installCommand;
-  const latestDeps = dependencies.map(dep => `${dep}`).join(" ");
+  const latestDeps = dependencies.map(dep => `${dep}@latest`).join(" ");
 
   switch (packageManager) {
     case "pnpm":

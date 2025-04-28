@@ -91,3 +91,9 @@ and fix tailwindcss issues.
 - `BadgeField` component refactored to use handle single select functionality.
 - `CLI` stop modify the tailwind.config.js on first init.
 
+
+## 1.1.1
+
+### 
+
+- Add support for version 4 of tailwindcss.
