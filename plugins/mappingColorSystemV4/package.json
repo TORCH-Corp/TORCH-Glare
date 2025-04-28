@@ -1,0 +1,20 @@
+{
+  "name": "mapping-color-system-v4",
+  "version": "1.0.0",
+  "description": "A Tailwind CSS plugin for mapping system for tailwindcss v4. ",
+  "main": "index.cjs",
+  "files": [
+    "index.cjs",
+    "tailwindVars.css"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tailwindcss",
+    "themes",
+    "plugin"
+  ],
+  "author": "TORCH Corp/Sajjad-iq",
+  "license": "MIT"
+}
