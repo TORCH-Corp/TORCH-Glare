@@ -85,3 +85,4 @@ and fix tailwindcss issues.
 ### Changed
 - `AlertDialog` popover position changed to `center` by default.
 - `BadgeField` component refactored to use handle single select functionality.
+- `CLI` stop modify the tailwind.config.js on first init.
