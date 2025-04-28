@@ -33,20 +33,22 @@ function installDependencies(dependencies: string[] = []) {
 
   switch (packageManager) {
     case "pnpm":
-      installCommand = `pnpm add ${latestDeps}`;
+      installCommand = `pnpm add ${latestDeps} --prefer-offline`;
       break;
     case "yarn":
-      installCommand = `yarn add ${latestDeps}`;
+      installCommand = `yarn add ${latestDeps} --ignore-engines --ignore-platform --prefer-offline`;
       break;
     case "bun":
-      installCommand = `bun add ${latestDeps}`;
+      installCommand = `bun add ${latestDeps} --no-save && bun install`;
       break;
     default:
-      installCommand = `npm install ${latestDeps}`;
+      installCommand = `npm install ${latestDeps} --legacy-peer-deps`;
   }
 
   try {
+
     // Execute the install command
+    console.log(`Running: ${installCommand}`);
     execSync(installCommand, { stdio: "inherit" });
     console.log("✅ Dependencies installed successfully.");
   } catch (error: any) {
@@ -61,6 +63,10 @@ function installDependencies(dependencies: string[] = []) {
     } else if (error.message.includes("not found")) {
       console.error(
         "💡 The package manager might not be installed. Please ensure it is installed and available in your PATH."
+      );
+    } else if (error.message.includes("ERESOLVE") || error.message.includes("peer dependency conflict")) {
+      console.error(
+        "💡 There are dependency conflicts. Try manually installing with 'npm install --force' or 'npm install --legacy-peer-deps'."
       );
     } else {
       console.error("💡 Check your internet connection and try again.");
