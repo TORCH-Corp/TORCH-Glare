@@ -188,9 +188,10 @@ const TableCell = React.forwardRef<
   >
     <div
       className={cn(
-        "flex justify-start items-center gap-1 w-[200px] min-w-full overflow-hidden",
+        "flex justify-start items-center gap-1 w-[200px] min-w-full overflow-hidden has-input:bg-blue-200",
         "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
         "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
+        "[&:has(input)]:[mask-image:none]",
         { "w-auto justify-center": isDummy }, childrenClassName)}
     >
       {props.children}

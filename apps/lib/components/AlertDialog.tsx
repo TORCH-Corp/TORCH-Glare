@@ -4,8 +4,8 @@ import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
 import { cn } from "../utils/cn"
-import { buttonVariants } from "./Button"
-import { ButtonVariant } from "@/utils/types"
+import { Button, buttonVariants } from "./Button"
+import { ButtonVariant } from "../utils/types"
 import { cva } from "class-variance-authority"
 
 const StatusTextStyle = cva("", {
@@ -55,10 +55,18 @@ const AlertDialogContent = React.forwardRef<
         <AlertDialogOverlay />
         <AlertDialogPrimitive.Content
             ref={ref}
-            className={cn(StatusTextStyle({ variant }),
-                "text-content-presentation-global-primary max-w-[800px] !m-1 sm:m-0",
-                "fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-2 border bg-background-presentation-body-overlay-primary p-2 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-                "rounded-[16px] border-2 border-border-presentation-global-primary",
+            className={cn(
+                StatusTextStyle({ variant }),
+                "fixed left-[50%] top-[50%] z-50 grid w-full max-w-[800px] translate-x-[-50%] translate-y-[-50%]",
+                "gap-2 rounded-[16px] border-2 border-border-presentation-global-primary",
+                "bg-background-presentation-body-overlay-primary p-[12px]",
+                "text-content-presentation-global-primary",
+                "shadow-lg duration-200",
+                "data-[state=open]:animate-in data-[state=closed]:animate-out",
+                "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+                "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+                "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
+                "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
                 className
             )}
             {...props}
@@ -120,11 +128,11 @@ const AlertDialogLabel = React.forwardRef<
     return (
         <AlertDialogPrimitive.Title
             ref={ref}
-            className={cn("text-lg font-semibold", className)}
+            className={cn("typography-display-medium-semibold", className)}
             {...props}
         >
-            <p className="first-letter:uppercase" >
-                <strong >{firstWord}</strong>
+            <p className="first-letter:uppercase typography-display-medium-semibold" >
+                <strong className="typography-display-medium-semibold" >{firstWord}</strong>
                 {restOfTitle.length > 0 && ' ' + restOfTitle}
             </p>
         </AlertDialogPrimitive.Title>
@@ -139,14 +147,15 @@ const AlertDialogDescription = React.forwardRef<
     <AlertDialogPrimitive.Description
         data-description=""
         ref={ref}
-        className={cn("bg-background-presentation-form-base border border-border-presentation-global-primary p-2 rounded-[8px]"
-            , "p-[12px_8px_12px_8px] sm:p-[24px_48px_48px_48px] typography-body-large-medium",
-            className)}
-
+        className={cn(
+            "typography-body-large-medium",
+            "bg-background-presentation-form-base",
+            "border border-border-presentation-global-primary",
+            "rounded-[8px] p-[24px_48px_48px_48px]",
+            className
+        )}
         {...props}
-    >
-        {props.children}
-    </AlertDialogPrimitive.Description>
+    />
 ))
 AlertDialogDescription.displayName =
     AlertDialogPrimitive.Description.displayName
@@ -166,8 +175,10 @@ const AlertDialogAction = React.forwardRef<
     <AlertDialogPrimitive.Action
         ref={ref}
         className={cn(buttonVariants({ variant: variant, size: size, buttonType: buttonType }), className)}
-        {...props}
-    />
+        asChild
+    >
+        <Button size={size} variant={variant} buttonType={buttonType} {...props} />
+    </AlertDialogPrimitive.Action>
 ))
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 

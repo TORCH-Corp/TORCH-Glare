@@ -11,9 +11,9 @@ import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { useClickOutside } from "../hooks/useClickOutside";
 import { Badge } from "./Badge";
-import { Tag, useTagSelection } from "@/hooks/useTagSelection";
+import { Tag, useTagSelection } from "../hooks/useTagSelection";
 
 
 interface Props
@@ -30,6 +30,7 @@ interface Props
   actionButton?: ReactNode
   tags: Tag[]
   onValueChange?: (tags: Tag[]) => void
+  singleSelect?: boolean
 }
 
 
@@ -50,9 +51,9 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       tags,
       onValueChange,
       children,
+      singleSelect = false,
       ...props
     },
-    forwardedRef
   ) => {
     const [dropDownListWidth, setDropDownListWidth] = useState(0);
     const popoverContentRef = useRef<HTMLDivElement>(null);
@@ -79,7 +80,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       focusedPopoverIndex,
       isPopoverOpen,
       setIsPopoverOpen,
-    } = useTagSelection({ Tags: tags, onTagsChange: onValueChange, inputRef });
+    } = useTagSelection({ Tags: tags, onTagsChange: onValueChange, inputRef, singleSelect });
 
     return (
       <Popover open={isPopoverOpen}>
@@ -93,7 +94,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
             <Group
               error={errorMessage !== undefined}
               onTable={onTable}
-              data-theme={theme}
               variant={variant}
               tabIndex={isPopoverOpen ? 0 : -1}
               onKeyDown={handleKeyDown}
@@ -102,9 +102,9 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               onFocus={(e: any) => {
                 setDropDownListWidth(e.currentTarget.offsetWidth);
               }}
-              className={cn("flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-end h-fit items-center",
+              className={cn("flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-start  items-center",
                 {
-                  "flex-wrap justify-start": isPopoverOpen,
+                  "flex-wrap justify-start h-fit": isPopoverOpen && !singleSelect,
                 },
                 className
               )}
@@ -163,7 +163,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
         </Tooltip>
 
         <PopoverContent
-          data-theme={theme}
           ref={popoverContentRef}
           style={{ width: dropDownListWidth }}
           variant={variant}

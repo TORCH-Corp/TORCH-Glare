@@ -81,5 +81,13 @@ small bug fixes and improvements.
 #### New Scripts
 - `updateModPlugins` script to automatically update the mode plugins.
 - `updateMappingPlugin` script to automatically update the mappingColorSystem plugin.
-
 and fix tailwindcss issues.
+
+
+## 1.1.0
+
+### Changed
+- `AlertDialog` popover position changed to `center` by default.
+- `BadgeField` component refactored to use handle single select functionality.
+- `CLI` stop modify the tailwind.config.js on first init.
+

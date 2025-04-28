@@ -12,17 +12,27 @@ export interface Tag {
 export const useTagSelection = ({
     Tags,
     onTagsChange,
-    inputRef
+    inputRef,
+    singleSelect = false
 }: {
     Tags: Tag[],
     onTagsChange?: (selectedTags: Tag[]) => void,
-    inputRef?: React.RefObject<HTMLInputElement | null>
+    inputRef?: React.RefObject<HTMLInputElement | null>,
+    singleSelect?: boolean
 }) => {
+    // Split initial tags into selected and unselected
+    const initialSelectedTags = Tags.filter(tag => tag.isSelected);
+    const initialUnselectedTags = Tags.filter(tag => !tag.isSelected);
+
     // Initialize with available tags (excluding any initially selected ones)
-    const [tags, setTags] = useState<Tag[]>(Tags);
+    const [tags, setTags] = useState<Tag[]>(initialUnselectedTags);
 
     // Initialize with any pre-selected tags
-    const [selectedTagsStack, setSelectedTagsStack] = useState<Tag[]>([]);
+    const [selectedTagsStack, setSelectedTagsStack] = useState<Tag[]>(
+        singleSelect && initialSelectedTags.length > 0
+            ? [initialSelectedTags[0]]
+            : initialSelectedTags
+    );
     const [searchTags, filterTagsBySearch] = useState('');
     const [focusedTagIndex, setFocusedTagIndex] = useState<number | null>(null);
     const [focusedPopoverIndex, setFocusedPopoverIndex] = useState<number | null>(null);
@@ -47,11 +57,29 @@ export const useTagSelection = ({
         tag.name.toLowerCase().includes(searchTags.toLowerCase())
     );
 
+    // Filter selected tags based on search input
+    const filteredSelectedTags = searchTags.length > 0
+        ? selectedTagsStack.filter(tag =>
+            tag.name.toLowerCase().includes(searchTags.toLowerCase()))
+        : selectedTagsStack;
+
     const handleSelectTag = (id: string) => {
         const tagToSelect = tags.find(tag => tag.id === id);
         if (tagToSelect) {
-            setSelectedTagsStack(prev => [...prev, { ...tagToSelect, isSelected: true }]);
-            setTags(prev => prev.filter(tag => tag.id !== id));
+            // If in single select mode, replace the current selection
+            if (singleSelect) {
+                // Move any currently selected tag back to available tags
+                if (selectedTagsStack.length > 0) {
+                    const currentSelected = selectedTagsStack[0];
+                    setTags(prev => [...prev, { ...currentSelected, isSelected: false }]);
+                }
+                setSelectedTagsStack([{ ...tagToSelect, isSelected: true }]);
+                setTags(prev => prev.filter(tag => tag.id !== id));
+            } else {
+                // Multi-select behavior (original)
+                setSelectedTagsStack(prev => [...prev, { ...tagToSelect, isSelected: true }]);
+                setTags(prev => prev.filter(tag => tag.id !== id));
+            }
         }
         filterTagsBySearch('');
         setFocusedPopoverIndex(null);
@@ -68,8 +96,13 @@ export const useTagSelection = ({
 
     // Reset the hook state with new data
     const reset = (newTags: Tag[] = [], newSelectedTags: Tag[] = []) => {
+        // In single select mode, ensure we only have at most one selected tag
+        const selectedTags = singleSelect && newSelectedTags.length > 0
+            ? [newSelectedTags[0]]
+            : newSelectedTags;
+
         setTags(newTags);
-        setSelectedTagsStack(newSelectedTags);
+        setSelectedTagsStack(selectedTags);
         filterTagsBySearch('');
         setFocusedTagIndex(null);
         setFocusedPopoverIndex(null);
@@ -169,11 +202,13 @@ export const useTagSelection = ({
         setFocusedPopoverIndex,
         filterTagsBySearch,
         filteredTags,
+        filteredSelectedTags,
         focusedTagIndex,
         focusedPopoverIndex,
         isPopoverOpen,
         setIsPopoverOpen,
-        reset
+        reset,
+        singleSelect
     };
 };
 

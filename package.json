@@ -1,11 +1,12 @@
 {
   "name": "torch-glare",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "type": "module",
   "license": "MIT",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "docs"
   ],
   "bin": {
     "torch-glare": "dist/bin/index.js"

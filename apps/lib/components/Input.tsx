@@ -11,17 +11,19 @@ interface InputGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "size"> {
     className?: string;
 }
 
-export const Group = ({ size = 'M', variant = "PresentationStyle", error = false, onTable = false, ref, className, ...props }: InputGroupProps) => {
-    return (
-        <div
-            className={cn(GroupStyles({ size, variant, error, onTable }), className)}
-            ref={ref}
-            {...props}>
-        </div>
-    )
-}
+export const Group = forwardRef<HTMLDivElement, InputGroupProps>(
+    ({ size = 'M', variant = "PresentationStyle", error = false, onTable = false, className, ...props }, ref) => {
+        return (
+            <div
+                className={cn(GroupStyles({ size, variant, error, onTable }), className)}
+                ref={ref}
+                {...props}>
+            </div>
+        )
+    }
+);
 
-
+Group.displayName = "Group";
 
 interface IconProps {
     children: React.ReactNode;

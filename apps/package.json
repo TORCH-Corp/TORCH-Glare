@@ -9,10 +9,6 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
@@ -45,10 +41,10 @@
     "embla-carousel": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.5.0",
-    "mapping-color-system": "^1.0.1",
     "glare-torch-mode": "^1.0.4",
     "glare-typography": "^1.0.4",
     "input-otp": "^1.4.2",
+    "mapping-color-system": "^1.0.1",
     "react": "^19.0.0",
     "react-code-blocks": "^0.1.6",
     "react-datepicker": "^8.0.0",
