@@ -5,7 +5,9 @@ export default function page() {
 
 
   return (
-    <Examples />
+    <div className='w-full h-full bg-background-system-body-primary'>
+      <Examples />
+    </div>
   );
 };
 

@@ -85,8 +85,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     "min-w-[30px]",
                     "outline-none",
                     "transition-all duration-200 ease-in-out",
-                    "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)]",
-                    "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]",
+                    "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)] focus:[mask-image:none]",
+                    "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)] focus:[mask-image:none]",
                     "hover:placeholder:text-content-presentation-action-light-primary",
                     className
                 )}

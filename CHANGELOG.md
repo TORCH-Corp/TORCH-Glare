@@ -94,6 +94,15 @@ and fix tailwindcss issues.
 
 ## 1.1.1
 
-### 
+### Added
 
 - Add support for version 4 of tailwindcss.
+
+
+## 1.1.2
+
+### Added
+
+- `Input` component refactored to use hide mask when input is focused.
+
+
