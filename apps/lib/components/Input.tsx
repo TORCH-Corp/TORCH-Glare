@@ -70,13 +70,33 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
     ({ className, ...props }, ref) => {
+        const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+            // Force scroll to the end
+            const input = e.target;
+            input.scrollLeft = input.scrollWidth;
+            // Call the original onFocus if it exists
+            if (props.onFocus) {
+                props.onFocus(e);
+            }
+        };
+
+        const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+            // Force scroll to the end
+            const input = e.target as HTMLInputElement;
+            input.scrollLeft = input.scrollWidth;
+            // Call the original onClick if it exists
+            if (props.onClick) {
+                props.onClick(e);
+            }
+        };
+
         return (
             <input
                 {...props}
                 autoComplete="off"
                 className={cn(
                     // Base styles
-                    "typography-body-large-regular",
+                    "typography-body-large-regular focus:pe-[30px]",
                     "text-content-presentation-action-light-primary",
                     "bg-transparent",
                     "h-full",
@@ -85,11 +105,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     "min-w-[30px]",
                     "outline-none",
                     "transition-all duration-200 ease-in-out",
-                    "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)] focus:[mask-image:none]",
-                    "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)] focus:[mask-image:none]",
+                    // Remove mask image completely when focused
+                    "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_85%,transparent_100%)]",
+                    "focus:[mask-image:none]",
+                    "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_85%,transparent_100%)]",
+                    "focus:rtl:[mask-image:none]",
                     "hover:placeholder:text-content-presentation-action-light-primary",
                     className
                 )}
+                onFocus={handleFocus}
+                onClick={handleClick}
                 ref={ref}
             />
         );
