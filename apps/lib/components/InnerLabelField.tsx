@@ -83,7 +83,7 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
   }
 );
 
-InnerLabelField.displayName = "LabelLessInput"
+InnerLabelField.displayName = "InnerLabelField"
 
 
 
@@ -136,7 +136,7 @@ const Label = ({
         className={cn(
           "w-[1px]",
           "h-[12px]",
-          "bg-border-presentation-action-primary ",
+          "bg-border-presentation-action-labelless-divider ",
           "transition-all",
           "duration-300",
           "ease-in-out",
