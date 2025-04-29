@@ -32,8 +32,8 @@ const Radio = React.forwardRef<
       )}
       {...props}
     >
-      <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <i className="ri-record-circle-fill text-background-presentation-state-information-primary leading-none"></i>
+      <RadioGroupPrimitive.Indicator className="bg-white rounded-full flex items-center justify-center shrink-0">
+        <i className="ri-record-circle-fill text-background-presentation-state-information-primary leading-none shrink-0"></i>
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )
@@ -45,7 +45,7 @@ export { RadioGroup, Radio }
 
 const glareRadioStyles = cva(
   [
-    "rounded-full shadow focus:outline-none flex items-center justify-center",
+    "rounded-full shadow focus:outline-none flex items-center justify-center shrink-0",
     "border border-border-presentation-action-checkbox-primary",
     "bg-background-presentation-action-borderstyle",
     "transition-[background,border-color,background-color] duration-200",
@@ -58,8 +58,8 @@ const glareRadioStyles = cva(
   {
     variants: {
       size: {
-        S: ["w-[12px]", "h-[12px] [&_i]:text-[15px]"],
-        M: ["w-[24px]", "h-[24px] [&_i]:text-[28px]"],
+        S: ["w-[12px]", "h-[12px] [&_i]:text-[10px] [&_i]:scale-[1.5]"],
+        M: ["w-[24px]", "h-[24px] [&_i]:text-[20px] [&_i]:scale-[1.47]"],
       },
     }
   }
