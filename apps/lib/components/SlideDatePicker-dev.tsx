@@ -12,9 +12,10 @@ function getDayArray(year: number, month: number): string[] {
 interface SlideDatePickerProps extends Omit<ComponentProps<typeof InputField>, 'onChange'> {
   onChange?: (e: Date) => void;
   theme?: "dark" | "light" | "default";
+  onDateChange?: (date: Date) => void;
 }
 
-export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>(({ theme = "dark", onChange, ...props }, forwardedRef) => {
+export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>(({ theme = "dark", onChange, onDateChange, ...props }, forwardedRef) => {
   const today = new Date();
   const pickerValueData = {
     year: String(today.getFullYear()),
@@ -49,6 +50,10 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     // Call the onChange callback with the Date object
     if (onChange) {
       onChange(newDate);
+    }
+
+    if (onDateChange) {
+      onDateChange(newDate);
     }
   };
 

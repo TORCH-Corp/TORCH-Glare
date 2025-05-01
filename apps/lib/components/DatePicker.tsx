@@ -32,8 +32,11 @@ export const Datepicker = ({ theme = "dark", onChange, className, dateFormat, cu
     <div className={cn("w-full", className)} data-theme={theme} >
       <DatePicker
         {...props}
-        dateFormat={dateFormat}
+        open
         customInput={customInput}
+        showTimeSelect
+        timeFormat="HH:mm:ss"
+        dateFormat="MMMM d, yyyy h:mm aa"
         onChange={(date: any) => {
           setStartDate(date)
           onChange && onChange(date)
