@@ -6,7 +6,7 @@ import { IosDatePicker } from '@/components/IosDatePicker-dev';
 export default function page() {
   return (
     <div className='w-full h-full'>
-      <div className='w-[300px] h-[100px] flex justify-center items-center'>
+      <div className=' flex justify-center items-center p-40'>
         <Datepicker
           customInput={<InputField />}
           onChange={(date: Date) => {
