@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function ProviderWrapper({ children }: { children: React.ReactNode }) {
     return (
-        <ThemeProvider >
+        <ThemeProvider defaultTheme='light' >
             {children}
         </ThemeProvider>
     )
