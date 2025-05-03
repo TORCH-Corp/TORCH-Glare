@@ -108,3 +108,8 @@ and fix tailwindcss issues.
 - `Input` component refactored to use auto scroll to the end of the input when the input is focused.
 - `DatePicker` add time picker to the date picker.
 
+## 1.1.3
+
+### Hot Fix
+
+- `DatePicker` fix open date picker issue.
