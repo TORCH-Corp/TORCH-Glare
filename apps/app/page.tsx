@@ -1,7 +1,6 @@
 'use client'
 import { Datepicker } from '@/components/DatePicker';
 import { InputField } from '@/components/InputField';
-import { IosDatePicker } from '@/components/IosDatePicker-dev';
 
 export default function page() {
   return (

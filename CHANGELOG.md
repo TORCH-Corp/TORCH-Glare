@@ -105,4 +105,4 @@ and fix tailwindcss issues.
 
 - `Input` component refactored to use hide mask when input is focused.
 - `Input` component refactored to use auto scroll to the end of the input when the input is focused.
-
+- `DatePicker` add time picker to the date picker.

@@ -34,9 +34,7 @@ export const Datepicker = ({ theme = "dark", onChange, className, dateFormat, cu
         {...props}
         open
         customInput={customInput}
-        showTimeSelect
-        timeFormat="HH:mm:ss"
-        dateFormat="MMMM d, yyyy h:mm aa"
+        dateFormat={dateFormat || "MMMM d, yyyy"}
         onChange={(date: any) => {
           setStartDate(date)
           onChange && onChange(date)
@@ -97,6 +95,55 @@ export const Datepicker = ({ theme = "dark", onChange, className, dateFormat, cu
           stroke:var(--background-system-body-base) !important;
           }
 
+          .react-datepicker__time-container{
+            background-color: var(--background-system-body-base) !important;
+            border-left: 1px solid var(--border-system-global-secondary) !important;
+            width: 189px !important;
+            border-radius: 0px 8px 8px 0px;
+            overflow: hidden !important;
+          }
+           
+          .react-datepicker-time__header{
+            display:none !important;
+            }
+
+            .react-datepicker__time-box{
+              width: 189px !important;
+              padding: 20px 0 !important;
+              background-color: var(--background-system-body-base) !important;
+            }
+
+
+          .react-datepicker__time-list{
+            background-color: var(--background-system-body-base) !important;
+            scrollbar-width: none !important; /* Firefox */
+            -ms-overflow-style: none !important; /* IE and Edge */
+            mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%) !important;
+            padding: 7px 0 !important;
+          }
+          .react-datepicker__time-list::-webkit-scrollbar {
+            display: none !important; /* Chrome, Safari and Opera */
+          }
+          .react-datepicker__time-list-item {
+            color:var(--content-system-global-primary) !important;
+            border-radius: 6px !important;
+            display:flex !important;
+            justify-content:center !important;
+            align-items:center !important;
+            font-size: 18px !important;
+            font-style: normal;
+            font-weight: 590 !important;
+            line-height: 120% !important; /* 26.4px */
+            letter-spacing: -0.22px !important;
+            margin: 0 8px !important;
+          }
+          .react-datepicker__time-list-item:hover {
+            background-color:var(--background-system-action-secondary-hover) !important;
+            border: 1px solid var(--border-system-action-primary-hover) !important;
+          }
+          .react-datepicker__time-list-item--selected {
+            background-color:var(--background-system-body-tertiary) !important;
+          }
         `}
       </style>
     </div>
@@ -276,10 +323,10 @@ export const MenuItemStyles = cva(
           "hover:!bg-background-system-action-secondary-hover",
           "hover:!text-content-system-action-primary-hover",
           "hover:!border-border-system-action-primary-hover",
-          "focus:bg-background-System-Action-Primary-Selected",
+          "focus:bg-background-system-action-primary-hover",
           "focus:border-transparent",
           "active:border-transparent",
-          "active:bg-background-System-Action-Primary-Selected",
+          "active:bg-background-system-action-primary-hover",
           "disabled:bg-background-system-body-secondary",
           "disabled:text-content-system-global-disabled",
         ],
