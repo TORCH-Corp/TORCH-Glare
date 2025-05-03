@@ -94,6 +94,7 @@ and fix tailwindcss issues.
 
 ## 1.1.1
 
+<<<<<<< HEAD
 ### Added
 
 - Add support for version 4 of tailwindcss.
@@ -106,3 +107,4 @@ and fix tailwindcss issues.
 - `Input` component refactored to use hide mask when input is focused.
 - `Input` component refactored to use auto scroll to the end of the input when the input is focused.
 - `DatePicker` add time picker to the date picker.
+
