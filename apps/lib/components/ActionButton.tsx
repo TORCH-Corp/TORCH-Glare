@@ -34,6 +34,7 @@ export const ActionButton = function ({
   as: Tag = "button",
   className,
   variant,
+  type = "button",
   children,
   theme,
   ...props
@@ -43,6 +44,7 @@ export const ActionButton = function ({
       theme={theme}
       asChild={asChild}
       buttonType="icon"
+      type={type}
       size={
         size == "XS" ? "S" :
           size == "S" ? "M" :

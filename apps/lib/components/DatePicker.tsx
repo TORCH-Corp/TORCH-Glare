@@ -21,7 +21,7 @@ export const DatePicker = forwardRef(({
     min,
     max,
     selected,
-    mode = "multiple",
+    mode = "single",
     onChange,
     showWeekNumber = false,
     captionLayout = "dropdown",

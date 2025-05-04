@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { DayPicker, DayPickerProps, getDefaultClassNames } from "react-day-picker"
+import { DayPicker } from "react-day-picker"
 import "react-day-picker/style.css";
 import { cn } from "../utils/cn"
 import { Button } from "./Button"

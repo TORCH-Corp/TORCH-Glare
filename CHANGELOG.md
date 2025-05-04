@@ -113,3 +113,16 @@ and fix tailwindcss issues.
 ### Hot Fix
 
 - `DatePicker` fix open date picker issue.
+
+## 1.1.4
+
+### Added
+
+- `Calender` component added to the library.
+
+### Refactor 
+
+- `DatePicker` refactored to use `Calender` component.
+- `Button` component type prop changed to `button` by default.
+
+

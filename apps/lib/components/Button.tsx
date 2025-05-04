@@ -26,6 +26,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       buttonType,
       className,
       disabled,
+      type = "button",
       theme,
       children,
       containerClassName,
@@ -41,6 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         data-theme={theme}
         disabled={disabled || is_loading}
         ref={ref}
+        type={type}
         className={cn(
           buttonVariants({
             variant,
