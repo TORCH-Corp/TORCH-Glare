@@ -10,7 +10,6 @@ interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
     selected?: Date | Date[] | undefined;
     min?: number;
     max?: number;
-    onChange?: (e: any) => void;
     size?: "M" | "S";
     showWeekNumber?: boolean;
     captionLayout?: "dropdown" | "label" | "dropdown-months" | "dropdown-years";
