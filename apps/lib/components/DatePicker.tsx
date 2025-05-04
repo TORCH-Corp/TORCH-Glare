@@ -1,71 +1,73 @@
-"use client"
+import React, { useState, forwardRef, ForwardedRef, HTMLAttributes } from 'react';
+import { Popover, PopoverContent, PopoverTrigger } from './Popover';
+import { Calender } from './Calender';
+import { Input, Trilling } from './Input';
+import { ActionButton } from './ActionButton';
+import { Group } from './Input';
 
-import * as React from "react"
-import { DayPicker, DayPickerProps } from "react-day-picker"
-import "react-day-picker/style.css";
-
-import { cn } from "../utils/cn"
-import { buttonVariants } from "./Button"
-
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
-
-function DatePicker({
-  className,
-  classNames,
-  showOutsideDays = true,
-  ...props
-}: DayPickerProps) {
-  return (
-    <DayPicker
-      showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
-      classNames={{
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
-        nav: "space-x-1 flex items-center",
-        nav_button: cn(
-          buttonVariants({ variant: "PrimeStyle" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
-        ),
-        nav_button_previous: "absolute left-1",
-        nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
-        head_row: "flex",
-        head_cell:
-          "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
-        row: "flex w-full mt-2",
-        cell: cn(
-          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md",
-          props.mode === "range"
-            ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
-            : "[&:has([aria-selected])]:rounded-md"
-        ),
-        day: cn(
-          buttonVariants({ variant: "PrimeStyle" }),
-          "h-8 w-8 p-0 font-normal aria-selected:opacity-100"
-        ),
-        day_range_start: "day-range-start",
-        day_range_end: "day-range-end",
-        day_selected:
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent text-accent-foreground",
-        day_outside:
-          "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
-        day_disabled: "text-muted-foreground opacity-50",
-        day_range_middle:
-          "aria-selected:bg-accent aria-selected:text-accent-foreground",
-        day_hidden: "invisible",
-        ...classNames,
-      }}
-      components={{
-        // Remove custom IconLeft/IconRight components as they're not in the type
-      }}
-      {...props}
-    />
-  )
+interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
+    mode?: "single" | "multiple";
+    selected?: Date | Date[] | undefined;
+    min?: number;
+    max?: number;
+    onChange?: (e: any) => void;
+    size?: "M" | "S";
+    showWeekNumber?: boolean;
+    captionLayout?: "dropdown" | "label" | "dropdown-months" | "dropdown-years";
 }
-DatePicker.displayName = "DatePicker"
 
-export { DatePicker }
+export const DatePicker = forwardRef(({
+    size = "M",
+    min,
+    max,
+    selected,
+    mode = "multiple",
+    onChange,
+    showWeekNumber = false,
+    captionLayout = "dropdown",
+    ...props
+}: DatePickerProps, ref: ForwardedRef<HTMLInputElement>) => {
+
+    const [date, setDate] = useState<Date[] | Date | undefined>(selected);
+
+    const mapDate = (date: Date | Date[] | undefined) => {
+        if (Array.isArray(date)) {
+            return date.map(d => d.toLocaleDateString());
+        }
+        return date?.toLocaleDateString();
+    }
+    return (
+        <Popover>
+            <PopoverTrigger asChild >
+                <Group size={size}>
+                    <Input{...props} value={mapDate(date)} ref={ref} />
+                    <Trilling>
+                        <ActionButton type='button' size={size == "M" ? "M" : "S"}>
+                            <i className="ri-calendar-event-fill"></i>
+                        </ActionButton>
+                    </Trilling>
+                </Group>
+            </PopoverTrigger>
+            <PopoverContent className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px]'>
+                <Calender
+                    captionLayout={captionLayout}
+                    showWeekNumber={showWeekNumber}
+                    mode={mode as any}
+                    selected={date as Date | Date[]}
+                    onSelect={(e: any) => {
+                        setDate(Array.isArray(e) ? [...e] : e);
+                        onChange?.({
+                            target: {
+                                value: e
+                            }
+                        } as any);
+                    }}
+                    min={min}
+                    max={max}
+                />
+            </PopoverContent>
+        </Popover>
+    )
+});
+
+DatePicker.displayName = "DatePicker";
