@@ -204,7 +204,7 @@ function PickerColumn({
       maxHeight: '100%',
       transitionProperty: 'transform',
       transitionTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
-      transitionDuration: isMoving ? '0ms' : '300ms',
+      transitionDuration: isMoving ? '0ms' : '500ms',
       transform: `translate3d(0, ${scrollerTranslate}px, 0)`,
     }),
     [scrollerTranslate, isMoving],
