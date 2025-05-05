@@ -14,7 +14,7 @@ export default function Page() {
         name="dateOfBirth"
         control={control}
         render={({ field }) => (
-          <DatePicker size='M'  {...field} />
+          <DatePicker size='M' mode='multiple' {...field} />
         )}
       />
       <Button type='submit'>Submit</Button>

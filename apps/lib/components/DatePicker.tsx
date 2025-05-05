@@ -4,7 +4,8 @@ import { Calender } from './Calender';
 import { Input, Trilling } from './Input';
 import { ActionButton } from './ActionButton';
 import { Group } from './Input';
-
+import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
     mode?: "single" | "multiple";
     selected?: Date | Date[] | undefined;
@@ -13,6 +14,7 @@ interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
     size?: "M" | "S";
     showWeekNumber?: boolean;
     captionLayout?: "dropdown" | "label" | "dropdown-months" | "dropdown-years";
+    dateFormat?: string;
 }
 
 export const DatePicker = forwardRef(({
@@ -24,17 +26,24 @@ export const DatePicker = forwardRef(({
     onChange,
     showWeekNumber = false,
     captionLayout = "dropdown",
+    dateFormat = "yyyy/MM/dd",
     ...props
 }: DatePickerProps, ref: ForwardedRef<HTMLInputElement>) => {
 
-    const [date, setDate] = useState<Date[] | Date | undefined>(selected);
+    const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected);
 
-    const mapDate = (date: Date | Date[] | undefined) => {
+    const mapDate = (date: Date | Date[] | DateRange | undefined) => {
         if (Array.isArray(date)) {
-            return date.map(d => d.toLocaleDateString());
+            return date.map(d => format(d, dateFormat)).join(' - ');
         }
-        return date?.toLocaleDateString();
+        if (date && 'from' in date) {
+            const fromStr = date.from ? format(date.from, dateFormat) : '';
+            const toStr = date.to ? format(date.to, dateFormat) : '';
+            return fromStr && toStr ? `${fromStr} - ${toStr}` : fromStr || toStr;
+        }
+        return date ? format(date as Date, dateFormat) : "";
     }
+
     return (
         <Popover>
             <PopoverTrigger asChild >
@@ -51,8 +60,8 @@ export const DatePicker = forwardRef(({
                 <Calender
                     captionLayout={captionLayout}
                     showWeekNumber={showWeekNumber}
-                    mode={mode as any}
-                    selected={date as Date | Date[]}
+                    mode={"range"}
+                    selected={date as any}
                     onSelect={(e: any) => {
                         setDate(Array.isArray(e) ? [...e] : e);
                         onChange?.({
