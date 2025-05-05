@@ -1,6 +1,6 @@
-import Picker, { PickerValue, PickerRootProps as PickerProps } from './components/Picker.tsx'
-import Column from './components/PickerColumn.tsx'
-import Item from './components/PickerItem.tsx'
+import Picker, { PickerValue, PickerRootProps as PickerProps } from './components/Picker'
+import Column from './components/PickerColumn'
+import Item from './components/PickerItem'
 
 export type { PickerProps, PickerValue }
 
