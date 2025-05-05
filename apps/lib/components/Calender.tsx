@@ -39,7 +39,7 @@ const Calender = ({
         MonthsDropdown: (e) => {
           return (
             <SimpleSelectValue
-              inputClassName="w-[22px]"
+              inputClassName="w-[23px]"
               value={e.options?.find(month => month.value === e.value)?.label.slice(0, 3) || ''}
             >
               {e.options?.map((month, i) => (
@@ -76,16 +76,16 @@ const Calender = ({
       }}
       classNames={{
         day: cn("w-[30px] h-[30px] [&_button]:w-[28px] [&_button]:h-[28px] [&_button]:rounded-[6px] [&_button]:text-content-system-global-primary [&_button]:bg-background-system-body-secondary [&_button]:m-[2px] [&_button]:text-[10px] [&_button]:border-[1px]  [&_button]:outline-none",
-          "[&_button]:hover:border-border-system-action-secondary-hover [&_button]:hover:bg-background-system-action-primary-hover",
+          "[&_button]:hover:border-border-system-action-secondary-hover [&_button]:hover:bg-background-system-action-secondary-hover",
           "[&_button]:focus-within:border-border-system-action-secondary-hover [&_button]:focus-within:bg-background-system-action-primary-hover",
           "[&_button]:transition-all [&_button]:duration-200"
         ),
         today: `[&_button]:bg-background-system-action-primary-hover`, // Add a border to today's date
-        selected: `[&_button]:bg-background-system-action-secondary-hover [&_button]:border-border-system-action-secondary-hover [&_button]:text-white`,
+        selected: `[&_button]:!bg-background-system-action-primary-hover [&_button]:border-border-system-action-secondary-hover [&_button]:text-white`,
         outside: `[&_button]:bg-transparent [&_button]:text-content-system-global-disabled`,
-        range_start: `[&_button]:!bg-background-system-action-secondary-hover [&_button]:border-border-system-action-secondary-hover [&_button]:text-white`,
-        range_end: `[&_button]:!bg-background-system-action-secondary-hover [&_button]:border-border-system-action-secondary-hover [&_button]:text-white`,
-        range_middle: `[&_button]:border-border-system-action-secondary-hover [&_button]:bg-background-system-action-primary-hover`,
+        range_start: `rounded-l-[8px] bg-background-system-action-primary-hover`,
+        range_end: `rounded-r-[8px] bg-background-system-action-primary-hover`,
+        range_middle: `bg-background-system-action-primary-hover [&_button]:!border-none [&_button]:bg-transparent`,
         weekdays: `text-content-presentation-global-highlight-darkback text-[12px]`,
         week_number: `text-content-presentation-global-highlight-darkback text-[12px] px-1`,
         month_caption: `flex items-center justify-center`,

@@ -6,9 +6,10 @@ import { ActionButton } from './ActionButton';
 import { Group } from './Input';
 import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
+
 interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
-    mode?: "single" | "multiple";
-    selected?: Date | Date[] | undefined;
+    mode?: "single" | "multiple" | "range";
+    selected?: Date | Date[] | DateRange | undefined;
     min?: number;
     max?: number;
     size?: "M" | "S";
@@ -32,7 +33,7 @@ export const DatePicker = forwardRef(({
 
     const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected);
 
-    const mapDate = (date: Date | Date[] | DateRange | undefined) => {
+    const mapDate = () => {
         if (Array.isArray(date)) {
             return date.map(d => format(d, dateFormat)).join(' - ');
         }
@@ -48,7 +49,7 @@ export const DatePicker = forwardRef(({
         <Popover>
             <PopoverTrigger asChild >
                 <Group size={size}>
-                    <Input{...props} value={mapDate(date)} ref={ref} />
+                    <Input{...props} value={mapDate()} ref={ref} />
                     <Trilling>
                         <ActionButton type='button' size={size == "M" ? "M" : "S"}>
                             <i className="ri-calendar-event-fill"></i>
@@ -60,7 +61,7 @@ export const DatePicker = forwardRef(({
                 <Calender
                     captionLayout={captionLayout}
                     showWeekNumber={showWeekNumber}
-                    mode={"range"}
+                    mode={mode as any}
                     selected={date as any}
                     onSelect={(e: any) => {
                         setDate(Array.isArray(e) ? [...e] : e);
@@ -70,8 +71,8 @@ export const DatePicker = forwardRef(({
                             }
                         } as any);
                     }}
-                    min={min}
-                    max={max}
+                    min={mode != "single" ? min : undefined}
+                    max={mode != "single" ? max : undefined}
                 />
             </PopoverContent>
         </Popover>

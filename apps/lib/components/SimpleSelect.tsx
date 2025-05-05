@@ -6,11 +6,12 @@ import { HTMLAttributes, InputHTMLAttributes, ReactNode, useEffect, useRef, useS
 interface SimpleSelectDropDownProps {
     className?: string;
     children: ReactNode;
+    onClick?: () => void;
 }
 
-const SimpleSelectDropDown = ({ className, children }: SimpleSelectDropDownProps) => {
+const SimpleSelectDropDown = ({ className, children, onClick }: SimpleSelectDropDownProps) => {
     return (
-        <div className={cn("absolute min-w-[100px] z-[20] top-[27px] left-0", dropdownMenuStyles({ variant: "SystemStyle" }), className)}>
+        <div className={cn("absolute min-w-[100px] z-[20] top-[27px] left-0", dropdownMenuStyles({ variant: "SystemStyle" }), className)} onClick={onClick}>
             {children}
         </div>
     );
@@ -106,7 +107,7 @@ const SimpleSelectValue = ({
                 })}></i>
             </button>
             {children && active && (
-                <SimpleSelectDropDown>
+                <SimpleSelectDropDown onClick={() => setActive(false)}>
                     {children}
                 </SimpleSelectDropDown>
             )}
