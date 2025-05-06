@@ -14,10 +14,10 @@ export default function Page() {
         name="dateOfBirth"
         control={control}
         render={({ field }) => (
-          <DatePicker size='M' mode="range" {...field} />
+          <DatePicker size='M' mode="single" timePicker={true} {...field} />
         )}
       />
-      <Button type='submit'>Submit</Button>
+      <Button theme='light' type='submit'>Submit</Button>
     </form>
   );
 }

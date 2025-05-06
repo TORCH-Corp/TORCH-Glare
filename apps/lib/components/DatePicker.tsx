@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, ForwardedRef, HTMLAttributes } from 'react';
+import React, { useState, forwardRef, ForwardedRef, HTMLAttributes, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { Calender } from './Calender';
 import { Input, Trilling } from './Input';
@@ -20,6 +20,7 @@ interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
     captionLayout?: "dropdown" | "label" | "dropdown-months" | "dropdown-years";
     dateFormat?: string;
     calendarProps?: CalendarProps;
+    timePicker?: boolean;
 }
 
 export const DatePicker = forwardRef(({
@@ -31,27 +32,69 @@ export const DatePicker = forwardRef(({
     onChange,
     showWeekNumber = false,
     captionLayout = "dropdown",
-    dateFormat = "yyyy/MM/dd",
+    dateFormat = "yyyy/MM/dd hh:mm a",
     calendarProps,
+    timePicker = false,
     ...props
 }: DatePickerProps, ref: ForwardedRef<HTMLInputElement>) => {
 
-    const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected);
+    const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected || new Date());
+    const [pickerValue, setPickerValue] = useState<PickerValue>({
+        hour: "12",
+        minute: "00",
+        time: "AM"
+    });
+
+    useEffect(() => {
+        onChange?.({
+            target: {
+                value: date
+            }
+        } as any);
+    }, [selected]);
+
+    const catchTime = (date: Date) => {
+        const newDate = new Date(date);
+        let hours = parseInt(String(pickerValue.hour));
+        // Convert to 24-hour format if PM
+        if (pickerValue.time === "PM" && hours < 12) {
+            hours += 12;
+        } else if (pickerValue.time === "AM" && hours === 12) {
+            // 12 AM should be 0 in 24-hour format
+            hours = 0;
+        }
+        newDate.setHours(hours);
+        newDate.setMinutes(parseInt(String(pickerValue.minute)));
+        return newDate;
+    }
+
+    const injectTime = (e: Date[] | Date | DateRange | undefined) => {
+        if (Array.isArray(e)) {
+            return e.map(d => catchTime(d));
+        }
+        if (e && 'from' in e) {
+            return {
+                from: catchTime(e.from as Date),
+                to: catchTime(e.to as Date)
+            };
+        }
+        return catchTime(e as Date);
+    }
 
     const mapDate = () => {
         if (Array.isArray(date)) {
-            return date.map(d => format(d, dateFormat)).join(' - ');
+            return date.map(d => format(catchTime(d), dateFormat)).join(' - ');
         }
         if (date && 'from' in date) {
-            const fromStr = date.from ? format(date.from, dateFormat) : '';
-            const toStr = date.to ? format(date.to, dateFormat) : '';
+            const fromStr = date.from ? format(catchTime(date.from), dateFormat) : '';
+            const toStr = date.to ? format(catchTime(date.to), dateFormat) : '';
             return fromStr && toStr ? `${fromStr} - ${toStr}` : fromStr || toStr;
         }
-        return date ? format(date as Date, dateFormat) : "";
+        return date ? format(catchTime(date as Date), dateFormat) : "";
     }
 
     return (
-        <Popover open>
+        <Popover>
             <PopoverTrigger asChild >
                 <Group size={size}>
                     <Input{...props} value={mapDate()} ref={ref} />
@@ -70,17 +113,30 @@ export const DatePicker = forwardRef(({
                     mode={mode as any}
                     selected={date as any}
                     onSelect={(e: any) => {
-                        setDate(Array.isArray(e) ? [...e] : e);
+                        setDate(injectTime(e));
                         onChange?.({
                             target: {
-                                value: e
+                                value: injectTime(e)
                             }
                         } as any);
                     }}
                     min={mode != "single" ? min : undefined}
                     max={mode != "single" ? max : undefined}
                 />
-                <TimePicker />
+                {timePicker && (
+                    <TimePicker
+                        value={pickerValue}
+                        onChange={(value: PickerValue) => {
+                            setPickerValue(value);
+                            setDate(injectTime(date))
+                            onChange?.({
+                                target: {
+                                    value: date
+                                }
+                            } as any);
+                        }}
+                    />
+                )}
             </PopoverContent>
         </Popover>
     )
@@ -88,24 +144,20 @@ export const DatePicker = forwardRef(({
 
 DatePicker.displayName = "DatePicker";
 
+interface TimePickerProps {
+    value: PickerValue;
+    onChange: (value: PickerValue) => void;
+}
 
-
-
-const TimePicker = () => {
-    const [pickerValue, setPickerValue] = useState<PickerValue>({
-        hour: "12",
-        minute: "00",
-        time: "AM"
-    });
-
+const TimePicker = ({ value, onChange }: TimePickerProps) => {
     return (
         <div className='relative w-full sm:w-[189px]'>
             <Picker
                 className="flex-1"
                 selectContainerClassName="bg-background-system-body-tertiary z-[-1] rounded-[8px]"
-                value={pickerValue}
+                value={value}
                 onChange={(e: PickerValue) => {
-                    setPickerValue(e);
+                    onChange(e);
                 }}
                 wheelMode=""
             >

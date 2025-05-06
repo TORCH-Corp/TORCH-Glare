@@ -83,9 +83,9 @@ const Calender = ({
         today: `[&_button]:bg-background-system-action-primary-hover`, // Add a border to today's date
         selected: `[&_button]:!bg-background-system-action-primary-hover [&_button]:border-border-system-action-secondary-hover [&_button]:text-white`,
         outside: `[&_button]:bg-transparent [&_button]:text-content-system-global-disabled`,
-        range_start: `rounded-l-[8px] bg-background-system-action-primary-hover`,
-        range_end: `rounded-r-[8px] bg-background-system-action-primary-hover`,
-        range_middle: `bg-background-system-action-primary-hover [&_button]:!border-none [&_button]:bg-transparent`,
+        range_start: `rounded-l-[8px] bg-background-system-action-secondary-hover`,
+        range_end: `rounded-r-[8px] bg-background-system-action-secondary-hover`,
+        range_middle: `bg-background-system-action-secondary-hover [&_button]:!border-none [&_button]:!bg-transparent`,
         weekdays: `text-content-presentation-global-highlight-darkback text-[12px]`,
         week_number: `text-content-presentation-global-highlight-darkback text-[12px] px-1`,
         month_caption: `flex items-center justify-center`,
