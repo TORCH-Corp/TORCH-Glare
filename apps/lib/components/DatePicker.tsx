@@ -46,6 +46,7 @@ export const DatePicker = forwardRef(({
         time: "AM"
     });
 
+    console.log(date);
     useEffect(() => {
         onChange?.({
             target: {
@@ -66,7 +67,7 @@ export const DatePicker = forwardRef(({
                     </Trilling>
                 </Group>
             </PopoverTrigger>
-            <PopoverContent className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px] flex flex-col sm:flex-row'>
+            <PopoverContent data-theme="dark" className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px] flex flex-col sm:flex-row'>
                 <Calender
                     {...calendarProps}
                     captionLayout={captionLayout}
@@ -84,7 +85,7 @@ export const DatePicker = forwardRef(({
                         value={pickerValue}
                         onChange={(value: PickerValue) => {
                             setPickerValue(value);
-                            setDate(applyNewTimeValue(date, value));
+                            setDate(injectTime(date, value));
                         }}
                     />
                 )}
@@ -141,81 +142,64 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
     )
 }
 
-
-
-const catchTime = (date: Date,pickerValue: PickerValue) => {
+const formatTimeToDate = (date: Date, pickerValue: PickerValue): Date => {
     const newDate = new Date(date);
     let hours = parseInt(String(pickerValue.hour));
-    // Convert to 24-hour format if PM
+    
+    // Convert to 24-hour format
     if (pickerValue.time === "PM" && hours < 12) {
         hours += 12;
     } else if (pickerValue.time === "AM" && hours === 12) {
-        // 12 AM should be 0 in 24-hour format
         hours = 0;
     }
+    
     newDate.setHours(hours);
     newDate.setMinutes(parseInt(String(pickerValue.minute)));
     return newDate;
-}
+};
 
-const injectTime = (e: Date[] | Date | DateRange | undefined ,pickerValue: PickerValue) : Date[] | Date | DateRange | undefined => {
-    const isValidDate = (d: Date) => d instanceof Date && !isNaN(d.getTime());
-    
-    if (!e) return undefined;
-    
-    if (Array.isArray(e)) {
-        return e.filter(d => isValidDate(d)).map(d => catchTime(d,pickerValue));
-    }
-    if (e && 'from' in e) {
-        const from = e.from && isValidDate(e.from) ? catchTime(e.from as Date,pickerValue) : undefined;
-        const to = e.to && isValidDate(e.to) ? catchTime(e.to as Date,pickerValue) : undefined;
-        return { from, to };
-    }
-    return isValidDate(e as Date) ? catchTime(e as Date,pickerValue) : undefined;
-}
+const isValidDate = (date: Date): boolean => 
+    date instanceof Date && !isNaN(date.getTime());
 
-const applyNewTimeValue = (dateValue: Date | Date[] | DateRange | undefined, timeValue: PickerValue) => {
-    const applyTimeToDate = (d: Date) => {
-        if (!(d instanceof Date) || isNaN(d.getTime())) return d;
-        
-        const newDate = new Date(d);
-        let hours = parseInt(String(timeValue.hour));
-        
-        if (timeValue.time === "PM" && hours < 12) {
-            hours += 12;
-        } else if (timeValue.time === "AM" && hours === 12) {
-            hours = 0;
-        }
-        
-        newDate.setHours(hours);
-        newDate.setMinutes(parseInt(String(timeValue.minute)));
-        return newDate;
-    };
-    
+const injectTime = (dateValue: Date | Date[] | DateRange | undefined, pickerValue: PickerValue): Date | Date[] | DateRange | undefined => {
     if (!dateValue) return undefined;
     
     if (Array.isArray(dateValue)) {
-        return dateValue.map(d => applyTimeToDate(d));
+        return dateValue.filter(isValidDate).map(date => formatTimeToDate(date, pickerValue));
     }
     
     if (dateValue && 'from' in dateValue) {
-        const from = dateValue.from ? applyTimeToDate(dateValue.from as Date) : undefined;
-        const to = dateValue.to ? applyTimeToDate(dateValue.to as Date) : undefined;
+        const from = dateValue.from && isValidDate(dateValue.from as Date) 
+            ? formatTimeToDate(dateValue.from as Date, pickerValue) 
+            : undefined;
+        const to = dateValue.to && isValidDate(dateValue.to as Date) 
+            ? formatTimeToDate(dateValue.to as Date, pickerValue) 
+            : undefined;
         return { from, to };
     }
     
-    return applyTimeToDate(dateValue as Date);
+    return isValidDate(dateValue as Date) 
+        ? formatTimeToDate(dateValue as Date, pickerValue) 
+        : undefined;
 };
 
-const mapDate = (date: Date | Date[] | DateRange | undefined,pickerValue: PickerValue,dateFormat: string) => {
+
+const mapDate = (date: Date | Date[] | DateRange | undefined, pickerValue: PickerValue, dateFormat: string): string => {
     if (!date) return '';
+    
     if (Array.isArray(date)) {
-        return date.map(d => format(catchTime(d,pickerValue), dateFormat)).join(', ');
+        return date.map(d => format(formatTimeToDate(d, pickerValue), dateFormat)).join(', ');
     }
+    
     if ('from' in date) {
-        const from = date.from ? format(catchTime(date.from,pickerValue), dateFormat) : '';
-        const to = date.to ? format(catchTime(date.to,pickerValue), dateFormat) : '';
-        return `${from} - ${to}`;
+        const from = date.from 
+            ? format(formatTimeToDate(date.from as Date, pickerValue), dateFormat) 
+            : '';
+        const to = date.to 
+            ? format(formatTimeToDate(date.to as Date, pickerValue), dateFormat) 
+            : '';
+        return from && to ? `${from} - ${to}` : from || to;
     }
-    return format(catchTime(date,pickerValue), dateFormat);
-}
+    
+    return format(formatTimeToDate(date as Date, pickerValue), dateFormat);
+};
