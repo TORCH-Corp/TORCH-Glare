@@ -38,7 +38,8 @@ export const DatePicker = forwardRef(({
     ...props
 }: DatePickerProps, ref: ForwardedRef<HTMLInputElement>) => {
 
-    const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected || new Date());
+    const fallbackDate = mode == "multiple" ? [new Date()] : mode == "range" ? {from: new Date(), to: new Date()} : new Date();
+    const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected || fallbackDate);
     const [pickerValue, setPickerValue] = useState<PickerValue>({
         hour: "12",
         minute: "00",
@@ -51,7 +52,7 @@ export const DatePicker = forwardRef(({
                 value: date
             }
         } as any);
-    }, [selected]);
+    }, [date,pickerValue]);
 
     const catchTime = (date: Date) => {
         const newDate = new Date(date);
@@ -68,36 +69,40 @@ export const DatePicker = forwardRef(({
         return newDate;
     }
 
-    const injectTime = (e: Date[] | Date | DateRange | undefined) => {
+    const injectTime = (e: Date[] | Date | DateRange | undefined) : Date[] | Date | DateRange | undefined => {
+        const isValidDate = (d: Date) => d instanceof Date && !isNaN(d.getTime());
+        
+        if (!e) return undefined;
+        
         if (Array.isArray(e)) {
-            return e.map(d => catchTime(d));
+            return e.filter(d => isValidDate(d)).map(d => catchTime(d));
         }
         if (e && 'from' in e) {
-            return {
-                from: catchTime(e.from as Date),
-                to: catchTime(e.to as Date)
-            };
+            const from = e.from && isValidDate(e.from) ? catchTime(e.from as Date) : undefined;
+            const to = e.to && isValidDate(e.to) ? catchTime(e.to as Date) : undefined;
+            return { from, to };
         }
-        return catchTime(e as Date);
+        return isValidDate(e as Date) ? catchTime(e as Date) : undefined;
     }
 
-    const mapDate = () => {
+    const mapDate = (date: Date | Date[] | DateRange | undefined) => {
+        if (!date) return '';
         if (Array.isArray(date)) {
-            return date.map(d => format(catchTime(d), dateFormat)).join(' - ');
+            return date.map(d => format(catchTime(d), dateFormat)).join(', ');
         }
-        if (date && 'from' in date) {
-            const fromStr = date.from ? format(catchTime(date.from), dateFormat) : '';
-            const toStr = date.to ? format(catchTime(date.to), dateFormat) : '';
-            return fromStr && toStr ? `${fromStr} - ${toStr}` : fromStr || toStr;
+        if ('from' in date) {
+            const from = date.from ? format(catchTime(date.from), dateFormat) : '';
+            const to = date.to ? format(catchTime(date.to), dateFormat) : '';
+            return `${from} - ${to}`;
         }
-        return date ? format(catchTime(date as Date), dateFormat) : "";
+        return format(catchTime(date), dateFormat);
     }
 
     return (
         <Popover>
             <PopoverTrigger asChild >
                 <Group size={size}>
-                    <Input{...props} value={mapDate()} ref={ref} />
+                    <Input{...props} value={mapDate(date)} ref={ref} />
                     <Trilling>
                         <ActionButton type='button' size={size == "M" ? "M" : "S"}>
                             <i className="ri-calendar-event-fill"></i>
@@ -114,11 +119,6 @@ export const DatePicker = forwardRef(({
                     selected={date as any}
                     onSelect={(e: any) => {
                         setDate(injectTime(e));
-                        onChange?.({
-                            target: {
-                                value: injectTime(e)
-                            }
-                        } as any);
                     }}
                     min={mode != "single" ? min : undefined}
                     max={mode != "single" ? max : undefined}
@@ -129,11 +129,6 @@ export const DatePicker = forwardRef(({
                         onChange={(value: PickerValue) => {
                             setPickerValue(value);
                             setDate(injectTime(date))
-                            onChange?.({
-                                target: {
-                                    value: date
-                                }
-                            } as any);
                         }}
                     />
                 )}
