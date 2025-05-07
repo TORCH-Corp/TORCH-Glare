@@ -123,7 +123,7 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
                 onChange={(e: PickerValue) => {
                     onChange(e);
                 }}
-                wheelMode="normall"
+                wheelMode="normal"
             >
                 <span className='absolute left-0 top-1/2 -translate-y-1/2 w-full h-[20px] flex justify-center items-center text-white text-[30px] pr-[55px] pb-[5px]' >:</span>
                 <Picker.Column name="hour">
