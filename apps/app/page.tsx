@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@/components/Button';
 import { DatePicker } from '@/components/DatePicker';
+import { InputField } from '@/components/InputField';
 import { Controller, useForm } from 'react-hook-form';
 
 export default function Page() {
@@ -15,9 +16,7 @@ export default function Page() {
         control={control}
         render={({ field }) => (
           <DatePicker size='M' mode="single" timePicker={true} {...field} >
-           <Button size='M' theme='light'>
-            <i className="ri-calendar-event-fill"></i>
-           </Button>
+            <input type="text" />
           </DatePicker>
         )}
       />

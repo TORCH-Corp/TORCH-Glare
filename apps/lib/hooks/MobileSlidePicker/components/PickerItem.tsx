@@ -1,6 +1,6 @@
 import { HTMLProps, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
-import { usePickerActions, usePickerData } from './Picker.tsx'
-import { useColumnData } from './PickerColumn.tsx'
+import { usePickerActions, usePickerData } from './Picker'
+import { useColumnData } from './PickerColumn'
 
 interface PickerItemRenderProps {
   selected: boolean

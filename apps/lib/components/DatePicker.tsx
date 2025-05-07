@@ -1,9 +1,9 @@
-import React, { useState, forwardRef, ForwardedRef, HTMLAttributes, useEffect } from 'react';
+import React, { useState, forwardRef, ForwardedRef, HTMLAttributes, useEffect, cloneElement, isValidElement } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { Calender } from './Calender';
 import { Input, Trilling } from './Input';
 import { ActionButton } from './ActionButton';
-import { Group } from './Input';import { DateRange } from 'react-day-picker';
+import { Group } from './Input'; import { DateRange } from 'react-day-picker';
 import Picker, { PickerValue } from '../hooks/MobileSlidePicker';
 import { applyTimeToDateValue, formatDateValueToString } from '../utils/dateFormat';
 
@@ -38,7 +38,7 @@ export const DatePicker = forwardRef(({
     ...props
 }: DatePickerProps, ref: ForwardedRef<HTMLInputElement>) => {
 
-    const fallbackDate = mode == "multiple" ? [new Date()] : mode == "range" ? {from: new Date(), to: new Date()} : new Date();
+    const fallbackDate = mode == "multiple" ? [new Date()] : mode == "range" ? { from: new Date(), to: new Date() } : new Date();
     const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected || fallbackDate);
     const [pickerValue, setPickerValue] = useState<PickerValue>({
         hour: "12",
@@ -52,21 +52,25 @@ export const DatePicker = forwardRef(({
                 value: date
             }
         } as any);
-    }, [date,pickerValue]);
+    }, [date, pickerValue]);
+
+    const formattedValue = formatDateValueToString(date, pickerValue, dateFormat);
 
     return (
         <Popover>
-            <PopoverTrigger  >    
-{
-    children ?
-        React.cloneElement(children as React.ReactElement<any>, {
-            value : formatDateValueToString(date,pickerValue,dateFormat),
-            children: React.isValidElement(children) && children.type !== "input" ? formatDateValueToString(date,pickerValue,dateFormat).toString() : null
-        })
-    :
-        <DefaultInput value={formatDateValueToString(date,pickerValue,dateFormat)} ref={ref} {...props} />
-}
-            </PopoverTrigger>
+            <PopoverTrigger asChild >
+                {
+                    <Group size={"M"}>
+                        <Input {...props} value={formattedValue} ref={ref} />
+                        <Trilling>
+                            <ActionButton type='button' size={"M"}>
+                                <i className="ri-calendar-event-fill"></i>
+                            </ActionButton>
+                        </Trilling>
+                    </Group>
+                }
+
+            </PopoverTrigger >
             <PopoverContent data-theme="dark" className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px] flex flex-col sm:flex-row'>
                 <Calender
                     {...calendarProps}
@@ -75,7 +79,7 @@ export const DatePicker = forwardRef(({
                     mode={mode as any}
                     selected={date as any}
                     onSelect={(e: any) => {
-                        setDate(applyTimeToDateValue(e,pickerValue));
+                        setDate(applyTimeToDateValue(e, pickerValue));
                     }}
                     min={mode != "single" ? min : undefined}
                     max={mode != "single" ? max : undefined}
@@ -143,19 +147,3 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
         </div>
     )
 }
-
-
-const DefaultInput = forwardRef(({...props}: React.InputHTMLAttributes<HTMLInputElement>, ref: ForwardedRef<HTMLInputElement>) => {
-    return(
-        <Group size={"M"}>
-        <Input {...props}  ref={ref} />
-        <Trilling>
-            <ActionButton type='button' size={"M"}>
-                <i className="ri-calendar-event-fill"></i>
-            </ActionButton>
-        </Trilling>
-    </Group>
-    )
-});
-
-DefaultInput.displayName = "DefaultInput";
