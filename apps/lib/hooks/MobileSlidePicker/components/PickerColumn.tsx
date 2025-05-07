@@ -90,14 +90,19 @@ function PickerColumn({
   const [isMoving, setIsMoving] = useState<boolean>(false)
   const [startTouchY, setStartTouchY] = useState<number>(0)
 
+  // Modified to snap to steps while moving
   const updateScrollerWhileMoving = useCallback((nextScrollerTranslate: number) => {
     if (nextScrollerTranslate < minTranslate) {
       nextScrollerTranslate = minTranslate - Math.pow(minTranslate - nextScrollerTranslate, 0.8)
     } else if (nextScrollerTranslate > maxTranslate) {
       nextScrollerTranslate = maxTranslate + Math.pow(nextScrollerTranslate - maxTranslate, 0.8)
+    } else {
+      // Snap to the nearest step while moving
+      const currentStep = Math.round((maxTranslate - nextScrollerTranslate) / itemHeight)
+      nextScrollerTranslate = maxTranslate - currentStep * itemHeight
     }
     setScrollerTranslate(nextScrollerTranslate)
-  }, [maxTranslate, minTranslate])
+  }, [maxTranslate, minTranslate, itemHeight])
 
   const handleTouchStart = useCallback((event: React.TouchEvent) => {
     setStartTouchY(event.targetTouches[0].pageY)
@@ -113,9 +118,15 @@ function PickerColumn({
       setIsMoving(true)
     }
 
-    const nextScrollerTranslate = startScrollerTranslate + event.targetTouches[0].pageY - startTouchY
-    updateScrollerWhileMoving(nextScrollerTranslate)
-  }, [isMoving, startScrollerTranslate, startTouchY, updateScrollerWhileMoving])
+    const touchDelta = event.targetTouches[0].pageY - startTouchY
+    // Calculate next scroll position
+    const rawNextScrollerTranslate = startScrollerTranslate + touchDelta
+    
+    // Only update if moved enough to warrant a step change
+    if (Math.abs(touchDelta) > itemHeight / 2) {
+      updateScrollerWhileMoving(rawNextScrollerTranslate)
+    }
+  }, [isMoving, startScrollerTranslate, startTouchY, updateScrollerWhileMoving, itemHeight])
 
   const handleTouchEnd = useCallback(() => {
     if (!isMoving) {
@@ -140,25 +151,33 @@ function PickerColumn({
 
   // Handle wheel events
   const wheelingTimer = useRef<number | null>(null)
+  const wheelDeltaAccumulator = useRef<number>(0)
 
   const handleWheeling = useCallback((event: WheelEvent) => {
     if (event.deltaY === 0) {
       return
     }
-    let delta = event.deltaY * 0.1
-    if (Math.abs(delta) < itemHeight) {
-      delta = itemHeight * Math.sign(delta)
+    
+    const direction = Math.sign(event.deltaY)
+    wheelDeltaAccumulator.current += Math.abs(event.deltaY)
+    
+    // Only move to next step when accumulated enough delta
+    if (wheelDeltaAccumulator.current >= itemHeight) {
+      wheelDeltaAccumulator.current = 0
+      
+      // Move exactly one item at a time for stepped scrolling
+      const delta = direction * itemHeight
+      const nextStep = wheelMode === 'normal' ? -direction : direction
+      const nextScrollerTranslate = maxTranslate - (
+        Math.round((maxTranslate - scrollerTranslate) / itemHeight) + nextStep
+      ) * itemHeight
+      
+      updateScrollerWhileMoving(nextScrollerTranslate)
     }
-    if (wheelMode === 'normal') {
-      delta = -delta
-    }
-
-
-    const nextScrollerTranslate = scrollerTranslate + delta
-    updateScrollerWhileMoving(nextScrollerTranslate)
-  }, [itemHeight, scrollerTranslate, updateScrollerWhileMoving, wheelMode])
+  }, [itemHeight, scrollerTranslate, updateScrollerWhileMoving, wheelMode, maxTranslate])
 
   const handleWheelEnd = useCallback(() => {
+    wheelDeltaAccumulator.current = 0
     handleScrollerTranslateSettled()
   }, [handleScrollerTranslateSettled])
 
@@ -180,7 +199,7 @@ function PickerColumn({
     wheelingTimer.current = setTimeout(() => {
       handleWheelEnd()
     }, 200) as unknown as number
-  }, [handleWheelEnd, handleWheeling, wheelingTimer, wheelMode])
+  }, [handleWheelEnd, handleWheeling, wheelMode])
 
   // 'touchmove' and 'wheel' should not be passive
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -204,7 +223,7 @@ function PickerColumn({
       maxHeight: '100%',
       transitionProperty: 'transform',
       transitionTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
-      transitionDuration: isMoving ? '0ms' : '500ms',
+      transitionDuration: isMoving ? '0ms' : '300ms',
       transform: `translate3d(0, ${scrollerTranslate}px, 0)`,
     }),
     [scrollerTranslate, isMoving],
