@@ -54,55 +54,11 @@ export const DatePicker = forwardRef(({
         } as any);
     }, [date,pickerValue]);
 
-    const catchTime = (date: Date) => {
-        const newDate = new Date(date);
-        let hours = parseInt(String(pickerValue.hour));
-        // Convert to 24-hour format if PM
-        if (pickerValue.time === "PM" && hours < 12) {
-            hours += 12;
-        } else if (pickerValue.time === "AM" && hours === 12) {
-            // 12 AM should be 0 in 24-hour format
-            hours = 0;
-        }
-        newDate.setHours(hours);
-        newDate.setMinutes(parseInt(String(pickerValue.minute)));
-        return newDate;
-    }
-
-    const injectTime = (e: Date[] | Date | DateRange | undefined) : Date[] | Date | DateRange | undefined => {
-        const isValidDate = (d: Date) => d instanceof Date && !isNaN(d.getTime());
-        
-        if (!e) return undefined;
-        
-        if (Array.isArray(e)) {
-            return e.filter(d => isValidDate(d)).map(d => catchTime(d));
-        }
-        if (e && 'from' in e) {
-            const from = e.from && isValidDate(e.from) ? catchTime(e.from as Date) : undefined;
-            const to = e.to && isValidDate(e.to) ? catchTime(e.to as Date) : undefined;
-            return { from, to };
-        }
-        return isValidDate(e as Date) ? catchTime(e as Date) : undefined;
-    }
-
-    const mapDate = (date: Date | Date[] | DateRange | undefined) => {
-        if (!date) return '';
-        if (Array.isArray(date)) {
-            return date.map(d => format(catchTime(d), dateFormat)).join(', ');
-        }
-        if ('from' in date) {
-            const from = date.from ? format(catchTime(date.from), dateFormat) : '';
-            const to = date.to ? format(catchTime(date.to), dateFormat) : '';
-            return `${from} - ${to}`;
-        }
-        return format(catchTime(date), dateFormat);
-    }
-
     return (
         <Popover>
             <PopoverTrigger asChild >
                 <Group size={size}>
-                    <Input{...props} value={mapDate(date)} ref={ref} />
+                    <Input{...props} value={mapDate(date,pickerValue,dateFormat)} ref={ref} />
                     <Trilling>
                         <ActionButton type='button' size={size == "M" ? "M" : "S"}>
                             <i className="ri-calendar-event-fill"></i>
@@ -118,7 +74,7 @@ export const DatePicker = forwardRef(({
                     mode={mode as any}
                     selected={date as any}
                     onSelect={(e: any) => {
-                        setDate(injectTime(e));
+                        setDate(injectTime(e,pickerValue));
                     }}
                     min={mode != "single" ? min : undefined}
                     max={mode != "single" ? max : undefined}
@@ -128,7 +84,7 @@ export const DatePicker = forwardRef(({
                         value={pickerValue}
                         onChange={(value: PickerValue) => {
                             setPickerValue(value);
-                            setDate(injectTime(date))
+                            setDate(applyNewTimeValue(date, value));
                         }}
                     />
                 )}
@@ -183,4 +139,83 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
             </Picker>
         </div>
     )
+}
+
+
+
+const catchTime = (date: Date,pickerValue: PickerValue) => {
+    const newDate = new Date(date);
+    let hours = parseInt(String(pickerValue.hour));
+    // Convert to 24-hour format if PM
+    if (pickerValue.time === "PM" && hours < 12) {
+        hours += 12;
+    } else if (pickerValue.time === "AM" && hours === 12) {
+        // 12 AM should be 0 in 24-hour format
+        hours = 0;
+    }
+    newDate.setHours(hours);
+    newDate.setMinutes(parseInt(String(pickerValue.minute)));
+    return newDate;
+}
+
+const injectTime = (e: Date[] | Date | DateRange | undefined ,pickerValue: PickerValue) : Date[] | Date | DateRange | undefined => {
+    const isValidDate = (d: Date) => d instanceof Date && !isNaN(d.getTime());
+    
+    if (!e) return undefined;
+    
+    if (Array.isArray(e)) {
+        return e.filter(d => isValidDate(d)).map(d => catchTime(d,pickerValue));
+    }
+    if (e && 'from' in e) {
+        const from = e.from && isValidDate(e.from) ? catchTime(e.from as Date,pickerValue) : undefined;
+        const to = e.to && isValidDate(e.to) ? catchTime(e.to as Date,pickerValue) : undefined;
+        return { from, to };
+    }
+    return isValidDate(e as Date) ? catchTime(e as Date,pickerValue) : undefined;
+}
+
+const applyNewTimeValue = (dateValue: Date | Date[] | DateRange | undefined, timeValue: PickerValue) => {
+    const applyTimeToDate = (d: Date) => {
+        if (!(d instanceof Date) || isNaN(d.getTime())) return d;
+        
+        const newDate = new Date(d);
+        let hours = parseInt(String(timeValue.hour));
+        
+        if (timeValue.time === "PM" && hours < 12) {
+            hours += 12;
+        } else if (timeValue.time === "AM" && hours === 12) {
+            hours = 0;
+        }
+        
+        newDate.setHours(hours);
+        newDate.setMinutes(parseInt(String(timeValue.minute)));
+        return newDate;
+    };
+    
+    if (!dateValue) return undefined;
+    
+    if (Array.isArray(dateValue)) {
+        return dateValue.map(d => applyTimeToDate(d));
+    }
+    
+    if (dateValue && 'from' in dateValue) {
+        const from = dateValue.from ? applyTimeToDate(dateValue.from as Date) : undefined;
+        const to = dateValue.to ? applyTimeToDate(dateValue.to as Date) : undefined;
+        return { from, to };
+    }
+    
+    return applyTimeToDate(dateValue as Date);
+};
+
+const mapDate = (date: Date | Date[] | DateRange | undefined,pickerValue: PickerValue,dateFormat: string) => {
+    if (!date) return '';
+    if (Array.isArray(date)) {
+        return date.map(d => format(catchTime(d,pickerValue), dateFormat)).join(', ');
+    }
+    if ('from' in date) {
+        const from = date.from ? format(catchTime(date.from,pickerValue), dateFormat) : '';
+        const to = date.to ? format(catchTime(date.to,pickerValue), dateFormat) : '';
+        return `${from} - ${to}`;
+    }
+    return format(catchTime(date,pickerValue), dateFormat);
 }
