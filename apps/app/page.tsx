@@ -16,10 +16,11 @@ export default function Page() {
         control={control}
         render={({ field }) => (
           <DatePicker size='M' mode="single" timePicker={true} {...field} >
-            <input type="text" />
+            <InputField />
           </DatePicker>
         )}
       />
+
       <Button theme='light' type='submit'>Submit</Button>
     </form>
   );

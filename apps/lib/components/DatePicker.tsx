@@ -64,18 +64,22 @@ export const DatePicker = forwardRef(({
 
     return (
         <Popover>
-            <PopoverTrigger asChild >
+            <PopoverTrigger  >
                 {
-                    <Group size={"M"}>
-                        <Input {...props} value={formattedValue} ref={ref} />
-                        <Trilling>
-                            <ActionButton type='button' size={"M"}>
-                                <i className="ri-calendar-event-fill"></i>
-                            </ActionButton>
-                        </Trilling>
-                    </Group>
+                    isValidElement(children) ?
+                        cloneElement(children as React.ReactElement<any>, {
+                            value: formattedValue
+                        })
+                        :
+                        <Group size={"M"}>
+                            <Input {...props} value={formattedValue} ref={ref} />
+                            <Trilling>
+                                <ActionButton type='button' size={"M"}>
+                                    <i className="ri-calendar-event-fill"></i>
+                                </ActionButton>
+                            </Trilling>
+                        </Group>
                 }
-
             </PopoverTrigger >
             <PopoverContent data-theme="dark" className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px] flex flex-col sm:flex-row'>
                 <Calender
