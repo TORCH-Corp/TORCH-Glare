@@ -14,7 +14,11 @@ export default function Page() {
         name="dateOfBirth"
         control={control}
         render={({ field }) => (
-          <DatePicker size='M' mode="range" timePicker={true} {...field} />
+          <DatePicker size='M' mode="single" timePicker={true} {...field} >
+           <Button size='M' theme='light'>
+            <i className="ri-calendar-event-fill"></i>
+           </Button>
+          </DatePicker>
         )}
       />
       <Button theme='light' type='submit'>Submit</Button>

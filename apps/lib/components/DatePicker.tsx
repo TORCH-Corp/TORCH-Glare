@@ -3,10 +3,9 @@ import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { Calender } from './Calender';
 import { Input, Trilling } from './Input';
 import { ActionButton } from './ActionButton';
-import { Group } from './Input';
-import { format } from 'date-fns';
-import { DateRange } from 'react-day-picker';
+import { Group } from './Input';import { DateRange } from 'react-day-picker';
 import Picker, { PickerValue } from '../hooks/MobileSlidePicker';
+import { applyTimeToDateValue, formatDateValueToString } from '../utils/dateFormat';
 
 export type CalendarProps = React.ComponentProps<typeof Calender>
 
@@ -35,6 +34,7 @@ export const DatePicker = forwardRef(({
     dateFormat = "yyyy/MM/dd hh:mm a",
     calendarProps,
     timePicker = false,
+    children,
     ...props
 }: DatePickerProps, ref: ForwardedRef<HTMLInputElement>) => {
 
@@ -46,7 +46,6 @@ export const DatePicker = forwardRef(({
         time: "AM"
     });
 
-    console.log(date);
     useEffect(() => {
         onChange?.({
             target: {
@@ -57,15 +56,16 @@ export const DatePicker = forwardRef(({
 
     return (
         <Popover>
-            <PopoverTrigger asChild >
-                <Group size={size}>
-                    <Input{...props} value={mapDate(date,pickerValue,dateFormat)} ref={ref} />
-                    <Trilling>
-                        <ActionButton type='button' size={size == "M" ? "M" : "S"}>
-                            <i className="ri-calendar-event-fill"></i>
-                        </ActionButton>
-                    </Trilling>
-                </Group>
+            <PopoverTrigger  >    
+{
+    children ?
+        React.cloneElement(children as React.ReactElement<any>, {
+            value : formatDateValueToString(date,pickerValue,dateFormat),
+            children: React.isValidElement(children) && children.type !== "input" ? formatDateValueToString(date,pickerValue,dateFormat).toString() : null
+        })
+    :
+        <DefaultInput value={formatDateValueToString(date,pickerValue,dateFormat)} ref={ref} {...props} />
+}
             </PopoverTrigger>
             <PopoverContent data-theme="dark" className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px] flex flex-col sm:flex-row'>
                 <Calender
@@ -75,7 +75,7 @@ export const DatePicker = forwardRef(({
                     mode={mode as any}
                     selected={date as any}
                     onSelect={(e: any) => {
-                        setDate(injectTime(e,pickerValue));
+                        setDate(applyTimeToDateValue(e,pickerValue));
                     }}
                     min={mode != "single" ? min : undefined}
                     max={mode != "single" ? max : undefined}
@@ -85,7 +85,7 @@ export const DatePicker = forwardRef(({
                         value={pickerValue}
                         onChange={(value: PickerValue) => {
                             setPickerValue(value);
-                            setDate(injectTime(date, value));
+                            setDate(applyTimeToDateValue(date, value));
                         }}
                     />
                 )}
@@ -95,6 +95,8 @@ export const DatePicker = forwardRef(({
 });
 
 DatePicker.displayName = "DatePicker";
+
+
 
 interface TimePickerProps {
     value: PickerValue;
@@ -142,64 +144,18 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
     )
 }
 
-const formatTimeToDate = (date: Date, pickerValue: PickerValue): Date => {
-    const newDate = new Date(date);
-    let hours = parseInt(String(pickerValue.hour));
-    
-    // Convert to 24-hour format
-    if (pickerValue.time === "PM" && hours < 12) {
-        hours += 12;
-    } else if (pickerValue.time === "AM" && hours === 12) {
-        hours = 0;
-    }
-    
-    newDate.setHours(hours);
-    newDate.setMinutes(parseInt(String(pickerValue.minute)));
-    return newDate;
-};
 
-const isValidDate = (date: Date): boolean => 
-    date instanceof Date && !isNaN(date.getTime());
+const DefaultInput = forwardRef(({...props}: React.InputHTMLAttributes<HTMLInputElement>, ref: ForwardedRef<HTMLInputElement>) => {
+    return(
+        <Group size={"M"}>
+        <Input {...props}  ref={ref} />
+        <Trilling>
+            <ActionButton type='button' size={"M"}>
+                <i className="ri-calendar-event-fill"></i>
+            </ActionButton>
+        </Trilling>
+    </Group>
+    )
+});
 
-const injectTime = (dateValue: Date | Date[] | DateRange | undefined, pickerValue: PickerValue): Date | Date[] | DateRange | undefined => {
-    if (!dateValue) return undefined;
-    
-    if (Array.isArray(dateValue)) {
-        return dateValue.filter(isValidDate).map(date => formatTimeToDate(date, pickerValue));
-    }
-    
-    if (dateValue && 'from' in dateValue) {
-        const from = dateValue.from && isValidDate(dateValue.from as Date) 
-            ? formatTimeToDate(dateValue.from as Date, pickerValue) 
-            : undefined;
-        const to = dateValue.to && isValidDate(dateValue.to as Date) 
-            ? formatTimeToDate(dateValue.to as Date, pickerValue) 
-            : undefined;
-        return { from, to };
-    }
-    
-    return isValidDate(dateValue as Date) 
-        ? formatTimeToDate(dateValue as Date, pickerValue) 
-        : undefined;
-};
-
-
-const mapDate = (date: Date | Date[] | DateRange | undefined, pickerValue: PickerValue, dateFormat: string): string => {
-    if (!date) return '';
-    
-    if (Array.isArray(date)) {
-        return date.map(d => format(formatTimeToDate(d, pickerValue), dateFormat)).join(', ');
-    }
-    
-    if ('from' in date) {
-        const from = date.from 
-            ? format(formatTimeToDate(date.from as Date, pickerValue), dateFormat) 
-            : '';
-        const to = date.to 
-            ? format(formatTimeToDate(date.to as Date, pickerValue), dateFormat) 
-            : '';
-        return from && to ? `${from} - ${to}` : from || to;
-    }
-    
-    return format(formatTimeToDate(date as Date, pickerValue), dateFormat);
-};
+DefaultInput.displayName = "DefaultInput";
