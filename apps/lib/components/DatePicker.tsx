@@ -4,7 +4,13 @@ import { Calender } from './Calender';
 import { Input, Trilling } from './Input';
 import { ActionButton } from './ActionButton';
 import { Group } from './Input'; import { DateRange } from 'react-day-picker';
-import Picker, { PickerValue } from '../hooks/MobileSlidePicker';
+import Picker from 'torch-react-mobile-picker';
+// Define PickerValue type directly to avoid the type import issue
+type PickerValue = {
+    hour: string;
+    minute: string;
+    time: string;
+};
 import { applyTimeToDateValue, formatDateValueToString } from '../utils/dateFormat';
 
 export type CalendarProps = React.ComponentProps<typeof Calender>
