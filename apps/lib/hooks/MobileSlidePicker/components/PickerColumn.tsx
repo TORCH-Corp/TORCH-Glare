@@ -91,13 +91,13 @@ function PickerColumn({
   const [startTouchY, setStartTouchY] = useState<number>(0)
 
   // Modified to snap to steps while moving
-  const updateScrollerWhileMoving = useCallback((nextScrollerTranslate: number) => {
+  const updateScrollerWhileMoving = useCallback((nextScrollerTranslate: number, shouldSnap = false) => {
     if (nextScrollerTranslate < minTranslate) {
       nextScrollerTranslate = minTranslate - Math.pow(minTranslate - nextScrollerTranslate, 0.8)
     } else if (nextScrollerTranslate > maxTranslate) {
       nextScrollerTranslate = maxTranslate + Math.pow(nextScrollerTranslate - maxTranslate, 0.8)
-    } else {
-      // Snap to the nearest step while moving
+    } else if (shouldSnap) {
+      // Snap to the nearest step only when explicitly requested (on end)
       const currentStep = Math.round((maxTranslate - nextScrollerTranslate) / itemHeight)
       nextScrollerTranslate = maxTranslate - currentStep * itemHeight
     }
@@ -119,25 +119,29 @@ function PickerColumn({
     }
 
     const touchDelta = event.targetTouches[0].pageY - startTouchY
-    // Calculate next scroll position
+    // Calculate next scroll position and allow fluid movement during touch
     const rawNextScrollerTranslate = startScrollerTranslate + touchDelta
     
-    // Only update if moved enough to warrant a step change
-    if (Math.abs(touchDelta) > itemHeight / 2) {
-      updateScrollerWhileMoving(rawNextScrollerTranslate)
-    }
-  }, [isMoving, startScrollerTranslate, startTouchY, updateScrollerWhileMoving, itemHeight])
+    // Update position without snapping during touch movement
+    updateScrollerWhileMoving(rawNextScrollerTranslate, false)
+  }, [isMoving, startScrollerTranslate, startTouchY, updateScrollerWhileMoving])
 
   const handleTouchEnd = useCallback(() => {
     if (!isMoving) {
       return
     }
+    
+    // Snap to the nearest step when touch ends
+    const currentStep = Math.round((maxTranslate - scrollerTranslate) / itemHeight)
+    const snappedTranslate = maxTranslate - currentStep * itemHeight
+    setScrollerTranslate(snappedTranslate)
+    
     setIsMoving(false)
     setStartTouchY(0)
     setStartScrollerTranslate(0)
 
     handleScrollerTranslateSettled()
-  }, [handleScrollerTranslateSettled, isMoving])
+  }, [handleScrollerTranslateSettled, isMoving, maxTranslate, scrollerTranslate, itemHeight])
 
   const handleTouchCancel = useCallback(() => {
     if (!isMoving) {
