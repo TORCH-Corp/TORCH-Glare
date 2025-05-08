@@ -122,7 +122,10 @@ and fix tailwindcss issues.
 
 ### Refactor 
 
-- `DatePicker` refactored to use `Calender` component.
+- `DatePicker` refactored to use `Calender` component .
+- `DatePicker` use new range, and multuble with Time slider.
 - `Button` component type prop changed to `button` by default.
+- `MobileSilder` Hook moved to npm as packege.
+
 
 

@@ -4,13 +4,9 @@ import { Calender } from './Calender';
 import { Input, Trilling } from './Input';
 import { ActionButton } from './ActionButton';
 import { Group } from './Input'; import { DateRange } from 'react-day-picker';
-import Picker from 'torch-react-mobile-picker';
+import Picker, { PickerValue } from 'torch-react-mobile-picker';
 // Define PickerValue type directly to avoid the type import issue
-type PickerValue = {
-    hour: string;
-    minute: string;
-    time: string;
-};
+
 import { applyTimeToDateValue, formatDateValueToString } from '../utils/dateFormat';
 
 export type CalendarProps = React.ComponentProps<typeof Calender>
@@ -52,6 +48,8 @@ export const DatePicker = forwardRef(({
         time: "AM"
     });
 
+
+    // Call the onChange function when the date or picker value changes
     useEffect(() => {
         onChange?.({
             target: {
@@ -65,12 +63,15 @@ export const DatePicker = forwardRef(({
     return (
         <Popover>
             <PopoverTrigger asChild  >
+                {/* Clone the children element and pass the formatted value to the input element */}
                 {
-                    isValidElement(children) ?
+                    isValidElement(children)?
                         cloneElement(children as React.ReactElement<HTMLInputElement>, {
-                            value: (children as React.ReactElement<HTMLInputElement>).props.value || formattedValue
+                            value: (children as React.ReactElement<HTMLInputElement>).props.value ?? formattedValue,
+                            type: "input"
                         })
                         :
+                        /* If the children is not a valid element, Show the default input */
                         <Group size={"M"}>
                             <Input {...props} value={formattedValue} ref={ref} />
                             <Trilling>

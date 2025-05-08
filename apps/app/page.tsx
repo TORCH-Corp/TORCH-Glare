@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/Button';
 import { DatePicker } from '@/components/DatePicker';
-import { InputField } from '@/components/InputField';
+import { InnerLabelField } from '@/components/InnerLabelField';
 import { Controller, useForm } from 'react-hook-form';
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
         control={control}
         render={({ field }) => (
           <DatePicker size='M' mode="range" timePicker={true} {...field} >
-            <InputField />
+            <InnerLabelField label='Date of Birth' />
           </DatePicker>
         )}
       />
