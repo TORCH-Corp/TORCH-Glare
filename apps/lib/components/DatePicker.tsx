@@ -64,11 +64,11 @@ export const DatePicker = forwardRef(({
 
     return (
         <Popover>
-            <PopoverTrigger  >
+            <PopoverTrigger asChild  >
                 {
                     isValidElement(children) ?
-                        cloneElement(children as React.ReactElement<any>, {
-                            value: formattedValue
+                        cloneElement(children as React.ReactElement<HTMLInputElement>, {
+                            value: (children as React.ReactElement<HTMLInputElement>).props.value || formattedValue
                         })
                         :
                         <Group size={"M"}>

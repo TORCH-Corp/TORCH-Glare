@@ -15,7 +15,7 @@ export default function Page() {
         name="dateOfBirth"
         control={control}
         render={({ field }) => (
-          <DatePicker size='M' mode="single" timePicker={true} {...field} >
+          <DatePicker size='M' mode="range" timePicker={true} {...field} >
             <InputField />
           </DatePicker>
         )}
