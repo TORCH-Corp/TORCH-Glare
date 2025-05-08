@@ -157,7 +157,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
           selectContainerClassName="bg-background-system-body-tertiary z-[-1] rounded-[8px]"
           value={pickerValue}
           onChange={handlePickerChange}
-          wheelMode="normal"
+          wheelMode="natural"
         >
           <Picker.Column name="year" >
             {years.map((year) => (
