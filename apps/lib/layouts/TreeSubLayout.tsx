@@ -1,9 +1,9 @@
 'use client';
 import { usePathname } from "next/navigation";
-import TabFormItem from "@/components/TabFormItem";
-import { cn } from "@/utils/cn";
+import TabFormItem from "../components/TabFormItem";
+import { cn } from "../utils/cn";
 import Link from "next/link";
-import { useActiveTreeItem } from "@/hooks/useActiveTreeItem";
+import { useActiveTreeItem } from "../hooks/useActiveTreeItem";
 
 interface TreeItem {
   id: string;

@@ -11,9 +11,9 @@ import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { useClickOutside } from "../hooks/useClickOutside";
 import { Badge } from "./Badge";
-import { Tag, useTagSelection } from "@/hooks/useTagSelection";
+import { Tag, useTagSelection } from "../hooks/useTagSelection";
 
 
 interface Props

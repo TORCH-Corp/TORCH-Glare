@@ -1,5 +1,5 @@
-import { useClickOutside } from "@/hooks/useClickOutside";
-import { cn } from "@/utils/cn";
+import { useClickOutside } from "../hooks/useClickOutside";
+import { cn } from "../utils/cn";
 import { cva } from "class-variance-authority";
 import { HTMLAttributes, InputHTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
 

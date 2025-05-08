@@ -14,7 +14,7 @@ import {
 
 import { cn } from "../utils/cn"
 import { Label } from "./Label"
-import { Themes } from "@/utils/types"
+import { Themes } from "../utils/types"
 import { ReactNode } from "react"
 const Form = FormProvider
 
