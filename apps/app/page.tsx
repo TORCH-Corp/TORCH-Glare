@@ -21,13 +21,13 @@ export default function Page() {
         )}
       />
 
-      {/*       <Controller
+      <Controller
         name="DatePicker"
         control={control}
         render={({ field }) => (
           <DatePicker timePicker {...field} />
         )}
-      /> */}
+      />
 
       <Button theme='light' type='submit'>Submit</Button>
     </form>

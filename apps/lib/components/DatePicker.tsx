@@ -47,7 +47,7 @@ export const DatePicker = forwardRef(({
         minute: "00",
         time: "AM"
     });
-
+    const [isOpen, setIsOpen] = useState(false);
 
     // Call the onChange function when the date or picker value changes
     useEffect(() => {
@@ -58,10 +58,23 @@ export const DatePicker = forwardRef(({
         } as any);
     }, [date, pickerValue]);
 
+    // Disable body scroll when popover is open
+    useEffect(() => {
+        if (isOpen) {
+            // Save the current overflow style
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+
+            // Cleanup function to restore original overflow style
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }
+    }, [isOpen]);
     const formattedValue = formatDateValueToString(date, pickerValue, dateFormat);
 
     return (
-        <Popover>
+        <Popover onOpenChange={setIsOpen}>
             <PopoverTrigger asChild  >
                 {/* Clone the children element and pass the formatted value to the input element */}
                 {

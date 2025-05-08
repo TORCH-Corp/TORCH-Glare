@@ -1,6 +1,6 @@
-import { cloneElement, ComponentProps, forwardRef, isValidElement, useState } from 'react';
+import { cloneElement, ComponentProps, forwardRef, isValidElement, useState, useEffect } from 'react';
 import { getDaysInMonth } from 'date-fns';
-import Picker, { PickerValue } from 'torch-react-mobile-picker';
+import Picker from 'torch-react-mobile-picker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
 import { ActionButton } from './ActionButton';
@@ -47,6 +47,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
   const [pickerValue, setPickerValue] = useState<SlideVlaues>(defaultPickerValue);
   const [date, setDate] = useState<Date>(new Date());
+  const [isOpen, setIsOpen] = useState(false);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ''));
@@ -68,7 +69,11 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     setPickerValue(updatedValue);
 
     // Create a Date object from the updated value
-    const newDate = new Date(`${updatedValue.year}-${updatedValue.month}-${updatedValue.day} ${updatedValue.hour}:${updatedValue.minute} ${updatedValue.time}`);
+    const newDate = new Date(
+      Number(updatedValue.year),
+      Number(updatedValue.month) - 1, // Month is 0-indexed in JavaScript Date
+      Number(updatedValue.day)
+    );
     setDate(newDate);
 
     // Call the onChange callback with the Date object
@@ -87,8 +92,32 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     time: pickerValue.time ?? defaultPickerValue.time
   }, dateFormat);
 
+  // Disable body scroll when popover is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save the current overflow style
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      // Cleanup function to restore original overflow style
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange({
+        target: {
+          value: date
+        }
+      } as any);
+    }
+  }, [formattedValue]);
+
   return (
-    <Popover>
+    <Popover onOpenChange={setIsOpen}>
       <PopoverTrigger asChild data-theme={theme} className='w-full flex-1' >
         {
           isValidElement(children) ?
