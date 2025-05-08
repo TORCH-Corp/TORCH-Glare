@@ -26,7 +26,7 @@ export default function Page() {
         name="DatePicker"
         control={control}
         render={({ field }) => (
-          <DatePicker timePicker {...field} />
+          <DatePicker  {...field} />
         )}
       />
 

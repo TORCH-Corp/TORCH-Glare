@@ -33,7 +33,7 @@ export const DatePicker = forwardRef(({
     onChange,
     showWeekNumber = false,
     captionLayout = "dropdown",
-    dateFormat = "yyyy/MM/dd hh:mm a",
+    dateFormat = "yyyy/MM/dd",
     calendarProps,
     timePicker = false,
     children,
