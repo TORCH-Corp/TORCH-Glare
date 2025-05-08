@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/Button';
 import { DatePicker } from '@/components/DatePicker';
-import { InnerLabelField } from '@/components/InnerLabelField';
+import { SlideDatePicker } from '@/components/SlideDatePicker';
 import { Controller, useForm } from 'react-hook-form';
 
 export default function Page() {
@@ -12,14 +12,20 @@ export default function Page() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 w-full p-5'>
       <Controller
-        name="dateOfBirth"
+        name="slideDatePicker"
         control={control}
         render={({ field }) => (
-          <DatePicker size='M' mode="range" timePicker={true} {...field} >
-            <InnerLabelField label='Date of Birth' />
-          </DatePicker>
+          <SlideDatePicker {...field} />
         )}
       />
+
+      {/*       <Controller
+        name="DatePicker"
+        control={control}
+        render={({ field }) => (
+          <DatePicker timePicker {...field} />
+        )}
+      /> */}
 
       <Button theme='light' type='submit'>Submit</Button>
     </form>

@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { SlideDatePicker } from "@/components/SlideDatePicker-dev";
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 

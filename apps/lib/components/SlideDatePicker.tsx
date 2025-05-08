@@ -1,8 +1,10 @@
-import { ComponentProps, forwardRef, useState } from 'react';
+import { cloneElement, ComponentProps, forwardRef, isValidElement, useState } from 'react';
 import { getDaysInMonth } from 'date-fns';
 import Picker, { PickerValue } from 'torch-react-mobile-picker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
+import { ActionButton } from './ActionButton';
+import { formatDateValueToString } from '@/utils/dateFormat';
 
 function getDayArray(year: number, month: number): string[] {
   const dayCount = getDaysInMonth(new Date(year, month - 1));
@@ -10,21 +12,41 @@ function getDayArray(year: number, month: number): string[] {
 }
 
 interface SlideDatePickerProps extends Omit<ComponentProps<typeof InputField>, 'onChange'> {
-  onChange?: (e: Date) => void;
+  onChange?: (e: any) => void;
   theme?: "dark" | "light" | "default";
-  onDateChange?: (date: Date) => void;
+  dateFormat?: string;
 }
 
-export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>(({ theme = "dark", onChange, onDateChange, ...props }, forwardedRef) => {
+type SlideVlaues = {
+  year: string,
+  month: string,
+  day: string,
+  hour?: string,
+  minute?: string,
+  time?: string
+}
+
+export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps>((
+  {
+    theme = "dark",
+    onChange,
+    dateFormat = "yyyy/MM/dd hh:mm a",
+    children,
+    ...props
+  }, forwardedRef) => {
+
   const today = new Date();
-  const pickerValueData = {
+  const defaultPickerValue = {
     year: String(today.getFullYear()),
     month: String(today.getMonth() + 1).padStart(2, '0'),
     day: String(today.getDate()).padStart(2, '0'),
+    hour: "00",
+    minute: "00",
+    time: "AM"
   };
 
-  const [pickerValue, setPickerValue] = useState<PickerValue>(pickerValueData);
-
+  const [pickerValue, setPickerValue] = useState<SlideVlaues>(defaultPickerValue);
+  const [date, setDate] = useState<Date>(new Date());
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ''));
@@ -33,34 +55,63 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
   ];
-  const handlePickerChange = (newValue: PickerValue, key: string) => {
-    let { year, month, day } = newValue;
+
+  const handlePickerChange = (newValue: SlideVlaues, key: string) => {
+    let { year, month, day, hour, minute, time } = newValue;
 
     if (key === 'year' || key === 'month') {
       const newDayArray = getDayArray(Number(year), Number(month));
       day = newDayArray.includes(day as string) ? day : newDayArray[newDayArray.length - 1];
     }
 
-    const updatedValue = { year, month, day };
+    const updatedValue = { year, month, day, hour, minute, time };
     setPickerValue(updatedValue);
 
     // Create a Date object from the updated value
-    const newDate = new Date(`${updatedValue.year}-${updatedValue.month}-${updatedValue.day}`);
+    const newDate = new Date(`${updatedValue.year}-${updatedValue.month}-${updatedValue.day} ${updatedValue.hour}:${updatedValue.minute} ${updatedValue.time}`);
+    setDate(newDate);
 
     // Call the onChange callback with the Date object
     if (onChange) {
-      onChange(newDate);
-    }
-
-    if (onDateChange) {
-      onDateChange(newDate);
+      onChange({
+        target: {
+          value: newDate
+        }
+      } as any);
     }
   };
 
+  const formattedValue = formatDateValueToString(date, {
+    hour: pickerValue.hour ?? defaultPickerValue.hour,
+    minute: pickerValue.minute ?? defaultPickerValue.minute,
+    time: pickerValue.time ?? defaultPickerValue.time
+  }, dateFormat);
+
   return (
     <Popover>
-      <PopoverTrigger data-theme={theme} className='w-full flex-1' >
-        <InputField theme={theme} {...props} ref={forwardedRef} value={`${pickerValue.year}/${pickerValue.month}/${pickerValue.day}`} readOnly />
+      <PopoverTrigger asChild data-theme={theme} className='w-full flex-1' >
+        {
+          isValidElement(children) ?
+            cloneElement(children as React.ReactElement<HTMLInputElement>, {
+              value: (children as React.ReactElement<HTMLInputElement>).props.value ?? formattedValue,
+              type: "input",
+              readOnly: true
+            })
+            :
+            /* If the children is not a valid element, Show the default input */
+            <InputField
+              readOnly
+              type="input"
+              childrenSide={
+                <ActionButton type='button' size={"M"}>
+                  <i className="ri-calendar-event-fill"></i>
+                </ActionButton>
+              }
+              {...props}
+              value={formattedValue}
+              ref={forwardedRef}
+            />
+        }
       </PopoverTrigger>
       <PopoverContent data-theme={theme} dir="ltr" variant={props.variant} className="overflow-hidden w-[285px] flex justify-center items-center p-[6px] pt-[30px]">
         <div className="flex justify-evenly items-center w-full absolute top-0 py-[6px]">
@@ -105,21 +156,3 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     </Popover>
   );
 });
-
-
-// using with react hook form lib
-/* 
- <form onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="date"
-        control={control}
-        render={({ field }) => (
-          <SlideDatePicker
-            {...field}
-            onChange={(value: Date) => field.onChange(value)}
-          />
-        )}
-      />
-      <button>submit</button>
-    </form>
-*/

@@ -5,9 +5,9 @@ import { Input, Trilling } from './Input';
 import { ActionButton } from './ActionButton';
 import { Group } from './Input'; import { DateRange } from 'react-day-picker';
 import Picker, { PickerValue } from 'torch-react-mobile-picker';
-// Define PickerValue type directly to avoid the type import issue
 
-import { applyTimeToDateValue, formatDateValueToString } from '../utils/dateFormat';
+import { applyTimeToDateValue, formatDateValueToString, TimePickerValue } from '../utils/dateFormat';
+import { InputField } from './InputField';
 
 export type CalendarProps = React.ComponentProps<typeof Calender>
 
@@ -42,7 +42,7 @@ export const DatePicker = forwardRef(({
 
     const fallbackDate = mode == "multiple" ? [new Date()] : mode == "range" ? { from: new Date(), to: new Date() } : new Date();
     const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(selected || fallbackDate);
-    const [pickerValue, setPickerValue] = useState<PickerValue>({
+    const [pickerValue, setPickerValue] = useState<TimePickerValue>({
         hour: "12",
         minute: "00",
         time: "AM"
@@ -65,21 +65,26 @@ export const DatePicker = forwardRef(({
             <PopoverTrigger asChild  >
                 {/* Clone the children element and pass the formatted value to the input element */}
                 {
-                    isValidElement(children)?
+                    isValidElement(children) ?
                         cloneElement(children as React.ReactElement<HTMLInputElement>, {
                             value: (children as React.ReactElement<HTMLInputElement>).props.value ?? formattedValue,
-                            type: "input"
+                            type: "input",
+                            readOnly: true
                         })
                         :
                         /* If the children is not a valid element, Show the default input */
-                        <Group size={"M"}>
-                            <Input {...props} value={formattedValue} ref={ref} />
-                            <Trilling>
+                        <InputField
+                            readOnly
+                            type="input"
+                            childrenSide={
                                 <ActionButton type='button' size={"M"}>
                                     <i className="ri-calendar-event-fill"></i>
                                 </ActionButton>
-                            </Trilling>
-                        </Group>
+                            }
+                            {...props}
+                            value={formattedValue}
+                            ref={ref}
+                        />
                 }
             </PopoverTrigger >
             <PopoverContent data-theme="dark" className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px] flex flex-col sm:flex-row'>
@@ -98,7 +103,7 @@ export const DatePicker = forwardRef(({
                 {timePicker && (
                     <TimePicker
                         value={pickerValue}
-                        onChange={(value: PickerValue) => {
+                        onChange={(value: TimePickerValue) => {
                             setPickerValue(value);
                             setDate(applyTimeToDateValue(date, value));
                         }}
@@ -114,8 +119,8 @@ DatePicker.displayName = "DatePicker";
 
 
 interface TimePickerProps {
-    value: PickerValue;
-    onChange: (value: PickerValue) => void;
+    value: TimePickerValue;
+    onChange: (value: TimePickerValue) => void;
 }
 
 const TimePicker = ({ value, onChange }: TimePickerProps) => {
@@ -125,7 +130,7 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
                 className="flex-1"
                 selectContainerClassName="bg-background-system-body-tertiary z-[-1] rounded-[8px]"
                 value={value}
-                onChange={(e: PickerValue) => {
+                onChange={(e: TimePickerValue) => {
                     onChange(e);
                 }}
                 wheelMode="normal"
