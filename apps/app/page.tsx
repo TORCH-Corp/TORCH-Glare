@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@/components/Button';
 import { DatePicker } from '@/components/DatePicker';
+import { InnerLabelField } from '@/components/InnerLabelField';
 import { SlideDatePicker } from '@/components/SlideDatePicker';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -15,7 +16,8 @@ export default function Page() {
         name="slideDatePicker"
         control={control}
         render={({ field }) => (
-          <SlideDatePicker {...field} />
+          <SlideDatePicker {...field} >
+          </SlideDatePicker>
         )}
       />
 

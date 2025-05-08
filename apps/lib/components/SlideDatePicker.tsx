@@ -30,7 +30,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   {
     theme = "dark",
     onChange,
-    dateFormat = "yyyy/MM/dd hh:mm a",
+    dateFormat = "yyyy/MM/dd",
     children,
     ...props
   }, forwardedRef) => {
