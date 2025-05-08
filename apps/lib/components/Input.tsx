@@ -137,7 +137,7 @@ input:-webkit-autofill:active {
 
 export const GroupStyles = cva(
     [
-        "flex w-full min-w-0 px-1 pe-[3px] justify-center items-center",
+        "flex w-full min-w-0 px-1 justify-center items-center",
         "typography-body-small-regular",
         "border",
         "transition-all duration-200 ease-in-out",

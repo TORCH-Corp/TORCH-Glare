@@ -4,7 +4,7 @@ import { Button } from "./Button";
 import { cn } from "../utils/cn";
 import { ButtonVariant, Themes } from "../utils/types";
 
-const buttonVariants = cva("", {
+const buttonVariants = cva("!rounded-[4px]", {
   variants: {
     size: {
       XS: "h-[18px] w-[18px] text-[12px]",
