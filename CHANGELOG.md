@@ -118,7 +118,7 @@ and fix tailwindcss issues.
 
 ### Added
 
-- `Calender` component added to the library.
+- `Calendar` component added to the library.
 - `SlideDatePicker` component added to the library.
 
 ### Refactor 

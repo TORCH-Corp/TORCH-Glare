@@ -1,15 +1,14 @@
 import React, { useState, forwardRef, ForwardedRef, HTMLAttributes, useEffect, cloneElement, isValidElement } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
-import { Calender } from './Calender';
-import { Input, Trilling } from './Input';
+import { Calendar } from './Calendar';
 import { ActionButton } from './ActionButton';
-import { Group } from './Input'; import { DateRange } from 'react-day-picker';
 import Picker, { PickerValue } from 'torch-react-mobile-picker';
 
 import { applyTimeToDateValue, formatDateValueToString, TimePickerValue } from '../utils/dateFormat';
 import { InputField } from './InputField';
+import { DateRange } from 'react-day-picker';
 
-export type CalendarProps = React.ComponentProps<typeof Calender>
+export type CalendarProps = React.ComponentProps<typeof Calendar>
 
 interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
     mode?: "single" | "multiple" | "range";
@@ -101,7 +100,7 @@ export const DatePicker = forwardRef(({
                 }
             </PopoverTrigger >
             <PopoverContent data-theme="dark" className='!h-fit max-h-[fit-content] p-0 border-none rounded-[12px] flex flex-col sm:flex-row'>
-                <Calender
+                <Calendar
                     {...calendarProps}
                     captionLayout={captionLayout}
                     showWeekNumber={showWeekNumber}

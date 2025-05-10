@@ -9,7 +9,7 @@ import { SimpleSelectValue, SimpleSelectItem } from "./SimpleSelect";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
-const Calender = ({
+const Calendar = ({
   className,
   classNames,
   captionLayout = "dropdown",
@@ -97,6 +97,6 @@ const Calender = ({
     />
   )
 }
-Calender.displayName = "Calender"
+Calendar.displayName = "Calendar"
 
-export { Calender }
+export { Calendar }
