@@ -15,7 +15,6 @@ import { useClickOutside } from "../hooks/useClickOutside";
 import { Badge } from "./Badge";
 import { Tag, useTagSelection } from "../hooks/useTagSelection";
 
-
 interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "XS" | "S" | "M"; // this is used to change the size style of the component
@@ -26,12 +25,11 @@ interface Props
   toolTipSide?: ToolTipSide;
   label?: string;
   required?: boolean;
-  theme?: Themes
-  actionButton?: ReactNode
-  tags: Tag[]
-  onValueChange?: (tags: Tag[]) => void
+  theme?: Themes;
+  actionButton?: ReactNode;
+  tags: Tag[];
+  onValueChange?: (tags: Tag[]) => void;
 }
-
 
 export const BadgeField = forwardRef<HTMLInputElement, Props>(
   (
@@ -62,7 +60,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       if (
         !inputGroupRef?.current?.contains(e?.target as Node) &&
         !popoverContentRef?.current?.contains(e?.target as Node)
-      ) setIsPopoverOpen(false);
+      )
+        setIsPopoverOpen(false);
       else setIsPopoverOpen(true);
     });
 
@@ -88,8 +87,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           open={errorMessage !== undefined}
           text={errorMessage}
         >
-          <PopoverTrigger asChild
-          >
+          <PopoverTrigger asChild>
             <Group
               error={errorMessage !== undefined}
               onTable={onTable}
@@ -102,44 +100,42 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               onFocus={(e: any) => {
                 setDropDownListWidth(e.currentTarget.offsetWidth);
               }}
-              className={cn("flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-end h-fit items-center",
+              className={cn(
+                "flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-end  items-center",
                 {
                   "flex-wrap justify-start": isPopoverOpen,
+                  "h-fit": isPopoverOpen,
                 },
                 className
               )}
             >
-              {icon && (
-                <Icon  >
-                  {icon}
-                </Icon>
-              )}
+              {icon && <Icon>{icon}</Icon>}
 
-              {
-                selectedTagsStack.map((tag, index) => (
-                  <Badge
-                    key={tag.id}
-                    size={size}
-                    variant={tag.variant as any}
-                    label={tag.name}
-                    isSelected={true}
-                    onUnselect={() => handleUnselectTag(tag.id)}
-                    className={focusedTagIndex === index ? "ring-2 ring-blue-500" : ""}
-                    tabIndex={focusedTagIndex === index ? 0 : -1}
-                  />
-                ))
-              }
+              {selectedTagsStack.map((tag, index) => (
+                <Badge
+                  key={tag.id}
+                  size={size}
+                  variant={tag.variant as any}
+                  label={tag.name}
+                  isSelected={true}
+                  onUnselect={() => handleUnselectTag(tag.id)}
+                  className={
+                    focusedTagIndex === index ? "ring-2 ring-blue-500" : ""
+                  }
+                  tabIndex={focusedTagIndex === index ? 0 : -1}
+                />
+              ))}
 
               <Input
                 {...props}
                 onChange={(e) => {
-                  props.onChange?.(e)
-                  filterTagsBySearch(e.target.value)
+                  props.onChange?.(e);
+                  filterTagsBySearch(e.target.value);
                 }}
                 onFocus={(e) => {
-                  props.onFocus?.(e)
+                  props.onFocus?.(e);
                   setFocusedTagIndex(null);
-                  setIsPopoverOpen(true)
+                  setIsPopoverOpen(true);
                 }}
                 ref={inputRef}
                 className={cn(
@@ -151,13 +147,13 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   }
                 )}
               />
-              {
-                actionButton && (
-                  <Trilling className="py-0" > {/* Keep the ActionButton right aligned */}
-                    {actionButton}
-                  </Trilling>
-                )
-              }
+              {actionButton && (
+                <Trilling className="py-0">
+                  {" "}
+                  {/* Keep the ActionButton right aligned */}
+                  {actionButton}
+                </Trilling>
+              )}
             </Group>
           </PopoverTrigger>
         </Tooltip>
@@ -178,13 +174,16 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   variant={tag.variant as any}
                   label={tag.name}
                   onClick={() => handleSelectTag(tag.id)}
-                  className={`outline-none  ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""} ${index !== 0 ? "mt-1" : ""}`}
+                  className={`outline-none  ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""
+                    } ${index !== 0 ? "mt-1" : ""}`}
                   tabIndex={focusedPopoverIndex === index ? 0 : -1}
                 />
               ))
             ) : (
               <div className="text-sm text-gray-500 py-1 px-2">
-                {tags.length === 0 ? "All tags selected" : "No matching tags found"}
+                {tags.length === 0
+                  ? "All tags selected"
+                  : "No matching tags found"}
               </div>
             )}
           </>
