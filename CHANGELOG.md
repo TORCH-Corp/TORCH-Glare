@@ -129,4 +129,16 @@ and fix tailwindcss issues.
 - `MobileSilder` Hook moved to npm as packege.
 
 
+## 1.1.5
+
+Hot bug fixes.
+
+
+
+## 1.1.6
+
+### Refactor
+
+- `DatePicker` use Initial value from value prop.
+- `BadgeField` fix size issue.
 

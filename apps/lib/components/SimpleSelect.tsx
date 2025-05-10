@@ -91,7 +91,7 @@ const SimpleSelectValue = ({
                 onChange={handleInputChange}
                 className={cn([
                     "bg-transparent",
-                    "text-white",
+                    "text-content-system-global-primary",
                     "h-[24px]",
                     "border-none",
                     "outline-none",
