@@ -3,7 +3,7 @@ import { Button } from '@/components/Button';
 import { Controller, useForm } from 'react-hook-form';
 import { BadgeField } from '@/components/BadgeField';
 import { Tag } from '@/hooks/useTagSelection';
-
+import { DatePicker } from '@/components/DatePicker';
 export default function Page() {
   const { control, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
@@ -23,8 +23,7 @@ export default function Page() {
         name="slideDatePicker"
         control={control}
         render={({ field }) => (
-          <BadgeField
-            tags={tags}
+          <DatePicker
             {...field}
           />
         )}

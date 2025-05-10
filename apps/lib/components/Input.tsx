@@ -48,10 +48,12 @@ export const Icon = ({ children, className }: IconProps) => {
 interface TrillingProps {
     children: React.ReactNode;
     className?: string;
+    onClick?: () => void;
 }
-export const Trilling = ({ children, className }: TrillingProps) => {
+export const Trilling = ({ children, className, onClick }: TrillingProps) => {
     return (
         <div
+            onClick={onClick}
             className={cn(
                 "flex items-center justify-center h-full gap-1 py-1",
                 className
