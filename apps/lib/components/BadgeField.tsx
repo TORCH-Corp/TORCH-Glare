@@ -3,6 +3,7 @@ import {
   forwardRef,
   InputHTMLAttributes,
   ReactNode,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -46,7 +47,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       actionButton,
       theme,
       tags,
-      onValueChange,
       children,
       ...props
     },
@@ -78,7 +78,16 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       focusedPopoverIndex,
       isPopoverOpen,
       setIsPopoverOpen,
-    } = useTagSelection({ Tags: tags, onTagsChange: onValueChange, inputRef });
+      searchTags
+    } = useTagSelection({
+      Tags: tags,
+      onTagsChange: (e) => props.onChange?.({
+        target: {
+          value: e
+        }
+      } as any),
+      inputRef
+    });
 
     return (
       <Popover open={isPopoverOpen}>
@@ -128,8 +137,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
 
               <Input
                 {...props}
+                value={searchTags}
                 onChange={(e) => {
-                  props.onChange?.(e);
                   filterTagsBySearch(e.target.value);
                 }}
                 onFocus={(e) => {
@@ -149,7 +158,6 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               />
               {actionButton && (
                 <Trilling className="py-0">
-                  {" "}
                   {/* Keep the ActionButton right aligned */}
                   {actionButton}
                 </Trilling>

@@ -183,8 +183,8 @@ export const GroupStyles = cva(
                 ],
             },
             size: {
-                S: ["h-[30px]", "rounded-[6px] [&_input]:h-[30px] [&_div[data-role='icon']]:text-[16px]"],
-                M: ["h-[40px]", "rounded-[8px] [&_input]:h-[40px] [&_div[data-role='icon']]:text-[18px] [&_div[data-role='icon']]:px-[2px]"],
+                S: ["h-[30px] min-h-[30px]", "rounded-[6px] [&_input]:h-[30px] [&_div[data-role='icon']]:text-[16px]"],
+                M: ["h-[40px] min-h-[40px]", "rounded-[8px] [&_input]:h-[40px] [&_div[data-role='icon']]:text-[18px] [&_div[data-role='icon']]:px-[2px]"],
             },
             error: {
                 true: [
