@@ -133,12 +133,12 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
             <InputField
               readOnly
               type="input"
+              {...props}
               childrenSide={
                 <ActionButton type='button' size={"M"}>
                   <i className="ri-calendar-event-fill"></i>
                 </ActionButton>
               }
-              {...props}
               value={formattedValue}
               ref={forwardedRef}
             />
