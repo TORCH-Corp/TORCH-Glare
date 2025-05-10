@@ -140,5 +140,5 @@ Hot bug fixes.
 ### Refactor
 
 - `DatePicker` use Initial value from value prop.
-- `BadgeField` fix size issue.
+- `BadgeField` compatible with react-hook-form and fix size issues.
 
