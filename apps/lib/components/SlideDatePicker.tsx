@@ -33,23 +33,24 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     onChange,
     dateFormat = "yyyy/MM/dd",
     children,
-    value,
+    value = new Date(),
     ...props
   }, forwardedRef) => {
 
-  const today = new Date();
+  const today = value
   const defaultPickerValue = {
     year: String(today.getFullYear()),
-    month: String(today.getMonth() + 1).padStart(2, '0'),
-    day: String(today.getDate()).padStart(2, '0'),
-    hour: "00",
-    minute: "00",
-    time: "AM"
+    month: String(today.getMonth() + 1),
+    day: String(today.getDate()),
+    hour: String(today.getHours()),
+    minute: String(today.getMinutes()),
+    time: today.getHours() < 12 ? "AM" : "PM"
   };
 
   const [pickerValue, setPickerValue] = useState<SlideValues>(defaultPickerValue);
-  const [date, setDate] = useState<Date>(value ? value : new Date());
+  const [date, setDate] = useState<Date>(value);
   const [isOpen, setIsOpen] = useState(false);
+
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
   const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ''));
