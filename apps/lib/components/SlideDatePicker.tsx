@@ -15,9 +15,10 @@ interface SlideDatePickerProps extends Omit<ComponentProps<typeof InputField>, '
   onChange?: (e: any) => void;
   theme?: "dark" | "light" | "default";
   dateFormat?: string;
+  value?: any;
 }
 
-type SlideVlaues = {
+type SlideValues = {
   year: string,
   month: string,
   day: string,
@@ -32,6 +33,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     onChange,
     dateFormat = "yyyy/MM/dd",
     children,
+    value,
     ...props
   }, forwardedRef) => {
 
@@ -45,8 +47,8 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     time: "AM"
   };
 
-  const [pickerValue, setPickerValue] = useState<SlideVlaues>(defaultPickerValue);
-  const [date, setDate] = useState<Date>(new Date());
+  const [pickerValue, setPickerValue] = useState<SlideValues>(defaultPickerValue);
+  const [date, setDate] = useState<Date>(value ? value : new Date());
   const [isOpen, setIsOpen] = useState(false);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
@@ -57,7 +59,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     "July", "August", "September", "October", "November", "December",
   ];
 
-  const handlePickerChange = (newValue: SlideVlaues, key: string) => {
+  const handlePickerChange = (newValue: SlideValues, key: string) => {
     let { year, month, day, hour, minute, time } = newValue;
 
     if (key === 'year' || key === 'month') {
