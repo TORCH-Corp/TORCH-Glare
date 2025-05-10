@@ -4,7 +4,7 @@ import Picker from 'torch-react-mobile-picker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { InputField } from './InputField';
 import { ActionButton } from './ActionButton';
-import { formatDateValueToString } from '@/utils/dateFormat';
+import { formatDateValueToString } from '../utils/dateFormat';
 
 function getDayArray(year: number, month: number): string[] {
   const dayCount = getDaysInMonth(new Date(year, month - 1));
