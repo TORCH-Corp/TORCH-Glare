@@ -6,6 +6,8 @@ import React, {
     useEffect,
     cloneElement,
     isValidElement,
+    useRef,
+    Ref,
 } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Calendar } from "./Calendar";
@@ -72,6 +74,7 @@ export const DatePicker = forwardRef(
             time: date instanceof Date && date.getHours() < 12 ? "AM" : "PM",
         });
         const [isOpen, setIsOpen] = useState(false);
+        const triggerRef = useRef<HTMLButtonElement>(null);
 
         // Call the onChange function when the date or picker value changes
         useEffect(() => {
@@ -103,7 +106,7 @@ export const DatePicker = forwardRef(
 
         return (
             <Popover onOpenChange={setIsOpen}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger ref={triggerRef} asChild>
                     {/* Clone the children element and pass the formatted value to the input element */}
                     {isValidElement(children) ? (
                         cloneElement(children as React.ReactElement<HTMLInputElement>, {
@@ -119,7 +122,9 @@ export const DatePicker = forwardRef(
                             readOnly
                             type="input"
                             childrenSide={
-                                <ActionButton type="button" size={"M"}>
+                                <ActionButton type="button" size={"M"} onClick={() => {
+                                    triggerRef.current?.click();
+                                }}>
                                     <i className="ri-calendar-event-fill"></i>
                                 </ActionButton>
                             }

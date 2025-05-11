@@ -48,6 +48,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [PopoverWidth, setPopoverWidth] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
       if (!forwardedRef) return;
@@ -56,14 +57,14 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
     }, [forwardedRef]);
     // TODO: make the user input visible when input is focused
     return (
-      <Popover open={isPopoverOpen}>
+      <Popover onOpenChange={setIsPopoverOpen}>
         <Tooltip
           theme={theme}
           toolTipSide={toolTipSide}
           open={errorMessage !== undefined}
           text={errorMessage}
         >
-          <PopoverTrigger asChild>
+          <PopoverTrigger ref={triggerRef} asChild>
             <Group
               error={errorMessage !== undefined}
               onTable={onTable}
@@ -113,6 +114,9 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               variant={variant}
               onOpenAutoFocus={(e: any) => e.preventDefault()}
               style={{ width: PopoverWidth }}
+              onClick={(e) => {
+                triggerRef.current?.click();
+              }}
             >
               {popoverChildren}
             </PopoverContent>

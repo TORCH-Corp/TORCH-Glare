@@ -1,4 +1,4 @@
-import { cloneElement, ComponentProps, forwardRef, isValidElement, useState, useEffect } from 'react';
+import { cloneElement, ComponentProps, forwardRef, isValidElement, useState, useEffect, useRef } from 'react';
 import { getDaysInMonth } from 'date-fns';
 import Picker from 'torch-react-mobile-picker';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
@@ -50,6 +50,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
   const [pickerValue, setPickerValue] = useState<SlideValues>(defaultPickerValue);
   const [date, setDate] = useState<Date>(value);
   const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
@@ -121,7 +122,7 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
   return (
     <Popover onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild data-theme={theme} className='w-full flex-1' >
+      <PopoverTrigger ref={triggerRef} asChild data-theme={theme} className='w-full flex-1' >
         {
           isValidElement(children) ?
             cloneElement(children as React.ReactElement<HTMLInputElement>, {
@@ -136,7 +137,9 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
               type="input"
               {...props}
               childrenSide={
-                <ActionButton type='button' size={"M"}>
+                <ActionButton type='button' size={"M"} onClick={() => {
+                  triggerRef.current?.click();
+                }}>
                   <i className="ri-calendar-event-fill"></i>
                 </ActionButton>
               }
