@@ -95,7 +95,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
                 ref={inputRef}
               />
 
-              <Trilling onClick={() => !props.disabled && setIsPopoverOpen(true)}>
+              <Trilling >
                 {childrenSide}
                 {popoverChildren && (
                   <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} disabled={props.disabled} />

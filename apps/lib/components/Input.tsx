@@ -45,15 +45,14 @@ export const Icon = ({ children, className }: IconProps) => {
 };
 
 
-interface TrillingProps {
+interface TrillingProps extends HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     className?: string;
-    onClick?: () => void;
 }
-export const Trilling = ({ children, className, onClick }: TrillingProps) => {
+export const Trilling = ({ children, className, ...props }: TrillingProps) => {
     return (
         <div
-            onClick={onClick}
+            {...props}
             className={cn(
                 "flex items-center justify-center h-full gap-1 py-1",
                 className
