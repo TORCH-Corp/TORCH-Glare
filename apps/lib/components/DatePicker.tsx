@@ -57,7 +57,9 @@ export const DatePicker = forwardRef(
     ) => {
         const initialDate =
             mode == "multiple"
-                ? [value]
+                ? Array.isArray(value)
+                    ? value
+                    : [value]
                 : mode == "range"
                     ? { from: value, to: value }
                     : value;
