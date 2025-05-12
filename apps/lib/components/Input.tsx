@@ -97,7 +97,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 autoComplete="off"
                 className={cn(
                     // Base styles
-                    "typography-body-large-regular focus:pe-[30px]",
+                    "typography-body-large-regular",
                     "text-content-presentation-action-light-primary",
                     "bg-transparent",
                     "h-full",
