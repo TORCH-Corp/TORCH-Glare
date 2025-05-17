@@ -1,27 +1,23 @@
 import React from 'react'
-import { Toaster as ToasterComponent } from 'react-hot-toast'
+import { Toaster as ToasterComponent, toast } from 'react-hot-toast'
 
 
-
-interface ToasterProps extends React.ComponentPropsWithoutRef<typeof ToasterComponent> {
-}
-
-export const Toaster = ({
+const Toaster = ({
     position = 'top-right',
     reverseOrder = false,
     gutter = 8,
     containerClassName = '',
     containerStyle = {},
     toastOptions = {},
-    ...props }: ToasterProps) => {
+    ...props }: React.ComponentPropsWithoutRef<typeof ToasterComponent>) => {
     return (
         <ToasterComponent
-            {...props}
             position={position}
             reverseOrder={reverseOrder}
             gutter={gutter}
             containerClassName={containerClassName}
             containerStyle={containerStyle}
+            {...props}
             toastOptions={{
                 // Define default options
                 className: '',
@@ -87,3 +83,5 @@ export const Toaster = ({
         />
     )
 }
+
+export { Toaster, toast }

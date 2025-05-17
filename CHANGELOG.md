@@ -142,3 +142,9 @@ Hot bug fixes.
 - `DatePicker` use Initial value from value prop.
 - `BadgeField` compatible with react-hook-form and fix size issues.
 
+
+# 1.1.7
+
+### Added 
+
+- `Toast` component added to the library.
