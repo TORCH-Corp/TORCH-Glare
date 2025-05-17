@@ -26,7 +26,7 @@ const Toaster = ({
                 style: {
                     background: 'var(--background-presentation-state-information-secondary)',
                     color: 'var(--content-presentation-global-primary)',
-                    borderRadius: '8px',
+                    borderRadius: '16px',
                 },
 
                 // Default options for specific types
@@ -35,7 +35,7 @@ const Toaster = ({
                     style: {
                         background: 'var(--background-presentation-state-success-secondary)',
                         color: 'var(--content-presentation-global-primary)',
-                        borderRadius: '8px',
+                        borderRadius: '16px',
                     },
                     iconTheme: {
                         primary: 'var(--background-presentation-state-success-primary)',
@@ -47,7 +47,7 @@ const Toaster = ({
                     style: {
                         background: 'var(--background-presentation-state-negative-secondary)',
                         color: 'var(--content-presentation-global-primary)',
-                        borderRadius: '8px',
+                        borderRadius: '16px',
                     },
                     iconTheme: {
                         primary: 'var(--background-presentation-state-negative-primary)',
@@ -59,7 +59,7 @@ const Toaster = ({
                     style: {
                         background: 'var(--background-presentation-state-warning-secondary)',
                         color: 'var(--content-presentation-global-primary)',
-                        borderRadius: '8px',
+                        borderRadius: '16px',
                     },
                     iconTheme: {
                         primary: 'var(--background-presentation-state-warning-primary)',
@@ -71,7 +71,7 @@ const Toaster = ({
                     style: {
                         background: 'var(--background-presentation-state-information-secondary)',
                         color: 'var(--content-presentation-global-primary)',
-                        borderRadius: '8px',
+                        borderRadius: '16px',
                     },
                     iconTheme: {
                         primary: 'var(--background-presentation-state-information-primary)',
