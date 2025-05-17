@@ -1,6 +1,7 @@
 'use client'
 import toast from 'react-hot-toast';
 import { Toaster } from '../lib/components/Toast';
+import { useEffect } from 'react';
 
 const notifySuccess = () => toast.success('Operation completed successfully!');
 const notifyError = () => toast.error('An error occurred while processing your request.');
@@ -32,44 +33,16 @@ const notifyPromise = async () => {
 };
 
 export default function Page() {
+
+  useEffect(() => {
+    notifySuccess();
+    notifyError();
+    notifyWarning();
+    notifyInfo();
+  }, []);
+
   return (
     <div data-theme="dark" className="p-4 space-y-4">
-      <div className="flex flex-col gap-2">
-        <button
-          onClick={notifySuccess}
-          className="px-4 py-2 bg-background-presentation-state-success-secondary text-content-presentation-global-primary rounded-md hover:opacity-90 transition-opacity"
-        >
-          Show Success Toast
-        </button>
-
-        <button
-          onClick={notifyError}
-          className="px-4 py-2 bg-background-presentation-state-negative-secondary text-content-presentation-global-primary rounded-md hover:opacity-90 transition-opacity"
-        >
-          Show Error Toast
-        </button>
-
-        <button
-          onClick={notifyWarning}
-          className="px-4 py-2 bg-background-presentation-state-warning-secondary text-content-presentation-global-primary rounded-md hover:opacity-90 transition-opacity"
-        >
-          Show Warning Toast
-        </button>
-
-        <button
-          onClick={notifyInfo}
-          className="px-4 py-2 bg-background-presentation-state-information-secondary text-content-presentation-global-primary rounded-md hover:opacity-90 transition-opacity"
-        >
-          Show Info Toast
-        </button>
-
-        <button
-          onClick={notifyPromise}
-          className="px-4 py-2 bg-background-presentation-action-primary text-content-presentation-action-light-primary rounded-md hover:opacity-90 transition-opacity"
-        >
-          Show Promise Toast
-        </button>
-      </div>
 
       <Toaster />
     </div>

@@ -3,7 +3,7 @@ import { Toaster as ToasterComponent, toast } from 'react-hot-toast'
 
 
 const Toaster = ({
-    position = 'top-right',
+    position = 'top-left',
     reverseOrder = false,
     gutter = 8,
     containerClassName = '',
@@ -21,7 +21,7 @@ const Toaster = ({
             toastOptions={{
                 // Define default options
                 className: '',
-                duration: 5000,
+                duration: 8000,
                 removeDelay: 1000,
                 style: {
                     background: 'var(--background-presentation-state-information-secondary)',
