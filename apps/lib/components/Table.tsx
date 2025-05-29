@@ -135,7 +135,7 @@ const TableHead = React.forwardRef<
           {...props}
           className={cn(
             tableHeadVariants({ size, disabled, isDummy }),
-            { "min-w-[200px]": !isDummy },
+            { "min-w-[100px]": !isDummy },
             className
           )}
         >

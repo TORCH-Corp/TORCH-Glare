@@ -7,7 +7,7 @@ import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogCancel 
 
 const dropZoneStyles = cva(
   [
-    "w-full  h-[65px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ",
+    "w-full min-w-[200px] h-[65px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ",
     "!border-border-presentation-action-borderstyle bg-background-presentation-badge-gray",
     "hover:border-border-presentation-action-borderstyle  hover:bg-background-presentation-badge-gray",
   ],
@@ -46,7 +46,6 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
   ) => {
     return (
       <section
-
         className={cn("flex items-center justify-center gap-1 w-full", className)}>
         {children}
         <Button
@@ -55,14 +54,13 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
           as="label"
           id={props.id}
           variant="PrimeContStyle"
-
           className={cn(dropZoneStyles({ active: isDropAreaActive }))}
           containerClassName="flex-col"
         >
           <h1 className="text-content-presentation-action-light-primary typography-body-large-medium">
             {mainLabel}
           </h1>
-          <p className="text-content-presentation-action-light-secondary typography-body-small-medium text-wrap whitespace-pre-wrap text-center">
+          <p className="text-content-presentation-action-light-secondary typography-body-small-medium">
             {secondaryLabel}
           </p>
           <input ref={ref} {...props} type="file" hidden />
