@@ -2,7 +2,6 @@ import * as React from "react";
 import { cn } from "../utils/cn";
 import { Label } from "./Label";
 import { cva, VariantProps } from "class-variance-authority";
-import { Input } from "./Input";
 
 // Define the styles for the textarea using cva
 const textareaStyles = cva(

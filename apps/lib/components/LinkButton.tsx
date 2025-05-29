@@ -1,4 +1,4 @@
-import React, { AnchorHTMLAttributes, HTMLAttributes, SVGProps } from "react";
+import React, { HTMLAttributes, SVGProps } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
