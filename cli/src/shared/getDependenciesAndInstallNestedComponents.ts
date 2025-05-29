@@ -42,7 +42,7 @@ export function getDependenciesAndInstallNestedComponents(
             moduleName.startsWith("../hooks") &&
             !installedDependencies.has(moduleName)
         ) {
-            addHook(moduleName.slice(9) + ".tsx");
+            addHook(moduleName.slice(9) + ".ts");
         }
         // install required nested components
         else if (

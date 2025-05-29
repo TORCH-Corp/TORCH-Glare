@@ -45,13 +45,14 @@ export const Icon = ({ children, className }: IconProps) => {
 };
 
 
-interface TrillingProps {
+interface TrillingProps extends HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     className?: string;
 }
-export const Trilling = ({ children, className }: TrillingProps) => {
+export const Trilling = ({ children, className, ...props }: TrillingProps) => {
     return (
         <div
+            {...props}
             className={cn(
                 "flex items-center justify-center h-full gap-1 py-1",
                 className
@@ -96,7 +97,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 autoComplete="off"
                 className={cn(
                     // Base styles
-                    "typography-body-large-regular focus:pe-[30px]",
+                    "typography-body-large-regular",
                     "text-content-presentation-action-light-primary",
                     "bg-transparent",
                     "h-full",

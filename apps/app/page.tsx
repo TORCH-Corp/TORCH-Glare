@@ -1,37 +1,51 @@
 'use client'
-import { Button } from '@/components/Button';
-import { Controller, useForm } from 'react-hook-form';
-import { BadgeField } from '@/components/BadgeField';
-import { Tag } from '@/hooks/useTagSelection';
+import toast from 'react-hot-toast';
+import { Toaster } from '../lib/components/Toast';
+import { useEffect } from 'react';
+
+const notifySuccess = () => toast.success('Operation completed successfully!');
+const notifyError = () => toast.error('An error occurred while processing your request.');
+const notifyWarning = () => toast.loading('Please review your changes before proceeding.');
+const notifyInfo = () => toast('Here is some important information for you.');
+
+// Simulate an async operation
+const simulateAsyncOperation = () => {
+  return new Promise((resolve, reject) => {
+    const shouldSucceed = Math.random() > 0.3; // 70% chance of success
+    setTimeout(() => {
+      if (shouldSucceed) {
+        resolve('Data fetched successfully!');
+      } else {
+        reject(new Error('Failed to fetch data'));
+      }
+    }, 2000);
+  });
+};
+
+const notifyPromise = async () => {
+  const promise = simulateAsyncOperation();
+
+  toast.promise(promise, {
+    loading: 'Fetching data...',
+    success: (data) => `${data}`,
+    error: (err) => `Error: ${err.message}`,
+  });
+};
 
 export default function Page() {
-  const { control, handleSubmit } = useForm();
-  const onSubmit = (data: any) => {
-    console.log(data);
-  }
-  const tags: Tag[] = [
-    { id: '1', name: 'Electronics', isSelected: false, variant: 'blue' },
-    { id: '2', name: 'Books', isSelected: false, variant: 'green' },
-    { id: '3', name: 'Clothing', isSelected: false, variant: 'purple' },
-    { id: '4', name: 'Home', isSelected: false, variant: 'yellow' },
-    { id: '5', name: 'Sports', isSelected: false, variant: 'navy' },
-    { id: '8', name: 'Limited Edition', isSelected: false, variant: 'cocktailGreen' },
-  ]
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 w-full p-5'>
-      <Controller
-        name="slideDatePicker"
-        control={control}
-        render={({ field }) => (
-          <BadgeField
-            tags={tags}
-            {...field}
-          />
-        )}
-      />
 
-      <Button theme='light' type='submit'>Submit</Button>
-    </form>
+  useEffect(() => {
+    notifySuccess();
+    notifyError();
+    notifyWarning();
+    notifyInfo();
+  }, []);
+
+  return (
+    <div data-theme="dark" className="p-4 space-y-4">
+
+      <Toaster />
+    </div>
   );
 }
 
