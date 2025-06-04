@@ -9,7 +9,7 @@ const CreatePluginFile = (filesPath) => {
     const defaultModeCssVars = ExtractCssVariables(filesPath.defaultModeCssVarsPath)
 
 
-    const tailwindVars = ConvertCssVarsToTailwindV4Vars(filesPath.darkModeCssVarsPath)
+    const tailwindVars = ConvertCssVarsToTailwindV4Vars([filesPath.darkModeCssVarsPath, filesPath.coreColorsPath])
 
     // Content to write to the file
     const content = `const plugin = require('tailwindcss/plugin');
@@ -35,8 +35,10 @@ module.exports =  plugin(function ({ addBase }) {
 `;
 
     fs.writeFileSync('new-plugin.js', content);
-    fs.writeFileSync('tailwindVars.css', tailwindVars);
-    console.log('new-plugin.js has been created successfully!');
+    // The tailwindVars result contains the output path and we don't need to write it again
+    // since ConvertCssVarsToTailwindV4Vars already creates the output file
+    console.log('Files have been created successfully!');
+    console.log('Generated theme file:', tailwindVars[tailwindVars.length - 1].outputPath);
 }
 
 
