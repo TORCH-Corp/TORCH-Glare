@@ -36,6 +36,7 @@ import {
     TableHeader,
     TableRow,
 } from "./Table"
+import { Checkbox } from "./Checkbox"
 
 interface DataTableProps<TData extends { id: string | number }, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -95,6 +96,9 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             <TableHead isDummy ></TableHead>
+                            <TableHead isDummy >
+                                <Checkbox onChange={() => table.toggleAllRowsSelected()} />
+                            </TableHead>
                             {headerGroup.headers.map((header) => {
                                 const sortHandler = header.column.getToggleSortingHandler()
                                 return (
@@ -123,6 +127,9 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                         >
                             {table.getRowModel().rows.map((row, i) => (
                                 <SortableRow key={i + "row"} row={row}>
+                                    <TableCell isDummy >
+                                        <Checkbox onChange={() => row.toggleSelected()} checked={row.getIsSelected()} />
+                                    </TableCell>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
