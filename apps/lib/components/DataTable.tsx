@@ -10,6 +10,8 @@ import {
     Row,
     SortingState,
     useReactTable,
+    getPaginationRowModel,
+    getFilteredRowModel,
 } from "@tanstack/react-table"
 import {
     DndContext,
@@ -53,6 +55,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [items, setItems] = React.useState<TData[]>(data)
+    const [rowSelection, setRowSelection] = React.useState({})
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -66,9 +69,15 @@ export function DataTable<TData extends { id: string | number }, TValue>({
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
         onSortingChange: setSorting,
+        onRowSelectionChange: setRowSelection,
+        enableRowSelection: true,
+        enableMultiRowSelection: true,
         state: {
             sorting,
+            rowSelection,
         },
     })
 
@@ -97,7 +106,12 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                         <TableRow key={headerGroup.id}>
                             <TableHead isDummy ></TableHead>
                             <TableHead isDummy >
-                                <Checkbox onChange={() => table.toggleAllRowsSelected()} />
+                                <Checkbox
+                                    checked={table.getIsAllRowsSelected()}
+                                    onCheckedChange={(checked) => {
+                                        table.toggleAllRowsSelected(!!checked)
+                                    }}
+                                />
                             </TableHead>
                             {headerGroup.headers.map((header) => {
                                 const sortHandler = header.column.getToggleSortingHandler()
@@ -126,9 +140,14 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                             strategy={verticalListSortingStrategy}
                         >
                             {table.getRowModel().rows.map((row, i) => (
-                                <SortableRow key={i + "row"} row={row}>
+                                <SortableRow key={i + "row"} row={row} state={row.getIsSelected() ? "selected" : undefined}>
                                     <TableCell isDummy >
-                                        <Checkbox onChange={() => row.toggleSelected()} checked={row.getIsSelected()} />
+                                        <Checkbox
+                                            checked={row.getIsSelected()}
+                                            onCheckedChange={(checked) => {
+                                                row.toggleSelected(!!checked)
+                                            }}
+                                        />
                                     </TableCell>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
@@ -158,9 +177,10 @@ export function DataTable<TData extends { id: string | number }, TValue>({
 interface SortableRowProps<TData> {
     row: Row<TData>
     children: React.ReactNode
+    state?: "delete" | "update" | "add" | "selected" | "open"
 }
 
-function SortableRow<TData>({ row, children }: SortableRowProps<TData>) {
+function SortableRow<TData>({ row, children, state }: SortableRowProps<TData>) {
     const {
         attributes,
         listeners,
@@ -182,6 +202,7 @@ function SortableRow<TData>({ row, children }: SortableRowProps<TData>) {
         <TableRow
             ref={setNodeRef}
             style={style}
+            state={state}
         >
             <TableCell
                 {...attributes}

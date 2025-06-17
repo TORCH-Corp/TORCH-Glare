@@ -61,12 +61,10 @@ const columns: ColumnDef<Person>[] = [
 
 export default function Page() {
   return (
-    <div className="p-4 space-y-4">
-      <DataTable
-        columns={columns}
-        data={data}
-      />
-    </div>
+    <DataTable
+      columns={columns}
+      data={data}
+    />
   )
 }
 
