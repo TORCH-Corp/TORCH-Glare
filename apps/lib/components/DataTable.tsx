@@ -121,8 +121,8 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                             items={table.getRowModel().rows.map(row => row.original)}
                             strategy={verticalListSortingStrategy}
                         >
-                            {table.getRowModel().rows.map((row) => (
-                                <SortableRow key={row.id} row={row}>
+                            {table.getRowModel().rows.map((row, i) => (
+                                <SortableRow key={i + "row"} row={row}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
