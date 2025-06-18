@@ -90,6 +90,21 @@ export function DataTable<TData extends { id: string | number }, TValue>({
 
             const newItems = arrayMove(items, oldIndex, newIndex)
             setItems(newItems)
+
+            // Update row selection to maintain correct mapping after reorder
+            const newRowSelection: Record<string, boolean> = {}
+            Object.keys(rowSelection).forEach((rowIndex) => {
+                const oldRowIndex = parseInt(rowIndex)
+                const row = table.getRowModel().rows[oldRowIndex]
+                if (row) {
+                    const newRowIndex = newItems.findIndex((item: any) => item.id === (row.original as any).id)
+                    if (newRowIndex !== -1) {
+                        newRowSelection[newRowIndex.toString()] = true
+                    }
+                }
+            })
+            setRowSelection(newRowSelection)
+
             onRowReorder?.(newItems)
         }
     }

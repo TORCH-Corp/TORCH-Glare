@@ -149,15 +149,13 @@ const TableHead = React.forwardRef<
             {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
           </div>
         </div>
-        {!isDummy && (
-          <button className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary">
-            <ResizeIcon
-              onMouseDown={handleStartResize}
-              onTouchStart={handleStartResize}
-            />
-          </button>
-        )}
-
+        <button disabled={isDummy} className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary">
+          <ResizeIcon
+            className={cn({ "!opacity-0 cursor-default": isDummy })}
+            onMouseDown={handleStartResize}
+            onTouchStart={handleStartResize}
+          />
+        </button>
       </th>
     );
   }
@@ -310,7 +308,7 @@ const ResizeIcon = (props: any) => {
   return (
     <svg
       {...props}
-      className="z-50 cursor-col-resize absolute top-[50%] right-[50%] translate-x-[50%] translate-y-[-50%] opacity-0 hover:opacity-100 transition-opacity duration-200"
+      className={cn("z-50 cursor-col-resize absolute top-[50%] right-[50%] translate-x-[50%] translate-y-[-50%] opacity-0 hover:opacity-100 transition-opacity duration-200", props.className)}
       width="8"
       height="32"
       viewBox="0 0 8 40"
