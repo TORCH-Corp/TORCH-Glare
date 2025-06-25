@@ -1,52 +1,71 @@
 'use client'
-import toast from 'react-hot-toast';
-import { Toaster } from '../lib/components/Toast';
-import { useEffect } from 'react';
+import { DataTable } from '@/components/DataTable'
+import { InputField } from '@/components/InputField'
+import { ColumnDef } from '@tanstack/react-table'
 
-const notifySuccess = () => toast.success('Operation completed successfully!');
-const notifyError = () => toast.error('An error occurred while processing your request.');
-const notifyWarning = () => toast.loading('Please review your changes before proceeding.');
-const notifyInfo = () => toast('Here is some important information for you.');
+interface Person {
+  id: string
+  name: string
+  email: string
+  role: string
+  input: string
+}
 
-// Simulate an async operation
-const simulateAsyncOperation = () => {
-  return new Promise((resolve, reject) => {
-    const shouldSucceed = Math.random() > 0.3; // 70% chance of success
-    setTimeout(() => {
-      if (shouldSucceed) {
-        resolve('Data fetched successfully!');
-      } else {
-        reject(new Error('Failed to fetch data'));
-      }
-    }, 2000);
-  });
-};
+const data: Person[] = [
+  {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'Admin',
+    input: 'input',
+  },
+  {
+    id: '2',
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    role: 'User',
+    input: 'input',
+  },
+  {
+    id: '3',
+    name: 'Bob Johnson',
+    email: 'bob@example.com',
+    role: 'Editor',
+    input: 'input',
+  },
+]
 
-const notifyPromise = async () => {
-  const promise = simulateAsyncOperation();
-
-  toast.promise(promise, {
-    loading: 'Fetching data...',
-    success: (data) => `${data}`,
-    error: (err) => `Error: ${err.message}`,
-  });
-};
+const columns: ColumnDef<Person>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+  },
+  {
+    accessorKey: 'role',
+    header: 'Role',
+  },
+  {
+    accessorKey: 'input',
+    header: 'input',
+    cell: ({ row }) => {
+      return <InputField onTable type="text" defaultValue={row.original.input} onChange={(e) => {
+        row.original.input = e.target.value
+      }} />
+    },
+  },
+]
 
 export default function Page() {
-
-  useEffect(() => {
-    notifySuccess();
-    notifyError();
-    notifyWarning();
-    notifyInfo();
-  }, []);
-
   return (
-    <div data-theme="dark" className="p-4 space-y-4">
-
-      <Toaster />
-    </div>
-  );
+    <DataTable
+      columns={columns}
+      data={data}
+    />
+  )
 }
 
 

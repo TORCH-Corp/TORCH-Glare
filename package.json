@@ -1,12 +1,13 @@
 {
   "name": "torch-glare",
-  "version": "1.1.7",
+  "version": "1.1.14",
   "type": "module",
   "license": "MIT",
   "files": [
     "dist",
-    "lib",
-    "docs"
+    "apps/lib",
+    "docs",
+    "!**/*-dev.*"
   ],
   "bin": {
     "torch-glare": "dist/bin/index.js"
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "deploy": "tsc && node ./scripts/bin/publish/index.js"
+    "deploy": "npx tsc --build --force && npm publish --access public"
   },
   "dependencies": {
     "commander": "^13.1.0",

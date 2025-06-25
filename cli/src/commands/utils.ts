@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the utils templates directory
-const utilsTemplatesDir: string = path.resolve(__dirname, "../../../lib/utils");
+const utilsTemplatesDir: string = path.resolve(__dirname, "../../../apps/lib/utils");
 
 /**
  * Main function to add a utility file and its dependencies.
