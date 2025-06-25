@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the layouts templates directory
-const layoutsTemplatesDir = path.resolve(__dirname, "../../../lib/layouts");
+const layoutsTemplatesDir = path.resolve(__dirname, "../../../apps/lib/layouts");
 
 /**
  * Main function to add a layout and its dependencies.

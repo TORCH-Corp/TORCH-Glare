@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the path to the provider templates directory
-const providerTemplatesDir: string = path.resolve(__dirname, "../../../lib/providers");
+const providerTemplatesDir: string = path.resolve(__dirname, "../../../apps/lib/providers");
 
 /**
  * Main function to add a provider and its dependencies.
