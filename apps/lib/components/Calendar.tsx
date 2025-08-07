@@ -64,7 +64,7 @@ const Calendar = ({
               inputClassName="w-[30px]"
               value={e.value}
             >
-              {e.options?.map((year, i) => (
+              {e.options?.map((year) => (
                 <SimpleSelectItem key={year.value} selected={e.value === year.value} onClick={() => e.onChange?.({ target: { value: year.value } } as any)}>
                   {year.label}
                 </SimpleSelectItem>
@@ -75,23 +75,24 @@ const Calendar = ({
         ...components
       }}
       classNames={{
-        day: cn("w-[30px] h-[30px] [&_button]:w-[28px] [&_button]:h-[28px] [&_button]:rounded-[6px] [&_button]:text-content-system-global-primary [&_button]:bg-background-system-body-secondary [&_button]:m-[2px] [&_button]:text-[10px] [&_button]:border-[1px]  [&_button]:outline-none",
-          "[&_button]:hover:border-border-system-action-secondary-hover [&_button]:hover:bg-background-system-action-secondary-hover",
-          "[&_button]:focus-within:border-border-system-action-secondary-hover [&_button]:focus-within:bg-background-system-action-primary-hover",
+        day: cn(
+          "!w-[30px] !h-[30px] [&_button]:!w-[28px] [&_button]:!h-[28px] [&_button]:!rounded-[6px] [&_button]:!text-content-system-global-primary [&_button]:!bg-background-system-body-secondary [&_button]:!m-[2px] [&_button]:!text-[10px] [&_button]:!border-[1px]  [&_button]:!outline-none",
+          "[&_button]:hover:!border-border-system-action-secondary-hover [&_button]:hover:!bg-background-system-action-secondary-hover",
+          "[&_button]:focus-within:!border-border-system-action-secondary-hover [&_button]:focus-within:!bg-background-system-action-primary-hover",
           "[&_button]:transition-all [&_button]:duration-200"
         ),
-        today: `[&_button]:bg-background-system-action-primary-hover`, // Add a border to today's date
-        selected: `[&_button]:!bg-background-system-action-primary-hover [&_button]:border-border-system-action-secondary-hover [&_button]:text-white`,
-        outside: `[&_button]:bg-transparent [&_button]:text-content-system-global-disabled`,
-        range_start: `rounded-l-[8px] bg-background-system-action-secondary-hover`,
-        range_end: `rounded-r-[8px] bg-background-system-action-secondary-hover`,
-        range_middle: `bg-background-system-action-secondary-hover [&_button]:!border-none [&_button]:!bg-transparent`,
-        weekdays: `text-content-presentation-global-primary text-[12px]`,
-        week_number: `text-content-presentation-global-primary text-[12px] px-1`,
+        today: `[&_button]:!bg-background-system-action-primary-hover`, // Add a border to today's date
+        selected: `[&_button]:!bg-background-system-action-primary-hover [&_button]:!border-border-system-action-secondary-hover [&_button]:!text-content-presentation-global-primary`,
+        outside: `[&_button]:!bg-transparent [&_button]:!text-content-system-global-disabled`,
+        range_start: `rounded-l-[8px] !bg-background-system-action-secondary-hover`,
+        range_end: `rounded-r-[8px] !bg-background-system-action-secondary-hover`,
+        range_middle: `!bg-background-system-action-secondary-hover [&_button]:!border-none [&_button]:!bg-transparent`,
+        weekdays: `!text-content-presentation-global-primary !text-[12px]`,
+        week_number: `!text-content-presentation-global-highlight-darkback !text-[12px] !px-1`,
         month_caption: `flex items-center justify-center`,
-        caption_label: `text-content-presentation-global-primary text-[14px] pt-[2px]`,
+        caption_label: `!text-content-presentation-global-primary !text-[14px] !pt-[2px]`,
         months: `flex items-end justify-center gap-4 flex-wrap`,
-        ...classNames
+        ...classNames,
       }}
       {...props}
     />
