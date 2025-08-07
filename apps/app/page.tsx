@@ -2,6 +2,8 @@
 import { DataTable } from '@/components/DataTable'
 import { InputField } from '@/components/InputField'
 import { ColumnDef } from '@tanstack/react-table'
+import Examples from './exmples'
+import { DatePicker } from '@/components/DatePicker'
 
 interface Person {
   id: string
@@ -61,10 +63,7 @@ const columns: ColumnDef<Person>[] = [
 
 export default function Page() {
   return (
-    <DataTable
-      columns={columns}
-      data={data}
-    />
+    <DatePicker />
   )
 }
 
