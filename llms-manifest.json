@@ -1,0 +1,191 @@
+{
+  "library": {
+    "name": "torch-glare",
+    "version": "1.1.15",
+    "description": "A comprehensive React component library with 55+ modern UI components",
+    "license": "MIT",
+    "homepage": "https://glare.torchcorp.com",
+    "repository": "https://github.com/torch-corp/torch-glare"
+  },
+  "documentation": {
+    "generated": "2024-11-05T13:30:00Z",
+    "generator": "torch-glare-docs",
+    "version": "2.0.0",
+    "format": "llms-txt",
+    "files": {
+      "navigation": "/llms.txt",
+      "full": "/llms-full.txt",
+      "manifest": "/llms-manifest.json"
+    }
+  },
+  "statistics": {
+    "totalComponents": 55,
+    "documentedComponents": 1,
+    "coverage": 1.8,
+    "totalHooks": 4,
+    "totalProviders": 1,
+    "totalPlugins": 4,
+    "totalPages": 85
+  },
+  "components": {
+    "buttons": {
+      "count": 4,
+      "items": [
+        { "name": "Button", "version": "1.1.15", "documented": true },
+        { "name": "ActionButton", "version": "1.1.15", "documented": false },
+        { "name": "LinkButton", "version": "1.1.15", "documented": false },
+        { "name": "LoginButton", "version": "1.1.15", "documented": false }
+      ]
+    },
+    "forms": {
+      "count": 16,
+      "items": [
+        { "name": "Input", "version": "1.1.15", "documented": false },
+        { "name": "InputField", "version": "1.1.15", "documented": false },
+        { "name": "Textarea", "version": "1.1.15", "documented": false },
+        { "name": "Checkbox", "version": "1.1.15", "documented": false },
+        { "name": "LabeledCheckBox", "version": "1.1.15", "documented": false },
+        { "name": "Radio", "version": "1.1.15", "documented": false },
+        { "name": "LabeledRadio", "version": "1.1.15", "documented": false },
+        { "name": "RadioCard", "version": "1.1.15", "documented": false },
+        { "name": "Select", "version": "1.1.15", "documented": false },
+        { "name": "SimpleSelect", "version": "1.1.15", "documented": false },
+        { "name": "Switch", "version": "1.1.15", "documented": false },
+        { "name": "Toggle", "version": "1.1.15", "documented": false },
+        { "name": "SearchField", "version": "1.1.15", "documented": false },
+        { "name": "InputOTP", "version": "1.1.15", "documented": false },
+        { "name": "Form", "version": "1.1.15", "documented": false },
+        { "name": "TabFormItem", "version": "1.1.15", "documented": false }
+      ]
+    },
+    "layout": {
+      "count": 6,
+      "items": [
+        { "name": "Card", "version": "1.1.15", "documented": false },
+        { "name": "CNLayout", "version": "1.1.15", "documented": false },
+        { "name": "FieldSection", "version": "1.1.15", "documented": false },
+        { "name": "TreeSubLayout", "version": "1.1.15", "documented": false },
+        { "name": "Divider", "version": "1.1.15", "documented": false },
+        { "name": "ScrollArea", "version": "1.1.15", "documented": false }
+      ]
+    },
+    "dataDisplay": {
+      "count": 8,
+      "items": [
+        { "name": "Badge", "version": "1.1.15", "documented": false },
+        { "name": "BadgeField", "version": "1.1.15", "documented": false },
+        { "name": "CountBadge", "version": "1.1.15", "documented": false },
+        { "name": "Avatar", "version": "1.1.15", "documented": false },
+        { "name": "Table", "version": "1.1.15", "documented": false },
+        { "name": "DataTable", "version": "1.1.15", "documented": false },
+        { "name": "TreeDropDown", "version": "1.1.15", "documented": false },
+        { "name": "Skeleton", "version": "1.1.15", "documented": false }
+      ]
+    },
+    "overlays": {
+      "count": 7,
+      "items": [
+        { "name": "Dialog", "version": "1.1.15", "documented": false },
+        { "name": "AlertDialog", "version": "1.1.15", "documented": false },
+        { "name": "Drawer", "version": "1.1.15", "documented": false },
+        { "name": "Popover", "version": "1.1.15", "documented": false },
+        { "name": "Tooltip", "version": "1.1.15", "documented": false },
+        { "name": "DropdownMenu", "version": "1.1.15", "documented": false },
+        { "name": "ProfileMenu", "version": "1.1.15", "documented": false }
+      ]
+    },
+    "dateTime": {
+      "count": 4,
+      "items": [
+        { "name": "Calendar", "version": "1.1.15", "documented": false },
+        { "name": "DatePicker", "version": "1.1.15", "documented": false },
+        { "name": "SlideDatePicker", "version": "1.1.15", "documented": false },
+        { "name": "IosDatePicker", "version": "experimental", "documented": false }
+      ]
+    },
+    "feedback": {
+      "count": 4,
+      "items": [
+        { "name": "Toast", "version": "1.1.15", "documented": false },
+        { "name": "SpinLoading", "version": "1.1.15", "documented": false },
+        { "name": "PasswordLevel", "version": "1.1.15", "documented": false },
+        { "name": "FieldHint", "version": "1.1.15", "documented": false }
+      ]
+    },
+    "labels": {
+      "count": 4,
+      "items": [
+        { "name": "Label", "version": "1.1.15", "documented": false },
+        { "name": "LabelField", "version": "1.1.15", "documented": false },
+        { "name": "InnerLabelField", "version": "1.1.15", "documented": false },
+        { "name": "TransparentLabel", "version": "1.1.15", "documented": false }
+      ]
+    },
+    "advanced": {
+      "count": 4,
+      "items": [
+        { "name": "Charts", "version": "experimental", "documented": false },
+        { "name": "Command", "version": "experimental", "documented": false },
+        { "name": "ImageAttachment", "version": "1.1.15", "documented": false },
+        { "name": "ActionsGroup", "version": "1.1.15", "documented": false }
+      ]
+    }
+  },
+  "hooks": {
+    "count": 4,
+    "items": [
+      { "name": "useActiveTreeItem", "version": "1.1.15", "documented": false },
+      { "name": "useClickOutside", "version": "1.1.15", "documented": false },
+      { "name": "useResize", "version": "1.1.15", "documented": false },
+      { "name": "useTagSelection", "version": "1.1.15", "documented": false }
+    ]
+  },
+  "providers": {
+    "count": 1,
+    "items": [
+      { "name": "ThemeProvider", "version": "1.1.15", "documented": false }
+    ]
+  },
+  "plugins": {
+    "count": 4,
+    "items": [
+      { "name": "mappingColorSystem", "version": "1.0.0", "documented": false },
+      { "name": "mappingColorSystemV4", "version": "4.0.0", "documented": false },
+      { "name": "torchMode", "version": "1.0.0", "documented": false },
+      { "name": "typography", "version": "1.0.0", "documented": false }
+    ]
+  },
+  "themes": {
+    "modes": ["light", "dark", "default"],
+    "variants": {
+      "button": [
+        "PrimeStyle",
+        "BlueSecStyle",
+        "YelSecStyle",
+        "RedSecStyle",
+        "BorderStyle",
+        "PrimeContStyle",
+        "BlueContStyle",
+        "RedContStyle"
+      ]
+    }
+  },
+  "dependencies": {
+    "production": {
+      "@radix-ui/react-slot": "^1.0.0",
+      "class-variance-authority": "^0.7.0",
+      "tailwindcss": "^3.0.0"
+    },
+    "peer": {
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0"
+    }
+  },
+  "support": {
+    "documentation": "https://glare.torchcorp.com",
+    "repository": "https://github.com/torch-corp/torch-glare",
+    "issues": "https://github.com/torch-corp/torch-glare/issues",
+    "discord": "https://discord.gg/torch-glare",
+    "email": "support@torchcorp.com"
+  }
+}

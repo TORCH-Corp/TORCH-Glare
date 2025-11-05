@@ -1,0 +1,739 @@
+# TORCH Glare Components Library - Complete Documentation
+
+> Comprehensive documentation for TORCH Glare Components Library v1.1.15. This file contains all documentation in a single, LLM-optimized format.
+
+**Generated:** November 2024 | **Components:** 55+ | **License:** MIT
+
+---
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+4. [Theming](#theming)
+5. [Components](#components)
+6. [Hooks](#hooks)
+7. [Providers](#providers)
+8. [Plugins](#plugins)
+9. [CLI Tool](#cli-tool)
+10. [API Reference](#api-reference)
+11. [Examples](#examples)
+12. [Migration](#migration)
+
+---
+
+## Introduction
+
+TORCH Glare is a comprehensive React component library designed for building modern, accessible, and themeable user interfaces. Built with TypeScript, Radix UI primitives, and Tailwind CSS, it provides 55+ production-ready components with full accessibility support and a powerful theming system.
+
+### Key Features
+
+- **55+ Components**: Complete set of UI components for modern applications
+- **TypeScript First**: Full TypeScript support with comprehensive type definitions
+- **Accessibility**: WCAG 2.1 AA compliant with Radix UI primitives
+- **Theming**: Dark/light modes with customizable theme system
+- **Polymorphic Components**: Flexible component rendering with `as` prop
+- **Performance**: Optimized bundle size with tree-shaking support
+- **CLI Tool**: Powerful CLI for component and theme management
+
+### Design Principles
+
+1. **Composability**: Components work together seamlessly
+2. **Accessibility First**: Built on Radix UI for optimal accessibility
+3. **Developer Experience**: Intuitive API with excellent TypeScript support
+4. **Themeable**: Flexible theming system with CSS variables
+5. **Performance**: Optimized for minimal bundle size
+
+---
+
+## Installation
+
+### NPM
+
+```bash
+npm install torch-glare
+```
+
+### Yarn
+
+```bash
+yarn add torch-glare
+```
+
+### PNPM
+
+```bash
+pnpm add torch-glare
+```
+
+### Peer Dependencies
+
+```json
+{
+  "react": "^18.0.0",
+  "react-dom": "^18.0.0",
+  "tailwindcss": "^3.0.0"
+}
+```
+
+---
+
+## Configuration
+
+### Basic Setup
+
+1. **Import styles in your app entry point:**
+
+```typescript
+// app.tsx or index.tsx
+import 'torch-glare/dist/styles.css'
+```
+
+2. **Configure Tailwind CSS:**
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: [
+    './src/**/*.{js,ts,jsx,tsx}',
+    './node_modules/torch-glare/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require('torch-glare/plugins/torchMode'),
+    require('torch-glare/plugins/mappingColorSystem'),
+    require('torch-glare/plugins/typography'),
+  ],
+}
+```
+
+3. **Add Theme Provider:**
+
+```typescript
+import { ThemeProvider } from 'torch-glare/lib/providers'
+
+function App() {
+  return (
+    <ThemeProvider theme="light">
+      {/* Your app content */}
+    </ThemeProvider>
+  )
+}
+```
+
+---
+
+## Theming
+
+### Theme Modes
+
+TORCH Glare supports three theme modes:
+- `light`: Light color scheme
+- `dark`: Dark color scheme
+- `default`: Follows system preference
+
+### Using Themes
+
+```typescript
+// Component level theming
+<Button theme="dark" variant="PrimeStyle">
+  Dark Button
+</Button>
+
+// Global theming with ThemeProvider
+<ThemeProvider theme="light">
+  <App />
+</ThemeProvider>
+```
+
+### Custom Themes
+
+Create custom themes by extending the base theme:
+
+```css
+/* custom-theme.css */
+[data-theme="custom"] {
+  --primary: #your-color;
+  --secondary: #your-color;
+  --background: #your-color;
+  --foreground: #your-color;
+  /* ... other variables */
+}
+```
+
+---
+
+## Components
+
+### Component Documentation Format
+
+Each component section includes:
+- Description and use cases
+- Import statement
+- Basic usage examples
+- Props API reference
+- TypeScript interface
+- Accessibility features
+- Common patterns
+
+---
+
+### Button
+
+A versatile button component with multiple variants, sizes, and states. Supports icons, loading states, and polymorphic rendering.
+
+#### Import
+
+```typescript
+import { Button } from 'torch-glare/lib/components/Button'
+```
+
+#### Basic Usage
+
+```typescript
+<Button variant="PrimeStyle" onClick={() => console.log('clicked')}>
+  Click me
+</Button>
+```
+
+#### Variants
+
+```typescript
+// Primary styles
+<Button variant="PrimeStyle">Primary</Button>
+<Button variant="PrimeContStyle">Primary Container</Button>
+
+// Secondary styles
+<Button variant="BlueSecStyle">Blue Secondary</Button>
+<Button variant="YelSecStyle">Yellow Secondary</Button>
+<Button variant="RedSecStyle">Red Secondary</Button>
+
+// Container styles
+<Button variant="BlueContStyle">Blue Container</Button>
+<Button variant="RedContStyle">Red Container</Button>
+
+// Border style
+<Button variant="BorderStyle">Border Only</Button>
+```
+
+#### Sizes
+
+```typescript
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+<Button size="xl">Extra Large</Button>
+<Button size="icon">Icon Only</Button>
+```
+
+#### Loading State
+
+```typescript
+<Button is_loading={true}>
+  Loading...
+</Button>
+```
+
+#### With Icons
+
+```typescript
+import { PlusIcon } from '@heroicons/react/24/outline'
+
+<Button>
+  <PlusIcon className="w-4 h-4 mr-2" />
+  Add Item
+</Button>
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `ButtonVariant` | `'PrimeStyle'` | Visual style variant |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'icon'` | `'md'` | Button size |
+| `is_loading` | `boolean` | `false` | Show loading state |
+| `disabled` | `boolean` | `false` | Disable interactions |
+| `asChild` | `boolean` | `false` | Render as child element |
+| `as` | `React.ElementType` | `'button'` | Element type to render |
+| `theme` | `Themes` | - | Component theme override |
+| `containerClassName` | `string` | - | Container wrapper classes |
+
+#### TypeScript
+
+```typescript
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon';
+  is_loading?: boolean;
+  disabled?: boolean;
+  asChild?: boolean;
+  as?: React.ElementType;
+  theme?: 'light' | 'dark' | 'default';
+  containerClassName?: string;
+}
+
+type ButtonVariant =
+  | 'PrimeStyle'
+  | 'BlueSecStyle'
+  | 'YelSecStyle'
+  | 'RedSecStyle'
+  | 'BorderStyle'
+  | 'PrimeContStyle'
+  | 'BlueContStyle'
+  | 'RedContStyle';
+```
+
+#### Accessibility
+
+- Keyboard accessible (Space/Enter activation)
+- Focus management with visible focus indicators
+- ARIA attributes for loading and disabled states
+- Screen reader announcements
+- Proper button role
+
+---
+
+### Input
+
+Text input component with validation support, theming, and various states.
+
+#### Import
+
+```typescript
+import { Input } from 'torch-glare/lib/components/Input'
+```
+
+#### Basic Usage
+
+```typescript
+<Input
+  placeholder="Enter text..."
+  value={value}
+  onChange={(e) => setValue(e.target.value)}
+/>
+```
+
+#### With Validation
+
+```typescript
+<Input
+  type="email"
+  required
+  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+  placeholder="Email address"
+/>
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `type` | `string` | `'text'` | Input type |
+| `placeholder` | `string` | - | Placeholder text |
+| `disabled` | `boolean` | `false` | Disable input |
+| `required` | `boolean` | `false` | Required field |
+| `pattern` | `string` | - | Validation pattern |
+| `theme` | `Themes` | - | Theme override |
+
+---
+
+### Card
+
+Container component for grouping related content with optional header and footer.
+
+#### Import
+
+```typescript
+import { Card } from 'torch-glare/lib/components/Card'
+```
+
+#### Basic Usage
+
+```typescript
+<Card>
+  <h2>Card Title</h2>
+  <p>Card content goes here</p>
+</Card>
+```
+
+---
+
+## Hooks
+
+### useActiveTreeItem
+
+Manages active state in tree navigation structures.
+
+```typescript
+import { useActiveTreeItem } from 'torch-glare/lib/hooks/useActiveTreeItem'
+
+const { activeItem, setActiveItem } = useActiveTreeItem(initialItem)
+```
+
+### useClickOutside
+
+Detects clicks outside a specified element.
+
+```typescript
+import { useClickOutside } from 'torch-glare/lib/hooks/useClickOutside'
+
+const ref = useRef(null)
+useClickOutside(ref, () => {
+  console.log('Clicked outside!')
+})
+```
+
+### useResize
+
+Handles window and element resize events.
+
+```typescript
+import { useResize } from 'torch-glare/lib/hooks/useResize'
+
+const { width, height } = useResize()
+```
+
+### useTagSelection
+
+Manages multi-tag selection state.
+
+```typescript
+import { useTagSelection } from 'torch-glare/lib/hooks/useTagSelection'
+
+const { selectedTags, toggleTag, clearTags } = useTagSelection()
+```
+
+---
+
+## Providers
+
+### ThemeProvider
+
+Provides theme context to all child components.
+
+```typescript
+import { ThemeProvider } from 'torch-glare/lib/providers/ThemeProvider'
+
+<ThemeProvider theme="light">
+  <App />
+</ThemeProvider>
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `theme` | `'light' \| 'dark' \| 'default'` | `'default'` | Theme mode |
+| `children` | `ReactNode` | - | Child components |
+
+---
+
+## Plugins
+
+### Mapping Color System
+
+Dynamic color mapping plugin for Tailwind CSS.
+
+```javascript
+// tailwind.config.js
+plugins: [
+  require('torch-glare/plugins/mappingColorSystem')
+]
+```
+
+### Torch Mode
+
+Theme mode management plugin.
+
+```javascript
+plugins: [
+  require('torch-glare/plugins/torchMode')
+]
+```
+
+### Typography
+
+Typography system plugin with font scales.
+
+```javascript
+plugins: [
+  require('torch-glare/plugins/typography')
+]
+```
+
+---
+
+## CLI Tool
+
+The torch-glare CLI provides commands for component and theme management.
+
+### Installation
+
+```bash
+npm install -g torch-glare
+```
+
+### Commands
+
+#### Initialize Project
+
+```bash
+torch-glare init
+```
+
+#### Add Component
+
+```bash
+torch-glare add <component-name>
+```
+
+#### Generate Theme
+
+```bash
+torch-glare theme generate --name custom
+```
+
+#### Update Plugins
+
+```bash
+torch-glare plugins update
+```
+
+---
+
+## API Reference
+
+### Component API
+
+All components extend standard HTML element attributes and accept:
+- `className`: Additional CSS classes
+- `style`: Inline styles
+- `ref`: React ref forwarding
+- `theme`: Theme override
+- Event handlers (onClick, onChange, etc.)
+
+### Theme API
+
+CSS variables available for customization:
+
+```css
+--primary: Primary color
+--secondary: Secondary color
+--background: Background color
+--foreground: Text color
+--border: Border color
+--radius: Border radius
+--shadow: Box shadow
+```
+
+### Type Definitions
+
+Core type definitions:
+
+```typescript
+type Themes = 'light' | 'dark' | 'default'
+
+type ButtonVariant =
+  | 'PrimeStyle'
+  | 'BlueSecStyle'
+  | 'YelSecStyle'
+  | 'RedSecStyle'
+  | 'BorderStyle'
+  | 'PrimeContStyle'
+  | 'BlueContStyle'
+  | 'RedContStyle'
+```
+
+---
+
+## Examples
+
+### Complete Form Example
+
+```typescript
+import {
+  Form,
+  Input,
+  InputField,
+  Select,
+  Checkbox,
+  Button,
+  Card
+} from 'torch-glare/lib/components'
+
+function ContactForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    category: '',
+    subscribe: false
+  })
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    console.log('Form submitted:', formData)
+  }
+
+  return (
+    <Card>
+      <Form onSubmit={handleSubmit}>
+        <InputField
+          label="Name"
+          name="name"
+          required
+          value={formData.name}
+          onChange={(e) => setFormData({
+            ...formData,
+            name: e.target.value
+          })}
+        />
+
+        <InputField
+          label="Email"
+          type="email"
+          name="email"
+          required
+          value={formData.email}
+          onChange={(e) => setFormData({
+            ...formData,
+            email: e.target.value
+          })}
+        />
+
+        <Select
+          label="Category"
+          value={formData.category}
+          onChange={(value) => setFormData({
+            ...formData,
+            category: value
+          })}
+        >
+          <option value="">Select category</option>
+          <option value="support">Support</option>
+          <option value="sales">Sales</option>
+          <option value="general">General</option>
+        </Select>
+
+        <Checkbox
+          checked={formData.subscribe}
+          onChange={(checked) => setFormData({
+            ...formData,
+            subscribe: checked
+          })}
+        >
+          Subscribe to newsletter
+        </Checkbox>
+
+        <Button type="submit" variant="PrimeStyle">
+          Submit
+        </Button>
+      </Form>
+    </Card>
+  )
+}
+```
+
+### Dashboard Layout
+
+```typescript
+import { CNLayout, Card, Badge, Table, Button } from 'torch-glare/lib/components'
+
+function Dashboard() {
+  return (
+    <CNLayout>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <h3>Total Users</h3>
+          <Badge variant="success">1,234</Badge>
+        </Card>
+
+        <Card>
+          <h3>Revenue</h3>
+          <Badge variant="primary">$12,345</Badge>
+        </Card>
+
+        <Card>
+          <h3>Active Sessions</h3>
+          <Badge variant="warning">89</Badge>
+        </Card>
+      </div>
+
+      <Card className="mt-6">
+        <Table>
+          {/* Table content */}
+        </Table>
+      </Card>
+    </CNLayout>
+  )
+}
+```
+
+---
+
+## Migration
+
+### From v1.0.x to v1.1.x
+
+#### Breaking Changes
+
+1. **Component imports changed:**
+```typescript
+// Old
+import Button from 'torch-glare/Button'
+
+// New
+import { Button } from 'torch-glare/lib/components/Button'
+```
+
+2. **Theme prop renamed:**
+```typescript
+// Old
+<Button colorScheme="dark">
+
+// New
+<Button theme="dark">
+```
+
+3. **Loading prop renamed:**
+```typescript
+// Old
+<Button loading={true}>
+
+// New
+<Button is_loading={true}>
+```
+
+### Changelog
+
+#### v1.1.15 (Current)
+- Added 10+ new components
+- Improved TypeScript support
+- Enhanced accessibility
+- Performance optimizations
+
+#### v1.1.14
+- Date picker improvements
+- Bug fixes
+
+---
+
+## Support
+
+- **Documentation**: https://glare.torchcorp.com
+- **GitHub**: https://github.com/torch-corp/torch-glare
+- **Issues**: https://github.com/torch-corp/torch-glare/issues
+- **Discord**: https://discord.gg/torch-glare
+- **Email**: support@torchcorp.com
+
+---
+
+## License
+
+MIT © TORCH Corporation
+
+---
+
+**Note**: This is a generated documentation file. Individual component documentation will be added as separate files are created. For the most up-to-date and detailed component documentation, refer to the individual component files in `/docs/components/`.

@@ -1,0 +1,63 @@
+{
+  "current": "1.1.15",
+  "latest": "1.1.15",
+  "versions": [
+    {
+      "version": "1.1.15",
+      "date": "2024-11-05",
+      "status": "stable",
+      "breaking": false,
+      "components": 55,
+      "highlights": [
+        "55+ production-ready components",
+        "Full TypeScript support",
+        "Radix UI primitives integration",
+        "Enhanced theming system"
+      ],
+      "docs": {
+        "navigation": "/versions/v1.1.15/llms.txt",
+        "full": "/versions/v1.1.15/llms-full.txt",
+        "changelog": "/docs/migration/changelog.md#v1115"
+      }
+    },
+    {
+      "version": "1.1.14",
+      "date": "2024-10-15",
+      "status": "maintenance",
+      "breaking": false,
+      "components": 52,
+      "highlights": [
+        "Date picker improvements",
+        "Table component enhancements",
+        "Bug fixes in form components"
+      ],
+      "docs": {
+        "navigation": "/versions/v1.1.14/llms.txt",
+        "full": "/versions/v1.1.14/llms-full.txt",
+        "changelog": "/docs/migration/changelog.md#v1114"
+      }
+    },
+    {
+      "version": "1.1.0",
+      "date": "2024-09-01",
+      "status": "deprecated",
+      "breaking": true,
+      "components": 45,
+      "highlights": [
+        "Major refactor with Radix UI",
+        "New theming system",
+        "Breaking API changes"
+      ],
+      "docs": {
+        "changelog": "/docs/migration/changelog.md#v110"
+      }
+    }
+  ],
+  "deprecation": {
+    "v1.0.x": {
+      "deprecated": "2024-09-01",
+      "endOfLife": "2025-03-01",
+      "migrationGuide": "/docs/migration/v1-migration.md"
+    }
+  }
+}

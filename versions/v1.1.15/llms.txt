@@ -1,0 +1,211 @@
+# TORCH Glare Components Library
+
+> A comprehensive React component library with 55+ modern UI components. Built with TypeScript, Radix UI, and Tailwind CSS. Features dark/light theming, full accessibility, and polymorphic components.
+
+**Version:** 1.1.15 | **License:** MIT | **Status:** Active | **Components:** 55+
+
+## Quick Start
+
+```bash
+npm install torch-glare
+```
+
+```typescript
+import { Button, Input, Card } from 'torch-glare/lib/components'
+import { ThemeProvider } from 'torch-glare/lib/providers'
+
+function App() {
+  return (
+    <ThemeProvider theme="light">
+      <Card>
+        <Input placeholder="Enter text..." />
+        <Button variant="PrimeStyle">Submit</Button>
+      </Card>
+    </ThemeProvider>
+  )
+}
+```
+
+## Documentation Structure
+
+### 📚 Learning (Tutorials)
+- [Getting Started](/docs/tutorials/getting-started.md): Installation, setup, and first component
+- [Building Your First Form](/docs/tutorials/first-form.md): Create a complete form with validation
+- [Theming Basics](/docs/tutorials/theming-basics.md): Understanding the theme system
+- [Component Composition](/docs/tutorials/component-composition.md): Building complex UIs
+
+### 🔧 Tasks (How-to Guides)
+- [Custom Themes](/docs/how-to/custom-themes.md): Creating and applying custom themes
+- [Form Validation](/docs/how-to/form-validation.md): Implementing form validation
+- [Dark Mode](/docs/how-to/dark-mode.md): Setting up dark/light mode switching
+- [Accessibility](/docs/how-to/accessibility.md): Ensuring WCAG compliance
+- [TypeScript Integration](/docs/how-to/typescript.md): Using with TypeScript
+
+### 📖 Reference
+- [Component API](/docs/reference/components.md): Complete props reference for all components
+- [Hooks API](/docs/reference/hooks.md): Custom React hooks documentation
+- [Theme API](/docs/reference/theme.md): Theme configuration and variables
+- [Types](/docs/reference/types.md): TypeScript type definitions
+- [Utilities](/docs/reference/utilities.md): Helper functions and utilities
+
+### 💡 Concepts (Explanation)
+- [Architecture](/docs/explanation/architecture.md): Library design and structure
+- [Design System](/docs/explanation/design-system.md): Design principles and patterns
+- [Theming System](/docs/explanation/theming.md): How theming works
+- [Accessibility](/docs/explanation/accessibility.md): Accessibility approach
+- [Performance](/docs/explanation/performance.md): Optimization strategies
+
+## Components
+
+### Form Controls
+- [Button](/docs/components/button.md): Interactive button with 11 variants and 5 sizes `v1.1.15`
+- [Input](/docs/components/input.md): Text input with validation and theming support `v1.1.15`
+- [InputField](/docs/components/input-field.md): Enhanced input with label and hints `v1.1.15`
+- [Textarea](/docs/components/textarea.md): Multi-line text input component `v1.1.15`
+- [Checkbox](/docs/components/checkbox.md): Checkbox input with label support `v1.1.15`
+- [LabeledCheckBox](/docs/components/labeled-checkbox.md): Checkbox with integrated label `v1.1.15`
+- [Radio](/docs/components/radio.md): Radio button for single selection `v1.1.15`
+- [LabeledRadio](/docs/components/labeled-radio.md): Radio with integrated label `v1.1.15`
+- [RadioCard](/docs/components/radio-card.md): Card-style radio selection `v1.1.15`
+- [Select](/docs/components/select.md): Dropdown select with search and multi-select `v1.1.15`
+- [SimpleSelect](/docs/components/simple-select.md): Lightweight select component `v1.1.15`
+- [Switch](/docs/components/switch.md): Toggle switch for on/off states `v1.1.15`
+- [Toggle](/docs/components/toggle.md): Toggle button with multiple states `v1.1.15`
+- [SearchField](/docs/components/search-field.md): Search input with icon and clear `v1.1.15`
+- [InputOTP](/docs/components/input-otp.md): One-time password input `v1.1.15`
+- [Form](/docs/components/form.md): Form wrapper with validation context `v1.1.15`
+
+### Buttons & Actions
+- [ActionButton](/docs/components/action-button.md): Icon button for actions `v1.1.15`
+- [ActionsGroup](/docs/components/actions-group.md): Group of action buttons `v1.1.15`
+- [LinkButton](/docs/components/link-button.md): Button styled as link `v1.1.15`
+- [LoginButton](/docs/components/login-button.md): Specialized login button `v1.1.15`
+
+### Layout & Containers
+- [Card](/docs/components/card.md): Content container with variants `v1.1.15`
+- [CNLayout](/docs/components/cn-layout.md): Complex layout system `v1.1.15`
+- [FieldSection](/docs/components/field-section.md): Form field grouping `v1.1.15`
+- [TreeSubLayout](/docs/components/tree-sub-layout.md): Tree structure layout `v1.1.15`
+- [Divider](/docs/components/divider.md): Visual separator component `v1.1.15`
+- [ScrollArea](/docs/components/scroll-area.md): Custom scrollable container `v1.1.15`
+
+### Data Display
+- [Badge](/docs/components/badge.md): Status and label badges `v1.1.15`
+- [BadgeField](/docs/components/badge-field.md): Badge with field integration `v1.1.15`
+- [CountBadge](/docs/components/count-badge.md): Numeric count indicator `v1.1.15`
+- [Avatar](/docs/components/avatar.md): User profile image component `v1.1.15`
+- [Table](/docs/components/table.md): Data table with sorting and selection `v1.1.15`
+- [DataTable](/docs/components/data-table.md): Advanced data table with pagination `v1.1.15`
+- [TreeDropDown](/docs/components/tree-dropdown.md): Hierarchical dropdown menu `v1.1.15`
+- [Skeleton](/docs/components/skeleton.md): Loading placeholder skeleton `v1.1.15`
+
+### Overlays & Dialogs
+- [Dialog](/docs/components/dialog.md): Modal dialog component `v1.1.15`
+- [AlertDialog](/docs/components/alert-dialog.md): Confirmation dialog `v1.1.15`
+- [Drawer](/docs/components/drawer.md): Slide-out panel component `v1.1.15`
+- [Popover](/docs/components/popover.md): Floating content popover `v1.1.15`
+- [Tooltip](/docs/components/tooltip.md): Contextual tooltips `v1.1.15`
+- [DropdownMenu](/docs/components/dropdown-menu.md): Dropdown menu system `v1.1.15`
+- [ProfileMenu](/docs/components/profile-menu.md): User profile dropdown `v1.1.15`
+
+### Date & Time
+- [Calendar](/docs/components/calendar.md): Date selection calendar `v1.1.15`
+- [DatePicker](/docs/components/date-picker.md): Date picker with calendar `v1.1.15`
+- [SlideDatePicker](/docs/components/slide-date-picker.md): Sliding date selector `v1.1.15`
+- [IosDatePicker](/docs/components/ios-date-picker.md): iOS-style date picker `experimental`
+
+### Feedback & Status
+- [Toast](/docs/components/toast.md): Temporary notification messages `v1.1.15`
+- [SpinLoading](/docs/components/spin-loading.md): Loading spinner animation `v1.1.15`
+- [PasswordLevel](/docs/components/password-level.md): Password strength indicator `v1.1.15`
+- [FieldHint](/docs/components/field-hint.md): Form field helper text `v1.1.15`
+
+### Labels & Text
+- [Label](/docs/components/label.md): Form label component `v1.1.15`
+- [LabelField](/docs/components/label-field.md): Label with field integration `v1.1.15`
+- [InnerLabelField](/docs/components/inner-label-field.md): Field with inner label `v1.1.15`
+- [TransparentLabel](/docs/components/transparent-label.md): Transparent background label `v1.1.15`
+
+### Advanced Components
+- [Charts](/docs/components/charts.md): Data visualization charts `experimental`
+- [Command](/docs/components/command.md): Command palette component `experimental`
+- [TabFormItem](/docs/components/tab-form-item.md): Tabbed form sections `v1.1.15`
+- [ImageAttachment](/docs/components/image-attachment.md): Image upload and preview `v1.1.15`
+
+## Hooks
+
+- [useActiveTreeItem](/docs/reference/hooks.md#useactivetreeitem): Tree navigation state management
+- [useClickOutside](/docs/reference/hooks.md#useclickoutside): Detect clicks outside element
+- [useResize](/docs/reference/hooks.md#useresize): Window and element resize handling
+- [useTagSelection](/docs/reference/hooks.md#usetagselection): Multi-tag selection management
+
+## Providers
+
+- [ThemeProvider](/docs/reference/providers.md#themeprovider): Global theme context provider
+
+## Theme System
+
+### Available Themes
+- `light`: Light mode theme
+- `dark`: Dark mode theme
+- `default`: System preference
+
+### Button Variants
+- `PrimeStyle`: Primary button style
+- `BlueSecStyle`: Blue secondary style
+- `YelSecStyle`: Yellow secondary style
+- `RedSecStyle`: Red secondary style
+- `BorderStyle`: Border only style
+- `PrimeContStyle`: Primary container style
+- `BlueContStyle`: Blue container style
+- `RedContStyle`: Red container style
+
+## Plugins
+
+- [Mapping Color System](/docs/reference/plugins.md#mapping-color-system): Dynamic color mapping
+- [Mapping Color System V4](/docs/reference/plugins.md#mapping-color-system-v4): Advanced color system
+- [Torch Mode](/docs/reference/plugins.md#torch-mode): Theme mode management
+- [Typography](/docs/reference/plugins.md#typography): Typography system
+
+## CLI Tool
+
+The torch-glare CLI provides commands for:
+- Component installation
+- Plugin management
+- Theme generation
+- Project scaffolding
+
+```bash
+# Install CLI globally
+npm install -g torch-glare
+
+# Use CLI
+torch-glare init
+torch-glare add button
+torch-glare theme generate
+```
+
+## Version History
+
+- [v1.1.15](/docs/migration/changelog.md#v1115): Current version - 55+ components
+- [v1.1.14](/docs/migration/changelog.md#v1114): Date picker improvements
+- [Migration Guide](/docs/migration/v1-migration.md): Upgrading from v1.0.x
+
+## Resources
+
+- [Documentation](https://glare.torchcorp.com): Official documentation site
+- [GitHub](https://github.com/torch-corp/torch-glare): Source code repository
+- [NPM](https://www.npmjs.com/package/torch-glare): NPM package
+- [Storybook](https://storybook.glare.torchcorp.com): Interactive component demos
+- [Examples](https://github.com/torch-corp/torch-glare/tree/main/examples): Example implementations
+
+## Support
+
+- [Issues](https://github.com/torch-corp/torch-glare/issues): Bug reports and feature requests
+- [Discussions](https://github.com/torch-corp/torch-glare/discussions): Community discussions
+- [Discord](https://discord.gg/torch-glare): Community chat
+- [Email](mailto:support@torchcorp.com): Direct support
+
+## License
+
+MIT © TORCH Corporation
