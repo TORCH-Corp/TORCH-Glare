@@ -14,7 +14,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="ltr" data-theme="default">
+    <html lang="en" dir="ltr" data-theme="dark">
       <head>
         <link
           href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
