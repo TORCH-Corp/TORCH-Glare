@@ -55,6 +55,7 @@
     "@tailwindcss/vite": "^4.0.9",
     "@tanstack/react-table": "^8.21.3",
     "autoprefixer": "^10.4.21",
+    "chart.js": "^4.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

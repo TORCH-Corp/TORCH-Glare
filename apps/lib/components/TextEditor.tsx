@@ -32,6 +32,7 @@ import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
 import Underline from "@editorjs/underline";
 import TextVariantTune from "@editorjs/text-variant-tune";
+import ChartBlockTool from "./ChartBlockTool";
 
 // ─── RTL Detection ───────────────────────────────────────────────────────────
 const RTL_REGEX = /[\u0591-\u07FF\u200F\u202B\u202E\uFB1D-\uFDFD\uFE70-\uFEFC]/;
@@ -146,6 +147,7 @@ const getDefaultTools = (): Record<string, any> => ({
   linkTool: { class: LinkTool },
   image: { class: SimpleImage },
   raw: { class: RawTool },
+  chart: { class: ChartBlockTool as any },
   marker: { class: Marker, shortcut: "CMD+SHIFT+M" },
   inlineCode: { class: InlineCode, shortcut: "CMD+SHIFT+I" },
   underline: { class: Underline },
@@ -361,6 +363,221 @@ const AUTO_DIR_STYLES = `
   .torch-text-editor[data-theme="dark"] .ce-popover__items::-webkit-scrollbar-thumb:hover,
   .torch-text-editor[data-theme="dark"] .ce-popover__container::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* ── Chart Block Tool ── */
+  .torch-text-editor .cdx-chart-block {
+    padding: 16px 0;
+    cursor: pointer;
+  }
+  .torch-text-editor .cdx-chart-block__editor-panel {
+    overflow: hidden;
+    max-height: 1000px;
+    opacity: 1;
+    transition: max-height 300ms ease-in-out, opacity 200ms ease-in-out, margin 300ms ease-in-out;
+    margin-bottom: 16px;
+  }
+  .torch-text-editor .cdx-chart-block__editor-panel--hidden {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    pointer-events: none;
+  }
+  .torch-text-editor .cdx-chart-block__title-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    background: transparent;
+    color: inherit;
+    outline: none;
+    margin-bottom: 12px;
+  }
+  .torch-text-editor .cdx-chart-block__title-input::placeholder {
+    color: #999;
+  }
+  .torch-text-editor .cdx-chart-block__type-selector {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .torch-text-editor .cdx-chart-block__type-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 200ms ease-in-out;
+  }
+  .torch-text-editor .cdx-chart-block__type-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  .torch-text-editor .cdx-chart-block__type-btn--active {
+    background: rgba(54, 162, 235, 0.15);
+    border-color: rgb(54, 162, 235);
+    color: rgb(54, 162, 235);
+  }
+  .torch-text-editor .cdx-chart-block__table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+  }
+  .torch-text-editor .cdx-chart-block__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .torch-text-editor .cdx-chart-block__table th,
+  .torch-text-editor .cdx-chart-block__table td {
+    border: 1px solid #e0e0e0;
+    padding: 4px 6px;
+    min-width: 80px;
+  }
+  .torch-text-editor .cdx-chart-block__corner-cell {
+    min-width: 100px;
+    width: 100px;
+  }
+  .torch-text-editor .cdx-chart-block__controls-header {
+    min-width: 60px;
+    width: 60px;
+  }
+  .torch-text-editor .cdx-chart-block__label-cell {
+    position: relative;
+  }
+  .torch-text-editor .cdx-chart-block__table input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: inherit;
+    outline: none;
+    font-size: 13px;
+    padding: 2px;
+  }
+  .torch-text-editor .cdx-chart-block__table input[type="number"] {
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+  .torch-text-editor .cdx-chart-block__table input[type="number"]::-webkit-inner-spin-button,
+  .torch-text-editor .cdx-chart-block__table input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .torch-text-editor .cdx-chart-block__color-picker {
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0;
+  }
+  .torch-text-editor .cdx-chart-block__dataset-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 60px;
+  }
+  .torch-text-editor .cdx-chart-block__remove-btn,
+  .torch-text-editor .cdx-chart-block__remove-col-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: all 200ms ease-in-out;
+    line-height: 1;
+  }
+  .torch-text-editor .cdx-chart-block__remove-btn:hover,
+  .torch-text-editor .cdx-chart-block__remove-col-btn:hover {
+    color: rgb(255, 99, 132);
+    background: rgba(255, 99, 132, 0.1);
+  }
+  .torch-text-editor .cdx-chart-block__remove-col-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 11px;
+    padding: 0 3px;
+  }
+  .torch-text-editor .cdx-chart-block__actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .torch-text-editor .cdx-chart-block__action-btn {
+    padding: 4px 12px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 200ms ease-in-out;
+  }
+  .torch-text-editor .cdx-chart-block__action-btn:hover {
+    border-style: solid;
+    background: rgba(0, 0, 0, 0.03);
+  }
+  .torch-text-editor .cdx-chart-block__canvas-wrapper {
+    position: relative;
+    height: 350px;
+    width: 100%;
+  }
+  .torch-text-editor .cdx-chart-block__canvas-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .torch-text-editor .cdx-chart-block__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: inherit;
+  }
+
+  /* ── Chart Block: dark mode ── */
+  [data-theme="dark"] .cdx-chart-block__title-input,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__title-input {
+    border-bottom-color: #3a3a3a;
+  }
+  [data-theme="dark"] .cdx-chart-block__title-input::placeholder,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__title-input::placeholder {
+    color: #666;
+  }
+  [data-theme="dark"] .cdx-chart-block__type-btn,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__type-btn {
+    border-color: #3a3a3a;
+  }
+  [data-theme="dark"] .cdx-chart-block__type-btn:hover,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__type-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  [data-theme="dark"] .cdx-chart-block__table-wrapper,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__table-wrapper {
+    border-color: #3a3a3a;
+  }
+  [data-theme="dark"] .cdx-chart-block__table th,
+  [data-theme="dark"] .cdx-chart-block__table td,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__table th,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__table td {
+    border-color: #3a3a3a;
+  }
+  [data-theme="dark"] .cdx-chart-block__action-btn,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__action-btn {
+    border-color: #3a3a3a;
+  }
+  [data-theme="dark"] .cdx-chart-block__action-btn:hover,
+  .torch-text-editor[data-theme="dark"] .cdx-chart-block__action-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
   }
 `;
 
