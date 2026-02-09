@@ -175,17 +175,52 @@ const AUTO_DIR_STYLES = `
     margin-left: 7px;
     margin-right: 0;
   }
+  /* Heading level styles (Tailwind reset strips defaults) */
+  .torch-text-editor h1.ce-header {
+    font-size: 2em;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .torch-text-editor h2.ce-header {
+    font-size: 1.5em;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .torch-text-editor h3.ce-header {
+    font-size: 1.25em;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .torch-text-editor h4.ce-header {
+    font-size: 1.1em;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .torch-text-editor h5.ce-header {
+    font-size: 1em;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .torch-text-editor h6.ce-header {
+    font-size: 0.9em;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+  /* Toolbar buttons: inherit theme color */
+  .torch-text-editor .ce-toolbar__plus,
+  .torch-text-editor .ce-toolbar__settings-btn {
+    color: inherit;
+    background-color: transparent;
+  }
 `;
 
 // ─── CVA Styles ──────────────────────────────────────────────────────────────
 const textEditorStyles = cva(
   [
-    "relative w-full rounded-[6px] overflow-hidden",
+    "relative w-full rounded-[6px]",
     "border transition-all duration-200 ease-in-out",
     "[&_.codex-editor]:min-h-[inherit]",
     "[&_.codex-editor__redactor]:min-h-[inherit] [&_.codex-editor__redactor]:pb-[100px]",
-    "[&_.ce-block__content]:max-w-full",
-    "[&_.ce-toolbar__content]:max-w-full",
     "[&_.ce-paragraph]:typography-body-medium-regular",
   ],
   {
