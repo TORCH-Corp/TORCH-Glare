@@ -53,14 +53,14 @@ function applyAutoDirection(container: HTMLElement) {
 
     // Handle list blocks — apply direction per list item so bullets flip
     const listItems = block.querySelectorAll<HTMLElement>(
-      ".cdx-list__item, .cdx-nested-list__item, .cdx-checklist__item"
+      ".cdx-list__item, .cdx-nested-list__item, .cdx-checklist__item",
     );
 
     if (listItems.length > 0) {
       let prevDir: "rtl" | "ltr" = "ltr";
       listItems.forEach((item) => {
         const editable = item.querySelector<HTMLElement>(
-          '[contenteditable="true"]'
+          '[contenteditable="true"]',
         );
         if (!editable) return;
         const text = (editable.textContent || "").trim();
@@ -77,7 +77,7 @@ function applyAutoDirection(container: HTMLElement) {
 
     // Handle regular blocks (paragraph, header, quote, warning, etc.)
     const editables = block.querySelectorAll<HTMLElement>(
-      '[contenteditable="true"]'
+      '[contenteditable="true"]',
     );
     editables.forEach((el) => {
       const text = (el.textContent || "").trim();
@@ -212,6 +212,156 @@ const AUTO_DIR_STYLES = `
     color: inherit;
     background-color: transparent;
   }
+
+  /* ── Table: restore borders stripped by Tailwind preflight ── */
+  .torch-text-editor .tc-table {
+    border-top: 1px solid var(--color-border);
+  }
+  .torch-text-editor .tc-row {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .torch-text-editor .tc-row:after {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .torch-text-editor .tc-cell {
+    border-right: 1px solid var(--color-border);
+  }
+  .torch-text-editor .tc-add-column {
+    border-top: 1px solid var(--color-border);
+  }
+  .torch-text-editor .tc-table--heading .tc-row:first-child {
+    border-bottom: 2px solid var(--color-border);
+  }
+  .torch-text-editor .tc-table--heading .tc-row:first-child:after {
+    border-bottom: 2px solid var(--color-border);
+  }
+  .torch-text-editor .tc-popover {
+    border: 1px solid var(--color-border);
+  }
+  .torch-text-editor .tc-popover__item-icon {
+    border: 1px solid var(--color-border);
+  }
+
+  /* ── Table: dark mode variable overrides ── */
+  /* Override the plugin's hardcoded light CSS variables for dark themes */
+  [data-theme="dark"] .tc-wrap,
+  .torch-text-editor[data-theme="dark"] .tc-wrap {
+    --color-background: #1e1e1e;
+    --color-text-secondary: #999;
+    --color-border: #3a3a3a;
+  }
+  [data-theme="dark"] .tc-popover,
+  .torch-text-editor[data-theme="dark"] .tc-popover {
+    --color-border: #3a3a3a;
+    --color-background: #2a2a2a;
+    --color-background-hover: rgba(255, 255, 255, 0.08);
+  }
+  [data-theme="dark"] .tc-cell--selected,
+  .torch-text-editor[data-theme="dark"] .tc-cell--selected {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  [data-theme="dark"] .tc-row--selected,
+  .torch-text-editor[data-theme="dark"] .tc-row--selected {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  [data-theme="dark"] .tc-toolbox,
+  .torch-text-editor[data-theme="dark"] .tc-toolbox {
+    --toggler-dots-color: #999;
+    --toggler-dots-color-hovered: #fff;
+  }
+  [data-theme="dark"] .tc-add-column svg,
+  .torch-text-editor[data-theme="dark"] .tc-add-column svg,
+  [data-theme="dark"] .tc-add-row svg,
+  .torch-text-editor[data-theme="dark"] .tc-add-row svg {
+    fill: #999;
+  }
+
+  /* ── Editor.js core popover: dark mode variable overrides ── */
+  [data-theme="dark"] .ce-popover,
+  .torch-text-editor[data-theme="dark"] .ce-popover {
+    --color-background: #2a2a2a;
+    --color-border: #3a3a3a;
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-text-primary: #e0e0e0;
+    --color-text-secondary: #888;
+    --color-border-icon: rgba(255, 255, 255, 0.12);
+    --color-border-icon-disabled: #3a3a3a;
+    --color-text-icon-active: #5ea3f0;
+    --color-background-icon-active: rgba(56, 138, 229, 0.15);
+    --color-background-item-focus: rgba(255, 255, 255, 0.06);
+    --color-shadow-item-focus: rgba(255, 255, 255, 0.04);
+    --color-background-item-hover: rgba(255, 255, 255, 0.08);
+    --color-background-item-confirm: #E24A4A;
+    --color-background-item-confirm-hover: #CE4343;
+  }
+
+  /* Search field in popover */
+  [data-theme="dark"] .cdx-search-field,
+  .torch-text-editor[data-theme="dark"] .cdx-search-field {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  [data-theme="dark"] .cdx-search-field__input,
+  .torch-text-editor[data-theme="dark"] .cdx-search-field__input {
+    color: #e0e0e0;
+  }
+  [data-theme="dark"] .cdx-search-field__icon svg,
+  .torch-text-editor[data-theme="dark"] .cdx-search-field__icon svg {
+    color: #888;
+  }
+
+  /* Inline toolbar */
+  [data-theme="dark"] .ce-inline-toolbar,
+  .torch-text-editor[data-theme="dark"] .ce-inline-toolbar {
+    --color-background-icon-active: rgba(56, 138, 229, 0.15);
+    --color-text-icon-active: #5ea3f0;
+    --color-text-primary: #e0e0e0;
+  }
+  [data-theme="dark"] .ce-inline-toolbar__dropdown:hover,
+  .torch-text-editor[data-theme="dark"] .ce-inline-toolbar__dropdown:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  [data-theme="dark"] .ce-inline-toolbar__dropdown,
+  .torch-text-editor[data-theme="dark"] .ce-inline-toolbar__dropdown {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Popover item separator line */
+  [data-theme="dark"] .ce-popover-item-separator__line,
+  .torch-text-editor[data-theme="dark"] .ce-popover-item-separator__line {
+    background: #3a3a3a;
+  }
+
+  /* ── Scrollbar styling ── */
+  .torch-text-editor .ce-popover__items::-webkit-scrollbar,
+  .torch-text-editor .ce-popover__container::-webkit-scrollbar {
+    width: 4px;
+  }
+  .torch-text-editor .ce-popover__items::-webkit-scrollbar-track,
+  .torch-text-editor .ce-popover__container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .torch-text-editor .ce-popover__items::-webkit-scrollbar-thumb,
+  .torch-text-editor .ce-popover__container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+  }
+  .torch-text-editor .ce-popover__items::-webkit-scrollbar-thumb:hover,
+  .torch-text-editor .ce-popover__container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+  }
+  [data-theme="dark"] .ce-popover__items::-webkit-scrollbar-thumb,
+  [data-theme="dark"] .ce-popover__container::-webkit-scrollbar-thumb,
+  .torch-text-editor[data-theme="dark"] .ce-popover__items::-webkit-scrollbar-thumb,
+  .torch-text-editor[data-theme="dark"] .ce-popover__container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  [data-theme="dark"] .ce-popover__items::-webkit-scrollbar-thumb:hover,
+  [data-theme="dark"] .ce-popover__container::-webkit-scrollbar-thumb:hover,
+  .torch-text-editor[data-theme="dark"] .ce-popover__items::-webkit-scrollbar-thumb:hover,
+  .torch-text-editor[data-theme="dark"] .ce-popover__container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
 `;
 
 // ─── CVA Styles ──────────────────────────────────────────────────────────────
@@ -251,8 +401,6 @@ const textEditorStyles = cva(
           "[&_.cdx-quote__text]:text-content-presentation-global-secondary",
           "[&_.cdx-input]:border-border-presentation-action-primary",
           "[&_.cdx-input]:text-content-presentation-global-primary",
-          "[&_.tc-table]:border-border-presentation-action-primary",
-          "[&_.tc-cell]:border-border-presentation-action-primary",
           "[&_.tc-cell]:text-content-presentation-global-primary",
           "[&_.cdx-warning]:border-border-presentation-state-warning",
           "[&_.cdx-warning__title]:text-content-presentation-global-primary",
@@ -284,8 +432,6 @@ const textEditorStyles = cva(
           "[&_.cdx-quote__text]:text-content-system-global-secondary",
           "[&_.cdx-input]:border-border-system-global-primary",
           "[&_.cdx-input]:text-content-system-global-primary",
-          "[&_.tc-table]:border-border-system-global-primary",
-          "[&_.tc-cell]:border-border-system-global-primary",
           "[&_.tc-cell]:text-content-system-global-primary",
           "[&_.cdx-warning]:border-border-system-action-primary-hover",
           "[&_.cdx-warning__title]:text-content-system-global-primary",
@@ -311,7 +457,7 @@ const textEditorStyles = cva(
       variant: "PresentationStyle",
       size: "M",
     },
-  }
+  },
 );
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -324,7 +470,8 @@ export interface TextEditorRef {
 }
 
 interface TextEditorProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "onChange">,
+  extends
+    Omit<HTMLAttributes<HTMLDivElement>, "onChange">,
     VariantProps<typeof textEditorStyles> {
   theme?: Themes;
   data?: OutputData;
@@ -358,13 +505,13 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       minHeight,
       ...props
     },
-    ref
+    ref,
   ) => {
     const editorRef = useRef<EditorJS | null>(null);
     const holderRef = useRef<HTMLDivElement>(null);
     const observerRef = useRef<MutationObserver | null>(null);
     const [holderId] = useState(
-      () => `torch-editor-${Math.random().toString(36).substring(2, 9)}`
+      () => `torch-editor-${Math.random().toString(36).substring(2, 9)}`,
     );
     const isInitializing = useRef(false);
     const onChangeRef = useRef(onChange);
@@ -428,7 +575,16 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       });
 
       editorRef.current = editor;
-    }, [holderId, readOnly, placeholder, autofocus, data, tools, onReady, setupAutoDirection]);
+    }, [
+      holderId,
+      readOnly,
+      placeholder,
+      autofocus,
+      data,
+      tools,
+      onReady,
+      setupAutoDirection,
+    ]);
 
     useEffect(() => {
       initEditor();
@@ -437,7 +593,10 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
         observerRef.current?.disconnect();
         observerRef.current = null;
 
-        if (editorRef.current && typeof editorRef.current.destroy === "function") {
+        if (
+          editorRef.current &&
+          typeof editorRef.current.destroy === "function"
+        ) {
           editorRef.current.destroy();
           editorRef.current = null;
         }
@@ -473,7 +632,7 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
           className={cn(
             "torch-text-editor",
             textEditorStyles({ variant, size, disabled, error }),
-            className
+            className,
           )}
           style={minHeight ? { minHeight: `${minHeight}px` } : undefined}
           {...props}
@@ -482,7 +641,7 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
         </div>
       </>
     );
-  }
+  },
 );
 
 TextEditor.displayName = "TextEditor";
