@@ -13,6 +13,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import EditorJS, { type OutputData } from "@editorjs/editorjs";
+import { isMarkdown, parseMarkdownToBlocks } from "../utils/markdownParser";
 
 // ─── Tool Imports ────────────────────────────────────────────────────────────
 import Header from "@editorjs/header";
@@ -36,58 +37,78 @@ import ChartBlockTool from "./ChartBlockTool";
 
 // ─── RTL Detection ───────────────────────────────────────────────────────────
 const RTL_REGEX = /[\u0591-\u07FF\u200F\u202B\u202E\uFB1D-\uFDFD\uFE70-\uFEFC]/;
-const HTML_TAG_REGEX = /<[^>]*>/g;
 
+/** Find the first visible character (skipping HTML tags and whitespace) and test RTL */
 function getTextDirection(text: string): "rtl" | "ltr" {
-  const plain = text.replace(HTML_TAG_REGEX, "").trim();
-  if (!plain) return "ltr";
-  return RTL_REGEX.test(plain.charAt(0)) ? "rtl" : "ltr";
+  let i = 0;
+  const len = text.length;
+  while (i < len) {
+    const ch = text[i];
+    if (ch === "<") {
+      // Skip HTML tag
+      const end = text.indexOf(">", i);
+      if (end === -1) break;
+      i = end + 1;
+    } else if (ch === " " || ch === "\n" || ch === "\t" || ch === "\r") {
+      i++;
+    } else {
+      return RTL_REGEX.test(ch) ? "rtl" : "ltr";
+    }
+  }
+  return "ltr";
+}
+
+function setDirIfChanged(el: HTMLElement, dir: "rtl" | "ltr") {
+  if (el.getAttribute("dir") !== dir) {
+    el.setAttribute("dir", dir);
+    el.style.textAlign = dir === "rtl" ? "right" : "left";
+  }
+}
+
+function applyDirectionToBlock(block: HTMLElement, fallbackDir: "rtl" | "ltr" = "ltr"): "rtl" | "ltr" {
+  // Skip non-text blocks (delimiters, embeds, code)
+  if (block.querySelector(".ce-delimiter, .cdx-embed, .embed-tool")) return fallbackDir;
+
+  // Handle list blocks — apply direction per list item so bullets flip
+  const listItems = block.querySelectorAll<HTMLElement>(
+    ".cdx-list__item, .cdx-nested-list__item, .cdx-checklist__item",
+  );
+
+  if (listItems.length > 0) {
+    let prevDir: "rtl" | "ltr" = fallbackDir;
+    listItems.forEach((item) => {
+      const editable = item.querySelector<HTMLElement>(
+        '[contenteditable="true"]',
+      );
+      if (!editable) return;
+      const text = (editable.textContent || "").trim();
+      const dir = text ? getTextDirection(text) : prevDir;
+      prevDir = dir;
+      setDirIfChanged(item, dir);
+      setDirIfChanged(editable, dir);
+    });
+    return prevDir;
+  }
+
+  // Handle regular blocks (paragraph, header, quote, warning, etc.)
+  let lastDir = fallbackDir;
+  const editables = block.querySelectorAll<HTMLElement>(
+    '[contenteditable="true"]',
+  );
+  editables.forEach((el) => {
+    const text = (el.textContent || "").trim();
+    const dir = text ? getTextDirection(text) : fallbackDir;
+    setDirIfChanged(el, dir);
+    lastDir = dir;
+  });
+  return lastDir;
 }
 
 function applyAutoDirection(container: HTMLElement) {
   const blocks = container.querySelectorAll<HTMLElement>(".ce-block");
   let lastBlockDir: "rtl" | "ltr" = "ltr";
-
   blocks.forEach((block) => {
-    // Skip non-text blocks (delimiters, embeds, code)
-    if (block.querySelector(".ce-delimiter, .cdx-embed, .embed-tool")) return;
-
-    // Handle list blocks — apply direction per list item so bullets flip
-    const listItems = block.querySelectorAll<HTMLElement>(
-      ".cdx-list__item, .cdx-nested-list__item, .cdx-checklist__item",
-    );
-
-    if (listItems.length > 0) {
-      let prevDir: "rtl" | "ltr" = "ltr";
-      listItems.forEach((item) => {
-        const editable = item.querySelector<HTMLElement>(
-          '[contenteditable="true"]',
-        );
-        if (!editable) return;
-        const text = (editable.textContent || "").trim();
-        // If empty, inherit direction from previous sibling item
-        const dir = text ? getTextDirection(text) : prevDir;
-        prevDir = dir;
-        item.setAttribute("dir", dir);
-        item.style.textAlign = dir === "rtl" ? "right" : "left";
-        editable.setAttribute("dir", dir);
-      });
-      lastBlockDir = prevDir;
-      return;
-    }
-
-    // Handle regular blocks (paragraph, header, quote, warning, etc.)
-    const editables = block.querySelectorAll<HTMLElement>(
-      '[contenteditable="true"]',
-    );
-    editables.forEach((el) => {
-      const text = (el.textContent || "").trim();
-      // If empty, inherit direction from previous block
-      const dir = text ? getTextDirection(text) : lastBlockDir;
-      el.setAttribute("dir", dir);
-      el.style.textAlign = dir === "rtl" ? "right" : "left";
-      lastBlockDir = dir;
-    });
+    lastBlockDir = applyDirectionToBlock(block, lastBlockDir);
   });
 }
 
@@ -579,6 +600,38 @@ const AUTO_DIR_STYLES = `
   .torch-text-editor[data-theme="dark"] .cdx-chart-block__action-btn:hover {
     background: rgba(255, 255, 255, 0.06);
   }
+
+  /* ── Paste loading overlay ── */
+  .torch-text-editor__loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: inherit;
+    opacity: 0.92;
+    border-radius: inherit;
+    pointer-events: all;
+  }
+  .torch-text-editor__loading-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: torch-editor-spin 0.7s linear infinite;
+    opacity: 0.6;
+  }
+  .torch-text-editor__loading-text {
+    font-size: 13px;
+    opacity: 0.6;
+  }
+  @keyframes torch-editor-spin {
+    to { transform: rotate(360deg); }
+  }
 `;
 
 // ─── CVA Styles ──────────────────────────────────────────────────────────────
@@ -731,26 +784,191 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       () => `torch-editor-${Math.random().toString(36).substring(2, 9)}`,
     );
     const isInitializing = useRef(false);
+    const pasteHandlerRef = useRef<((e: ClipboardEvent) => void) | null>(null);
+    const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const idleCallbackRef = useRef<number | null>(null);
+    const dirRafRef = useRef<number | null>(null);
     const onChangeRef = useRef(onChange);
     onChangeRef.current = onChange;
 
+    // Refs for initial-only config — changing these does NOT recreate the editor
+    const initialDataRef = useRef(data);
+    const toolsRef = useRef(tools);
+    const onReadyRef = useRef(onReady);
+    const readOnlyRef = useRef(readOnly);
+    const placeholderRef = useRef(placeholder);
+    const autofocusRef = useRef(autofocus);
+
+    // Keep refs up to date (but don't trigger re-init)
+    onReadyRef.current = onReady;
+
+    // Schedule save via requestIdleCallback so it runs when browser is idle
+    const scheduleIdleSave = useCallback(() => {
+      if (idleCallbackRef.current != null) {
+        (window.cancelIdleCallback || clearTimeout)(idleCallbackRef.current);
+      }
+      const doSave = async () => {
+        idleCallbackRef.current = null;
+        if (!editorRef.current || !onChangeRef.current) return;
+        try {
+          const savedData = await editorRef.current.save();
+          onChangeRef.current(savedData);
+        } catch {
+          // Editor may have been destroyed
+        }
+      };
+      if (typeof window.requestIdleCallback === "function") {
+        idleCallbackRef.current = window.requestIdleCallback(() => doSave(), { timeout: 2000 });
+      } else {
+        // Fallback for browsers without requestIdleCallback
+        idleCallbackRef.current = window.setTimeout(() => doSave(), 100) as unknown as number;
+      }
+    }, []);
+
+    // ── Markdown paste handler ──
+    const setupMarkdownPaste = useCallback(
+      (holderEl: HTMLElement) => {
+        const handler = async (e: ClipboardEvent) => {
+          if (readOnlyRef.current || !editorRef.current) return;
+
+          const plain = e.clipboardData?.getData("text/plain") || "";
+
+          // Only intercept if the plain text is markdown
+          if (!isMarkdown(plain)) return;
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          const parsedBlocks = parseMarkdownToBlocks(plain);
+          if (parsedBlocks.length === 0) return;
+
+          const editor = editorRef.current;
+
+          // Save existing content, merge new blocks at cursor, render once
+          // This avoids per-block insert which freezes the editor on large pastes
+          try {
+            const existingData = await editor.save();
+            const existingBlocks = existingData.blocks || [];
+
+            // Determine insertion point
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const blocks = (editor as any).blocks;
+            let insertIdx = existingBlocks.length;
+            try {
+              if (blocks?.getCurrentBlockIndex) {
+                insertIdx = blocks.getCurrentBlockIndex() + 1;
+              }
+            } catch {
+              // Use end of document
+            }
+
+            // Convert parsed blocks to OutputData block format
+            const newBlocks = parsedBlocks.map((block) => ({
+              type: block.type,
+              data: block.data,
+            }));
+
+            // Remove empty paragraph at cursor if it's the only content there
+            const filteredExisting = [...existingBlocks];
+            if (insertIdx > 0) {
+              const cursorBlock = filteredExisting[insertIdx - 1];
+              if (
+                cursorBlock &&
+                cursorBlock.type === "paragraph" &&
+                (!cursorBlock.data.text ||
+                  cursorBlock.data.text.trim() === "" ||
+                  cursorBlock.data.text === "<br>")
+              ) {
+                filteredExisting.splice(insertIdx - 1, 1);
+                insertIdx = Math.max(0, insertIdx - 1);
+              }
+            }
+
+            // Merge: existing blocks before cursor + new blocks + existing blocks after cursor
+            const mergedBlocks = [
+              ...filteredExisting.slice(0, insertIdx),
+              ...newBlocks,
+              ...filteredExisting.slice(insertIdx),
+            ];
+
+            // Pause MutationObserver during bulk render to prevent O(n^2) direction checks
+            observerRef.current?.disconnect();
+
+            // Single render pass — no per-block DOM thrashing
+            await editor.render({
+              time: Date.now(),
+              version: existingData.version,
+              blocks: mergedBlocks,
+            });
+
+            // Reconnect observer on the redactor element
+            if (observerRef.current) {
+              const redactor = holderEl.querySelector(".codex-editor__redactor") || holderEl;
+              observerRef.current.observe(redactor, {
+                childList: true,
+                subtree: false,
+              });
+            }
+            // Defer direction scan to next frame — let the browser paint first
+            requestAnimationFrame(() => applyAutoDirection(holderEl));
+
+            // Trigger onChange with merged data
+            if (onChangeRef.current) {
+              const savedData = await editor.save();
+              onChangeRef.current(savedData);
+            }
+          } catch {
+            // Fallback: if render approach fails, do nothing rather than freeze
+          }
+        };
+
+        holderEl.addEventListener("paste", handler as unknown as EventListener, true);
+        pasteHandlerRef.current = handler;
+      },
+      [],
+    );
+
     // ── Auto-direction: watch for DOM changes & input ──
+    const inputHandlerRef = useRef<((e: Event) => void) | null>(null);
+
     const setupAutoDirection = useCallback((holderEl: HTMLElement) => {
-      // Apply direction to all existing blocks
+      // Apply direction to all existing blocks once on init
       applyAutoDirection(holderEl);
 
-      // Listen for input events to re-detect direction per block
-      holderEl.addEventListener("input", () => {
-        applyAutoDirection(holderEl);
-      });
+      // On input: batch direction check to next animation frame (non-blocking)
+      let pendingBlock: HTMLElement | null = null;
+      const inputHandler = (e: Event) => {
+        const target = e.target as HTMLElement;
+        const block = target.closest<HTMLElement>(".ce-block");
+        if (!block) return;
+        pendingBlock = block;
+        if (dirRafRef.current === null) {
+          dirRafRef.current = requestAnimationFrame(() => {
+            dirRafRef.current = null;
+            if (pendingBlock) {
+              applyDirectionToBlock(pendingBlock);
+              pendingBlock = null;
+            }
+          });
+        }
+      };
+      holderEl.addEventListener("input", inputHandler);
+      inputHandlerRef.current = inputHandler;
 
-      // Watch for new blocks being added
-      observerRef.current = new MutationObserver(() => {
-        applyAutoDirection(holderEl);
+      // Watch for block additions/removals — only process NEW blocks (O(1) per mutation)
+      const redactor = holderEl.querySelector(".codex-editor__redactor") || holderEl;
+      observerRef.current = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof HTMLElement && node.classList.contains("ce-block")) {
+              applyDirectionToBlock(node);
+            }
+          });
+        }
       });
-      observerRef.current.observe(holderEl, {
+      observerRef.current.observe(redactor, {
         childList: true,
-        subtree: true,
+        subtree: false,
       });
     }, []);
 
@@ -760,55 +978,66 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
 
       const editor = new EditorJS({
         holder: holderId,
-        tools: tools ?? getDefaultTools(),
+        tools: toolsRef.current ?? getDefaultTools(),
         tunes: ["textVariant"],
-        data: data || undefined,
-        readOnly,
-        placeholder,
-        autofocus,
+        data: initialDataRef.current || undefined,
+        readOnly: readOnlyRef.current,
+        placeholder: placeholderRef.current,
+        autofocus: autofocusRef.current,
         onReady: () => {
           isInitializing.current = false;
 
-          // Set up auto-direction after editor is ready
+          // Set up auto-direction and markdown paste after editor is ready
           const holderEl = document.getElementById(holderId);
           if (holderEl) {
             setupAutoDirection(holderEl);
+            setupMarkdownPaste(holderEl);
           }
 
-          onReady?.();
+          onReadyRef.current?.();
         },
-        onChange: async (api) => {
-          // Re-apply direction on content changes
-          const holderEl = document.getElementById(holderId);
-          if (holderEl) {
-            applyAutoDirection(holderEl);
-          }
-
-          if (onChangeRef.current) {
-            const savedData = await api.saver.save();
-            onChangeRef.current(savedData);
-          }
+        onChange: () => {
+          // Debounce + idle-schedule: wait for typing to pause, then save when browser is idle
+          if (!onChangeRef.current) return;
+          if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+          saveTimerRef.current = setTimeout(scheduleIdleSave, 500);
         },
       });
 
       editorRef.current = editor;
-    }, [
-      holderId,
-      readOnly,
-      placeholder,
-      autofocus,
-      data,
-      tools,
-      onReady,
-      setupAutoDirection,
-    ]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [holderId, setupAutoDirection, setupMarkdownPaste, scheduleIdleSave]);
 
     useEffect(() => {
       initEditor();
 
       return () => {
+        const holderEl = document.getElementById(holderId);
+
+        // Clean up markdown paste handler
+        if (pasteHandlerRef.current && holderEl) {
+          holderEl.removeEventListener(
+            "paste",
+            pasteHandlerRef.current as unknown as EventListener,
+            true,
+          );
+          pasteHandlerRef.current = null;
+        }
+
+        // Clean up input direction handler
+        if (inputHandlerRef.current && holderEl) {
+          holderEl.removeEventListener("input", inputHandlerRef.current);
+          inputHandlerRef.current = null;
+        }
+
         observerRef.current?.disconnect();
         observerRef.current = null;
+
+        if (dirRafRef.current) cancelAnimationFrame(dirRafRef.current);
+        if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+        if (idleCallbackRef.current != null) {
+          (window.cancelIdleCallback || clearTimeout)(idleCallbackRef.current);
+        }
 
         if (
           editorRef.current &&
@@ -820,6 +1049,17 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
         isInitializing.current = false;
       };
     }, [initEditor]);
+
+    // Handle readOnly changes without recreating the editor
+    useEffect(() => {
+      if (editorRef.current && editorRef.current.readOnly) {
+        try {
+          editorRef.current.readOnly.toggle(readOnly);
+        } catch {
+          // Editor may not be ready yet
+        }
+      }
+    }, [readOnly]);
 
     useImperativeHandle(ref, () => ({
       save: async () => {
@@ -846,6 +1086,8 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
         <div
           ref={holderRef}
           data-theme={theme}
+          spellCheck={false}
+          translate="no"
           className={cn(
             "torch-text-editor",
             textEditorStyles({ variant, size, disabled, error }),
