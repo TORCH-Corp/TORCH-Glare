@@ -638,7 +638,7 @@ const AUTO_DIR_STYLES = `
 const textEditorStyles = cva(
   [
     "relative w-full rounded-[6px]",
-    "border transition-all duration-200 ease-in-out",
+    "border-0 transition-all duration-200 ease-in-out",
     "[&_.codex-editor]:min-h-[inherit]",
     "[&_.codex-editor__redactor]:min-h-[inherit] [&_.codex-editor__redactor]:pb-[100px]",
     "[&_.ce-paragraph]:typography-body-medium-regular",
@@ -649,9 +649,6 @@ const textEditorStyles = cva(
         PresentationStyle: [
           "bg-background-presentation-form-field-primary",
           "text-content-presentation-global-primary",
-          "border-border-presentation-action-primary",
-          "hover:border-border-presentation-action-hover",
-          "focus-within:border-border-presentation-state-focus",
           "[&_.codex-editor]:text-content-presentation-global-primary",
           "[&_.ce-block--selected_.ce-block__content]:bg-background-presentation-action-hover",
           "[&_.cdx-marker]:bg-background-presentation-state-warning-primary",
@@ -678,37 +675,6 @@ const textEditorStyles = cva(
           "[&_.cdx-checklist__item-checkbox]:border-border-presentation-action-primary",
           "[&_.ce-delimiter]:border-border-presentation-action-primary",
         ],
-        SystemStyle: [
-          "bg-background-system-body-base",
-          "text-content-system-global-primary",
-          "border-border-system-global-primary",
-          "hover:border-border-system-action-primary-hover",
-          "focus-within:border-border-system-action-primary-hover",
-          "[&_.codex-editor]:text-content-system-global-primary",
-          "[&_.ce-block--selected_.ce-block__content]:bg-background-system-action-primary-hover",
-          "[&_.ce-toolbar__settings-btn]:text-content-system-global-primary",
-          "[&_.ce-toolbar__plus]:text-content-system-global-primary",
-          "[&_.ce-toolbar__settings-btn:hover]:bg-background-system-action-secondary-hover",
-          "[&_.ce-toolbar__plus:hover]:bg-background-system-action-secondary-hover",
-          "[&_.ce-popover]:bg-background-system-body-tertiary",
-          "[&_.ce-popover]:border-border-system-global-primary",
-          "[&_.ce-popover__item]:text-content-system-global-primary",
-          "[&_.ce-popover__item:hover]:bg-background-system-action-secondary-hover",
-          "[&_.ce-inline-toolbar]:bg-background-system-body-tertiary",
-          "[&_.ce-inline-toolbar]:border-border-system-global-primary",
-          "[&_.ce-inline-toolbar__buttons_.ce-inline-tool]:text-content-system-global-primary",
-          "[&_.ce-code__textarea]:bg-background-system-body-tertiary",
-          "[&_.ce-code__textarea]:text-content-system-global-primary",
-          "[&_.cdx-quote__text]:text-content-system-global-secondary",
-          "[&_.cdx-input]:border-border-system-global-primary",
-          "[&_.cdx-input]:text-content-system-global-primary",
-          "[&_.tc-cell]:text-content-system-global-primary",
-          "[&_.cdx-warning]:border-border-system-action-primary-hover",
-          "[&_.cdx-warning__title]:text-content-system-global-primary",
-          "[&_.cdx-warning__message]:text-content-system-global-secondary",
-          "[&_.cdx-checklist__item-checkbox]:border-border-system-global-primary",
-          "[&_.ce-delimiter]:border-border-system-global-primary",
-        ],
       },
       size: {
         S: "min-h-[200px] p-2",
@@ -719,13 +685,9 @@ const textEditorStyles = cva(
       disabled: {
         true: "cursor-not-allowed opacity-60 pointer-events-none",
       },
-      error: {
-        true: "border-border-presentation-state-negative",
-      },
     },
     defaultVariants: {
       variant: "PresentationStyle",
-      size: "M",
     },
   },
 );
@@ -763,7 +725,6 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       variant,
       size,
       disabled,
-      error,
       theme,
       data,
       onChange,
@@ -1090,7 +1051,7 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
           translate="no"
           className={cn(
             "torch-text-editor",
-            textEditorStyles({ variant, size, disabled, error }),
+            textEditorStyles({ variant, size, disabled }),
             className,
           )}
           style={minHeight ? { minHeight: `${minHeight}px` } : undefined}

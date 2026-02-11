@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import {
-  TextEditor,
-  TextEditorRef,
-  OutputData,
-} from "@/components/TextEditor";
+import { TextEditor, TextEditorRef, OutputData } from "@/components/TextEditor";
 
 const MIXED_SAMPLE_DATA: OutputData = {
   time: Date.now(),
@@ -124,7 +120,8 @@ const SAMPLE_DATA: OutputData = {
       type: "warning",
       data: {
         title: "Note",
-        message: "This editor outputs clean JSON data that can be rendered anywhere.",
+        message:
+          "This editor outputs clean JSON data that can be rendered anywhere.",
       },
     },
   ],
@@ -153,16 +150,15 @@ export default function TextEditorExample() {
         TextEditor Component
       </h1>
 
-      {/* ================================================================== */}
-      {/* Auto-Direction: Mixed Arabic & English */}
-      {/* ================================================================== */}
+      {/* ── Auto-Direction: Mixed Arabic & English ── */}
       <section className="space-y-4">
         <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
           Auto-Direction (Mixed Arabic & English)
         </h2>
         <p className="typography-body-medium-regular text-content-presentation-global-secondary">
-          Each block automatically detects its text direction based on the first character.
-          Arabic text becomes RTL, English text stays LTR — all in the same editor.
+          Each block automatically detects its text direction based on the first
+          character. Arabic text becomes RTL, English text stays LTR — all in
+          the same editor.
         </p>
 
         <div className="flex gap-3">
@@ -183,7 +179,6 @@ export default function TextEditorExample() {
         <TextEditor
           ref={editorRef}
           data={MIXED_SAMPLE_DATA}
-          variant="PresentationStyle"
           size="L"
           placeholder="Start writing in any language..."
           onChange={(data) => console.log("Content changed:", data)}
@@ -202,9 +197,7 @@ export default function TextEditorExample() {
         )}
       </section>
 
-      {/* ================================================================== */}
-      {/* Sizes */}
-      {/* ================================================================== */}
+      {/* ── Sizes ── */}
       <section className="space-y-4">
         <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
           Sizes
@@ -237,67 +230,20 @@ export default function TextEditorExample() {
         </div>
       </section>
 
-      {/* ================================================================== */}
-      {/* SystemStyle */}
-      {/* ================================================================== */}
-      <section className="space-y-4">
-        <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
-          SystemStyle Variant
-        </h2>
-        <div className="p-4 rounded-[8px] bg-background-system-body-secondary">
-          <TextEditor
-            variant="SystemStyle"
-            size="M"
-            theme="dark"
-            placeholder="System style editor..."
-          />
-        </div>
-      </section>
-
-      {/* ================================================================== */}
-      {/* Read Only */}
-      {/* ================================================================== */}
+      {/* ── Read Only ── */}
       <section className="space-y-4">
         <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
           Read Only
         </h2>
-        <TextEditor
-          data={SAMPLE_DATA}
-          variant="PresentationStyle"
-          size="M"
-          readOnly
-        />
+        <TextEditor data={SAMPLE_DATA} size="M" readOnly />
       </section>
 
-      {/* ================================================================== */}
-      {/* Disabled & Error */}
-      {/* ================================================================== */}
+      {/* ── Disabled ── */}
       <section className="space-y-4">
         <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
-          States
+          Disabled
         </h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <span className="typography-body-small-medium text-content-presentation-global-secondary">
-              Disabled
-            </span>
-            <TextEditor
-              size="S"
-              disabled
-              placeholder="Disabled editor..."
-            />
-          </div>
-          <div className="space-y-2">
-            <span className="typography-body-small-medium text-content-presentation-global-secondary">
-              Error
-            </span>
-            <TextEditor
-              size="S"
-              error
-              placeholder="Editor with error..."
-            />
-          </div>
-        </div>
+        <TextEditor size="S" disabled placeholder="Disabled editor..." />
       </section>
     </div>
   );
