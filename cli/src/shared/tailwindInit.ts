@@ -1,35 +1,37 @@
 import { execSync } from "child_process";
 import { detectPackageManager } from "./detectPackageManager.js";
-import path from "path";
-import fs from "fs";
+import { detectTailwindVersion } from "./detectFramework.js";
+
+/**
+ * Install Tailwind CSS plugin dependencies.
+ * Detects Tailwind version to install correct mapping-color-system variant.
+ */
 export function tailwindInit(): void {
-  const LessThanV4 = IsTailwindLessThanV4()
+  const twVersion = detectTailwindVersion();
+  const isV3 = twVersion === 3;
+
   const dependencies = [
     "tailwindcss-animate",
     "tailwind-scrollbar-hide",
     "glare-typography",
-    LessThanV4 ? "mapping-color-system" : "mapping-color-system-v4",
+    isV3 ? "mapping-color-system" : "mapping-color-system-v4",
     "glare-torch-mode",
   ];
-  installDependencies(dependencies);
+  installTailwindDependencies(dependencies);
 }
-
 
 /**
  * Installs dependencies using the detected package manager.
- * @param {string[]} dependencies - List of dependencies to install.
  */
-function installDependencies(dependencies: string[] = []) {
+function installTailwindDependencies(dependencies: string[] = []) {
   if (!dependencies.length) {
-    console.warn("⚠️ No dependencies provided to install.");
+    console.warn("  ⚠️ No dependencies provided to install.");
     return;
   }
 
-  // Detect the package manager
   const packageManager = detectPackageManager();
-  console.log(`📦 Detected package manager: ${packageManager}`);
+  console.log(`  📦 Detected package manager: ${packageManager}`);
 
-  // Generate the install command based on the package manager
   let installCommand;
   const latestDeps = dependencies.map(dep => `${dep}@latest`).join(" ");
 
@@ -48,42 +50,27 @@ function installDependencies(dependencies: string[] = []) {
   }
 
   try {
-
-    // Execute the install command
-    console.log(`Running: ${installCommand}`);
+    console.log(`  Running: ${installCommand}`);
     execSync(installCommand, { stdio: "inherit" });
-    console.log("✅ Dependencies installed successfully.");
+    console.log("  ✅ Tailwind plugins installed successfully.");
   } catch (error: any) {
-    console.error("❌ Error installing dependencies:");
+    console.error("  ❌ Error installing Tailwind plugins:");
     console.error(error.message);
 
-    // Provide additional troubleshooting tips
     if (error.message.includes("EACCES")) {
       console.error(
-        "💡 It seems you don't have permission to install packages globally. Try running the command with sudo or fix your npm permissions."
+        "  💡 Permission error. Try running with sudo or fix your npm permissions."
       );
     } else if (error.message.includes("not found")) {
       console.error(
-        "💡 The package manager might not be installed. Please ensure it is installed and available in your PATH."
+        "  💡 Package manager not found. Ensure it is installed and in your PATH."
       );
     } else if (error.message.includes("ERESOLVE") || error.message.includes("peer dependency conflict")) {
       console.error(
-        "💡 There are dependency conflicts. Try manually installing with 'npm install --force' or 'npm install --legacy-peer-deps'."
+        "  💡 Dependency conflicts. Try 'npm install --force' or '--legacy-peer-deps'."
       );
     } else {
-      console.error("💡 Check your internet connection and try again.");
+      console.error("  💡 Check your internet connection and try again.");
     }
   }
 }
-
-
-const IsTailwindLessThanV4 = () => {
-  const packageJson = fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8');
-  const parsedJson = JSON.parse(packageJson) as any;
-
-  const tailwindVersion = parsedJson.devDependencies?.['tailwindcss'];
-  if (!tailwindVersion) return false;
-
-  return tailwindVersion.startsWith('^3') || tailwindVersion.startsWith('3')
-}
-

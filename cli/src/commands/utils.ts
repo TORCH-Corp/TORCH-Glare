@@ -53,7 +53,8 @@ export async function addUtil(util?: string, replace: boolean = false): Promise<
     // Copy the utility file and install dependencies
     copyComponentsRecursively(source, target);
 
-    console.log(`✅ ${util} has been added to ${targetFile.path}!`);
+    const targetPath = targetFile.aliases?.utils || targetFile.path || "utils";
+    console.log(`✅ ${util} has been added to ${targetPath}!`);
 }
 
 /**

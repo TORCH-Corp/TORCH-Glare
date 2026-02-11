@@ -49,7 +49,8 @@ export async function addLayout(layout?: string, replace: boolean = false): Prom
     // Copy the layout (file) and install dependencies
     copyComponentsRecursively(source, targetDir);
 
-    console.log(`✅ ${layout} has been added to ${targetFile.path}!`);
+    const targetPath = targetFile.aliases?.layouts || targetFile.path || "layouts";
+    console.log(`✅ ${layout} has been added to ${targetPath}!`);
 }
 
 /**

@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import { getConfig } from "../shared/getConfig.js";
 import { CONFIG_FILE } from "./init.js";
-import { Config } from "../types/main.js";
+import { Config, Category } from "../types/main.js";
+import { getResolvedPath } from "../shared/getConfig.js";
 import { tailwindInit } from "../shared/tailwindInit.js";
 import readline from "readline";
 import { getAvailableFiles } from "../shared/getAvailableFiles.js";
@@ -112,9 +113,10 @@ async function updateItems(type: string, config: any): Promise<void> {
  * @param {string} type - The type of items (e.g., "components", "hooks", "utils").
  * @returns {string} - Path to the installed items directory.
  */
-function getInstalledItemsDir(config: any, type: string): string {
-    const normalizedPath = config.path.replace("@/", "");
-    return path.join(process.cwd(), normalizedPath, type);
+function getInstalledItemsDir(config: Config, type: string): string {
+    const category = type as Category;
+    const resolvedPath = getResolvedPath(config, category);
+    return path.join(process.cwd(), resolvedPath);
 }
 
 /**

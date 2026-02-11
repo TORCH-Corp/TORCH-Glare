@@ -49,7 +49,8 @@ export async function addHook(hook?: string, replace: boolean = false): Promise<
     // Copy the hook (file) and install dependencies
     copyComponentsRecursively(source, targetDir);
 
-    console.log(`✅ ${hook} has been added to ${targetFile.path}!`);
+    const targetPath = targetFile.aliases?.hooks || targetFile.path || "hooks";
+    console.log(`✅ ${hook} has been added to ${targetPath}!`);
 }
 
 /**

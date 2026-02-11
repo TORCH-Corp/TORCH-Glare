@@ -50,7 +50,8 @@ export async function addProvider(provider?: string, replace: boolean = false): 
     // Copy the provider (file or directory) and install dependencies
     copyComponentsRecursively(source, targetDir);
 
-    console.log(`✅ ${provider} has been added to ${targetFile.path}!`);
+    const targetPath = targetFile.aliases?.providers || targetFile.path || "providers";
+    console.log(`✅ ${provider} has been added to ${targetPath}!`);
 }
 
 /**

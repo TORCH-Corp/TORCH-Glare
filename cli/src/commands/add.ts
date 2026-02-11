@@ -56,7 +56,8 @@ export async function add(component?: string, replace: boolean = false): Promise
     // Copy the component (directory or file) and install dependencies
     copyComponentsRecursively(source, targetDir);
 
-    console.log(`✅ ${component} has been added to ${targetFile.path}!`);
+    const targetPath = targetFile.aliases?.components || targetFile.path || "components";
+    console.log(`✅ ${component} has been added to ${targetPath}!`);
 }
 
 

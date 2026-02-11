@@ -12,13 +12,14 @@ const program = new Command();
 
 program
   .name("torch-glare")
-  .description("Torch Glare for managing React components")
-  .version("1.0.8");
+  .description("TORCH Glare — React component library CLI")
+  .version("1.2.8");
 
 program
   .command("init")
-  .description("Initialize torch.json configuration file")
-  .action(() => initConfig());
+  .description("Initialize TORCH Glare in your project (auto-detects and configures everything)")
+  .option("-d, --defaults", "Skip prompts and use auto-detected defaults")
+  .action((options) => initConfig(options.defaults ?? false));
 
 program
   .command("add [component]")
@@ -32,12 +33,12 @@ program
 
 program
   .command("layout [layout]")
-  .description("Add a Layout interactively or install a specified one")
+  .description("Add a layout interactively or install a specified one")
   .action((layout) => addLayout(layout && `${layout}.tsx`));
 
 program
   .command("util [util]")
-  .description("Add a utils interactively or install a specified one")
+  .description("Add a utility interactively or install a specified one")
   .action((util) => addUtil(util && `${util}.ts`));
 
 program
@@ -47,7 +48,7 @@ program
 
 program
   .command("update")
-  .description("Update everything installed")
+  .description("Update all installed components, hooks, utils, providers, and layouts")
   .action(() => updateInstalledComponents());
 
 program.parse(process.argv);

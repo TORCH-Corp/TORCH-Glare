@@ -1,22 +1,35 @@
 import path from "path";
-import { Config } from "../types/main.js";
+import { Config, Category } from "../types/main.js";
 
 /**
- * Get the source and target paths for the component.
- * @param {string} component - The name of the component.
- * @param {object} config - Configuration object.
+ * Get the source and target paths for a file.
+ * Supports both new aliases-based config and legacy path-based config.
+ * @param {string} fileName - The name of the file.
+ * @param {Config} config - Configuration object.
  * @param {string} templatesDir - The path to the templates directory.
- * @param {string} saveFolderName - The name of the folder to save the component.
+ * @param {Category} category - The category (components, hooks, utils, providers, layouts).
  * @returns {object} - Object containing source and target directory paths.
  */
 export function getInstallPaths(
-    component: string,
+    fileName: string,
     config: Config,
     templatesDir: string,
-    saveFolderName: string
+    category: Category
 ): { source: string; targetDir: string } {
-    const source = path.join(templatesDir, `${component}`);
-    const normalizedPath = config.path.replace("@/", "");
-    const targetDir = path.join(process.cwd(), normalizedPath, saveFolderName);
+    const source = path.join(templatesDir, `${fileName}`);
+
+    let targetDir: string;
+
+    if (config.aliases && config.aliases[category]) {
+        // New format: resolve from aliases
+        const aliasPath = config.aliases[category];
+        const normalizedPath = aliasPath.replace("@/", "").replace(/^\.\//, "");
+        targetDir = path.join(process.cwd(), normalizedPath);
+    } else {
+        // Legacy format: use path + category folder
+        const normalizedPath = (config.path || "./").replace("@/", "");
+        targetDir = path.join(process.cwd(), normalizedPath, category);
+    }
+
     return { source, targetDir };
 }
