@@ -88,6 +88,7 @@ export async function initConfig(defaults: boolean = false): Promise<void> {
 
     // Step 8: Write glare.json
     const config: Config = {
+        path: basePath,
         framework,
         tailwind: {
             version: tailwindVersion,
