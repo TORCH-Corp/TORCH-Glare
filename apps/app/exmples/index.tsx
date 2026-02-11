@@ -32,6 +32,7 @@ import { useTheme } from "@/providers/ThemeProvider";
 import IosDatePickerExample from "./IosDatePicerExample";
 import AlertDialogExample from "./AlertDialogExample";
 import FormExample from "./FormExample";
+import TextEditorExample from "./TextEditorExample";
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
 
@@ -94,6 +95,7 @@ export default function Examples() {
         <RingLoadingExample />
         <AlertDialogExample />
         <FormExample />
+        <TextEditorExample />
         <div className="my-10"></div>
       </section>
     </div>
