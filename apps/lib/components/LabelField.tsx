@@ -2,7 +2,7 @@ import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import { InputField } from "./InputField";
 import { Label } from "./Label";
 import { ToolTipSide } from "./Tooltip";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 export interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {

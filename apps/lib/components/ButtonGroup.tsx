@@ -4,7 +4,7 @@ import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { ToggleButton, toggleButtonStyles } from "./ToggleButton";
 
 // ============================================================================

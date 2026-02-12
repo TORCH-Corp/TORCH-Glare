@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "mapping-color-system-v4/tailwindVars.css";
+@plugin "glare-torch-mode";
+@plugin "tailwind-scrollbar-hide";
+@plugin "tailwindcss-animate";
+@plugin "glare-typography";
+@plugin "mapping-color-system-v4";
+

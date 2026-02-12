@@ -5,7 +5,7 @@ import { cn } from "../utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 import { Tooltip } from "./Tooltip";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 const Select = SelectPrimitive.Root;
 

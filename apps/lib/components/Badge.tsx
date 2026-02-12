@@ -1,7 +1,7 @@
 import { ReactNode, HTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 export const badgeBase = cva(
   [

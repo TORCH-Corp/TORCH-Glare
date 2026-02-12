@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from "react";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { Divider } from "./Divider";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

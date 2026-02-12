@@ -1,7 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { ReactNode } from "react";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 import React from "react";
 

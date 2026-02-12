@@ -18,12 +18,14 @@ export interface Aliases {
 export function resolveAliases(framework: Framework): { basePath: string; aliases: Aliases; aliasPrefix: string } {
     const { basePath, aliasPrefix } = resolveBasePath(framework);
 
+    // Store actual filesystem paths (not alias paths) so getInstallPaths resolves correctly
+    const normalizedBase = basePath.replace(/\/$/, "");
     const aliases: Aliases = {
-        components: `${aliasPrefix}components`,
-        hooks: `${aliasPrefix}hooks`,
-        utils: `${aliasPrefix}utils`,
-        providers: `${aliasPrefix}providers`,
-        layouts: `${aliasPrefix}layouts`,
+        components: `${normalizedBase}/components`,
+        hooks: `${normalizedBase}/hooks`,
+        utils: `${normalizedBase}/utils`,
+        providers: `${normalizedBase}/providers`,
+        layouts: `${normalizedBase}/layouts`,
     };
 
     return { basePath, aliases, aliasPrefix };

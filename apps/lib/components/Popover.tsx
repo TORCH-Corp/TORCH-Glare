@@ -4,7 +4,7 @@ import { cn } from "../utils/cn";
 import React, { useEffect, useRef } from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Slot } from "@radix-ui/react-slot";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 interface LocalPopOverProps extends VariantProps<typeof popoverStyles> {
   variant?: "SystemStyle" | "PresentationStyle";

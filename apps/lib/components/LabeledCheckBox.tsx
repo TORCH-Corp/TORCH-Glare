@@ -1,7 +1,7 @@
 'use client';
 import { forwardRef } from "react";
 import { Label } from "./Label";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { Checkbox } from "./Checkbox";
 import { cn } from "../utils/cn";
 interface Props extends Omit<React.ComponentProps<typeof Checkbox>, "size"> {

@@ -10,7 +10,7 @@ import {
 import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { Badge } from "./Badge";

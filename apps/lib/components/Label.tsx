@@ -2,7 +2,7 @@ import { LabelHTMLAttributes, ReactNode } from "react";
 import React from "react";
 import { cn } from "../utils/cn";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 const labelComponentVariants = cva("flex", {
   variants: {

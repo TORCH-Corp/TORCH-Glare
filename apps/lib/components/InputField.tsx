@@ -11,7 +11,7 @@ import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { ActionButton } from "./ActionButton";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
 
 export interface Props

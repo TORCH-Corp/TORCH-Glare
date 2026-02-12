@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, ReactNode, ButtonHTMLAttributes } from "react";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { cva, VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
 import Counter from "../components/CountBadge";

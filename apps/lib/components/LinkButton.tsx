@@ -1,7 +1,7 @@
 import React, { HTMLAttributes, SVGProps } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { Slot } from "@radix-ui/react-slot";
 
 // Link button base styles

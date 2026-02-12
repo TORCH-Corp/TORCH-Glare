@@ -4,7 +4,7 @@ import { forwardRef, InputHTMLAttributes, ReactNode, useState } from "react";
 import { InputField } from "./InputField";
 import { ToolTipSide } from "./Tooltip";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {

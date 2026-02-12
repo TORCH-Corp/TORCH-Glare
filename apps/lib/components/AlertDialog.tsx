@@ -5,7 +5,7 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
 import { cn } from "../utils/cn"
 import { Button, buttonVariants } from "./Button"
-import { ButtonVariant } from "../utils/types"
+import type { ButtonVariant } from "../utils/types"
 import { cva } from "class-variance-authority"
 
 const StatusTextStyle = cva("", {

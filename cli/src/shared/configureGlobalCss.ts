@@ -4,12 +4,12 @@ import inquirer from "inquirer";
 import { Framework, findGlobalCssPath } from "./detectFramework.js";
 
 const V4_PLUGIN_DIRECTIVES = `@import "tailwindcss";
+@import "mapping-color-system-v4/tailwindVars.css";
 @plugin "glare-torch-mode";
 @plugin "tailwind-scrollbar-hide";
 @plugin "tailwindcss-animate";
 @plugin "glare-typography";
 @plugin "mapping-color-system-v4";
-@import "mapping-color-system-v4/tailwindVars.css";
 `;
 
 const V3_TAILWIND_DIRECTIVES = `@tailwind base;
@@ -80,17 +80,36 @@ async function configureV4Css(existingCss: string | null, framework: Framework, 
     const missingLines = lines.filter(line => !content.includes(line.trim()));
 
     if (missingLines.length > 0) {
-        // Replace @import "tailwindcss" if present, or prepend
+        // Split missing lines into @import and @plugin groups to maintain correct CSS order
+        const missingImports = missingLines.filter(l => l.startsWith("@import") && !l.includes('"tailwindcss"'));
+        const missingPlugins = missingLines.filter(l => l.startsWith("@plugin"));
+
         let modified = content;
         if (content.includes('@import "tailwindcss"') || content.includes("@import 'tailwindcss'")) {
-            // Add plugin directives after the tailwindcss import
-            modified = content.replace(
-                /(@import\s+["']tailwindcss["'];?\s*\n?)/,
-                `$1${missingLines.filter(l => !l.includes('@import "tailwindcss"')).join("\n")}\n`
-            );
+            // Add @import lines right after the tailwindcss import
+            if (missingImports.length > 0) {
+                modified = modified.replace(
+                    /(@import\s+["']tailwindcss["'];?\s*\n?)/,
+                    `$1${missingImports.join("\n")}\n`
+                );
+            }
+            // Add @plugin lines after all @import lines
+            if (missingPlugins.length > 0) {
+                // Find the last @import line and insert plugins after it
+                const lastImportMatch = modified.match(/.*@import[^\n]*\n/g);
+                if (lastImportMatch && lastImportMatch.length > 0) {
+                    const lastImport = lastImportMatch[lastImportMatch.length - 1]!;
+                    modified = modified.replace(
+                        lastImport,
+                        `${lastImport}${missingPlugins.join("\n")}\n`
+                    );
+                } else {
+                    modified = missingPlugins.join("\n") + "\n" + modified;
+                }
+            }
         } else {
-            // Prepend all directives
-            modified = missingLines.join("\n") + "\n\n" + content;
+            // No tailwindcss import — prepend all directives (imports first, then plugins)
+            modified = [...missingImports, ...missingPlugins].join("\n") + "\n\n" + content;
         }
         fs.writeFileSync(fullPath, modified);
     }

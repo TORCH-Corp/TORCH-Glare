@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "../utils/cn";
-import { ButtonVariant, Themes } from "../utils/types";
+import type { ButtonVariant, Themes } from "../utils/types";
 
 interface Props
   extends ButtonHTMLAttributes<HTMLButtonElement>,

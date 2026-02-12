@@ -2,7 +2,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 
 interface DropdownMenuProps {

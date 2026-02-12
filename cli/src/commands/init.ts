@@ -37,11 +37,11 @@ export async function initConfig(defaults: boolean = false): Promise<void> {
     console.log(`    Tailwind CSS:    v${tailwindVersion}`);
     console.log(`    Package manager: ${packageManager}`);
     console.log(`    Base path:       ${basePath} (alias: ${aliasPrefix})`);
-    console.log(`    Components:      ${aliases.components}`);
-    console.log(`    Hooks:           ${aliases.hooks}`);
-    console.log(`    Utils:           ${aliases.utils}`);
-    console.log(`    Providers:       ${aliases.providers}`);
-    console.log(`    Layouts:         ${aliases.layouts}`);
+    console.log(`    Components:      ${aliases.components}${aliasPrefix !== basePath ? ` (${aliasPrefix}components)` : ""}`);
+    console.log(`    Hooks:           ${aliases.hooks}${aliasPrefix !== basePath ? ` (${aliasPrefix}hooks)` : ""}`);
+    console.log(`    Utils:           ${aliases.utils}${aliasPrefix !== basePath ? ` (${aliasPrefix}utils)` : ""}`);
+    console.log(`    Providers:       ${aliases.providers}${aliasPrefix !== basePath ? ` (${aliasPrefix}providers)` : ""}`);
+    console.log(`    Layouts:         ${aliases.layouts}${aliasPrefix !== basePath ? ` (${aliasPrefix}layouts)` : ""}`);
     console.log("");
 
     if (!defaults) {

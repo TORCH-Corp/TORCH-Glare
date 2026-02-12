@@ -2,7 +2,7 @@ import { forwardRef, HTMLAttributes, InputHTMLAttributes, ReactNode, useEffect, 
 import { Button } from "./Button";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogCancel } from "./AlertDialog";
 
 const dropZoneStyles = cva(

@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 import { cn } from "../utils/cn";
-import { ButtonVariant, Themes } from "../utils/types";
+import type { ButtonVariant, Themes } from "../utils/types";
 
 const buttonVariants = cva("!rounded-[4px]", {
   variants: {

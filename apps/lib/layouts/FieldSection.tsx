@@ -1,7 +1,7 @@
 import { cn } from "../utils/cn";
 import { ReactNode } from "react";
 import { Label } from "../components/Label";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 
 interface Props {
   label?: ReactNode;

@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import EditorJS, { type OutputData } from "@editorjs/editorjs";
 import { isMarkdown, parseMarkdownToBlocks } from "../utils/markdownParser";
 

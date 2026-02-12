@@ -1,4 +1,4 @@
-import { Themes } from "../utils/types";
+import type { Themes } from "../utils/types";
 import { cn } from "../utils/cn"; // Assuming you have a `cn` utility
 import { HTMLAttributes, useEffect, useState } from "react";
 
