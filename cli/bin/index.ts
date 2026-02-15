@@ -7,6 +7,7 @@ import { addLayout } from "../src/commands/layout.js";
 import { addUtil } from "../src/commands/utils.js";
 import { addProvider } from "../src/commands/provider.js";
 import { updateInstalledComponents } from "../src/commands/update.js";
+import { setupMcp } from "../src/commands/mcp.js";
 
 const program = new Command();
 
@@ -49,5 +50,10 @@ program
   .command("update")
   .description("Update everything installed")
   .action(() => updateInstalledComponents());
+
+program
+  .command("mcp")
+  .description("Set up TORCH Glare MCP server for your AI client")
+  .action(() => setupMcp());
 
 program.parse(process.argv);
