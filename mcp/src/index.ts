@@ -165,10 +165,10 @@ async function main() {
   // Tool 6: Get design system info
   server.tool(
     "get-design-system-info",
-    "Get TORCH Glare design system information about theming, typography, colors, plugins, hooks, providers, or utilities",
+    "Get TORCH Glare design system information about theming, typography, colors, plugins, hooks, providers, utilities, or installation",
     {
       topic: z
-        .enum(["theming", "typography", "colors", "plugins", "hooks", "providers", "utilities", "all"])
+        .enum(["theming", "typography", "colors", "plugins", "hooks", "providers", "utilities", "installation", "all"])
         .describe("Topic to retrieve information about"),
     },
     async ({ topic }) => {
@@ -180,6 +180,7 @@ async function main() {
         hooks: ["hooks"],
         providers: ["providers"],
         utilities: ["utilities"],
+        installation: [],
         all: ["hooks", "providers", "utilities", "tailwind-plugins", "types"],
       };
 
@@ -189,6 +190,12 @@ async function main() {
       for (const name of refNames) {
         const content = loader.getReference(name);
         if (content) sections.push(content);
+      }
+
+      // Include getting-started tutorial for installation topic
+      if (topic === "installation" || topic === "all") {
+        const tutorial = loader.getTutorial("getting-started");
+        if (tutorial) sections.push(tutorial);
       }
 
       // Also include theming tutorial for theming topic

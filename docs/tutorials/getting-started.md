@@ -4,7 +4,7 @@ description: Step-by-step guide to installing and using TORCH Glare Components L
 category: Tutorial
 difficulty: Beginner
 duration: 15 minutes
-tags: [getting-started, installation, setup, first-component]
+tags: [getting-started, installation, setup, first-component, cli, tailwind]
 related:
   - Building Your First Form
   - Theming Basics
@@ -17,11 +17,10 @@ Welcome to TORCH Glare! This tutorial will guide you through installing the libr
 
 ## What You'll Learn
 
-- Installing TORCH Glare and its dependencies
-- Setting up Tailwind CSS with TORCH plugins
-- Configuring the ThemeProvider
+- Installing TORCH Glare using the CLI
+- Configuring Tailwind CSS with TORCH plugins
+- Adding components to your project
 - Creating your first components
-- Understanding the design system
 
 ## Prerequisites
 
@@ -29,473 +28,193 @@ Before you begin, make sure you have:
 
 - Node.js 16+ installed
 - Basic knowledge of React and TypeScript
-- A React project (Next.js, Vite, or Create React App)
+- A React project with Tailwind CSS installed (Next.js, Vite, or Create React App)
 
 ---
 
-## Step 1: Installation
+## Step 1: Initialize TORCH Glare
 
-### Install the Core Library
+Run the following command to initialize your project:
 
 ```bash
-npm install @torch-ai/torch-glare
+npx torch-glare@latest init
 ```
 
-Or using Yarn:
+This will install the required dependencies and generate a `glare.json` file, where you can customize the installation path for your components.
 
-```bash
-yarn add @torch-ai/torch-glare
+### Configure Component Path
+
+The generated `glare.json` file controls where components are installed:
+
+```json
+{
+  "path": "./src"
+}
 ```
 
-### Install Tailwind CSS Plugins
+Adjust the `path` to match your project structure (e.g., `./src`, `./app`, `./components`).
 
-TORCH Glare requires several Tailwind CSS plugins for theming and typography:
+---
 
-```bash
-npm install mapping-color-system glare-torch-mode glare-typography tailwindcss-animate tailwind-scrollbar-hide
-```
+## Step 2: Add Fonts and Icons
 
-### Install Peer Dependencies
+Add Remix Icons CDN and SF-Pro font to your HTML `<head>` or metadata. SF-Pro is the standard font family for TORCH Glare Components.
 
-```bash
-npm install tailwindcss postcss autoprefixer class-variance-authority clsx tailwind-merge
+```html
+<head>
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+        rel="stylesheet"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdn.statically.io/gh/TORCH-Corp/SF-PRO-FONT/main/font/fonts.css"
+    />
+    <link
+        rel="preload"
+        href="https://cdn.statically.io/gh/TORCH-Corp/SF-PRO-FONT/main/font/SF-Pro.woff2"
+        as="font"
+        type="font/woff2"
+    />
+</head>
 ```
 
 ---
 
-## Step 2: Configure Tailwind CSS
+## Step 3: Configure Tailwind CSS
 
-Create or update your `tailwind.config.ts` file:
+### For Tailwind CSS v4
 
-```ts
-// tailwind.config.ts
-import type { Config } from "tailwindcss";
+Add the following to your `global.css` file:
 
-export default {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [
-    // TORCH Glare required plugins
-    require('mapping-color-system'),
-    require('glare-torch-mode'),
-    require('glare-typography'),
-
-    // Optional but recommended
-    require('tailwindcss-animate'),
-    require('tailwind-scrollbar-hide'),
-  ],
-} satisfies Config;
+```css
+@import "tailwindcss";
+@plugin "glare-torch-mode";
+@plugin "tailwind-scrollbar-hide";
+@plugin "tailwindcss-animate";
+@plugin "glare-typography";
+@plugin "mapping-color-system-v4";
+@import "mapping-color-system-v4/tailwindVars.css";
 ```
 
-### Create PostCSS Config
+### For Tailwind CSS v3
+
+First install the mapping color system:
+
+```bash
+npm install mapping-color-system@latest
+```
+
+Then configure your `tailwind.config.js`:
 
 ```js
-// postcss.config.js
+const { plugin, mappingVars } = require('mapping-color-system')
+
 module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
+    content: [
+        // put the path from your glare.json file, e.g.:
+        "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    ],
+    theme: {
+        extend: {
+            colors: mappingVars,
+        },
+    },
+    plugins: [
+        plugin,
+        require('tailwindcss-animate'),
+        require('tailwind-scrollbar-hide'),
+        require('glare-typography'),
+        require('glare-torch-mode'),
+        function ({ addVariant }) {
+            addVariant("rtl", '&[dir="rtl"]');
+            addVariant("ltr", '&[dir="ltr"]');
+        },
+    ],
 };
 ```
 
-### Import Tailwind CSS
+Important:
+- Specify the component path in the `content` array matching your `glare.json` path
+- Add all plugins to the `plugins` array
+- Add `mappingVars` to the `extend.colors` object
 
-```css
-/* globals.css or app.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+---
+
+## Step 4: Add Components
+
+Run the following command to see a dropdown list of available components:
+
+```bash
+npx torch-glare@latest add
+```
+
+Or specify which component you want:
+
+```bash
+npx torch-glare@latest add Button
+```
+
+You can add multiple components at once:
+
+```bash
+npx torch-glare@latest add Button Input Badge
 ```
 
 ---
 
-## Step 3: Set Up Theme Provider
+## Step 5: Use Components
 
-### Next.js App Router
+Import and use the components from the path configured in `glare.json`:
 
 ```tsx
-// app/layout.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
-import './globals.css';
+import { Button } from "./components/Button";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function App() {
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider defaultTheme="light" defaultThemeMode="TORCH">
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  );
-}
-```
-
-### Next.js Pages Router
-
-```tsx
-// pages/_app.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
-import type { AppProps } from 'next/app';
-import '../styles/globals.css';
-
-export default function App({ Component, pageProps }: AppProps) {
-  return (
-    <ThemeProvider defaultTheme="light" defaultThemeMode="TORCH">
-      <Component {...pageProps} />
-    </ThemeProvider>
-  );
-}
-```
-
-### Vite + React
-
-```tsx
-// main.tsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { ThemeProvider } from '@torch-ai/torch-glare';
-import App from './App';
-import './index.css';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ThemeProvider defaultTheme="light" defaultThemeMode="TORCH">
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>
-);
-```
-
----
-
-## Step 4: Create Your First Component
-
-Let's create a simple welcome card using TORCH Glare components.
-
-### Basic Card
-
-```tsx
-// components/WelcomeCard.tsx
-import { Button } from '@torch-ai/torch-glare';
-
-export default function WelcomeCard() {
-  return (
-    <div className="
-      bg-background-presentation-form-base
-      border border-border-presentation-global-primary
-      rounded-lg p-6 max-w-md
-    ">
-      <h1 className="typography-display-medium-bold mb-2">
-        Welcome to TORCH Glare! 👋
-      </h1>
-      <p className="typography-body-medium-regular text-content-presentation-global-secondary mb-4">
-        You've successfully set up TORCH Glare. Let's build something amazing!
-      </p>
-      <Button theme="light" variant="PrimeStyle">
-        Get Started
-      </Button>
-    </div>
-  );
-}
-```
-
-### Use the Component
-
-```tsx
-// app/page.tsx or src/App.tsx
-import WelcomeCard from './components/WelcomeCard';
-
-export default function Home() {
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <WelcomeCard />
-    </div>
-  );
-}
-```
-
----
-
-## Step 5: Add Theme Toggle
-
-Let's add a theme switcher to test the theming system.
-
-### Create Theme Toggle Component
-
-```tsx
-// components/ThemeToggle.tsx
-'use client'; // Add this for Next.js App Router
-
-import { useTheme, Button } from '@torch-ai/torch-glare';
-
-export default function ThemeToggle() {
-  const { theme, updateTheme } = useTheme();
-
-  const toggleTheme = () => {
-    updateTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-  return (
-    <Button
-      theme={theme as any}
-      variant="ContStyle"
-      onClick={toggleTheme}
-      buttonType="icon"
-      size="M"
-    >
-      {theme === 'light' ? '🌙' : '☀️'}
+    <Button variant="PrimeStyle" size="M">
+      Click Me
     </Button>
   );
 }
 ```
 
-### Add to Layout
-
-```tsx
-// app/layout.tsx (or wherever your layout is)
-import ThemeToggle from './components/ThemeToggle';
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body>
-        <ThemeProvider defaultTheme="light" defaultThemeMode="TORCH">
-          <div className="fixed top-4 right-4 z-50">
-            <ThemeToggle />
-          </div>
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  );
-}
-```
-
----
-
-## Step 6: Explore More Components
-
-Now that you have the basics set up, let's try a few more components.
-
 ### Button Variants
 
 ```tsx
-import { Button } from '@torch-ai/torch-glare';
+import { Button } from "./components/Button";
 
 export default function ButtonShowcase() {
   return (
     <div className="flex gap-2 flex-wrap">
-      <Button theme="light" variant="PrimeStyle">
-        Primary
-      </Button>
-      <Button theme="light" variant="ContStyle">
-        Contrast
-      </Button>
-      <Button theme="light" variant="SecondStyle">
-        Secondary
-      </Button>
-      <Button theme="light" variant="BorderStyle">
-        Outline
-      </Button>
+      <Button variant="PrimeStyle">Primary</Button>
+      <Button variant="ContStyle">Contrast</Button>
+      <Button variant="SecondStyle">Secondary</Button>
+      <Button variant="BorderStyle">Outline</Button>
     </div>
   );
 }
 ```
 
-### Input Field
+### Theming
+
+Most components accept a `theme` prop for per-component theming:
 
 ```tsx
-import { InputField } from '@torch-ai/torch-glare';
-import { useState } from 'react';
+<Button theme="light" variant="PrimeStyle">Light Theme</Button>
+<Button theme="dark" variant="PrimeStyle">Dark Theme</Button>
+```
 
-export default function InputDemo() {
-  const [email, setEmail] = useState('');
+Or use the `ThemeProvider` for app-wide theming:
 
+```tsx
+import { ThemeProvider } from "./providers/ThemeProvider";
+
+export default function RootLayout({ children }) {
   return (
-    <InputField
-      theme="light"
-      label="Email Address"
-      type="email"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      placeholder="you@example.com"
-    />
-  );
-}
-```
-
-### Badge Component
-
-```tsx
-import { Badge } from '@torch-ai/torch-glare';
-
-export default function BadgeDemo() {
-  return (
-    <div className="flex gap-2">
-      <Badge theme="light" variant="SecondStyle">
-        New
-      </Badge>
-      <Badge theme="light" variant="PrimeStyle">
-        Featured
-      </Badge>
-      <Badge theme="light" variant="ContStyle">
-        Popular
-      </Badge>
-    </div>
-  );
-}
-```
-
----
-
-## Step 7: Understanding the Design System
-
-### Color System
-
-TORCH Glare uses a comprehensive color token system:
-
-```tsx
-// Background colors
-<div className="bg-background-system-body-primary">
-<div className="bg-background-presentation-form-base">
-<div className="bg-background-presentation-action-primary">
-
-// Text colors
-<p className="text-content-presentation-global-primary">
-<p className="text-content-presentation-global-secondary">
-<p className="text-content-presentation-state-success">
-
-// Border colors
-<div className="border border-border-presentation-global-primary">
-<div className="border border-border-presentation-action-hover">
-```
-
-### Typography System
-
-```tsx
-// Display text (large headings)
-<h1 className="typography-display-large-bold">
-
-// Headers (section titles)
-<h2 className="typography-headers-large-semibold">
-
-// Body text (paragraphs)
-<p className="typography-body-medium-regular">
-
-// Labels (form labels, tags)
-<label className="typography-labels-medium-semibold">
-```
-
-### Theme Props
-
-Most components accept a `theme` prop:
-
-```tsx
-<Button theme="light" variant="PrimeStyle">
-  Light Theme
-</Button>
-
-<Button theme="dark" variant="PrimeStyle">
-  Dark Theme
-</Button>
-```
-
----
-
-## Step 8: Build a Complete Example
-
-Let's combine everything into a complete example:
-
-```tsx
-// components/UserProfile.tsx
-'use client';
-
-import { useState } from 'react';
-import {
-  Button,
-  InputField,
-  Badge,
-  Avatar,
-} from '@torch-ai/torch-glare';
-
-export default function UserProfile() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-
-  const handleSave = () => {
-    console.log('Saving:', { name, email });
-  };
-
-  return (
-    <div className="
-      max-w-2xl mx-auto p-6
-      bg-background-presentation-form-base
-      border border-border-presentation-global-primary
-      rounded-lg
-    ">
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
-        <Avatar
-          theme="light"
-          src="/avatar.jpg"
-          alt="User"
-          size="L"
-        />
-        <div>
-          <h2 className="typography-headers-large-bold">
-            Profile Settings
-          </h2>
-          <Badge theme="light" variant="SecondStyle">
-            Pro Member
-          </Badge>
-        </div>
-      </div>
-
-      {/* Form */}
-      <div className="space-y-4">
-        <InputField
-          theme="light"
-          label="Full Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-        />
-
-        <InputField
-          theme="light"
-          label="Email Address"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-        />
-
-        <div className="flex gap-2 justify-end">
-          <Button theme="light" variant="BorderStyle">
-            Cancel
-          </Button>
-          <Button theme="light" variant="PrimeStyle" onClick={handleSave}>
-            Save Changes
-          </Button>
-        </div>
-      </div>
-    </div>
+    <ThemeProvider defaultTheme="light">
+      {children}
+    </ThemeProvider>
   );
 }
 ```
@@ -504,56 +223,29 @@ export default function UserProfile() {
 
 ## Common Issues and Solutions
 
-### Issue: Styles Not Applied
+### Styles Not Applied
 
-**Problem**: Components don't have styling.
-
-**Solution**: Make sure you've:
+Make sure you've:
 1. Imported `globals.css` with Tailwind directives
-2. Configured `tailwind.config.ts` correctly
-3. Added TORCH Glare plugins
+2. Configured `tailwind.config` correctly with all plugins
+3. Added the correct component path to the `content` array
 
-### Issue: Theme Not Switching
+### Theme Not Switching
 
-**Problem**: Theme toggle doesn't work.
-
-**Solution**: Ensure:
+Ensure:
 1. `ThemeProvider` wraps your app
-2. Component is marked with `'use client'` (Next.js)
+2. Component is marked with `'use client'` (Next.js App Router)
 3. Both `mapping-color-system` and `glare-torch-mode` plugins are installed
-
-### Issue: TypeScript Errors
-
-**Problem**: Type errors with components.
-
-**Solution**:
-```bash
-npm install --save-dev @types/react @types/node
-```
 
 ---
 
-## Next Steps
+## Manual Installation
 
-Congratulations! You've successfully set up TORCH Glare. Here's what to explore next:
+If you have issues with the CLI, see the [manual installation guide](https://torch-glare.com/getting-started/manual) for step-by-step instructions.
+
+## Next Steps
 
 1. **[Building Your First Form](./building-first-form.md)** - Create a complete form with validation
 2. **[Theming Basics](./theming-basics.md)** - Customize colors and themes
 3. **[Component Composition](./component-composition.md)** - Build complex UIs
 4. **[Component Documentation](../components/)** - Explore all available components
-
-## Additional Resources
-
-- [GitHub Repository](https://github.com/torch-ai/torch-glare)
-- [Component API Reference](../components/)
-- [Tailwind Plugins Reference](../reference/tailwind-plugins.md)
-- [Hooks Reference](../reference/hooks.md)
-
-## Need Help?
-
-- Check the [FAQ](../faq.md)
-- Read [Common Issues](../troubleshooting.md)
-- Join our [Discord Community](https://discord.gg/torch-glare)
-- Report issues on [GitHub](https://github.com/torch-ai/torch-glare/issues)
-
-Happy coding! 🚀
