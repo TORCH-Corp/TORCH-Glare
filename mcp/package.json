@@ -1,0 +1,45 @@
+{
+  "name": "torch-glare-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for TORCH Glare component library — gives AI assistants full access to component docs, API references, code examples, and design system info",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "torch-glare-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "prebuild": "node -e \"const fs=require('fs');if(!fs.existsSync('docs')){fs.mkdirSync('docs',{recursive:true});['components','reference','tutorials','how-to'].forEach(d=>{const src='../docs/'+d;const dst='docs/'+d;if(fs.existsSync(src)){fs.cpSync(src,dst,{recursive:true})}});if(fs.existsSync('../llms-manifest.json')){fs.cpSync('../llms-manifest.json','docs/llms-manifest.json')}}\"",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "torch-glare",
+    "component-library",
+    "react",
+    "documentation",
+    "ai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/torch-corp/torch-glare",
+    "directory": "mcp"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.0"
+  }
+}
