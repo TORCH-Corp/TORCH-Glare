@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 import { addUtil } from "../commands/utils.js";
 import { addHook } from "../commands/hook.js";
 import { add } from "../commands/add.js";
@@ -51,7 +52,14 @@ export function getDependenciesAndInstallNestedComponents(
                 !moduleName.startsWith("../components")) &&
             !installedDependencies.has(moduleName)
         ) {
-            add(moduleName.slice(2) + ".tsx");
+            const baseName = moduleName.slice(2);
+            const dir = path.dirname(componentPath);
+            // Try .tsx first, fall back to .ts for non-JSX files
+            if (fs.existsSync(path.join(dir, baseName + ".tsx"))) {
+                add(baseName + ".tsx");
+            } else {
+                add(baseName + ".ts");
+            }
         }
         // install required for layouts components
         else if (
@@ -59,7 +67,13 @@ export function getDependenciesAndInstallNestedComponents(
             moduleName.startsWith("../components") &&
             !installedDependencies.has(moduleName)
         ) {
-            add(moduleName.slice(14) + ".tsx");
+            const baseName = moduleName.slice(14);
+            const componentsDir = path.resolve(path.dirname(componentPath), "../components");
+            if (fs.existsSync(path.join(componentsDir, baseName + ".tsx"))) {
+                add(baseName + ".tsx");
+            } else {
+                add(baseName + ".ts");
+            }
         }
     }
 
