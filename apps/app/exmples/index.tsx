@@ -33,6 +33,8 @@ import IosDatePickerExample from "./IosDatePicerExample";
 import AlertDialogExample from "./AlertDialogExample";
 import FormExample from "./FormExample";
 import TextEditorExample from "./TextEditorExample";
+import TimelineExample from "./TimelineExample";
+import StepperExample from "./StepperExample";
 export default function Examples() {
   const { theme, updateTheme } = useTheme();
 
@@ -96,6 +98,8 @@ export default function Examples() {
         <AlertDialogExample />
         <FormExample />
         <TextEditorExample />
+        <TimelineExample />
+        <StepperExample />
         <div className="my-10"></div>
       </section>
     </div>

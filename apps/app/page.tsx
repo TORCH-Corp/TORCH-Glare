@@ -6,6 +6,25 @@ import {
   ButtonGroup,
   ButtonGroupItem,
 } from "@/components/ButtonGroup";
+import { Button } from "@/components/Button";
+import {
+  Timeline,
+  TimelineItem,
+  TimelineConnector,
+  TimelineIndicator,
+  TimelineSeparator,
+  TimelineContent,
+  TimelineHeading,
+  TimelineDescription,
+} from "@/components/Timeline";
+import {
+  Stepper,
+  Step,
+  StepIndicator,
+  StepConnector,
+  StepLabel,
+  StepDescription,
+} from "@/components/Stepper";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
@@ -400,6 +419,323 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      {/* ================================================================== */}
+      {/* TIMELINE */}
+      {/* ================================================================== */}
+
+      <section className="space-y-6">
+        <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+          Timeline
+        </h2>
+
+        {/* Vertical Timeline */}
+        <div className="space-y-4">
+          <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+            Vertical — Order Tracking
+          </h3>
+          <Timeline orientation="vertical">
+            <TimelineItem>
+              <TimelineConnector>
+                <TimelineIndicator variant="completed" />
+                <TimelineSeparator active />
+              </TimelineConnector>
+              <TimelineContent>
+                <TimelineHeading>Order Placed</TimelineHeading>
+                <TimelineDescription>Your order has been confirmed and is being processed.</TimelineDescription>
+              </TimelineContent>
+            </TimelineItem>
+
+            <TimelineItem>
+              <TimelineConnector>
+                <TimelineIndicator variant="completed" />
+                <TimelineSeparator active />
+              </TimelineConnector>
+              <TimelineContent>
+                <TimelineHeading>Payment Verified</TimelineHeading>
+                <TimelineDescription>Payment of $129.00 was successfully charged.</TimelineDescription>
+              </TimelineContent>
+            </TimelineItem>
+
+            <TimelineItem>
+              <TimelineConnector>
+                <TimelineIndicator variant="active" />
+                <TimelineSeparator />
+              </TimelineConnector>
+              <TimelineContent>
+                <TimelineHeading>In Transit</TimelineHeading>
+                <TimelineDescription>Package is on its way — expected delivery in 2 days.</TimelineDescription>
+              </TimelineContent>
+            </TimelineItem>
+
+            <TimelineItem>
+              <TimelineConnector>
+                <TimelineIndicator variant="default" />
+              </TimelineConnector>
+              <TimelineContent>
+                <TimelineHeading>Delivered</TimelineHeading>
+                <TimelineDescription>Awaiting delivery to your address.</TimelineDescription>
+              </TimelineContent>
+            </TimelineItem>
+          </Timeline>
+        </div>
+
+        {/* Custom Icons */}
+        <div className="space-y-4">
+          <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+            Custom Icons — Git Activity
+          </h3>
+          <Timeline orientation="vertical">
+            <TimelineItem>
+              <TimelineConnector>
+                <TimelineIndicator variant="completed" icon={<i className="ri-git-commit-line" />} />
+                <TimelineSeparator active />
+              </TimelineConnector>
+              <TimelineContent>
+                <TimelineHeading>Initial Commit</TimelineHeading>
+                <TimelineDescription>feat: project scaffolding</TimelineDescription>
+              </TimelineContent>
+            </TimelineItem>
+
+            <TimelineItem>
+              <TimelineConnector>
+                <TimelineIndicator variant="active" icon={<i className="ri-code-s-slash-line" />} />
+                <TimelineSeparator />
+              </TimelineConnector>
+              <TimelineContent>
+                <TimelineHeading>Code Review</TimelineHeading>
+                <TimelineDescription>PR #42 — Add authentication</TimelineDescription>
+              </TimelineContent>
+            </TimelineItem>
+
+            <TimelineItem>
+              <TimelineConnector>
+                <TimelineIndicator variant="error" icon={<i className="ri-bug-line" />} />
+              </TimelineConnector>
+              <TimelineContent>
+                <TimelineHeading>Build Failed</TimelineHeading>
+                <TimelineDescription>CI pipeline error on main branch</TimelineDescription>
+              </TimelineContent>
+            </TimelineItem>
+          </Timeline>
+        </div>
+
+        {/* Indicator Variants */}
+        <div className="space-y-4">
+          <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+            Indicator Variants & Sizes
+          </h3>
+          <div className="flex gap-8 items-center justify-center">
+            {(["S", "M", "L"] as const).map((size) => (
+              <div key={size} className="flex flex-col gap-3 items-center w-[40px]">
+                <span className="typography-body-small-medium text-content-presentation-global-secondary">
+                  {size}
+                </span>
+                <TimelineIndicator variant="default" size={size} />
+                <TimelineIndicator variant="active" size={size} />
+                <TimelineIndicator variant="completed" size={size} />
+                <TimelineIndicator variant="error" size={size} />
+                <TimelineIndicator variant="warning" size={size} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================== */}
+      {/* STEPPER */}
+      {/* ================================================================== */}
+
+      <StepperDemo />
     </div>
+  );
+}
+
+function StepperDemo() {
+  const [activeStep, setActiveStep] = useState(1);
+  const totalSteps = 4;
+
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        Stepper
+      </h2>
+
+      {/* Interactive Horizontal */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Horizontal — Interactive (Step {activeStep + 1} of {totalSteps})
+        </h3>
+        <Stepper activeStep={activeStep} orientation="horizontal" size="M">
+          <Step index={0}>
+            <StepIndicator />
+            <StepLabel>Account</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator />
+            <StepLabel>Profile</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={2}>
+            <StepIndicator />
+            <StepLabel>Settings</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={3}>
+            <StepIndicator />
+            <StepLabel>Confirm</StepLabel>
+          </Step>
+        </Stepper>
+
+        <div className="flex gap-2">
+          <Button
+            size="S"
+            variant="BorderStyle"
+            disabled={activeStep === 0}
+            onClick={() => setActiveStep((s) => Math.max(0, s - 1))}
+          >
+            <i className="ri-arrow-left-s-line" /> Back
+          </Button>
+          <Button
+            size="S"
+            variant="PrimeStyle"
+            disabled={activeStep >= totalSteps}
+            onClick={() => setActiveStep((s) => Math.min(totalSteps, s + 1))}
+          >
+            Next <i className="ri-arrow-right-s-line" />
+          </Button>
+          <Button
+            size="S"
+            variant="PrimeContStyle"
+            onClick={() => setActiveStep(0)}
+          >
+            Reset
+          </Button>
+        </div>
+      </div>
+
+      {/* Sizes */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Sizes
+        </h3>
+        {(["S", "M", "L"] as const).map((size) => (
+          <div key={size} className="space-y-2">
+            <span className="typography-body-small-medium text-content-presentation-global-secondary">
+              Size: {size}
+            </span>
+            <Stepper activeStep={2} orientation="horizontal" size={size}>
+              <Step index={0}>
+                <StepIndicator />
+                <StepLabel>Step 1</StepLabel>
+              </Step>
+              <StepConnector />
+              <Step index={1}>
+                <StepIndicator />
+                <StepLabel>Step 2</StepLabel>
+              </Step>
+              <StepConnector />
+              <Step index={2}>
+                <StepIndicator />
+                <StepLabel>Step 3</StepLabel>
+              </Step>
+            </Stepper>
+          </div>
+        ))}
+      </div>
+
+      {/* With Descriptions */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          With Descriptions
+        </h3>
+        <Stepper activeStep={1} orientation="horizontal" size="L">
+          <Step index={0}>
+            <StepIndicator />
+            <StepLabel>Account</StepLabel>
+            <StepDescription>Create your account</StepDescription>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator />
+            <StepLabel>Profile</StepLabel>
+            <StepDescription>Set up your profile</StepDescription>
+          </Step>
+          <StepConnector />
+          <Step index={2}>
+            <StepIndicator />
+            <StepLabel>Complete</StepLabel>
+            <StepDescription>Review and finish</StepDescription>
+          </Step>
+        </Stepper>
+      </div>
+
+      {/* Error State */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Error State
+        </h3>
+        <Stepper activeStep={2} orientation="horizontal" size="M">
+          <Step index={0}>
+            <StepIndicator />
+            <StepLabel>Upload</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator />
+            <StepLabel>Validate</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={2} isError>
+            <StepIndicator />
+            <StepLabel>Process</StepLabel>
+            <StepDescription>Validation failed</StepDescription>
+          </Step>
+          <StepConnector />
+          <Step index={3}>
+            <StepIndicator />
+            <StepLabel>Done</StepLabel>
+          </Step>
+        </Stepper>
+      </div>
+
+      {/* Custom Icons */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Custom Icons — Checkout Flow
+        </h3>
+        <Stepper activeStep={1} orientation="horizontal" size="L">
+          <Step index={0}>
+            <StepIndicator
+              icon={<i className="ri-shopping-cart-line" />}
+              completedIcon={<i className="ri-shopping-cart-fill" />}
+            />
+            <StepLabel>Cart</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator
+              icon={<i className="ri-map-pin-line" />}
+              completedIcon={<i className="ri-map-pin-fill" />}
+            />
+            <StepLabel>Shipping</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={2}>
+            <StepIndicator
+              icon={<i className="ri-bank-card-line" />}
+              completedIcon={<i className="ri-bank-card-fill" />}
+            />
+            <StepLabel>Payment</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={3}>
+            <StepIndicator icon={<i className="ri-check-double-line" />} />
+            <StepLabel>Confirm</StepLabel>
+          </Step>
+        </Stepper>
+      </div>
+    </section>
   );
 }
