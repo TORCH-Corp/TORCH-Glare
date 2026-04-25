@@ -5,13 +5,18 @@ import { useState } from "react";
 export default function ButtonExample() {
   const [ButtonButtonVariants] = useState<any>([
     "PrimeStyle",
-    "BlueSecStyle",
+    "BluSecStyle",
     "YelSecStyle",
     "RedSecStyle",
     "BorderStyle",
     "PrimeContStyle",
-    "BlueContStyle",
+    "BluContStyle",
     "RedContStyle",
+    "PrimeColStyle",
+    "BluColStyle",
+    "RedColStyle",
+    "GreenColStyle",
+    "YelColStyle",
   ]);
   const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
 

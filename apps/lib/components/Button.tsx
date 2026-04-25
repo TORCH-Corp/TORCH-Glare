@@ -5,15 +5,16 @@ import { cn } from "../utils/cn";
 import { ButtonVariant, Themes } from "../utils/types";
 
 interface Props
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+  extends
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
   is_loading?: boolean;
   disabled?: boolean;
   asChild?: boolean;
   variant?: ButtonVariant;
   as?: React.ElementType;
-  theme?: Themes
-  containerClassName?: string
+  theme?: Themes;
+  containerClassName?: string;
 }
 export const Button = forwardRef<HTMLButtonElement, Props>(
   (
@@ -32,7 +33,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       containerClassName,
       ...props
     },
-    ref
+    ref,
   ) => {
     const Component = asChild ? Slot : Tag;
 
@@ -51,34 +52,45 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             buttonType,
             disabled,
           }),
-          className
+          className,
         )}
       >
         {asChild ? (
           React.cloneElement(
             children as React.ReactElement,
             {},
-            <div className={cn("px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0", containerClassName)}>
+            <div
+              className={cn(
+                "px-[3px] flex items-center justify-center bg-background-presentation-action-borderstyle gap-[3px] has-[>i]:p-0",
+                containerClassName,
+              )}
+            >
               {(children as React.ReactElement<any>).props.children}
               {is_loading && <LoadingIcon size={size} />}
-            </div>
+            </div>,
           )
         ) : (
-          <div className={cn("px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0", containerClassName)}>
+          <div
+            className={cn(
+              "px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0",
+              containerClassName,
+            )}
+          >
             {children}
             {is_loading && <LoadingIcon size={size} />}
           </div>
         )}
       </Component>
     );
-  }
+  },
 );
 
-Button.displayName = "Button"
+Button.displayName = "Button";
 
-
-
-export function LoadingIcon({ size, className }: {
+export function LoadingIcon({
+  size,
+  className,
+}: {
   size?: "S" | "M" | "L" | "XL" | null;
   className?: string;
 }) {
@@ -88,7 +100,7 @@ export function LoadingIcon({ size, className }: {
         S: "w-[12px] h-[12px]",
         M: "w-[18px] h-[18px]",
         L: "w-[20px] h-[20px]",
-        XL: "w-[20px] h-[20px]"
+        XL: "w-[20px] h-[20px]",
       },
     },
     defaultVariants: {
@@ -115,91 +127,130 @@ export function LoadingIcon({ size, className }: {
   );
 }
 
-
-
-
 export const buttonVariants = cva(
   "flex items-center whitespace-nowrap justify-center  transition-[background,color] duration-200 ease-in-out border border-transparent outline-none leading-none [&-i]:!leading-none",
   {
     variants: {
       variant: {
-        // fucus styles for medium screens and above
+        // Sec variants: base = button-secondary, hover picks up fill color
         PrimeStyle: [
-          "bg-background-presentation-action-secondary",
+          "bg-background-presentation-button-secondary",
           "text-content-presentation-action-light-primary",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-action-hover",
-          "focus:lg:focus:md:border lg:focus:md:border-border-presentation-state-focus", // Focus style only for medium screens and above
-          "active:bg-background-presentation-action-hover active:text-content-presentation-action-hover",
+          "hover:bg-background-presentation-button-hover",
+          "hover:text-content-presentation-global-hover",
+          "focus:lg:focus:md:border lg:focus:md:border-border-presentation-state-focus",
+          "active:bg-background-presentation-button-hover active:text-content-presentation-global-hover",
         ],
-        BlueSecStyle: [
-          "bg-background-presentation-action-secondary",
+        BluSecStyle: [
+          "bg-background-presentation-button-secondary",
           "text-content-presentation-action-light-primary",
-          "hover:bg-background-presentation-state-information-primary",
-          "hover:text-content-presentation-action-hover",
+          "hover:bg-background-presentation-button-fill-blue-primary",
+          "hover:text-content-presentation-global-hover",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "active:bg-background-presentation-state-information-primary active:text-content-presentation-action-hover",
+          "active:bg-background-presentation-button-fill-blue-primary active:text-content-presentation-global-hover",
         ],
         YelSecStyle: [
-          "bg-background-presentation-action-secondary",
+          "bg-background-presentation-button-secondary",
           "text-content-presentation-action-light-primary",
-          "hover:bg-background-presentation-state-warning-primary",
+          "hover:bg-background-presentation-button-fill-yellow-primary",
           "hover:text-content-presentation-action-light-primary",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "active:bg-background-presentation-state-warning-primary active:text-content-presentation-action-light-primary",
+          "active:bg-background-presentation-button-fill-yellow-primary active:text-content-presentation-action-light-primary",
         ],
         RedSecStyle: [
-          "bg-background-presentation-action-secondary",
+          "bg-background-presentation-button-secondary",
           "text-content-presentation-action-light-primary",
-          "hover:bg-background-presentation-state-negative-primary",
-          "hover:text-content-presentation-action-hover",
+          "hover:bg-background-presentation-button-fill-red-primary",
+          "hover:text-content-presentation-global-hover",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "active:bg-background-presentation-state-negative-primary active:text-content-presentation-action-hover",
+          "active:bg-background-presentation-button-fill-red-primary active:text-content-presentation-global-hover",
         ],
         BorderStyle: [
           "text-content-presentation-action-light-primary",
           "border border-border-presentation-action-disabled",
-          "bg-background-presentation-action-borderstyle",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-action-hover",
+          "bg-background-presentation-button-borderstyle",
+          "hover:bg-background-presentation-button-hover",
+          "hover:text-content-presentation-global-hover",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
           "focus:lg:text-content-presentation-action-light-primary",
-          "focus:hover:lg:text-content-presentation-action-hover",
-          "active:bg-background-presentation-action-hover active:text-content-presentation-action-hover",
+          "focus:hover:lg:text-content-presentation-global-hover",
+          "active:bg-background-presentation-button-hover active:text-content-presentation-global-hover",
         ],
+        // Cont variants: transparent base, hover shows button-contstyle-hover
         PrimeContStyle: [
           "text-content-presentation-action-light-primary",
           "border-transparent bg-transparent",
-          "hover:bg-background-presentation-action-contstyle-hover",
+          "hover:bg-background-presentation-button-contstyle-hover",
           "hover:text-content-presentation-action-light-primary",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "focus:lg:bg-background-presentation-action-borderstyle",
-          "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-light-primary",
+          "focus:lg:bg-background-presentation-button-borderstyle",
+          "active:bg-background-presentation-button-contstyle-hover active:text-content-presentation-action-light-primary",
         ],
-        BlueContStyle: [
+        BluContStyle: [
           "text-content-presentation-action-light-primary",
           "border-transparent bg-transparent",
-          "hover:bg-background-presentation-action-contstyle-hover",
-          "hover:text-content-presentation-action-information-hover",
+          "hover:bg-background-presentation-button-contstyle-hover",
+          "hover:text-content-presentation-global-information-hover",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "focus:lg:bg-background-presentation-action-borderstyle",
-          "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-information-hover",
+          "focus:lg:bg-background-presentation-button-borderstyle",
+          "active:bg-background-presentation-button-contstyle-hover active:text-content-presentation-global-information-hover",
         ],
         RedContStyle: [
           "text-content-presentation-action-light-primary",
           "border-transparent bg-transparent",
-          "hover:bg-background-presentation-action-contstyle-hover",
-          "hover:text-content-presentation-action-negative-hover",
+          "hover:bg-background-presentation-button-contstyle-hover",
+          "hover:text-content-presentation-global-negative-hover",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "focus:lg:bg-background-presentation-action-borderstyle",
-          "active:bg-background-presentation-action-contstyle-hover active:text-content-presentation-action-negative-hover",
+          "focus:lg:bg-background-presentation-button-borderstyle",
+          "active:bg-background-presentation-button-contstyle-hover active:text-content-presentation-global-negative-hover",
+        ],
+        // Col variants: filled solid color base + always-white text, hover deepens to -secondary
+        PrimeColStyle: [
+          "bg-background-presentation-button-primary",
+          "text-content-presentation-action-dark-primary",
+          "hover:bg-background-presentation-button-hover",
+          "hover:text-content-presentation-action-dark-primary",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-button-hover active:text-content-presentation-action-dark-primary",
+        ],
+        BluColStyle: [
+          "bg-background-presentation-button-fill-blue-primary",
+          "text-content-presentation-action-dark-primary",
+          "hover:bg-background-presentation-button-fill-blue-secondary",
+          "hover:text-content-presentation-action-dark-primary",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-button-fill-blue-secondary active:text-content-presentation-action-dark-primary",
+        ],
+        RedColStyle: [
+          "bg-background-presentation-button-fill-red-primary",
+          "text-content-presentation-action-dark-primary",
+          "hover:bg-background-presentation-button-fill-red-secondary",
+          "hover:text-content-presentation-action-dark-primary",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-button-fill-red-secondary active:text-content-presentation-action-dark-primary",
+        ],
+        GreenColStyle: [
+          "bg-background-presentation-button-fill-green-primary",
+          "text-content-presentation-action-dark-primary",
+          "hover:bg-background-presentation-button-fill-green-secondary",
+          "hover:text-content-presentation-action-dark-primary",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-button-fill-green-secondary active:text-content-presentation-action-dark-primary",
+        ],
+        YelColStyle: [
+          "bg-background-presentation-button-fill-yellow-primary",
+          "text-content-presentation-global-primary",
+          "hover:bg-background-presentation-button-fill-yellow-secondary",
+          "hover:text-content-presentation-global-primary",
+          "focus:lg:border focus:lg:border-border-presentation-state-focus",
+          "active:bg-background-presentation-button-fill-yellow-secondary active:text-content-presentation-global-primary",
         ],
       },
       size: {
         S: "h-[22px] px-[6px] typography-body-small-medium rounded-[4px] [&_i]:text-[12px]",
-        M: "h-[28px] px-[14px] typography-body-large-medium rounded-[4px] [&_i]:text-[18px]",
-        L: "h-[34px] px-[22px] typography-body-large-medium rounded-[6px] [&_i]:text-[20px]",
-        XL: "h-[40px] px-[30px] typography-headers-medium-medium rounded-[6px] [&_i]:text-[22px]",
+        M: "h-[28px] px-[14px] typography-body-large-medium rounded-[6px] [&_i]:text-[18px]",
+        L: "h-[34px] px-[22px] typography-body-large-medium rounded-[8px] [&_i]:text-[20px]",
+        XL: "h-[40px] px-[30px] typography-headers-medium-medium rounded-[8px] [&_i]:text-[22px]",
       },
       is_loading: {
         true: "[&_i]:hidden",
@@ -222,12 +273,12 @@ export const buttonVariants = cva(
         is_loading: true,
         className: [
           "cursor-wait",
-          "bg-background-presentation-action-hover",
-          "text-content-presentation-action-hover",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-action-hover",
+          "bg-background-presentation-button-hover",
+          "text-content-presentation-global-hover",
+          "hover:bg-background-presentation-button-hover",
+          "hover:text-content-presentation-global-hover",
           "focus:lg:border focus:lg:border-transparent",
-          "active:bg-background-presentation-action-hover active:text-content-presentation-action-hover",
+          "active:bg-background-presentation-button-hover active:text-content-presentation-global-hover",
         ],
       },
       {
@@ -235,7 +286,7 @@ export const buttonVariants = cva(
         className: [
           "cursor-not-allowed",
           "pointer-events-none",
-          "bg-background-presentation-action-disabled",
+          "bg-background-presentation-button-disabled",
           "text-content-presentation-state-disabled",
           "border-transparent",
         ],
@@ -261,5 +312,5 @@ export const buttonVariants = cva(
         className: "w-[40px] h-[40px] p-0 leading-[0]",
       },
     ],
-  }
+  },
 );
