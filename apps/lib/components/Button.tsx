@@ -61,7 +61,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             {},
             <div
               className={cn(
-                "px-[3px] flex items-center justify-center bg-background-presentation-action-borderstyle gap-[3px] has-[>i]:p-0",
+                "px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0",
                 containerClassName,
               )}
             >
@@ -204,14 +204,14 @@ export const buttonVariants = cva(
           "focus:lg:bg-background-presentation-button-borderstyle",
           "active:bg-background-presentation-button-contstyle-hover active:text-content-presentation-global-negative-hover",
         ],
-        // Col variants: filled solid color base + always-white text, hover deepens to -secondary
+        // Col variants: filled solid color base, hover deepens to -secondary
         PrimeColStyle: [
           "bg-background-presentation-button-primary",
-          "text-content-presentation-action-dark-primary",
+          "text-content-presentation-global-primary-inverse",
           "hover:bg-background-presentation-button-hover",
-          "hover:text-content-presentation-action-dark-primary",
+          "hover:text-content-presentation-global-primary-inverse",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",
-          "active:bg-background-presentation-button-hover active:text-content-presentation-action-dark-primary",
+          "active:bg-background-presentation-button-hover active:text-content-presentation-global-primary-inverse",
         ],
         BluColStyle: [
           "bg-background-presentation-button-fill-blue-primary",
@@ -247,10 +247,10 @@ export const buttonVariants = cva(
         ],
       },
       size: {
-        S: "h-[22px] px-[6px] typography-body-small-medium rounded-[4px] [&_i]:text-[12px]",
-        M: "h-[28px] px-[14px] typography-body-large-medium rounded-[6px] [&_i]:text-[18px]",
-        L: "h-[34px] px-[22px] typography-body-large-medium rounded-[8px] [&_i]:text-[20px]",
-        XL: "h-[40px] px-[30px] typography-headers-medium-medium rounded-[8px] [&_i]:text-[22px]",
+        S: "h-[22px] py-[2px] px-[6px] typography-body-small-medium rounded-[4px] [&_i]:text-[12px]",
+        M: "h-[28px] py-[2px] px-[14px] typography-body-large-medium rounded-[6px] [&_i]:text-[18px]",
+        L: "h-[34px] py-[5px] px-[22px] typography-body-large-medium rounded-[8px] [&_i]:text-[20px]",
+        XL: "h-[40px] py-[8px] px-[30px] typography-headers-medium-medium rounded-[8px] [&_i]:text-[22px]",
       },
       is_loading: {
         true: "[&_i]:hidden",

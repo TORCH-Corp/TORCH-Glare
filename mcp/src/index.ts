@@ -13,6 +13,26 @@ import { DocsLoader } from "./docs-loader.js";
 import { ComponentRegistry } from "./component-registry.js";
 import { extractSection, extractCodeExamples } from "./markdown-utils.js";
 
+/**
+ * Absolute project rules prepended to every code/docs response so any AI
+ * assistant using this MCP server sees them, even without a companion skill.
+ * Keep this list short — every byte is repeated on every relevant tool call.
+ */
+const RULES_BANNER = `> ⚠️ **TORCH Glare — ABSOLUTE RULES (must follow when generating code)**
+>
+> **Never** generate code that uses \`system\` color tokens or the \`SystemStyle\` variant. Always use the \`presentation\` equivalents.
+>
+> | ❌ Never write | ✅ Write instead |
+> |---|---|
+> | \`bg-background-system-*\` | \`bg-background-presentation-*\` |
+> | \`text-content-system-*\` | \`text-content-presentation-*\` |
+> | \`border-border-system-*\` | \`border-border-presentation-*\` |
+> | \`variant="SystemStyle"\` | \`variant="PresentationStyle"\` (or omit — it's the default) |
+>
+> Applies to new components, edits, response examples, and copy-paste suggestions. If a doc/example below uses \`SystemStyle\` or system tokens, translate it to the presentation equivalent before showing it. Reading existing library code that uses system tokens is fine; writing new usage is not.
+
+`;
+
 async function main() {
   // 1. Load all documentation into memory
   const loader = new DocsLoader();
@@ -83,7 +103,7 @@ async function main() {
         };
       }
       return {
-        content: [{ type: "text", text: doc.rawContent }],
+        content: [{ type: "text", text: RULES_BANNER + doc.rawContent }],
       };
     }
   );
@@ -114,7 +134,7 @@ async function main() {
         result += "No dedicated API section found. Use get-component-docs for the full documentation.";
       }
 
-      return { content: [{ type: "text", text: result }] };
+      return { content: [{ type: "text", text: RULES_BANNER + result }] };
     }
   );
 
@@ -157,7 +177,7 @@ async function main() {
         .join("\n\n");
 
       return {
-        content: [{ type: "text", text: `# ${doc.name} Code Examples${pattern ? ` (filtered: "${pattern}")` : ""}\n\n${formatted}` }],
+        content: [{ type: "text", text: RULES_BANNER + `# ${doc.name} Code Examples${pattern ? ` (filtered: "${pattern}")` : ""}\n\n${formatted}` }],
       };
     }
   );
@@ -211,7 +231,7 @@ async function main() {
       }
 
       return {
-        content: [{ type: "text", text: sections.join("\n\n---\n\n") }],
+        content: [{ type: "text", text: RULES_BANNER + sections.join("\n\n---\n\n") }],
       };
     }
   );
@@ -280,7 +300,7 @@ async function main() {
         contents: [
           {
             uri: "torch-glare://design-system",
-            text: sections.length > 0 ? sections.join("\n\n---\n\n") : "Design system docs not available.",
+            text: sections.length > 0 ? RULES_BANNER + sections.join("\n\n---\n\n") : "Design system docs not available.",
           },
         ],
       };
@@ -316,7 +336,7 @@ async function main() {
         };
       }
       return {
-        contents: [{ uri: uri.href, text: doc.rawContent }],
+        contents: [{ uri: uri.href, text: RULES_BANNER + doc.rawContent }],
       };
     }
   );

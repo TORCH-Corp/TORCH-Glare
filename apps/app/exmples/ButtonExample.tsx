@@ -61,7 +61,7 @@ export default function ButtonExample() {
           </div>
 
           {/* Icon button ButtonVariants */}
-          <div className="flex gap-4 items-center w-full">
+          <div className="flex gap-4 items-center w-full mb-4">
             {ButtonSizes.map((size: any) => (
               <div
                 key={`icon-${size}`}
@@ -77,6 +77,76 @@ export default function ButtonExample() {
                 </span>
                 <Button variant={variant} size={size} buttonType="icon">
                   <i className="ri-add-circle-fill"></i>
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Icon + label (leading icon) */}
+          <div className="flex gap-4 items-center w-full mb-4">
+            {ButtonSizes.map((size: any) => (
+              <div
+                key={`icon-leading-${size}`}
+                className="flex flex-col items-center gap-2"
+              >
+                <span
+                  className={cn(
+                    "text-sm",
+                    "text-content-system-global-primary"
+                  )}
+                >
+                  Leading {size}
+                </span>
+                <Button variant={variant} size={size}>
+                  <i className="ri-add-circle-fill"></i>
+                  Label
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Icon + label (trailing icon) */}
+          <div className="flex gap-4 items-center w-full mb-4">
+            {ButtonSizes.map((size: any) => (
+              <div
+                key={`icon-trailing-${size}`}
+                className="flex flex-col items-center gap-2"
+              >
+                <span
+                  className={cn(
+                    "text-sm",
+                    "text-content-system-global-primary"
+                  )}
+                >
+                  Trailing {size}
+                </span>
+                <Button variant={variant} size={size}>
+                  Label
+                  <i className="ri-arrow-right-line"></i>
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Both icons + label */}
+          <div className="flex gap-4 items-center w-full">
+            {ButtonSizes.map((size: any) => (
+              <div
+                key={`icon-both-${size}`}
+                className="flex flex-col items-center gap-2"
+              >
+                <span
+                  className={cn(
+                    "text-sm",
+                    "text-content-system-global-primary"
+                  )}
+                >
+                  Both {size}
+                </span>
+                <Button variant={variant} size={size}>
+                  <i className="ri-search-line"></i>
+                  Label
+                  <i className="ri-arrow-down-s-line"></i>
                 </Button>
               </div>
             ))}
