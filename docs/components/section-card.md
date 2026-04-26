@@ -1,0 +1,275 @@
+---
+name: SectionCard
+title: SectionCard
+description: Sectioned card container with a colored title badge for grouping related content like forms, tables, or lists.
+category: layout
+group: Layout & Containers
+tags: [layout, card, section, container, form, group]
+status: stable
+version: 1.1.22
+dependencies:
+  - "class-variance-authority": "^0.7.0"
+---
+
+# SectionCard
+
+> A card container with an optional colored title badge. Use it to group related content — custom field forms, tables, settings groups — under a clear, color-coded heading.
+
+## Installation
+
+```bash
+npx torch-glare add SectionCard
+```
+
+## Import
+
+```typescript
+import { SectionCard, type SectionColor } from "@/components/SectionCard";
+```
+
+## Basic Usage
+
+```tsx
+import { SectionCard } from "@/components/SectionCard";
+
+export function Example() {
+  return (
+    <SectionCard color="Blue" title="Project details">
+      <p className="text-content-presentation-action-light-primary py-4">
+        Card body content goes here.
+      </p>
+    </SectionCard>
+  );
+}
+```
+
+## API Reference
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `color` | `SectionColor` | `"Blue"` | Color of the title badge. One of `Blue`, `Yellow`, `Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`. |
+| `title` | `ReactNode` | — | Title rendered inside the colored badge. Optional — when omitted, the header is hidden entirely. Accepts any ReactNode (string, JSX with icons, links, etc.). |
+| `containerClassName` | `string` | — | Class name applied to the outer container (alongside `className`). |
+| `headerClassName` | `string` | — | Class name applied to the header wrapper around the title badge. |
+| `bodyClassName` | `string` | — | Class name applied to the body wrapper holding `children`. |
+| `className` | `string` | — | Standard React class name on the outer container. |
+| `children` | `ReactNode` | — | Body content. |
+| `...rest` | `HTMLAttributes<HTMLDivElement>` | — | All standard div props except `title` (which is overridden). |
+
+### TypeScript
+
+```typescript
+export type SectionColor =
+  | "Blue"
+  | "Yellow"
+  | "Green"
+  | "Red"
+  | "Orange"
+  | "Purple"
+  | "Pink"
+  | "Gray";
+
+export interface SectionCardProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+  color?: SectionColor;
+  title?: ReactNode;
+  containerClassName?: string;
+  headerClassName?: string;
+  bodyClassName?: string;
+}
+```
+
+The component is a `forwardRef<HTMLDivElement, SectionCardProps>`.
+
+## Examples
+
+### All Colors
+
+```tsx
+import { SectionCard, type SectionColor } from "@/components/SectionCard";
+
+const COLORS: SectionColor[] = [
+  "Blue",
+  "Yellow",
+  "Green",
+  "Red",
+  "Orange",
+  "Purple",
+  "Pink",
+  "Gray",
+];
+
+export function AllColors() {
+  return (
+    <div className="flex flex-col gap-[24px]">
+      {COLORS.map((color) => (
+        <SectionCard key={color} color={color} title={`${color} section`}>
+          <p className="text-content-presentation-action-light-primary py-4">
+            This is a {color.toLowerCase()} sectioned card.
+          </p>
+        </SectionCard>
+      ))}
+    </div>
+  );
+}
+```
+
+### No Title
+
+When `title` is omitted, the header is hidden but the body padding remains.
+
+```tsx
+<SectionCard>
+  <p className="text-content-presentation-action-light-primary py-4">
+    A SectionCard without a title — header is hidden, body still padded.
+  </p>
+</SectionCard>
+```
+
+### Rich Title with Icon
+
+`title` accepts any ReactNode, so you can pass JSX with icons, counts, links, etc.
+
+```tsx
+<SectionCard
+  color="Purple"
+  title={
+    <span className="flex items-center gap-[6px]">
+      <i className="ri-magic-line" />
+      Rich title with icon
+    </span>
+  }
+>
+  <p className="text-content-presentation-action-light-primary py-4">
+    The title prop is fully customizable.
+  </p>
+</SectionCard>
+```
+
+### Custom Fields Form
+
+A common pattern: pair `SectionCard` with a row layout to build labeled-field forms.
+
+```tsx
+import { type ReactNode } from "react";
+import { SectionCard } from "@/components/SectionCard";
+import { InputField } from "@/components/InputField";
+import { ActionButton } from "@/components/ActionButton";
+
+export function CustomFieldsForm() {
+  return (
+    <SectionCard
+      color="Blue"
+      title={
+        <span className="flex items-center gap-[6px]">
+          <i className="ri-edit-box-line" />
+          Custom fields
+        </span>
+      }
+    >
+      <FieldRow
+        label="Name"
+        required
+        right={
+          <div className="flex flex-1 items-center gap-[12px]">
+            <InputField placeholder="First Name*" className="flex-1" />
+            <InputField placeholder="Last Name*" className="flex-1" />
+          </div>
+        }
+      />
+
+      <RowDivider />
+
+      <FieldRow
+        label="Department"
+        right={<InputField placeholder="Write Hint Here" className="flex-1" />}
+      />
+
+      <RowDivider />
+
+      <FieldRow
+        label="Alias names"
+        right={
+          <InputField
+            placeholder="Write Hint Here"
+            className="flex-1"
+            childrenSide={
+              <ActionButton aria-label="Add alias name">
+                <i className="ri-add-line" />
+              </ActionButton>
+            }
+          />
+        }
+      />
+    </SectionCard>
+  );
+}
+
+interface FieldRowProps {
+  label: string;
+  required?: boolean;
+  right: ReactNode;
+}
+
+function FieldRow({ label, required, right }: FieldRowProps) {
+  return (
+    <div className="flex items-center gap-[24px] py-[18px]">
+      <div className="flex w-[220px] shrink-0 items-center gap-[6px]">
+        <span className="typography-body-medium-regular text-content-presentation-action-light-primary">
+          {label}
+        </span>
+        {required && (
+          <span className="typography-body-small-medium text-content-presentation-state-negative">
+            (Required)
+          </span>
+        )}
+      </div>
+      <div className="flex flex-1 items-center">{right}</div>
+    </div>
+  );
+}
+
+function RowDivider() {
+  return <div className="h-px w-full bg-border-presentation-global-primary" />;
+}
+```
+
+### Custom Layout (override defaults)
+
+Use `containerClassName`, `headerClassName`, and `bodyClassName` to override the built-in spacing and width without losing the title/body structure.
+
+```tsx
+<SectionCard
+  color="Green"
+  title="Compact card"
+  containerClassName="w-[600px] pt-[4px] pb-[16px]"
+  bodyClassName="px-[24px]"
+>
+  <p className="text-content-presentation-action-light-primary py-2">
+    Tighter, narrower variant.
+  </p>
+</SectionCard>
+```
+
+## Patterns
+
+- **Color coding**: Use distinct colors to help users scan a page of multiple sections (e.g., Blue for primary forms, Yellow for warnings, Red for destructive zones).
+- **No-title sections**: Drop the `title` prop entirely when the section's purpose is obvious from context — keeps the body padding without the visual weight of a header.
+- **Composing with form fields**: `SectionCard` does not impose any inner layout — pair it with helpers like the `FieldRow` pattern above, or with `InputField`, `Form`, or `FieldSection` for more structured forms.
+- **Default width**: The component ships with `w-[1100px]`. Override via `containerClassName="w-full"` (or any specific width) for narrower containers.
+
+## Accessibility
+
+- The container is a plain `<div>`. If the section represents a distinct landmark, add `role="region"` and an `aria-label` (or use `aria-labelledby` pointing at the title).
+- The title is rendered as styled text inside a badge `<div>`, not as a heading element. If the section needs a heading semantically, wrap your `title` content in an appropriate `<h2>`/`<h3>` and reset its margin via Tailwind classes.
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| Card overflows on small screens | Default width is `w-[1100px]`. Override with `containerClassName="w-full"` or a smaller fixed width. |
+| Title not showing | The `title` prop is optional — omitting it hides the entire header. Pass any non-null `ReactNode` to render it. |
+| Badge color looks wrong | `color` only accepts the predefined `SectionColor` values. For custom badge colors, override via `headerClassName` and a custom child node. |
+| Need a different background | The body uses `bg-background-presentation-form-base`. Override via `containerClassName` (your class wins via `cn()` merging). |

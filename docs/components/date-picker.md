@@ -579,6 +579,59 @@ describe('DatePicker', () => {
 })
 ```
 
+## Known Limitations & Frontend Patterns
+
+### `onChange` payload type does not match what TypeScript thinks
+
+`DatePicker` props extend `HTMLAttributes<HTMLInputElement>`, which makes `onChange` look like `(e: ChangeEvent<HTMLInputElement>) => void` where `e.target.value: string`. **At runtime the value is a `Date | Date[] | DateRange`**, not a string — the component dispatches a hand-rolled pseudo-event with the typed payload behind a `string` type assertion.
+
+**Workaround — cast through `unknown` on every call site:**
+
+```tsx
+<DatePicker
+  mode="single"
+  value={startDate}
+  onChange={(e) =>
+    setStartDate(e.target.value as unknown as Date | undefined)
+  }
+/>
+```
+
+For `mode="multiple"`:
+
+```tsx
+onChange={(e) => setDates(e.target.value as unknown as Date[] | undefined)}
+```
+
+For `mode="range"`:
+
+```tsx
+onChange={(e) => setRange(e.target.value as unknown as DateRange | undefined)}
+```
+
+The `as unknown as Date` shape is required — TypeScript will reject `as Date` directly because `string` and `Date` don't overlap.
+
+### `TimePickerValue` interface — `hour`/`minute` are strings, not numbers
+
+The shipped runtime uses `string` for `hour`, `minute`, and `time` (`"AM" | "PM"`). If you derive your own state from `TimePickerValue`, type those fields as `string`, not `number`, regardless of what older docs claim.
+
+### `npx torch-glare add DatePicker` does not install `utils/dateFormat.ts`
+
+The CLI ships `DatePicker.tsx` without copying the `dateFormat.ts` utility it imports, so the component fails to build immediately after install:
+
+```
+[plugin:vite:import-analysis] Failed to resolve import "../utils/dateFormat"
+from "DatePicker.tsx".
+```
+
+**Workaround until the CLI is fixed:** create `utils/dateFormat.ts` manually with the three exports the component needs:
+
+- `TimePickerValue` (`{ hour: string; minute: string; time: "AM" | "PM" }`)
+- `applyTimeToDateValue(value, timePickerValue)` — applies the time picker value to the date value
+- `formatDateValueToString(value, timePickerValue, dateFormat)` — formats the date value to a display string
+
+Reverse-engineer the implementation from the call sites in `DatePicker.tsx` until the CLI copies it automatically.
+
 ## Accessibility
 
 - **Keyboard Navigation**:

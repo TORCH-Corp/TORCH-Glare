@@ -482,6 +482,69 @@ export const DialogCloseButton: React.ForwardRefExoticComponent<
 >
 ```
 
+## Known Limitations & Frontend Patterns
+
+### `DialogContent` ships without background, padding, border, or sizing
+
+The base classes on the shipped `DialogContent` are missing every property a usable dialog panel needs — no background color (transparent), no padding (form fields flush against the edge), no border / rounded corners, `w-fit` (so the panel sizes to content), and no `max-height` / overflow handling. Out of the box, dialogs are visually broken and tall forms get cut off.
+
+**Override pattern** — wrap or replace the shipped `DialogContent` with these defaults so you don't have to repeat them on every consumer:
+
+```tsx
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { cn } from "@/utils/cn";
+
+const DialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPrimitive.Portal>
+    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/80" />
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        "fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%]",
+        "flex flex-col gap-4 p-6 rounded-2xl",
+        "border border-border-presentation-global-primary",
+        "bg-background-presentation-form-base",
+        "shadow-2xl",
+        "max-h-[90vh] overflow-y-auto",
+        "duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Content>
+  </DialogPrimitive.Portal>
+));
+```
+
+Critical defaults:
+
+- `bg-background-presentation-form-base` — solid background using the design token
+- `border border-border-presentation-global-primary rounded-2xl` — visible panel
+- `p-6` — sensible padding
+- `w-full max-w-lg` — consistent 512 px width; override per-dialog with `className="max-w-2xl"` etc.
+- `max-h-[90vh] overflow-y-auto` — long forms scroll instead of getting clipped
+
+### `DialogTitle` with icon
+
+Plain `<DialogTitle>Create Account</DialogTitle>` lacks visual hierarchy. Standard pattern across production dialogs:
+
+```tsx
+<DialogHeader>
+  <DialogTitle>
+    <div className="flex items-center gap-2">
+      <i className="ri-bank-line text-content-presentation-state-information" />
+      <span>Create Account</span>
+    </div>
+  </DialogTitle>
+</DialogHeader>
+```
+
+Pick an icon that matches the entity (`ri-bank-line` for accounts, `ri-calendar-line` for fiscal periods, `ri-receipt-line` for vouchers, etc.).
+
 ## Common Patterns
 
 ### Alert/Confirmation Pattern

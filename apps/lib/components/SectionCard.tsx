@@ -14,7 +14,7 @@ const titleBadge = cva(
         Orange: "bg-red-orange-900",
         Purple: "bg-violet-900",
         Pink: "bg-medium-violet-red-900",
-        Gray: "bg-background-presentation-button-primary",
+        Gray: "bg-background-presentation-badge-gray",
       },
     },
     defaultVariants: { color: "Blue" },

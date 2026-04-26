@@ -426,6 +426,42 @@ test('InputField meets WCAG standards', async () => {
 })
 ```
 
+## Known Limitations & Frontend Patterns
+
+### Form-row alignment (h-10)
+
+When mixing `InputField` with `Select`, `<input type="date">`, or other form controls in a multi-column row, default heights don't always match. The shipped pattern that keeps everything on a 40 px baseline:
+
+```tsx
+<InputField
+  className="h-10"
+  icon={<i className="ri-hashtag text-base" />}
+  placeholder="e.g. JV-001"
+  errorMessage={errors.code?.message}
+  toolTipSide="top"
+  {...register("code")}
+/>
+```
+
+Recommendations:
+
+- Pass `className="h-10"` on every form-context `InputField`. Pair with `Select` set to `className="w-full h-10"` so the row aligns.
+- Use `errorMessage` + `toolTipSide` instead of rendering a separate `<p>` below the field — the built-in tooltip is less visually noisy and is what the component is designed for.
+- Add an `icon` prop (`<i className="ri-* text-base" />`) for visual scannability; this is standard across most form fields in production apps.
+
+> ⚠️ **Do not use `variant="SystemStyle"`** to "fix" the form look — `SystemStyle` is reserved for internal library system surfaces. Use the default `PresentationStyle` plus `className="h-10"`. See the rules banner at the top of every doc response.
+
+### Field wrapper for forms
+
+Wrap each labeled field in `flex flex-col gap-1.5` (not `space-y-1.5`) so labels align cleanly at the top of multi-column rows:
+
+```tsx
+<div className="flex flex-col gap-1.5">
+  <Label>Voucher Number *</Label>
+  <InputField className="h-10" icon={...} {...register("number")} />
+</div>
+```
+
 ## Accessibility
 
 ### Keyboard Support

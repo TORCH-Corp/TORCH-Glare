@@ -747,6 +747,81 @@ test('Table meets WCAG standards', async () => {
 })
 ```
 
+## Known Limitations & Frontend Patterns
+
+### `Table` defaults to `w-auto` — always pass `className="w-full"` for data tables
+
+The shipped `Table` base classes include `w-auto`, so the table sizes to its content. Inside a `Card`, `Dialog`, or any flex/grid container with short rows, the table collapses to a narrow column on the left with empty space on the right. This is rarely what you want for a data list.
+
+**Always pass `className="w-full"`** for list/data tables:
+
+```tsx
+<Card className="p-0 overflow-hidden">
+  <CardContent className="p-0 overflow-x-auto">
+    <Table className="w-full">
+      <TableHeader>
+        <TableRow>
+          <TableHead>Number</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead className="text-right">Total Debit</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>...</TableBody>
+    </Table>
+  </CardContent>
+</Card>
+```
+
+**Wrap with `overflow-x-auto`** on the parent so wide tables (10+ columns) scroll horizontally inside the card instead of overflowing it.
+
+### Numeric columns: `text-right` on both head and cell
+
+Right-align debit, credit, amount, count columns on **both** `TableHead` and the corresponding `TableCell`:
+
+```tsx
+<TableHead className="text-right">Total Debit</TableHead>
+<TableCell className="text-right font-mono">{voucher.totalDebit}</TableCell>
+```
+
+Use `font-mono` on the cell so digits line up across rows.
+
+### `whitespace-nowrap` on date and numeric cells
+
+Dates and amounts wrap awkwardly when the column is narrow. Add `whitespace-nowrap` on those cells (not on heads):
+
+```tsx
+<TableCell className="whitespace-nowrap">{formatDate(voucher.date)}</TableCell>
+```
+
+### `TableCell` force-wraps children — use `childrenClassName` to override
+
+`TableCell` unconditionally wraps children in an inner `<div>` with `flex justify-start items-center gap-1 min-w-[200px] overflow-hidden` plus a fade-out gradient mask. Three common breakages:
+
+1. **Empty-state rows don't center.** A `flex flex-col items-center` empty state ends up flush left because the outer wrapper's `justify-start` already decided alignment.
+2. **Multi-line content is clipped** by `overflow-hidden` + the gradient mask.
+3. **`flex-col` doesn't work** because the wrapper is `flex` (row) by default.
+
+**Workaround — use the `childrenClassName` prop**, which merges into the inner wrapper, and skip your own outer `<div>`:
+
+```tsx
+<TableRow>
+  <TableCell
+    colSpan={7}
+    childrenClassName="flex flex-col items-center justify-center gap-3 py-12 w-full min-w-0 text-content-presentation-global-secondary"
+  >
+    <i className="ri-inbox-line text-4xl opacity-60" />
+    <p className="typography-body-medium-regular">No data</p>
+    <p className="typography-body-small-regular opacity-80">Try adjusting filters</p>
+  </TableCell>
+</TableRow>
+```
+
+Key overrides on `childrenClassName`:
+
+- `flex flex-col` overrides the default `flex-row`
+- `items-center justify-center` overrides `justify-start`
+- `w-full min-w-0` overrides the hardcoded `min-w-[200px]`
+
 ## Accessibility
 
 ### Keyboard Support
