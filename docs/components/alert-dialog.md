@@ -456,6 +456,166 @@ function PermissionAlert() {
 | `variant` | `ButtonVariant` | `'RedSecStyle'` | Button variant |
 | `buttonType` | `'button' \| 'icon'` | `'icon'` | Button type |
 
+## Known Limitations & Frontend Patterns
+
+### Every AlertDialog subcomponent ships without panel/typography defaults — and worse than `Dialog`
+
+`AlertDialogContent` ships with `p-[12px]` (too tight), `AlertDialogHeader` with `flex justify-between` (instead of `flex-col` for stacked title+description), `AlertDialogFooter` with `flex-col-reverse sm:flex-row` (vertical-on-mobile), and `AlertDialogDescription` with the bizarre `bg-background-presentation-form-base border ... rounded-[8px] p-[24px_48px_48px_48px]` — a 48 px-padded bordered box wrapped around what should be a one-line subtitle.
+
+**Production-tested override** — patch `AlertDialog.tsx` once after `npx torch-glare add AlertDialog`. Same surface-token corrections as `Dialog`: use `bg-background-presentation-body-primary` and `text-content-presentation-global-*`, never `*-system-*` and never `form-base`.
+
+```tsx
+"use client";
+
+import * as React from "react";
+import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
+import { cn } from "@/utils/cn";
+
+const AlertDialog = AlertDialogPrimitive.Root;
+const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
+const AlertDialogPortal = AlertDialogPrimitive.Portal;
+
+const AlertDialogOverlay = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Overlay
+    ref={ref}
+    className={cn(
+      "fixed inset-0 z-50 bg-black/60",
+      "data-[state=open]:animate-in data-[state=closed]:animate-out",
+      "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className,
+    )}
+    {...props}
+  />
+));
+AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
+
+const AlertDialogContent = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPortal>
+    <AlertDialogOverlay />
+    <AlertDialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        "fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]",
+        "flex flex-col items-stretch justify-start",
+        "w-[92vw] sm:max-w-md",
+        "bg-background-presentation-body-primary",
+        "border border-border-presentation-global-primary",
+        "rounded-xl shadow-lg",
+        "p-0 gap-0 overflow-hidden",
+        "duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out",
+        className,
+      )}
+      {...props}
+    />
+  </AlertDialogPortal>
+));
+AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
+
+const AlertDialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("flex flex-col space-y-1.5 text-left px-6 pt-5 pb-2", className)}
+    {...props}
+  />
+);
+AlertDialogHeader.displayName = "AlertDialogHeader";
+
+const AlertDialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("flex flex-row justify-end gap-2 px-6 py-4", className)}
+    {...props}
+  />
+);
+AlertDialogFooter.displayName = "AlertDialogFooter";
+
+const AlertDialogTitle = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Title
+    ref={ref}
+    className={cn(
+      "typography-headers-small-semibold text-content-presentation-global-primary",
+      className,
+    )}
+    {...props}
+  />
+));
+AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
+
+const AlertDialogDescription = React.forwardRef<
+  React.ElementRef<typeof AlertDialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Description
+    ref={ref}
+    className={cn(
+      "typography-body-small-regular text-content-presentation-global-secondary px-6 pb-2",
+      className,
+    )}
+    {...props}
+  />
+));
+AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;
+
+const AlertDialogAction = AlertDialogPrimitive.Action;
+const AlertDialogCancel = AlertDialogPrimitive.Cancel;
+
+export {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+};
+```
+
+Critical default decisions:
+
+- **Drop the bordered box on `AlertDialogDescription`.** The shipped default wraps the description in a 48 px-padded bordered box, which produces a visually heavy nested panel. Description is a one-line subtitle — same typography pattern as `DialogDescription`.
+- **`AlertDialogHeader` → `flex flex-col` (NOT `flex justify-between`)** so title and description stack with proper rhythm.
+- **`AlertDialogFooter` → `flex-row justify-end`** on all viewports, no `flex-col-reverse sm:flex-row` weirdness.
+- **`AlertDialogDescription` carries `px-6 pb-2`** since alert dialogs typically don't have a separate body section between header and footer.
+- Surface and text tokens are **identical to `Dialog`** — `bg-background-presentation-body-primary` + `text-content-presentation-global-primary` + `text-content-presentation-global-secondary`. Never `*-system-*`. Never `form-base`. Never `action-secondary`.
+
+### Standard usage after the override
+
+Once the patches above are in place, every consumer renders correctly with bare components:
+
+```tsx
+<AlertDialog open={open} onOpenChange={setOpen}>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Delete this template?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. The template will be permanently removed.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel asChild>
+        <Button type="button" variant="BorderStyle" size="M">Cancel</Button>
+      </AlertDialogCancel>
+      <AlertDialogAction asChild>
+        <Button type="button" variant="RedColStyle" size="M" onClick={handleDelete}>
+          Delete
+        </Button>
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+```
+
 ## Variants
 
 ### Default Variant

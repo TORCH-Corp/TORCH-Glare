@@ -615,6 +615,31 @@ The `as unknown as Date` shape is required — TypeScript will reject `as Date` 
 
 The shipped runtime uses `string` for `hour`, `minute`, and `time` (`"AM" | "PM"`). If you derive your own state from `TimePickerValue`, type those fields as `string`, not `number`, regardless of what older docs claim.
 
+### Internal `<Picker>` value/onChange types are incompatible with `TimePickerValue` — `tsc` fails out of the box
+
+`DatePicker.tsx` wraps `torch-react-mobile-picker`'s `<Picker>` and passes a concrete `TimePickerValue` (`{ hour, minute, time }`) where the picker's generic `PickerValue` (`Record<string, string>`) is expected. Strict TypeScript builds fail immediately:
+
+```
+DatePicker.tsx: Type 'TimePickerValue' is not assignable to type 'PickerValue'.
+  Index signature for type 'string' is missing in type 'TimePickerValue'.
+DatePicker.tsx: Type '(e: TimePickerValue) => void' is not assignable to type
+  '(value: PickerValue, key: string) => void'.
+```
+
+**Workaround — add `as any` casts at the `<Picker>` boundary** (and only there, so consumer types stay honest):
+
+```tsx
+<Picker
+  value={value as any}
+  onChange={((e: TimePickerValue) => {
+    onChange(e);
+  }) as any}
+  wheelMode="normal"
+>
+```
+
+Patch this manually after `npx torch-glare add DatePicker` — otherwise `pnpm build` (which runs `tsc -b`) will fail. The same `Ref` import in the file is also unused and trips `noUnusedLocals`; remove it while you're in there.
+
 ### `npx torch-glare add DatePicker` does not install `utils/dateFormat.ts`
 
 The CLI ships `DatePicker.tsx` without copying the `dateFormat.ts` utility it imports, so the component fails to build immediately after install:
