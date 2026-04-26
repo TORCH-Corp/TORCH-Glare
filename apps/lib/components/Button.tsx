@@ -61,7 +61,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             {},
             <div
               className={cn(
-                "px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0",
+                "flex items-center justify-center [&>:is(i,svg):first-child]:mr-[3px] [&>:is(i,svg):last-child]:ml-[3px] [&>:is(i,svg):only-child]:m-0 [&:has(>:is(i,svg):last-child):not(:has(>:is(i,svg):first-child))]:pl-[6px] [&:has(>:is(i,svg):first-child):not(:has(>:is(i,svg):last-child))]:pr-[6px]",
                 containerClassName,
               )}
             >
@@ -72,7 +72,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         ) : (
           <div
             className={cn(
-              "px-[3px] flex items-center justify-center gap-[3px] has-[>i]:p-0",
+              "flex items-center justify-center [&>:is(i,svg):first-child]:mr-[3px] [&>:is(i,svg):last-child]:ml-[3px] [&>:is(i,svg):only-child]:m-0 [&:has(>:is(i,svg):last-child):not(:has(>:is(i,svg):first-child))]:pl-[6px] [&:has(>:is(i,svg):first-child):not(:has(>:is(i,svg):last-child))]:pr-[6px]",
               containerClassName,
             )}
           >
