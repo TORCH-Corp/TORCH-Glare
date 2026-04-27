@@ -16,6 +16,11 @@ const Drawer = ({
 )
 Drawer.displayName = "Drawer"
 
+const DrawerNested = (
+    props: React.ComponentProps<typeof DrawerPrimitive.NestedRoot>
+) => <DrawerPrimitive.NestedRoot {...props} />
+DrawerNested.displayName = "DrawerNested"
+
 const DrawerTrigger = DrawerPrimitive.Trigger
 
 const DrawerPortal = DrawerPrimitive.Portal
@@ -34,21 +39,28 @@ const DrawerOverlay = React.forwardRef<
 ))
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 
+interface DrawerContentProps
+    extends React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> {
+    showHandle?: boolean
+}
+
 const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+    DrawerContentProps
+>(({ className, children, showHandle = true, ...props }, ref) => (
     <DrawerPortal>
         <DrawerOverlay />
         <DrawerPrimitive.Content
             ref={ref}
             className={cn(
-                "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] bg-background-system-body-primary m-1 border-border-system-global-primary",
+                "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] bg-background-presentation-form-field-primary m-1 border border-border-presentation-action-primary",
                 className
             )}
             {...props}
         >
-            <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+            {showHandle && (
+                <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-background-presentation-action-disabled" />
+            )}
             {children}
         </DrawerPrimitive.Content>
     </DrawerPortal>
@@ -98,7 +110,10 @@ const DrawerDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DrawerPrimitive.Description
         ref={ref}
-        className={cn("text-sm text-muted-foreground", className)}
+        className={cn(
+            "typography-body-small-regular text-content-presentation-action-light-secondary",
+            className
+        )}
         {...props}
     />
 ))
@@ -106,6 +121,7 @@ DrawerDescription.displayName = DrawerPrimitive.Description.displayName
 
 export {
     Drawer,
+    DrawerNested,
     DrawerPortal,
     DrawerOverlay,
     DrawerTrigger,
