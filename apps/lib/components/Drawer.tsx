@@ -46,6 +46,13 @@ interface DrawerContentProps extends React.ComponentPropsWithoutRef<
   showHandle?: boolean;
   notch?: React.ReactNode;
   notchSide?: "left" | "right";
+  /**
+   * Show the dark "tray" frame (and panel border + inset shadow) around the
+   * drawer panel. Defaults to `true`. Set to `false` for bottom-anchored
+   * drawers (slide up from below) where a surrounding frame would just look
+   * like a stray border at the top.
+   */
+  framed?: boolean;
   wrapperClassName?: string;
   trayClassName?: string;
 }
@@ -61,12 +68,15 @@ const DrawerContent = React.forwardRef<
       showHandle = true,
       notch,
       notchSide = "left",
+      framed: framedProp,
       wrapperClassName,
       trayClassName,
       ...props
     },
     ref,
-  ) => (
+  ) => {
+    const framed = framedProp ?? true;
+    return (
     <DrawerPortal>
       <DrawerOverlay />
       <DrawerPrimitive.Content
@@ -89,18 +99,24 @@ const DrawerContent = React.forwardRef<
         )}
         <div
           className={cn(
-            "flex flex-1 flex-col p-1.5 bg-black-400 min-h-0 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]",
-            notch
+            "flex flex-1 flex-col min-h-0",
+            framed
+              ? "p-1.5 bg-black-400 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]"
+              : "p-0",
+            framed && notch
               ? notchSide === "right"
                 ? "rounded-tr-none rounded-tl-[22px] rounded-b-[22px]"
                 : "rounded-tl-none rounded-tr-[22px] rounded-b-[22px]"
-              : "rounded-t-[22px]",
+              : framed
+                ? "rounded-t-[22px]"
+                : "",
             trayClassName,
           )}
         >
           <div
             className={cn(
-              "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)] min-h-0",
+              "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
+              framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
               className,
             )}
           >
@@ -112,7 +128,8 @@ const DrawerContent = React.forwardRef<
         </div>
       </DrawerPrimitive.Content>
     </DrawerPortal>
-  ),
+    );
+  },
 );
 DrawerContent.displayName = "DrawerContent";
 

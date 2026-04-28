@@ -131,7 +131,7 @@ export default function DrawerPage() {
             <DrawerTrigger asChild>
               <Button variant="PrimeStyle">Open drawer</Button>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent framed={false}>
               <DrawerHeader>
                 <DrawerTitle>Basic drawer</DrawerTitle>
                 <DrawerDescription>
@@ -176,7 +176,7 @@ export default function DrawerPage() {
             <DrawerTrigger asChild>
               <Button variant="PrimeStyle">Open settings</Button>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent framed={false}>
               <DrawerHeader>
                 <DrawerTitle>Settings</DrawerTitle>
                 <DrawerDescription>
@@ -192,7 +192,7 @@ export default function DrawerPage() {
                       <i className="ri-arrow-right-s-line" />
                     </Button>
                   </DrawerTrigger>
-                  <DrawerContent>
+                  <DrawerContent framed={false}>
                     <DrawerHeader>
                       <DrawerTitle>Account</DrawerTitle>
                       <DrawerDescription>
@@ -223,7 +223,7 @@ export default function DrawerPage() {
                       <i className="ri-arrow-right-s-line" />
                     </Button>
                   </DrawerTrigger>
-                  <DrawerContent>
+                  <DrawerContent framed={false}>
                     <DrawerHeader>
                       <DrawerTitle>Notifications</DrawerTitle>
                       <DrawerDescription>
@@ -282,7 +282,7 @@ export default function DrawerPage() {
             <DrawerTrigger asChild>
               <Button variant="PrimeStyle">Checkout</Button>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent framed={false}>
               <DrawerHeader>
                 <DrawerTitle>Your cart</DrawerTitle>
                 <DrawerDescription>1 item — $129.00</DrawerDescription>
@@ -309,7 +309,7 @@ export default function DrawerPage() {
                   <DrawerTrigger asChild>
                     <Button variant="PrimeStyle">Continue to shipping</Button>
                   </DrawerTrigger>
-                  <DrawerContent>
+                  <DrawerContent framed={false}>
                     <DrawerHeader>
                       <DrawerTitle>Shipping</DrawerTitle>
                       <DrawerDescription>
@@ -349,7 +349,7 @@ export default function DrawerPage() {
                         <DrawerTrigger asChild>
                           <Button variant="PrimeStyle">Continue to payment</Button>
                         </DrawerTrigger>
-                        <DrawerContent>
+                        <DrawerContent framed={false}>
                           <DrawerHeader>
                             <DrawerTitle>Payment</DrawerTitle>
                             <DrawerDescription>
@@ -572,6 +572,7 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Open full-screen</Button>
             </DrawerTrigger>
             <DrawerContent
+              framed={false}
               wrapperClassName="inset-x-0 top-0 bottom-0 m-0 h-screen w-screen max-w-none"
             >
               <DrawerHeader className="flex flex-row items-center justify-between border-b border-border-presentation-action-disabled">
@@ -629,7 +630,7 @@ export default function DrawerPage() {
             <DrawerTrigger asChild>
               <Button variant="PrimeStyle">Open half-screen</Button>
             </DrawerTrigger>
-            <DrawerContent wrapperClassName="h-full max-h-[97vh]">
+            <DrawerContent framed={false} wrapperClassName="h-full max-h-[97vh]">
               <DrawerHeader>
                 <DrawerTitle>Comments</DrawerTitle>
                 <DrawerDescription>
