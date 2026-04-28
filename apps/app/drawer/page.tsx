@@ -475,6 +475,87 @@ export default function DrawerPage() {
         </section>
 
         {/* ============================================================== */}
+        {/* LEFT-SIDE DRAWER (RTL) */}
+        {/* ============================================================== */}
+        <section className="space-y-4">
+          <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+            Left-side (RTL)
+          </h2>
+          <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
+            Slides in from the left edge. Pass{" "}
+            <code className="px-1 rounded bg-background-presentation-action-disabled text-content-presentation-global-primary">
+              direction="left"
+            </code>{" "}
+            to{" "}
+            <code className="px-1 rounded bg-background-presentation-action-disabled text-content-presentation-global-primary">
+              Drawer
+            </code>
+            . Useful for RTL layouts, navigation menus, or mirrored side
+            panels. The example uses an app-style notch on the top-right
+            (mirrored from the right-side variant).
+          </p>
+
+          <Drawer direction="left">
+            <DrawerTrigger asChild>
+              <Button variant="PrimeStyle">Open left drawer</Button>
+            </DrawerTrigger>
+            <DrawerContent
+              showHandle={false}
+              notchSide="right"
+              wrapperClassName="top-2 left-2 bottom-2 right-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
+              className="rounded-tl-[10px] rounded-b-[10px]"
+              notch={
+                <DrawerNotch>
+                  <DrawerClose asChild>
+                    <DrawerNotchClose />
+                  </DrawerClose>
+                  <DrawerNotchPill color="Yellow">
+                    Open in new tab
+                    <i className="ri-arrow-right-up-line text-[12px]" />
+                  </DrawerNotchPill>
+                </DrawerNotch>
+              }
+            >
+              <DrawerHeader>
+                <DrawerHeaderTitle>
+                  <DrawerBadge color="Purple">Menu</DrawerBadge>
+                  <DrawerTitle>Navigation</DrawerTitle>
+                </DrawerHeaderTitle>
+              </DrawerHeader>
+
+              <div className="px-4 pb-4 space-y-2 flex-1 overflow-y-auto">
+                {[
+                  { icon: "ri-dashboard-line", label: "Dashboard" },
+                  { icon: "ri-team-line", label: "Customers" },
+                  { icon: "ri-shopping-bag-line", label: "Orders" },
+                  { icon: "ri-bar-chart-line", label: "Analytics" },
+                  { icon: "ri-settings-line", label: "Settings" },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    className="flex w-full items-center gap-3 p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base hover:bg-background-presentation-action-hover transition-colors"
+                  >
+                    <i
+                      className={`${item.icon} text-content-presentation-global-primary`}
+                    />
+                    <span className="typography-body-medium-regular text-content-presentation-global-primary">
+                      {item.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <DrawerFooter>
+                <DrawerClose asChild>
+                  <Button variant="BorderStyle">Close</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        </section>
+
+        {/* ============================================================== */}
         {/* FULL-SCREEN DRAWER */}
         {/* ============================================================== */}
         <section className="space-y-4">

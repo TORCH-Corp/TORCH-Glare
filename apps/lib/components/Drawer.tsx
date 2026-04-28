@@ -45,6 +45,7 @@ interface DrawerContentProps extends React.ComponentPropsWithoutRef<
 > {
   showHandle?: boolean;
   notch?: React.ReactNode;
+  notchSide?: "left" | "right";
   wrapperClassName?: string;
   trayClassName?: string;
 }
@@ -59,6 +60,7 @@ const DrawerContent = React.forwardRef<
       children,
       showHandle = true,
       notch,
+      notchSide = "left",
       wrapperClassName,
       trayClassName,
       ...props
@@ -75,12 +77,23 @@ const DrawerContent = React.forwardRef<
         )}
         {...props}
       >
-        {notch && <div className="self-start">{notch}</div>}
+        {notch && (
+          <div className={notchSide === "right" ? "self-end" : "self-start"}>
+            {React.isValidElement(notch)
+              ? React.cloneElement(
+                  notch as React.ReactElement<{ side?: "left" | "right" }>,
+                  { side: notchSide },
+                )
+              : notch}
+          </div>
+        )}
         <div
           className={cn(
             "flex flex-1 flex-col p-1.5 bg-black-400 min-h-0 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]",
             notch
-              ? "rounded-tl-none rounded-tr-[22px] rounded-b-[22px]"
+              ? notchSide === "right"
+                ? "rounded-tr-none rounded-tl-[22px] rounded-b-[22px]"
+                : "rounded-tl-none rounded-tr-[22px] rounded-b-[22px]"
               : "rounded-t-[22px]",
             trayClassName,
           )}
@@ -184,25 +197,20 @@ const DrawerFooter = ({
 );
 DrawerFooter.displayName = "DrawerFooter";
 
+interface DrawerNotchProps extends React.HTMLAttributes<HTMLDivElement> {
+  side?: "left" | "right";
+}
+
 const DrawerNotch = ({
   className,
   children,
+  side = "left",
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className="relative flex flex-row items-end">
-    <div
-      className={cn(
-        "flex flex-row items-center gap-1 rounded-t-[18px] bg-black-400 px-1.5 pt-1.5 pb-1.5",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-    {/* Concave corner connector — bridges the notch's bottom-right to the
-        tray's top-left with a smooth quarter-circle curve. Sits at the
-        bottom-right of the notch row and flows down into the tray's top
-        padding strip, both filled with the same #434446. */}
+}: DrawerNotchProps) => {
+  // Wedge bridges the notch's bottom-edge corner into the tray's top edge.
+  // For a left-attached notch (the default), the wedge sits at the notch's
+  // bottom-right; for a right-attached notch, mirror it to the bottom-left.
+  const wedge = (
     <svg
       aria-hidden
       width="12"
@@ -210,10 +218,34 @@ const DrawerNotch = ({
       viewBox="0 0 12 12"
       className="block shrink-0 self-end"
     >
-      <path d="M 0 0 L 0 12 L 12 12 A 12 12 0 0 1 0 0 Z" fill="#434446" />
+      <path
+        d={
+          side === "right"
+            ? "M 12 0 L 12 12 L 0 12 A 12 12 0 0 0 12 0 Z"
+            : "M 0 0 L 0 12 L 12 12 A 12 12 0 0 1 0 0 Z"
+        }
+        fill="#434446"
+      />
     </svg>
-  </div>
-);
+  );
+
+  return (
+    <div className="relative flex flex-row items-end">
+      {side === "right" && wedge}
+      <div
+        className={cn(
+          "flex items-center gap-1 rounded-t-[18px] bg-black-400 px-1.5 pt-1.5 pb-1.5",
+          side === "right" ? "flex-row-reverse" : "flex-row",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+      {side === "left" && wedge}
+    </div>
+  );
+};
 DrawerNotch.displayName = "DrawerNotch";
 
 const DrawerNotchClose = React.forwardRef<
