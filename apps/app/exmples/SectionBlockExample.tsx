@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { SectionCard, type SectionColor } from "@/components/SectionCard";
+import { SectionBlock, type SectionColor } from "@/components/SectionBlock";
 import { InputField } from "@/components/InputField";
 import { ActionButton } from "@/components/ActionButton";
 import { cn } from "@/utils/cn";
@@ -15,7 +15,7 @@ const COLORS: SectionColor[] = [
   "Gray",
 ];
 
-export default function SectionCardExample() {
+export default function SectionBlockExample() {
   return (
     <div className="flex flex-col gap-[24px] w-full items-center">
       <h1
@@ -24,12 +24,12 @@ export default function SectionCardExample() {
           "text-content-system-global-primary",
         )}
       >
-        SectionCard
+        SectionBlock
       </h1>
 
       {/* All colors, default content */}
       {COLORS.map((color) => (
-        <SectionCard key={color} color={color} title={`${color} section`}>
+        <SectionBlock key={color} color={color} title={`${color} section`}>
           <p className="text-content-system-global-primary py-4">
             This is a {color.toLowerCase()} sectioned card. The badge above
             inherits the color variant; the body uses the form-base background
@@ -38,18 +38,18 @@ export default function SectionCardExample() {
           <p className="text-content-system-global-secondary pb-2">
             Replace this content with anything — forms, tables, lists, etc.
           </p>
-        </SectionCard>
+        </SectionBlock>
       ))}
 
       {/* No-title variant */}
-      <SectionCard>
+      <SectionBlock>
         <p className="text-content-system-global-primary py-4">
-          A SectionCard without a title — header is hidden, body still padded.
+          A SectionBlock without a title — header is hidden, body still padded.
         </p>
-      </SectionCard>
+      </SectionBlock>
 
       {/* Custom rich title */}
-      <SectionCard
+      <SectionBlock
         color="Purple"
         title={
           <span className="flex items-center gap-[6px]">
@@ -62,10 +62,10 @@ export default function SectionCardExample() {
           The `title` prop accepts any ReactNode — pass JSX for icons, links,
           counts, etc.
         </p>
-      </SectionCard>
+      </SectionBlock>
 
       {/* Custom fields form (matches reference screenshot) */}
-      <SectionCard
+      <SectionBlock
         color="Blue"
         title={
           <span className="flex items-center gap-[6px]">
@@ -108,7 +108,7 @@ export default function SectionCardExample() {
             />
           }
         />
-      </SectionCard>
+      </SectionBlock>
     </div>
   );
 }

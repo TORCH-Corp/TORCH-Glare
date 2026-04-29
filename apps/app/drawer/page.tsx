@@ -21,7 +21,7 @@ import {
   DrawerNotchApp,
 } from "@/components/Drawer";
 import { Button } from "@/components/Button";
-import { SectionCard } from "@/components/SectionCard";
+import { SectionBlock } from "@/components/SectionBlock";
 import { InputField } from "@/components/InputField";
 import { LabeledCheckBox } from "@/components/LabeledCheckBox";
 import { LabeledRadio } from "@/components/LabeledRadio";
@@ -503,7 +503,7 @@ export default function DrawerPage() {
               showHandle={false}
               notchSide="right"
               wrapperClassName="top-2 left-2 bottom-2 right-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
-              className="rounded-tl-[10px] rounded-b-[10px]"
+              className="rounded-tl-[16px] rounded-b-[16px]"
               notch={
                 <DrawerNotch>
                   <DrawerClose asChild>
@@ -719,7 +719,7 @@ function FormDrawerContent({ notch }: { notch?: ReactNode }) {
       </DrawerHeader>
 
       <div className="flex-1 overflow-y-auto px-12 py-6 space-y-3">
-        <SectionCard
+        <SectionBlock
           color="Blue"
           title={
             <span className="flex items-center gap-[6px]">
@@ -756,9 +756,9 @@ function FormDrawerContent({ notch }: { notch?: ReactNode }) {
             label="Phone"
             right={<InputField placeholder="+1 555 0000" className="flex-1" />}
           />
-        </SectionCard>
+        </SectionBlock>
 
-        <SectionCard
+        <SectionBlock
           color="Purple"
           title={
             <span className="flex items-center gap-[6px]">
@@ -782,7 +782,7 @@ function FormDrawerContent({ notch }: { notch?: ReactNode }) {
             label="Postal code"
             right={<InputField placeholder="94103" className="flex-1" />}
           />
-        </SectionCard>
+        </SectionBlock>
       </div>
     </DrawerContent>
   );

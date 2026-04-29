@@ -23,7 +23,7 @@ const titleBadge = cva(
 
 export type SectionColor = NonNullable<VariantProps<typeof titleBadge>["color"]>;
 
-export interface SectionCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+export interface SectionBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   color?: SectionColor;
   title?: ReactNode;
   containerClassName?: string;
@@ -31,7 +31,7 @@ export interface SectionCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   bodyClassName?: string;
 }
 
-export const SectionCard = forwardRef<HTMLDivElement, SectionCardProps>(
+export const SectionBlock = forwardRef<HTMLDivElement, SectionBlockProps>(
   (
     {
       children,
@@ -68,4 +68,4 @@ export const SectionCard = forwardRef<HTMLDivElement, SectionCardProps>(
   },
 );
 
-SectionCard.displayName = "SectionCard";
+SectionBlock.displayName = "SectionBlock";

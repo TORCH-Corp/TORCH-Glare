@@ -64,7 +64,7 @@
         { "name": "Card", "version": "1.1.15", "documented": false },
         { "name": "CNLayout", "version": "1.1.15", "documented": false },
         { "name": "FieldSection", "version": "1.1.15", "documented": false },
-        { "name": "SectionCard", "version": "1.1.22", "documented": true },
+        { "name": "SectionBlock", "version": "1.1.22", "documented": true },
         { "name": "TreeSubLayout", "version": "1.1.15", "documented": false },
         { "name": "Divider", "version": "1.1.15", "documented": false },
         { "name": "ScrollArea", "version": "1.1.15", "documented": false }

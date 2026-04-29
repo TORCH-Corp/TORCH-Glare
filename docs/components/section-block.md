@@ -1,6 +1,6 @@
 ---
-name: SectionCard
-title: SectionCard
+name: SectionBlock
+title: SectionBlock
 description: Sectioned card container with a colored title badge for grouping related content like forms, tables, or lists.
 category: layout
 group: Layout & Containers
@@ -11,34 +11,34 @@ dependencies:
   - "class-variance-authority": "^0.7.0"
 ---
 
-# SectionCard
+# SectionBlock
 
 > A card container with an optional colored title badge. Use it to group related content — custom field forms, tables, settings groups — under a clear, color-coded heading.
 
 ## Installation
 
 ```bash
-npx torch-glare add SectionCard
+npx torch-glare add SectionBlock
 ```
 
 ## Import
 
 ```typescript
-import { SectionCard, type SectionColor } from "@/components/SectionCard";
+import { SectionBlock, type SectionColor } from "@/components/SectionBlock";
 ```
 
 ## Basic Usage
 
 ```tsx
-import { SectionCard } from "@/components/SectionCard";
+import { SectionBlock } from "@/components/SectionBlock";
 
 export function Example() {
   return (
-    <SectionCard color="Blue" title="Project details">
+    <SectionBlock color="Blue" title="Project details">
       <p className="text-content-presentation-action-light-primary py-4">
         Card body content goes here.
       </p>
-    </SectionCard>
+    </SectionBlock>
   );
 }
 ```
@@ -71,7 +71,7 @@ export type SectionColor =
   | "Pink"
   | "Gray";
 
-export interface SectionCardProps
+export interface SectionBlockProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   color?: SectionColor;
   title?: ReactNode;
@@ -81,14 +81,14 @@ export interface SectionCardProps
 }
 ```
 
-The component is a `forwardRef<HTMLDivElement, SectionCardProps>`.
+The component is a `forwardRef<HTMLDivElement, SectionBlockProps>`.
 
 ## Examples
 
 ### All Colors
 
 ```tsx
-import { SectionCard, type SectionColor } from "@/components/SectionCard";
+import { SectionBlock, type SectionColor } from "@/components/SectionBlock";
 
 const COLORS: SectionColor[] = [
   "Blue",
@@ -105,11 +105,11 @@ export function AllColors() {
   return (
     <div className="flex flex-col gap-[24px]">
       {COLORS.map((color) => (
-        <SectionCard key={color} color={color} title={`${color} section`}>
+        <SectionBlock key={color} color={color} title={`${color} section`}>
           <p className="text-content-presentation-action-light-primary py-4">
             This is a {color.toLowerCase()} sectioned card.
           </p>
-        </SectionCard>
+        </SectionBlock>
       ))}
     </div>
   );
@@ -121,11 +121,11 @@ export function AllColors() {
 When `title` is omitted, the header is hidden but the body padding remains.
 
 ```tsx
-<SectionCard>
+<SectionBlock>
   <p className="text-content-presentation-action-light-primary py-4">
-    A SectionCard without a title — header is hidden, body still padded.
+    A SectionBlock without a title — header is hidden, body still padded.
   </p>
-</SectionCard>
+</SectionBlock>
 ```
 
 ### Rich Title with Icon
@@ -133,7 +133,7 @@ When `title` is omitted, the header is hidden but the body padding remains.
 `title` accepts any ReactNode, so you can pass JSX with icons, counts, links, etc.
 
 ```tsx
-<SectionCard
+<SectionBlock
   color="Purple"
   title={
     <span className="flex items-center gap-[6px]">
@@ -145,22 +145,22 @@ When `title` is omitted, the header is hidden but the body padding remains.
   <p className="text-content-presentation-action-light-primary py-4">
     The title prop is fully customizable.
   </p>
-</SectionCard>
+</SectionBlock>
 ```
 
 ### Custom Fields Form
 
-A common pattern: pair `SectionCard` with a row layout to build labeled-field forms.
+A common pattern: pair `SectionBlock` with a row layout to build labeled-field forms.
 
 ```tsx
 import { type ReactNode } from "react";
-import { SectionCard } from "@/components/SectionCard";
+import { SectionBlock } from "@/components/SectionBlock";
 import { InputField } from "@/components/InputField";
 import { ActionButton } from "@/components/ActionButton";
 
 export function CustomFieldsForm() {
   return (
-    <SectionCard
+    <SectionBlock
       color="Blue"
       title={
         <span className="flex items-center gap-[6px]">
@@ -203,7 +203,7 @@ export function CustomFieldsForm() {
           />
         }
       />
-    </SectionCard>
+    </SectionBlock>
   );
 }
 
@@ -241,7 +241,7 @@ function RowDivider() {
 Use `containerClassName`, `headerClassName`, and `bodyClassName` to override the built-in spacing and width without losing the title/body structure.
 
 ```tsx
-<SectionCard
+<SectionBlock
   color="Green"
   title="Compact card"
   containerClassName="w-[600px] pt-[4px] pb-[16px]"
@@ -250,14 +250,14 @@ Use `containerClassName`, `headerClassName`, and `bodyClassName` to override the
   <p className="text-content-presentation-action-light-primary py-2">
     Tighter, narrower variant.
   </p>
-</SectionCard>
+</SectionBlock>
 ```
 
 ## Patterns
 
 - **Color coding**: Use distinct colors to help users scan a page of multiple sections (e.g., Blue for primary forms, Yellow for warnings, Red for destructive zones).
 - **No-title sections**: Drop the `title` prop entirely when the section's purpose is obvious from context — keeps the body padding without the visual weight of a header.
-- **Composing with form fields**: `SectionCard` does not impose any inner layout — pair it with helpers like the `FieldRow` pattern above, or with `InputField`, `Form`, or `FieldSection` for more structured forms.
+- **Composing with form fields**: `SectionBlock` does not impose any inner layout — pair it with helpers like the `FieldRow` pattern above, or with `InputField`, `Form`, or `FieldSection` for more structured forms.
 - **Default width**: The component ships with `w-[1100px]`. Override via `containerClassName="w-full"` (or any specific width) for narrower containers.
 
 ## Accessibility
