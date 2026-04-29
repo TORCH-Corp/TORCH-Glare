@@ -32,12 +32,12 @@ export function FieldSection({
       {...props}
       data-theme={theme}
       className={cn(
-        "grid  border-t border-border-presentation-global-primary py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] ",
+        "grid py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] ",
         direction === "vertical" && "grid-rows-[auto_1fr] gap-[12px]",
         direction === "horizontal" && "grid-cols-[350px_1fr] gap-[24px]",
         direction === "flexible" &&
-        "grid-rows-[auto_1fr] gap-[12px] lg:grid-cols-[350px_1fr] lg:grid-rows-[1fr] lg:gap-[24px]",
-        className
+          "grid-rows-[auto_1fr] gap-[12px] lg:grid-cols-[350px_1fr] lg:grid-rows-[1fr] lg:gap-[24px]",
+        className,
       )}
     >
       {/* Fixed width section for labels */}
@@ -58,7 +58,9 @@ export function FieldSection({
       </div>
 
       {/* Flexible section that takes up the remaining space */}
-      <div className="grid grid-cols-1 place-items-end gap-[12px]">{children}</div>
+      <div className="grid grid-cols-1 place-items-end gap-[12px]">
+        {children}
+      </div>
     </section>
   );
 }

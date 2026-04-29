@@ -207,7 +207,7 @@ export const buttonVariants = cva(
         // Col variants: filled solid color base, hover deepens to -secondary
         PrimeColStyle: [
           "bg-background-presentation-button-primary",
-          "text-content-presentation-global-primary-inverse",
+          "text-content-presentation-global-hover",
           "hover:bg-background-presentation-button-hover",
           "hover:text-content-presentation-global-primary-inverse",
           "focus:lg:border focus:lg:border-border-presentation-state-focus",

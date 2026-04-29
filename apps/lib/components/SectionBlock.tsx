@@ -21,11 +21,17 @@ const titleBadge = cva(
   },
 );
 
-export type SectionColor = NonNullable<VariantProps<typeof titleBadge>["color"]>;
+export type SectionColor = NonNullable<
+  VariantProps<typeof titleBadge>["color"]
+>;
 
-export interface SectionBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+export interface SectionBlockProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "title"
+> {
   color?: SectionColor;
   title?: ReactNode;
+  icon?: ReactNode;
   containerClassName?: string;
   headerClassName?: string;
   bodyClassName?: string;
@@ -41,6 +47,7 @@ export const SectionBlock = forwardRef<HTMLDivElement, SectionBlockProps>(
       containerClassName,
       headerClassName,
       bodyClassName,
+      icon,
       ...props
     },
     ref,
@@ -49,19 +56,33 @@ export const SectionBlock = forwardRef<HTMLDivElement, SectionBlockProps>(
       <div
         ref={ref}
         className={cn(
-          "flex w-[1100px] pt-[6px] pb-[24px] px-0 flex-col rounded-[16px] bg-background-presentation-form-base shadow-[0_0_32px_2px_rgba(0,0,0,0.05)]",
+          "flex  w-full pt-[6px] pb-[24px] px-0 flex-col rounded-[16px] bg-background-presentation-form-base shadow-[0_0_32px_2px_rgba(0,0,0,0.05)]",
           className,
           containerClassName,
         )}
         {...props}
       >
         {title && (
-          <div className={cn("flex px-[6px] flex-col gap-[10px]", headerClassName)}>
-            <div className={cn(titleBadge({ color }))}>{title}</div>
+          <div
+            className={cn("flex px-[6px] flex-col gap-[10px]", headerClassName)}
+          >
+            <div className={cn(titleBadge({ color }))}>
+              <span className="flex items-center gap-1.5">
+                {icon}
+                {title}
+              </span>
+            </div>
           </div>
         )}
-        <div className={cn("flex px-[42px] flex-col gap-[2px]", bodyClassName)}>
-          {children}
+        <div
+          className={cn(
+            "flex px-[42px] flex-col gap-[2px] px-[42px]",
+            bodyClassName,
+          )}
+        >
+          <div className="flex w-full divide-y divide-gray-300 min-w-[300px]  flex-col items-start ">
+            {children}
+          </div>
         </div>
       </div>
     );
