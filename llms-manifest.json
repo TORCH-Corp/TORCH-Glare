@@ -1,7 +1,7 @@
 {
   "library": {
     "name": "torch-glare",
-    "version": "1.1.15",
+    "version": "1.5.0",
     "description": "A comprehensive React component library with 55+ modern UI components",
     "license": "MIT",
     "homepage": "https://glare.torchcorp.com",
