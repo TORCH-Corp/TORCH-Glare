@@ -59,32 +59,6 @@ export default function FormStepperExample() {
         </FormStepper>
       </Section>
 
-      {/* Sizes */}
-      <Section title="Sizes">
-        <div className="flex flex-col gap-4">
-          <FormStepper size="S">
-            <FormStep index={0} type="default" selected>
-              <FormStepIndicator />
-              <FormStepLabel>Size S</FormStepLabel>
-            </FormStep>
-            <FormStep index={1} type="success">
-              <FormStepIndicator />
-              <FormStepLabel>Size S</FormStepLabel>
-            </FormStep>
-          </FormStepper>
-          <FormStepper size="M">
-            <FormStep index={0} type="default" selected>
-              <FormStepIndicator />
-              <FormStepLabel>Size M</FormStepLabel>
-            </FormStep>
-            <FormStep index={1} type="success">
-              <FormStepIndicator />
-              <FormStepLabel>Size M</FormStepLabel>
-            </FormStep>
-          </FormStepper>
-        </div>
-      </Section>
-
       {/* Interactive */}
       <Section title={`Interactive — Step ${activeStep + 1} of 4`}>
         <FormStepper activeStep={activeStep}>
