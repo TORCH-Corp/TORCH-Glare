@@ -6,7 +6,7 @@ import { Themes } from "../utils/types";
 
 
 interface DropdownMenuProps {
-  variant?: "SystemStyle" | "PresentationStyle";
+  variant?: "PresentationStyle";
   className?: string;
   theme?: Themes
 }
@@ -84,7 +84,7 @@ DropdownMenuSubTrigger.displayName =
 const DropdownMenuSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent> & {
-    variant?: "SystemStyle" | "PresentationStyle";
+    variant?: "PresentationStyle";
   }
 >(({ className, variant = "PresentationStyle", ...props }, ref) => (
   <DropdownMenuPrimitive.SubContent
@@ -313,18 +313,6 @@ export const MenuItemStyles = cva(
           "focus:text-content-presentation-global-primary-inverse",
           "active:text-content-presentation-state-negative",
         ],
-        SystemStyle: [
-          "bg-background-system-body-primary",
-          "text-content-system-global-primary",
-          "hover:bg-background-system-action-secondary-hover",
-          "hover:text-content-system-action-primary-hover",
-          "hover:border-border-system-action-primary-hover",
-          "focus:bg-background-system-action-secondary-hover",
-          "focus:text-content-system-action-primary-hover",
-          "focus:border-border-system-action-primary-hover",
-          "disabled:bg-background-system-body-secondary",
-          "disabled:text-content-system-global-disabled",
-        ],
       },
       size: {
         S: ["typography-body-small-regular", "h-[24px]"],
@@ -380,11 +368,6 @@ export const dropdownMenuStyles = cva(
   {
     variants: {
       variant: {
-        SystemStyle: [
-          "border-border-system-global-secondary",
-          "bg-background-system-body-primary",
-          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
-        ],
         PresentationStyle: [
           "border-border-presentation-global-primary",
           "bg-background-presentation-form-base",
