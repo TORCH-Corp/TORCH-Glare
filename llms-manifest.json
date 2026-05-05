@@ -1,7 +1,7 @@
 {
   "library": {
     "name": "torch-glare",
-    "version": "1.5.0",
+    "version": "2.1.1",
     "description": "A comprehensive React component library with 55+ modern UI components",
     "license": "MIT",
     "homepage": "https://glare.torchcorp.com",
@@ -20,8 +20,8 @@
   },
   "statistics": {
     "totalComponents": 55,
-    "documentedComponents": 1,
-    "coverage": 1.8,
+    "documentedComponents": 2,
+    "coverage": 3.6,
     "totalHooks": 4,
     "totalProviders": 1,
     "totalPlugins": 4,
@@ -73,7 +73,7 @@
     "dataDisplay": {
       "count": 8,
       "items": [
-        { "name": "Badge", "version": "1.1.15", "documented": false },
+        { "name": "Badge", "version": "1.1.15", "documented": true },
         { "name": "BadgeField", "version": "1.1.15", "documented": false },
         { "name": "CountBadge", "version": "1.1.15", "documented": false },
         { "name": "Avatar", "version": "1.1.15", "documented": false },

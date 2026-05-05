@@ -1,3 +1,15 @@
+## 2.1.1
+
+### Changed
+- **BREAKING:** `Badge` API restructured.
+  - Replaced `variant` prop with two orthogonal props: `badgeStyle` (`'subtle' | 'solid'`, default `'subtle'`) and `color` (10 options).
+  - New color set: `gray`, `slate`, `red`, `orange`, `yellow`, `green`, `ocean`, `blue`, `purple`, `rose`. Removed legacy values: `highlight`, `greenLight`, `cocktailGreen`, `redOrange`, `redLight`, `bluePurple`, `navy`.
+  - Renamed chip-removal props: `isSelected` → `isClosable`, `onUnselect` → `onClose`.
+  - Subtle text and icons are now rendered with a single neutral foreground (`--Content-Presentation-Global-subtle`, `#494949`) blended with `mix-blend-mode: luminosity`, regardless of color.
+  - Close button rebuilt as an inline 12×12 SVG (12 on XS, 14 on S, 16 on M) with a `4px`-radius hover background using `--Background-Presentation-Action-Secondary`. The button participates in the same luminosity blend.
+- The `M` size label no longer carries a `1px` top-padding shim — text is centered via flex alignment + typography line-height.
+- `BadgeField` updated internally to pass the new `color` and `isClosable`/`onClose` props.
+
 ## 1.5.0
 
 ### Changed

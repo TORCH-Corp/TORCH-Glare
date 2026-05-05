@@ -34,8 +34,8 @@ import { useState } from 'react'
 export function BasicBadgeField() {
   const [tags] = useState([
     { id: '1', name: 'React', variant: 'blue' },
-    { id: '2', name: 'TypeScript', variant: 'bluePurple' },
-    { id: '3', name: 'Next.js', variant: 'navy' },
+    { id: '2', name: 'TypeScript', variant: 'purple' },
+    { id: '3', name: 'Next.js', variant: 'slate' },
   ])
 
   return (
@@ -60,12 +60,12 @@ export function TechnologySelector() {
 
   const allTags: Tag[] = [
     { id: '1', name: 'React', variant: 'blue' },
-    { id: '2', name: 'TypeScript', variant: 'bluePurple' },
-    { id: '3', name: 'Next.js', variant: 'navy' },
-    { id: '4', name: 'Tailwind CSS', variant: 'cocktailGreen' },
+    { id: '2', name: 'TypeScript', variant: 'purple' },
+    { id: '3', name: 'Next.js', variant: 'slate' },
+    { id: '4', name: 'Tailwind CSS', variant: 'green' },
     { id: '5', name: 'Node.js', variant: 'green' },
     { id: '6', name: 'PostgreSQL', variant: 'blue' },
-    { id: '7', name: 'MongoDB', variant: 'greenLight' },
+    { id: '7', name: 'MongoDB', variant: 'green' },
     { id: '8', name: 'GraphQL', variant: 'purple' },
     { id: '9', name: 'REST API', variant: 'gray' },
     { id: '10', name: 'Docker', variant: 'blue' },
@@ -105,9 +105,9 @@ export function CategoryFilter() {
     { id: 'development', name: 'Development', variant: 'blue' },
     { id: 'marketing', name: 'Marketing', variant: 'yellow' },
     { id: 'sales', name: 'Sales', variant: 'green' },
-    { id: 'support', name: 'Support', variant: 'redOrange' },
+    { id: 'support', name: 'Support', variant: 'orange' },
     { id: 'hr', name: 'Human Resources', variant: 'rose' },
-    { id: 'finance', name: 'Finance', variant: 'navy' },
+    { id: 'finance', name: 'Finance', variant: 'slate' },
   ]
 
   const [selectedCategories, setSelectedCategories] = useState<Tag[]>([])
@@ -152,13 +152,13 @@ export function SkillsSelector() {
     { id: 'ts', name: 'TypeScript', variant: 'blue' },
     { id: 'react', name: 'React', variant: 'blue' },
     { id: 'vue', name: 'Vue.js', variant: 'green' },
-    { id: 'angular', name: 'Angular', variant: 'redLight' },
-    { id: 'node', name: 'Node.js', variant: 'greenLight' },
+    { id: 'angular', name: 'Angular', variant: 'red' },
+    { id: 'node', name: 'Node.js', variant: 'green' },
     { id: 'python', name: 'Python', variant: 'blue' },
-    { id: 'java', name: 'Java', variant: 'redOrange' },
-    { id: 'go', name: 'Go', variant: 'cocktailGreen' },
-    { id: 'rust', name: 'Rust', variant: 'redOrange' },
-    { id: 'sql', name: 'SQL', variant: 'navy' },
+    { id: 'java', name: 'Java', variant: 'orange' },
+    { id: 'go', name: 'Go', variant: 'green' },
+    { id: 'rust', name: 'Rust', variant: 'orange' },
+    { id: 'sql', name: 'SQL', variant: 'slate' },
     { id: 'nosql', name: 'NoSQL', variant: 'green' },
     { id: 'aws', name: 'AWS', variant: 'yellow' },
     { id: 'azure', name: 'Azure', variant: 'blue' },
@@ -213,16 +213,16 @@ Tag management for projects with custom variants.
 ```tsx
 export function ProjectTags() {
   const projectTags: Tag[] = [
-    { id: '1', name: 'High Priority', variant: 'redLight' },
+    { id: '1', name: 'High Priority', variant: 'red' },
     { id: '2', name: 'In Progress', variant: 'blue' },
     { id: '3', name: 'Completed', variant: 'green' },
     { id: '4', name: 'On Hold', variant: 'yellow' },
     { id: '5', name: 'Needs Review', variant: 'purple' },
-    { id: '6', name: 'Client Approval', variant: 'bluePurple' },
+    { id: '6', name: 'Client Approval', variant: 'purple' },
     { id: '7', name: 'Internal', variant: 'gray' },
-    { id: '8', name: 'External', variant: 'navy' },
-    { id: '9', name: 'Urgent', variant: 'redOrange' },
-    { id: '10', name: 'Can Wait', variant: 'greenLight' },
+    { id: '8', name: 'External', variant: 'slate' },
+    { id: '9', name: 'Urgent', variant: 'orange' },
+    { id: '10', name: 'Can Wait', variant: 'green' },
   ]
 
   const [projectData, setProjectData] = useState({
@@ -310,7 +310,7 @@ export function BadgeFieldWithIcon() {
   const tags: Tag[] = [
     { id: '1', name: 'JavaScript', variant: 'yellow' },
     { id: '2', name: 'Python', variant: 'blue' },
-    { id: '3', name: 'Ruby', variant: 'redLight' },
+    { id: '3', name: 'Ruby', variant: 'red' },
   ]
 
   return (
@@ -385,7 +385,7 @@ export function EmailRecipients() {
     { id: '1', name: 'john@example.com', variant: 'blue' },
     { id: '2', name: 'jane@example.com', variant: 'green' },
     { id: '3', name: 'team@example.com', variant: 'purple' },
-    { id: '4', name: 'support@example.com', variant: 'navy' },
+    { id: '4', name: 'support@example.com', variant: 'slate' },
   ]
 
   const [recipients, setRecipients] = useState<Tag[]>([])

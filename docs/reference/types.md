@@ -381,42 +381,50 @@ interface TreeSubLayoutProps {
 
 ### Badge Types
 
-#### BadgeVariant
+#### BadgeStyle
 
 ```typescript
-type BadgeVariant =
-  | "PrimeStyle"
-  | "SecondStyle"
-  | "ContStyle"
-  | "BorderStyle";
-```
-
-#### BadgeProps
-
-```typescript
-interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: BadgeVariant;
-  theme?: Themes;
-  children: React.ReactNode;
-}
+type BadgeStyle = "subtle" | "solid";
 ```
 
 #### BadgeColor
 
 ```typescript
 type BadgeColor =
-  | "green"
-  | "green-light"
-  | "cocktail-green"
-  | "yellow"
-  | "red-orange"
+  | "gray"
+  | "slate"
   | "red"
-  | "rose"
-  | "purple"
-  | "blue-purple"
+  | "orange"
+  | "yellow"
+  | "green"
+  | "ocean"
   | "blue"
-  | "navy"
-  | "gray";
+  | "purple"
+  | "rose";
+```
+
+#### BadgeSize
+
+```typescript
+type BadgeSize = "XS" | "S" | "M";
+```
+
+#### BadgeProps
+
+```typescript
+interface BadgeProps
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color"> {
+  label?: string;
+  badgeStyle?: BadgeStyle; // default: "subtle"
+  color?: BadgeColor;      // default: "gray"
+  size?: BadgeSize;        // default: "S"
+  showIcon?: boolean;      // default: true
+  badgeIcon?: React.ReactNode;
+  isClosable?: boolean;
+  onClose?: () => void;
+  theme?: Themes;
+  className?: string;
+}
 ```
 
 ### Avatar Types
