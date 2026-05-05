@@ -1,10 +1,23 @@
 import { Badge } from "@/components/Badge";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+
+const COLORS = [
+  "gray",
+  "slate",
+  "red",
+  "orange",
+  "yellow",
+  "green",
+  "ocean",
+  "blue",
+  "purple",
+  "rose",
+] as const;
+
+const SIZES = ["XS", "S", "M"] as const;
+const STYLES = ["subtle", "solid"] as const;
 
 export function BadgeExample() {
-  const [variants] = useState<any>(["green", "greenLight", "cocktailGreen", "yellow", 'redOrange', 'redLight', 'rose', 'purple', 'bluePurple', 'blue', 'navy', 'gray']);
-
   return (
     <>
       <h1
@@ -15,21 +28,63 @@ export function BadgeExample() {
       >
         Badge Preview
       </h1>
-      {variants.map((variant: any) => (
-        <div key={variant} className="flex flex-col gap-2 w-full">
+
+      {COLORS.map((color) => (
+        <div key={color} className="flex flex-col gap-3 w-full mb-8">
           <span
             className={cn(
-              "text-sm",
+              "text-sm capitalize",
               "text-content-system-global-primary"
             )}
           >
-            Variant: {variant}
+            {color}
           </span>
-          <div className="flex gap-2 items-start">
-            <Badge label={`${variant} size: XS`} variant={variant} size={"XS"} isSelected />
-            <Badge label={`${variant} size: S`} variant={variant} size="S" isSelected />
-            <Badge label={`${variant} size: M`} variant={variant} size="M" isSelected />
-          </div>
+
+          {STYLES.map((badgeStyle) => (
+            <div key={badgeStyle} className="flex flex-col gap-2">
+              <span
+                className={cn(
+                  "text-xs uppercase tracking-wide",
+                  "text-content-system-global-secondary"
+                )}
+              >
+                {badgeStyle}
+              </span>
+
+              <div className="flex gap-2 items-start flex-wrap">
+                {SIZES.map((size) => (
+                  <Badge
+                    key={`${size}-icon`}
+                    label={`${color} ${size}`}
+                    badgeStyle={badgeStyle}
+                    color={color}
+                    size={size}
+                  />
+                ))}
+                {SIZES.map((size) => (
+                  <Badge
+                    key={`${size}-noicon`}
+                    label={`${color} ${size} no-icon`}
+                    badgeStyle={badgeStyle}
+                    color={color}
+                    size={size}
+                    showIcon={false}
+                  />
+                ))}
+                {SIZES.map((size) => (
+                  <Badge
+                    key={`${size}-closable`}
+                    label={`${color} ${size} closable`}
+                    badgeStyle={badgeStyle}
+                    color={color}
+                    size={size}
+                    isClosable
+                    onClose={() => {}}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       ))}
     </>

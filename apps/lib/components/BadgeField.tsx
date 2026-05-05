@@ -124,10 +124,10 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 <Badge
                   key={tag.id}
                   size={size}
-                  variant={tag.variant as any}
+                  color={tag.variant as any}
                   label={tag.name}
-                  isSelected={true}
-                  onUnselect={() => handleUnselectTag(tag.id)}
+                  isClosable={true}
+                  onClose={() => handleUnselectTag(tag.id)}
                   className={
                     focusedTagIndex === index ? "ring-2 ring-blue-500" : ""
                   }
@@ -179,7 +179,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 <Badge
                   key={tag.id}
                   size={size}
-                  variant={tag.variant as any}
+                  color={tag.variant as any}
                   label={tag.name}
                   onClick={() => handleSelectTag(tag.id)}
                   className={`outline-none  ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""

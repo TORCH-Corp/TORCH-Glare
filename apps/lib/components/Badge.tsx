@@ -3,73 +3,182 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 
-export const badgeBase = cva(
+const SOLID_TEXT =
+  "text-content-presentation-global-primary-light [&_i]:text-content-presentation-global-primary-light";
+
+const solidCompoundVariants = [
+  {
+    badgeStyle: "solid" as const,
+    color: "gray" as const,
+    className: `bg-background-presentation-badge-gray-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "slate" as const,
+    className: `bg-background-presentation-badge-slate-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "red" as const,
+    className: `bg-background-presentation-badge-red-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "orange" as const,
+    className: `bg-background-presentation-badge-orange-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "yellow" as const,
+    className: `bg-background-presentation-badge-yellow-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "green" as const,
+    className: `bg-background-presentation-badge-green-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "ocean" as const,
+    className: `bg-background-presentation-badge-ocean-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "blue" as const,
+    className: `bg-background-presentation-badge-blue-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "purple" as const,
+    className: `bg-background-presentation-badge-purple-solid ${SOLID_TEXT}`,
+  },
+  {
+    badgeStyle: "solid" as const,
+    color: "rose" as const,
+    className: `bg-background-presentation-badge-rose-solid ${SOLID_TEXT}`,
+  },
+];
+
+const SUBTLE_TEXT =
+  "text-content-presentation-global-subtle [&>div]:mix-blend-luminosity [&_i]:text-content-presentation-global-subtle [&_i]:mix-blend-luminosity [&>button]:mix-blend-luminosity";
+
+const subtleCompoundVariants = [
+  {
+    badgeStyle: "subtle" as const,
+    color: "gray" as const,
+    className: `bg-background-presentation-badge-gray-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "slate" as const,
+    className: `bg-background-presentation-badge-slate-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "red" as const,
+    className: `bg-background-presentation-badge-red-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "orange" as const,
+    className: `bg-background-presentation-badge-orange-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "yellow" as const,
+    className: `bg-background-presentation-badge-yellow-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "green" as const,
+    className: `bg-background-presentation-badge-green-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "ocean" as const,
+    className: `bg-background-presentation-badge-ocean-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "blue" as const,
+    className: `bg-background-presentation-badge-blue-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "purple" as const,
+    className: `bg-background-presentation-badge-purple-subtle ${SUBTLE_TEXT}`,
+  },
+  {
+    badgeStyle: "subtle" as const,
+    color: "rose" as const,
+    className: `bg-background-presentation-badge-rose-subtle ${SUBTLE_TEXT}`,
+  },
+];
+
+export const badgeStyles = cva(
   [
-    "px-[6px]",
-    "[&_div]:text-content-presentation-action-light-primary",
-    "[&_i]:!leading-none",
-    "flex",
-    "justify-center",
-    "items-center",
-    "border",
+    "inline-flex items-center justify-center w-fit",
     "rounded-[6px]",
-    "transition-all",
-    "duration-300",
-    "ease-in-out",
-    "w-fit",
-    "cursor-pointer",
-    "[&_i]:leading-0",
+    "transition-all duration-200 ease-in-out",
+    "whitespace-nowrap",
+    "[&_i]:!leading-none",
   ],
   {
     variants: {
+      badgeStyle: {
+        solid: "",
+        subtle: "",
+      },
+      color: {
+        gray: "",
+        slate: "",
+        red: "",
+        orange: "",
+        yellow: "",
+        green: "",
+        ocean: "",
+        blue: "",
+        purple: "",
+        rose: "",
+      },
       size: {
-        XS: "h-[18px] [&_i]:text-[12px] [&_div]:typography-body-small-medium",
-        S: "h-[22px] [&_i]:text-[12px] [&_div]:typography-body-small-medium",
-        M: "h-[26px] [&_i]:text-[16px] [&_div]:typography-body-medium-medium",
-      },
-      variant: {
-        highlight: ["h-[20px] [&_i]:text-[12px] [&_div]:typography-body-small-medium",
-          "bg-background-presentation-badge-gray border-transparent px-[3px]"
-        ],
-        green: "border-border-presentation-badge-green bg-background-presentation-badge-green [&_i]:text-content-presentation-badge-green",
-        greenLight: "border-border-presentation-badge-green-light bg-background-presentation-badge-green-light [&_i]:text-content-presentation-badge-green-light",
-        cocktailGreen: "border-border-presentation-badge-cocktail-green bg-background-presentation-badge-cocktail-green [&_i]:text-content-presentation-badge-cocktail-green",
-        yellow: "border-border-presentation-badge-yellow bg-background-presentation-badge-yellow [&_i]:text-content-presentation-badge-yellow",
-        redOrange: "border-border-presentation-badge-red-orange bg-background-presentation-badge-red-orange [&_i]:text-content-presentation-badge-red-orange",
-        redLight: "border-border-presentation-badge-red bg-background-presentation-badge-red [&_i]:text-content-presentation-badge-red",
-        rose: "border-border-presentation-badge-rose bg-background-presentation-badge-rose [&_i]:text-content-presentation-badge-rose",
-        purple: "border-border-presentation-badge-purple bg-background-presentation-badge-purple [&_i]:text-content-presentation-badge-purple",
-        bluePurple: "border-border-presentation-badge-blue-purple bg-background-presentation-badge-blue-purple [&_i]:text-content-presentation-badge-blue-purple",
-        blue: "border-border-presentation-badge-blue bg-background-presentation-badge-blue [&_i]:text-content-presentation-badge-blue",
-        navy: "border-border-presentation-badge-navy bg-background-presentation-badge-navy [&_i]:text-content-presentation-badge-navy",
-        gray: "border-border-presentation-badge-gray bg-background-presentation-badge-gray [&_i]:text-content-presentation-badge-gray",
+        XS: "h-[18px] px-[6px] py-0 [&_i]:text-[12px] [&>div]:typography-body-small-medium",
+        S: "h-[22px] px-[6px] py-[2px] [&_i]:text-[12px] [&>div]:typography-body-small-medium",
+        M: "h-[26px] px-[8px] py-[2px] [&_i]:text-[16px] [&>div]:typography-body-medium-medium",
       },
     },
+    compoundVariants: [...solidCompoundVariants, ...subtleCompoundVariants],
     defaultVariants: {
+      badgeStyle: "subtle",
+      color: "gray",
       size: "S",
-      variant: "green",
     },
-  }
+  },
 );
 
-interface BadgeProps extends HTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof badgeBase> {
+interface BadgeProps
+  extends
+    Omit<HTMLAttributes<HTMLSpanElement>, "color">,
+    VariantProps<typeof badgeStyles> {
   label?: string;
-  onUnselect?: () => void;
-  isSelected?: boolean;
   badgeIcon?: ReactNode;
+  showIcon?: boolean;
+  isClosable?: boolean;
+  onClose?: () => void;
+  theme?: Themes;
   className?: string;
-  theme?: Themes
 }
 
 export const Badge: React.FC<BadgeProps> = ({
   label,
-  onUnselect,
-  isSelected,
   badgeIcon,
+  showIcon = true,
+  isClosable,
+  onClose,
   theme,
-  size = "S",
-  variant = "green",
+  badgeStyle,
+  color,
+  size,
   className,
   ...props
 }) => {
@@ -78,37 +187,55 @@ export const Badge: React.FC<BadgeProps> = ({
       {...props}
       data-theme={theme}
       className={cn(
-        badgeBase({ size, variant }),
-        {
-          "cursor-default": isSelected,
-        },
-        className
+        badgeStyles({ badgeStyle, color, size }),
+        { "cursor-default": isClosable },
+        className,
       )}
     >
-      <div className={"flex justify-center items-center"}>
-        {!badgeIcon ? (
-          <i className={cn("ri-circle-fill !text-[8px]", { "hidden": variant === "highlight" })}></i>
-        ) : (
-          badgeIcon
-        )}
-      </div>
+      {showIcon && (
+        <div className="flex items-center justify-center">
+          {badgeIcon ?? <i className="ri-circle-fill !text-[8px]" />}
+        </div>
+      )}
 
-      <div className="px-[3px] whitespace-nowrap">{label}</div>
-      {isSelected && (
+      {label && <div className="px-[3px]">{label}</div>}
+
+      {isClosable && (
         <button
-          onClick={onUnselect}
-          className="rounded-[2px] flex justify-center items-center cursor-pointer"
-          tabIndex={0}
-          role="button"
-          aria-label="Remove badge"
+          type="button"
+          onClick={onClose}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              onUnselect?.();
+              onClose?.();
             }
           }}
+          className={cn(
+            "rounded-[4px]",
+            "flex items-center justify-center cursor-pointer",
+            "hover:bg-background-presentation-action-secondary",
+            "transition-colors duration-150",
+            size === "M"
+              ? "w-[16px] h-[16px]"
+              : size === "S"
+                ? "w-[14px] h-[14px]"
+                : "w-[12px] h-[12px]",
+          )}
+          aria-label="Remove badge"
         >
-          <i className="ri-close-line !text-content-presentation-action-light-primary"></i>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            viewBox="0 0 12 12"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M6.00002 5.33336L8.33334 3L9 3.66667L6.66668 6.00002L9 8.33334L8.33334 9L6.00002 6.66668L3.66667 9L3 8.33334L5.33336 6.00002L3 3.66667L3.66667 3L6.00002 5.33336Z"
+              fill="currentColor"
+            />
+          </svg>
         </button>
       )}
     </span>

@@ -249,6 +249,7 @@
   --color-content-presentation-global-primary-inverse: var(--content-presentation-global-primary-inverse);
   --color-content-presentation-global-primary-light: var(--content-presentation-global-primary-light);
   --color-content-presentation-global-secondary: var(--content-presentation-global-secondary);
+  --color-content-presentation-global-subtle: var(--content-presentation-global-subtle);
   --color-content-presentation-global-success-hover: var(--content-presentation-global-success-hover);
   --color-content-presentation-state-disabled: var(--content-presentation-state-disabled);
   --color-content-presentation-state-information: var(--content-presentation-state-information);
