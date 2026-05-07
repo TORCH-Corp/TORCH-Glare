@@ -172,6 +172,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           style={{ width: dropDownListWidth }}
           variant={variant}
           onKeyDown={handleKeyDown}
+          className="p-2 flex flex-wrap gap-1"
         >
           <>
             {filteredTags.length > 0 ? (
@@ -182,8 +183,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   color={tag.variant as any}
                   label={tag.name}
                   onClick={() => handleSelectTag(tag.id)}
-                  className={`outline-none  ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""
-                    } ${index !== 0 ? "mt-1" : ""}`}
+                  className={`outline-none ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""}`}
                   tabIndex={focusedPopoverIndex === index ? 0 : -1}
                 />
               ))
