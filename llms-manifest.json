@@ -2,7 +2,7 @@
   "library": {
     "name": "torch-glare",
     "version": "2.1.1",
-    "description": "A comprehensive React component library with 55+ modern UI components",
+    "description": "A comprehensive React component library with 60+ modern UI components",
     "license": "MIT",
     "homepage": "https://glare.torchcorp.com",
     "repository": "https://github.com/torch-corp/torch-glare"
@@ -19,9 +19,9 @@
     }
   },
   "statistics": {
-    "totalComponents": 55,
-    "documentedComponents": 2,
-    "coverage": 3.6,
+    "totalComponents": 65,
+    "documentedComponents": 62,
+    "coverage": 95.4,
     "totalHooks": 4,
     "totalProviders": 1,
     "totalPlugins": 4,
@@ -29,106 +29,113 @@
   },
   "components": {
     "buttons": {
-      "count": 4,
+      "count": 6,
       "items": [
         { "name": "Button", "version": "1.1.15", "documented": true },
-        { "name": "ActionButton", "version": "1.1.15", "documented": false },
-        { "name": "LinkButton", "version": "1.1.15", "documented": false },
-        { "name": "LoginButton", "version": "1.1.15", "documented": false }
+        { "name": "ActionButton", "version": "1.1.15", "documented": true },
+        { "name": "LinkButton", "version": "1.1.15", "documented": true },
+        { "name": "LoginButton", "version": "1.1.15", "documented": true },
+        { "name": "ButtonGroup", "version": "1.1.15", "documented": true },
+        { "name": "ToggleButton", "version": "1.1.15", "documented": true }
       ]
     },
     "forms": {
-      "count": 16,
+      "count": 18,
       "items": [
-        { "name": "Input", "version": "1.1.15", "documented": false },
-        { "name": "InputField", "version": "1.1.15", "documented": false },
-        { "name": "Textarea", "version": "1.1.15", "documented": false },
-        { "name": "Checkbox", "version": "1.1.15", "documented": false },
-        { "name": "LabeledCheckBox", "version": "1.1.15", "documented": false },
-        { "name": "Radio", "version": "1.1.15", "documented": false },
-        { "name": "LabeledRadio", "version": "1.1.15", "documented": false },
-        { "name": "RadioCard", "version": "1.1.15", "documented": false },
-        { "name": "Select", "version": "1.1.15", "documented": false },
-        { "name": "SimpleSelect", "version": "1.1.15", "documented": false },
-        { "name": "Switch", "version": "1.1.15", "documented": false },
-        { "name": "Toggle", "version": "1.1.15", "documented": false },
-        { "name": "SearchField", "version": "1.1.15", "documented": false },
-        { "name": "InputOTP", "version": "1.1.15", "documented": false },
-        { "name": "Form", "version": "1.1.15", "documented": false },
-        { "name": "TabFormItem", "version": "1.1.15", "documented": false }
+        { "name": "Input", "version": "1.1.15", "documented": true },
+        { "name": "InputField", "version": "1.1.15", "documented": true },
+        { "name": "Textarea", "version": "1.1.15", "documented": true },
+        { "name": "Checkbox", "version": "1.1.15", "documented": true },
+        { "name": "LabeledCheckBox", "version": "1.1.15", "documented": true },
+        { "name": "Radio", "version": "1.1.15", "documented": true },
+        { "name": "LabeledRadio", "version": "1.1.15", "documented": true },
+        { "name": "RadioCard", "version": "1.1.15", "documented": true },
+        { "name": "Select", "version": "1.1.15", "documented": true },
+        { "name": "SimpleSelect", "version": "1.1.15", "documented": true },
+        { "name": "Switch", "version": "1.1.15", "documented": true },
+        { "name": "Toggle", "version": "1.1.15", "documented": true },
+        { "name": "SearchField", "version": "1.1.15", "documented": true },
+        { "name": "InputOTP", "version": "1.1.15", "documented": true },
+        { "name": "Form", "version": "1.1.15", "documented": true },
+        { "name": "TabFormItem", "version": "1.1.15", "documented": true },
+        { "name": "FormStepper", "version": "2.1.1", "documented": true },
+        { "name": "Stepper", "version": "2.1.1", "documented": true }
       ]
     },
     "layout": {
       "count": 7,
       "items": [
-        { "name": "Card", "version": "1.1.15", "documented": false },
-        { "name": "CNLayout", "version": "1.1.15", "documented": false },
-        { "name": "FieldSection", "version": "1.1.15", "documented": false },
+        { "name": "Card", "version": "1.1.15", "documented": true },
+        { "name": "CNLayout", "version": "1.1.15", "documented": true },
+        { "name": "FieldSection", "version": "1.1.15", "documented": true },
         { "name": "SectionBlock", "version": "1.1.22", "documented": true },
-        { "name": "TreeSubLayout", "version": "1.1.15", "documented": false },
-        { "name": "Divider", "version": "1.1.15", "documented": false },
-        { "name": "ScrollArea", "version": "1.1.15", "documented": false }
+        { "name": "TreeSubLayout", "version": "1.1.15", "documented": true },
+        { "name": "Divider", "version": "1.1.15", "documented": true },
+        { "name": "ScrollArea", "version": "1.1.15", "documented": true }
       ]
     },
     "dataDisplay": {
-      "count": 8,
+      "count": 10,
       "items": [
         { "name": "Badge", "version": "1.1.15", "documented": true },
-        { "name": "BadgeField", "version": "1.1.15", "documented": false },
-        { "name": "CountBadge", "version": "1.1.15", "documented": false },
-        { "name": "Avatar", "version": "1.1.15", "documented": false },
-        { "name": "Table", "version": "1.1.15", "documented": false },
-        { "name": "DataTable", "version": "1.1.15", "documented": false },
-        { "name": "TreeDropDown", "version": "1.1.15", "documented": false },
-        { "name": "Skeleton", "version": "1.1.15", "documented": false }
+        { "name": "BadgeField", "version": "1.1.15", "documented": true },
+        { "name": "CountBadge", "version": "1.1.15", "documented": true },
+        { "name": "Avatar", "version": "1.1.15", "documented": true },
+        { "name": "Table", "version": "1.1.15", "documented": true },
+        { "name": "DataTable", "version": "1.1.15", "documented": true },
+        { "name": "TreeDropDown", "version": "1.1.15", "documented": true },
+        { "name": "Skeleton", "version": "1.1.15", "documented": true },
+        { "name": "Timeline", "version": "2.1.1", "documented": true },
+        { "name": "Breadcrumb", "version": "1.1.15", "documented": true }
       ]
     },
     "overlays": {
       "count": 7,
       "items": [
-        { "name": "Dialog", "version": "1.1.15", "documented": false },
-        { "name": "AlertDialog", "version": "1.1.15", "documented": false },
-        { "name": "Drawer", "version": "1.1.15", "documented": false },
-        { "name": "Popover", "version": "1.1.15", "documented": false },
-        { "name": "Tooltip", "version": "1.1.15", "documented": false },
-        { "name": "DropdownMenu", "version": "1.1.15", "documented": false },
-        { "name": "ProfileMenu", "version": "1.1.15", "documented": false }
+        { "name": "Dialog", "version": "1.1.15", "documented": true },
+        { "name": "AlertDialog", "version": "1.1.15", "documented": true },
+        { "name": "Drawer", "version": "1.1.15", "documented": true },
+        { "name": "Popover", "version": "1.1.15", "documented": true },
+        { "name": "Tooltip", "version": "1.1.15", "documented": true },
+        { "name": "DropdownMenu", "version": "1.1.15", "documented": true },
+        { "name": "ProfileMenu", "version": "1.1.15", "documented": true }
       ]
     },
     "dateTime": {
       "count": 4,
       "items": [
-        { "name": "Calendar", "version": "1.1.15", "documented": false },
-        { "name": "DatePicker", "version": "1.1.15", "documented": false },
-        { "name": "SlideDatePicker", "version": "1.1.15", "documented": false },
+        { "name": "Calendar", "version": "1.1.15", "documented": true },
+        { "name": "DatePicker", "version": "1.1.15", "documented": true },
+        { "name": "SlideDatePicker", "version": "1.1.15", "documented": true },
         { "name": "IosDatePicker", "version": "experimental", "documented": false }
       ]
     },
     "feedback": {
       "count": 4,
       "items": [
-        { "name": "Toast", "version": "1.1.15", "documented": false },
-        { "name": "SpinLoading", "version": "1.1.15", "documented": false },
-        { "name": "PasswordLevel", "version": "1.1.15", "documented": false },
-        { "name": "FieldHint", "version": "1.1.15", "documented": false }
+        { "name": "Toast", "version": "1.1.15", "documented": true },
+        { "name": "SpinLoading", "version": "1.1.15", "documented": true },
+        { "name": "PasswordLevel", "version": "1.1.15", "documented": true },
+        { "name": "FieldHint", "version": "1.1.15", "documented": true }
       ]
     },
     "labels": {
       "count": 4,
       "items": [
-        { "name": "Label", "version": "1.1.15", "documented": false },
-        { "name": "LabelField", "version": "1.1.15", "documented": false },
-        { "name": "InnerLabelField", "version": "1.1.15", "documented": false },
-        { "name": "TransparentLabel", "version": "1.1.15", "documented": false }
+        { "name": "Label", "version": "1.1.15", "documented": true },
+        { "name": "LabelField", "version": "1.1.15", "documented": true },
+        { "name": "InnerLabelField", "version": "1.1.15", "documented": true },
+        { "name": "TransparentLabel", "version": "1.1.15", "documented": true }
       ]
     },
     "advanced": {
-      "count": 4,
+      "count": 5,
       "items": [
         { "name": "Charts", "version": "experimental", "documented": false },
         { "name": "Command", "version": "experimental", "documented": false },
-        { "name": "ImageAttachment", "version": "1.1.15", "documented": false },
-        { "name": "ActionsGroup", "version": "1.1.15", "documented": false }
+        { "name": "ImageAttachment", "version": "1.1.15", "documented": true },
+        { "name": "ActionsGroup", "version": "1.1.15", "documented": true },
+        { "name": "TextEditor", "version": "1.1.15", "documented": true }
       ]
     }
   },
