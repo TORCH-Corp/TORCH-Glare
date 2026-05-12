@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
 import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
@@ -22,7 +23,7 @@ const templatesDir = path.resolve(__dirname, "../../../apps/lib/components");
 
 /**
  * Main function to add a component and its dependencies.
- * @param {string} component - The name of the component to add.    
+ * @param {string} component - The name of the component to add.
  * @param {boolean} replace - Whether to replace the existing component.
  */
 export async function add(component?: string, replace: boolean = false): Promise<void> {
@@ -34,17 +35,18 @@ export async function add(component?: string, replace: boolean = false): Promise
         component = await promptComponentSelection(availableComponents);
     }
 
-    // Validate if the component exists in the templates directory
-    if (!availableComponents.includes(component)) {
+    // Resolve user input to an actual entry — accepts "Button", "Button.tsx", or "DataViews" (folder).
+    const resolved = resolveComponentEntry(component, availableComponents, templatesDir);
+    if (!resolved) {
         console.error(`❌ Component "${component}" not found.`);
         return;
     }
 
-    const { source, targetDir } = getInstallPaths(component, targetFile, templatesDir, "components");
+    const { source, targetDir } = getInstallPaths(resolved, targetFile, templatesDir, "components");
 
     // Check if component already exists
-    if (isFileExists(targetDir, component) && !replace) {
-        console.log(`⚠️ Component "${component}" already exists.`);
+    if (isFileExists(targetDir, resolved) && !replace) {
+        console.log(`⚠️ Component "${resolved}" already exists.`);
         return;
     }
 
@@ -56,9 +58,32 @@ export async function add(component?: string, replace: boolean = false): Promise
     // Copy the component (directory or file) and install dependencies
     copyComponentsRecursively(source, targetDir);
 
-    console.log(`✅ ${component} has been added to ${targetFile.path}!`);
+    console.log(`✅ ${resolved} has been added to ${targetFile.path}!`);
 }
 
+
+/**
+ * Resolve a user-provided component name to an actual entry in the templates
+ * directory. Tries (in order):
+ *   1. exact match (e.g. "Button.tsx" or "DataViews")
+ *   2. with `.tsx` suffix (e.g. user typed "Button")
+ *   3. with `.ts`  suffix  (for non-JSX modules)
+ * Returns the matching entry name, or null if nothing matches.
+ */
+function resolveComponentEntry(
+    input: string,
+    available: string[],
+    dir: string,
+): string | null {
+    if (available.includes(input)) return input;
+    const candidates = [`${input}.tsx`, `${input}.ts`];
+    for (const c of candidates) {
+        if (available.includes(c)) return c;
+    }
+    // Last-ditch: see if it exists on disk even if `getAvailableFiles` missed it.
+    if (fs.existsSync(path.join(dir, input))) return input;
+    return null;
+}
 
 
 /**
@@ -77,10 +102,3 @@ async function promptComponentSelection(availableComponents: string[]): Promise<
     ]);
     return selectedComponent;
 }
-
-
-
-
-
-
-

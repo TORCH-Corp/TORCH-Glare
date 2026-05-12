@@ -9,7 +9,15 @@ import path from "path";
  */
 export function copyComponentsRecursively(source: string, target: string): void {
     if (fs.lstatSync(source).isDirectory()) {
-        copyDirectorySync(source, target);
+        // If target already exists as a directory, nest the source folder
+        // inside it (so `add DataViews` ends up at ./components/DataViews/,
+        // not flattened into ./components/). Otherwise the target IS the
+        // destination directory (legacy behavior).
+        const finalTarget =
+            fs.existsSync(target) && fs.lstatSync(target).isDirectory()
+                ? path.join(target, path.basename(source))
+                : target;
+        copyDirectorySync(source, finalTarget);
     } else {
         let finalTarget = target;
 

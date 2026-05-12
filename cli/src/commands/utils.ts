@@ -29,11 +29,13 @@ export async function addUtil(util?: string, replace: boolean = false): Promise<
         util = await promptUtilSelection(availableUtils);
     }
 
-    // Validate if the utility file exists in the utils templates directory
-    if (!availableUtils.includes(util)) {
+    // Resolve user input — accepts "cn", "cn.ts", or a folder name like "dataViews".
+    const resolved = resolveUtilEntry(util, availableUtils, utilsTemplatesDir);
+    if (!resolved) {
         console.error(`❌ Utility file "${util}" not found.`);
         return;
     }
+    util = resolved;
 
     // get the path and create the create the target directory
     const { source, targetDir } = getInstallPaths(util, targetFile, utilsTemplatesDir, "utils");
@@ -63,6 +65,26 @@ export async function addUtil(util?: string, replace: boolean = false): Promise<
  */
 function getAvailableUtils(utilsTemplatesDir: string): string[] {
     return fs.readdirSync(utilsTemplatesDir).map((file) => path.basename(file));
+}
+
+/**
+ * Resolve a user-provided util name to an actual entry. Tries:
+ *   1. exact match (e.g. "cn.ts" or "dataViews")
+ *   2. with `.ts` suffix
+ *   3. with `.tsx` suffix
+ */
+function resolveUtilEntry(
+    input: string,
+    available: string[],
+    dir: string,
+): string | null {
+    if (available.includes(input)) return input;
+    const candidates = [`${input}.ts`, `${input}.tsx`];
+    for (const c of candidates) {
+        if (available.includes(c)) return c;
+    }
+    if (fs.existsSync(path.join(dir, input))) return input;
+    return null;
 }
 
 /**
