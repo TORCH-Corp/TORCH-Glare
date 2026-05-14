@@ -1,5 +1,5 @@
 import type { DynamicRecord, TreeConfig } from "../../components/DataViews/types"
-import { getByPath } from "./pathUtils"
+import { getByPath, setByPath } from "./pathUtils"
 
 export type TreeNode = {
   id: string
@@ -13,6 +13,7 @@ export type ResolvedTreeConfig = {
   childrenField?: string
   parentField?: string
   idField: string
+  orderField?: string
   nodeLabel?: string
   defaultExpanded: "all" | "roots" | "none"
 }
@@ -41,6 +42,7 @@ export function autoDetectTreeShape(
     childrenField,
     parentField,
     idField,
+    orderField: config.orderField,
     nodeLabel: config.nodeLabel,
     defaultExpanded: config.defaultExpanded ?? "roots",
   }
@@ -197,6 +199,178 @@ export function flattenAll(data: DynamicRecord[], childrenField: string): Dynami
   }
   for (const r of data) dfs(r)
   return out
+}
+
+export type MoveArgs = {
+  dragIds: string[]
+  parentId: string | null
+  index: number
+}
+
+export function applyMove(
+  data: DynamicRecord[],
+  config: ResolvedTreeConfig,
+  args: MoveArgs,
+): DynamicRecord[] {
+  if (config.childrenField) return applyMoveNested(data, config, args)
+  if (config.parentField) return applyMoveFlat(data, config, args)
+  return applyMoveTopLevel(data, config, args)
+}
+
+function recordId(record: DynamicRecord, idField: string, fallbackIdx: number): string {
+  const v = getByPath(record, idField)
+  return v != null ? String(v) : `__row${fallbackIdx}`
+}
+
+function applyMoveTopLevel(
+  data: DynamicRecord[],
+  config: ResolvedTreeConfig,
+  args: MoveArgs,
+): DynamicRecord[] {
+  const ids = new Set(args.dragIds)
+  const dragged: DynamicRecord[] = []
+  const remaining: DynamicRecord[] = []
+  data.forEach((rec, i) => {
+    if (ids.has(recordId(rec, config.idField, i))) dragged.push(rec)
+    else remaining.push(rec)
+  })
+  const target = args.parentId == null ? remaining : remaining
+  const insertAt = Math.max(0, Math.min(args.index, target.length))
+  return [...target.slice(0, insertAt), ...dragged, ...target.slice(insertAt)]
+}
+
+function applyMoveFlat(
+  data: DynamicRecord[],
+  config: ResolvedTreeConfig,
+  args: MoveArgs,
+): DynamicRecord[] {
+  const idField = config.idField
+  const parentField = config.parentField!
+  const orderField = config.orderField
+
+  const dragSet = new Set(args.dragIds)
+
+  if (args.parentId) {
+    for (const d of data) {
+      const id = String(getByPath(d, idField) ?? "")
+      if (!dragSet.has(id)) continue
+      let cur: string | null = args.parentId
+      while (cur) {
+        if (cur === id) return data
+        const search = cur
+        const parentRec = data.find((r) => String(getByPath(r, idField) ?? "") === search)
+        if (!parentRec) break
+        const next = getByPath(parentRec, parentField)
+        cur = next == null ? null : String(next)
+      }
+    }
+  }
+
+  const updatedParent: DynamicRecord[] = data.map((rec) => {
+    const id = String(getByPath(rec, idField) ?? "")
+    if (!dragSet.has(id)) return rec
+    return setByPath(rec, parentField, args.parentId ?? null)
+  })
+
+  if (!orderField) return updatedParent
+
+  const siblingsAfter = updatedParent.filter((rec) => {
+    const p = getByPath(rec, parentField)
+    const norm = p == null ? null : String(p)
+    return norm === (args.parentId ?? null)
+  })
+
+  const dragged: DynamicRecord[] = []
+  const others: DynamicRecord[] = []
+  siblingsAfter.forEach((rec) => {
+    const id = String(getByPath(rec, idField) ?? "")
+    if (dragSet.has(id)) dragged.push(rec)
+    else others.push(rec)
+  })
+
+  const insertAt = Math.max(0, Math.min(args.index, others.length))
+  const newOrder = [...others.slice(0, insertAt), ...dragged, ...others.slice(insertAt)]
+  const orderById = new Map<string, number>()
+  newOrder.forEach((rec, i) => {
+    const id = String(getByPath(rec, idField) ?? "")
+    orderById.set(id, i)
+  })
+
+  return updatedParent.map((rec) => {
+    const id = String(getByPath(rec, idField) ?? "")
+    if (!orderById.has(id)) return rec
+    return setByPath(rec, orderField, orderById.get(id)!)
+  })
+}
+
+function applyMoveNested(
+  data: DynamicRecord[],
+  config: ResolvedTreeConfig,
+  args: MoveArgs,
+): DynamicRecord[] {
+  const childrenField = config.childrenField!
+  const idField = config.idField
+  const dragSet = new Set(args.dragIds)
+
+  const isAncestorOfDrag = (record: DynamicRecord, ancestors: DynamicRecord[]): boolean => {
+    const id = String(getByPath(record, idField) ?? "")
+    if (dragSet.has(id)) {
+      for (const a of ancestors) {
+        const aid = String(getByPath(a, idField) ?? "")
+        if (aid === args.parentId) return true
+      }
+    }
+    const kids = getByPath(record, childrenField)
+    if (Array.isArray(kids)) {
+      for (const k of kids) {
+        if (isAncestorOfDrag(k, [...ancestors, record])) return true
+      }
+    }
+    return false
+  }
+  for (const r of data) if (isAncestorOfDrag(r, [])) return data
+
+  const extracted: DynamicRecord[] = []
+  const extract = (records: DynamicRecord[]): DynamicRecord[] =>
+    records
+      .map((rec) => {
+        const id = String(getByPath(rec, idField) ?? "")
+        const kids = getByPath(rec, childrenField)
+        const newKids = Array.isArray(kids) ? extract(kids) : kids
+        const next = Array.isArray(kids) ? setByPath(rec, childrenField, newKids) : rec
+        if (dragSet.has(id)) {
+          extracted.push(next)
+          return null
+        }
+        return next
+      })
+      .filter((r): r is DynamicRecord => r !== null)
+
+  let pruned = extract(data)
+
+  const insert = (records: DynamicRecord[]): DynamicRecord[] =>
+    records.map((rec) => {
+      const id = String(getByPath(rec, idField) ?? "")
+      if (id === args.parentId) {
+        const kids = getByPath(rec, childrenField)
+        const arr = Array.isArray(kids) ? [...kids] : []
+        const at = Math.max(0, Math.min(args.index, arr.length))
+        arr.splice(at, 0, ...extracted)
+        return setByPath(rec, childrenField, arr)
+      }
+      const kids = getByPath(rec, childrenField)
+      if (Array.isArray(kids)) {
+        return setByPath(rec, childrenField, insert(kids))
+      }
+      return rec
+    })
+
+  if (args.parentId == null) {
+    const at = Math.max(0, Math.min(args.index, pruned.length))
+    return [...pruned.slice(0, at), ...extracted, ...pruned.slice(at)]
+  }
+
+  return insert(pruned)
 }
 
 export function pruneTree(

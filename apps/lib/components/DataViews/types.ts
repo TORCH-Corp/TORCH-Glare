@@ -6,9 +6,11 @@ export type TreeConfig = {
   childrenField?: string
   parentField?: string
   idField?: string
+  orderField?: string
   nodeLabel?: string
   defaultExpanded?: "all" | "roots" | "none"
   defaultRightPane?: "table" | "details"
+  dndEnabled?: boolean
 }
 
 export type ViewVisibility = {

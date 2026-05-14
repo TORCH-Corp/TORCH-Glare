@@ -12,6 +12,7 @@ import type {
   TreeConfig,
 } from "./types"
 import {
+  applyMove,
   autoDetectTreeShape,
   buildTree,
   findNodeById,
@@ -144,17 +145,35 @@ export function TreeView({
     treeConfig?.defaultRightPane ?? "table",
   )
 
+  const dndEnabled = treeConfig?.dndEnabled !== false && !!onDataUpdate
+
+  const handleMove = ({
+    dragIds,
+    parentId,
+    index,
+  }: {
+    dragIds: string[]
+    parentId: string | null
+    index: number
+  }) => {
+    if (!onDataUpdate) return
+    const next = applyMove(data, resolvedTree, { dragIds, parentId, index })
+    onDataUpdate(next)
+  }
+
   const treeContent = (
     <TreeSidebar
       roots={visibleForest}
       expanded={expanded}
       selectedId={selectedId}
       labelField={labelField}
+      dndEnabled={dndEnabled}
       onToggle={toggle}
       onSelect={(id) => {
         setSelectedId(id)
         if (isMobile) setDrawerOpen(false)
       }}
+      onMove={handleMove}
     />
   )
 
@@ -171,10 +190,12 @@ export function TreeView({
     <div className="flex h-full bg-background-presentation-body-primary">
       {!isMobile && (
         <div className="w-64 border-r border-border-presentation-global-primary bg-background-presentation-body-overlay-primary flex flex-col">
-          <div className="px-3 py-2 border-b border-border-presentation-global-primary text-xs font-semibold text-content-presentation-global-secondary uppercase tracking-wide">
-            Tree
+          <div className="px-3 py-2 border-b border-border-presentation-global-primary">
+            <span className="text-xs font-semibold text-content-presentation-global-secondary uppercase tracking-wide">
+              Tree
+            </span>
           </div>
-          <div className="flex-1 overflow-y-auto">{treeContent}</div>
+          <div className="flex-1 overflow-hidden">{treeContent}</div>
         </div>
       )}
 
