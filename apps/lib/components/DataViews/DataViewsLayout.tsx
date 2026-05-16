@@ -1,7 +1,7 @@
 "use client"
 
-import { forwardRef, useState } from "react"
-import { Table2, Kanban as KanbanIcon, Inbox as InboxIcon, Settings, Network } from "lucide-react"
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { List, LayoutGrid, Inbox as InboxIcon, Network } from "lucide-react"
 import type {
   DynamicRecord,
   DynamicColumnConfig,
@@ -11,15 +11,15 @@ import type {
   InboxConfig,
   TreeConfig,
   ViewConfig,
+  ViewType,
   ViewVisibility,
 } from "./types"
-import { Button } from "../Button"
-import TabFormItem from "../TabFormItem"
 import { TableView } from "./TableView"
 import { KanbanView } from "./KanbanView"
 import { InboxView } from "./InboxView"
 import { TreeView } from "./TreeView"
-import { SettingsPanel } from "./SettingsPanel"
+import { DataViewsHeader, type DataViewsHeaderView } from "./DataViewsHeader"
+import { DataViewsConfigPanel } from "./DataViewsConfigPanel"
 import { useDataViewsState } from "../../hooks/useDataViewsState"
 import { cn } from "../../utils/cn"
 import type { Themes } from "../../utils/types"
@@ -47,15 +47,26 @@ export type DataViewsLayoutProps = {
   showSettings?: boolean
   showTitle?: boolean
 
+  onAddNew?: () => void
+  addNewLabel?: string
+
   className?: string
   theme?: Themes
 }
+
+const VIEW_META: Record<ViewType, { label: string; icon: DataViewsHeaderView["icon"] }> = {
+  table: { label: "List", icon: <List /> },
+  kanban: { label: "Board", icon: <LayoutGrid /> },
+  inbox: { label: "Inbox", icon: <InboxIcon /> },
+  tree: { label: "Tree", icon: <Network /> },
+}
+
+const VIEW_ORDER: ViewType[] = ["table", "kanban", "inbox", "tree"]
 
 export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
   function DataViewsLayout(props, ref) {
     const {
       title = "Data Views",
-      description = "Unified data visualization across multiple views",
       data,
       config: initialConfig,
       fields,
@@ -67,9 +78,12 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
       filters,
       filterState: externalFilterState,
       onFilterChange,
-      showFilters = true,
+      // `showFilters` is retained on the public API but filters now live in the
+      // right-side config rail rather than an inline per-view panel.
       showSettings = true,
       showTitle = true,
+      onAddNew,
+      addNewLabel,
       className,
       theme,
     } = props
@@ -98,161 +112,169 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
       onFilterChange,
     })
 
-    const [showSettingsPanel, setShowSettingsPanel] = useState(false)
+    // `panelOpen` drives intent; `panelMounted` keeps the panel in the tree
+    // through the close animation before unmounting.
+    const [panelOpen, setPanelOpen] = useState(false)
+    const [panelMounted, setPanelMounted] = useState(false)
+    const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    const openPanel = useCallback(() => {
+      if (closeTimer.current) {
+        clearTimeout(closeTimer.current)
+        closeTimer.current = null
+      }
+      // Mount at width 0 first, then flip to open on the next frame so the
+      // width transition animates from 0 → 260px instead of snapping.
+      setPanelMounted(true)
+      requestAnimationFrame(() => requestAnimationFrame(() => setPanelOpen(true)))
+    }, [])
+
+    const closePanel = useCallback(() => {
+      setPanelOpen(false)
+      if (closeTimer.current) clearTimeout(closeTimer.current)
+      // Keep mounted through the width/fade animation (300ms) before unmounting.
+      closeTimer.current = setTimeout(() => setPanelMounted(false), 300)
+    }, [])
+
+    const togglePanel = useCallback(() => {
+      if (panelOpen) closePanel()
+      else openPanel()
+    }, [panelOpen, openPanel, closePanel])
+
+    useEffect(() => {
+      return () => {
+        if (closeTimer.current) clearTimeout(closeTimer.current)
+      }
+    }, [])
 
     const effectiveKanbanGroupBy = kanbanGroupBy ?? config.kanbanGroupBy
-    const effectiveShowFilters = showFilters && config.showFilters !== false
-    const effectiveConfig: ViewConfig = { ...config, showFilters: effectiveShowFilters }
+    // Filters now live in the right-side rail, not as an inline per-view panel.
+    const effectiveConfig: ViewConfig = { ...config, showFilters: false }
+
+    const headerViews = useMemo<DataViewsHeaderView[]>(
+      () =>
+        VIEW_ORDER.filter((v) => enabledViews[v]).map((v) => ({
+          id: v,
+          label: VIEW_META[v].label,
+          icon: VIEW_META[v].icon,
+        })),
+      [enabledViews],
+    )
 
     return (
       <div
         ref={ref}
         data-theme={theme}
         className={cn(
-          "flex h-screen flex-col bg-background-presentation-body-primary text-content-presentation-global-primary",
+          // Shell is always black (matches Figma): the dark header and config
+          // rail sit on it; the Master Container is the white surface inside.
+          "flex h-screen gap-2 bg-black p-2 text-content-presentation-global-primary",
           className,
         )}
       >
-        {showTitle && (
-          <header className="border-b border-border-presentation-global-primary bg-background-presentation-body-primary">
-            <div className="flex items-center justify-between px-6 py-4">
-              <div>
-                <h1 className="text-2xl font-semibold text-content-presentation-global-primary">{title}</h1>
-                {description && (
-                  <p className="text-sm text-content-presentation-global-secondary">{description}</p>
-                )}
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 rounded-lg bg-background-presentation-form-field-primary p-1">
-                  {enabledViews.table && (
-                    <TabFormItem
-                      componentType="top"
-                      active={currentView === "table"}
-                      onClick={() => setCurrentView("table")}
-                      className="gap-2"
-                    >
-                      <Table2 className="h-4 w-4" />
-                      Table
-                    </TabFormItem>
-                  )}
-                  {enabledViews.kanban && (
-                    <TabFormItem
-                      componentType="top"
-                      active={currentView === "kanban"}
-                      onClick={() => setCurrentView("kanban")}
-                      className="gap-2"
-                    >
-                      <KanbanIcon className="h-4 w-4" />
-                      Kanban
-                    </TabFormItem>
-                  )}
-                  {enabledViews.inbox && (
-                    <TabFormItem
-                      componentType="top"
-                      active={currentView === "inbox"}
-                      onClick={() => setCurrentView("inbox")}
-                      className="gap-2"
-                    >
-                      <InboxIcon className="h-4 w-4" />
-                      Inbox
-                    </TabFormItem>
-                  )}
-                  {enabledViews.tree && (
-                    <TabFormItem
-                      componentType="top"
-                      active={currentView === "tree"}
-                      onClick={() => setCurrentView("tree")}
-                      className="gap-2"
-                    >
-                      <Network className="h-4 w-4" />
-                      Tree
-                    </TabFormItem>
-                  )}
-                </div>
-
-                {showSettings && (
-                  <Button
-                    variant="PrimeStyle"
-                    size="M"
-                    onClick={() => setShowSettingsPanel((v) => !v)}
-                    className="gap-2 bg-transparent"
-                  >
-                    <Settings className="h-4 w-4" />
-                    Settings
-                  </Button>
-                )}
-              </div>
-            </div>
-          </header>
-        )}
-
-        <main className="flex flex-1 overflow-hidden">
-          <div className="flex-1 overflow-hidden">
-            {currentView === "table" && enabledViews.table && (
-              <TableView
-                data={flatItems}
-                columns={detectedColumns}
-                fields={resolvedFields}
-                config={effectiveConfig}
-                onDataUpdate={onDataUpdate}
-                onSortChange={(sortBy, sortOrder) => setConfig({ sortBy, sortOrder })}
-                filters={filters}
-                filterState={filterState}
-                onFilterChange={setFilterState}
-                showFilters={effectiveShowFilters}
-              />
-            )}
-            {currentView === "kanban" && enabledViews.kanban && (
-              <KanbanView
-                data={flatItems}
-                columns={detectedColumns}
-                fields={resolvedFields}
-                config={effectiveConfig}
-                onDataUpdate={onDataUpdate}
-                groupByField={effectiveKanbanGroupBy}
-              />
-            )}
-            {currentView === "inbox" && enabledViews.inbox && (
-              <InboxView
-                data={flatItems}
-                columns={detectedColumns}
-                fields={resolvedFields}
-                inboxConfig={inboxConfig}
-                config={effectiveConfig}
-                onDataUpdate={onDataUpdate}
-                filters={filters}
-                filterState={filterState}
-                onFilterChange={setFilterState}
-                showFilters={effectiveShowFilters}
-              />
-            )}
-            {currentView === "tree" && enabledViews.tree && (
-              <TreeView
-                data={items}
-                columns={detectedColumns}
-                fields={resolvedFields}
-                treeConfig={treeConfig}
-                config={effectiveConfig}
-                onDataUpdate={onDataUpdate}
-                filters={filters}
-                filterState={filterState}
-                onFilterChange={setFilterState}
-                showFilters={effectiveShowFilters}
-              />
-            )}
-          </div>
-
-          {showSettings && showSettingsPanel && (
-            <SettingsPanel
-              config={config}
-              onConfigChange={setConfig}
-              onClose={() => setShowSettingsPanel(false)}
+        {/* Left column: header + content. Shrinks as the panel expands. */}
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          {showTitle && (
+            <DataViewsHeader
+              title={title}
+              views={headerViews}
               currentView={currentView}
-              fields={resolvedFields}
+              onViewChange={setCurrentView}
+              showSettings={showSettings}
+              settingsOpen={panelOpen}
+              onToggleSettings={togglePanel}
+              onAddNew={onAddNew}
+              addNewLabel={addNewLabel}
             />
           )}
-        </main>
+
+          <main className="flex min-h-0 flex-1 overflow-hidden">
+            {/* Master Container — white card, 16px radius, #D4D4D4 hairline
+                border. Fixed surface (matches header chrome). */}
+            <div className="flex flex-1 overflow-hidden rounded-[16px] border border-[#D4D4D4] bg-white">
+              <div className="flex-1 overflow-auto">
+              {currentView === "table" && enabledViews.table && (
+                <TableView
+                  data={flatItems}
+                  columns={detectedColumns}
+                  fields={resolvedFields}
+                  config={effectiveConfig}
+                  onDataUpdate={onDataUpdate}
+                  onSortChange={(sortBy, sortOrder) => setConfig({ sortBy, sortOrder })}
+                  filters={filters}
+                  filterState={filterState}
+                  onFilterChange={setFilterState}
+                  showFilters={false}
+                />
+              )}
+              {currentView === "kanban" && enabledViews.kanban && (
+                <KanbanView
+                  data={flatItems}
+                  columns={detectedColumns}
+                  fields={resolvedFields}
+                  config={effectiveConfig}
+                  onDataUpdate={onDataUpdate}
+                  groupByField={effectiveKanbanGroupBy}
+                />
+              )}
+              {currentView === "inbox" && enabledViews.inbox && (
+                <InboxView
+                  data={flatItems}
+                  columns={detectedColumns}
+                  fields={resolvedFields}
+                  inboxConfig={inboxConfig}
+                  config={effectiveConfig}
+                  onDataUpdate={onDataUpdate}
+                  filters={filters}
+                  filterState={filterState}
+                  onFilterChange={setFilterState}
+                  showFilters={false}
+                />
+              )}
+              {currentView === "tree" && enabledViews.tree && (
+                <TreeView
+                  data={items}
+                  columns={detectedColumns}
+                  fields={resolvedFields}
+                  treeConfig={treeConfig}
+                  config={effectiveConfig}
+                  onDataUpdate={onDataUpdate}
+                  filters={filters}
+                  filterState={filterState}
+                  onFilterChange={setFilterState}
+                  showFilters={false}
+                />
+              )}
+              </div>
+            </div>
+          </main>
+        </div>
+
+        {/* Right rail: full-height sibling of the [header + content] column, so
+            opening it pushes the header as well as the content. The wrapper
+            animates its width so the left column reflows in sync with the
+            panel's slide-in. */}
+        {showSettings && panelMounted && (
+          <div
+            className={cn(
+              "shrink-0 overflow-hidden transition-[width] duration-300 ease-in-out",
+              panelOpen ? "w-[260px]" : "w-0",
+            )}
+          >
+            <DataViewsConfigPanel
+              state={panelOpen ? "open" : "closed"}
+              config={config}
+              onConfigChange={setConfig}
+              onClose={closePanel}
+              currentView={currentView}
+              fields={resolvedFields}
+              data={flatItems}
+              filterState={filterState}
+              onFilterChange={setFilterState}
+              filterConfig={filters}
+            />
+          </div>
+        )}
       </div>
     )
   }

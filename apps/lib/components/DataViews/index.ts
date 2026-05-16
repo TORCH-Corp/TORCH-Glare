@@ -15,6 +15,10 @@ export type { TreeViewProps } from "./TreeView"
 
 export { FilterPanel } from "./FilterPanel"
 export { SettingsPanel } from "./SettingsPanel"
+export { DataViewsHeader } from "./DataViewsHeader"
+export type { DataViewsHeaderView } from "./DataViewsHeader"
+export { DataViewsConfigPanel } from "./DataViewsConfigPanel"
+export type { DataViewsConfigPanelProps } from "./DataViewsConfigPanel"
 
 export { renderField } from "./fieldRenderers"
 export { resolveBadgeVariant } from "./badgeAdapter"
