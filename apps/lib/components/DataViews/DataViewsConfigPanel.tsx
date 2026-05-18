@@ -52,6 +52,9 @@ export type DataViewsConfigPanelProps = {
 
 const DEFAULT_SAVED_VIEWS: SavedView[] = [
   { id: "default", label: "Default View" },
+  { id: "high-priority", label: "High Priority" },
+  { id: "pending-orders", label: "Pending Orders" },
+  { id: "recent", label: "Recently Created" },
 ];
 
 function SectionHeader({

@@ -200,7 +200,7 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
             />
           )}
 
-          <main className="flex min-h-0 flex-1 overflow-hidden">
+          <main className="flex min-h-0 flex-1 overflow-hidden ">
             {/* Master Container — white card, 16px radius, #D4D4D4 hairline
                 border. Fixed surface (matches header chrome). */}
             <div className="flex flex-1 overflow-hidden rounded-[16px] border border-border-presentation-global-primary ">

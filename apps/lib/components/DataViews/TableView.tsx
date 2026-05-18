@@ -119,7 +119,7 @@ export function TableView({
   const filtersEnabled = showFilters && config.showFilters !== false;
 
   return (
-    <div className="flex h-full bg-background-presentation-body-primary">
+    <div className="flex h-full bg-background-presentation-form-base">
       {filtersEnabled && !isMobile && (
         <FilterPanel
           data={data}
@@ -131,7 +131,7 @@ export function TableView({
         />
       )}
 
-      <div className="flex flex-1 flex-col gap-4 p-2 overflow-hidden">
+      <div className="flex flex-1 flex-col gap-4  overflow-hidden">
         {!isMobile ? (
           <div className="flex-1 overflow-auto rounded-lg">
             <Table className="w-full">
@@ -162,7 +162,18 @@ export function TableView({
                     </TableCell>
                     {displayFields.map((field) => (
                       <TableCell key={field.path}>
-                        {renderField(getByPath(item, field.path), field, item)}
+                        {/* `isolate` confines the Badge's mix-blend-luminosity
+                            to a local stacking context and `transform-gpu`
+                            promotes it to its own layer, so the table's
+                            post-mount column reflow repaints cleanly instead
+                            of leaving a ghosted/doubled badge frame. */}
+                        <span className="isolate inline-flex transform-gpu">
+                          {renderField(
+                            getByPath(item, field.path),
+                            field,
+                            item,
+                          )}
+                        </span>
                       </TableCell>
                     ))}
                   </TableRow>
