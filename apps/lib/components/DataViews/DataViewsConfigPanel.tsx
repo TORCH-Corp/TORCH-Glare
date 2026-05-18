@@ -1,7 +1,11 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
-import { X, GripVertical, Settings as SettingsIcon, Filter as FilterIcon } from "lucide-react"
+import { useMemo, useState } from "react";
+import {
+  X,
+  Settings as SettingsIcon,
+  Filter as FilterIcon,
+} from "lucide-react";
 import type {
   ViewConfig,
   ViewType,
@@ -10,51 +14,51 @@ import type {
   DynamicFilterConfig,
   FilterState,
   FilterValue,
-} from "./types"
-import { Switch } from "../Switch"
-import { RadioGroup, Radio } from "../Radio"
-import { Label } from "../Label"
-import { FilterPanel } from "./FilterPanel"
-import { cn } from "../../utils/cn"
+} from "./types";
+import { Switch } from "../Switch";
+import { RadioGroup, Radio } from "../Radio";
+import { Label } from "../Label";
+import { FilterPanel } from "./FilterPanel";
+import { cn } from "../../utils/cn";
 
-type ConfigTab = "config" | "filters"
+type ConfigTab = "config" | "filters";
 
-type SavedView = { id: string; label: string }
+type SavedView = { id: string; label: string };
 
 export type DataViewsConfigPanelProps = {
-  config: ViewConfig
-  onConfigChange: (config: Partial<ViewConfig>) => void
-  onClose: () => void
-  currentView: ViewType
-  fields: FieldConfig[]
+  config: ViewConfig;
+  onConfigChange: (config: Partial<ViewConfig>) => void;
+  onClose: () => void;
+  currentView: ViewType;
+  fields: FieldConfig[];
 
   // Filters tab
-  data: DynamicRecord[]
-  filterState: FilterState
-  onFilterChange: (filters: FilterState) => void
-  filterConfig?: DynamicFilterConfig[]
+  data: DynamicRecord[];
+  filterState: FilterState;
+  onFilterChange: (filters: FilterState) => void;
+  filterConfig?: DynamicFilterConfig[];
 
   // Saved views (presentational shell — wire to persistence when available)
-  savedViews?: SavedView[]
-  activeSavedView?: string
-  onSavedViewChange?: (id: string) => void
-  onSaveNewView?: () => void
+  savedViews?: SavedView[];
+  activeSavedView?: string;
+  onSavedViewChange?: (id: string) => void;
+  onSaveNewView?: () => void;
 
   // Animation: drives slide-in/out. Parent keeps the panel mounted through
   // the close animation, then unmounts.
-  state?: "open" | "closed"
-}
+  state?: "open" | "closed";
+};
 
 const DEFAULT_SAVED_VIEWS: SavedView[] = [
   { id: "default", label: "Default View" },
-]
+];
 
 function SectionHeader({
   title,
   action,
 }: {
-  title: string
-  action?: React.ReactNode
+  title: string;
+  action?: React.ReactNode;
 }) {
   return (
     <div className="flex items-center justify-between">
@@ -63,8 +67,45 @@ function SectionHeader({
       </h3>
       {action}
     </div>
-  )
+  );
 }
+
+/** 2×3 dot drag handle, matching the Figma SB-Column-Item grip (16×16 box,
+ *  compact ~1.5px dots, tight spacing — drawn as an SVG for pixel accuracy). */
+function GripDots() {
+  return (
+    <svg
+      aria-hidden
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      // Panel is always-dark chrome (like the hardcoded white label text):
+      // the grip stays white-on-dark regardless of host theme.
+      className="text-white/60"
+      fill="currentColor"
+    >
+      {[5.33, 9.33].flatMap((cx) =>
+        [3.33, 8, 12.67].map((cy) => (
+          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1" />
+        )),
+      )}
+    </svg>
+  );
+}
+
+/** 2px blue insertion line shown between rows during a drag-reorder. */
+function DropLine() {
+  return (
+    <div className="pointer-events-none relative h-0">
+      <div className="absolute -top-[1px] left-0 right-0 h-[2px] rounded-full bg-[#005ECC]" />
+    </div>
+  );
+}
+
+// Shared Switch override: bright green track (#0AC713) when checked, matching
+// the Figma Switcher-1.0 "On" state, regardless of the dark theme scope.
+const SWITCH_GREEN =
+  "data-[state=checked]:bg-[#0AC713] data-[state=checked]:border-[#0AC713]";
 
 export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
   const {
@@ -81,61 +122,70 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
     onSavedViewChange,
     onSaveNewView,
     state = "open",
-  } = props
+  } = props;
 
-  const [tab, setTab] = useState<ConfigTab>("config")
+  const [tab, setTab] = useState<ConfigTab>("config");
 
   const visibleFields = useMemo(
     () => fields.filter((f) => f.type !== "hidden"),
     [fields],
-  )
+  );
   const visiblePaths = useMemo(
     () => new Set(visibleFields.map((f) => f.path)),
     [visibleFields],
-  )
+  );
   const fieldByPath = useMemo(
     () => new Map(visibleFields.map((f) => [f.path, f])),
     [visibleFields],
-  )
+  );
   const orderedColumns = useMemo(
     () =>
       [...config.tableColumns]
         .filter((c) => visiblePaths.has(c.id))
         .sort((a, b) => a.order - b.order),
     [config.tableColumns, visiblePaths],
-  )
+  );
 
   const toggleColumnVisibility = (path: string) => {
     const next = config.tableColumns.map((c) =>
       c.id === path ? { ...c, visible: !c.visible } : c,
-    )
-    onConfigChange({ tableColumns: next })
-  }
+    );
+    onConfigChange({ tableColumns: next });
+  };
 
-  const [dragPath, setDragPath] = useState<string | null>(null)
-  const [dragOverPath, setDragOverPath] = useState<string | null>(null)
+  const [dragPath, setDragPath] = useState<string | null>(null);
+  const [dragOverPath, setDragOverPath] = useState<string | null>(null);
+  // Whether the drop will land before (true) or after (false) dragOverPath.
+  const [dropBefore, setDropBefore] = useState(true);
 
-  const reorderColumn = (sourcePath: string, targetPath: string) => {
-    if (sourcePath === targetPath) return
-    const ids = orderedColumns.map((c) => c.id)
-    const from = ids.indexOf(sourcePath)
-    const to = ids.indexOf(targetPath)
-    if (from === -1 || to === -1) return
-    const reordered = [...ids]
-    const [moved] = reordered.splice(from, 1)
-    reordered.splice(to, 0, moved)
-    const orderByPath = new Map(reordered.map((id, i) => [id, i]))
+  const reorderColumn = (
+    sourcePath: string,
+    targetPath: string,
+    before: boolean,
+  ) => {
+    if (sourcePath === targetPath) return;
+    const ids = orderedColumns.map((c) => c.id);
+    const from = ids.indexOf(sourcePath);
+    let to = ids.indexOf(targetPath);
+    if (from === -1 || to === -1) return;
+    const reordered = [...ids];
+    reordered.splice(from, 1);
+    // Recompute the target index after removal, then offset for before/after.
+    to = reordered.indexOf(targetPath);
+    const insertAt = before ? to : to + 1;
+    reordered.splice(insertAt, 0, sourcePath);
+    const orderByPath = new Map(reordered.map((id, i) => [id, i]));
     const next = config.tableColumns.map((c) => {
-      const newOrder = orderByPath.get(c.id)
-      return newOrder == null ? c : { ...c, order: newOrder }
-    })
-    onConfigChange({ tableColumns: next })
-  }
+      const newOrder = orderByPath.get(c.id);
+      return newOrder == null ? c : { ...c, order: newOrder };
+    });
+    onConfigChange({ tableColumns: next });
+  };
 
-  const sortableColumns = orderedColumns
+  const sortableColumns = orderedColumns;
 
   const tabBtn = (id: ConfigTab, icon: React.ReactNode, label: string) => {
-    const active = tab === id
+    const active = tab === id;
     return (
       <button
         type="button"
@@ -153,8 +203,8 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
         </span>
         {label}
       </button>
-    )
-  }
+    );
+  };
 
   return (
     <div
@@ -227,7 +277,7 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
             {/* Table Columns */}
             <div className="space-y-3">
               <SectionHeader title="Table Columns" />
-              <p className="text-[14px] text-content-presentation-global-tertiary">
+              <p className="text-[12px] leading-[1.475] text-content-presentation-global-tertiary">
                 Show or hide columns in table view
               </p>
               {orderedColumns.length === 0 ? (
@@ -235,58 +285,74 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                   No fields detected.
                 </p>
               ) : (
-                <div className="space-y-1.5 rounded-[12px] bg-[#1C1D1F] p-1">
+                <div data-theme="dark" className="flex flex-col gap-2">
                   {orderedColumns.map((col) => {
-                    const field = fieldByPath.get(col.id)
-                    const isDragging = dragPath === col.id
-                    const isDropTarget =
-                      dragOverPath === col.id && dragPath !== col.id
+                    const field = fieldByPath.get(col.id);
+                    const isDragging = dragPath === col.id;
+                    const isTarget =
+                      dragOverPath === col.id && dragPath !== col.id;
                     return (
-                      <div
-                        key={col.id}
-                        draggable
-                        onDragStart={(e) => {
-                          setDragPath(col.id)
-                          e.dataTransfer.effectAllowed = "move"
-                          e.dataTransfer.setData("text/plain", col.id)
-                        }}
-                        onDragOver={(e) => {
-                          e.preventDefault()
-                          e.dataTransfer.dropEffect = "move"
-                          if (dragOverPath !== col.id) setDragOverPath(col.id)
-                        }}
-                        onDragLeave={() => {
-                          if (dragOverPath === col.id) setDragOverPath(null)
-                        }}
-                        onDrop={(e) => {
-                          e.preventDefault()
-                          if (dragPath) reorderColumn(dragPath, col.id)
-                          setDragPath(null)
-                          setDragOverPath(null)
-                        }}
-                        onDragEnd={() => {
-                          setDragPath(null)
-                          setDragOverPath(null)
-                        }}
-                        className={cn(
-                          "flex items-center gap-2 rounded-[10px] px-2 py-2 transition-colors cursor-grab active:cursor-grabbing",
-                          isDragging
-                            ? "opacity-50"
-                            : isDropTarget
-                              ? "bg-[#252729]"
-                              : "hover:bg-[#252729]",
-                        )}
-                      >
-                        <GripVertical className="h-4 w-4 text-content-presentation-global-tertiary" />
-                        <span className="flex-1 text-[14px] text-white">
-                          {col.label || field?.label || col.id}
-                        </span>
-                        <Switch
-                          checked={col.visible}
-                          onCheckedChange={() => toggleColumnVisibility(col.id)}
-                        />
+                      <div key={col.id}>
+                        {isTarget && dropBefore && <DropLine />}
+                        <div
+                          draggable
+                          onDragStart={(e) => {
+                            setDragPath(col.id);
+                            e.dataTransfer.effectAllowed = "move";
+                            e.dataTransfer.setData("text/plain", col.id);
+                          }}
+                          onDragOver={(e) => {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = "move";
+                            const rect =
+                              e.currentTarget.getBoundingClientRect();
+                            const before =
+                              e.clientY < rect.top + rect.height / 2;
+                            if (dragOverPath !== col.id)
+                              setDragOverPath(col.id);
+                            if (dropBefore !== before) setDropBefore(before);
+                          }}
+                          onDragLeave={() => {
+                            if (dragOverPath === col.id) setDragOverPath(null);
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (dragPath)
+                              reorderColumn(dragPath, col.id, dropBefore);
+                            setDragPath(null);
+                            setDragOverPath(null);
+                          }}
+                          onDragEnd={() => {
+                            setDragPath(null);
+                            setDragOverPath(null);
+                          }}
+                          className={cn(
+                            // SB-Column-Item: standalone #1C1D1F pill, #252729
+                            // border. Figma container spec: 8px radius, 8.8px
+                            // padding, 8px gap between grip / label / switch.
+                            "flex items-center gap-2 rounded-r-[99px] rounded-l-[60px] border border-[#252729] bg-[#1C1D1F] p-[8.8px] transition-colors cursor-grab active:cursor-grabbing",
+                            isDragging ? "opacity-50" : "hover:bg-[#252729]",
+                          )}
+                        >
+                          <span className="flex shrink-0 items-center justify-center">
+                            <GripDots />
+                          </span>
+                          <span className="flex-1 text-[14px] text-white">
+                            {col.label || field?.label || col.id}
+                          </span>
+                          <span className="flex shrink-0 items-center">
+                            <Switch
+                              checked={col.visible}
+                              onCheckedChange={() =>
+                                toggleColumnVisibility(col.id)
+                              }
+                              className={SWITCH_GREEN}
+                            />
+                          </span>
+                        </div>
+                        {isTarget && !dropBefore && <DropLine />}
                       </div>
-                    )
+                    );
                   })}
                 </div>
               )}
@@ -304,8 +370,8 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
               ) : (
                 <div className="space-y-1.5 rounded-[12px] bg-[#1C1D1F] p-1">
                   {sortableColumns.map((col) => {
-                    const field = fieldByPath.get(col.id)
-                    const isActive = config.sortBy === col.id
+                    const field = fieldByPath.get(col.id);
+                    const isActive = config.sortBy === col.id;
                     return (
                       <div
                         key={col.id}
@@ -317,9 +383,14 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                         <div className="flex items-center gap-1">
                           <button
                             type="button"
-                            aria-pressed={isActive && config.sortOrder === "asc"}
+                            aria-pressed={
+                              isActive && config.sortOrder === "asc"
+                            }
                             onClick={() =>
-                              onConfigChange({ sortBy: col.id, sortOrder: "asc" })
+                              onConfigChange({
+                                sortBy: col.id,
+                                sortOrder: "asc",
+                              })
                             }
                             className={cn(
                               "h-6 rounded-md px-2 text-xs transition-colors",
@@ -332,9 +403,14 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                           </button>
                           <button
                             type="button"
-                            aria-pressed={isActive && config.sortOrder === "desc"}
+                            aria-pressed={
+                              isActive && config.sortOrder === "desc"
+                            }
                             onClick={() =>
-                              onConfigChange({ sortBy: col.id, sortOrder: "desc" })
+                              onConfigChange({
+                                sortBy: col.id,
+                                sortOrder: "desc",
+                              })
                             }
                             className={cn(
                               "h-6 rounded-md px-2 text-xs transition-colors",
@@ -347,7 +423,7 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                           </button>
                         </div>
                       </div>
-                    )
+                    );
                   })}
                 </div>
               )}
@@ -369,5 +445,5 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

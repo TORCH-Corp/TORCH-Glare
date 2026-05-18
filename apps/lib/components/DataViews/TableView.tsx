@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
-import { FilterPanel } from "./FilterPanel"
-import { Search } from "lucide-react"
+import { useMemo, useState } from "react";
+import { FilterPanel } from "./FilterPanel";
+import { Search } from "lucide-react";
 import type {
   DynamicRecord,
   ViewConfig,
@@ -11,10 +11,10 @@ import type {
   FilterState,
   FilterValue,
   FieldConfig,
-} from "./types"
-import { Card, CardContent, CardHeader } from "../Card"
-import { Checkbox } from "../Checkbox"
-import { InputField } from "../InputField"
+} from "./types";
+import { Card, CardContent, CardHeader } from "../Card";
+import { Checkbox } from "../Checkbox";
+import { InputField } from "../InputField";
 import {
   Table,
   TableHeader,
@@ -23,24 +23,27 @@ import {
   TableRow,
   TableCell,
   TableCheckbox,
-} from "../Table"
-import { getByPath, matchesFilterValues } from "../../utils/dataViews/pathUtils"
-import { renderField } from "./fieldRenderers"
-import { visibleFields } from "../../utils/dataViews/fieldUtils"
-import { useIsMobile } from "../../hooks/useIsMobile"
+} from "../Table";
+import {
+  getByPath,
+  matchesFilterValues,
+} from "../../utils/dataViews/pathUtils";
+import { renderField } from "./fieldRenderers";
+import { visibleFields } from "../../utils/dataViews/fieldUtils";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export type TableViewProps = {
-  data: DynamicRecord[]
-  columns?: DynamicColumnConfig[]
-  fields: FieldConfig[]
-  config: ViewConfig
-  onDataUpdate?: (data: DynamicRecord[]) => void
-  onSortChange?: (sortBy: string, sortOrder: "asc" | "desc") => void
-  filters?: DynamicFilterConfig[]
-  filterState?: FilterState
-  onFilterChange?: (filters: FilterState) => void
-  showFilters?: boolean
-}
+  data: DynamicRecord[];
+  columns?: DynamicColumnConfig[];
+  fields: FieldConfig[];
+  config: ViewConfig;
+  onDataUpdate?: (data: DynamicRecord[]) => void;
+  onSortChange?: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  filters?: DynamicFilterConfig[];
+  filterState?: FilterState;
+  onFilterChange?: (filters: FilterState) => void;
+  showFilters?: boolean;
+};
 
 export function TableView({
   data,
@@ -52,80 +55,82 @@ export function TableView({
   onFilterChange,
   showFilters = true,
 }: TableViewProps) {
-  const isMobile = useIsMobile()
-  const [searchQuery, setSearchQuery] = useState("")
-  const [internalFilters, setInternalFilters] = useState<FilterState>({})
+  const isMobile = useIsMobile();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [internalFilters, setInternalFilters] = useState<FilterState>({});
 
-  const activeFilters = externalFilterState ?? internalFilters
+  const activeFilters = externalFilterState ?? internalFilters;
 
-  const sortPath = config.sortBy || null
-  const sortDirection: "asc" | "desc" = config.sortOrder ?? "asc"
+  const sortPath = config.sortBy || null;
+  const sortDirection: "asc" | "desc" = config.sortOrder ?? "asc";
 
   const handleSort = (path: string) => {
-    if (!onSortChange) return
+    if (!onSortChange) return;
     if (sortPath === path) {
-      onSortChange(path, sortDirection === "asc" ? "desc" : "asc")
+      onSortChange(path, sortDirection === "asc" ? "desc" : "asc");
     } else {
-      onSortChange(path, "asc")
+      onSortChange(path, "asc");
     }
-  }
+  };
 
   const handleFilterChange = (path: string, value: FilterValue) => {
-    const newFilters: FilterState = { ...activeFilters, [path]: value }
-    if (onFilterChange) onFilterChange(newFilters)
-    else setInternalFilters(newFilters)
-  }
+    const newFilters: FilterState = { ...activeFilters, [path]: value };
+    if (onFilterChange) onFilterChange(newFilters);
+    else setInternalFilters(newFilters);
+  };
 
   const clearAllFilters = () => {
-    if (onFilterChange) onFilterChange({})
-    else setInternalFilters({})
-  }
+    if (onFilterChange) onFilterChange({});
+    else setInternalFilters({});
+  };
 
   const filteredAndSortedData = useMemo(() => {
     let filtered = data.filter((item) => {
       const matchesSearch = !searchQuery
         ? true
         : Object.values(item).some((value) => {
-            if (value == null) return false
-            return String(value).toLowerCase().includes(searchQuery.toLowerCase())
-          })
+            if (value == null) return false;
+            return String(value)
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+          });
 
-      const matchesFilters = Object.entries(activeFilters).every(([path, filterValues]) =>
-        matchesFilterValues(item, path, filterValues),
-      )
+      const matchesFilters = Object.entries(activeFilters).every(
+        ([path, filterValues]) => matchesFilterValues(item, path, filterValues),
+      );
 
-      return matchesSearch && matchesFilters
-    })
+      return matchesSearch && matchesFilters;
+    });
 
     if (sortPath) {
       filtered = [...filtered].sort((a, b) => {
-        const aVal = getByPath(a, sortPath)
-        const bVal = getByPath(b, sortPath)
-        const modifier = sortDirection === "asc" ? 1 : -1
+        const aVal = getByPath(a, sortPath);
+        const bVal = getByPath(b, sortPath);
+        const modifier = sortDirection === "asc" ? 1 : -1;
 
-        if (aVal == null && bVal == null) return 0
-        if (aVal == null) return 1
-        if (bVal == null) return -1
+        if (aVal == null && bVal == null) return 0;
+        if (aVal == null) return 1;
+        if (bVal == null) return -1;
 
         if (typeof aVal === "string" && typeof bVal === "string") {
-          return aVal.localeCompare(bVal) * modifier
+          return aVal.localeCompare(bVal) * modifier;
         }
         if (typeof aVal === "number" && typeof bVal === "number") {
-          return (aVal - bVal) * modifier
+          return (aVal - bVal) * modifier;
         }
-        return String(aVal).localeCompare(String(bVal)) * modifier
-      })
+        return String(aVal).localeCompare(String(bVal)) * modifier;
+      });
     }
 
-    return filtered
-  }, [data, searchQuery, activeFilters, sortPath, sortDirection])
+    return filtered;
+  }, [data, searchQuery, activeFilters, sortPath, sortDirection]);
 
   const displayFields = useMemo(
     () => visibleFields(fields).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     [fields],
-  )
+  );
 
-  const filtersEnabled = showFilters && config.showFilters !== false
+  const filtersEnabled = showFilters && config.showFilters !== false;
 
   return (
     <div className="flex h-full bg-background-presentation-body-primary">
@@ -140,7 +145,7 @@ export function TableView({
         />
       )}
 
-      <div className="flex flex-1 flex-col gap-4 p-6 overflow-hidden">
+      <div className="flex flex-1 flex-col gap-4 p-2 overflow-hidden">
         <div className="relative max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-presentation-global-tertiary z-10" />
           <InputField
@@ -163,7 +168,9 @@ export function TableView({
                     <TableHead
                       key={field.path}
                       size="M"
-                      sortType={sortPath === field.path ? sortDirection : undefined}
+                      sortType={
+                        sortPath === field.path ? sortDirection : undefined
+                      }
                       onSort={() => handleSort(field.path)}
                     >
                       {field.label}
@@ -199,7 +206,9 @@ export function TableView({
                         <div className="flex-1">
                           {displayFields[0] && (
                             <p className="font-medium">
-                              {String(getByPath(item, displayFields[0].path) ?? "")}
+                              {String(
+                                getByPath(item, displayFields[0].path) ?? "",
+                              )}
                             </p>
                           )}
                         </div>
@@ -208,9 +217,20 @@ export function TableView({
                   </CardHeader>
                   <CardContent className="space-y-2 pt-0">
                     {displayFields.slice(1).map((field) => (
-                      <div key={field.path} className="flex items-center justify-between text-sm">
-                        <span className="text-content-presentation-global-tertiary">{field.label}:</span>
-                        <span>{renderField(getByPath(item, field.path), field, item)}</span>
+                      <div
+                        key={field.path}
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <span className="text-content-presentation-global-tertiary">
+                          {field.label}:
+                        </span>
+                        <span>
+                          {renderField(
+                            getByPath(item, field.path),
+                            field,
+                            item,
+                          )}
+                        </span>
                       </div>
                     ))}
                   </CardContent>
@@ -221,5 +241,5 @@ export function TableView({
         )}
       </div>
     </div>
-  )
+  );
 }
