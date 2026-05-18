@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { FilterPanel } from "./FilterPanel";
-import { Search } from "lucide-react";
 import type {
   DynamicRecord,
   ViewConfig,
@@ -14,7 +13,6 @@ import type {
 } from "./types";
 import { Card, CardContent, CardHeader } from "../Card";
 import { Checkbox } from "../Checkbox";
-import { InputField } from "../InputField";
 import {
   Table,
   TableHeader,
@@ -56,7 +54,6 @@ export function TableView({
   showFilters = true,
 }: TableViewProps) {
   const isMobile = useIsMobile();
-  const [searchQuery, setSearchQuery] = useState("");
   const [internalFilters, setInternalFilters] = useState<FilterState>({});
 
   const activeFilters = externalFilterState ?? internalFilters;
@@ -85,22 +82,11 @@ export function TableView({
   };
 
   const filteredAndSortedData = useMemo(() => {
-    let filtered = data.filter((item) => {
-      const matchesSearch = !searchQuery
-        ? true
-        : Object.values(item).some((value) => {
-            if (value == null) return false;
-            return String(value)
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase());
-          });
-
-      const matchesFilters = Object.entries(activeFilters).every(
-        ([path, filterValues]) => matchesFilterValues(item, path, filterValues),
-      );
-
-      return matchesSearch && matchesFilters;
-    });
+    let filtered = data.filter((item) =>
+      Object.entries(activeFilters).every(([path, filterValues]) =>
+        matchesFilterValues(item, path, filterValues),
+      ),
+    );
 
     if (sortPath) {
       filtered = [...filtered].sort((a, b) => {
@@ -123,7 +109,7 @@ export function TableView({
     }
 
     return filtered;
-  }, [data, searchQuery, activeFilters, sortPath, sortDirection]);
+  }, [data, activeFilters, sortPath, sortDirection]);
 
   const displayFields = useMemo(
     () => visibleFields(fields).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
@@ -146,16 +132,6 @@ export function TableView({
       )}
 
       <div className="flex flex-1 flex-col gap-4 p-2 overflow-hidden">
-        <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-presentation-global-tertiary z-10" />
-          <InputField
-            placeholder="Search items..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-
         {!isMobile ? (
           <div className="flex-1 overflow-auto rounded-lg">
             <Table className="w-full">

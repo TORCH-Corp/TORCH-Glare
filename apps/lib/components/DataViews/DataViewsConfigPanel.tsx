@@ -5,6 +5,7 @@ import {
   X,
   Settings as SettingsIcon,
   Filter as FilterIcon,
+  Plus,
 } from "lucide-react";
 import type {
   ViewConfig,
@@ -246,19 +247,21 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
               <RadioGroup
                 value={activeSavedView ?? savedViews[0]?.id}
                 onValueChange={(v) => onSavedViewChange?.(v)}
-                className="space-y-0 rounded-[12px] bg-[#1C1D1F] p-1"
+                className="flex flex-col gap-1 space-y-0 rounded-[12px] bg-[#1C1D1F] p-1"
               >
                 {savedViews.map((sv, i) => (
                   <div key={sv.id}>
-                    {i > 0 && <div className="mx-2 h-px bg-[#2C2D2E]" />}
-                    <div className="flex items-center gap-2 px-2 py-2.5">
+                    {/* Divider spans edge-to-edge (Figma: no horizontal
+                        inset). */}
+                    {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
+                    <div className="flex items-center gap-1.5 py-1 pl-2">
                       <Radio value={sv.id} id={`sv-${sv.id}`} />
                       <Label
                         htmlFor={`sv-${sv.id}`}
-                        className="cursor-pointer text-white"
-                      >
-                        {sv.label}
-                      </Label>
+                        size="M"
+                        label={sv.label}
+                        className="cursor-pointer [&_p]:text-white"
+                      />
                     </div>
                   </div>
                 ))}
@@ -266,9 +269,10 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
               <button
                 type="button"
                 onClick={onSaveNewView}
-                className="flex w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#1C1D1F] py-2.5 text-[14px] font-[510] text-white transition-colors hover:bg-[#252729]"
+                className="flex w-full items-center justify-center gap-1.5 rounded-[4px] bg-white/[0.15] px-1.5 py-0.5 text-[12px] font-[510] text-white transition-colors hover:bg-white/25"
               >
-                + Save a New View
+                <Plus className="h-3 w-3" />
+                Save a New View
               </button>
             </div>
 
@@ -368,64 +372,33 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                   No sortable columns.
                 </p>
               ) : (
-                <div className="space-y-1.5 rounded-[12px] bg-[#1C1D1F] p-1">
-                  {sortableColumns.map((col) => {
+                // Single-choice radio list (Figma 1612:30016): selecting a
+                // column sets config.sortBy; direction keeps config.sortOrder.
+                <RadioGroup
+                  value={config.sortBy || undefined}
+                  onValueChange={(v) => onConfigChange({ sortBy: v })}
+                  className="flex flex-col gap-1 space-y-0 rounded-[12px] bg-[#1C1D1F] p-1"
+                >
+                  {sortableColumns.map((col, i) => {
                     const field = fieldByPath.get(col.id);
-                    const isActive = config.sortBy === col.id;
                     return (
-                      <div
-                        key={col.id}
-                        className="flex items-center gap-2 rounded-[10px] px-2 py-2"
-                      >
-                        <span className="flex-1 text-[14px] text-white">
-                          {col.label || field?.label || col.id}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <button
-                            type="button"
-                            aria-pressed={
-                              isActive && config.sortOrder === "asc"
-                            }
-                            onClick={() =>
-                              onConfigChange({
-                                sortBy: col.id,
-                                sortOrder: "asc",
-                              })
-                            }
-                            className={cn(
-                              "h-6 rounded-md px-2 text-xs transition-colors",
-                              isActive && config.sortOrder === "asc"
-                                ? "bg-[#005ECC] text-white"
-                                : "text-content-presentation-global-tertiary hover:text-white",
-                            )}
-                          >
-                            Asc
-                          </button>
-                          <button
-                            type="button"
-                            aria-pressed={
-                              isActive && config.sortOrder === "desc"
-                            }
-                            onClick={() =>
-                              onConfigChange({
-                                sortBy: col.id,
-                                sortOrder: "desc",
-                              })
-                            }
-                            className={cn(
-                              "h-6 rounded-md px-2 text-xs transition-colors",
-                              isActive && config.sortOrder === "desc"
-                                ? "bg-[#005ECC] text-white"
-                                : "text-content-presentation-global-tertiary hover:text-white",
-                            )}
-                          >
-                            Desc
-                          </button>
+                      <div key={col.id}>
+                        {/* Edge-to-edge divider (Figma: no horizontal
+                            inset). */}
+                        {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
+                        <div className="flex items-center gap-1.5 py-1 pl-2">
+                          <Radio value={col.id} id={`sort-${col.id}`} />
+                          <Label
+                            htmlFor={`sort-${col.id}`}
+                            size="M"
+                            label={col.label || field?.label || col.id}
+                            className="cursor-pointer [&_p]:text-white"
+                          />
                         </div>
                       </div>
                     );
                   })}
-                </div>
+                </RadioGroup>
               )}
             </div>
           </div>
