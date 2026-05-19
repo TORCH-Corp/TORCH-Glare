@@ -16,10 +16,10 @@ import type {
   FilterState,
   FilterValue,
 } from "./types";
-import { Switch } from "../Switch";
-import { RadioGroup, Radio } from "../Radio";
-import { Label } from "../Label";
+
+import { RadioGroup } from "../Radio";
 import { FilterPanel } from "./FilterPanel";
+import { RadioRow, DataViewsSwitch } from "./PanelControls";
 import { cn } from "../../utils/cn";
 
 type ConfigTab = "config" | "filters";
@@ -52,9 +52,6 @@ export type DataViewsConfigPanelProps = {
 
 const DEFAULT_SAVED_VIEWS: SavedView[] = [
   { id: "default", label: "Default View" },
-  { id: "high-priority", label: "High Priority" },
-  { id: "pending-orders", label: "Pending Orders" },
-  { id: "recent", label: "Recently Created" },
 ];
 
 function SectionHeader({
@@ -106,11 +103,6 @@ function DropLine() {
   );
 }
 
-// Shared Switch override: bright green track (#0AC713) when checked, matching
-// the Figma Switcher-1.0 "On" state, regardless of the dark theme scope.
-const SWITCH_GREEN =
-  "data-[state=checked]:bg-[#0AC713] data-[state=checked]:border-[#0AC713]";
-
 export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
   const {
     config,
@@ -129,6 +121,19 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
   } = props;
 
   const [tab, setTab] = useState<ConfigTab>("config");
+
+  // Saved View is controlled by the parent when `activeSavedView` /
+  // `onSavedViewChange` are supplied; otherwise fall back to local state so the
+  // radios are still interactive (DataViewsLayout doesn't thread these props
+  // yet — without this the selection would snap back every click).
+  const [internalSavedView, setInternalSavedView] = useState(
+    () => savedViews[0]?.id,
+  );
+  const selectedSavedView = activeSavedView ?? internalSavedView;
+  const handleSavedViewChange = (id: string) => {
+    if (onSavedViewChange) onSavedViewChange(id);
+    else setInternalSavedView(id);
+  };
 
   const visibleFields = useMemo(
     () => fields.filter((f) => f.type !== "hidden"),
@@ -248,8 +253,8 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
             <div className="space-y-3">
               <SectionHeader title="Saved View" />
               <RadioGroup
-                value={activeSavedView ?? savedViews[0]?.id}
-                onValueChange={(v) => onSavedViewChange?.(v)}
+                value={selectedSavedView}
+                onValueChange={handleSavedViewChange}
                 className="flex flex-col gap-1 space-y-0 rounded-[12px] bg-[#1C1D1F] p-1"
               >
                 {savedViews.map((sv, i) => (
@@ -257,15 +262,7 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                     {/* Divider spans edge-to-edge (Figma: no horizontal
                         inset). */}
                     {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
-                    <div className="flex items-center gap-1.5 py-1 pl-2">
-                      <Radio value={sv.id} id={`sv-${sv.id}`} />
-                      <Label
-                        htmlFor={`sv-${sv.id}`}
-                        size="M"
-                        label={sv.label}
-                        className="cursor-pointer [&_p]:text-white"
-                      />
-                    </div>
+                    <RadioRow value={sv.id} label={sv.label} />
                   </div>
                 ))}
               </RadioGroup>
@@ -348,12 +345,11 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                             {col.label || field?.label || col.id}
                           </span>
                           <span className="flex shrink-0 items-center">
-                            <Switch
+                            <DataViewsSwitch
                               checked={col.visible}
                               onCheckedChange={() =>
                                 toggleColumnVisibility(col.id)
                               }
-                              className={SWITCH_GREEN}
                             />
                           </span>
                         </div>
@@ -389,15 +385,10 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                         {/* Edge-to-edge divider (Figma: no horizontal
                             inset). */}
                         {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
-                        <div className="flex items-center gap-1.5 py-1 pl-2">
-                          <Radio value={col.id} id={`sort-${col.id}`} />
-                          <Label
-                            htmlFor={`sort-${col.id}`}
-                            size="M"
-                            label={col.label || field?.label || col.id}
-                            className="cursor-pointer [&_p]:text-white"
-                          />
-                        </div>
+                        <RadioRow
+                          value={col.id}
+                          label={col.label || field?.label || col.id}
+                        />
                       </div>
                     );
                   })}

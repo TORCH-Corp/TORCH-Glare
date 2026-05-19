@@ -204,10 +204,12 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
             {/* Master Container — white card, 16px radius, #D4D4D4 hairline
                 border. Fixed surface (matches header chrome). */}
             <div className="flex flex-1 overflow-hidden rounded-[16px] border border-border-presentation-global-primary ">
-              {/* Clip the scrollable surface to the same 16px radius so the
-                  opaque view background doesn't square off the parent's
-                  rounded corners. */}
-              <div className="flex-1 overflow-auto rounded-[16px]">
+              {/* Clip the scrollable surface to the parent radius MINUS the 1px
+                  border (16 − 1 = 15px). Using the full 16px here let the
+                  opaque view background sit flush with the parent's outer edge
+                  and bleed past the border as a ~1px light line on the
+                  left/right straight sides. */}
+              <div className="flex-1 overflow-auto rounded-[15px]">
                 {currentView === "table" && enabledViews.table && (
                   <TableView
                     data={flatItems}
