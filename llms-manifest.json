@@ -75,7 +75,7 @@
       ]
     },
     "dataDisplay": {
-      "count": 10,
+      "count": 11,
       "items": [
         { "name": "Badge", "version": "1.1.15", "documented": true },
         { "name": "BadgeField", "version": "1.1.15", "documented": true },
@@ -86,7 +86,8 @@
         { "name": "TreeDropDown", "version": "1.1.15", "documented": true },
         { "name": "Skeleton", "version": "1.1.15", "documented": true },
         { "name": "Timeline", "version": "2.1.1", "documented": true },
-        { "name": "Breadcrumb", "version": "1.1.15", "documented": true }
+        { "name": "Breadcrumb", "version": "1.1.15", "documented": true },
+        { "name": "DataViewsConfigPanel", "version": "2.1.2", "documented": true }
       ]
     },
     "overlays": {
