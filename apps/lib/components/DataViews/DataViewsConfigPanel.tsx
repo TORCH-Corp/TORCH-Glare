@@ -163,25 +163,21 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
   };
 
   const [dragPath, setDragPath] = useState<string | null>(null);
-  const [dragOverPath, setDragOverPath] = useState<string | null>(null);
-  // Whether the drop will land before (true) or after (false) dragOverPath.
-  const [dropBefore, setDropBefore] = useState(true);
+  // Insertion slot in the ordered list: 0 means before the first row, N means
+  // after the last row (count). Single source of truth — there is exactly one
+  // indicator at a time, so no double-line ambiguity between adjacent rows.
+  const [dropSlot, setDropSlot] = useState<number | null>(null);
 
-  const reorderColumn = (
-    sourcePath: string,
-    targetPath: string,
-    before: boolean,
-  ) => {
-    if (sourcePath === targetPath) return;
+  const reorderColumnToSlot = (sourcePath: string, slot: number) => {
     const ids = orderedColumns.map((c) => c.id);
     const from = ids.indexOf(sourcePath);
-    let to = ids.indexOf(targetPath);
-    if (from === -1 || to === -1) return;
+    if (from === -1) return;
+    // Dropping into the same logical position (before or after itself) is a no-op.
+    if (slot === from || slot === from + 1) return;
     const reordered = [...ids];
     reordered.splice(from, 1);
-    // Recompute the target index after removal, then offset for before/after.
-    to = reordered.indexOf(targetPath);
-    const insertAt = before ? to : to + 1;
+    // After removal, indices shift left by 1 for any slot beyond `from`.
+    const insertAt = slot > from ? slot - 1 : slot;
     reordered.splice(insertAt, 0, sourcePath);
     const orderByPath = new Map(reordered.map((id, i) => [id, i]));
     const next = config.tableColumns.map((c) => {
@@ -290,14 +286,17 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                 </p>
               ) : (
                 <div data-theme="dark" className="flex flex-col gap-2">
-                  {orderedColumns.map((col) => {
+                  {orderedColumns.map((col, index) => {
                     const field = fieldByPath.get(col.id);
                     const isDragging = dragPath === col.id;
-                    const isTarget =
-                      dragOverPath === col.id && dragPath !== col.id;
+                    // Slot for the cursor on this row: top half = insert at
+                    // `index` (before this row); bottom half = `index + 1`
+                    // (after this row, which is the SAME slot as "before next
+                    // row" — the single source of truth avoids the old
+                    // double-line problem in the gap between rows).
                     return (
                       <div key={col.id}>
-                        {isTarget && dropBefore && <DropLine />}
+                        {dropSlot === index && dragPath && <DropLine />}
                         <div
                           draggable
                           onDragStart={(e) => {
@@ -312,23 +311,19 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                               e.currentTarget.getBoundingClientRect();
                             const before =
                               e.clientY < rect.top + rect.height / 2;
-                            if (dragOverPath !== col.id)
-                              setDragOverPath(col.id);
-                            if (dropBefore !== before) setDropBefore(before);
-                          }}
-                          onDragLeave={() => {
-                            if (dragOverPath === col.id) setDragOverPath(null);
+                            const slot = before ? index : index + 1;
+                            if (dropSlot !== slot) setDropSlot(slot);
                           }}
                           onDrop={(e) => {
                             e.preventDefault();
-                            if (dragPath)
-                              reorderColumn(dragPath, col.id, dropBefore);
+                            if (dragPath && dropSlot != null)
+                              reorderColumnToSlot(dragPath, dropSlot);
                             setDragPath(null);
-                            setDragOverPath(null);
+                            setDropSlot(null);
                           }}
                           onDragEnd={() => {
                             setDragPath(null);
-                            setDragOverPath(null);
+                            setDropSlot(null);
                           }}
                           className={cn(
                             // SB-Column-Item: standalone #1C1D1F pill, #252729
@@ -353,10 +348,14 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                             />
                           </span>
                         </div>
-                        {isTarget && !dropBefore && <DropLine />}
                       </div>
                     );
                   })}
+                  {/* Drop-at-end indicator: only ever rendered when the slot
+                      points past the last row, so still exactly one line. */}
+                  {dropSlot === orderedColumns.length && dragPath && (
+                    <DropLine />
+                  )}
                 </div>
               )}
             </div>

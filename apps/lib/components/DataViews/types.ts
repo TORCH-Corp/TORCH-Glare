@@ -9,7 +9,9 @@ export type TreeConfig = {
   orderField?: string
   nodeLabel?: string
   defaultExpanded?: "all" | "roots" | "none"
-  defaultRightPane?: "table" | "details"
+  /** Right-pane mode for the selected tree node. `"details"` is accepted as a
+   *  deprecated alias of `"card"` for backward compatibility. */
+  defaultRightPane?: "table" | "card" | "details"
   dndEnabled?: boolean
 }
 

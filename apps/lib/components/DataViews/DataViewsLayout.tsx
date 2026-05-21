@@ -180,7 +180,7 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
         className={cn(
           // Shell is always black (matches Figma): the dark header and config
           // rail sit on it; the Master Container is the white surface inside.
-          "flex h-screen gap-2 bg-black p-2 text-content-presentation-global-primary",
+          "flex h-screen gap-2 bg-black  text-content-presentation-global-primary",
           className,
         )}
       >
