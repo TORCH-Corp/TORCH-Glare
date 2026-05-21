@@ -1,55 +1,89 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useMemo, useState } from "react"
-import { Badge } from "../Badge"
-import { Plus, MoreHorizontal } from "lucide-react"
+import type React from "react";
+import { Fragment, useMemo, useState } from "react";
+import { MoreHorizontal } from "lucide-react";
 import type {
   DynamicRecord,
   ViewConfig,
   DynamicColumnConfig,
   FieldConfig,
-} from "./types"
-import { Button } from "../Button"
-import { Card, CardContent, CardHeader } from "../Card"
-import { getByPath, setByPath } from "../../utils/dataViews/pathUtils"
-import { renderField } from "./fieldRenderers"
-import { visibleFields } from "../../utils/dataViews/fieldUtils"
-import { useIsMobile } from "../../hooks/useIsMobile"
-import { resolveBadgeVariant } from "./badgeAdapter"
+  KanbanColumnColor,
+} from "./types";
+import { Button } from "../Button";
+import {
+  DataViewCard,
+  type DataViewCardRow,
+} from "../../layouts/DataViewCard";
+import { getByPath, setByPath } from "../../utils/dataViews/pathUtils";
+import { renderField } from "./fieldRenderers";
+import { visibleFields } from "../../utils/dataViews/fieldUtils";
+import { useIsMobile } from "../../hooks/useIsMobile";
+import { cn } from "../../utils/cn";
 
 export type KanbanViewProps = {
-  data: DynamicRecord[]
-  columns?: DynamicColumnConfig[]
-  fields: FieldConfig[]
-  config: ViewConfig
-  onDataUpdate?: (data: DynamicRecord[]) => void
-  groupByField?: string
-}
+  data: DynamicRecord[];
+  columns?: DynamicColumnConfig[];
+  fields: FieldConfig[];
+  config: ViewConfig;
+  onDataUpdate?: (data: DynamicRecord[]) => void;
+  groupByField?: string;
+  // Path of the field to render as the card title. Defaults to the first
+  // visible non-group-by field. Use this to opt out of the "first field wins"
+  // heuristic when consumers want a specific field (e.g. "name", "id").
+  titleField?: string;
+  // Click handler for the column header's overflow button. When omitted the
+  // button is hidden so app-less columns stay clean.
+  onColumnAction?: (columnId: string) => void;
+};
+
+const COLUMN_PALETTE: readonly KanbanColumnColor[] = [
+  "gray",
+  "purple",
+  "orange",
+  "blue",
+  "green",
+  "red",
+] as const;
+type ColumnColor = KanbanColumnColor;
+
+// Figma kanban header pills use deeply saturated dark fills (#131415, #330C69,
+// #532200, #002F66). We match each to the closest existing raw-color token in
+// `glare-torch-mode`. Purple has no presentation-layer match close enough, so
+// we use the exact Figma hex inline.
+const COLUMN_BG: Record<ColumnColor, string> = {
+  gray: "bg-black-900",
+  purple: "bg-[#330C69]",
+  orange: "bg-orange-900",
+  blue: "bg-blue-sparkle-900",
+  green: "bg-green-cyan-900",
+  red: "bg-red-orange-900",
+};
+
+const colorIndexFor = (key: string) => {
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) | 0;
+  return Math.abs(h) % COLUMN_PALETTE.length;
+};
 
 type KanbanColumn = {
-  id: string
-  title: string
-  color: string
-  items: DynamicRecord[]
-}
+  id: string;
+  title: string;
+  color: ColumnColor;
+  items: DynamicRecord[];
+};
 
-const COLUMN_COLORS = [
-  "bg-background-presentation-badge-gray-primary",
-  "bg-background-presentation-badge-blue-primary",
-  "bg-background-presentation-badge-purple-primary",
-  "bg-background-presentation-badge-success-primary",
-  "bg-background-presentation-badge-yellow-primary",
-  "bg-background-presentation-badge-red-primary",
-]
-
-function getId(item: DynamicRecord, fallbackPath: string | undefined, idx: number): any {
-  if (item?.id != null) return item.id
+function getId(
+  item: DynamicRecord,
+  fallbackPath: string | undefined,
+  idx: number,
+): any {
+  if (item?.id != null) return item.id;
   if (fallbackPath) {
-    const v = getByPath(item, fallbackPath)
-    if (v != null) return v
+    const v = getByPath(item, fallbackPath);
+    if (v != null) return v;
   }
-  return idx
+  return idx;
 }
 
 export function KanbanView({
@@ -57,124 +91,161 @@ export function KanbanView({
   fields,
   onDataUpdate,
   groupByField = "status",
+  titleField,
+  onColumnAction,
 }: KanbanViewProps) {
-  const isMobile = useIsMobile()
-  const [draggedItem, setDraggedItem] = useState<{ item: DynamicRecord; columnId: string } | null>(null)
+  const isMobile = useIsMobile();
+  const [draggedItem, setDraggedItem] = useState<{
+    item: DynamicRecord;
+    columnId: string;
+  } | null>(null);
 
   const displayFields = useMemo(
     () => visibleFields(fields).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     [fields],
-  )
+  );
 
   const groupField = useMemo(
     () => fields.find((f) => f.path === groupByField),
     [fields, groupByField],
-  )
+  );
 
   const kanbanColumns = useMemo<KanbanColumn[]>(() => {
-    const groups: Record<string, KanbanColumn> = {}
+    const groups: Record<string, KanbanColumn> = {};
+    const overrides = groupField?.kanbanVariants;
+
+    // Resolve a column's visible title + pill color. Consumer-supplied
+    // `kanbanVariants[key]` wins; otherwise fall back to the raw key and the
+    // palette rotation.
+    const resolve = (key: string, paletteIdx: number) => ({
+      title: overrides?.[key]?.label ?? key,
+      color:
+        overrides?.[key]?.color ??
+        COLUMN_PALETTE[paletteIdx % COLUMN_PALETTE.length],
+    });
 
     if (groupField?.variants) {
       Object.keys(groupField.variants).forEach((value, index) => {
         groups[value] = {
           id: value,
-          title: value,
-          color: COLUMN_COLORS[index % COLUMN_COLORS.length],
+          ...resolve(value, index),
           items: [],
-        }
-      })
+        };
+      });
     }
 
-    let nextColorIdx = Object.keys(groups).length
     for (const item of data) {
-      const value = String(getByPath(item, groupByField) ?? "Uncategorized")
+      const value = String(getByPath(item, groupByField) ?? "Uncategorized");
       if (!groups[value]) {
         groups[value] = {
           id: value,
-          title: value,
-          color: COLUMN_COLORS[nextColorIdx++ % COLUMN_COLORS.length],
+          ...resolve(value, colorIndexFor(value)),
           items: [],
-        }
+        };
       }
-      groups[value].items.push(item)
+      groups[value].items.push(item);
     }
 
-    return Object.values(groups)
-  }, [data, groupByField, groupField])
+    return Object.values(groups);
+  }, [data, groupByField, groupField]);
 
   const handleDragStart = (item: DynamicRecord, columnId: string) => {
-    setDraggedItem({ item, columnId })
-  }
+    setDraggedItem({ item, columnId });
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
-  const idPath = displayFields[0]?.path
+  const idPath = displayFields[0]?.path;
 
   const handleDrop = (targetColumnId: string) => {
-    if (!draggedItem) return
-    const draggedId = getId(draggedItem.item, idPath, -1)
+    if (!draggedItem) return;
+    const draggedId = getId(draggedItem.item, idPath, -1);
 
     const updatedData = data.map((item, idx) => {
-      const itemId = getId(item, idPath, idx)
+      const itemId = getId(item, idPath, idx);
       if (itemId === draggedId) {
-        return setByPath(item, groupByField, targetColumnId)
+        return setByPath(item, groupByField, targetColumnId);
       }
-      return item
-    })
+      return item;
+    });
 
-    onDataUpdate?.(updatedData)
-    setDraggedItem(null)
-  }
+    onDataUpdate?.(updatedData);
+    setDraggedItem(null);
+  };
+
+  // Resolve the title field: consumer-supplied `titleField` wins, else fall
+  // back to the first visible non-group-by field.
+  const resolvedTitleField = useMemo(() => {
+    if (titleField) return displayFields.find((f) => f.path === titleField);
+    return displayFields.find((f) => f.path !== groupByField);
+  }, [displayFields, titleField, groupByField]);
 
   const renderCard = (item: DynamicRecord, idx: number) => {
-    const itemId = getId(item, idPath, idx)
-    const titleField = displayFields[0]
-    const descField = displayFields[1]
-    const titleValue = titleField ? getByPath(item, titleField.path) : ""
-    const descValue = descField ? getByPath(item, descField.path) : null
+    const itemId = getId(item, idPath, idx);
+    const titleFieldResolved = resolvedTitleField;
+    const titleValue = titleFieldResolved
+      ? getByPath(item, titleFieldResolved.path)
+      : "";
+    const bodyFields = displayFields.filter(
+      (f) => f.path !== groupByField && f.path !== titleFieldResolved?.path,
+    );
+
+    // Pair body fields two-per-row so the grid keeps its alternating rhythm
+    // even when one side is missing. If a pair has only one non-null value, the
+    // surviving cell spans both columns. Fully empty pairs are dropped so we
+    // don't render a phantom row with only hairlines.
+    const rows: DataViewCardRow[] = [];
+    for (let i = 0; i < bodyFields.length; i += 2) {
+      const left = bodyFields[i];
+      const right = bodyFields[i + 1];
+      const leftValue = left ? getByPath(item, left.path) : null;
+      const rightValue = right ? getByPath(item, right.path) : null;
+      const cells: DataViewCardRow = [];
+      if (left && leftValue != null) {
+        cells.push({
+          key: left.path,
+          label: left.label,
+          value: renderField(leftValue, left, item),
+        });
+      }
+      if (right && rightValue != null) {
+        cells.push({
+          key: right.path,
+          label: right.label,
+          value: renderField(rightValue, right, item),
+        });
+      }
+      if (cells.length > 0) rows.push(cells);
+    }
 
     return (
-      <Card
+      <DataViewCard
         key={itemId}
         draggable={!isMobile}
-        onDragStart={!isMobile ? () => handleDragStart(item, String(getByPath(item, groupByField) ?? "Uncategorized")) : undefined}
-        className={isMobile ? "cursor-pointer" : "cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"}
-      >
-        <CardHeader>
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex-1">
-              {titleField && renderField(titleValue, titleField, item)}
-            </div>
-            <Button variant="BorderStyle" buttonType="icon" className="h-6 w-6 -mt-1 -mr-1">
-              <MoreHorizontal className="h-3 w-3" />
-            </Button>
-          </div>
-          {descField && descValue != null && (
-            <div className="text-xs text-content-presentation-global-tertiary leading-relaxed">
-              {renderField(descValue, descField, item)}
-            </div>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-3 pt-0">
-          <div className="space-y-2">
-            {displayFields.slice(2).map((field) => {
-              if (field.path === groupByField) return null
-              const value = getByPath(item, field.path)
-              if (value == null) return null
-              return (
-                <div key={field.path} className="flex items-center justify-between text-xs">
-                  <span className="text-content-presentation-global-tertiary">{field.label}:</span>
-                  {renderField(value, field, item)}
-                </div>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
+        onDragStart={
+          !isMobile
+            ? () =>
+                handleDragStart(
+                  item,
+                  String(getByPath(item, groupByField) ?? "Uncategorized"),
+                )
+            : undefined
+        }
+        className={cn(
+          isMobile
+            ? "cursor-pointer"
+            : "cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow",
+        )}
+        title={
+          titleFieldResolved &&
+          renderField(titleValue, titleFieldResolved, item)
+        }
+        rows={rows}
+      />
+    );
+  };
 
   if (isMobile) {
     return (
@@ -182,7 +253,7 @@ export function KanbanView({
         <div className="flex flex-col gap-4">
           {kanbanColumns.map((column) => (
             <div key={column.id} className="flex flex-col gap-3">
-              <ColumnHeader column={column} />
+              <ColumnHeader column={column} onAction={onColumnAction} />
               <div className="flex flex-col gap-3">
                 {column.items.map((item, idx) => renderCard(item, idx))}
               </div>
@@ -190,53 +261,64 @@ export function KanbanView({
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="h-full overflow-x-auto p-6 bg-background-presentation-body-primary">
-      <div className="flex h-full gap-4 pb-4" style={{ minWidth: "max-content" }}>
-        {kanbanColumns.map((column) => (
-          <div
-            key={column.id}
-            className="flex w-80 flex-col gap-3"
-            onDragOver={handleDragOver}
-            onDrop={() => handleDrop(column.id)}
-          >
-            <ColumnHeader column={column} />
-            <div className="flex flex-col gap-3 overflow-y-auto">
-              {column.items.map((item, idx) => renderCard(item, idx))}
+    <div className="h-full overflow-x-auto p-2 bg-background-presentation-body-primary">
+      <div className="flex h-full gap-4" style={{ minWidth: "max-content" }}>
+        {kanbanColumns.map((column, i) => (
+          <Fragment key={column.id}>
+            <div
+              className="flex w-[279px] flex-col gap-2"
+              onDragOver={handleDragOver}
+              onDrop={() => handleDrop(column.id)}
+            >
+              <ColumnHeader column={column} onAction={onColumnAction} />
+              <div className="flex flex-col gap-2 overflow-y-auto py-2">
+                {column.items.map((item, idx) => renderCard(item, idx))}
+              </div>
             </div>
-          </div>
+            {i < kanbanColumns.length - 1 && (
+              <div
+                aria-hidden
+                className="self-stretch mt-[42px] border-dashed border-l-[2px]  border-border-presentation-global-primary"
+              />
+            )}
+          </Fragment>
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-function ColumnHeader({ column }: { column: KanbanColumn }) {
-  const countBadge = resolveBadgeVariant("gray")
+function ColumnHeader({
+  column,
+  onAction,
+}: {
+  column: KanbanColumn;
+  onAction?: (columnId: string) => void;
+}) {
   return (
-    <div className="flex items-center justify-between rounded-lg p-3 border border-border-presentation-global-primary bg-background-presentation-body-overlay-primary">
-      <div className="flex items-center gap-2">
-        <div className={`h-2 w-2 rounded-full ${column.color}`} />
-        <h3 className="font-semibold text-content-presentation-global-primary">{column.title}</h3>
-        <Badge
-          {...countBadge}
-          label={String(column.items.length)}
-          className="h-5 rounded-full p-0 text-xs"
-          size="XS"
-         
-        />
-      </div>
-      <div className="flex items-center gap-1">
-        <Button variant="BorderStyle" buttonType="icon" className="h-7 w-7">
-          <Plus className="h-4 w-4" />
+    <div
+      className={cn(
+        "flex items-center justify-between rounded-[10px] px-[6px] py-[4px]",
+        COLUMN_BG[column.color],
+      )}
+    >
+      <h3 className="typography-headers-small-medium text-content-presentation-global-primary-light">
+        {column.title}
+      </h3>
+      {onAction && (
+        <Button
+          variant="BorderStyle"
+          buttonType="icon"
+          className="h-5 w-5 border-0 bg-transparent text-content-presentation-global-primary-light hover:bg-white/10"
+          onClick={() => onAction(column.id)}
+        >
+          <MoreHorizontal className="h-3.5 w-3.5" />
         </Button>
-        <Button variant="BorderStyle" buttonType="icon" className="h-7 w-7">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </div>
+      )}
     </div>
-  )
+  );
 }

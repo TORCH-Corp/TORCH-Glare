@@ -53,6 +53,17 @@ export type FieldPreset =
   | { label: string; min?: number; max?: number }
   | { label: string; from?: string; to?: string }
 
+// Palette keys for the Kanban column header pill. Kept in lockstep with
+// `COLUMN_PALETTE` in KanbanView.tsx so consumers can pick a color per status
+// via `FieldConfig.kanbanVariants`.
+export type KanbanColumnColor =
+  | "gray"
+  | "purple"
+  | "orange"
+  | "blue"
+  | "green"
+  | "red"
+
 export type BadgeVariant =
   | "green"
   | "greenLight"
@@ -103,6 +114,16 @@ export type FieldConfig = {
 
   variants?: Record<string, BadgeVariant>
   defaultVariant?: BadgeVariant
+
+  // Per-status overrides for the Kanban board view. Keys must match
+  // `variants` keys (or any value present in the data). Lets consumers set a
+  // human-friendly column title and pick a column pill color without affecting
+  // the badge color used elsewhere.
+  kanbanVariants?: Record<
+    string,
+    { label?: string; color?: KanbanColumnColor }
+  >
+
 
   variant?: BadgeVariant
   limit?: number

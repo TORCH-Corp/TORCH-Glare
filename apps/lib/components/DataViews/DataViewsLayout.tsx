@@ -42,6 +42,8 @@ export type DataViewsLayoutProps = {
   inboxConfig?: InboxConfig;
   treeConfig?: TreeConfig;
   kanbanGroupBy?: string;
+  kanbanTitleField?: string;
+  onKanbanColumnAction?: (columnId: string) => void;
 
   views?: ViewVisibility;
 
@@ -92,6 +94,8 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
       inboxConfig,
       treeConfig,
       kanbanGroupBy,
+      kanbanTitleField,
+      onKanbanColumnAction,
       views,
       columns,
       filters,
@@ -252,6 +256,8 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
                     config={effectiveConfig}
                     onDataUpdate={onDataUpdate}
                     groupByField={effectiveKanbanGroupBy}
+                    titleField={kanbanTitleField}
+                    onColumnAction={onKanbanColumnAction}
                   />
                 )}
                 {currentView === "inbox" && enabledViews.inbox && (
