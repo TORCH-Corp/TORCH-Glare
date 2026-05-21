@@ -99,6 +99,7 @@ export function KanbanView({
     item: DynamicRecord;
     columnId: string;
   } | null>(null);
+  const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
 
   const displayFields = useMemo(
     () => visibleFields(fields).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
@@ -153,14 +154,31 @@ export function KanbanView({
     setDraggedItem({ item, columnId });
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, columnId: string) => {
     e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (dragOverColumnId !== columnId) setDragOverColumnId(columnId);
+  };
+
+  const handleDragLeave = (e: React.DragEvent, columnId: string) => {
+    // Only clear when the pointer actually exits this column — moving over a
+    // child element fires dragleave on the parent before dragenter on the child.
+    if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+    if (dragOverColumnId === columnId) setDragOverColumnId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+    setDragOverColumnId(null);
   };
 
   const idPath = displayFields[0]?.path;
 
   const handleDrop = (targetColumnId: string) => {
-    if (!draggedItem) return;
+    if (!draggedItem) {
+      setDragOverColumnId(null);
+      return;
+    }
     const draggedId = getId(draggedItem.item, idPath, -1);
 
     const updatedData = data.map((item, idx) => {
@@ -173,6 +191,7 @@ export function KanbanView({
 
     onDataUpdate?.(updatedData);
     setDraggedItem(null);
+    setDragOverColumnId(null);
   };
 
   // Resolve the title field: consumer-supplied `titleField` wins, else fall
@@ -184,6 +203,8 @@ export function KanbanView({
 
   const renderCard = (item: DynamicRecord, idx: number) => {
     const itemId = getId(item, idPath, idx);
+    const isDraggingThis =
+      draggedItem != null && getId(draggedItem.item, idPath, -1) === itemId;
     const titleFieldResolved = resolvedTitleField;
     const titleValue = titleFieldResolved
       ? getByPath(item, titleFieldResolved.path)
@@ -233,10 +254,12 @@ export function KanbanView({
                 )
             : undefined
         }
+        onDragEnd={!isMobile ? handleDragEnd : undefined}
         className={cn(
           isMobile
             ? "cursor-pointer"
             : "cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow",
+          !isMobile && isDraggingThis && "opacity-40",
         )}
         title={
           titleFieldResolved &&
@@ -267,15 +290,22 @@ export function KanbanView({
   return (
     <div className="h-full overflow-x-auto p-2 bg-background-presentation-body-primary">
       <div className="flex h-full gap-4" style={{ minWidth: "max-content" }}>
-        {kanbanColumns.map((column, i) => (
+        {kanbanColumns.map((column, i) => {
+          const isDropTarget =
+            draggedItem != null && dragOverColumnId === column.id;
+          return (
           <Fragment key={column.id}>
             <div
-              className="flex w-[279px] flex-col gap-2"
-              onDragOver={handleDragOver}
+              className={cn(
+                "flex w-[279px] flex-col gap-2 rounded-[12px] p-1 transition-colors duration-150 ease-in-out",
+                isDropTarget && "bg-white/[0.04]",
+              )}
+              onDragOver={(e) => handleDragOver(e, column.id)}
+              onDragLeave={(e) => handleDragLeave(e, column.id)}
               onDrop={() => handleDrop(column.id)}
             >
               <ColumnHeader column={column} onAction={onColumnAction} />
-              <div className="flex flex-col gap-2 overflow-y-auto py-2">
+              <div className="flex flex-col gap-2 overflow-y-auto py-1">
                 {column.items.map((item, idx) => renderCard(item, idx))}
               </div>
             </div>
@@ -286,7 +316,8 @@ export function KanbanView({
               />
             )}
           </Fragment>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
