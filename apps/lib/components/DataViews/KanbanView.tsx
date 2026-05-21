@@ -11,10 +11,7 @@ import type {
   KanbanColumnColor,
 } from "./types";
 import { Button } from "../Button";
-import {
-  DataViewCard,
-  type DataViewCardRow,
-} from "../../layouts/DataViewCard";
+import { DataViewCard, type DataViewCardRow } from "../../layouts/DataViewCard";
 import { getByPath, setByPath } from "../../utils/dataViews/pathUtils";
 import { renderField } from "./fieldRenderers";
 import { visibleFields } from "../../utils/dataViews/fieldUtils";
@@ -294,28 +291,28 @@ export function KanbanView({
           const isDropTarget =
             draggedItem != null && dragOverColumnId === column.id;
           return (
-          <Fragment key={column.id}>
-            <div
-              className={cn(
-                "flex w-[279px] flex-col gap-2 rounded-[12px] p-1 transition-colors duration-150 ease-in-out",
-                isDropTarget && "bg-white/[0.04]",
-              )}
-              onDragOver={(e) => handleDragOver(e, column.id)}
-              onDragLeave={(e) => handleDragLeave(e, column.id)}
-              onDrop={() => handleDrop(column.id)}
-            >
-              <ColumnHeader column={column} onAction={onColumnAction} />
-              <div className="flex flex-col gap-2 overflow-y-auto py-1">
-                {column.items.map((item, idx) => renderCard(item, idx))}
-              </div>
-            </div>
-            {i < kanbanColumns.length - 1 && (
+            <Fragment key={column.id}>
               <div
-                aria-hidden
-                className="self-stretch mt-[42px] border-dashed border-l-[2px]  border-border-presentation-global-primary"
-              />
-            )}
-          </Fragment>
+                className={cn(
+                  "flex w-[279px] flex-col gap-2 rounded-[12px] p-1 transition-colors duration-150 ease-in-out",
+                  isDropTarget && "bg-white/[0.04]",
+                )}
+                onDragOver={(e) => handleDragOver(e, column.id)}
+                onDragLeave={(e) => handleDragLeave(e, column.id)}
+                onDrop={() => handleDrop(column.id)}
+              >
+                <ColumnHeader column={column} onAction={onColumnAction} />
+                <div className="flex flex-col gap-2 overflow-y-auto py-1">
+                  {column.items.map((item, idx) => renderCard(item, idx))}
+                </div>
+              </div>
+              {i < kanbanColumns.length - 1 && (
+                <div
+                  aria-hidden
+                  className="self-stretch mt-[42px] border-dashed border-l-[2px]  border-border-presentation-global-primary"
+                />
+              )}
+            </Fragment>
           );
         })}
       </div>
@@ -333,7 +330,7 @@ function ColumnHeader({
   return (
     <div
       className={cn(
-        "flex items-center justify-between rounded-[10px] px-[6px] py-[4px]",
+        "flex items-center justify-between rounded-[8px] px-[6px] py-[4px]",
         COLUMN_BG[column.color],
       )}
     >
