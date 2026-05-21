@@ -1,6 +1,7 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState, type ReactNode } from "react"
+import Link from "next/link"
 import { Badge } from "../Badge"
 import { FilterPanel } from "./FilterPanel"
 import {
@@ -13,7 +14,6 @@ import {
   Forward,
   Paperclip,
   InboxIcon,
-  Mail,
   AlertCircle,
 } from "lucide-react"
 import { cn } from "../../utils/cn"
@@ -51,9 +51,12 @@ export type InboxViewProps = {
   filterState?: FilterState
   onFilterChange?: (filters: FilterState) => void
   showFilters?: boolean
+  itemHref?: (item: DynamicRecord, id: any) => string
+  selectedItemId?: any
+  renderDetail?: (item: DynamicRecord | null) => ReactNode
 }
 
-type InboxFilter = "all" | "unread" | "starred" | "priority"
+type InboxFilter = "all" | "starred" | "priority"
 
 function getId(item: DynamicRecord, fallbackPath: string | undefined, idx: number): any {
   if (item?.id != null) return item.id
@@ -85,6 +88,9 @@ export function InboxView({
   filterState: externalFilterState,
   onFilterChange,
   showFilters = true,
+  itemHref,
+  selectedItemId,
+  renderDetail,
 }: InboxViewProps) {
   const isMobile = useIsMobile()
   const [selectedItem, setSelectedItem] = useState<DynamicRecord | null>(data[0] || null)
@@ -102,6 +108,15 @@ export function InboxView({
   const inboxCfg = useMemo(() => resolveInboxConfig(data, userInboxConfig), [data, userInboxConfig])
   const idPath = displayFields[0]?.path
 
+  useEffect(() => {
+    if (selectedItemId == null) return
+    const match = data.find((item, idx) => {
+      const cur = getId(item, idPath, idx)
+      return String(cur) === String(selectedItemId)
+    })
+    if (match) setSelectedItem(match)
+  }, [selectedItemId, data, idPath])
+
   const titleField = useMemo(() => {
     const path = inboxCfg.titlePath
     if (path) return fields.find((f) => f.path === path) ?? { path, label: path, type: "text" as const }
@@ -118,8 +133,6 @@ export function InboxView({
 
   const isStarred = (item: DynamicRecord) =>
     inboxCfg.starredField ? !!getByPath(item, inboxCfg.starredField) : false
-  const isRead = (item: DynamicRecord) =>
-    inboxCfg.readField ? !!getByPath(item, inboxCfg.readField) : true
   const hasAttachment = (item: DynamicRecord) => {
     if (!inboxCfg.attachmentField) return false
     const v = getByPath(item, inboxCfg.attachmentField)
@@ -154,21 +167,8 @@ export function InboxView({
     }
   }
 
-  const markAsRead = (itemId: any) => {
-    if (!inboxCfg.readField) return
-    const updatedData = data.map((item, idx) => {
-      const cur = getId(item, idPath, idx)
-      if (cur === itemId) {
-        return setByPath(item, inboxCfg.readField!, true)
-      }
-      return item
-    })
-    onDataUpdate?.(updatedData)
-  }
-
-  const handleSelectItem = (item: DynamicRecord, idx: number) => {
+  const handleSelectItem = (item: DynamicRecord) => {
     setSelectedItem(item)
-    markAsRead(getId(item, idPath, idx))
   }
 
   const handleFilterChange = (path: string, value: FilterValue) => {
@@ -187,14 +187,13 @@ export function InboxView({
       const matchesSearch = !searchQuery
         ? true
         : displayFields.some((f) => {
-            const value = getByPath(item, f.path)
-            if (value == null) return false
-            return String(value).toLowerCase().includes(searchQuery.toLowerCase())
-          })
+          const value = getByPath(item, f.path)
+          if (value == null) return false
+          return String(value).toLowerCase().includes(searchQuery.toLowerCase())
+        })
 
       const matchesInboxFilter =
         inboxFilter === "all" ||
-        (inboxFilter === "unread" && !isRead(item)) ||
         (inboxFilter === "starred" && isStarred(item)) ||
         (inboxFilter === "priority" && isHighPriority(item))
 
@@ -207,7 +206,6 @@ export function InboxView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, searchQuery, inboxFilter, activeFilters, displayFields, inboxCfg])
 
-  const unreadCount = inboxCfg.readField ? data.filter((i) => !isRead(i)).length : 0
   const starredCount = inboxCfg.starredField ? data.filter((i) => isStarred(i)).length : 0
   const priorityCount = inboxCfg.priorityField ? data.filter((i) => isHighPriority(i)).length : 0
 
@@ -221,7 +219,7 @@ export function InboxView({
   }))
 
   return (
-    <div className="flex h-full flex-col md:flex-row bg-background-presentation-body-primary">
+    <div data-theme="light" className="flex h-full flex-col md:flex-row gap-2">
       {filtersEnabled && !isMobile && (
         <div className="w-64 border-r border-border-presentation-global-primary bg-background-presentation-body-overlay-primary flex flex-col">
           <div className="p-4 space-y-1">
@@ -234,19 +232,6 @@ export function InboxView({
               All Items
               <Badge {...countBadge} label={String(data.length)} className="ml-auto" size="XS" />
             </TabFormItem>
-            {inboxCfg.readField && (
-              <TabFormItem
-                componentType="side"
-                className="w-full justify-start gap-2"
-                onClick={() => setInboxFilter("unread")}
-              >
-                <Mail className="h-4 w-4" />
-                Unread
-                {unreadCount > 0 && (
-                  <Badge {...countBadge} label={String(unreadCount)} className="ml-auto" size="XS" />
-                )}
-              </TabFormItem>
-            )}
             {inboxCfg.starredField && (
               <TabFormItem
                 componentType="side"
@@ -291,7 +276,7 @@ export function InboxView({
       )}
 
       <div className={cn(
-        "border-r border-border-presentation-global-primary flex flex-col bg-background-presentation-body-overlay-primary",
+        "border rounded-[16px] border-border-presentation-global-primary flex flex-col bg-background-presentation-form-base",
         isMobile ? "flex-1" : "w-full md:w-96",
       )}>
         <div className="p-4 border-b border-border-presentation-global-primary">
@@ -312,20 +297,19 @@ export function InboxView({
             const titleValue = titleField ? getByPath(item, titleField.path) : ""
             const previewValue = previewField ? getByPath(item, previewField.path) : ""
             const detailValue = detailField ? getByPath(item, detailField.path) : ""
-            const read = isRead(item)
-            const selected = selectedItem != null && getId(selectedItem, idPath, -1) === itemId
+            const selected =
+              (selectedItemId != null && String(selectedItemId) === String(itemId)) ||
+              (selectedItem != null && getId(selectedItem, idPath, -1) === itemId)
 
-            return (
-              <div
-                key={itemId}
-                onClick={() => handleSelectItem(item, idx)}
-                className={cn(
-                  "flex items-start gap-3 p-4 border-b border-border-presentation-global-primary cursor-pointer transition-colors hover:bg-background-presentation-action-contstyle-hover",
-                  read && "bg-background-presentation-badge-gray opacity-70",
-                  selected &&
-                    "bg-background-presentation-action-primary/10 border-l-2 border-l-background-presentation-action-primary",
-                )}
-              >
+            const rowClass = cn(
+              "flex items-start gap-3 py-4 px-[18px] border-b border-2 border-border-presentation-global-primary cursor-pointer transition-colors hover:bg-background-presentation-action-contstyle-hover",
+              selected &&
+              "bg-blue-sparkle-alpha-5 border-y-2 border-y-border-presentation-state-focus",
+            )
+            const href = itemHref?.(item, itemId)
+
+            const rowContent = (
+              <>
                 <Avatar className="h-10 w-10 shrink-0">
                   <AvatarFallback className="bg-background-presentation-action-primary text-content-presentation-action-primary text-sm">
                     {getInitials(previewValue || titleValue)}
@@ -333,14 +317,7 @@ export function InboxView({
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <p
-                      className={cn(
-                        "text-sm truncate",
-                        read
-                          ? "font-normal text-content-presentation-global-secondary"
-                          : "font-semibold text-content-presentation-global-primary",
-                      )}
-                    >
+                    <p className="text-sm truncate font-semibold text-content-presentation-global-primary">
                       {String(previewValue ?? "")}
                     </p>
                     <div className="flex items-center gap-1 shrink-0">
@@ -368,14 +345,7 @@ export function InboxView({
                       )}
                     </div>
                   </div>
-                  <p
-                    className={cn(
-                      "text-sm mb-1 truncate",
-                      read
-                        ? "font-normal text-content-presentation-global-secondary"
-                        : "font-medium text-content-presentation-global-primary",
-                    )}
-                  >
+                  <p className="text-sm mb-1 truncate font-medium text-content-presentation-global-primary">
                     {String(titleValue ?? "")}
                   </p>
                   {detailField && detailValue != null && (
@@ -395,15 +365,37 @@ export function InboxView({
                     })}
                   </div>
                 </div>
+              </>
+            )
+
+            return href ? (
+              <Link
+                key={itemId}
+                href={href}
+                className={cn(rowClass, "no-underline text-inherit")}
+              >
+                {rowContent}
+              </Link>
+            ) : (
+              <div
+                key={itemId}
+                onClick={() => handleSelectItem(item)}
+                className={rowClass}
+              >
+                {rowContent}
               </div>
             )
           })}
         </div>
       </div>
 
-      {config.showPreviewPane && !isMobile && selectedItem ? (
-        <div className="flex-1 flex flex-col bg-background-presentation-body-primary">
-          <div className="flex items-center justify-between gap-4 p-4 border-b border-border-presentation-global-primary bg-background-presentation-body-primary">
+      {renderDetail && !isMobile ? (
+        <div className="flex-1 flex flex-col bg-background-presentation-form-base overflow-hidden rounded-[16px]">
+          {renderDetail(selectedItem)}
+        </div>
+      ) : config.showPreviewPane && !isMobile && selectedItem ? (
+        <div className="flex-1 flex flex-col bg-background-presentation-form-base ">
+          <div className="flex items-center justify-between gap-4 p-4 border-b border-border-presentation-global-primary bg-background-presentation-form-base">
             <div className="flex items-center gap-2">
               <Button variant="BorderStyle" buttonType="icon">
                 <Archive className="h-4 w-4" />
@@ -493,7 +485,7 @@ export function InboxView({
             </Card>
           </div>
 
-          <div className="flex items-center gap-2 p-4 border-t border-border-presentation-global-primary bg-background-presentation-body-primary">
+          <div className="flex items-center gap-2 p-4 border-t border-border-presentation-global-primary bg-background-presentation-form-base">
             <Button className="gap-2">
               <Reply className="h-4 w-4" />
               Reply
@@ -505,7 +497,7 @@ export function InboxView({
           </div>
         </div>
       ) : !isMobile && (
-        <div className="flex-1 flex items-center justify-center bg-background-presentation-body-primary">
+        <div className="flex-1 flex items-center justify-center bg-background-presentation-form-base">
           <p className="text-content-presentation-global-tertiary">Select an item to view details</p>
         </div>
       )}

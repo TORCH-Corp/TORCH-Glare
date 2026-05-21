@@ -7,6 +7,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ReactNode,
 } from "react";
 import { List, LayoutGrid, Inbox as InboxIcon, Network } from "lucide-react";
 import type {
@@ -57,6 +58,14 @@ export type DataViewsLayoutProps = {
   onAddNew?: () => void;
   addNewLabel?: string;
 
+  inboxItemHref?: (item: DynamicRecord, id: any) => string;
+  inboxSelectedId?: any;
+  inboxRenderDetail?: (item: DynamicRecord | null) => ReactNode;
+
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+
   className?: string;
   theme?: Themes;
 };
@@ -94,6 +103,12 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
       showTitle = true,
       onAddNew,
       addNewLabel,
+      inboxItemHref,
+      inboxSelectedId,
+      inboxRenderDetail,
+      searchValue,
+      onSearchChange,
+      searchPlaceholder,
       className,
       theme,
     } = props;
@@ -197,13 +212,16 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
               onToggleSettings={togglePanel}
               onAddNew={onAddNew}
               addNewLabel={addNewLabel}
+              searchValue={searchValue}
+              onSearchChange={onSearchChange}
+              searchPlaceholder={searchPlaceholder}
             />
           )}
 
           <main className="flex min-h-0 flex-1 overflow-hidden ">
             {/* Master Container — white card, 16px radius, #D4D4D4 hairline
                 border. Fixed surface (matches header chrome). */}
-            <div className="flex flex-1 overflow-hidden rounded-[16px] border border-border-presentation-global-primary ">
+            <div className="flex flex-1 overflow-hidden rounded-[16px]">
               {/* Clip the scrollable surface to the parent radius MINUS the 1px
                   border (16 − 1 = 15px). Using the full 16px here let the
                   opaque view background sit flush with the parent's outer edge
@@ -248,6 +266,9 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
                     filterState={filterState}
                     onFilterChange={setFilterState}
                     showFilters={false}
+                    itemHref={inboxItemHref}
+                    selectedItemId={inboxSelectedId}
+                    renderDetail={inboxRenderDetail}
                   />
                 )}
                 {currentView === "tree" && enabledViews.tree && (

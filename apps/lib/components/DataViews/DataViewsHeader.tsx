@@ -1,9 +1,10 @@
 "use client"
 
-import { Settings } from "lucide-react"
+import { Search, Settings } from "lucide-react"
 import type { ReactNode } from "react"
 import type { ViewType } from "./types"
 import { Button } from "../Button"
+import { InputField } from "../InputField"
 import { cn } from "../../utils/cn"
 
 export type DataViewsHeaderView = {
@@ -22,6 +23,9 @@ type DataViewsHeaderProps = {
   onToggleSettings: () => void
   onAddNew?: () => void
   addNewLabel?: string
+  searchValue?: string
+  onSearchChange?: (value: string) => void
+  searchPlaceholder?: string
   className?: string
 }
 
@@ -35,6 +39,9 @@ export function DataViewsHeader({
   onToggleSettings,
   onAddNew,
   addNewLabel = "Add New",
+  searchValue,
+  onSearchChange,
+  searchPlaceholder = "Search...",
   className,
 }: DataViewsHeaderProps) {
   return (
@@ -58,8 +65,8 @@ export function DataViewsHeader({
       {/* Divider */}
       <div className="h-7 w-px shrink-0 bg-[#434446]" />
 
-      {/* Segmented view switcher */}
-      <div className="flex flex-1 items-center">
+      {/* Segmented view switcher + search */}
+      <div className="flex flex-1 items-center gap-2">
         <div className="flex items-center gap-[2px] rounded-[10px] bg-[#252729] p-[2px] shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)]">
           {views.map((view, idx) => {
             const active = view.id === currentView
@@ -92,6 +99,18 @@ export function DataViewsHeader({
             )
           })}
         </div>
+
+        {onSearchChange && (
+          <div className="relative w-[240px] shrink-0">
+            <Search className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-content-presentation-global-tertiary" />
+            <InputField
+              placeholder={searchPlaceholder}
+              value={searchValue ?? ""}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        )}
       </div>
 
       {/* Action bar */}
