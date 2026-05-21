@@ -30,7 +30,7 @@ export function RadioRow({ value, label }: { value: string; label: string }) {
     <RadioGroupPrimitive.Item
       value={value}
       className={cn(
-        "group flex w-full items-center gap-1.5 py-1 pl-2",
+        "group flex w-full items-center gap-1.5 py-1 pl-2 h-[32px]",
         "cursor-pointer rounded-[8px] text-left outline-none transition-colors",
         "hover:bg-white/[0.04] focus-visible:bg-white/[0.04]",
       )}

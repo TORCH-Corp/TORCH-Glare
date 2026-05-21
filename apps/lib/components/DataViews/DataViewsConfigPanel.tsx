@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   X,
   Settings as SettingsIcon,
@@ -372,10 +372,21 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
               ) : (
                 // Single-choice radio list (Figma 1612:30016): selecting a
                 // column sets config.sortBy; direction keeps config.sortOrder.
+                // Rows + dividers are flat siblings so the `peer` pattern
+                // can hide the dividers immediately before AND after a
+                // hovered row.
                 <RadioGroup
                   value={config.sortBy || undefined}
                   onValueChange={(v) => onConfigChange({ sortBy: v })}
-                  className="flex flex-col gap-1 space-y-0 rounded-[12px] bg-[#1C1D1F] p-1"
+                  className={cn(
+                    "flex flex-col space-y-0 rounded-[12px] bg-[#1C1D1F] p-1",
+                    // Wrapper containing the hovered row: hide its OWN
+                    // divider (sits above the row).
+                    "[&>div:has(>[role=radio]:hover)>.dv-divider]:opacity-0",
+                    // Wrapper that directly follows the one with the hovered
+                    // row: hide its divider (sits below the hovered row).
+                    "[&>div:has(>[role=radio]:hover)+div>.dv-divider]:opacity-0",
+                  )}
                 >
                   {sortableColumns.map((col, i) => {
                     const field = fieldByPath.get(col.id);
@@ -383,7 +394,9 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                       <div key={col.id}>
                         {/* Edge-to-edge divider (Figma: no horizontal
                             inset). */}
-                        {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
+                        {i > 0 && (
+                          <div className="dv-divider h-px bg-[#2C2D2E]" />
+                        )}
                         <RadioRow
                           value={col.id}
                           label={col.label || field?.label || col.id}
