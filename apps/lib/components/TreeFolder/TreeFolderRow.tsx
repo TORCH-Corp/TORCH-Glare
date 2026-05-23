@@ -1,47 +1,44 @@
-"use client"
+"use client";
 
-import { ChevronRight, ChevronDown, GripVertical } from "lucide-react"
-import type { DragEvent } from "react"
-import { cn } from "../../utils/cn"
-import { resolveIcon } from "./icons"
-import type {
-  TreeFolderIconResolver,
-  TreeFolderVisibleRow,
-} from "./types"
+import { ChevronRight, ChevronDown, GripVertical } from "lucide-react";
+import type { DragEvent } from "react";
+import { cn } from "../../utils/cn";
+import { resolveIcon } from "./icons";
+import type { TreeFolderIconResolver, TreeFolderVisibleRow } from "./types";
 
 export type TreeFolderRowDragHandlers = {
-  draggable: boolean
-  onDragStart: (e: DragEvent<HTMLElement>) => void
-  onDragEnd: (e: DragEvent<HTMLElement>) => void
-  onDragOver: (e: DragEvent<HTMLElement>) => void
-  onDragLeave: (e: DragEvent<HTMLElement>) => void
-  onDrop: (e: DragEvent<HTMLElement>) => void
-}
+  draggable: boolean;
+  onDragStart: (e: DragEvent<HTMLElement>) => void;
+  onDragEnd: (e: DragEvent<HTMLElement>) => void;
+  onDragOver: (e: DragEvent<HTMLElement>) => void;
+  onDragLeave: (e: DragEvent<HTMLElement>) => void;
+  onDrop: (e: DragEvent<HTMLElement>) => void;
+};
 
 export type TreeFolderRowProps = {
-  row: TreeFolderVisibleRow
-  rowHeight: number
-  indent: number
-  iconFor?: TreeFolderIconResolver
+  row: TreeFolderVisibleRow;
+  rowHeight: number;
+  indent: number;
+  iconFor?: TreeFolderIconResolver;
 
-  isSelected: boolean
-  isAncestor: boolean
-  isDescendantOfSelected: boolean
+  isSelected: boolean;
+  isAncestor: boolean;
+  isDescendantOfSelected: boolean;
   /** True when the previous visible row is part of the same selected-subtree band. */
-  isPrevInBand: boolean
+  isPrevInBand: boolean;
   /** True when the next visible row is part of the same selected-subtree band. */
-  isNextInBand: boolean
+  isNextInBand: boolean;
 
-  isDragging: boolean
-  isDropTargetInside: boolean
-  isDropBefore: boolean
-  isDropAfter: boolean
+  isDragging: boolean;
+  isDropTargetInside: boolean;
+  isDropBefore: boolean;
+  isDropAfter: boolean;
 
-  dndEnabled: boolean
-  onSelect: (id: string | null) => void
-  onToggle: (id: string) => void
-  dragHandlers: TreeFolderRowDragHandlers
-}
+  dndEnabled: boolean;
+  onSelect: (id: string | null) => void;
+  onToggle: (id: string) => void;
+  dragHandlers: TreeFolderRowDragHandlers;
+};
 
 export function TreeFolderRow({
   row,
@@ -62,78 +59,81 @@ export function TreeFolderRow({
   onToggle,
   dragHandlers,
 }: TreeFolderRowProps) {
-  const { node, level, isOpen, isInternal, ancestorHasMoreSiblings } = row
-  const data = node
-  const hasChildren = isInternal
+  const { node, level, isOpen, isInternal, ancestorHasMoreSiblings } = row;
+  const data = node;
+  const hasChildren = isInternal;
 
-  const willReceiveDrop = isDropTargetInside && dndEnabled
-  const inSubtreeOfSelected = isDescendantOfSelected
-  const inAncestorChain = isAncestor
+  const willReceiveDrop = isDropTargetInside && dndEnabled;
+  const inSubtreeOfSelected = isDescendantOfSelected;
+  const inAncestorChain = isAncestor;
   // Selected row gets the strong fill; direct children get a softer overlay so
   // they read as "members of the selected group" without competing with the
   // selection itself. Rows stand alone — no neighbor-aware joining anymore.
-  const showSelected = isSelected && !willReceiveDrop
-  const showChildOfSelected = inSubtreeOfSelected && !isSelected && !willReceiveDrop
+  const showSelected = isSelected && !willReceiveDrop;
+  const showChildOfSelected =
+    inSubtreeOfSelected && !isSelected && !willReceiveDrop;
   // A row is "in the selection group" if it's the selected node itself or a
   // descendant tinted by it. Neighbor-aware rounding then merges adjacent rows
   // into one continuous pill instead of stacked individual chips.
-  const inGroup = showSelected || showChildOfSelected
-  const isGroupStart = inGroup && !isPrevInBand
-  const isGroupEnd = inGroup && !isNextInBand
+  const inGroup = showSelected || showChildOfSelected;
+  const isGroupStart = inGroup && !isPrevInBand;
+  const isGroupEnd = inGroup && !isNextInBand;
 
   const icon = resolveIcon(iconFor, data, {
     isOpen,
     isInternal,
     isSelected,
-  })
+  });
 
   const outerClassName = cn(
     "relative w-full min-w-max",
     isDragging && "opacity-40",
     data.disabled && "opacity-50 pointer-events-none",
-  )
+  );
 
   const bandClassName = cn(
     "pointer-events-none absolute inset-y-0 inset-x-[2px] z-0 rounded-md transition-colors duration-100",
     inGroup && !isGroupStart && "rounded-t-none",
     inGroup && !isGroupEnd && "rounded-b-none",
-    !willReceiveDrop && !inGroup &&
+    !willReceiveDrop &&
+      !inGroup &&
       "group-hover/row:bg-background-presentation-form-field-hover group-active/row:bg-background-presentation-action-hover/20",
     showSelected && "bg-background-presentation-state-information-primary",
     // Token isn't exposed as channels, so Tailwind's /alpha modifier doesn't
     // work on it — paint the descendant tint with the same hex at 30% alpha.
     showChildOfSelected && "bg-[#005ECC]/30",
-    inAncestorChain && !inGroup &&
+    inAncestorChain &&
+      !inGroup &&
       "bg-background-presentation-state-information-secondary",
     willReceiveDrop && "bg-background-presentation-state-information-primary",
-  )
+  );
 
   const rowClassName = cn(
     "relative z-10 flex items-center gap-1 py-1 pr-2 cursor-pointer text-sm min-w-max",
     showSelected && "text-white",
     willReceiveDrop && "text-white",
-  )
+  );
 
   // Grip occupies a fixed slot at the outer-left edge. `contentStart` is where
   // the indent-padding origin (depth 0) begins, leaving breathing room between
   // the grip column and the first connector / chevron.
-  const gripSlotWidth = 16
-  const gripGutterPad = 6
-  const contentStart = gripSlotWidth + gripGutterPad // 22px
+  const gripSlotWidth = 16;
+  const gripGutterPad = 6;
+  const contentStart = gripSlotWidth + gripGutterPad; // 22px
 
   const rowStyle = {
     paddingLeft: contentStart + level * indent,
     height: rowHeight,
-  }
+  };
 
   const handleRowClick = () => {
-    if (data.disabled) return
-    onSelect(node.id)
-  }
+    if (data.disabled) return;
+    onSelect(node.id);
+  };
 
   // Insert lines for "between" drops (above/below sibling). Inset to the row's
   // indent so they line up with the new sibling's level.
-  const insertLineInset = contentStart + level * indent
+  const insertLineInset = contentStart + level * indent;
 
   return (
     <div
@@ -149,13 +149,15 @@ export function TreeFolderRow({
           right of this 16px reserved column. Hidden until row hover. */}
       {dndEnabled && (
         <span
-          className="absolute left-0 top-0 z-[6] flex h-full w-4 items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity duration-150 cursor-grab active:cursor-grabbing"
+          className="absolute left-1.5 top-0 z-[6] flex h-full w-4 items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity duration-150 cursor-grab active:cursor-grabbing"
           aria-hidden
         >
           <GripVertical
             className={cn(
               "w-3.5 h-3.5",
-              showSelected ? "text-white/80" : "text-content-presentation-global-tertiary",
+              showSelected
+                ? "text-white/80"
+                : "text-content-presentation-global-tertiary",
             )}
           />
         </span>
@@ -202,8 +204,8 @@ export function TreeFolderRow({
           <button
             type="button"
             onClick={(e) => {
-              e.stopPropagation()
-              onToggle(node.id)
+              e.stopPropagation();
+              onToggle(node.id);
             }}
             className={cn(
               "shrink-0 w-4 h-4 flex items-center justify-center rounded",
@@ -226,7 +228,9 @@ export function TreeFolderRow({
         <span
           className={cn(
             "shrink-0 w-4 h-4 flex items-center justify-center",
-            showSelected ? "text-white/90" : "text-content-presentation-global-tertiary",
+            showSelected
+              ? "text-white/90"
+              : "text-content-presentation-global-tertiary",
           )}
           aria-hidden
         >
@@ -241,7 +245,9 @@ export function TreeFolderRow({
           <span
             className={cn(
               "shrink-0 text-xs tabular-nums",
-              showSelected ? "text-white/80" : "text-content-presentation-global-tertiary",
+              showSelected
+                ? "text-white/80"
+                : "text-content-presentation-global-tertiary",
             )}
           >
             ({countDescendants(node)})
@@ -249,7 +255,7 @@ export function TreeFolderRow({
         )}
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -276,17 +282,17 @@ function TreeConnectors({
   contentStart,
   ancestorHasMoreSiblings,
 }: {
-  level: number
-  indent: number
-  rowHeight: number
-  contentStart: number
-  ancestorHasMoreSiblings: boolean[]
+  level: number;
+  indent: number;
+  rowHeight: number;
+  contentStart: number;
+  ancestorHasMoreSiblings: boolean[];
 }) {
   // Grip handle sits in a fixed outer-left slot, so the chevron column for a
   // row at depth D is: contentStart + D*indent + chevron-half(8).
-  const chevronX = (depth: number) => contentStart + depth * indent + 8
-  const lineColor = "var(--color-border-presentation-global-primary, #3A3B3D)"
-  const segments: React.ReactNode[] = []
+  const chevronX = (depth: number) => contentStart + depth * indent + 8;
+  const lineColor = "var(--color-border-presentation-global-primary, #3A3B3D)";
+  const segments: React.ReactNode[] = [];
 
   // Ancestor verticals: full-height line at each ancestor's chevron column,
   // skipped when the ancestor at that depth has no more siblings below.
@@ -294,7 +300,7 @@ function TreeConnectors({
   // below this row," so it controls whether to draw the vertical in that
   // ancestor's chevron gutter (chevronX(d)).
   for (let d = 0; d < level - 1; d++) {
-    if (!ancestorHasMoreSiblings[d]) continue
+    if (!ancestorHasMoreSiblings[d]) continue;
     segments.push(
       <span
         key={`v-${d}`}
@@ -302,15 +308,15 @@ function TreeConnectors({
         className="pointer-events-none absolute top-0 bottom-0 w-px"
         style={{ left: chevronX(d), backgroundColor: lineColor }}
       />,
-    )
+    );
   }
 
   // Parent's gutter (depth = level - 1). T or L vertical, plus horizontal stub
   // landing just before this row's own grip/chevron starts.
-  const parentDepth = level - 1
-  const parentX = chevronX(parentDepth)
-  const midY = rowHeight / 2
-  const ownContentX = contentStart + level * indent + 2 // extend 4px further toward the row content
+  const parentDepth = level - 1;
+  const parentX = chevronX(parentDepth);
+  const midY = rowHeight / 2;
+  const ownContentX = contentStart + level * indent + 2; // extend 4px further toward the row content
 
   segments.push(
     <span
@@ -324,7 +330,7 @@ function TreeConnectors({
         backgroundColor: lineColor,
       }}
     />,
-  )
+  );
   segments.push(
     <span
       key="h-own"
@@ -337,21 +343,21 @@ function TreeConnectors({
         backgroundColor: lineColor,
       }}
     />,
-  )
+  );
 
-  return <>{segments}</>
+  return <>{segments}</>;
 }
 
 function countDescendants(node: {
-  children?: { children?: any[] }[] | null
+  children?: { children?: any[] }[] | null;
 }): number {
-  if (!node.children) return 0
-  let n = 0
-  const stack: any[] = [...node.children]
+  if (!node.children) return 0;
+  let n = 0;
+  const stack: any[] = [...node.children];
   while (stack.length) {
-    n++
-    const top = stack.pop()
-    if (top.children) for (const c of top.children) stack.push(c)
+    n++;
+    const top = stack.pop();
+    if (top.children) for (const c of top.children) stack.push(c);
   }
-  return n
+  return n;
 }

@@ -197,8 +197,11 @@ export function TreeView({
       {!isMobile && (
         <div className="w-64 rounded-[16px] border border-border-presentation-global-primary bg-background-presentation-form-base overflow-hidden flex flex-col">
           <div className="px-3 py-2 border-b border-border-presentation-global-primary">
-            <span className="text-xs font-semibold text-content-presentation-global-secondary uppercase tracking-wide">
-              Tree
+            <span
+              style={{ fontFeatureSettings: "'cv05' on" }}
+              className="typography-display-medium-medium uppercase text-content-presentation-global-primary"
+            >
+              categories
             </span>
           </div>
           <div className="flex-1 overflow-hidden">{treeContent}</div>
