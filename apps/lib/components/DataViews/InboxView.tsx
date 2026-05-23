@@ -394,7 +394,7 @@ export function InboxView({
           {renderDetail(selectedItem)}
         </div>
       ) : config.showPreviewPane && !isMobile && selectedItem ? (
-        <div className="flex-1 flex flex-col bg-background-presentation-form-base ">
+        <div className="flex-1 flex flex-col bg-background-presentation-form-base overflow-hidden rounded-[16px] border border-border-presentation-global-primary">
           <div className="flex items-center justify-between gap-4 p-4 border-b border-border-presentation-global-primary bg-background-presentation-form-base">
             <div className="flex items-center gap-2">
               <Button variant="BorderStyle" buttonType="icon">
@@ -497,7 +497,7 @@ export function InboxView({
           </div>
         </div>
       ) : !isMobile && (
-        <div className="flex-1 flex items-center justify-center bg-background-presentation-form-base">
+        <div className="flex-1 flex items-center justify-center bg-background-presentation-form-base overflow-hidden rounded-[16px] border border-border-presentation-global-primary">
           <p className="text-content-presentation-global-tertiary">Select an item to view details</p>
         </div>
       )}
