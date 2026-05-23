@@ -219,7 +219,7 @@ export function InboxView({
   }))
 
   return (
-    <div data-theme="light" className="flex h-full flex-col md:flex-row gap-2">
+    <div className="flex h-full flex-col md:flex-row gap-2">
       {filtersEnabled && !isMobile && (
         <div className="w-64 border-r border-border-presentation-global-primary bg-background-presentation-body-overlay-primary flex flex-col">
           <div className="p-4 space-y-1">
