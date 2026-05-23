@@ -62,7 +62,7 @@ export function TreeFolderRow({
   onToggle,
   dragHandlers,
 }: TreeFolderRowProps) {
-  const { node, level, isOpen, isInternal, isLastChild, ancestorHasMoreSiblings } = row
+  const { node, level, isOpen, isInternal, ancestorHasMoreSiblings } = row
   const data = node
   const hasChildren = isInternal
 
@@ -168,7 +168,6 @@ export function TreeFolderRow({
             indent={indent}
             rowHeight={rowHeight}
             contentStart={contentStart}
-            isLastChild={isLastChild}
             ancestorHasMoreSiblings={ancestorHasMoreSiblings}
           />
         </div>
@@ -275,14 +274,12 @@ function TreeConnectors({
   indent,
   rowHeight,
   contentStart,
-  isLastChild,
   ancestorHasMoreSiblings,
 }: {
   level: number
   indent: number
   rowHeight: number
   contentStart: number
-  isLastChild: boolean
   ancestorHasMoreSiblings: boolean[]
 }) {
   // Grip handle sits in a fixed outer-left slot, so the chevron column for a
@@ -313,7 +310,7 @@ function TreeConnectors({
   const parentDepth = level - 1
   const parentX = chevronX(parentDepth)
   const midY = rowHeight / 2
-  const ownContentX = contentStart + level * indent - 2 // 2px breathing room before content
+  const ownContentX = contentStart + level * indent + 2 // extend 4px further toward the row content
 
   segments.push(
     <span
@@ -323,7 +320,7 @@ function TreeConnectors({
       style={{
         left: parentX,
         top: 0,
-        height: isLastChild ? midY : "100%",
+        height: "100%",
         backgroundColor: lineColor,
       }}
     />,
