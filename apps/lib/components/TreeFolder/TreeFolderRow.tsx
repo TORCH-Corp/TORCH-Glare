@@ -291,7 +291,9 @@ function TreeConnectors({
   // Grip handle sits in a fixed outer-left slot, so the chevron column for a
   // row at depth D is: contentStart + D*indent + chevron-half(8).
   const chevronX = (depth: number) => contentStart + depth * indent + 8;
-  const lineColor = "var(--color-border-presentation-global-primary, #3A3B3D)";
+  // Connector color is theme-aware: black/20 on default+light, white/20 on dark.
+  // The dark swap relies on a `data-theme="dark"` ancestor (set by TreeFolder).
+  const lineClass = "bg-black-alpha-20 [[data-theme=dark]_&]:bg-white-alpha-20";
   const segments: React.ReactNode[] = [];
 
   // Ancestor verticals: full-height line at each ancestor's chevron column,
@@ -305,8 +307,8 @@ function TreeConnectors({
       <span
         key={`v-${d}`}
         aria-hidden
-        className="pointer-events-none absolute top-0 bottom-0 w-px"
-        style={{ left: chevronX(d), backgroundColor: lineColor }}
+        className={cn("pointer-events-none absolute top-0 bottom-0 w-px", lineClass)}
+        style={{ left: chevronX(d) }}
       />,
     );
   }
@@ -322,12 +324,11 @@ function TreeConnectors({
     <span
       key="v-own"
       aria-hidden
-      className="pointer-events-none absolute w-px"
+      className={cn("pointer-events-none absolute w-px", lineClass)}
       style={{
         left: parentX,
         top: 0,
         height: "100%",
-        backgroundColor: lineColor,
       }}
     />,
   );
@@ -335,12 +336,11 @@ function TreeConnectors({
     <span
       key="h-own"
       aria-hidden
-      className="pointer-events-none absolute h-px"
+      className={cn("pointer-events-none absolute h-px", lineClass)}
       style={{
         left: parentX,
         top: midY,
         width: Math.max(4, ownContentX - parentX),
-        backgroundColor: lineColor,
       }}
     />,
   );
