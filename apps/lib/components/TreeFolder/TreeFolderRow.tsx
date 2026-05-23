@@ -69,10 +69,17 @@ export function TreeFolderRow({
   const willReceiveDrop = isDropTargetInside && dndEnabled
   const inSubtreeOfSelected = isDescendantOfSelected
   const inAncestorChain = isAncestor
-  const inBand = (isSelected || inSubtreeOfSelected) && !willReceiveDrop
-
-  const isBandStart = inBand && !isPrevInBand
-  const isBandEnd = inBand && !isNextInBand
+  // Selected row gets the strong fill; direct children get a softer overlay so
+  // they read as "members of the selected group" without competing with the
+  // selection itself. Rows stand alone — no neighbor-aware joining anymore.
+  const showSelected = isSelected && !willReceiveDrop
+  const showChildOfSelected = inSubtreeOfSelected && !isSelected && !willReceiveDrop
+  // A row is "in the selection group" if it's the selected node itself or a
+  // descendant tinted by it. Neighbor-aware rounding then merges adjacent rows
+  // into one continuous pill instead of stacked individual chips.
+  const inGroup = showSelected || showChildOfSelected
+  const isGroupStart = inGroup && !isPrevInBand
+  const isGroupEnd = inGroup && !isNextInBand
 
   const icon = resolveIcon(iconFor, data, {
     isOpen,
@@ -87,21 +94,23 @@ export function TreeFolderRow({
   )
 
   const bandClassName = cn(
-    "pointer-events-none absolute inset-y-0 inset-x-[2px] transition-colors duration-100",
-    "rounded-md",
-    inBand && !isBandStart && "rounded-t-none",
-    inBand && !isBandEnd && "rounded-b-none",
-    !willReceiveDrop && !inBand &&
+    "pointer-events-none absolute inset-y-0 inset-x-[2px] rounded-md transition-colors duration-100",
+    inGroup && !isGroupStart && "rounded-t-none",
+    inGroup && !isGroupEnd && "rounded-b-none",
+    !willReceiveDrop && !inGroup &&
       "group-hover/row:bg-background-presentation-form-field-hover group-active/row:bg-background-presentation-action-hover/20",
-    inBand && "bg-background-presentation-state-information-primary",
-    inAncestorChain && !inBand &&
+    showSelected && "bg-background-presentation-state-information-primary",
+    // Token isn't exposed as channels, so Tailwind's /alpha modifier doesn't
+    // work on it — paint the descendant tint with the same hex at 30% alpha.
+    showChildOfSelected && "bg-[#005ECC]/30",
+    inAncestorChain && !inGroup &&
       "bg-background-presentation-state-information-secondary",
     willReceiveDrop && "bg-background-presentation-state-information-primary",
   )
 
   const rowClassName = cn(
     "relative z-10 flex items-center gap-1 py-1 pr-2 cursor-pointer text-sm min-w-max",
-    inBand && "text-white",
+    showSelected && "text-white",
     willReceiveDrop && "text-white",
   )
 
@@ -160,7 +169,7 @@ export function TreeFolderRow({
             <GripVertical
               className={cn(
                 "w-3.5 h-3.5",
-                inBand ? "text-white/80" : "text-content-presentation-global-tertiary",
+                showSelected ? "text-white/80" : "text-content-presentation-global-tertiary",
               )}
             />
           </span>
@@ -175,7 +184,7 @@ export function TreeFolderRow({
             }}
             className={cn(
               "shrink-0 w-4 h-4 flex items-center justify-center rounded",
-              inBand
+              showSelected
                 ? "text-white/80 hover:text-white"
                 : "text-content-presentation-global-tertiary hover:text-content-presentation-global-primary",
             )}
@@ -194,7 +203,7 @@ export function TreeFolderRow({
         <span
           className={cn(
             "shrink-0 w-4 h-4 flex items-center justify-center",
-            inBand ? "text-white/90" : "text-content-presentation-global-tertiary",
+            showSelected ? "text-white/90" : "text-content-presentation-global-tertiary",
           )}
           aria-hidden
         >
@@ -209,7 +218,7 @@ export function TreeFolderRow({
           <span
             className={cn(
               "shrink-0 text-xs tabular-nums",
-              inBand ? "text-white/80" : "text-content-presentation-global-tertiary",
+              showSelected ? "text-white/80" : "text-content-presentation-global-tertiary",
             )}
           >
             ({countDescendants(node)})

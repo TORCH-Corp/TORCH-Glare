@@ -168,8 +168,7 @@ export default function TreeFolderDemo() {
         <p className="text-sm text-content-presentation-global-secondary max-w-prose">
           A standalone, reusable tree component modeled after Figma&apos;s layers panel.
           Native HTML5 drag-and-drop — drag rows to reparent or reorder. The breadcrumb
-          at the top of the panel shows the selected node&apos;s path; ancestor rows are
-          subtly highlighted so you can see “what&apos;s inside what.”
+          at the top of the panel shows the selected node&apos;s path.
         </p>
         <div className="mt-6 text-xs text-content-presentation-global-tertiary">
           Selected: <span className="text-content-presentation-global-primary">{selected ?? "none"}</span>

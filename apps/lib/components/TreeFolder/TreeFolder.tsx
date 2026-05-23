@@ -123,7 +123,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
       title = "Layers",
       showBreadcrumb = true,
       showHeader = true,
-      highlightAncestors = true,
+      highlightAncestors = false,
       highlightSubtree = true,
       headerAccessory,
       emptyState,
