@@ -183,9 +183,9 @@ export function TreeView({
   const filtersEnabled = showFilters && config.showFilters !== false
 
   return (
-    <div className="flex h-full bg-background-presentation-body-primary">
+    <div className="flex h-full gap-2">
       {!isMobile && (
-        <div className="w-64 border-r border-border-presentation-global-primary bg-background-presentation-body-overlay-primary flex flex-col">
+        <div className="w-64 rounded-[16px] border border-border-presentation-global-primary bg-background-presentation-form-base overflow-hidden flex flex-col">
           <div className="px-3 py-2 border-b border-border-presentation-global-primary">
             <span className="text-xs font-semibold text-content-presentation-global-secondary uppercase tracking-wide">
               Tree
@@ -206,8 +206,8 @@ export function TreeView({
         />
       )}
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-border-presentation-global-primary bg-background-presentation-body-primary">
+      <div className="flex-1 flex flex-col overflow-hidden rounded-[16px] border border-border-presentation-global-primary bg-background-presentation-form-base">
+        <div className="flex items-center gap-2 px-3 py-2 border-b border-border-presentation-global-primary bg-background-presentation-form-base">
           {isMobile && <TreeDrawerTrigger onClick={() => setDrawerOpen(true)} />}
 
           {/* Segmented switcher — same style as the main view switcher
