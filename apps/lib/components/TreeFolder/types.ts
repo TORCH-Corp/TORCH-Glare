@@ -56,6 +56,15 @@ export type TreeFolderVisibleRow = {
   isOpen: boolean
   /** True for internal nodes (any node with non-empty children). */
   isInternal: boolean
+  /**
+   * Connector-line geometry. `isLastChild` toggles the row's own bend between L
+   * (last) and T (non-last). `ancestorHasMoreSiblings[d]` is true when the
+   * ancestor at depth `d` still has visible siblings after this row — that
+   * controls whether the vertical guide renders in that ancestor's gutter.
+   * Length === `level`.
+   */
+  isLastChild: boolean
+  ancestorHasMoreSiblings: boolean[]
 }
 
 /** Where the pointer is dropping relative to the hovered row. */
