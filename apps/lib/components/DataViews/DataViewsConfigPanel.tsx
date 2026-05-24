@@ -409,18 +409,17 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
             </div>
           </div>
         ) : (
-          <div className="[&>div]:w-full [&>div]:border-r-0 [&>div]:bg-transparent">
-            <FilterPanel
-              data={data}
-              fields={fields}
-              filters={filterState}
-              onFilterChange={(path: string, value: FilterValue) =>
-                onFilterChange({ ...filterState, [path]: value })
-              }
-              onClearAll={() => onFilterChange({})}
-              filterConfig={filterConfig}
-            />
-          </div>
+          <FilterPanel
+            variant="panel"
+            data={data}
+            fields={fields}
+            filters={filterState}
+            onFilterChange={(path: string, value: FilterValue) =>
+              onFilterChange({ ...filterState, [path]: value })
+            }
+            onClearAll={() => onFilterChange({})}
+            filterConfig={filterConfig}
+          />
         )}
       </div>
     </div>

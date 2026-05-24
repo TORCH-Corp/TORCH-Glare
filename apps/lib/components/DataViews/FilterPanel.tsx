@@ -1,5 +1,6 @@
 "use client"
 
+import { Fragment } from "react"
 import { Button } from "../Button"
 import { Badge } from "../Badge"
 import { X } from "lucide-react"
@@ -37,6 +38,13 @@ type FilterPanelProps = {
   onFilterChange: (path: string, value: FilterValue) => void
   onClearAll: () => void
   filterConfig?: DynamicFilterConfig[]
+  /**
+   * "default": standalone left-rail style (border, padding, light surface).
+   * "panel": matches the Config tab inside DataViewsConfigPanel — no outer
+   * chrome, white section headers, categorical options inside a #1C1D1F
+   * rounded container, sections separated by #2C2D2E dividers.
+   */
+  variant?: "default" | "panel"
 }
 
 const NUMERIC_TYPES: FieldType[] = [
@@ -172,6 +180,7 @@ export function FilterPanel({
   onFilterChange,
   onClearAll,
   filterConfig,
+  variant = "default",
 }: FilterPanelProps) {
   const entries = buildFilterableEntries(data, fields, filterConfig)
 
@@ -198,6 +207,57 @@ export function FilterPanel({
 
   const countBadge = resolveBadgeVariant("gray")
 
+  if (variant === "panel") {
+    return (
+      <div className="flex flex-col gap-6 px-3 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h3 className="text-[18px] font-[510] leading-[1.32] tracking-[-0.01em] text-white">
+              Filters
+            </h3>
+            {totalFilters > 0 && (
+              <Badge
+                {...countBadge}
+                label={String(totalFilters)}
+                className="h-5 min-w-[20px] rounded-full p-0 text-xs"
+                size="XS"
+              />
+            )}
+          </div>
+          {totalFilters > 0 && (
+            <button
+              type="button"
+              onClick={onClearAll}
+              className="flex items-center gap-1 rounded-[4px] bg-white/[0.15] px-1.5 py-0.5 text-[12px] font-[510] text-white transition-colors hover:bg-white/25"
+            >
+              <X className="h-3 w-3" />
+              Clear
+            </button>
+          )}
+        </div>
+
+        {entries.map((entry, index) => (
+          <Fragment key={entry.path}>
+            {index > 0 && <div className="h-px w-full bg-[#2C2D2E]" />}
+            <div className="space-y-3">
+              <h3 className="text-[18px] font-[510] leading-[1.32] tracking-[-0.01em] text-white">
+                {entry.label}
+              </h3>
+              <FilterBody
+                entry={entry}
+                data={data}
+                value={filters[entry.path]}
+                onCategoricalToggle={(opt) => toggleCategorical(entry.path, opt)}
+                onSetFilter={(v) => setFilter(entry.path, v)}
+                variant="panel"
+              />
+            </div>
+          </Fragment>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="w-64 border-r border-border-presentation-global-primary bg-background-presentation-body-overlay-primary p-4 overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
@@ -209,7 +269,7 @@ export function FilterPanel({
               label={String(totalFilters)}
               className="h-5 min-w-[20px] rounded-full p-0 text-xs"
               size="XS"
-             
+
             />
           )}
         </div>
@@ -248,12 +308,14 @@ function FilterBody({
   value,
   onCategoricalToggle,
   onSetFilter,
+  variant = "default",
 }: {
   entry: Entry
   data: DynamicRecord[]
   value: FilterValue | undefined
   onCategoricalToggle: (option: string) => void
   onSetFilter: (next: FilterValue) => void
+  variant?: "default" | "panel"
 }) {
   if (entry.kind === "numeric-range" && entry.field) {
     const extremes = computeNumericExtremes(data, entry.path)
@@ -293,12 +355,47 @@ function FilterBody({
 
   const opts = getCategoricalOptions(data, entry.path, entry.field, entry.legacy)
   const selected = Array.isArray(value) ? value : []
+
+  if (variant === "panel") {
+    return (
+      <div className="flex flex-col rounded-[12px] bg-[#1C1D1F] p-1">
+        {opts.map((opt, i) => {
+          const isSelected = selected.includes(opt)
+          const badgeVariant = entry.field?.variants?.[opt]
+          const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null
+          return (
+            <Fragment key={opt}>
+              {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
+              <label
+                htmlFor={`${entry.path}-${opt}`}
+                className="flex cursor-pointer items-center gap-2 rounded-[8px] px-2 py-2 text-[14px] text-white hover:bg-white/5"
+              >
+                <Checkbox
+                  id={`${entry.path}-${opt}`}
+                  checked={isSelected}
+                  onCheckedChange={() => onCategoricalToggle(opt)}
+                />
+                <span className="flex-1 leading-none">
+                  {entry.legacy?.render
+                    ? entry.legacy.render(opt, isSelected)
+                    : badgeProps
+                      ? <Badge {...badgeProps} label={opt} size="XS" />
+                      : opt}
+                </span>
+              </label>
+            </Fragment>
+          )
+        })}
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-2">
       {opts.map((opt) => {
         const isSelected = selected.includes(opt)
-        const variant = entry.field?.variants?.[opt]
-        const badgeProps = variant ? resolveBadgeVariant(variant) : null
+        const badgeVariant = entry.field?.variants?.[opt]
+        const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null
         return (
           <div key={opt} className="flex items-center space-x-2">
             <Checkbox

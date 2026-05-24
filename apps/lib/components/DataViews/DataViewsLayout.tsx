@@ -199,7 +199,10 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
         className={cn(
           // Shell is always black (matches Figma): the dark header and config
           // rail sit on it; the Master Container is the white surface inside.
-          "flex h-screen gap-2 bg-black  text-content-presentation-global-primary",
+          // `overflow-hidden` traps any child overflow — without it, a tall
+          // config-panel body escapes and creates a page-level scrollbar in
+          // addition to the panel's own.
+          "flex h-screen gap-2 overflow-hidden bg-black text-content-presentation-global-primary",
           className,
         )}
       >

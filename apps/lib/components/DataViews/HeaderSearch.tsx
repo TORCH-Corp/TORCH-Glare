@@ -70,7 +70,8 @@ export function HeaderSearch({
         onKeyDown={(e) => {
           if (e.key === "Escape") clearAndCollapse();
         }}
-        className="flex-1 bg-transparent text-[14px] leading-none text-white caret-[#1E7AFE] placeholder:text-content-presentation-global-tertiary focus:outline-none"
+        size={1}
+        className="min-w-0 flex-1 bg-transparent text-[14px] leading-none text-white caret-[#1E7AFE] placeholder:text-content-presentation-global-tertiary focus:outline-none"
       />
       <button
         type="button"

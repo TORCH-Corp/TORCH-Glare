@@ -66,7 +66,7 @@ export function DataViewsHeader({
       <div className="h-7 w-px shrink-0 bg-[#434446]" />
 
       {/* Segmented view switcher */}
-      <div className="flex flex-1 items-center gap-2">
+      <div className="flex min-w-0 flex-1 items-center gap-2">
         <div className="flex items-center gap-[2px] rounded-[10px] bg-[#252729] p-[2px] shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)]">
           {views.map((view, idx) => {
             const active = view.id === currentView;
