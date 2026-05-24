@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import { Search, Settings } from "lucide-react"
-import type { ReactNode } from "react"
-import type { ViewType } from "./types"
-import { Button } from "../Button"
-import { InputField } from "../InputField"
-import { cn } from "../../utils/cn"
+import { Settings } from "lucide-react";
+import { type ReactNode } from "react";
+import type { ViewType } from "./types";
+import { Button } from "../Button";
+import { HeaderSearch } from "./HeaderSearch";
+import { cn } from "../../utils/cn";
 
 export type DataViewsHeaderView = {
-  id: ViewType
-  label: string
-  icon: ReactNode
-}
+  id: ViewType;
+  label: string;
+  icon: ReactNode;
+};
 
 type DataViewsHeaderProps = {
-  title: string
-  views: DataViewsHeaderView[]
-  currentView: ViewType
-  onViewChange: (view: ViewType) => void
-  showSettings: boolean
-  settingsOpen: boolean
-  onToggleSettings: () => void
-  onAddNew?: () => void
-  addNewLabel?: string
-  searchValue?: string
-  onSearchChange?: (value: string) => void
-  searchPlaceholder?: string
-  className?: string
-}
+  title: string;
+  views: DataViewsHeaderView[];
+  currentView: ViewType;
+  onViewChange: (view: ViewType) => void;
+  showSettings: boolean;
+  settingsOpen: boolean;
+  onToggleSettings: () => void;
+  onAddNew?: () => void;
+  addNewLabel?: string;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  className?: string;
+};
 
 export function DataViewsHeader({
   title,
@@ -65,15 +65,15 @@ export function DataViewsHeader({
       {/* Divider */}
       <div className="h-7 w-px shrink-0 bg-[#434446]" />
 
-      {/* Segmented view switcher + search */}
+      {/* Segmented view switcher */}
       <div className="flex flex-1 items-center gap-2">
         <div className="flex items-center gap-[2px] rounded-[10px] bg-[#252729] p-[2px] shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)]">
           {views.map((view, idx) => {
-            const active = view.id === currentView
-            const prevActive = idx > 0 && views[idx - 1].id === currentView
+            const active = view.id === currentView;
+            const prevActive = idx > 0 && views[idx - 1].id === currentView;
             // Separator sits between two inactive tabs only; the active white
             // pill never has a flanking divider (matches Figma).
-            const showDivider = idx > 0 && !active && !prevActive
+            const showDivider = idx > 0 && !active && !prevActive;
             return (
               <div key={view.id} className="flex items-center">
                 {showDivider && (
@@ -96,25 +96,20 @@ export function DataViewsHeader({
                   {view.label}
                 </button>
               </div>
-            )
+            );
           })}
         </div>
-
-        {onSearchChange && (
-          <div className="relative w-[240px] shrink-0">
-            <Search className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-content-presentation-global-tertiary" />
-            <InputField
-              placeholder={searchPlaceholder}
-              value={searchValue ?? ""}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-        )}
       </div>
 
       {/* Action bar */}
       <div className="flex shrink-0 items-center gap-2">
+        {onSearchChange && (
+          <HeaderSearch
+            value={searchValue ?? ""}
+            onChange={onSearchChange}
+            placeholder={searchPlaceholder}
+          />
+        )}
         {onAddNew && (
           <Button
             variant="PrimeStyle"
@@ -141,5 +136,6 @@ export function DataViewsHeader({
         )}
       </div>
     </div>
-  )
+  );
 }
+
