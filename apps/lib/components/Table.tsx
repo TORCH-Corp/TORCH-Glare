@@ -128,7 +128,7 @@ const TableHead = React.forwardRef<
       <th
         ref={headRef}
         className={cn(
-          "relative py-[2px] px-[2px] border-b-[2px]  border-border-presentation-table-header",
+          "relative py-[6px] px-[4px] border-b-[2px]  border-border-presentation-table-header",
         )}
       >
         <div
