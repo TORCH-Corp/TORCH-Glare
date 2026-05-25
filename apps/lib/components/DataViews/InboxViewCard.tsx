@@ -2,128 +2,108 @@
 
 import { forwardRef, type ReactNode } from "react";
 import Link from "next/link";
-import { Star, Paperclip } from "lucide-react";
 import { cn } from "../../utils/cn";
-import { Avatar, AvatarFallback } from "../Avatar";
+import { Divider } from "../Divider";
 import { getByPath } from "../../utils/dataViews/pathUtils";
 import { renderField } from "./fieldRenderers";
 import type { DynamicRecord, FieldConfig } from "./types";
 
-function getInitials(name: any): string {
-  const s = String(name ?? "?").trim();
-  if (!s) return "?";
-  return (
-    s
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase() ?? "")
-      .join("") || "?"
-  );
-}
-
 export interface InboxViewCardProps {
   item: DynamicRecord;
+  rowFields?: FieldConfig[];
   titleField?: FieldConfig;
   previewField?: FieldConfig;
   detailField?: FieldConfig;
   metaFields?: FieldConfig[];
+  dateField?: FieldConfig;
+  dateLabel?: string;
   selected?: boolean;
-  starred?: boolean;
-  hasAttachment?: boolean;
-  showStar?: boolean;
-  onToggleStar?: () => void;
   onSelect?: () => void;
   href?: string;
   className?: string;
 }
 
-export const InboxViewCard = forwardRef<HTMLDivElement, InboxViewCardProps>(
-  (
-    {
-      item,
-      titleField,
-      previewField,
-      detailField,
-      metaFields = [],
-      selected = false,
-      starred = false,
-      hasAttachment = false,
-      showStar = false,
-      onToggleStar,
-      onSelect,
-      href,
-      className,
-    },
-    ref,
-  ) => {
-    const titleValue = titleField ? getByPath(item, titleField.path) : "";
-    const previewValue = previewField ? getByPath(item, previewField.path) : "";
-    const detailValue = detailField ? getByPath(item, detailField.path) : "";
+function pickRowFields(props: InboxViewCardProps): FieldConfig[] {
+  if (props.rowFields && props.rowFields.length) return props.rowFields;
+  const collected: FieldConfig[] = [];
+  if (props.previewField) collected.push(props.previewField);
+  if (props.titleField && props.titleField.path !== props.previewField?.path) {
+    collected.push(props.titleField);
+  }
+  if (props.detailField) collected.push(props.detailField);
+  if (props.metaFields?.length) collected.push(...props.metaFields);
+  return collected;
+}
 
-    const rowClass = cn(
-      "flex items-start gap-3 py-4 px-[18px] border-b border-y-2 bg-background-presentation-form-base border-background-presentation-form-base cursor-pointer transition-colors hover:bg-background-presentation-action-contstyle-hover",
+function pickDateField(
+  rowFields: FieldConfig[],
+  explicit?: FieldConfig,
+): FieldConfig | undefined {
+  if (explicit) return explicit;
+  return rowFields.find((f) => f.type === "date");
+}
+
+export const InboxViewCard = forwardRef<HTMLDivElement, InboxViewCardProps>(
+  (props, ref) => {
+    const { item, selected = false, onSelect, href, className } = props;
+    const allRowFields = pickRowFields(props);
+    const dateField = pickDateField(allRowFields, props.dateField);
+    const rowFields = dateField
+      ? allRowFields.filter((f) => f.path !== dateField.path)
+      : allRowFields;
+    const dateLabel = props.dateLabel ?? "Created at:";
+
+    const cardClass = cn(
+      "flex flex-col gap-2 p-3 cursor-pointer transition-colors",
+      "bg-background-presentation-form-base",
+      "border-y-2 border-transparent",
+      !selected &&
+        "hover:bg-[image:linear-gradient(0deg,rgba(151,72,255,0.05)_0%,rgba(151,72,255,0.05)_100%)] hover:border-y-[#AE71FF]",
       selected &&
-        "bg-blue-sparkle-alpha-5 border-y-2 border-y-border-presentation-state-focus",
+        "bg-[image:linear-gradient(0deg,rgba(0,117,255,0.05)_0%,rgba(0,117,255,0.05)_100%)] border-y-border-presentation-state-focus",
       className,
     );
 
     const content: ReactNode = (
       <>
-        <Avatar className="h-10 w-10 shrink-0">
-          <AvatarFallback className="bg-background-presentation-action-primary text-content-presentation-action-primary text-sm">
-            {getInitials(previewValue || titleValue)}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <p className="text-sm truncate font-semibold text-content-presentation-global-primary">
-              {String(previewValue ?? "")}
-            </p>
-            <div className="flex items-center gap-1 shrink-0">
-              {hasAttachment && (
-                <Paperclip className="h-3 w-3 text-content-presentation-global-tertiary" />
-              )}
-              {showStar && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleStar?.();
-                  }}
-                  className="hover:text-content-presentation-badge-yellow transition-colors"
-                  aria-label="Toggle star"
-                >
-                  <Star
-                    className={cn(
-                      "h-4 w-4",
-                      starred
-                        ? "fill-content-presentation-badge-yellow text-content-presentation-badge-yellow"
-                        : "text-content-presentation-global-tertiary",
-                    )}
-                  />
-                </button>
-              )}
+        <div className="flex flex-col gap-1 w-full">
+          {rowFields.map((field, idx) => {
+            const value = getByPath(item, field.path);
+            return (
+              <div key={field.path ?? idx} className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="w-[100px] shrink-0 typography-body-large-semibold text-content-presentation-global-secondary">
+                    {field.label ?? field.path}:
+                  </span>
+                  <span className="h-full py-0.5 flex items-center">
+                    <span className="block h-full w-px bg-black-alpha-15" />
+                  </span>
+                  <span className="flex-1 min-w-0 truncate typography-body-large-medium text-content-presentation-global-primary">
+                    {renderField(value, field, item)}
+                  </span>
+                </div>
+                {idx < rowFields.length - 1 && <Divider className="mt-1" />}
+              </div>
+            );
+          })}
+        </div>
+
+        {dateField && (
+          <div className="flex items-center justify-end">
+            <div className="inline-flex items-center gap-0.5 p-0.5 rounded-md bg-black-alpha-10">
+              <div className="px-1 rounded-sm">
+                <span className="typography-labels-medium-semibold text-content-presentation-global-primary">
+                  {dateLabel}
+                </span>
+              </div>
+              <div className="px-1 rounded-sm bg-black-alpha-075">
+                <span className="typography-labels-medium-semibold text-content-presentation-global-primary">
+                  {renderField(getByPath(item, dateField.path), dateField, item)}
+                </span>
+              </div>
             </div>
           </div>
-          <p className="text-sm mb-1 truncate font-medium text-content-presentation-global-primary">
-            {String(titleValue ?? "")}
-          </p>
-          {detailField && detailValue != null && (
-            <p className="text-xs text-content-presentation-global-secondary truncate leading-relaxed">
-              {String(detailValue)}
-            </p>
-          )}
-          <div className="flex items-center gap-2 mt-2">
-            {metaFields.map((field) => {
-              const value = getByPath(item, field.path);
-              if (value == null) return null;
-              return (
-                <span key={field.path} className="text-xs">
-                  {renderField(value, field, item)}
-                </span>
-              );
-            })}
-          </div>
-        </div>
+        )}
       </>
     );
 
@@ -131,7 +111,7 @@ export const InboxViewCard = forwardRef<HTMLDivElement, InboxViewCardProps>(
       return (
         <Link
           href={href}
-          className={cn(rowClass, "no-underline text-inherit")}
+          className={cn(cardClass, "no-underline text-inherit")}
         >
           {content}
         </Link>
@@ -139,7 +119,7 @@ export const InboxViewCard = forwardRef<HTMLDivElement, InboxViewCardProps>(
     }
 
     return (
-      <div ref={ref} onClick={onSelect} className={rowClass}>
+      <div ref={ref} onClick={onSelect} className={cardClass}>
         {content}
       </div>
     );

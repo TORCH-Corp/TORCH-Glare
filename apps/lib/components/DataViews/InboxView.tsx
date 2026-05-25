@@ -158,8 +158,6 @@ export function InboxView({
     return displayFields[1];
   }, [inboxCfg.previewPath, displayFields, fields]);
 
-  const detailField = useMemo(() => displayFields[2], [displayFields]);
-
   const isStarred = (item: DynamicRecord) =>
     inboxCfg.starredField ? !!getByPath(item, inboxCfg.starredField) : false;
   const hasAttachment = (item: DynamicRecord) => {
@@ -335,7 +333,7 @@ export function InboxView({
             inbox
           </span>
         </div>
-        <div className="flex-1 flex flex-col overflow-y-auto gap-1 bg-background-presentation-button-disabled">
+        <div className="flex-1 flex flex-col overflow-y-auto gap-1 py-1 bg-background-presentation-button-disabled">
           {filteredData.map((item, idx) => {
             const itemId = getId(item, idPath, idx);
             const selected =
@@ -348,15 +346,8 @@ export function InboxView({
               <InboxViewCard
                 key={itemId}
                 item={item}
-                titleField={titleField}
-                previewField={previewField}
-                detailField={detailField}
-                metaFields={displayFields.slice(3, 5)}
+                rowFields={displayFields}
                 selected={selected}
-                starred={isStarred(item)}
-                hasAttachment={hasAttachment(item)}
-                showStar={!!inboxCfg.starredField}
-                onToggleStar={() => toggleStar(itemId)}
                 onSelect={() => handleSelectItem(item)}
                 href={itemHref?.(item, itemId)}
               />
