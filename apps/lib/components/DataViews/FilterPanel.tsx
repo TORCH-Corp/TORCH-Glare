@@ -1,12 +1,15 @@
 "use client"
 
 import { Fragment } from "react"
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { Button } from "../Button"
 import { Badge } from "../Badge"
 import { X } from "lucide-react"
 import { Checkbox } from "../Checkbox"
 import { Divider } from "../Divider"
 import { Label } from "../Label"
+import { DataViewRadio } from "./DataViewRadio"
+import { cn } from "../../utils/cn"
 import type {
   DynamicRecord,
   DynamicFilterConfig,
@@ -355,17 +358,62 @@ function FilterBody({
 
   const opts = getCategoricalOptions(data, entry.path, entry.field, entry.legacy)
   const selected = Array.isArray(value) ? value : []
+  const isSingle = entry.field?.filterMode === "single"
+
+  if (isSingle) {
+    const current = selected[0] ?? ""
+    const onSingleChange = (next: string) => onSetFilter(next ? [next] : [])
+    return (
+      <RadioGroupPrimitive.Root
+        value={current}
+        onValueChange={onSingleChange}
+        className={cn(
+          "flex flex-col space-y-0 rounded-[12px] bg-[#1C1D1F] p-1",
+          // Hide the divider directly above and below the hovered row.
+          "[&>div:has(>[role=radio]:hover)>.dv-divider]:opacity-0",
+          "[&>div:has(>[role=radio]:hover)+div>.dv-divider]:opacity-0",
+        )}
+      >
+        {opts.map((opt, i) => {
+          const isSelected = current === opt
+          const badgeVariant = entry.field?.variants?.[opt]
+          const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null
+          return (
+            <div key={opt}>
+              {i > 0 && (
+                <div className="dv-divider h-px bg-[#2C2D2E]" />
+              )}
+              <DataViewRadio value={opt}>
+                {entry.legacy?.render
+                  ? entry.legacy.render(opt, isSelected)
+                  : badgeProps
+                    ? <Badge {...badgeProps} label={opt} size="XS" />
+                    : opt}
+              </DataViewRadio>
+            </div>
+          )
+        })}
+      </RadioGroupPrimitive.Root>
+    )
+  }
 
   if (variant === "panel") {
     return (
-      <div className="flex flex-col rounded-[12px] bg-[#1C1D1F] p-1">
+      <div
+        className={cn(
+          "flex flex-col rounded-[12px] bg-[#1C1D1F] p-1",
+          // Hide the divider directly above and below the hovered row.
+          "[&>div:has(>label:hover)>.dv-divider]:opacity-0",
+          "[&>div:has(>label:hover)+div>.dv-divider]:opacity-0",
+        )}
+      >
         {opts.map((opt, i) => {
           const isSelected = selected.includes(opt)
           const badgeVariant = entry.field?.variants?.[opt]
           const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null
           return (
-            <Fragment key={opt}>
-              {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
+            <div key={opt}>
+              {i > 0 && <div className="dv-divider h-px bg-[#2C2D2E]" />}
               <label
                 htmlFor={`${entry.path}-${opt}`}
                 className="flex cursor-pointer items-center gap-2 rounded-[8px] px-2 py-2 text-[14px] text-white hover:bg-white/5"
@@ -383,7 +431,7 @@ function FilterBody({
                       : opt}
                 </span>
               </label>
-            </Fragment>
+            </div>
           )
         })}
       </div>

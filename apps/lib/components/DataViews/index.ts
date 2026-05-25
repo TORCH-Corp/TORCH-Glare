@@ -16,6 +16,9 @@ export type { InboxViewCardProps } from "./InboxViewCard"
 export { TreeView } from "./TreeView"
 export type { TreeViewProps } from "./TreeView"
 
+export { DataViewRadio } from "./DataViewRadio"
+export type { DataViewRadioProps } from "./DataViewRadio"
+
 export { FilterPanel } from "./FilterPanel"
 export { SettingsPanel } from "./SettingsPanel"
 export { DataViewsHeader } from "./DataViewsHeader"

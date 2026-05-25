@@ -154,6 +154,12 @@ export type FieldConfig = {
   filterable?: boolean
   filterLabel?: string
   filterOptions?: string[] | { label: string; value: string }[]
+  /**
+   * Categorical filter selection mode.
+   * - "multi" (default): checkboxes, multi-select. FilterValue is the array of picked options.
+   * - "single": radios, single-select. FilterValue is a 1-element array.
+   */
+  filterMode?: "single" | "multi"
   presets?: FieldPreset[]
   rangeMin?: number
   rangeMax?: number
