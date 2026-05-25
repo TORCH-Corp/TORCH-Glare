@@ -220,19 +220,35 @@ export function TreeView({
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden rounded-[16px] border border-border-presentation-global-primary bg-background-presentation-form-base">
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-border-presentation-global-primary bg-background-presentation-form-base">
-          {isMobile && (
-            <TreeDrawerTrigger onClick={() => setDrawerOpen(true)} />
-          )}
+        <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border-presentation-global-primary bg-background-presentation-form-base">
+          <div className="flex items-center gap-2 min-w-0">
+            {isMobile && (
+              <TreeDrawerTrigger onClick={() => setDrawerOpen(true)} />
+            )}
+            <span
+              style={{ fontFeatureSettings: "'cv05' on" }}
+              className="typography-display-medium-medium uppercase text-content-presentation-global-primary truncate"
+            >
+              {selectedNode
+                ? String(getByPath(selectedNode.record, labelField.path) ?? "Items")
+                : "Items"}
+            </span>
+            <div className="h-6 w-px bg-border-presentation-global-primary shrink-0" />
+            <span className="text-sm text-content-presentation-global-secondary truncate">
+              {selectedNode
+                ? `${recordsForRightPane.length} record${recordsForRightPane.length === 1 ? "" : "s"}`
+                : "Select an item"}
+            </span>
+          </div>
 
           {/* Segmented switcher — same style as the main view switcher
               (DataViewsHeader): #252729 track, white active pill, divider
               between two inactive tabs only. */}
-          <div className="flex items-center gap-[2px] rounded-[10px] bg-background-presentation-body-primary p-[2px] shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)]">
+          <div className="flex items-center gap-[2px] rounded-[10px] bg-background-presentation-body-primary p-[2px] shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)] shrink-0">
             {(
               [
-                { id: "table", label: "Table", icon: <Table2 /> },
-                { id: "card", label: "Card", icon: <LayoutGrid /> },
+                { id: "table", label: "List", icon: <Table2 /> },
+                { id: "card", label: "Cards", icon: <LayoutGrid /> },
               ] as const
             ).map((tab, idx) => {
               const active = rightPaneMode === tab.id;
@@ -258,18 +274,12 @@ export function TreeView({
                     <span className="flex h-[14px] w-[14px] items-center justify-center [&_svg]:h-[14px] [&_svg]:w-[14px]">
                       {tab.icon}
                     </span>
-                    {tab.label}
+                    <span className="max-w-[80px] truncate">{tab.label}</span>
                   </button>
                 </div>
               );
             })}
           </div>
-
-          <span className="ml-auto text-sm text-content-presentation-global-secondary truncate">
-            {selectedNode
-              ? `${recordsForRightPane.length} record${recordsForRightPane.length === 1 ? "" : "s"}`
-              : "Select an item"}
-          </span>
         </div>
 
         <div className="flex-1 overflow-hidden">

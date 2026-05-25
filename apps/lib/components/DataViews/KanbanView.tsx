@@ -294,8 +294,9 @@ export function KanbanView({
             <Fragment key={column.id}>
               <div
                 className={cn(
-                  "flex w-[279px] flex-col gap-2 rounded-[12px] p-1 transition-colors duration-150 ease-in-out",
-                  isDropTarget && "bg-white/[0.04]",
+                  "flex w-[279px] flex-col gap-2 rounded-[12px] p-1 transition-colors duration-150 ease-in-out border-2 border-transparent",
+                  isDropTarget &&
+                    "bg-background-presentation-cardbutton-blue-hover border-dashed border-border-presentation-state-focus",
                 )}
                 onDragOver={(e) => handleDragOver(e, column.id)}
                 onDragLeave={(e) => handleDragLeave(e, column.id)}
