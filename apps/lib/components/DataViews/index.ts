@@ -10,6 +10,9 @@ export type { KanbanViewProps } from "./KanbanView"
 export { InboxView } from "./InboxView"
 export type { InboxViewProps } from "./InboxView"
 
+export { InboxViewCard } from "./InboxViewCard"
+export type { InboxViewCardProps } from "./InboxViewCard"
+
 export { TreeView } from "./TreeView"
 export type { TreeViewProps } from "./TreeView"
 

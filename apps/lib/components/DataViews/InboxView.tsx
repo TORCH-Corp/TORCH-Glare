@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import Link from "next/link";
 import { Badge } from "../Badge";
 import { FilterPanel } from "./FilterPanel";
 import {
@@ -44,6 +43,7 @@ import {
 } from "../../utils/dataViews/fieldUtils";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { resolveBadgeVariant } from "./badgeAdapter";
+import { InboxViewCard } from "./InboxViewCard";
 
 export type InboxViewProps = {
   data: DynamicRecord[];
@@ -338,104 +338,28 @@ export function InboxView({
         <div className="flex-1 flex flex-col overflow-y-auto gap-1 bg-background-presentation-button-disabled">
           {filteredData.map((item, idx) => {
             const itemId = getId(item, idPath, idx);
-            const titleValue = titleField
-              ? getByPath(item, titleField.path)
-              : "";
-            const previewValue = previewField
-              ? getByPath(item, previewField.path)
-              : "";
-            const detailValue = detailField
-              ? getByPath(item, detailField.path)
-              : "";
             const selected =
               (selectedItemId != null &&
                 String(selectedItemId) === String(itemId)) ||
               (selectedItem != null &&
                 getId(selectedItem, idPath, -1) === itemId);
 
-            const rowClass = cn(
-              "flex items-start gap-3 py-4 px-[18px] border-b border-y-2 bg-background-presentation-form-base border-background-presentation-form-base cursor-pointer transition-colors hover:bg-background-presentation-action-contstyle-hover",
-              selected &&
-                "bg-blue-sparkle-alpha-5 border-y-2 border-y-border-presentation-state-focus",
-            );
-            const href = itemHref?.(item, itemId);
-
-            const rowContent = (
-              <>
-                <Avatar className="h-10 w-10 shrink-0">
-                  <AvatarFallback className="bg-background-presentation-action-primary text-content-presentation-action-primary text-sm">
-                    {getInitials(previewValue || titleValue)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2 mb-1">
-                    <p className="text-sm truncate font-semibold text-content-presentation-global-primary">
-                      {String(previewValue ?? "")}
-                    </p>
-                    <div className="flex items-center gap-1 shrink-0">
-                      {hasAttachment(item) && (
-                        <Paperclip className="h-3 w-3 text-content-presentation-global-tertiary" />
-                      )}
-                      {inboxCfg.starredField && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleStar(itemId);
-                          }}
-                          className="hover:text-content-presentation-badge-yellow transition-colors"
-                          aria-label="Toggle star"
-                        >
-                          <Star
-                            className={cn(
-                              "h-4 w-4",
-                              isStarred(item)
-                                ? "fill-content-presentation-badge-yellow text-content-presentation-badge-yellow"
-                                : "text-content-presentation-global-tertiary",
-                            )}
-                          />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-sm mb-1 truncate font-medium text-content-presentation-global-primary">
-                    {String(titleValue ?? "")}
-                  </p>
-                  {detailField && detailValue != null && (
-                    <p className="text-xs text-content-presentation-global-secondary truncate leading-relaxed">
-                      {String(detailValue)}
-                    </p>
-                  )}
-                  <div className="flex items-center gap-2 mt-2">
-                    {displayFields.slice(3, 5).map((field) => {
-                      const value = getByPath(item, field.path);
-                      if (value == null) return null;
-                      return (
-                        <span key={field.path} className="text-xs">
-                          {renderField(value, field, item)}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-              </>
-            );
-
-            return href ? (
-              <Link
+            return (
+              <InboxViewCard
                 key={itemId}
-                href={href}
-                className={cn(rowClass, "no-underline text-inherit")}
-              >
-                {rowContent}
-              </Link>
-            ) : (
-              <div
-                key={itemId}
-                onClick={() => handleSelectItem(item)}
-                className={rowClass}
-              >
-                {rowContent}
-              </div>
+                item={item}
+                titleField={titleField}
+                previewField={previewField}
+                detailField={detailField}
+                metaFields={displayFields.slice(3, 5)}
+                selected={selected}
+                starred={isStarred(item)}
+                hasAttachment={hasAttachment(item)}
+                showStar={!!inboxCfg.starredField}
+                onToggleStar={() => toggleStar(itemId)}
+                onSelect={() => handleSelectItem(item)}
+                href={itemHref?.(item, itemId)}
+              />
             );
           })}
         </div>
