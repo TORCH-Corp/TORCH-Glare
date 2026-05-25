@@ -55,7 +55,7 @@ export function DataViewCard({
                       "border-t border-border-presentation-global-primary",
                     cells.length === 2 &&
                       cellIdx === 0 &&
-                      "after:absolute after:right-0 after:top-[7%] after:h-[80%] after:w-px after:bg-border-presentation-global-primary",
+                      "after:absolute after:end-0 after:top-[7%] after:h-[80%] after:w-px after:bg-border-presentation-global-primary",
                     cells.length === 1 && "col-span-2",
                   )}
                 >

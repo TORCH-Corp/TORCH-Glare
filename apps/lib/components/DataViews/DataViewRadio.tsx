@@ -21,7 +21,7 @@ export function DataViewRadio({
     <RadioGroupPrimitive.Item
       value={value}
       className={cn(
-        "group flex w-full items-center gap-1.5 py-1 pl-2 h-[32px]",
+        "group flex w-full items-center gap-1.5 py-1 ps-2 h-[32px]",
         "cursor-pointer rounded-[8px] text-left outline-none transition-colors",
         "hover:bg-background-presentation-action-contstyle-hover focus-visible:bg-background-presentation-action-contstyle-hover",
         className,

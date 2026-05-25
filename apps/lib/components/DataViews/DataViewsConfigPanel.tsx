@@ -329,7 +329,7 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                             // SB-Column-Item: standalone #1C1D1F pill, #252729
                             // border. Figma container spec: 8px radius, 8.8px
                             // padding, 8px gap between grip / label / switch.
-                            "flex items-center gap-2 rounded-r-[99px] rounded-l-[60px] border border-[#252729] bg-[#1C1D1F] p-[8.8px] transition-colors cursor-grab active:cursor-grabbing",
+                            "flex items-center gap-2 rounded-e-[99px] rounded-s-[60px] border border-[#252729] bg-[#1C1D1F] p-[8.8px] transition-colors cursor-grab active:cursor-grabbing",
                             isDragging ? "opacity-50" : "hover:bg-[#252729]",
                           )}
                         >
