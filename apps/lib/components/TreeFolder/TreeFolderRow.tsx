@@ -122,7 +122,7 @@ export function TreeFolderRow({
   const contentStart = gripSlotWidth + gripGutterPad; // 22px
 
   const rowStyle = {
-    paddingLeft: contentStart + level * indent,
+    paddingInlineStart: contentStart + level * indent,
     height: rowHeight,
   };
 
@@ -149,7 +149,7 @@ export function TreeFolderRow({
           right of this 16px reserved column. Hidden until row hover. */}
       {dndEnabled && (
         <span
-          className="absolute left-1.5 top-0 z-[6] flex h-full w-4 items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity duration-150 cursor-grab active:cursor-grabbing"
+          className="absolute start-1.5 top-0 z-[6] flex h-full w-4 items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity duration-150 cursor-grab active:cursor-grabbing"
           aria-hidden
         >
           <GripVertical
@@ -179,14 +179,14 @@ export function TreeFolderRow({
         <span
           aria-hidden
           className="pointer-events-none absolute -top-px left-0 right-0 z-20 h-0.5 bg-background-presentation-state-information-primary"
-          style={{ marginLeft: insertLineInset }}
+          style={{ marginInlineStart: insertLineInset }}
         />
       )}
       {isDropAfter && (
         <span
           aria-hidden
           className="pointer-events-none absolute -bottom-px left-0 right-0 z-20 h-0.5 bg-background-presentation-state-information-primary"
-          style={{ marginLeft: insertLineInset }}
+          style={{ marginInlineStart: insertLineInset }}
         />
       )}
 
@@ -308,7 +308,7 @@ function TreeConnectors({
         key={`v-${d}`}
         aria-hidden
         className={cn("pointer-events-none absolute top-0 bottom-0 w-px", lineClass)}
-        style={{ left: chevronX(d) }}
+        style={{ insetInlineStart: chevronX(d) }}
       />,
     );
   }
@@ -326,7 +326,7 @@ function TreeConnectors({
       aria-hidden
       className={cn("pointer-events-none absolute w-px", lineClass)}
       style={{
-        left: parentX,
+        insetInlineStart: parentX,
         top: 0,
         height: "100%",
       }}
@@ -338,7 +338,7 @@ function TreeConnectors({
       aria-hidden
       className={cn("pointer-events-none absolute h-px", lineClass)}
       style={{
-        left: parentX,
+        insetInlineStart: parentX,
         top: midY,
         width: Math.max(4, ownContentX - parentX),
       }}
