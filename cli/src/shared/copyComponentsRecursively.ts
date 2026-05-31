@@ -49,9 +49,18 @@ export function copyDirectorySync(
 
         if (item.isDirectory()) {
             copyDirectorySync(sourcePath, targetPath);
-        } else {
+        } else if (isCopyableFile(item.name)) {
             fs.copyFileSync(sourcePath, targetPath);
             installDependencies(sourcePath);
         }
     }
+}
+
+/**
+ * Decide whether a file should be copied into the user's project. Skips
+ * documentation/meta files that live alongside source for maintainers but add
+ * noise to a consumer's drop-in (e.g. ARCHITECTURE.md inside a component folder).
+ */
+function isCopyableFile(fileName: string): boolean {
+    return !/\.(md|mdx)$/i.test(fileName);
 } 

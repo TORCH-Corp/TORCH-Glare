@@ -1,7 +1,6 @@
 "use client";
 
-import { forwardRef, type ReactNode } from "react";
-import Link from "next/link";
+import { forwardRef, type ElementType, type ReactNode } from "react";
 import { cn } from "../../utils/cn";
 import { Divider } from "../Divider";
 import { getByPath } from "../../utils/dataViews/pathUtils";
@@ -20,6 +19,12 @@ export interface InboxViewCardProps {
   selected?: boolean;
   onSelect?: () => void;
   href?: string;
+  /**
+   * Component used to render the link when `href` is set. Defaults to a plain
+   * `<a>` so the component stays framework-agnostic. Pass your router's link
+   * (e.g. Next.js `Link`, React Router `Link`) for client-side navigation.
+   */
+  linkComponent?: ElementType;
   className?: string;
 }
 
@@ -45,7 +50,8 @@ function pickDateField(
 
 export const InboxViewCard = forwardRef<HTMLDivElement, InboxViewCardProps>(
   (props, ref) => {
-    const { item, selected = false, onSelect, href, className } = props;
+    const { item, selected = false, onSelect, href, linkComponent, className } =
+      props;
     const allRowFields = pickRowFields(props);
     const dateField = pickDateField(allRowFields, props.dateField);
     const rowFields = dateField
@@ -108,13 +114,14 @@ export const InboxViewCard = forwardRef<HTMLDivElement, InboxViewCardProps>(
     );
 
     if (href) {
+      const LinkTag = (linkComponent ?? "a") as ElementType;
       return (
-        <Link
+        <LinkTag
           href={href}
           className={cn(cardClass, "no-underline text-inherit")}
         >
           {content}
-        </Link>
+        </LinkTag>
       );
     }
 
