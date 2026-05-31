@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { addUtil } from "../commands/utils.js";
 import { addHook } from "../commands/hook.js";
+import { addLayout } from "../commands/layout.js";
 import { add } from "../commands/add.js";
 
 /**
@@ -71,6 +72,12 @@ export function getDependenciesAndInstallNestedComponents(
             if (hookEntry) {
                 addHook(`${hookEntry}.ts`)
             }
+        } else if (head === "layouts") {
+            // layouts/DataViewCard → copy from apps/lib/layouts (NOT components)
+            const layoutEntry = rest[1]
+            if (layoutEntry) {
+                addLayout(layoutEntry)
+            }
         } else if (head === "components") {
             const compEntry = rest[1]
             if (compEntry) {
@@ -123,7 +130,7 @@ function routeByLocation(absPath: string): void {
         case "components": add(stripExt(entry)); break
         case "hooks":      addHook(entry); break
         case "utils":      addUtil(entry); break
-        case "layouts":    add(stripExt(entry)); break
+        case "layouts":    addLayout(stripExt(entry)); break
     }
 }
 
