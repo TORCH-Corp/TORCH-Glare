@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type ElementType,
+  type ReactNode,
+} from "react";
 import { Badge } from "../Badge";
 import { FilterPanel } from "./FilterPanel";
 import {
@@ -57,6 +63,12 @@ export type InboxViewProps = {
   onFilterChange?: (filters: FilterState) => void;
   showFilters?: boolean;
   itemHref?: (item: DynamicRecord, id: any) => string;
+  /**
+   * Component used to render each item's link when `itemHref` is set. Defaults
+   * to a plain `<a>` (full-page navigation). Pass your router's link
+   * (e.g. Next.js `Link`, React Router `Link`) for client-side navigation.
+   */
+  linkComponent?: ElementType;
   selectedItemId?: any;
   renderDetail?: (item: DynamicRecord | null) => ReactNode;
 };
@@ -100,6 +112,7 @@ export function InboxView({
   onFilterChange,
   showFilters = true,
   itemHref,
+  linkComponent,
   selectedItemId,
   renderDetail,
 }: InboxViewProps) {
@@ -350,6 +363,7 @@ export function InboxView({
                 selected={selected}
                 onSelect={() => handleSelectItem(item)}
                 href={itemHref?.(item, itemId)}
+                linkComponent={linkComponent}
               />
             );
           })}

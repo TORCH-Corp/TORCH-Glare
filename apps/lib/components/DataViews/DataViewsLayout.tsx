@@ -7,6 +7,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ElementType,
   type ReactNode,
 } from "react";
 import { List, LayoutGrid, Inbox as InboxIcon, Network } from "lucide-react";
@@ -61,6 +62,12 @@ export type DataViewsLayoutProps = {
   addNewLabel?: string;
 
   inboxItemHref?: (item: DynamicRecord, id: any) => string;
+  /**
+   * Component used to render inbox item links when `inboxItemHref` is set.
+   * Defaults to a plain `<a>` (full-page navigation). Pass your router's link
+   * (e.g. Next.js `Link`, React Router `Link`) for client-side navigation.
+   */
+  inboxLinkComponent?: ElementType;
   inboxSelectedId?: any;
   inboxRenderDetail?: (item: DynamicRecord | null) => ReactNode;
 
@@ -108,6 +115,7 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
       onAddNew,
       addNewLabel,
       inboxItemHref,
+      inboxLinkComponent,
       inboxSelectedId,
       inboxRenderDetail,
       searchValue,
@@ -276,6 +284,7 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
                     onFilterChange={setFilterState}
                     showFilters={false}
                     itemHref={inboxItemHref}
+                    linkComponent={inboxLinkComponent}
                     selectedItemId={inboxSelectedId}
                     renderDetail={inboxRenderDetail}
                   />

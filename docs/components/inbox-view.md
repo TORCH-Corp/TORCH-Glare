@@ -82,17 +82,25 @@ function Mailbox() {
 
 ### Link rows to routes (framework-agnostic)
 
-`itemHref` turns each row into a link. The underlying card renders a plain `<a>`
-by default, so it works in any framework.
+`itemHref` turns each row into a link. By default the card renders a plain `<a>`
+(full-page navigation), so it works in any framework. For client-side routing,
+pass your router's link via `linkComponent` — this is what makes navigation
+behave consistently across environments. Without it you get a normal `<a>`.
 
 ```tsx
+// Next.js
+import Link from "next/link"
+
 <InboxView
   data={state.flatItems}
   fields={state.resolvedFields}
   config={state.config}
   itemHref={(item, id) => `/messages/${id}`}
+  linkComponent={Link}        // React Router users pass their <Link> the same way
 />
 ```
+
+> Via `DataViewsLayout` (tab mode) the same prop is named `inboxLinkComponent`.
 
 ## API Reference
 
@@ -111,6 +119,7 @@ by default, so it works in any framework.
 | `onFilterChange` | `(filters: FilterState) => void` | `undefined` | Fires when a filter changes. |
 | `showFilters` | `boolean` | `true` | Show the integrated filter panel. |
 | `itemHref` | `(item: DynamicRecord, id: any) => string` | `undefined` | When set, each row becomes a link to the returned href. |
+| `linkComponent` | `ElementType` | `"a"` | Component used to render each item's link when `itemHref` is set. Pass your router's link (Next.js `Link`, React Router `Link`) for client-side navigation. Defaults to a plain `<a>` (full-page nav). |
 | `selectedItemId` | `any` | `undefined` | Id of the currently selected row (drives the detail pane + highlight). |
 | `renderDetail` | `(item: DynamicRecord \| null) => ReactNode` | `undefined` | Renders the right-hand detail pane for the selected item. |
 

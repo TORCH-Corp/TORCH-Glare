@@ -222,7 +222,8 @@ export function FilterPanel({
               <Badge
                 {...countBadge}
                 label={String(totalFilters)}
-                className="h-5 min-w-[20px] rounded-full p-0 text-xs"
+                showIcon={false}
+                className="h-5 w-5 min-w-0 justify-center rounded-full p-0 text-xs"
                 size="XS"
               />
             )}
@@ -270,9 +271,9 @@ export function FilterPanel({
             <Badge
               {...countBadge}
               label={String(totalFilters)}
-              className="h-5 min-w-[20px] rounded-full p-0 text-xs"
+              showIcon={false}
+              className="h-5 w-5 min-w-0 justify-center rounded-full p-0 text-xs"
               size="XS"
-
             />
           )}
         </div>

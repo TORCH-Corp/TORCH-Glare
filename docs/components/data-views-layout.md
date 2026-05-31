@@ -140,6 +140,8 @@ Inbox auto-detects `isRead`, `isStarred`, `hasAttachment`, `priority`. Override 
 | `views` | `ViewVisibility` | all on (tree auto) | Per-view toggle: `{ table?, kanban?, inbox?, tree? }`. Omitted keys default to `true` (Tree auto-hides without hierarchy). |
 | `kanbanGroupBy` | `string` | `"status"` | Dot-path to the field used for Kanban columns. |
 | `inboxConfig` | `InboxConfig` | auto-detected | Map of starred/read/attachment/priority field paths for Inbox. |
+| `inboxItemHref` | `(item, id) => string` | — | When set, each Inbox row becomes a link to the returned href. |
+| `inboxLinkComponent` | `ElementType` | `"a"` | Component used to render Inbox item links when `inboxItemHref` is set. Pass your router's link (Next.js `Link`, React Router `Link`) for client-side navigation; defaults to a plain `<a>` (full-page nav). |
 | `treeConfig` | `TreeConfig` | auto-detected | `childrenField`, `parentField`, `idField`, `nodeLabel`, `defaultExpanded`. |
 | `filterState` | `FilterState` | uncontrolled | Controlled filter state. Pair with `onFilterChange`. |
 | `onFilterChange` | `(state: FilterState) => void` | — | Fires when any filter changes. When provided, the layout is controlled. |
