@@ -7,7 +7,8 @@
     "dist",
     "apps/lib",
     "docs",
-    "!**/*-dev.*"
+    "!**/*-dev.*",
+    "!apps/lib/components/**/*.md"
   ],
   "bin": {
     "torch-glare": "dist/bin/index.js"
