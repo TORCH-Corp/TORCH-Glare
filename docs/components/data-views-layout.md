@@ -11,7 +11,22 @@ keywords: [data-views, layout, table, kanban, inbox, tree, multi-view, filter, s
 
 ## Installation
 
-The component is part of `torch-glare`. It depends on `@radix-ui/react-slider`, `react-day-picker`, `lucide-react`, and `vaul` (all already vendored by the library). No extra install needed.
+```bash
+npx torch-glare@latest add DataViews
+```
+
+The CLI transitively installs everything DataViews imports — the sibling views,
+the `DataViewCard` layout, the `useDataViewsState` hook, the `dataViews` utils,
+and the `TreeFolder` component — plus the 3rd-party deps it uses
+(`@radix-ui/react-slider`, `react-day-picker`, `lucide-react`, `vaul`).
+
+> **Badge version:** DataViews uses the current Badge API
+> (`color` / `badgeStyle` / `showIcon`). If your project vendored an older
+> `Badge.tsx` (with `variant` / `isSelected`), refresh it with
+> `npx torch-glare@latest add Badge --force` and migrate call sites
+> (`variant=` → `color=`, `isSelected`+`onUnselect` → `isClosable`+`onClose`).
+> The Badge also needs `mapping-color-system-v4` tokens
+> (`--background-presentation-badge-{color}-{subtle|solid}`) in your CSS.
 
 ## Import
 

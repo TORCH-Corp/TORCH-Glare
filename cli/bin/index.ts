@@ -24,7 +24,8 @@ program
 program
   .command("add [component]")
   .description("Add a component interactively or install a specified one")
-  .action((component) => add(component));
+  .option("-f, --force", "Overwrite the component if it already exists")
+  .action((component, options) => add(component, !!options.force));
 
 program
   .command("hook [hook]")
