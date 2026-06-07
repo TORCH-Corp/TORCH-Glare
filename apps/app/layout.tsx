@@ -14,27 +14,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="ltr" data-theme="light">
+    <html lang="en" dir="ltr" data-theme="default">
       <head>
         <link
           href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
           rel="stylesheet"
         />
-        <link
+        {/* <link
           rel="stylesheet"
           href="https://cdn.statically.io/gh/TORCH-Corp/SF-PRO-FONT/main/font/fonts.css"
-        />
-
+        /> */}
+        {/* 
         <link
           rel="preload"
           href="https://cdn.statically.io/gh/TORCH-Corp/SF-PRO-FONT/main/font/SF-Pro.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
-        />
+        /> */}
       </head>
       <body>
-        <ProviderWrapper>{children}</ProviderWrapper>
+        {children}
       </body>
     </html>
   );

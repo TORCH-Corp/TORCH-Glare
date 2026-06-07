@@ -25,18 +25,44 @@ import {
   StepLabel,
   StepDescription,
 } from "@/components/Stepper";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "@/components/DropdownMenu";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
   const [multipleValues, setMultipleValues] = useState<string[]>(["bold"]);
   const [isBoldOn, setIsBoldOn] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary h-screen">
+
+    <DropdownMenuDemo />
+  </div>
 
   return (
-    <div className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
+    <div className="p-8 space-y-12 bg-background-presentation-body-primary ">
       <h1 className="typography-headers-medium-medium text-content-presentation-global-primary">
         ToggleButton & ButtonGroup Demo
       </h1>
+
+      {/* ================================================================== */}
+      {/* DROPDOWN MENU */}
+      {/* ================================================================== */}
+
+      <DropdownMenuDemo />
 
       {/* ================================================================== */}
       {/* TOGGLE BUTTON (Standalone) */}
@@ -550,7 +576,195 @@ export default function Page() {
     </div>
   );
 }
+function DropdownMenuDemo() {
+  const [showToolbar, setShowToolbar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [showStatusBar, setShowStatusBar] = useState(true);
+  const [panelPosition, setPanelPosition] = useState("bottom");
 
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        DropdownMenu
+      </h2>
+
+      {/* Basic Menu */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Basic Menu with Items
+        </h3>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="BorderStyle" size="M">
+              <i className="ri-more-2-line" />
+              Actions
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem>
+              <i className="ri-edit-line text-[16px]" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <i className="ri-file-copy-line text-[16px]" />
+              Duplicate
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <i className="ri-share-line text-[16px]" />
+              Share
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="Negative">
+              <i className="ri-delete-bin-line text-[16px]" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Labels & Shortcuts */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Labels & Shortcuts
+        </h3>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="BorderStyle" size="M">
+              <i className="ri-clipboard-line" />
+              Clipboard
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>Editing</DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <i className="ri-scissors-line text-[16px]" />
+                Cut
+                <DropdownMenuShortcut>⌘X</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant={"Default"} disabled>
+                <i className="ri-file-copy-line text-[16px]" />
+                Copy
+                <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <i className="ri-clipboard-line text-[16px]" />
+                Paste
+                <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>History</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <i className="ri-arrow-go-back-line text-[16px]" />
+              Undo
+              <DropdownMenuShortcut>⌘Z</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <i className="ri-arrow-go-forward-line text-[16px]" />
+              Redo
+              <DropdownMenuShortcut>⇧⌘Z</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Checkbox Items */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Checkbox Items
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Visible:{" "}
+          {[
+            showToolbar && "Toolbar",
+            showSidebar && "Sidebar",
+            showStatusBar && "Status Bar",
+          ]
+            .filter(Boolean)
+            .join(", ") || "None"}
+        </p>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="BorderStyle" size="M">
+              <i className="ri-layout-line" />
+              View Options
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+            <DropdownMenuCheckboxItem
+              checked={showToolbar}
+              onCheckedChange={setShowToolbar}
+            >
+              Toolbar
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              checked={showSidebar}
+              onCheckedChange={setShowSidebar}
+            >
+              Sidebar
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              checked={showStatusBar}
+              onCheckedChange={setShowStatusBar}
+            >
+              Status Bar
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Radio Group + Submenu */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Radio Group & Submenu
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Panel position: {panelPosition}
+        </p>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="BorderStyle" size="M">
+              <i className="ri-settings-3-line" />
+              Panel Settings
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>Position</DropdownMenuLabel>
+            <DropdownMenuRadioGroup
+              value={panelPosition}
+              onValueChange={setPanelPosition}
+            >
+              <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="bottom">
+                Bottom
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <i className="ri-more-line text-[16px]" />
+                More Options
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>
+                  <i className="ri-refresh-line text-[16px]" />
+                  Reset Layout
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <i className="ri-fullscreen-line text-[16px]" />
+                  Toggle Fullscreen
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </section>
+  );
+}
 function StepperDemo() {
   const [activeStep, setActiveStep] = useState(1);
   const totalSteps = 4;
@@ -739,3 +953,5 @@ function StepperDemo() {
     </section>
   );
 }
+
+

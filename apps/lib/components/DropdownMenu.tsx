@@ -16,21 +16,52 @@ const DropdownMenu = DropdownMenuPrimitive.Root;
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 
-const DropdownMenuGroup = DropdownMenuPrimitive.Group;
+const DropdownMenuGroup = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Group>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Group> &
+  VariantProps<typeof dropdownMenuGroupStyles>
+>(({ className, variant = "Boxed", ...props }, ref) => (
+  <DropdownMenuPrimitive.Group
+    ref={ref}
+    className={cn(dropdownMenuGroupStyles({ variant }), className)}
+    {...props}
+  />
+));
+DropdownMenuGroup.displayName = DropdownMenuPrimitive.Group.displayName;
 
 const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 
 const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 
-const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
+const DropdownMenuRadioGroup = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.RadioGroup>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioGroup> &
+  VariantProps<typeof dropdownMenuGroupStyles>
+>(({ className, variant = "Boxed", ...props }, ref) => (
+  <DropdownMenuPrimitive.RadioGroup
+    ref={ref}
+    className={cn(dropdownMenuGroupStyles({ variant }), className)}
+    {...props}
+  />
+));
+DropdownMenuRadioGroup.displayName =
+  DropdownMenuPrimitive.RadioGroup.displayName;
 
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> &
-  DropdownMenuProps
+  DropdownMenuProps & { autoGroup?: boolean }
 >(
   (
-    { theme, className, sideOffset = 4, variant = "PresentationStyle", ...props },
+    {
+      theme,
+      className,
+      sideOffset = 4,
+      variant = "PresentationStyle",
+      autoGroup = true,
+      children,
+      ...props
+    },
     ref
   ) => (
     <DropdownMenuPrimitive.Portal>
@@ -40,7 +71,9 @@ const DropdownMenuContent = React.forwardRef<
         sideOffset={sideOffset}
         className={cn(dropdownMenuStyles({ variant }), className)}
         {...props}
-      />
+      >
+        {autoGroup ? autoGroupChildren(children) : children}
+      </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
   )
 );
@@ -59,7 +92,6 @@ const DropdownMenuSubTrigger = React.forwardRef<
       children,
       variant = "Default",
       size = "M",
-      disabled,
       ...props
     },
     ref
@@ -67,14 +99,14 @@ const DropdownMenuSubTrigger = React.forwardRef<
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
       className={cn(
-        MenuItemStyles({ variant, size, disabled }),
+        MenuItemStyles({ variant, size }),
         "justify-between",
         className
       )}
       {...props}
     >
-      {children}
-      <i className="ri-arrow-right-s-line text-[16px]"></i>
+      <div >{children} <i className="ri-arrow-right-s-line text-[16px]"></i></div>
+
     </DropdownMenuPrimitive.SubTrigger>
   )
 );
@@ -85,14 +117,30 @@ const DropdownMenuSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent> & {
     variant?: "PresentationStyle";
+    autoGroup?: boolean;
   }
->(({ className, variant = "PresentationStyle", ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cn(dropdownMenuStyles({ variant }), className)}
-    {...props}
-  />
-));
+>(
+  (
+    {
+      className,
+      variant = "PresentationStyle",
+      autoGroup = true,
+      children,
+      ...props
+    },
+    ref
+  ) => (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        ref={ref}
+        className={cn(dropdownMenuStyles({ variant }), className)}
+        {...props}
+      >
+        {autoGroup ? autoGroupChildren(children) : children}
+      </DropdownMenuPrimitive.SubContent>
+    </DropdownMenuPrimitive.Portal>
+  )
+);
 DropdownMenuSubContent.displayName =
   DropdownMenuPrimitive.SubContent.displayName;
 
@@ -106,9 +154,9 @@ const DropdownMenuItem = React.forwardRef<
     {
       className,
       inset,
+      children,
       variant = "Default",
       size = "M",
-      disabled,
       active,
       ...props
     },
@@ -118,10 +166,12 @@ const DropdownMenuItem = React.forwardRef<
       {...props}
       ref={ref}
       className={cn(
-        MenuItemStyles({ variant, size, disabled, active }),
+        MenuItemStyles({ variant, size, active }),
         className
       )}
-    />
+    >
+      <div >{children}</div>
+    </DropdownMenuPrimitive.Item>
   )
 );
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
@@ -138,7 +188,6 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       checked,
       variant = "Default",
       size = "M",
-      disabled,
       ...props
     },
     ref
@@ -146,7 +195,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     <DropdownMenuPrimitive.CheckboxItem
       ref={ref}
       className={cn(
-        MenuItemStyles({ variant, size, disabled }),
+        MenuItemStyles({ variant, size }),
         "relative pl-8",
         className
       )}
@@ -158,7 +207,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
           <i className="ri-radio-button-fill text-white text-[16px]"></i>
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
-      {children}
+      <div >{children}</div>
     </DropdownMenuPrimitive.CheckboxItem>
   )
 );
@@ -176,7 +225,6 @@ const DropdownMenuRadioItem = React.forwardRef<
       children,
       variant = "Default",
       size = "M",
-      disabled,
       ...props
     },
     ref
@@ -184,7 +232,7 @@ const DropdownMenuRadioItem = React.forwardRef<
     <DropdownMenuPrimitive.RadioItem
       ref={ref}
       className={cn(
-        MenuItemStyles({ variant, size, disabled }),
+        MenuItemStyles({ variant, size }),
         "relative pl-8",
         className
       )}
@@ -201,6 +249,58 @@ const DropdownMenuRadioItem = React.forwardRef<
 );
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
 
+// Item types that should be boxed together when sitting loose in the menu.
+// A child of any OTHER type (Label, Separator, an explicit Group, etc.)
+// breaks the current run and is rendered untouched.
+//
+// DropdownMenuSub is included because its trigger renders as an inline row
+// (the SubContent is portaled out), so it belongs in the box with the items.
+const GROUPABLE_TYPES = [
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuSub,
+] as const;
+
+const isGroupable = (child: React.ReactNode): child is React.ReactElement =>
+  React.isValidElement(child) &&
+  (GROUPABLE_TYPES as readonly React.ElementType[]).includes(
+    child.type as React.ElementType
+  );
+
+/**
+ * Wraps consecutive runs of loose menu items in a Boxed DropdownMenuGroup so
+ * items render inside a container even when the consumer doesn't write one.
+ * Non-groupable children (labels, separators, submenus, explicit groups) act
+ * as boundaries and pass through unchanged.
+ */
+function autoGroupChildren(children: React.ReactNode): React.ReactNode {
+  const out: React.ReactNode[] = [];
+  let run: React.ReactElement[] = [];
+
+  const flush = (key: string) => {
+    if (run.length === 0) return;
+    out.push(
+      <DropdownMenuGroup key={key} variant="Boxed">
+        {run}
+      </DropdownMenuGroup>
+    );
+    run = [];
+  };
+
+  React.Children.toArray(children).forEach((child, index) => {
+    if (isGroupable(child)) {
+      run.push(child);
+    } else {
+      flush(`auto-group-${index}`);
+      out.push(child);
+    }
+  });
+  flush("auto-group-last");
+
+  return out;
+}
+
 const DropdownMenuLabel = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
@@ -210,7 +310,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      "text-content-presentation-state-disabled typography-body-medium-regular px-[12px] h-[32px] flex justify-start items-center",
+      "text-content-presentation-global-primary-light typography-body-small-medium px-[12px] pt-1 flex justify-start items-center",
       className
     )}
     {...props}
@@ -268,45 +368,56 @@ export {
 
 export const MenuItemStyles = cva(
   [
-    "text-content-presentation-action-light-primary",
+    "text-content-presentation-global-primary-light typography-body-medium-regular",
     "outline-none",
     "border",
     "border-transparent",
     "flex",
-    "gap-[8px]",
     "items-center",
     "justify-start",
     "text-overflow",
     "overflow-hidden",
-    "px-[12px]",
+    "p-[2px]",
     "rounded-[4px]",
     "transition-all",
+    "bg-[rgba(184,192,204,0.36)]",
     "ease-in-out",
     "duration-300",
+    "[&>div]:flex",
+    "[&>div]:px-[12px]",
+    "[&>div]:py-[4px]",
+    "[&>div]:gap-2",
+    "[&>div]:w-full",
+    "[&>div]:rounded-[8px]",
+
 
   ],
   {
     variants: {
       variant: {
         Default: [
-          "text-content-presentation-action-light-primary",
-          "bg-background-presentation-action-dropdown-primary",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-global-primary-inverse",
-          "focus:bg-background-presentation-action-hover",
-          "focus:text-content-presentation-global-primary-inverse",
-          "disabled:text-content-presentation-state-disabled",
-          "disabled:bg-white-00",
+          "text-content-presentation-global-primary-light",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-black-1000",
+          "[&[data-highlighted]>div]:bg-white-alpha-75",
+          "[&[data-highlighted]>div]:text-black-1000",
+          "[&[data-disabled]>div]:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:opacity-50",
+          // Disabled items are pointer-events:none by default (Radix), so
+          // re-enable them to allow hover styling without making them selectable.
+          "[&[data-disabled]]:pointer-events-auto",
+          "[&[data-disabled]>div]:hover:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:hover:bg-transparent",
         ],
-        Warning: [
-          "text-content-presentation-state-information",
+        info: [
+          "text-blue-sparkle-200",
           "hover:bg-background-presentation-state-information-primary",
           "focus:bg-background-presentation-state-information-primary",
-          "focus:text-content-presentation-global-primary-inverse",
-          "hover:text-content-presentation-global-primary-inverse",
+          "focus:text-blue-sparkle-600",
+          "hover:text-blue-sparkle-600",
         ],
         Negative: [
-          "text-content-presentation-state-negative",
+          "text-medium-red-200",
           "hover:bg-background-presentation-state-negative-primary",
           "hover:text-content-presentation-global-primary-inverse",
           "focus:bg-background-presentation-state-negative-primary",
@@ -319,12 +430,7 @@ export const MenuItemStyles = cva(
         M: ["typography-body-medium-regular", "h-[32px]"],
       },
 
-      disabled: {
-        true: [
-          "text-content-presentation-state-disabled",
-          "bg-white-00",
-        ],
-      },
+
 
       active: {
         true: [
@@ -337,13 +443,12 @@ export const MenuItemStyles = cva(
         variant: "Default",
         size: "M",
         active: false,
-        disabled: false,
       },
     },
     compoundVariants: [
       {
         active: true,
-        variant: "Warning",
+        variant: "info",
         className: ["text-content-presentation-state-negative"],
       },
     ],
@@ -352,8 +457,7 @@ export const MenuItemStyles = cva(
 export const dropdownMenuStyles = cva(
   [
     "p-1",
-    "rounded-[8px]",
-    "border",
+    "rounded-[14px]",
     "max-h-[200px]",
     "min-w-[240px]",
     "outline-none",
@@ -364,14 +468,14 @@ export const dropdownMenuStyles = cva(
     "data-[state=open]:fade-in-0",
     "overflow-x-hidden",
     "scrollbar-hide",
+    "  backdrop-blur-[21px]"
   ],
   {
     variants: {
       variant: {
         PresentationStyle: [
-          "border-border-presentation-global-primary",
-          "bg-background-presentation-form-base",
-          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+          "bg-[rgba(61,64,69,0.72)]",
+          "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
         ],
       },
       defaultVariants: {
@@ -380,3 +484,24 @@ export const dropdownMenuStyles = cva(
     },
   }
 );
+
+export const dropdownMenuGroupStyles = cva(["flex", "flex-col"], {
+  variants: {
+    variant: {
+      // Visually contains its items in a bordered card.
+      Boxed: [
+        "gap-[1px]",
+        "",
+        "",
+        "rounded-[10px]",
+        "bg-bldue-500",
+        "overflow-hidden"
+      ],
+      // No container — semantic grouping only (Radix default behavior).
+      Plain: [],
+    },
+  },
+  defaultVariants: {
+    variant: "Boxed",
+  },
+});
