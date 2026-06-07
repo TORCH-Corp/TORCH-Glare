@@ -114,6 +114,12 @@ const DrawerContent = React.forwardRef<
           )}
         >
           <div
+            // The content surface is always light (#F0F0F0) regardless of the
+            // page theme, so pin a light theme here. This makes theme-aware
+            // content tokens (DrawerTitle/Description and any consumer content)
+            // resolve to their dark-on-light values instead of following a dark
+            // page theme (which would render white-on-light = invisible).
+            data-theme="light"
             className={cn(
               "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
               framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
@@ -148,14 +154,18 @@ const DrawerHeader = ({
 DrawerHeader.displayName = "DrawerHeader";
 
 const drawerHeaderPane = cva(
-  "flex items-center gap-2 rounded-[14px] border p-2 bg-[#131415] border-[#2C2D2E] shadow-[0_0_32px_2px_rgba(0,0,0,0.05)]",
+  // Dark pill. Force any DrawerTitle/Description inside it back to light text
+  // (their defaults are dark for the light content surface).
+  "flex items-center gap-2 rounded-[14px] border p-2 bg-[#131415] border-[#2C2D2E] shadow-[0_0_32px_2px_rgba(0,0,0,0.05)] [&_[data-slot=drawer-title]]:text-white [&_[data-slot=drawer-description]]:text-[#9FA0A1]",
 );
 
 const DrawerHeaderTitle = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn(drawerHeaderPane(), className)} {...props} />
+  // Dark surface — pin a dark theme so any buttons/content inside resolve their
+  // theme tokens for dark (the surrounding content surface is data-theme=light).
+  <div data-theme="dark" className={cn(drawerHeaderPane(), className)} {...props} />
 );
 DrawerHeaderTitle.displayName = "DrawerHeaderTitle";
 
@@ -164,6 +174,7 @@ const DrawerHeaderActions = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
+    data-theme="dark"
     className={cn(drawerHeaderPane(), "justify-end", className)}
     {...props}
   />
@@ -358,8 +369,12 @@ const DrawerTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Title
     ref={ref}
+    data-slot="drawer-title"
+    // Dark text by default — the title usually sits on the light content
+    // surface. Inside the dark DrawerHeaderTitle pill it is flipped back to
+    // white via a descendant selector on `drawerHeaderPane`.
     className={cn(
-      "typography-display-medium-medium uppercase text-white leading-none",
+      "typography-display-medium-medium uppercase text-content-presentation-global-primary leading-none",
       className,
     )}
     {...props}
@@ -373,7 +388,11 @@ const DrawerDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Description
     ref={ref}
-    className={cn("typography-body-small-regular text-[#9FA0A1]", className)}
+    data-slot="drawer-description"
+    className={cn(
+      "typography-body-small-regular text-content-presentation-action-light-secondary",
+      className,
+    )}
     {...props}
   />
 ));
