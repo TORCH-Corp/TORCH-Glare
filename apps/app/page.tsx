@@ -31,7 +31,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuGroup,
   DropdownMenuCheckboxItem,
@@ -613,7 +612,6 @@ function DropdownMenuDemo() {
               <i className="ri-share-line text-[16px]" />
               Share
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem variant="Negative">
               <i className="ri-delete-bin-line text-[16px]" />
               Delete
@@ -647,13 +645,12 @@ function DropdownMenuDemo() {
                 Copy
                 <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem variant={"Negative"} >
                 <i className="ri-clipboard-line text-[16px]" />
                 Paste
                 <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
             <DropdownMenuLabel>History</DropdownMenuLabel>
             <DropdownMenuItem>
               <i className="ri-arrow-go-back-line text-[16px]" />
@@ -692,25 +689,29 @@ function DropdownMenuDemo() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem
-              checked={showToolbar}
-              onCheckedChange={setShowToolbar}
-            >
-              Toolbar
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              checked={showSidebar}
-              onCheckedChange={setShowSidebar}
-            >
-              Sidebar
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              checked={showStatusBar}
-              onCheckedChange={setShowStatusBar}
-            >
-              Status Bar
-            </DropdownMenuCheckboxItem>
+            <DropdownMenuLabel>Checkbox Items</DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <DropdownMenuCheckboxItem
+                checked={showToolbar}
+                onCheckedChange={setShowToolbar}
+              >
+                Toolbar
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={showSidebar}
+                onCheckedChange={setShowSidebar}
+                variant={"info"}
+              >
+                Sidebar
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={showStatusBar}
+                onCheckedChange={setShowStatusBar}
+                variant={"Negative"}
+              >
+                Status Bar
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -742,7 +743,6 @@ function DropdownMenuDemo() {
               </DropdownMenuRadioItem>
               <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
-            <DropdownMenuSeparator />
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <i className="ri-more-line text-[16px]" />

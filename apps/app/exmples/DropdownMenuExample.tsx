@@ -5,7 +5,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuPortal,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
@@ -76,7 +75,6 @@ export default function DropdownMenuExample() {
                       Check IT
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
                       variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
@@ -104,7 +102,6 @@ export default function DropdownMenuExample() {
                           >
                             Message
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator />
                           <DropdownMenuItem
                             variant={variant === "PresentationStyle" ? "Negative" : "SystemStyle"}
 
@@ -121,7 +118,6 @@ export default function DropdownMenuExample() {
                       <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >
@@ -137,7 +133,6 @@ export default function DropdownMenuExample() {
                   >
                     API
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >

@@ -3,6 +3,7 @@ import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
+import { Radio } from "./Radio";
 
 
 interface DropdownMenuProps {
@@ -105,7 +106,10 @@ const DropdownMenuSubTrigger = React.forwardRef<
       )}
       {...props}
     >
-      <div >{children} <i className="ri-arrow-right-s-line text-[16px]"></i></div>
+      <div className="justify-between"><div className="flex gap-2">
+        {children}
+      </div>
+        <i className="ri-arrow-right-s-line text-[16px]"></i></div>
 
     </DropdownMenuPrimitive.SubTrigger>
   )
@@ -196,18 +200,31 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       ref={ref}
       className={cn(
         MenuItemStyles({ variant, size }),
-        "relative pl-8",
+        "relative",
         className
       )}
       checked={checked}
       {...props}
     >
-      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-        <DropdownMenuPrimitive.ItemIndicator>
-          <i className="ri-radio-button-fill text-white text-[16px]"></i>
-        </DropdownMenuPrimitive.ItemIndicator>
-      </span>
-      <div >{children}</div>
+
+      <div className="relative flex   items-center">
+        <span className="h-full flex  items-center justify-center">
+          {/* Red dot is the default; hidden once the item is checked. */}
+          <div className=" flex justify-center items-center h-full  [[data-state=checked]_&]:hidden">
+            <div className="w-[16px] h-[16px] rounded-[3px] border border-white-alpha-40 bg-black-alpha-15  group-hover:border-white-700 group-hover:bg-black-alpha-075">
+            </div>
+          </div>
+
+          {/* Blue dot only renders when the item is checked. */}
+          <DropdownMenuPrimitive.ItemIndicator>
+            <div className="bg-blue-sparkle-600 flex justify-center items-center w-[16px] h-[16px] rounded-[3px]">
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M5.8339 8.84977L11.1961 3.48755L12.0211 4.3125L5.8339 10.4997L2.12158 6.7874L2.94654 5.96245L5.8339 8.84977Z" fill="#F9F9F9" />
+              </svg>
+            </div>
+          </DropdownMenuPrimitive.ItemIndicator>
+        </span> {children}</div>
     </DropdownMenuPrimitive.CheckboxItem>
   )
 );
@@ -233,17 +250,25 @@ const DropdownMenuRadioItem = React.forwardRef<
       ref={ref}
       className={cn(
         MenuItemStyles({ variant, size }),
-        "relative pl-8",
+        "relative",
         className
       )}
       {...props}
     >
-      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-        <DropdownMenuPrimitive.ItemIndicator>
-          <i className="h-2 w-2 fill-current" />
-        </DropdownMenuPrimitive.ItemIndicator>
-      </span>
-      {children}
+      <div className="relative flex   items-center">
+        <span className="h-full left-2 flex h-3.5 w-3.5 items-center justify-center">
+          {/* Red dot is the default; hidden once the item is checked. */}
+          <div className=" flex justify-center items-center h-full  [[data-state=checked]_&]:hidden">
+            <div className="w-[14px] h-[14px] rounded-[100px] border border-white-alpha-40 bg-black-alpha-15  group-hover:border-white-700 group-hover:bg-black-alpha-075">
+            </div>
+          </div>
+          <DropdownMenuPrimitive.ItemIndicator>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 14" fill="none">
+              <rect width="14" height="14" rx="7" fill="#005ECC" />
+              <rect x="5" y="5" width="4" height="4" rx="2" fill="white" />
+            </svg>        </DropdownMenuPrimitive.ItemIndicator>
+        </span>
+        {children} </div>
     </DropdownMenuPrimitive.RadioItem>
   )
 );
@@ -318,21 +343,6 @@ const DropdownMenuLabel = React.forwardRef<
 ));
 DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
 
-const DropdownMenuSeparator = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Separator
-    ref={ref}
-    className={cn(
-      "mx-[8px] my-[4px] border-b border-b-border-presentation-action-disabled flex-1",
-      className
-    )}
-    {...props}
-  />
-));
-DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
-
 const DropdownMenuShortcut = ({
   className,
   ...props
@@ -359,7 +369,6 @@ export {
   DropdownMenuCheckboxItem,
   DropdownMenuRadioItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuItem,
 };
@@ -378,7 +387,6 @@ export const MenuItemStyles = cva(
     "text-overflow",
     "overflow-hidden",
     "p-[2px]",
-    "rounded-[4px]",
     "transition-all",
     "bg-[rgba(184,192,204,0.36)]",
     "ease-in-out",
@@ -389,6 +397,7 @@ export const MenuItemStyles = cva(
     "[&>div]:gap-2",
     "[&>div]:w-full",
     "[&>div]:rounded-[8px]",
+    "group"
 
 
   ],
@@ -408,21 +417,37 @@ export const MenuItemStyles = cva(
           "[&[data-disabled]]:pointer-events-auto",
           "[&[data-disabled]>div]:hover:text-content-presentation-global-primary-light",
           "[&[data-disabled]>div]:hover:bg-transparent",
+          "[&[data-disabled]>div]:hover:shadow-none",
         ],
         info: [
           "text-blue-sparkle-200",
-          "hover:bg-background-presentation-state-information-primary",
-          "focus:bg-background-presentation-state-information-primary",
-          "focus:text-blue-sparkle-600",
-          "hover:text-blue-sparkle-600",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-blue-sparkle-700",
+          "[&[data-highlighted]>div]:bg-white-alpha-75",
+          "[&[data-highlighted]>div]:text-blue-sparkle-700",
+          "[&[data-disabled]>div]:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:opacity-50",
+          // Disabled items are pointer-events:none by default (Radix), so
+          // re-enable them to allow hover styling without making them selectable.
+          "[&[data-disabled]]:pointer-events-auto",
+          "[&[data-disabled]>div]:hover:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:hover:bg-transparent",
+          "[&[data-disabled]>div]:hover:shadow-none",
         ],
         Negative: [
           "text-medium-red-200",
-          "hover:bg-background-presentation-state-negative-primary",
-          "hover:text-content-presentation-global-primary-inverse",
-          "focus:bg-background-presentation-state-negative-primary",
-          "focus:text-content-presentation-global-primary-inverse",
-          "active:text-content-presentation-state-negative",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-medium-red-600",
+          "[&[data-highlighted]>div]:bg-white-alpha-75",
+          "[&[data-highlighted]>div]:text-medium-red-600",
+          "[&[data-disabled]>div]:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:opacity-50",
+          // Disabled items are pointer-events:none by default (Radix), so
+          // re-enable them to allow hover styling without making them selectable.
+          "[&[data-disabled]]:pointer-events-auto",
+          "[&[data-disabled]>div]:hover:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:hover:bg-transparent",
+          "[&[data-disabled]>div]:hover:shadow-none",
         ],
       },
       size: {
@@ -458,7 +483,7 @@ export const dropdownMenuStyles = cva(
   [
     "p-1",
     "rounded-[14px]",
-    "max-h-[200px]",
+    "max-h-[400px]",
     "min-w-[240px]",
     "outline-none",
     "overflow-scroll",
@@ -468,7 +493,8 @@ export const dropdownMenuStyles = cva(
     "data-[state=open]:fade-in-0",
     "overflow-x-hidden",
     "scrollbar-hide",
-    "  backdrop-blur-[21px]"
+    "  backdrop-blur-[21px]",
+    "flex gap-1 flex-col"
   ],
   {
     variants: {
@@ -491,8 +517,6 @@ export const dropdownMenuGroupStyles = cva(["flex", "flex-col"], {
       // Visually contains its items in a bordered card.
       Boxed: [
         "gap-[1px]",
-        "",
-        "",
         "rounded-[10px]",
         "bg-bldue-500",
         "overflow-hidden"
