@@ -40,6 +40,20 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from "@/components/DropdownMenu";
+import {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuShortcut,
+  ContextMenuCheckboxItem,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSub,
+  ContextMenuSubTrigger,
+  ContextMenuSubContent,
+} from "@/components/ContextMenu";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
@@ -49,6 +63,7 @@ export default function Page() {
   return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary h-screen">
 
     <DropdownMenuDemo />
+    <ContextMenuDemo />
   </div>
 
   return (
@@ -765,6 +780,84 @@ function DropdownMenuDemo() {
     </section>
   );
 }
+
+function ContextMenuDemo() {
+  const [showGrid, setShowGrid] = useState(true);
+  const [zoom, setZoom] = useState("100");
+
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        ContextMenu (Right-click)
+      </h2>
+
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Right-click the area below
+        </h3>
+        <ContextMenu>
+          <ContextMenuTrigger className="flex h-[160px] w-full items-center justify-center rounded-[10px] border border-dashed border-border-presentation-action-disabled text-content-presentation-global-secondary typography-body-medium-regular select-none">
+            Right-click here
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuLabel>Actions</ContextMenuLabel>
+            <ContextMenuItem>
+              <i className="ri-edit-line text-[16px]" />
+              Edit
+              <ContextMenuShortcut>⌘E</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem>
+              <i className="ri-file-copy-line text-[16px]" />
+              Duplicate
+              <ContextMenuShortcut>⌘D</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem>
+              <i className="ri-share-line text-[16px]" />
+              Share
+            </ContextMenuItem>
+
+            <ContextMenuLabel>View</ContextMenuLabel>
+            <ContextMenuCheckboxItem
+              checked={showGrid}
+              onCheckedChange={setShowGrid}
+            >
+              Show Grid
+            </ContextMenuCheckboxItem>
+            <ContextMenuRadioGroup value={zoom} onValueChange={setZoom}>
+              <ContextMenuRadioItem value="50">Zoom 50%</ContextMenuRadioItem>
+              <ContextMenuRadioItem value="100">Zoom 100%</ContextMenuRadioItem>
+              <ContextMenuRadioItem value="200">Zoom 200%</ContextMenuRadioItem>
+            </ContextMenuRadioGroup>
+
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>
+                <i className="ri-more-line text-[16px]" />
+                More Options
+              </ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                <ContextMenuItem>
+                  <i className="ri-refresh-line text-[16px]" />
+                  Reset
+                </ContextMenuItem>
+                <ContextMenuItem>
+                  <i className="ri-fullscreen-line text-[16px]" />
+                  Fullscreen
+                </ContextMenuItem>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+
+            <ContextMenuItem variant="Negative">
+              <i className="ri-delete-bin-line text-[16px]" />
+              Delete
+              <ContextMenuShortcut>⌘⌫</ContextMenuShortcut>
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </div>
+    </section>
+  );
+}
+
 function StepperDemo() {
   const [activeStep, setActiveStep] = useState(1);
   const totalSteps = 4;
