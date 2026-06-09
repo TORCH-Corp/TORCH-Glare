@@ -54,14 +54,17 @@ import {
   ContextMenuSubTrigger,
   ContextMenuSubContent,
 } from "@/components/ContextMenu";
+import { BadgeField } from "@/components/BadgeField";
+import type { Tag } from "@/hooks/useTagSelection";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
   const [multipleValues, setMultipleValues] = useState<string[]>(["bold"]);
   const [isBoldOn, setIsBoldOn] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary h-screen">
+  return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
 
+    <BadgeFieldDemo />
     <DropdownMenuDemo />
     <ContextMenuDemo />
     <RtlMenuDemo />
@@ -979,6 +982,42 @@ function RtlMenuDemo() {
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
+      </div>
+    </section>
+  );
+}
+
+const BADGE_FIELD_TAGS: Tag[] = [
+  { id: "1", name: "Electronics", isSelected: true, variant: "blue" },
+  { id: "2", name: "Books", isSelected: false, variant: "green" },
+  { id: "3", name: "Clothing", isSelected: false, variant: "purple" },
+  { id: "4", name: "Home", isSelected: false, variant: "yellow" },
+  { id: "5", name: "Sports", isSelected: false, variant: "ocean" },
+  { id: "6", name: "Limited Edition", isSelected: false, variant: "rose" },
+];
+
+function BadgeFieldDemo() {
+  const [selected, setSelected] = useState<Tag[]>([]);
+
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        BadgeField
+      </h2>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Search & select tags (menu-styled dropdown)
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Selected: {selected.map((t) => t.name).join(", ") || "None"}
+        </p>
+        <BadgeField
+          tags={BADGE_FIELD_TAGS}
+          onValueChange={setSelected}
+          icon={<i className="ri-price-tag-3-line" />}
+          placeholder="Select a badge"
+        />
       </div>
     </section>
   );

@@ -1,25 +1,18 @@
 "use client";
 
-import { VariantProps } from "class-variance-authority";
+import { cva, VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
-import {
-  MenuItemStyles,
-  menuContentStyles,
-  menuGroupStyles,
-  autoGroupChildren,
-  markGroupable,
-} from "./menu-shared";
 
 /**
  * ContextMenu — a right-click (or long-press) menu.
  *
  * Same surface as DropdownMenu (items, groups, the boxed look, auto-grouping),
  * built on @radix-ui/react-context-menu so it opens at the pointer on
- * right-click instead of anchoring to a clicked trigger button. All styling and
- * the auto-group behavior are shared via ./menu-shared.
+ * right-click instead of anchoring to a clicked trigger button. The styling and
+ * auto-group logic are kept self-contained here (mirrored in DropdownMenu).
  */
 
 interface ContextMenuContentProps {
@@ -157,7 +150,7 @@ const ContextMenuContent = React.forwardRef<
         )}
         {...props}
       >
-        {autoGroup ? autoGroupChildren(children, ContextMenuGroup) : children}
+        {autoGroup ? autoGroupChildren(children) : children}
       </ContextMenuPrimitive.Content>
     </ContextMenuPrimitive.Portal>
   )
@@ -199,7 +192,7 @@ const ContextMenuSubContent = React.forwardRef<
         className={cn(menuContentStyles({ variant }), className)}
         {...props}
       >
-        {autoGroup ? autoGroupChildren(children, ContextMenuGroup) : children}
+        {autoGroup ? autoGroupChildren(children) : children}
       </ContextMenuPrimitive.SubContent>
     </ContextMenuPrimitive.Portal>
   )
@@ -298,11 +291,50 @@ const ContextMenuRadioItem = React.forwardRef<
 ));
 ContextMenuRadioItem.displayName = ContextMenuPrimitive.RadioItem.displayName;
 
-// Tag groupable rows so the shared autoGroupChildren boxes them (see DropdownMenu).
-markGroupable(ContextMenuItem);
-markGroupable(ContextMenuCheckboxItem);
-markGroupable(ContextMenuRadioItem);
-markGroupable(ContextMenuSub);
+// Item types that should be boxed together when sitting loose in the menu.
+// ContextMenuSub is included because its trigger renders as an inline row.
+const GROUPABLE_TYPES = [
+  ContextMenuItem,
+  ContextMenuCheckboxItem,
+  ContextMenuRadioItem,
+  ContextMenuSub,
+] as const;
+
+const isGroupable = (child: React.ReactNode): child is React.ReactElement =>
+  React.isValidElement(child) &&
+  (GROUPABLE_TYPES as readonly React.ElementType[]).includes(
+    child.type as React.ElementType
+  );
+
+// Wraps consecutive runs of loose items in a Boxed ContextMenuGroup so items
+// render inside a container even when the consumer doesn't write one. Labels,
+// separators and explicit groups act as boundaries and pass through unchanged.
+function autoGroupChildren(children: React.ReactNode): React.ReactNode {
+  const out: React.ReactNode[] = [];
+  let run: React.ReactElement[] = [];
+
+  const flush = (key: string) => {
+    if (run.length === 0) return;
+    out.push(
+      <ContextMenuGroup key={key} variant="Boxed">
+        {run}
+      </ContextMenuGroup>
+    );
+    run = [];
+  };
+
+  React.Children.toArray(children).forEach((child, index) => {
+    if (isGroupable(child)) {
+      run.push(child);
+    } else {
+      flush(`auto-group-${index}`);
+      out.push(child);
+    }
+  });
+  flush("auto-group-last");
+
+  return out;
+}
 
 const ContextMenuLabel = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Label>,
@@ -348,3 +380,145 @@ export {
   ContextMenuLabel,
   ContextMenuShortcut,
 };
+
+const MenuItemStyles = cva(
+  [
+    "text-content-presentation-global-primary-light typography-body-medium-regular",
+    "outline-none",
+    "border",
+    "border-transparent",
+    "flex",
+    "items-center",
+    "justify-start",
+    "text-overflow",
+    "overflow-hidden",
+    "p-[2px]",
+    "transition-all",
+    "bg-[rgba(184,192,204,0.36)]",
+    "ease-in-out",
+    "duration-300",
+    "[&>div]:flex",
+    "[&>div]:px-[12px]",
+    "[&>div]:py-[4px]",
+    "[&>div]:gap-2",
+    "[&>div]:w-full",
+    "[&>div]:rounded-[8px]",
+    "[&>div]:items-center ",
+    "group",
+  ],
+  {
+    variants: {
+      variant: {
+        Default: [
+          "text-content-presentation-global-primary-light",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-black-1000",
+          "[&[data-highlighted]>div]:bg-white-alpha-75",
+          "[&[data-highlighted]>div]:text-black-1000",
+          "[&[data-disabled]>div]:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:opacity-50",
+          // Disabled items are pointer-events:none by default (Radix), so
+          // re-enable them to allow hover styling without making them selectable.
+          "[&[data-disabled]]:pointer-events-auto",
+          "[&[data-disabled]>div]:hover:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:hover:bg-transparent",
+          "[&[data-disabled]>div]:hover:shadow-none",
+        ],
+        info: [
+          "text-blue-sparkle-200",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-blue-sparkle-700",
+          "[&[data-highlighted]>div]:bg-white-alpha-75",
+          "[&[data-highlighted]>div]:text-blue-sparkle-700",
+          "[&[data-disabled]>div]:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:opacity-50",
+          "[&[data-disabled]]:pointer-events-auto",
+          "[&[data-disabled]>div]:hover:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:hover:bg-transparent",
+          "[&[data-disabled]>div]:hover:shadow-none",
+        ],
+        Negative: [
+          "text-medium-red-200",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-medium-red-600",
+          "[&[data-highlighted]>div]:bg-white-alpha-75",
+          "[&[data-highlighted]>div]:text-medium-red-600",
+          "[&[data-disabled]>div]:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:opacity-50",
+          "[&[data-disabled]]:pointer-events-auto",
+          "[&[data-disabled]>div]:hover:text-content-presentation-global-primary-light",
+          "[&[data-disabled]>div]:hover:bg-transparent",
+          "[&[data-disabled]>div]:hover:shadow-none",
+        ],
+      },
+      size: {
+        S: ["typography-body-small-regular", "h-[24px]"],
+        M: ["typography-body-medium-regular", "h-[32px]"],
+      },
+      active: {
+        true: [
+          "bg-background-presentation-action-selected",
+          "text-content-presentation-action-light-primary",
+        ],
+      },
+      defaultVariants: {
+        variant: "Default",
+        size: "M",
+        active: false,
+      },
+    },
+    compoundVariants: [
+      {
+        active: true,
+        variant: "info",
+        className: ["text-content-presentation-state-negative"],
+      },
+    ],
+  }
+);
+
+const menuContentStyles = cva(
+  [
+    "p-1",
+    "rounded-[14px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    // Only animate the OPEN (enter) state. An exit animation on [data-state=closed]
+    // holds the old DOM node during close, which breaks close/reposition on a
+    // second right-click (Radix issue #2572).
+    "data-[state=open]:animate-in",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+    "backdrop-blur-[21px]",
+    "flex gap-1 flex-col",
+  ],
+  {
+    variants: {
+      variant: {
+        PresentationStyle: [
+          "bg-[rgba(61,64,69,0.72)]",
+          "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
+
+const menuGroupStyles = cva(["flex", "flex-col"], {
+  variants: {
+    variant: {
+      // Visually contains its items in a bordered card.
+      Boxed: ["gap-[1px]", "rounded-[10px]", "bg-bldue-500", "overflow-hidden"],
+      // No container — semantic grouping only (Radix default behavior).
+      Plain: [],
+    },
+  },
+  defaultVariants: {
+    variant: "Boxed",
+  },
+});

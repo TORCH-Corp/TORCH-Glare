@@ -15,6 +15,7 @@ import { Icon, Input, Group, Trilling } from "./Input";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { Badge } from "./Badge";
 import { Tag, useTagSelection } from "../hooks/useTagSelection";
+import { cva } from "class-variance-authority";
 
 interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
@@ -172,32 +173,116 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           style={{ width: dropDownListWidth }}
           variant={variant}
           onKeyDown={handleKeyDown}
-          className="p-2 flex flex-wrap gap-1"
+          // Reuse the DropdownMenu surface so the list matches the menu design.
+          className={cn(menuContentStyles({ variant: "PresentationStyle" }), "p-1")}
         >
-          <>
-            {filteredTags.length > 0 ? (
-              filteredTags.map((tag, index) => (
-                <Badge
-                  key={tag.id}
-                  size={size}
-                  color={tag.variant as any}
-                  label={tag.name}
-                  onClick={() => handleSelectTag(tag.id)}
-                  className={`outline-none ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""}`}
-                  tabIndex={focusedPopoverIndex === index ? 0 : -1}
-                />
-              ))
-            ) : (
-              <div className="text-sm text-gray-500 py-1 px-2">
-                {tags.length === 0
-                  ? "All tags selected"
-                  : "No matching tags found"}
-              </div>
-            )}
-          </>
+          {filteredTags.length > 0 ? (
+            filteredTags.map((tag, index) => (
+              <button
+                type="button"
+                key={tag.id}
+                onClick={() => handleSelectTag(tag.id)}
+                data-highlighted={focusedPopoverIndex === index ? "" : undefined}
+                tabIndex={focusedPopoverIndex === index ? 0 : -1}
+                className={cn(
+                  MenuItemStyles({ variant: "Default", size: "M" }),
+                  "w-full"
+                )}
+              >
+                <div>
+                  <Badge size={size} color={tag.variant as any} label={tag.name} />
+                </div>
+              </button>
+            ))
+          ) : (
+            <div className="px-3 py-2 typography-body-small-regular text-content-presentation-global-secondary">
+              {tags.length === 0
+                ? "All tags selected"
+                : "No matching tags found"}
+            </div>
+          )}
         </PopoverContent>
       </Popover>
     );
   }
 );
 BadgeField.displayName = "BadgeField";
+
+// Local copies of the menu surface styles so the dropdown list matches the
+// DropdownMenu/ContextMenu design (self-contained — no shared module).
+const menuContentStyles = cva(
+  [
+    "p-1",
+    "rounded-[14px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+    "backdrop-blur-[21px]",
+    "flex gap-1 flex-col",
+  ],
+  {
+    variants: {
+      variant: {
+        PresentationStyle: [
+          "bg-[rgba(61,64,69,0.72)]",
+          "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
+
+const MenuItemStyles = cva(
+  [
+    "text-content-presentation-global-primary-light typography-body-medium-regular",
+    "outline-none",
+    "border",
+    "border-transparent",
+    "flex",
+    "items-center",
+    "justify-start",
+    "text-overflow",
+    "overflow-hidden",
+    "p-[2px]",
+    "transition-all",
+    "bg-[rgba(184,192,204,0.36)]",
+    "ease-in-out",
+    "duration-300",
+    "[&>div]:flex",
+    "[&>div]:px-[12px]",
+    "[&>div]:py-[4px]",
+    "[&>div]:gap-2",
+    "[&>div]:w-full",
+    "[&>div]:rounded-[8px]",
+    "[&>div]:items-center ",
+    "group",
+  ],
+  {
+    variants: {
+      variant: {
+        Default: [
+          "text-content-presentation-global-primary-light",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-black-1000",
+          "[&[data-highlighted]>div]:bg-white-alpha-75",
+          "[&[data-highlighted]>div]:text-black-1000",
+        ],
+      },
+      size: {
+        S: ["typography-body-small-regular", "h-[24px]"],
+        M: ["typography-body-medium-regular", "h-[32px]"],
+      },
+      defaultVariants: {
+        variant: "Default",
+        size: "M",
+      },
+    },
+  }
+);
