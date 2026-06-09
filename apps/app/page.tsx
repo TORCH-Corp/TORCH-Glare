@@ -64,6 +64,7 @@ export default function Page() {
 
     <DropdownMenuDemo />
     <ContextMenuDemo />
+    <RtlMenuDemo />
   </div>
 
   return (
@@ -850,6 +851,131 @@ function ContextMenuDemo() {
               <i className="ri-delete-bin-line text-[16px]" />
               Delete
               <ContextMenuShortcut>⌘⌫</ContextMenuShortcut>
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </div>
+    </section>
+  );
+}
+
+function RtlMenuDemo() {
+  const [showGrid, setShowGrid] = useState(true);
+  const [zoom, setZoom] = useState("100");
+
+  return (
+    <section dir="rtl" className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        RTL / العربية
+      </h2>
+
+      {/* Dropdown — RTL */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          القائمة المنسدلة
+        </h3>
+        <DropdownMenu dir="rtl">
+          <DropdownMenuTrigger asChild>
+            <Button variant="BorderStyle" size="M">
+              <i className="ri-menu-line" />
+              الإجراءات
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>تحرير</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <i className="ri-edit-line text-[16px]" />
+              تعديل
+              <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <i className="ri-file-copy-line text-[16px]" />
+              نسخ
+              <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <i className="ri-share-line text-[16px]" />
+              مشاركة
+            </DropdownMenuItem>
+
+            <DropdownMenuLabel>العرض</DropdownMenuLabel>
+            <DropdownMenuCheckboxItem
+              checked={showGrid}
+              onCheckedChange={setShowGrid}
+            >
+              إظهار الشبكة
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuRadioGroup value={zoom} onValueChange={setZoom}>
+              <DropdownMenuRadioItem value="50">تكبير ٥٠٪</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="100">تكبير ١٠٠٪</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="200">تكبير ٢٠٠٪</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <i className="ri-more-line text-[16px]" />
+                خيارات أخرى
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>
+                  <i className="ri-refresh-line text-[16px]" />
+                  إعادة تعيين
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <i className="ri-fullscreen-line text-[16px]" />
+                  ملء الشاشة
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+
+            <DropdownMenuItem variant="Negative">
+              <i className="ri-delete-bin-line text-[16px]" />
+              حذف
+              <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Context menu — RTL */}
+      <div className="space-y-4">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          قائمة النقر بالزر الأيمن
+        </h3>
+        <ContextMenu dir="rtl">
+          <ContextMenuTrigger className="flex h-[160px] w-full items-center justify-center rounded-[10px] border border-dashed border-border-presentation-action-disabled text-content-presentation-global-secondary typography-body-medium-regular select-none">
+            انقر بالزر الأيمن هنا
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuLabel>إجراءات</ContextMenuLabel>
+            <ContextMenuItem>
+              <i className="ri-edit-line text-[16px]" />
+              تعديل
+              <ContextMenuShortcut>⌘E</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem>
+              <i className="ri-file-copy-line text-[16px]" />
+              نسخ
+            </ContextMenuItem>
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>
+                <i className="ri-more-line text-[16px]" />
+                خيارات أخرى
+              </ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                <ContextMenuItem>
+                  <i className="ri-refresh-line text-[16px]" />
+                  إعادة تعيين
+                </ContextMenuItem>
+                <ContextMenuItem>
+                  <i className="ri-fullscreen-line text-[16px]" />
+                  ملء الشاشة
+                </ContextMenuItem>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+            <ContextMenuItem variant="Negative">
+              <i className="ri-delete-bin-line text-[16px]" />
+              حذف
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>

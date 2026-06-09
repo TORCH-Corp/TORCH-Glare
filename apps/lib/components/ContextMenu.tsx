@@ -103,7 +103,7 @@ const ContextMenuSub = ContextMenuPrimitive.Sub;
 const ContextMenuGroup = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Group>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Group> &
-    VariantProps<typeof menuGroupStyles>
+  VariantProps<typeof menuGroupStyles>
 >(({ className, variant = "Boxed", ...props }, ref) => (
   <ContextMenuPrimitive.Group
     ref={ref}
@@ -116,7 +116,7 @@ ContextMenuGroup.displayName = ContextMenuPrimitive.Group.displayName;
 const ContextMenuRadioGroup = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.RadioGroup>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioGroup> &
-    VariantProps<typeof menuGroupStyles>
+  VariantProps<typeof menuGroupStyles>
 >(({ className, variant = "Boxed", ...props }, ref) => (
   <ContextMenuPrimitive.RadioGroup
     ref={ref}
@@ -129,7 +129,7 @@ ContextMenuRadioGroup.displayName = ContextMenuPrimitive.RadioGroup.displayName;
 const ContextMenuContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content> &
-    ContextMenuContentProps & { autoGroup?: boolean }
+  ContextMenuContentProps & { autoGroup?: boolean }
 >(
   (
     {
@@ -178,7 +178,7 @@ const ContextMenuSubTrigger = React.forwardRef<
     >
       <div className="justify-between">
         <div className="flex gap-2">{children}</div>
-        <i className="ri-arrow-right-s-line text-[16px]"></i>
+        <i className="ri-arrow-right-s-line text-[16px] rtl:rotate-180"></i>
       </div>
     </ContextMenuPrimitive.SubTrigger>
   )
@@ -227,13 +227,18 @@ ContextMenuItem.displayName = ContextMenuPrimitive.Item.displayName;
 const ContextMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem> &
-    VariantProps<typeof MenuItemStyles>
+  VariantProps<typeof MenuItemStyles>
 >(
-  ({ className, children, checked, variant = "Default", size = "M", ...props }, ref) => (
+  ({ className, children, checked, variant = "Default", size = "M", onSelect, ...props }, ref) => (
     <ContextMenuPrimitive.CheckboxItem
       ref={ref}
       className={cn(MenuItemStyles({ variant, size }), "relative", className)}
       checked={checked}
+      // Keep the menu open when toggling; preventDefault stops Radix's auto-close.
+      onSelect={(event) => {
+        event.preventDefault();
+        onSelect?.(event);
+      }}
       {...props}
     >
       <div className="relative flex items-center">
@@ -262,11 +267,16 @@ ContextMenuCheckboxItem.displayName = ContextMenuPrimitive.CheckboxItem.displayN
 const ContextMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem> &
-    VariantProps<typeof MenuItemStyles>
->(({ className, children, variant = "Default", size = "M", ...props }, ref) => (
+  VariantProps<typeof MenuItemStyles>
+>(({ className, children, variant = "Default", size = "M", onSelect, ...props }, ref) => (
   <ContextMenuPrimitive.RadioItem
     ref={ref}
     className={cn(MenuItemStyles({ variant, size }), "relative", className)}
+    // Keep the menu open when selecting; preventDefault stops Radix's auto-close.
+    onSelect={(event) => {
+      event.preventDefault();
+      onSelect?.(event);
+    }}
     {...props}
   >
     <div className="relative flex items-center">
@@ -316,7 +326,7 @@ const ContextMenuShortcut = ({
   ...props
 }: React.HTMLAttributes<HTMLSpanElement>) => (
   <span
-    className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
+    className={cn("ml-auto ltr:ml-0 rtl:mr-auto text-xs tracking-widest opacity-60", className)}
     {...props}
   />
 );

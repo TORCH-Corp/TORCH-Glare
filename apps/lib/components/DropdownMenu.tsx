@@ -123,7 +123,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
       <div className="justify-between"><div className="flex gap-2">
         {children}
       </div>
-        <i className="ri-arrow-right-s-line text-[16px]"></i></div>
+        <i className="ri-arrow-right-s-line text-[16px] rtl:rotate-180"></i></div>
 
     </DropdownMenuPrimitive.SubTrigger>
   )
@@ -206,6 +206,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       checked,
       variant = "Default",
       size = "M",
+      onSelect,
       ...props
     },
     ref
@@ -218,6 +219,11 @@ const DropdownMenuCheckboxItem = React.forwardRef<
         className
       )}
       checked={checked}
+      // Keep the menu open when toggling; preventDefault stops Radix's auto-close.
+      onSelect={(event) => {
+        event.preventDefault();
+        onSelect?.(event);
+      }}
       {...props}
     >
 
@@ -256,6 +262,7 @@ const DropdownMenuRadioItem = React.forwardRef<
       children,
       variant = "Default",
       size = "M",
+      onSelect,
       ...props
     },
     ref
@@ -267,6 +274,11 @@ const DropdownMenuRadioItem = React.forwardRef<
         "relative",
         className
       )}
+      // Keep the menu open when selecting; preventDefault stops Radix's auto-close.
+      onSelect={(event) => {
+        event.preventDefault();
+        onSelect?.(event);
+      }}
       {...props}
     >
       <div className="relative flex   items-center">
@@ -320,7 +332,7 @@ const DropdownMenuShortcut = ({
 }: React.HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
-      className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
+      className={cn("ltr:ml-auto rtl:mr-auto rtl:ml-0 text-xs tracking-widest opacity-60", className)}
       {...props}
     />
   );

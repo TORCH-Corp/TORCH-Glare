@@ -31,6 +31,7 @@ export const MenuItemStyles = cva(
     "[&>div]:gap-2",
     "[&>div]:w-full",
     "[&>div]:rounded-[8px]",
+    "[&>div]:items-center ",
     "group",
   ],
   {
