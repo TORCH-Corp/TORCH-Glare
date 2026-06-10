@@ -89,13 +89,27 @@ Add the following to your `global.css` file:
 
 ```css
 @import "tailwindcss";
+/* IMPORTANT: this @import MUST come before any @plugin or @source rule.
+   CSS requires all @import statements to precede other at-rules, so if it
+   is placed after the @plugin lines the bundler (Vite/Lightning CSS,
+   PostCSS) silently drops it. That removes every --color-* registration
+   this file provides and breaks ALL bg/text/border-*-presentation-* utilities
+   (e.g. Badge renders with no background). Keep it directly under
+   @import "tailwindcss". */
+@import "mapping-color-system-v4/tailwindVars.css";
 @plugin "glare-torch-mode";
 @plugin "tailwind-scrollbar-hide";
 @plugin "tailwindcss-animate";
 @plugin "glare-typography";
 @plugin "mapping-color-system-v4";
-@import "mapping-color-system-v4/tailwindVars.css";
 ```
+
+> ⚠️ **Common failure:** if your Badge (or any component using
+> `bg-background-presentation-*` colors) renders with no background, the
+> `tailwindVars.css` `@import` is almost certainly positioned **after** the
+> `@plugin` rules and is being dropped as an invalid `@import`. Move it up,
+> directly below `@import "tailwindcss"`, and rebuild. Look for the build
+> warning `@import must precede all other statements` — that confirms it.
 
 ### For Tailwind CSS v3
 
