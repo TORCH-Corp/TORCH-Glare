@@ -31,6 +31,7 @@ interface Props
   actionButton?: ReactNode;
   tags: Tag[];
   onValueChange?: (tags: Tag[]) => void;
+  addLabel?: string
 }
 
 export const BadgeField = forwardRef<HTMLInputElement, Props>(
@@ -48,6 +49,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       actionButton,
       theme,
       tags,
+      addLabel = "add",
+      dir,
       children,
       ...props
     },
@@ -99,6 +102,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
         >
           <PopoverTrigger asChild>
             <Group
+              dir={dir}
               error={errorMessage !== undefined}
               onTable={onTable}
               data-theme={theme}
@@ -168,41 +172,56 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
         </Tooltip>
 
         <PopoverContent
+          dir={dir}
           data-theme={theme}
           ref={popoverContentRef}
           style={{ width: dropDownListWidth }}
           variant={variant}
           onKeyDown={handleKeyDown}
-          // Reuse the DropdownMenu surface so the list matches the menu design.
-          className={cn(menuContentStyles({ variant: "PresentationStyle" }), "p-1")}
+          className={cn(menuContentContinerStyles({ variant: "PresentationStyle" }), "p-1 rounded-[17px]")}
+
+        // Reuse the DropdownMenu surface so the list matches the menu design.
         >
-          {filteredTags.length > 0 ? (
-            filteredTags.map((tag, index) => (
-              <button
-                type="button"
-                key={tag.id}
-                onClick={() => handleSelectTag(tag.id)}
-                data-highlighted={focusedPopoverIndex === index ? "" : undefined}
-                tabIndex={focusedPopoverIndex === index ? 0 : -1}
-                className={cn(
-                  MenuItemStyles({ variant: "Default", size: "M" }),
-                  "w-full"
-                )}
-              >
-                <div>
-                  <Badge size={size} color={tag.variant as any} label={tag.name} />
-                </div>
-              </button>
-            ))
-          ) : (
-            <div className="px-3 py-2 typography-body-small-regular text-content-presentation-global-secondary">
-              {tags.length === 0
-                ? "All tags selected"
-                : "No matching tags found"}
-            </div>
-          )}
+          <div
+            className={cn(menuContentStyles({ variant: "PresentationStyle" }), "p-0")}
+
+          >
+            {filteredTags.length > 0 ? (
+              filteredTags.map((tag, index) => (
+                <button
+                  type="button"
+                  key={tag.id}
+                  onClick={() => handleSelectTag(tag.id)}
+                  data-highlighted={focusedPopoverIndex === index ? "" : undefined}
+                  tabIndex={focusedPopoverIndex === index ? 0 : -1}
+                  className={cn(
+                    MenuItemStyles({ variant: "Default", size: "M" }),
+                    "w-full p-1 shrink-0 h-fit"
+                  )}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <Badge size={size} badgeStyle={"solid"} color={tag.variant as any} label={tag.name} />
+
+                    <div className="flex group-hover:opacity-100 opacity-0 px-[4px] py-[2px] items-center rounded-[6px] bg-white-50">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" className="rtl:rotate-180" fill="none">
+                        <path d="M3.91422 5.49995H10V6.49995H3.91422L6.5962 9.1819L5.8891 9.889L2 5.99995L5.8891 2.11084L6.5962 2.81794L3.91422 5.49995Z" fill="black" />
+                      </svg>
+                      <p className="text-black-1000 text-right text-[12px] font-[510] leading-[148%]">
+                        {addLabel}
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="px-3 py-2 typography-body-small-regular text-white-alpha-75">
+                {tags.length === 0
+                  ? "All tags selected"
+                  : "No matching tags found"}
+              </div>
+            )} </div>
         </PopoverContent>
-      </Popover>
+      </Popover >
     );
   }
 );
@@ -212,7 +231,30 @@ BadgeField.displayName = "BadgeField";
 // DropdownMenu/ContextMenu design (self-contained — no shared module).
 const menuContentStyles = cva(
   [
-    "p-1",
+    "rounded-[10px]",
+    "min-w-[240px]",
+    "outline-none",
+    "overflow-scroll",
+    "data-[state=open]:animate-in",
+    "data-[state=open]:fade-in-0",
+    "overflow-x-hidden",
+    "scrollbar-hide",
+    "flex gap-[1px] flex-col",
+  ],
+  {
+    variants: {
+      variant: {
+        PresentationStyle: [
+        ],
+      },
+      defaultVariants: {
+        variant: "PresentationStyle",
+      },
+    },
+  }
+);
+const menuContentContinerStyles = cva(
+  [
     "rounded-[14px]",
     "min-w-[240px]",
     "outline-none",
@@ -250,29 +292,21 @@ const MenuItemStyles = cva(
     "justify-start",
     "text-overflow",
     "overflow-hidden",
-    "p-[2px]",
     "transition-all",
     "bg-[rgba(184,192,204,0.36)]",
     "ease-in-out",
     "duration-300",
-    "[&>div]:flex",
-    "[&>div]:px-[12px]",
-    "[&>div]:py-[4px]",
-    "[&>div]:gap-2",
-    "[&>div]:w-full",
-    "[&>div]:rounded-[8px]",
-    "[&>div]:items-center ",
+    "flex",
+    "p-1",
+    "w-full",
+    "items-center ",
     "group",
   ],
   {
     variants: {
       variant: {
         Default: [
-          "text-content-presentation-global-primary-light",
-          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
-          "[&>div]:hover:text-black-1000",
-          "[&[data-highlighted]>div]:bg-white-alpha-75",
-          "[&[data-highlighted]>div]:text-black-1000",
+          "hover:bg-[rgba(184,192,204,0.50)] ",
         ],
       },
       size: {

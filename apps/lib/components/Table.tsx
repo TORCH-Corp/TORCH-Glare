@@ -103,12 +103,12 @@ TableRow.displayName = "TableRow";
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
-    TableHeadVariantsProps &
-    React.ButtonHTMLAttributes<HTMLButtonElement> & {
-      sortType?: "asc" | "desc" | undefined;
-      onSort?: () => void;
-      isDummy?: boolean;
-    }
+  TableHeadVariantsProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    sortType?: "asc" | "desc" | undefined;
+    onSort?: () => void;
+    isDummy?: boolean;
+  }
 >(
   (
     { className, size = "M", disabled, sortType, onSort, isDummy, ...props },

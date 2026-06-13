@@ -56,6 +56,10 @@ import {
 } from "@/components/ContextMenu";
 import { BadgeField } from "@/components/BadgeField";
 import type { Tag } from "@/hooks/useTagSelection";
+import {
+  SearchableTable,
+  type SearchableTableColumn,
+} from "@/components/SearchableTable";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
@@ -64,7 +68,9 @@ export default function Page() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
 
+    <SearchableTableDemo />
     <BadgeFieldDemo />
+    <BadgeFieldRtlDemo />
     <DropdownMenuDemo />
     <ContextMenuDemo />
     <RtlMenuDemo />
@@ -987,6 +993,54 @@ function RtlMenuDemo() {
   );
 }
 
+type Person = { id: string; name: string; role: string; email: string };
+
+const SEARCHABLE_TABLE_PEOPLE: Person[] = [
+  { id: "1", name: "Ahmed Ali", role: "Designer", email: "ahmed@torch.com" },
+  { id: "2", name: "Sara Ibrahim", role: "Frontend", email: "sara@torch.com" },
+  { id: "3", name: "Mostafa Nabil", role: "Backend", email: "mostafa@torch.com" },
+  { id: "4", name: "Lina Hassan", role: "QA", email: "lina@torch.com" },
+  { id: "5", name: "Omar Khaled", role: "DevOps", email: "omar@torch.com" },
+  { id: "6", name: "Nour Adel", role: "Research", email: "nour@torch.com" },
+];
+
+const PEOPLE_COLUMNS: SearchableTableColumn<Person>[] = [
+  { key: "name", header: "Name" },
+  { key: "role", header: "Role" },
+  { key: "email", header: "Email" },
+];
+
+function SearchableTableDemo() {
+  const [selected, setSelected] = useState<Person | null>(null);
+
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        SearchableTable
+      </h2>
+
+      <div className="space-y-4 max-w-[520px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Focus the input, search, click a row to select
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Selected: {selected ? `${selected.name} (${selected.role})` : "None"}
+        </p>
+        <SearchableTable<Person>
+          columns={PEOPLE_COLUMNS}
+          rows={SEARCHABLE_TABLE_PEOPLE}
+          value={selected}
+          onSelect={setSelected}
+          getLabel={(p) => `${p.name} — ${p.role}`}
+          getRowId={(p) => p.id}
+          icon={<i className="ri-search-line" />}
+          placeholder="Search people…"
+        />
+      </div>
+    </section>
+  );
+}
+
 const BADGE_FIELD_TAGS: Tag[] = [
   { id: "1", name: "Electronics", isSelected: true, variant: "blue" },
   { id: "2", name: "Books", isSelected: false, variant: "green" },
@@ -1000,7 +1054,7 @@ function BadgeFieldDemo() {
   const [selected, setSelected] = useState<Tag[]>([]);
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6" >
       <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
         BadgeField
       </h2>
@@ -1017,6 +1071,44 @@ function BadgeFieldDemo() {
           onValueChange={setSelected}
           icon={<i className="ri-price-tag-3-line" />}
           placeholder="Select a badge"
+        />
+      </div>
+    </section>
+  );
+}
+
+const BADGE_FIELD_TAGS_AR: Tag[] = [
+  { id: "1", name: "إلكترونيات", isSelected: true, variant: "blue" },
+  { id: "2", name: "كتب", isSelected: false, variant: "green" },
+  { id: "3", name: "ملابس", isSelected: false, variant: "purple" },
+  { id: "4", name: "المنزل", isSelected: false, variant: "yellow" },
+  { id: "5", name: "رياضة", isSelected: false, variant: "ocean" },
+  { id: "6", name: "إصدار محدود", isSelected: false, variant: "rose" },
+];
+
+function BadgeFieldRtlDemo() {
+  const [selected, setSelected] = useState<Tag[]>([]);
+
+  return (
+    <section dir="rtl" className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        BadgeField — العربية (RTL)
+      </h2>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          ابحث واختر الوسوم
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          المحدد: {selected.map((t) => t.name).join("، ") || "لا شيء"}
+        </p>
+        <BadgeField
+          dir="rtl"
+          tags={BADGE_FIELD_TAGS_AR}
+          onValueChange={setSelected}
+          icon={<i className="ri-price-tag-3-line" />}
+          placeholder="اختر وسماً"
+          addLabel="إضافة"
         />
       </div>
     </section>
