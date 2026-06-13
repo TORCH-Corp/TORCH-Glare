@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ToggleButton,
   ButtonGroup,
@@ -1007,8 +1007,67 @@ const SELECT_OPTIONS: SearchableSelectOption[] = [
   { value: "research", label: "Research", icon: <i className="ri-flask-line text-[16px]" /> },
 ];
 
+// Fake paginated + searchable "backend": 200 generated items, 20 per page,
+// filtered by query, with a simulated network delay.
+const ALL_REMOTE = Array.from({ length: 200 }, (_, i) => ({
+  value: `user-${i + 1}`,
+  label: `User ${String(i + 1).padStart(3, "0")}`,
+}));
+const PAGE_SIZE = 20;
+
+function fakeFetch(query: string, page: number) {
+  return new Promise<{ options: SearchableSelectOption[]; hasMore: boolean }>(
+    (resolve) => {
+      setTimeout(() => {
+        const matched = ALL_REMOTE.filter((o) =>
+          o.label.toLowerCase().includes(query.toLowerCase())
+        );
+        const start = page * PAGE_SIZE;
+        const slice = matched.slice(start, start + PAGE_SIZE);
+        resolve({ options: slice, hasMore: start + PAGE_SIZE < matched.length });
+      }, 600);
+    }
+  );
+}
+
 function SearchableSelectDemo() {
   const [value, setValue] = useState<string | null>(null);
+
+  // Async-mode state (you'd normally use React Query / SWR here).
+  const [asyncValue, setAsyncValue] = useState<string | null>(null);
+  const [items, setItems] = useState<SearchableSelectOption[]>([]);
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // Refetch page 0 whenever the (debounced) query changes.
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fakeFetch(query, 0).then((res) => {
+      if (cancelled) return;
+      setItems(res.options);
+      setHasMore(res.hasMore);
+      setPage(0);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
+
+  const loadMore = () => {
+    if (loading || !hasMore) return;
+    const next = page + 1;
+    setLoading(true);
+    fakeFetch(query, next).then((res) => {
+      setItems((prev) => [...prev, ...res.options]);
+      setHasMore(res.hasMore);
+      setPage(next);
+      setLoading(false);
+    });
+  };
 
   return (
     <section className="space-y-6">
@@ -1018,7 +1077,7 @@ function SearchableSelectDemo() {
 
       <div className="space-y-4 max-w-[420px]">
         <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
-          Search & pick one (menu-styled rows)
+          Static — search & pick one (menu-styled rows)
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Selected: {value ?? "None"}
@@ -1029,6 +1088,27 @@ function SearchableSelectDemo() {
           onValueChange={(v) => setValue(v)}
           icon={<i className="ri-search-line" />}
           placeholder="Search teams…"
+        />
+      </div>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Async — server search + infinite scroll (200 items, 20/page)
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Selected: {asyncValue ?? "None"} · Loaded: {items.length}
+        </p>
+        <SearchableSelect
+          options={items}
+          value={asyncValue}
+          onValueChange={(v) => setAsyncValue(v)}
+          filterClientSide={false}
+          onSearchChange={setQuery}
+          hasMore={hasMore}
+          loading={loading}
+          onLoadMore={loadMore}
+          icon={<i className="ri-search-line" />}
+          placeholder="Search users… (scroll to load more)"
         />
       </div>
     </section>
