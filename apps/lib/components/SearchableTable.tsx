@@ -6,6 +6,7 @@ import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Icon, Input, Group } from "./Input";
+import { Button } from "./Button";
 import { useClickOutside } from "../hooks/useClickOutside";
 import {
   Table,
@@ -184,6 +185,34 @@ export function SearchableTable<T extends Record<string, unknown>>({
               "!h-[24px]": size === "M",
             })}
           />
+          {/* Chevron toggle — boxed icon button matching the Select component. */}
+          <Button
+            as="span"
+            buttonType="icon"
+            tabIndex={-1}
+            aria-label={open ? "Close" : "Open"}
+            onMouseDown={(e: React.MouseEvent) => {
+              // Prevent the input's blur/focus race; toggle the dropdown.
+              e.preventDefault();
+              if (open) {
+                setOpen(false);
+              } else {
+                inputRef.current?.focus();
+                setOpen(true);
+              }
+            }}
+            className={cn(
+              "shrink-0",
+              open && "bg-background-presentation-action-hover text-white"
+            )}
+          >
+            <i
+              className={cn(
+                "ri-arrow-down-s-line text-[16px] transition-all duration-100 ease-in-out",
+                open && "rotate-180"
+              )}
+            />
+          </Button>
         </Group>
       </PopoverTrigger>
 
