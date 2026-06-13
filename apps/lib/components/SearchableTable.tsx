@@ -202,7 +202,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
               }
             }}
             className={cn(
-              "shrink-0",
+              "shrink-0 h-[32px] w-[32px] rounded-[4px]",
               open && "bg-background-presentation-action-hover text-white"
             )}
           >

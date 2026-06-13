@@ -60,6 +60,10 @@ import {
   SearchableTable,
   type SearchableTableColumn,
 } from "@/components/SearchableTable";
+import {
+  SearchableSelect,
+  type SearchableSelectOption,
+} from "@/components/SearchableSelect";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
@@ -68,6 +72,7 @@ export default function Page() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
 
+    <SearchableSelectDemo />
     <SearchableTableDemo />
     <BadgeFieldDemo />
     <BadgeFieldRtlDemo />
@@ -988,6 +993,43 @@ function RtlMenuDemo() {
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
+      </div>
+    </section>
+  );
+}
+
+const SELECT_OPTIONS: SearchableSelectOption[] = [
+  { value: "design", label: "Design", icon: <i className="ri-palette-line text-[16px]" /> },
+  { value: "frontend", label: "Frontend", icon: <i className="ri-code-s-slash-line text-[16px]" /> },
+  { value: "backend", label: "Backend", icon: <i className="ri-server-line text-[16px]" /> },
+  { value: "qa", label: "QA", icon: <i className="ri-bug-line text-[16px]" /> },
+  { value: "devops", label: "DevOps", icon: <i className="ri-terminal-box-line text-[16px]" /> },
+  { value: "research", label: "Research", icon: <i className="ri-flask-line text-[16px]" /> },
+];
+
+function SearchableSelectDemo() {
+  const [value, setValue] = useState<string | null>(null);
+
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        SearchableSelect
+      </h2>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Search & pick one (menu-styled rows)
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Selected: {value ?? "None"}
+        </p>
+        <SearchableSelect
+          options={SELECT_OPTIONS}
+          value={value}
+          onValueChange={(v) => setValue(v)}
+          icon={<i className="ri-search-line" />}
+          placeholder="Search teams…"
+        />
       </div>
     </section>
   );
