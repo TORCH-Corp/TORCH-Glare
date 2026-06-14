@@ -32,6 +32,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
   DropdownMenuGroup,
+  DropdownMenuPortal,
 } from '@torch-ui/components'
 ```
 
@@ -275,27 +276,6 @@ function DisabledMenu() {
 }
 ```
 
-### SystemStyle Variant
-
-```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
-
-function SystemMenu() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button>System</button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent variant="SystemStyle">
-        <DropdownMenuItem variant="SystemStyle">Settings</DropdownMenuItem>
-        <DropdownMenuItem variant="SystemStyle">About</DropdownMenuItem>
-        <DropdownMenuItem variant="SystemStyle">Help</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
-```
-
 ### Right-click Menu
 
 For a true right-click (context) menu, use the dedicated [ContextMenu](./context-menu.md) component instead of DropdownMenu — it opens at the pointer on right-click / long-press.
@@ -340,12 +320,12 @@ function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'SystemStyle' \| 'PresentationStyle'` | `'PresentationStyle'` | Visual style variant |
+| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style variant |
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant |
 | `className` | `string` | - | Additional CSS classes |
 | `sideOffset` | `number` | `4` | Distance from trigger |
 | `collisionPadding` | `number` | `8` | Gap kept from viewport edges when flipping/shifting |
-| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment |
+| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Alignment (inherited from Radix) |
 | `autoGroup` | `boolean` | `true` | Auto-wrap loose items in boxed groups |
 
 ### DropdownMenuItem
@@ -354,6 +334,7 @@ function Example() {
 |------|------|---------|-------------|
 | `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Item style variant |
 | `size` | `'S' \| 'M'` | `'M'` | Item size |
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
 | `disabled` | `boolean` | `false` | Disabled state |
 | `active` | `boolean` | `false` | Active state |
 | `onSelect` | `(event) => void` | - | Select handler |
@@ -365,6 +346,7 @@ function Example() {
 | `checked` | `boolean \| 'indeterminate'` | `false` | Checked state |
 | `onCheckedChange` | `(checked: boolean) => void` | - | Change handler |
 | `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
+| `size` | `'S' \| 'M'` | `'M'` | Item size |
 
 ### DropdownMenuRadioGroup
 
@@ -379,11 +361,30 @@ function Example() {
 |------|------|---------|-------------|
 | `value` | `string` | Required | Radio option value |
 | `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
+| `size` | `'S' \| 'M'` | `'M'` | Item size |
+
+### DropdownMenuSubTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
+| `size` | `'S' \| 'M'` | `'M'` | Item size |
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
+| `className` | `string` | - | Additional CSS classes |
+
+### DropdownMenuSubContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style variant |
+| `autoGroup` | `boolean` | `true` | Auto-wrap loose items in boxed groups |
+| `className` | `string` | - | Additional CSS classes |
 
 ### DropdownMenuLabel
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
 | `className` | `string` | - | Additional CSS classes |
 
 ### DropdownMenuGroup
@@ -419,11 +420,13 @@ export const DropdownMenu: React.FC<DropdownMenuProps>
 
 // Content
 interface DropdownMenuContentProps {
-  variant?: 'SystemStyle' | 'PresentationStyle'
+  variant?: 'PresentationStyle'
   theme?: 'dark' | 'light' | 'default'
   className?: string
   sideOffset?: number
+  collisionPadding?: number
   align?: 'start' | 'center' | 'end'
+  autoGroup?: boolean
 }
 
 export const DropdownMenuContent: React.ForwardRefExoticComponent<DropdownMenuContentProps>
@@ -432,6 +435,7 @@ export const DropdownMenuContent: React.ForwardRefExoticComponent<DropdownMenuCo
 interface DropdownMenuItemProps {
   variant?: 'Default' | 'info' | 'Negative'
   size?: 'S' | 'M'
+  inset?: boolean
   disabled?: boolean
   active?: boolean
   onSelect?: (event: Event) => void
@@ -444,6 +448,7 @@ interface DropdownMenuCheckboxItemProps {
   checked?: boolean | 'indeterminate'
   onCheckedChange?: (checked: boolean) => void
   variant?: 'Default' | 'info' | 'Negative'
+  size?: 'S' | 'M'
 }
 
 export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<DropdownMenuCheckboxItemProps>
@@ -452,6 +457,8 @@ export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<DropdownM
 interface DropdownMenuRadioItemProps {
   value: string
   variant?: 'Default' | 'info' | 'Negative'
+  size?: 'S' | 'M'
+  onSelect?: (event: Event) => void
 }
 
 export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<DropdownMenuRadioItemProps>
@@ -598,7 +605,7 @@ describe('DropdownMenu', () => {
 | Bundle size (minified) | ~8kb |
 | Bundle size (gzipped) | ~3kb |
 | Dependencies | @radix-ui/react-dropdown-menu (~15kb) |
-| Max height | 200px (scrollable) |
+| Max height | Radix available height (scrollable) |
 | Tree-shakeable | ✅ |
 
 ## Best Practices

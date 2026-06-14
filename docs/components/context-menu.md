@@ -272,6 +272,7 @@ The right-click zone. Wrap it around the element the menu should open from.
 |------|------|---------|-------------|
 | `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Item style variant |
 | `size` | `'S' \| 'M'` | `'M'` | Item size |
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
 | `active` | `boolean` | `false` | Active (selected) state |
 | `disabled` | `boolean` | `false` | Disabled state (still shows but is not selectable) |
 | `onSelect` | `(event: Event) => void` | - | Select handler; closes the menu by default |
@@ -311,6 +312,7 @@ The right-click zone. Wrap it around the element the menu should open from.
 |------|------|---------|-------------|
 | `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
 | `size` | `'S' \| 'M'` | `'M'` | Item size |
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
 | `className` | `string` | - | Additional CSS classes |
 
 Renders a trailing chevron (`ri-arrow-right-s-line`) that mirrors in RTL.
@@ -319,6 +321,7 @@ Renders a trailing chevron (`ri-arrow-right-s-line`) that mirrors in RTL.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
 | `className` | `string` | - | Additional CSS classes |
 
 A non-interactive section heading. Acts as a boundary for auto-grouping.

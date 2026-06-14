@@ -194,7 +194,7 @@ function AsyncExample() {
 | `searchKeys` | `(keyof T & string)[]` | Every column `key` | Which fields client-side search matches against. |
 | `placeholder` | `string` | `'Search…'` | Input placeholder text. |
 | `size` | `'XS' \| 'S' \| 'M'` | `'M'` | Input size. (`XS` maps the underlying Group to `S` with a tighter input height.) |
-| `variant` | `'SystemStyle' \| 'PresentationStyle'` | `'PresentationStyle'` | Visual style of the input and dropdown surface. |
+| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style of the input and dropdown surface. |
 | `icon` | `ReactNode` | - | Optional leading icon rendered inside the input. |
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant, applied via `data-theme`. |
 | `dir` | `string` | - | Text direction (e.g. `'rtl'`), applied to the input group and dropdown. |
@@ -244,7 +244,7 @@ interface SearchableTableProps<T> {
   searchKeys?: (keyof T & string)[]
   placeholder?: string
   size?: 'XS' | 'S' | 'M'
-  variant?: 'SystemStyle' | 'PresentationStyle'
+  variant?: 'PresentationStyle'
   icon?: React.ReactNode
   theme?: Themes
   dir?: string

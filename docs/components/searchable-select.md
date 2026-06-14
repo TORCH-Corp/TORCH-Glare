@@ -170,7 +170,7 @@ function ArabicPicker({ options, value, onValueChange }) {
 | `onValueChange` | `(value: string, option: SearchableSelectOption) => void` | - | Called when an option is selected. Receives the value and the full option object. |
 | `placeholder` | `string` | `'Search…'` | Placeholder text for the search input. |
 | `size` | `'XS' \| 'S' \| 'M'` | `'M'` | Field size. |
-| `variant` | `'SystemStyle' \| 'PresentationStyle'` | `'PresentationStyle'` | Visual style variant for the field and dropdown surface. |
+| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style variant for the field and dropdown surface. |
 | `icon` | `ReactNode` | - | Optional leading icon rendered inside the field. |
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant, applied via `data-theme`. |
 | `dir` | `string` | - | Text direction (e.g. `'rtl'`) for the field and dropdown. |
@@ -210,7 +210,7 @@ interface SearchableSelectProps {
   onValueChange?: (value: string, option: SearchableSelectOption) => void
   placeholder?: string
   size?: 'XS' | 'S' | 'M'
-  variant?: 'SystemStyle' | 'PresentationStyle'
+  variant?: 'PresentationStyle'
   icon?: ReactNode
   theme?: 'dark' | 'light' | 'default'
   dir?: string

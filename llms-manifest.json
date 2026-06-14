@@ -1,7 +1,7 @@
 {
   "library": {
     "name": "torch-glare",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "description": "A comprehensive React component library with 60+ modern UI components",
     "license": "MIT",
     "homepage": "https://glare.torchcorp.com",
@@ -19,9 +19,9 @@
     }
   },
   "statistics": {
-    "totalComponents": 68,
-    "documentedComponents": 65,
-    "coverage": 95.6,
+    "totalComponents": 74,
+    "documentedComponents": 71,
+    "coverage": 95.9,
     "totalHooks": 4,
     "totalProviders": 1,
     "totalPlugins": 4,
@@ -64,15 +64,10 @@
       ]
     },
     "forms": {
-      "count": 20,
+      "count": 19,
       "items": [
         {
           "name": "SearchableSelect",
-          "version": "1.0.0",
-          "documented": true
-        },
-        {
-          "name": "SearchableTable",
           "version": "1.0.0",
           "documented": true
         },
@@ -209,8 +204,13 @@
       ]
     },
     "dataDisplay": {
-      "count": 16,
+      "count": 17,
       "items": [
+        {
+          "name": "SearchableTable",
+          "version": "1.0.0",
+          "documented": true
+        },
         {
           "name": "Avatar",
           "version": "1.1.15",

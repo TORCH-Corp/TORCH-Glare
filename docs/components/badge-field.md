@@ -33,9 +33,9 @@ import { useState } from 'react'
 
 export function BasicBadgeField() {
   const [tags] = useState([
-    { id: '1', name: 'React', variant: 'blue' },
-    { id: '2', name: 'TypeScript', variant: 'purple' },
-    { id: '3', name: 'Next.js', variant: 'slate' },
+    { id: '1', name: 'React', isSelected: false, variant: 'blue' },
+    { id: '2', name: 'TypeScript', isSelected: false, variant: 'purple' },
+    { id: '3', name: 'Next.js', isSelected: false, variant: 'slate' },
   ])
 
   return (
@@ -59,16 +59,16 @@ export function TechnologySelector() {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([])
 
   const allTags: Tag[] = [
-    { id: '1', name: 'React', variant: 'blue' },
-    { id: '2', name: 'TypeScript', variant: 'purple' },
-    { id: '3', name: 'Next.js', variant: 'slate' },
-    { id: '4', name: 'Tailwind CSS', variant: 'green' },
-    { id: '5', name: 'Node.js', variant: 'green' },
-    { id: '6', name: 'PostgreSQL', variant: 'blue' },
-    { id: '7', name: 'MongoDB', variant: 'green' },
-    { id: '8', name: 'GraphQL', variant: 'purple' },
-    { id: '9', name: 'REST API', variant: 'gray' },
-    { id: '10', name: 'Docker', variant: 'blue' },
+    { id: '1', name: 'React', isSelected: false, variant: 'blue' },
+    { id: '2', name: 'TypeScript', isSelected: false, variant: 'purple' },
+    { id: '3', name: 'Next.js', isSelected: false, variant: 'slate' },
+    { id: '4', name: 'Tailwind CSS', isSelected: false, variant: 'green' },
+    { id: '5', name: 'Node.js', isSelected: false, variant: 'green' },
+    { id: '6', name: 'PostgreSQL', isSelected: false, variant: 'blue' },
+    { id: '7', name: 'MongoDB', isSelected: false, variant: 'green' },
+    { id: '8', name: 'GraphQL', isSelected: false, variant: 'purple' },
+    { id: '9', name: 'REST API', isSelected: false, variant: 'gray' },
+    { id: '10', name: 'Docker', isSelected: false, variant: 'blue' },
   ]
 
   return (
@@ -101,13 +101,13 @@ Filter content by multiple categories.
 ```tsx
 export function CategoryFilter() {
   const categories: Tag[] = [
-    { id: 'design', name: 'Design', variant: 'purple' },
-    { id: 'development', name: 'Development', variant: 'blue' },
-    { id: 'marketing', name: 'Marketing', variant: 'yellow' },
-    { id: 'sales', name: 'Sales', variant: 'green' },
-    { id: 'support', name: 'Support', variant: 'orange' },
-    { id: 'hr', name: 'Human Resources', variant: 'rose' },
-    { id: 'finance', name: 'Finance', variant: 'slate' },
+    { id: 'design', name: 'Design', isSelected: false, variant: 'purple' },
+    { id: 'development', name: 'Development', isSelected: false, variant: 'blue' },
+    { id: 'marketing', name: 'Marketing', isSelected: false, variant: 'yellow' },
+    { id: 'sales', name: 'Sales', isSelected: false, variant: 'green' },
+    { id: 'support', name: 'Support', isSelected: false, variant: 'orange' },
+    { id: 'hr', name: 'Human Resources', isSelected: false, variant: 'rose' },
+    { id: 'finance', name: 'Finance', isSelected: false, variant: 'slate' },
   ]
 
   const [selectedCategories, setSelectedCategories] = useState<Tag[]>([])
@@ -148,21 +148,21 @@ Multi-select skills for job applications or profiles.
 ```tsx
 export function SkillsSelector() {
   const skills: Tag[] = [
-    { id: 'js', name: 'JavaScript', variant: 'yellow' },
-    { id: 'ts', name: 'TypeScript', variant: 'blue' },
-    { id: 'react', name: 'React', variant: 'blue' },
-    { id: 'vue', name: 'Vue.js', variant: 'green' },
-    { id: 'angular', name: 'Angular', variant: 'red' },
-    { id: 'node', name: 'Node.js', variant: 'green' },
-    { id: 'python', name: 'Python', variant: 'blue' },
-    { id: 'java', name: 'Java', variant: 'orange' },
-    { id: 'go', name: 'Go', variant: 'green' },
-    { id: 'rust', name: 'Rust', variant: 'orange' },
-    { id: 'sql', name: 'SQL', variant: 'slate' },
-    { id: 'nosql', name: 'NoSQL', variant: 'green' },
-    { id: 'aws', name: 'AWS', variant: 'yellow' },
-    { id: 'azure', name: 'Azure', variant: 'blue' },
-    { id: 'gcp', name: 'Google Cloud', variant: 'blue' },
+    { id: 'js', name: 'JavaScript', isSelected: false, variant: 'yellow' },
+    { id: 'ts', name: 'TypeScript', isSelected: false, variant: 'blue' },
+    { id: 'react', name: 'React', isSelected: false, variant: 'blue' },
+    { id: 'vue', name: 'Vue.js', isSelected: false, variant: 'green' },
+    { id: 'angular', name: 'Angular', isSelected: false, variant: 'red' },
+    { id: 'node', name: 'Node.js', isSelected: false, variant: 'green' },
+    { id: 'python', name: 'Python', isSelected: false, variant: 'blue' },
+    { id: 'java', name: 'Java', isSelected: false, variant: 'orange' },
+    { id: 'go', name: 'Go', isSelected: false, variant: 'green' },
+    { id: 'rust', name: 'Rust', isSelected: false, variant: 'orange' },
+    { id: 'sql', name: 'SQL', isSelected: false, variant: 'slate' },
+    { id: 'nosql', name: 'NoSQL', isSelected: false, variant: 'green' },
+    { id: 'aws', name: 'AWS', isSelected: false, variant: 'yellow' },
+    { id: 'azure', name: 'Azure', isSelected: false, variant: 'blue' },
+    { id: 'gcp', name: 'Google Cloud', isSelected: false, variant: 'blue' },
   ]
 
   const [selectedSkills, setSelectedSkills] = useState<Tag[]>([])
@@ -213,16 +213,16 @@ Tag management for projects with custom variants.
 ```tsx
 export function ProjectTags() {
   const projectTags: Tag[] = [
-    { id: '1', name: 'High Priority', variant: 'red' },
-    { id: '2', name: 'In Progress', variant: 'blue' },
-    { id: '3', name: 'Completed', variant: 'green' },
-    { id: '4', name: 'On Hold', variant: 'yellow' },
-    { id: '5', name: 'Needs Review', variant: 'purple' },
-    { id: '6', name: 'Client Approval', variant: 'purple' },
-    { id: '7', name: 'Internal', variant: 'gray' },
-    { id: '8', name: 'External', variant: 'slate' },
-    { id: '9', name: 'Urgent', variant: 'orange' },
-    { id: '10', name: 'Can Wait', variant: 'green' },
+    { id: '1', name: 'High Priority', isSelected: false, variant: 'red' },
+    { id: '2', name: 'In Progress', isSelected: false, variant: 'blue' },
+    { id: '3', name: 'Completed', isSelected: false, variant: 'green' },
+    { id: '4', name: 'On Hold', isSelected: false, variant: 'yellow' },
+    { id: '5', name: 'Needs Review', isSelected: false, variant: 'purple' },
+    { id: '6', name: 'Client Approval', isSelected: false, variant: 'purple' },
+    { id: '7', name: 'Internal', isSelected: false, variant: 'gray' },
+    { id: '8', name: 'External', isSelected: false, variant: 'slate' },
+    { id: '9', name: 'Urgent', isSelected: false, variant: 'orange' },
+    { id: '10', name: 'Can Wait', isSelected: false, variant: 'green' },
   ]
 
   const [projectData, setProjectData] = useState({
@@ -275,9 +275,9 @@ BadgeField in various sizes.
 ```tsx
 export function BadgeFieldSizes() {
   const tags: Tag[] = [
-    { id: '1', name: 'Small', variant: 'blue' },
-    { id: '2', name: 'Medium', variant: 'green' },
-    { id: '3', name: 'Large', variant: 'purple' },
+    { id: '1', name: 'Small', isSelected: false, variant: 'blue' },
+    { id: '2', name: 'Medium', isSelected: false, variant: 'green' },
+    { id: '3', name: 'Large', isSelected: false, variant: 'purple' },
   ]
 
   return (
@@ -308,9 +308,9 @@ Badge field with custom icons and action buttons.
 ```tsx
 export function BadgeFieldWithIcon() {
   const tags: Tag[] = [
-    { id: '1', name: 'JavaScript', variant: 'yellow' },
-    { id: '2', name: 'Python', variant: 'blue' },
-    { id: '3', name: 'Ruby', variant: 'red' },
+    { id: '1', name: 'JavaScript', isSelected: false, variant: 'yellow' },
+    { id: '2', name: 'Python', isSelected: false, variant: 'blue' },
+    { id: '3', name: 'Ruby', isSelected: false, variant: 'red' },
   ]
 
   return (
@@ -339,9 +339,9 @@ export function BadgeFieldWithError() {
   const [error, setError] = useState('')
 
   const availableTags: Tag[] = [
-    { id: '1', name: 'Option 1', variant: 'blue' },
-    { id: '2', name: 'Option 2', variant: 'green' },
-    { id: '3', name: 'Option 3', variant: 'purple' },
+    { id: '1', name: 'Option 1', isSelected: false, variant: 'blue' },
+    { id: '2', name: 'Option 2', isSelected: false, variant: 'green' },
+    { id: '3', name: 'Option 3', isSelected: false, variant: 'purple' },
   ]
 
   const handleChange = (newTags: Tag[]) => {
@@ -382,10 +382,10 @@ Tag-style email recipient selector.
 ```tsx
 export function EmailRecipients() {
   const contacts: Tag[] = [
-    { id: '1', name: 'john@example.com', variant: 'blue' },
-    { id: '2', name: 'jane@example.com', variant: 'green' },
-    { id: '3', name: 'team@example.com', variant: 'purple' },
-    { id: '4', name: 'support@example.com', variant: 'slate' },
+    { id: '1', name: 'john@example.com', isSelected: false, variant: 'blue' },
+    { id: '2', name: 'jane@example.com', isSelected: false, variant: 'green' },
+    { id: '3', name: 'team@example.com', isSelected: false, variant: 'purple' },
+    { id: '4', name: 'support@example.com', isSelected: false, variant: 'slate' },
   ]
 
   const [recipients, setRecipients] = useState<Tag[]>([])
@@ -422,37 +422,29 @@ export function EmailRecipients() {
 }
 ```
 
-### Variants
+### RTL Support
 
-System and Presentation style variants.
+Pass `dir="rtl"` (and a translated `addLabel`) to mirror the field for right-to-left languages.
 
 ```tsx
-export function BadgeFieldVariants() {
+export function RtlBadgeField() {
   const tags: Tag[] = [
-    { id: '1', name: 'Tag 1', variant: 'blue' },
-    { id: '2', name: 'Tag 2', variant: 'green' },
-    { id: '3', name: 'Tag 3', variant: 'purple' },
+    { id: '1', name: 'إلكترونيات', isSelected: false, variant: 'blue' },
+    { id: '2', name: 'كتب', isSelected: false, variant: 'green' },
+    { id: '3', name: 'ملابس', isSelected: false, variant: 'purple' },
   ]
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="font-semibold mb-2">System Style</h3>
-        <BadgeField
-          tags={tags}
-          variant="SystemStyle"
-          placeholder="System style variant..."
-        />
-      </div>
+  const [selected, setSelected] = useState<Tag[]>([])
 
-      <div>
-        <h3 className="font-semibold mb-2">Presentation Style</h3>
-        <BadgeField
-          tags={tags}
-          variant="PresentationStyle"
-          placeholder="Presentation style variant..."
-        />
-      </div>
+  return (
+    <div dir="rtl">
+      <BadgeField
+        dir="rtl"
+        tags={tags}
+        onValueChange={setSelected}
+        addLabel="إضافة"
+        placeholder="اختر وسماً"
+      />
     </div>
   )
 }
@@ -469,7 +461,7 @@ Extends all Input element props (except size and variant).
 | tags | `Tag[]` | **Required** | Available tags to select from |
 | onValueChange | `(tags: Tag[]) => void` | - | Callback when selection changes |
 | size | `'XS' \| 'S' \| 'M'` | `'M'` | Field size |
-| variant | `'SystemStyle' \| 'PresentationStyle'` | `'PresentationStyle'` | Visual variant |
+| variant | `'PresentationStyle'` | `'PresentationStyle'` | Visual variant |
 | icon | `ReactNode` | - | Leading icon |
 | errorMessage | `string` | - | Error message (shows tooltip) |
 | onTable | `boolean` | `false` | Table-specific styling |
@@ -478,6 +470,8 @@ Extends all Input element props (except size and variant).
 | required | `boolean` | `false` | Required indicator |
 | theme | `Themes` | - | Theme override |
 | actionButton | `ReactNode` | - | Trailing action button |
+| addLabel | `string` | `'add'` | Label for the add action shown in the field |
+| dir | `string` | `'ltr'` | Reading direction (`'rtl'` for right-to-left) |
 | placeholder | `string` | - | Input placeholder text |
 
 ### Tag Type
@@ -486,7 +480,10 @@ Extends all Input element props (except size and variant).
 interface Tag {
   id: string
   name: string
-  variant?: BadgeVariant
+  isSelected: boolean
+  variant?: string
+  value?: string
+  [key: string]: any
 }
 ```
 
@@ -500,8 +497,8 @@ BadgeField includes comprehensive keyboard support:
 | `ArrowUp` | Move focus to previous tag in dropdown |
 | `ArrowLeft` | Move focus to previous selected tag |
 | `ArrowRight` | Move focus to next selected tag |
-| `Enter` | Select focused tag / Remove focused selected tag |
-| `Backspace` | Remove last selected tag when input is empty |
+| `Enter` | Select the focused tag from the dropdown |
+| `Delete` / `Backspace` | Remove the focused selected tag |
 | `Escape` | Close dropdown |
 | `Tab` | Close dropdown and move to next field |
 
@@ -531,7 +528,7 @@ BadgeField includes comprehensive keyboard support:
 interface BadgeFieldProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'variant'> {
   size?: 'XS' | 'S' | 'M'
-  variant?: 'SystemStyle' | 'PresentationStyle'
+  variant?: 'PresentationStyle'
   icon?: ReactNode
   errorMessage?: string
   onTable?: boolean
@@ -542,12 +539,16 @@ interface BadgeFieldProps
   actionButton?: ReactNode
   tags: Tag[]
   onValueChange?: (tags: Tag[]) => void
+  addLabel?: string
 }
 
 interface Tag {
   id: string
   name: string
-  variant?: BadgeVariant
+  isSelected: boolean
+  variant?: string
+  value?: string
+  [key: string]: any
 }
 ```
 
@@ -596,8 +597,8 @@ import { BadgeField } from '@/components/BadgeField'
 
 describe('BadgeField', () => {
   const mockTags = [
-    { id: '1', name: 'Tag 1', variant: 'blue' },
-    { id: '2', name: 'Tag 2', variant: 'green' },
+    { id: '1', name: 'Tag 1', isSelected: false, variant: 'blue' },
+    { id: '2', name: 'Tag 2', isSelected: false, variant: 'green' },
   ]
 
   it('renders placeholder', () => {
@@ -638,7 +639,10 @@ describe('BadgeField', () => {
     fireEvent.focus(input)
     fireEvent.click(screen.getByText('Tag 1'))
 
-    expect(handleChange).toHaveBeenCalledWith([mockTags[0]])
+    // Selecting a tag emits it with isSelected: true
+    expect(handleChange).toHaveBeenCalledWith([
+      expect.objectContaining({ id: '1', isSelected: true }),
+    ])
   })
 
   it('removes tag on unselect', () => {

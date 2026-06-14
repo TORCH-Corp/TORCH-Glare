@@ -52,6 +52,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       addLabel = "add",
       dir,
       children,
+      onValueChange,
       ...props
     },
     forwardedRef
@@ -85,11 +86,17 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       searchTags
     } = useTagSelection({
       Tags: tags,
-      onTagsChange: (e) => props.onChange?.({
-        target: {
-          value: e
-        }
-      } as any),
+      onTagsChange: (e) => {
+        // Native onChange keeps the event-shaped API (Tag[] in target.value)
+        // for react-hook-form / Controller; onValueChange is the typed, direct
+        // callback consumers and the docs use.
+        props.onChange?.({
+          target: {
+            value: e
+          }
+        } as any);
+        onValueChange?.(e);
+      },
       inputRef
     });
 
