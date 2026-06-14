@@ -1,12 +1,12 @@
 "use client";
 
-import { ReactNode, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Icon, Input, Group } from "./Input";
-import { Button } from "./Button";
+import { Button, LoadingIcon } from "./Button";
 import { useClickOutside } from "../hooks/useClickOutside";
 import {
   Table,
@@ -53,7 +53,31 @@ interface Props<T> {
   theme?: Themes;
   dir?: string;
   className?: string;
+
+  // --- Async / backend pagination (all optional; static `rows` still works) ---
+  /**
+   * When true (default), the component filters `rows` by searchKeys locally.
+   * Set false for server-side search — `rows` are rendered as-is and you
+   * refetch them in response to `onSearchChange`.
+   */
+  filterClientSide?: boolean;
+  /** Debounced as the user types — refetch your data here (server search). */
+  onSearchChange?: (query: string) => void;
+  /** Debounce for `onSearchChange`, in ms (default 300). */
+  searchDebounceMs?: number;
+  /** Whether more pages are available; gates the infinite-scroll loader. */
+  hasMore?: boolean;
+  /** Whether a fetch is in flight; shows a loading row and blocks onLoadMore. */
+  loading?: boolean;
+  /** Called when the list nears the bottom and `hasMore && !loading`. */
+  onLoadMore?: () => void;
+  /** Max rows visible before the list scrolls (default 6). */
+  maxVisibleRows?: number;
 }
+
+// One M-size table row ≈ 40px + the 44px sticky header.
+const ROW_HEIGHT = 40;
+const HEADER_HEIGHT = 44;
 
 // Popover surface styled like the DropdownMenu (kept local — self-contained).
 const tableDropdownStyles = cva(
@@ -62,8 +86,7 @@ const tableDropdownStyles = cva(
     "rounded-[14px]",
     "border-0", // neutralize PopoverContent's base border (the card provides its own)
     "outline-none",
-    "max-h-[320px]",
-    "overflow-auto",
+    "overflow-y-auto",
     "scrollbar-hide",
     "backdrop-blur-[21px]",
     "data-[state=open]:animate-in",
@@ -101,12 +124,37 @@ export function SearchableTable<T extends Record<string, unknown>>({
   theme,
   dir,
   className,
+  filterClientSide = true,
+  onSearchChange,
+  searchDebounceMs = 300,
+  hasMore = false,
+  loading = false,
+  onLoadMore,
+  maxVisibleRows = 6,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [dropdownWidth, setDropdownWidth] = useState(0);
   const popoverContentRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // Debounced server search: notify the consumer to refetch when the query
+  // settles. Skipped entirely if no onSearchChange is provided (static mode).
+  useEffect(() => {
+    if (!onSearchChange) return;
+    const id = setTimeout(() => onSearchChange(search.trim()), searchDebounceMs);
+    return () => clearTimeout(id);
+  }, [search, onSearchChange, searchDebounceMs]);
+
+  // Infinite scroll: when the vertical scroll viewport nears the bottom, ask the
+  // consumer to load the next page (onScroll is reliable across Radix's portal).
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!onLoadMore || !hasMore || loading) return;
+    const el = e.currentTarget;
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 80) {
+      onLoadMore();
+    }
+  };
 
   const groupRef = useClickOutside<HTMLDivElement>((e) => {
     const target = e?.target as Node;
@@ -125,6 +173,8 @@ export function SearchableTable<T extends Record<string, unknown>>({
   const keysToSearch = searchKeys ?? columns.map((c) => c.key);
 
   const filteredRows = useMemo(() => {
+    // Server-side search mode: render rows as-is (already filtered upstream).
+    if (!filterClientSide) return rows;
     const q = search.trim().toLowerCase();
     if (!q) return rows;
     return rows.filter((row) =>
@@ -132,7 +182,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
         String(row[k] ?? "").toLowerCase().includes(q)
       )
     );
-  }, [rows, search, keysToSearch]);
+  }, [rows, search, keysToSearch, filterClientSide]);
 
   const selectedId = value ? rowId(value) : undefined;
   // True while the user is actively typing a query. When false, the input shows
@@ -221,13 +271,17 @@ export function SearchableTable<T extends Record<string, unknown>>({
         data-theme={theme}
         ref={popoverContentRef}
         variant={variant}
-        // Lock the dropdown to the input's width; the table fits within it via
-        // w-full + table-fixed (columns share this width, no overflow).
-        style={{ width: dropdownWidth || undefined }}
+        onScroll={handleScroll}
+        // Lock the dropdown to the input's width; the table scrolls horizontally
+        // inside it. Cap height to ~maxVisibleRows (+ header) so the rest scrolls.
+        style={{
+          width: dropdownWidth || undefined,
+          maxHeight: HEADER_HEIGHT + maxVisibleRows * ROW_HEIGHT + 8,
+        }}
         onOpenAutoFocus={(e) => e.preventDefault()}
         className={cn(tableDropdownStyles({ variant }))}
       >
-        {filteredRows.length > 0 ? (
+        {filteredRows.length > 0 && (
           // Table-DDV wrapper: frosted bordered card around the table (Figma).
           // The radius + overflow-hidden also go on the <table> itself, because a
           // <table>'s corner cells paint to square edges and otherwise cover an
@@ -286,9 +340,19 @@ export function SearchableTable<T extends Record<string, unknown>>({
               </TableBody>
             </Table>
           </div>
-        ) : (
+        )}
+
+        {/* Empty state — only when nothing is loading. */}
+        {filteredRows.length === 0 && !loading && (
           <div className="px-3 py-4 typography-body-small-regular text-white-alpha-75">
             No results found
+          </div>
+        )}
+
+        {/* Loading row (initial load or fetching the next page). */}
+        {loading && (
+          <div className="flex items-center justify-center py-2">
+            <LoadingIcon size="M" />
           </div>
         )}
       </PopoverContent>

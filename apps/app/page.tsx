@@ -1132,8 +1132,67 @@ const PEOPLE_COLUMNS: SearchableTableColumn<Person>[] = [
   { key: "email", header: "Email" },
 ];
 
+// Fake paginated + searchable "backend" of 200 people, 20 per page.
+const ALL_REMOTE_PEOPLE: Person[] = Array.from({ length: 200 }, (_, i) => ({
+  id: `p-${i + 1}`,
+  name: `Person ${String(i + 1).padStart(3, "0")}`,
+  role: ["Designer", "Frontend", "Backend", "QA", "DevOps"][i % 5],
+  email: `person${i + 1}@torch.com`,
+}));
+const PEOPLE_PAGE_SIZE = 20;
+
+function fetchPeople(query: string, page: number) {
+  return new Promise<{ rows: Person[]; hasMore: boolean }>((resolve) => {
+    setTimeout(() => {
+      const matched = ALL_REMOTE_PEOPLE.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query.toLowerCase()) ||
+          p.role.toLowerCase().includes(query.toLowerCase())
+      );
+      const start = page * PEOPLE_PAGE_SIZE;
+      const slice = matched.slice(start, start + PEOPLE_PAGE_SIZE);
+      resolve({ rows: slice, hasMore: start + PEOPLE_PAGE_SIZE < matched.length });
+    }, 600);
+  });
+}
+
 function SearchableTableDemo() {
   const [selected, setSelected] = useState<Person | null>(null);
+
+  // Async-mode state (you'd normally use React Query / SWR here).
+  const [asyncSelected, setAsyncSelected] = useState<Person | null>(null);
+  const [rows, setRows] = useState<Person[]>([]);
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetchPeople(query, 0).then((res) => {
+      if (cancelled) return;
+      setRows(res.rows);
+      setHasMore(res.hasMore);
+      setPage(0);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
+
+  const loadMore = () => {
+    if (loading || !hasMore) return;
+    const next = page + 1;
+    setLoading(true);
+    fetchPeople(query, next).then((res) => {
+      setRows((prev) => [...prev, ...res.rows]);
+      setHasMore(res.hasMore);
+      setPage(next);
+      setLoading(false);
+    });
+  };
 
   return (
     <section className="space-y-6">
@@ -1143,7 +1202,7 @@ function SearchableTableDemo() {
 
       <div className="space-y-4 max-w-[520px]">
         <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
-          Focus the input, search, click a row to select
+          Static — search, click a row to select
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Selected: {selected ? `${selected.name} (${selected.role})` : "None"}
@@ -1157,6 +1216,31 @@ function SearchableTableDemo() {
           getRowId={(p) => p.id}
           icon={<i className="ri-search-line" />}
           placeholder="Search people…"
+        />
+      </div>
+
+      <div className="space-y-4 max-w-[520px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Async — server search + infinite scroll (200 rows, 20/page)
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Selected: {asyncSelected ? asyncSelected.name : "None"} · Loaded:{" "}
+          {rows.length}
+        </p>
+        <SearchableTable<Person>
+          columns={PEOPLE_COLUMNS}
+          rows={rows}
+          value={asyncSelected}
+          onSelect={setAsyncSelected}
+          getLabel={(p) => `${p.name} — ${p.role}`}
+          getRowId={(p) => p.id}
+          filterClientSide={false}
+          onSearchChange={setQuery}
+          hasMore={hasMore}
+          loading={loading}
+          onLoadMore={loadMore}
+          icon={<i className="ri-search-line" />}
+          placeholder="Search people… (scroll to load more)"
         />
       </div>
     </section>
