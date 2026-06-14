@@ -1,13 +1,13 @@
 ---
 title: DropdownMenu
-description: Comprehensive dropdown menu component with rich features including sub-menus, checkboxes, radio groups, and keyboard navigation
+description: Comprehensive dropdown menu component with rich features including sub-menus, checkboxes, radio groups, auto-grouping, and keyboard navigation
 group: Overlays & Dialogs
-keywords: [dropdown-menu, menu, context-menu, radix-ui, submenu, checkbox]
+keywords: [dropdown-menu, menu, radix-ui, submenu, checkbox, radio, auto-group]
 ---
 
 # DropdownMenu
 
-> A feature-rich dropdown menu component with support for nested submenus, checkbox items, radio groups, separators, and keyboard shortcuts. Perfect for application menus, context menus, and complex action lists.
+> A feature-rich dropdown menu component with support for nested submenus, checkbox items, radio groups, auto-grouped boxed sections, and keyboard shortcuts. Perfect for application menus and complex action lists. For right-click menus, see [ContextMenu](./context-menu.md).
 
 ## Installation
 
@@ -27,7 +27,6 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubTrigger,
@@ -35,6 +34,8 @@ import {
   DropdownMenuGroup,
 } from '@torch-ui/components'
 ```
+
+> **Auto-grouping:** Loose items placed directly in `DropdownMenuContent` (or `DropdownMenuSubContent`) are automatically wrapped in a boxed group, so they render inside a rounded container without you writing `DropdownMenuGroup` yourself. A `DropdownMenuLabel`, an explicit `DropdownMenuGroup`, or a `DropdownMenuRadioGroup` acts as a boundary that starts a new box. Disable this with `autoGroup={false}` on the content. (There is no `DropdownMenuSeparator` — separation comes from labels and the boxed groups.)
 
 ## Quick Examples
 
@@ -122,10 +123,12 @@ function ShortcutMenu() {
 }
 ```
 
-### With Labels and Separators
+### With Labels and Grouping
+
+Labels act as section boundaries. The loose items between labels are automatically wrapped in boxed groups — no separator component needed.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@torch-ui/components'
 
 function OrganizedMenu() {
   return (
@@ -138,13 +141,9 @@ function OrganizedMenu() {
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
 
-        <DropdownMenuSeparator />
-
         <DropdownMenuLabel>Settings</DropdownMenuLabel>
         <DropdownMenuItem>Preferences</DropdownMenuItem>
         <DropdownMenuItem>Keyboard Shortcuts</DropdownMenuItem>
-
-        <DropdownMenuSeparator />
 
         <DropdownMenuItem variant="Negative">Logout</DropdownMenuItem>
       </DropdownMenuContent>
@@ -155,8 +154,10 @@ function OrganizedMenu() {
 
 ### With Checkboxes
 
+Checkbox and radio items keep the menu **open** when toggled (the built-in `onSelect` calls `preventDefault`), so users can change several options without the menu closing each time.
+
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuSeparator } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from '@torch-ui/components'
 import { useState } from 'react'
 
 function CheckboxMenu() {
@@ -295,26 +296,25 @@ function SystemMenu() {
 }
 ```
 
-### Context Menu Pattern
+### Right-click Menu
+
+For a true right-click (context) menu, use the dedicated [ContextMenu](./context-menu.md) component instead of DropdownMenu — it opens at the pointer on right-click / long-press.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from '@torch-ui/components'
 
-function ContextMenu({ x, y }: { x: number; y: number }) {
+function Example() {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div onContextMenu={(e) => e.preventDefault()}>
-          Right-click me
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>View</DropdownMenuItem>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Properties</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <ContextMenu>
+      <ContextMenuTrigger className="rounded-md border border-dashed p-8">
+        Right-click here
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>View</ContextMenuItem>
+        <ContextMenuItem>Edit</ContextMenuItem>
+        <ContextMenuItem variant="Negative">Delete</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   )
 }
 ```
@@ -344,13 +344,15 @@ function ContextMenu({ x, y }: { x: number; y: number }) {
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant |
 | `className` | `string` | - | Additional CSS classes |
 | `sideOffset` | `number` | `4` | Distance from trigger |
+| `collisionPadding` | `number` | `8` | Gap kept from viewport edges when flipping/shifting |
 | `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment |
+| `autoGroup` | `boolean` | `true` | Auto-wrap loose items in boxed groups |
 
 ### DropdownMenuItem
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'Default' \| 'Warning' \| 'Negative' \| 'SystemStyle'` | `'Default'` | Item style variant |
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Item style variant |
 | `size` | `'S' \| 'M'` | `'M'` | Item size |
 | `disabled` | `boolean` | `false` | Disabled state |
 | `active` | `boolean` | `false` | Active state |
@@ -362,7 +364,7 @@ function ContextMenu({ x, y }: { x: number; y: number }) {
 |------|------|---------|-------------|
 | `checked` | `boolean \| 'indeterminate'` | `false` | Checked state |
 | `onCheckedChange` | `(checked: boolean) => void` | - | Change handler |
-| `variant` | `'Default' \| 'Warning' \| 'Negative' \| 'SystemStyle'` | `'Default'` | Style variant |
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
 
 ### DropdownMenuRadioGroup
 
@@ -376,7 +378,7 @@ function ContextMenu({ x, y }: { x: number; y: number }) {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | Required | Radio option value |
-| `variant` | `'Default' \| 'Warning' \| 'Negative' \| 'SystemStyle'` | `'Default'` | Style variant |
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
 
 ### DropdownMenuLabel
 
@@ -384,10 +386,11 @@ function ContextMenu({ x, y }: { x: number; y: number }) {
 |------|------|---------|-------------|
 | `className` | `string` | - | Additional CSS classes |
 
-### DropdownMenuSeparator
+### DropdownMenuGroup
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `variant` | `'Boxed' \| 'Plain'` | `'Boxed'` | Boxed renders a bordered container; Plain is semantic-only |
 | `className` | `string` | - | Additional CSS classes |
 
 ### DropdownMenuShortcut
@@ -427,7 +430,7 @@ export const DropdownMenuContent: React.ForwardRefExoticComponent<DropdownMenuCo
 
 // Item
 interface DropdownMenuItemProps {
-  variant?: 'Default' | 'Warning' | 'Negative' | 'SystemStyle'
+  variant?: 'Default' | 'info' | 'Negative'
   size?: 'S' | 'M'
   disabled?: boolean
   active?: boolean
@@ -440,7 +443,7 @@ export const DropdownMenuItem: React.ForwardRefExoticComponent<DropdownMenuItemP
 interface DropdownMenuCheckboxItemProps {
   checked?: boolean | 'indeterminate'
   onCheckedChange?: (checked: boolean) => void
-  variant?: 'Default' | 'Warning' | 'Negative' | 'SystemStyle'
+  variant?: 'Default' | 'info' | 'Negative'
 }
 
 export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<DropdownMenuCheckboxItemProps>
@@ -448,7 +451,7 @@ export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<DropdownM
 // RadioItem
 interface DropdownMenuRadioItemProps {
   value: string
-  variant?: 'Default' | 'Warning' | 'Negative' | 'SystemStyle'
+  variant?: 'Default' | 'info' | 'Negative'
 }
 
 export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<DropdownMenuRadioItemProps>

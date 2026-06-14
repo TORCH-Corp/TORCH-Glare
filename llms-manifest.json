@@ -19,9 +19,9 @@
     }
   },
   "statistics": {
-    "totalComponents": 65,
-    "documentedComponents": 62,
-    "coverage": 95.4,
+    "totalComponents": 68,
+    "documentedComponents": 65,
+    "coverage": 95.6,
     "totalHooks": 4,
     "totalProviders": 1,
     "totalPlugins": 4,
@@ -64,8 +64,18 @@
       ]
     },
     "forms": {
-      "count": 18,
+      "count": 20,
       "items": [
+        {
+          "name": "SearchableSelect",
+          "version": "1.0.0",
+          "documented": true
+        },
+        {
+          "name": "SearchableTable",
+          "version": "1.0.0",
+          "documented": true
+        },
         {
           "name": "Input",
           "version": "1.1.15",
@@ -284,8 +294,13 @@
       ]
     },
     "overlays": {
-      "count": 7,
+      "count": 8,
       "items": [
+        {
+          "name": "ContextMenu",
+          "version": "1.0.0",
+          "documented": true
+        },
         {
           "name": "Dialog",
           "version": "1.1.15",
