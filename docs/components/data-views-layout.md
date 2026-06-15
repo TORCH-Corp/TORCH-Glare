@@ -268,7 +268,7 @@ function CustomScreen({ data, fields }: Props) {
 
 ## Accessibility
 
-- The view-switcher uses `TabFormItem` (button-based, full keyboard support via Tab/Enter/Space).
+- The view-switcher uses [`TabSwitch`](./tab-switch.md) — a segmented `role="tablist"` control (each view a `role="tab"` button, full keyboard support via Tab/Enter/Space). Installing DataViews pulls in `TabSwitch` automatically.
 - Tree rows expose `role="treeitem"` with `aria-expanded` and `aria-selected`.
 - Filter checkboxes carry labels and `htmlFor` linkage.
 - Settings panel buttons have `aria-pressed` for sort direction.
@@ -284,4 +284,5 @@ The component uses only `*-presentation-*` design tokens. Wrap with `ThemeProvid
 - [`KanbanView`](./kanban-view.md) — standalone kanban
 - [`InboxView`](./inbox-view.md) — standalone inbox
 - [`TreeView`](./tree-view.md) — standalone tree
+- [`TabSwitch`](./tab-switch.md) — the segmented view-switcher in the header (reusable on its own)
 - [How-to: Render a backend response with DataViews](../how-to/data-views-from-backend-response.md) — recipes by data shape.

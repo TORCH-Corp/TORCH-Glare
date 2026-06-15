@@ -4,6 +4,7 @@ import { Search, Settings } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { ViewType } from "./types";
 import { Button } from "../Button";
+import { TabSwitch } from "../TabSwitch";
 import { cn } from "../../utils/cn";
 
 export type DataViewsHeaderView = {
@@ -66,38 +67,18 @@ export function DataViewsHeader({
 
       {/* Segmented view switcher */}
       <div className="flex flex-1 items-center gap-2">
-        <div className="flex items-center gap-[2px] rounded-[10px] bg-[#252729] p-[2px] shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)]">
-          {views.map((view, idx) => {
-            const active = view.id === currentView;
-            const prevActive = idx > 0 && views[idx - 1].id === currentView;
-            // Separator sits between two inactive tabs only; the active white
-            // pill never has a flanking divider (matches Figma).
-            const showDivider = idx > 0 && !active && !prevActive;
-            return (
-              <div key={view.id} className="flex items-center">
-                {showDivider && (
-                  <div className="mx-[3px] h-3 w-px bg-[#434446]" />
-                )}
-                <button
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => onViewChange(view.id)}
-                  className={cn(
-                    "flex h-6 items-center gap-[6px] rounded-[8px] px-3 text-[14px] font-[510] leading-none transition-all duration-200 ease-in-out",
-                    active
-                      ? "bg-white text-black shadow-[0_0_10px_2px_rgba(0,0,0,0.25)]"
-                      : "bg-transparent text-white hover:bg-white/5",
-                  )}
-                >
-                  <span className="flex h-[14px] w-[14px] items-center justify-center [&_svg]:h-[14px] [&_svg]:w-[14px]">
-                    {view.icon}
-                  </span>
-                  {view.label}
-                </button>
-              </div>
-            );
-          })}
-        </div>
+        <TabSwitch
+          // The header bar is always dark, so the switcher resolves dark-theme
+          // tokens regardless of the host app's theme.
+          theme="dark"
+          value={currentView}
+          onValueChange={onViewChange}
+          options={views.map((view) => ({
+            value: view.id,
+            label: view.label,
+            icon: view.icon,
+          }))}
+        />
       </div>
 
       {/* Action bar */}

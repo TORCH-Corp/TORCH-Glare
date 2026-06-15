@@ -19,9 +19,9 @@
     }
   },
   "statistics": {
-    "totalComponents": 74,
-    "documentedComponents": 71,
-    "coverage": 95.9,
+    "totalComponents": 75,
+    "documentedComponents": 72,
+    "coverage": 96.0,
     "totalHooks": 4,
     "totalProviders": 1,
     "totalPlugins": 4,
@@ -64,7 +64,7 @@
       ]
     },
     "forms": {
-      "count": 19,
+      "count": 20,
       "items": [
         {
           "name": "SearchableSelect",
@@ -149,6 +149,11 @@
         {
           "name": "TabFormItem",
           "version": "1.1.15",
+          "documented": true
+        },
+        {
+          "name": "TabSwitch",
+          "version": "1.0.0",
           "documented": true
         },
         {
