@@ -251,53 +251,53 @@ export function SearchableSelect({
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="overflow-y-auto overflow-x-hidden scrollbar-hide"
+          className="overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide"
           style={{ maxHeight: maxVisibleItems * ROW_HEIGHT }}
         >
-        {filteredOptions.length > 0 && (
-          // Boxed group container — matches the DropdownMenu's auto-grouped look.
-          <div className="flex flex-col gap-[1px] rounded-[10px] overflow-hidden">
-            {filteredOptions.map((option) => {
-              const isSelected = option.value === value;
-              return (
-                // Same structure as DropdownMenuItem: MenuItemStyles on the
-                // element + a single inner <div> the styles target via [&>div].
-                <button
-                  type="button"
-                  key={option.value}
-                  onClick={() => handleSelect(option)}
-                  data-highlighted={isSelected ? "" : undefined}
-                  className={cn(
-                    MenuItemStyles({ variant: "Default", size: "M" }),
-                    "shrink-0" // keep full row height; the list scrolls instead of squishing
-                  )}
-                >
-                  <div>
-                    {option.icon}
-                    <span className="flex-1 text-start">{option.label}</span>
-                    {isSelected && (
-                      <i className="ri-check-line text-[16px] shrink-0" />
+          {filteredOptions.length > 0 && (
+            // Boxed group container — matches the DropdownMenu's auto-grouped look.
+            <div className="flex flex-col gap-[1px] rounded-[10px] overflow-hidden">
+              {filteredOptions.map((option) => {
+                const isSelected = option.value === value;
+                return (
+                  // Same structure as DropdownMenuItem: MenuItemStyles on the
+                  // element + a single inner <div> the styles target via [&>div].
+                  <button
+                    type="button"
+                    key={option.value}
+                    onClick={() => handleSelect(option)}
+                    data-highlighted={isSelected ? "" : undefined}
+                    className={cn(
+                      MenuItemStyles({ variant: "Default", size: "M" }),
+                      "shrink-0" // keep full row height; the list scrolls instead of squishing
                     )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
+                  >
+                    <div>
+                      {option.icon}
+                      <span className="flex-1 text-start">{option.label}</span>
+                      {isSelected && (
+                        <i className="ri-check-line text-[16px] shrink-0" />
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
-        {/* Empty state — only when nothing is loading. */}
-        {filteredOptions.length === 0 && !loading && (
-          <div className="px-3 py-2 typography-body-small-regular text-white-alpha-75">
-            No results found
-          </div>
-        )}
+          {/* Empty state — only when nothing is loading. */}
+          {filteredOptions.length === 0 && !loading && (
+            <div className="px-3 py-2 typography-body-small-regular text-white-alpha-75">
+              No results found
+            </div>
+          )}
 
-        {/* Loading row (initial load or fetching the next page). */}
-        {loading && (
-          <div className="flex items-center justify-center py-2">
-            <LoadingIcon size="M" />
-          </div>
-        )}
+          {/* Loading row (initial load or fetching the next page). */}
+          {loading && (
+            <div className="flex items-center justify-center py-2">
+              <LoadingIcon size="M" />
+            </div>
+          )}
 
         </div>
       </PopoverContent>

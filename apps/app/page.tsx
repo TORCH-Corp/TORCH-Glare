@@ -72,11 +72,11 @@ export default function Page() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
 
+    <DropdownMenuDemo />
     <SearchableSelectDemo />
     <SearchableTableDemo />
     <BadgeFieldDemo />
     <BadgeFieldRtlDemo />
-    <DropdownMenuDemo />
     <ContextMenuDemo />
     <RtlMenuDemo />
   </div>
@@ -665,6 +665,51 @@ function DropdownMenuDemo() {
           <DropdownMenuContent align="start">
             <DropdownMenuLabel>Editing</DropdownMenuLabel>
             <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <i className="ri-scissors-line text-[16px]" />
+                Cut
+                <DropdownMenuShortcut>⌘X</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant={"Default"} disabled>
+                <i className="ri-file-copy-line text-[16px]" />
+                Copy
+                <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant={"Negative"} >
+                <i className="ri-clipboard-line text-[16px]" />
+                Paste
+                <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <i className="ri-scissors-line text-[16px]" />
+                Cut
+                <DropdownMenuShortcut>⌘X</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant={"Default"} disabled>
+                <i className="ri-file-copy-line text-[16px]" />
+                Copy
+                <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant={"Negative"} >
+                <i className="ri-clipboard-line text-[16px]" />
+                Paste
+                <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <i className="ri-scissors-line text-[16px]" />
+                Cut
+                <DropdownMenuShortcut>⌘X</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant={"Default"} disabled>
+                <i className="ri-file-copy-line text-[16px]" />
+                Copy
+                <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem variant={"Negative"} >
+                <i className="ri-clipboard-line text-[16px]" />
+                Paste
+                <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <i className="ri-scissors-line text-[16px]" />
                 Cut
