@@ -50,7 +50,7 @@ DropdownMenuRadioGroup.displayName =
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> &
-  DropdownMenuProps & { autoGroup?: boolean }
+  DropdownMenuProps & { autoGroup?: boolean; maxHeight?: number }
 >(
   (
     {
@@ -60,6 +60,8 @@ const DropdownMenuContent = React.forwardRef<
       variant = "PresentationStyle",
       autoGroup = true,
       collisionPadding = 8,
+      maxHeight = 320,
+      style,
       children,
       ...props
     },
@@ -71,13 +73,13 @@ const DropdownMenuContent = React.forwardRef<
         ref={ref}
         sideOffset={sideOffset}
         collisionPadding={collisionPadding}
-        className={cn(
-          menuContentStyles({ variant }),
-          // Cap to the space Radix has after collision handling so a tall menu
-          // scrolls instead of overflowing off-screen.
-          "max-h-[var(--radix-dropdown-menu-content-available-height)]",
-          className
-        )}
+        // Cap at maxHeight, but never exceed the space Radix has after collision
+        // handling. The menu scrolls (overflow on the surface) past this height.
+        style={{
+          maxHeight: `min(${maxHeight}px, var(--radix-dropdown-menu-content-available-height))`,
+          ...style,
+        }}
+        className={cn(menuContentStyles({ variant }), className)}
         {...props}
       >
         {autoGroup ? autoGroupChildren(children) : children}
@@ -398,6 +400,7 @@ export const MenuItemStyles = cva(
     "border",
     "border-transparent",
     "flex",
+    "shrink-0", // keep full row height so the menu scrolls instead of squishing
     "items-center",
     "justify-start",
     "text-overflow",
@@ -493,13 +496,13 @@ export const menuContentStyles = cva(
     "rounded-[14px]",
     "min-w-[240px]",
     "outline-none",
-    "overflow-scroll",
+    "overflow-y-auto",
+    "overflow-x-hidden",
     // Only animate the OPEN (enter) state. An exit animation on [data-state=closed]
     // holds the old DOM node during close, which breaks the context menu's
     // close/reposition on a second right-click (Radix issue #2572).
     "data-[state=open]:animate-in",
     "data-[state=open]:fade-in-0",
-    "overflow-x-hidden",
     "scrollbar-hide",
     "backdrop-blur-[21px]",
     "flex gap-1 flex-col",
@@ -519,7 +522,7 @@ export const menuContentStyles = cva(
   }
 );
 
-export const menuGroupStyles = cva(["flex", "flex-col"], {
+export const menuGroupStyles = cva(["flex", "flex-col", "shrink-0"], {
   variants: {
     variant: {
       // Visually contains its items in a bordered card.
