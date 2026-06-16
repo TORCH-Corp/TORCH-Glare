@@ -1,13 +1,24 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { cva } from "class-variance-authority";
+import {
+  forwardRef,
+  InputHTMLAttributes,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
-import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+} from "./Dialog";
 import { Icon, Input, Group } from "./Input";
-import { Button, LoadingIcon } from "./Button";
-import { useClickOutside } from "../hooks/useClickOutside";
+import { LoadingIcon } from "./Button";
 import {
   Table,
   TableHeader,
@@ -18,12 +29,12 @@ import {
 } from "./Table";
 
 /**
- * SearchableTable — a searchable combobox whose dropdown renders a real Table.
+ * SearchableTable — a field that opens a modal Dialog to pick a row from a Table.
  *
- * Type in the input to filter rows; the dropdown opens on focus and shows the
- * filtered data using the existing Table component (composed inside a Popover,
- * the same mechanism BadgeField uses). Click a row to select it (single-select):
- * the dropdown closes and the input shows the selected row's label.
+ * The trigger shows a placeholder until something is selected, then shows the
+ * selected row's label. Clicking it opens a dialog containing a search input and
+ * the data Table; clicking a row selects it, sets the value, and closes the
+ * dialog. Supports client- or server-side search and infinite-scroll pagination.
  */
 
 export interface SearchableTableColumn<T> {
@@ -40,13 +51,18 @@ interface Props<T> {
   /** Controlled selected row (optional). */
   value?: T | null;
   onSelect?: (row: T) => void;
-  /** Text shown in the input after selection; defaults to the first column's value. */
+  /** Text shown on the trigger after selection; defaults to the first column's value. */
   getLabel?: (row: T) => string;
   /** Stable id/key per row; defaults to JSON of the row. */
   getRowId?: (row: T) => string;
   /** Which fields the search matches; defaults to every column key. */
   searchKeys?: (keyof T & string)[];
+  /** Trigger placeholder shown until a row is selected. */
   placeholder?: string;
+  /** Placeholder for the search input inside the dialog. */
+  searchPlaceholder?: string;
+  /** Label shown on the dialog's search field. */
+  title?: string;
   size?: "XS" | "S" | "M";
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode;
@@ -71,43 +87,7 @@ interface Props<T> {
   loading?: boolean;
   /** Called when the list nears the bottom and `hasMore && !loading`. */
   onLoadMore?: () => void;
-  /** Max rows visible before the list scrolls (default 6). */
-  maxVisibleRows?: number;
 }
-
-// One M-size table row ≈ 40px + the 44px sticky header.
-const ROW_HEIGHT = 40;
-const HEADER_HEIGHT = 44;
-
-// Popover surface styled like the DropdownMenu (kept local — self-contained).
-const tableDropdownStyles = cva(
-  [
-    "p-1",
-    "rounded-[14px]",
-    "border-0", // neutralize PopoverContent's base border (the card provides its own)
-    "outline-none",
-    "overflow-y-auto",
-    "scrollbar-hide",
-    "backdrop-blur-[21px]",
-    "data-[state=open]:animate-in",
-    "data-[state=open]:fade-in-0",
-  ],
-  {
-    variants: {
-      variant: {
-        PresentationStyle: [
-          "bg-[rgba(61,64,69,0.72)]",
-          "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
-        ],
-        SystemStyle: [
-          "bg-background-system-body-primary",
-          "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
-        ],
-      },
-    },
-    defaultVariants: { variant: "PresentationStyle" },
-  }
-);
 
 export function SearchableTable<T extends Record<string, unknown>>({
   columns,
@@ -117,7 +97,9 @@ export function SearchableTable<T extends Record<string, unknown>>({
   getLabel,
   getRowId,
   searchKeys,
-  placeholder = "Search…",
+  placeholder = "Select…",
+  searchPlaceholder = "Search…",
+  title = "Select an item",
   size = "M",
   variant = "PresentationStyle",
   icon,
@@ -130,13 +112,17 @@ export function SearchableTable<T extends Record<string, unknown>>({
   hasMore = false,
   loading = false,
   onLoadMore,
-  maxVisibleRows = 6,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [dropdownWidth, setDropdownWidth] = useState(0);
-  const popoverContentRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const rowId = (row: T) => getRowId?.(row) ?? JSON.stringify(row);
+  const label = (row: T) =>
+    getLabel?.(row) ?? String(row[columns[0]?.key] ?? "");
+
+  const keysToSearch = searchKeys ?? columns.map((c) => c.key);
 
   // Debounced server search: notify the consumer to refetch when the query
   // settles. Skipped entirely if no onSearchChange is provided (static mode).
@@ -146,8 +132,13 @@ export function SearchableTable<T extends Record<string, unknown>>({
     return () => clearTimeout(id);
   }, [search, onSearchChange, searchDebounceMs]);
 
-  // Infinite scroll: when the vertical scroll viewport nears the bottom, ask the
-  // consumer to load the next page (onScroll is reliable across Radix's portal).
+  // Reset the query whenever the dialog closes so it reopens clean.
+  useEffect(() => {
+    if (!open) setSearch("");
+  }, [open]);
+
+  // Infinite scroll: when the scroll viewport nears the bottom, ask the consumer
+  // to load the next page.
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (!onLoadMore || !hasMore || loading) return;
     const el = e.currentTarget;
@@ -155,22 +146,6 @@ export function SearchableTable<T extends Record<string, unknown>>({
       onLoadMore();
     }
   };
-
-  const groupRef = useClickOutside<HTMLDivElement>((e) => {
-    const target = e?.target as Node;
-    if (
-      !groupRef.current?.contains(target) &&
-      !popoverContentRef.current?.contains(target)
-    ) {
-      setOpen(false);
-    }
-  });
-
-  const rowId = (row: T) => getRowId?.(row) ?? JSON.stringify(row);
-  const label = (row: T) =>
-    getLabel?.(row) ?? String(row[columns[0]?.key] ?? "");
-
-  const keysToSearch = searchKeys ?? columns.map((c) => c.key);
 
   const filteredRows = useMemo(() => {
     // Server-side search mode: render rows as-is (already filtered upstream).
@@ -185,124 +160,87 @@ export function SearchableTable<T extends Record<string, unknown>>({
   }, [rows, search, keysToSearch, filterClientSide]);
 
   const selectedId = value ? rowId(value) : undefined;
-  // True while the user is actively typing a query. When false, the input shows
-  // the selected row's label as its real value (solid text, not placeholder).
-  const [searching, setSearching] = useState(false);
 
   const handleSelect = (row: T) => {
     onSelect?.(row);
-    setSearch("");
-    setSearching(false);
     setOpen(false);
   };
 
-  // Solid value: search text while typing, otherwise the selected label.
-  const displayValue = searching ? search : value ? label(value) : "";
-
   return (
-    <Popover open={open}>
-      <PopoverTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        {/* Trigger: shows placeholder until a row is selected, then its label. */}
         <Group
           dir={dir}
           data-theme={theme}
           variant={variant}
           size={size === "XS" ? "S" : size}
-          ref={groupRef as never}
-          onFocus={(e: React.FocusEvent<HTMLDivElement>) =>
-            setDropdownWidth(e.currentTarget.offsetWidth)
-          }
-          className={cn("flex w-full items-center gap-1 p-1", className)}
+          role="button"
+          tabIndex={0}
+          className={cn(
+            "flex w-full items-center gap-1 p-1 cursor-pointer",
+            className
+          )}
         >
           {icon && <Icon>{icon}</Icon>}
-          <Input
-            ref={inputRef}
-            placeholder={placeholder}
-            value={displayValue}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setSearching(true);
-            }}
-            onFocus={() => {
-              // Start a fresh search; the selected label clears so the user can type.
-              setSearching(true);
-              setSearch("");
-              setOpen(true);
-            }}
-            onBlur={() => setSearching(false)}
-            className={cn("min-w-[100px] flex-1", {
-              "!h-[18px]": size === "XS",
-              "!h-[22px]": size === "S",
-              "!h-[24px]": size === "M",
-            })}
-          />
-          {/* Chevron toggle — boxed icon button matching the Select component. */}
-          <Button
-            as="span"
-            buttonType="icon"
-            tabIndex={-1}
-            aria-label={open ? "Close" : "Open"}
-            onMouseDown={(e: React.MouseEvent) => {
-              // Prevent the input's blur/focus race; toggle the dropdown.
-              e.preventDefault();
-              if (open) {
-                setOpen(false);
-              } else {
-                inputRef.current?.focus();
-                setOpen(true);
-              }
-            }}
+          <span
             className={cn(
-              "shrink-0 h-[32px] w-[32px] rounded-[4px]",
-              open && "bg-background-presentation-action-hover text-white"
+              "flex-1 px-1 truncate typography-body-medium-regular",
+              value
+                ? "text-content-presentation-action-light-primary"
+                : "text-content-presentation-action-light-secondary"
             )}
           >
-            <i
-              className={cn(
-                "ri-arrow-down-s-line text-[16px] transition-all duration-100 ease-in-out",
-                open && "rotate-180"
-              )}
-            />
-          </Button>
+            {value ? label(value) : placeholder}
+          </span>
+          <i className="ri-arrow-down-s-line text-[16px] shrink-0 text-content-presentation-action-light-primary" />
         </Group>
-      </PopoverTrigger>
+      </DialogTrigger>
 
-      <PopoverContent
+      <DialogContent
         dir={dir}
         data-theme={theme}
-        ref={popoverContentRef}
-        variant={variant}
-        onScroll={handleScroll}
-        // Lock the dropdown to the input's width; the table scrolls horizontally
-        // inside it. Cap height to ~maxVisibleRows (+ header) so the rest scrolls.
-        style={{
-          width: dropdownWidth || undefined,
-          maxHeight: HEADER_HEIGHT + maxVisibleRows * ROW_HEIGHT + 8,
+        onOpenAutoFocus={(e) => {
+          // Focus the search input instead of the first row.
+          e.preventDefault();
+          inputRef.current?.focus();
         }}
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        className={cn(tableDropdownStyles({ variant }))}
+        className={cn(
+          "w-[min(640px,90vw)] bg-transparent !items-stretch rounded-[14px] p-4 gap-3 shadow-none",
+        )}
       >
-        {filteredRows.length > 0 && (
-          // Table-DDV wrapper: frosted bordered card around the table (Figma).
-          // The radius + overflow-hidden also go on the <table> itself, because a
-          // <table>'s corner cells paint to square edges and otherwise cover an
-          // ancestor's rounded corners.
-          <div className="rounded-[10px] border overflow-x-auto  border-white-alpha-40 bg-[rgba(184,192,204,0.5)]">
+        {/* Visually-hidden title for accessibility (Radix requires a DialogTitle). */}
+        <DialogTitle className="sr-only">{title ?? "Select an item"}</DialogTitle>
+
+        {/* Search input — local inline-label field (full control over colors). */}
+        <SearchInput
+          ref={inputRef}
+          variant={variant}
+          theme={theme}
+          dir={dir}
+          label={title}
+          value={search}
+          placeholder={searchPlaceholder}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {/* Scrollable table area */}
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="max-h-[55vh] overflow-auto scrollbar-hide rounded-[10px] border border-white-alpha-40 bg-[rgba(184,192,204,0.5)]"
+        >
+          {filteredRows.length > 0 && (
             <Table
               theme={theme as never}
               data-theme="dark"
-              // Natural width (w-max) so columns keep their sizes and the wrapper
-              // scrolls horizontally instead of squeezing them into the input width.
-              className="w-max rounded-[10px] overflow-hidden"
+              className="w-full rounded-[10px] overflow-hidden"
             >
-              {/* The blurred dark header bar is painted on the TableHEAD cells
-                  (which fill the row); bg/height on a <tr> doesn't render
-                  reliably because cells paint over it. */}
-              <TableHeader className=" bg-black-alpha-20 shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]">
+              <TableHeader className="bg-black-alpha-20 shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]">
                 <TableRow className="h-[44px] [&_button]:bg-white-alpha-40 [&>th]:border-white-alpha-20">
                   {columns.map((col) => (
                     <TableHead
                       key={col.key}
-                      // White semibold header text from the design.
                       className="cursor-default typography-body-medium-medium text-white"
                     >
                       {col.header}
@@ -318,15 +256,14 @@ export function SearchableTable<T extends Record<string, unknown>>({
                       key={id}
                       state={selectedId === id ? "selected" : undefined}
                       onClick={() => handleSelect(row)}
-                      // h-[40px] rows with a translucent white bottom rule.
-                      className={cn("cursor-pointer h-[40px] ", selectedId === id && "bg-white-alpha-50")}
+                      className={cn(
+                        "cursor-pointer h-[40px]",
+                        selectedId === id && "bg-white-alpha-50"
+                      )}
                     >
                       {columns.map((col) => (
                         <TableCell
                           key={col.key}
-                          // White body text; whitespace-nowrap (overriding the
-                          // component's break-all) keeps columns wide so the
-                          // table overflows horizontally instead of wrapping.
                           className="border-b border-white-alpha-20 text-white px-[8px] !whitespace-nowrap !break-normal"
                         >
                           {col.render
@@ -339,25 +276,78 @@ export function SearchableTable<T extends Record<string, unknown>>({
                 })}
               </TableBody>
             </Table>
-          </div>
-        )}
+          )}
 
-        {/* Empty state — only when nothing is loading. */}
-        {filteredRows.length === 0 && !loading && (
-          <div className="px-3 py-4 typography-body-small-regular text-white-alpha-75">
-            No results found
-          </div>
-        )}
+          {/* Empty state — only when nothing is loading. */}
+          {filteredRows.length === 0 && !loading && (
+            <div className="px-3 py-6 text-center typography-body-small-regular text-white-alpha-75">
+              No results found
+            </div>
+          )}
 
-        {/* Loading row (initial load or fetching the next page). */}
-        {loading && (
-          <div className="flex items-center justify-center py-2">
-            <LoadingIcon size="M" />
-          </div>
-        )}
-      </PopoverContent>
-    </Popover>
+          {/* Loading row (initial load or fetching the next page). */}
+          {loading && (
+            <div className="flex items-center justify-center py-3">
+              <LoadingIcon size="M" />
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
 SearchableTable.displayName = "SearchableTable";
+
+/* -------------------------------------------------------------------------- */
+/* SearchInput — local inline-label search field (replaces InnerLabelField).  */
+/* The whole field + its text turn white on hover/focus, fully controlled here. */
+/* -------------------------------------------------------------------------- */
+
+interface SearchInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  variant?: "SystemStyle" | "PresentationStyle";
+  theme?: Themes;
+  label?: string;
+}
+
+const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
+  ({ variant = "PresentationStyle", theme, label, className, ...props }, ref) => (
+    <Group
+      data-theme={theme}
+      variant={variant}
+      size="M"
+      className={cn(
+        "group flex w-full items-center gap-2 p-1 rounded-[10px] transition-colors",
+        "border border-white-alpha-40 bg-[rgba(184,192,204,0.5)]",
+        "hover:bg-background-presentation-table-row-hover",
+        "focus-within:bg-background-presentation-table-row-hover",
+        className
+      )}
+    >
+      <Icon className="shrink-0">
+        <i className="ri-search-line text-content-presentation-global-secondary transition-colors group-hover:text-white group-focus-within:text-white" />
+      </Icon>
+
+      {label && (
+        <>
+          <span className="shrink-0 px-1 typography-labels-small-regular text-content-presentation-global-secondary text-[14px] text-white transition-colors group-hover:text-white group-focus-within:text-white">
+            {label}
+          </span>
+          <span className="h-[14px] w-px shrink-0 rounded-full bg-border-presentation-action-labelless-divider transition-colors group-hover:bg-white-alpha-40" />
+        </>
+      )}
+
+      <Input
+        ref={ref}
+        {...props}
+        className={cn(
+          "min-w-[100px] flex-1 !h-[24px] bg-transparent",
+          "text-content-presentation-action-light-primary",
+          "transition-colors group-hover:!text-white group-focus-within:!text-white"
+        )}
+      />
+    </Group>
+  )
+);
+SearchInput.displayName = "SearchInput";

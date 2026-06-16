@@ -1247,7 +1247,7 @@ function SearchableTableDemo() {
 
       <div className="space-y-4 max-w-[520px]">
         <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
-          Static — search, click a row to select
+          Static — click to open dialog, search & pick a row
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Selected: {selected ? `${selected.name} (${selected.role})` : "None"}
@@ -1259,14 +1259,15 @@ function SearchableTableDemo() {
           onSelect={setSelected}
           getLabel={(p) => `${p.name} — ${p.role}`}
           getRowId={(p) => p.id}
-          icon={<i className="ri-search-line" />}
-          placeholder="Search people…"
+          icon={<i className="ri-user-line" />}
+          placeholder="Select a person…"
+          title="Select a person"
         />
       </div>
 
       <div className="space-y-4 max-w-[520px]">
         <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
-          Async — server search + infinite scroll (200 rows, 20/page)
+          Async — dialog with server search + infinite scroll (200 rows, 20/page)
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Selected: {asyncSelected ? asyncSelected.name : "None"} · Loaded:{" "}
@@ -1284,8 +1285,10 @@ function SearchableTableDemo() {
           hasMore={hasMore}
           loading={loading}
           onLoadMore={loadMore}
-          icon={<i className="ri-search-line" />}
-          placeholder="Search people… (scroll to load more)"
+          icon={<i className="ri-user-line" />}
+          placeholder="Select a person…"
+          title="Select a person"
+          searchPlaceholder="Search people… (scroll to load more)"
         />
       </div>
     </section>
