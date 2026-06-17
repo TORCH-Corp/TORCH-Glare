@@ -19,9 +19,9 @@
     }
   },
   "statistics": {
-    "totalComponents": 75,
-    "documentedComponents": 72,
-    "coverage": 96.0,
+    "totalComponents": 76,
+    "documentedComponents": 73,
+    "coverage": 96.1,
     "totalHooks": 4,
     "totalProviders": 1,
     "totalPlugins": 4,
@@ -169,11 +169,16 @@
       ]
     },
     "layout": {
-      "count": 7,
+      "count": 8,
       "items": [
         {
           "name": "Card",
           "version": "1.1.15",
+          "documented": true
+        },
+        {
+          "name": "HeaderBar",
+          "version": "1.0.0",
           "documented": true
         },
         {
