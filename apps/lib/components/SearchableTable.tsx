@@ -206,7 +206,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
           inputRef.current?.focus();
         }}
         className={cn(
-          "w-[min(640px,90vw)] bg-transparent !items-stretch rounded-[14px] p-4 gap-3 shadow-none",
+          "w-[min(640px,90vw)]  bg-transparent !items-stretch rounded-[14px] gap-3 shadow-none",
         )}
       >
         {/* Visually-hidden title for accessibility (Radix requires a DialogTitle). */}
