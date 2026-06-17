@@ -299,6 +299,32 @@ function Example() {
 }
 ```
 
+### Long Menu (max height + scroll)
+
+Tall menus scroll instead of overflowing off-screen. The surface caps at `maxHeight` (default `320`px) and never exceeds the space available after collision handling. Pass `maxHeight` to change the cap.
+
+```typescript
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@torch-ui/components'
+import { Button } from '@torch-ui/components'
+
+function LongMenu() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="BorderStyle">Jump to section</Button>
+      </DropdownMenuTrigger>
+      {/* Cap the surface at 240px — the rest scrolls. */}
+      <DropdownMenuContent align="start" maxHeight={240}>
+        <DropdownMenuLabel>Sections</DropdownMenuLabel>
+        {Array.from({ length: 20 }, (_, i) => (
+          <DropdownMenuItem key={i}>Section {i + 1}</DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+```
+
 ## API Reference
 
 ### DropdownMenu (Root)
@@ -326,6 +352,7 @@ function Example() {
 | `sideOffset` | `number` | `4` | Distance from trigger |
 | `collisionPadding` | `number` | `8` | Gap kept from viewport edges when flipping/shifting |
 | `align` | `'start' \| 'center' \| 'end'` | `'center'` | Alignment (inherited from Radix) |
+| `maxHeight` | `number` | `320` | Max height (px) of the surface before it scrolls. Capped at `min(maxHeight, available-height)` so the menu never overflows off-screen |
 | `autoGroup` | `boolean` | `true` | Auto-wrap loose items in boxed groups |
 
 ### DropdownMenuItem
@@ -426,6 +453,7 @@ interface DropdownMenuContentProps {
   sideOffset?: number
   collisionPadding?: number
   align?: 'start' | 'center' | 'end'
+  maxHeight?: number         // default 320 — surface scrolls past this
   autoGroup?: boolean
 }
 

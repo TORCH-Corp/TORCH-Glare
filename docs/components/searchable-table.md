@@ -1,20 +1,20 @@
 ---
 title: SearchableTable
-description: A searchable combobox whose dropdown renders a real Table, with single-select, client- or server-side search, and infinite-scroll pagination
+description: A field that opens a modal dialog to pick a row from a real Table, with single-select, client- or server-side search, and infinite-scroll pagination
 group: Inputs
-keywords: [searchable-table, combobox, table, search, async, infinite-scroll, pagination, select]
+keywords: [searchable-table, dialog, table, search, async, infinite-scroll, pagination, select, picker]
 ---
 
 # SearchableTable
 
-> A searchable combobox that renders its options as a real, multi-column `Table` inside a `Popover`. Type to filter rows (client-side) or refetch them from a backend (server-side), click a row to single-select it, and scroll to the bottom to lazy-load more pages. Generic over your row type `T`.
+> A field that opens a modal `Dialog` to pick a row from a real, multi-column `Table`. The trigger shows a placeholder until something is selected, then the selected row's label. Click it to open the dialog (a search input + the data table); type to filter rows (client-side) or refetch them from a backend (server-side), click a row to single-select it and close the dialog, and scroll to the bottom to lazy-load more pages. Generic over your row type `T`.
 
 ## Installation
 
-`SearchableTable` is part of the TORCH Glare component library. It composes the [Popover](./popover.md) (built on Radix Popover) and the [Table](./table.md) component internally, so both must be available — they ship with the library.
+`SearchableTable` is part of the TORCH Glare component library. It composes the [Dialog](./dialog.md) (built on Radix Dialog) and the [Table](./table.md) component internally, so both must be available — they ship with the library.
 
 ```bash
-npm install @torch-ui/components @radix-ui/react-popover
+npm install @torch-ui/components @radix-ui/react-dialog
 ```
 
 ## Import
@@ -60,13 +60,15 @@ function Example() {
       onSelect={setSelected}
       getLabel={(row) => row.name}
       getRowId={(row) => row.id}
-      placeholder="Search users…"
+      icon={<i className="ri-user-line" />}
+      placeholder="Select a user…"
+      title="Select a user"
     />
   )
 }
 ```
 
-The input opens its dropdown on focus. As you type, rows are filtered locally by every column key. Clicking a row selects it (single-select), closes the dropdown, and shows `getLabel(row)` in the input.
+Clicking the field opens a modal dialog with a search input and the data table. As you type, rows are filtered locally by every column key. Clicking a row selects it (single-select), closes the dialog, and shows `getLabel(row)` on the trigger. Use `placeholder` for the trigger text, `searchPlaceholder` for the in-dialog search input, and `title` for the dialog's search-field label (also the accessible dialog title).
 
 ### Custom cell rendering
 
@@ -159,25 +161,34 @@ function AsyncExample() {
       hasMore={hasMore}
       loading={loading}
       onLoadMore={loadMore}
-      placeholder="Search users…"
+      icon={<i className="ri-user-line" />}
+      placeholder="Select a user…"
+      title="Select a user"
+      searchPlaceholder="Search users… (scroll to load more)"
     />
   )
 }
 ```
 
-### Capping the visible height
+### Dialog labels (trigger, title, search)
 
-`maxVisibleRows` (default `6`) caps how many rows are visible before the dropdown scrolls vertically. The remaining rows stay reachable via scroll, which is also what drives infinite-scroll loading.
+Three props control the dialog's text. `placeholder` is the trigger text shown until a row is selected; `title` labels the dialog's search field (and is the accessible dialog title); `searchPlaceholder` is the placeholder of the in-dialog search input.
 
 ```typescript
 <SearchableTable<User>
   columns={columns}
   rows={users}
+  value={selected}
   onSelect={setSelected}
   getRowId={(row) => row.id}
-  maxVisibleRows={4}
+  icon={<i className="ri-user-line" />}
+  placeholder="Select a user…"
+  title="Select a user"
+  searchPlaceholder="Search by name or role…"
 />
 ```
+
+The data table inside the dialog scrolls vertically once it exceeds `~55vh`; the remaining rows stay reachable via scroll, which is also what drives infinite-scroll loading.
 
 ## API Reference
 
@@ -188,24 +199,25 @@ function AsyncExample() {
 | `columns` | `SearchableTableColumn<T>[]` | Required | Column config — header, the row key to read, and an optional cell renderer. |
 | `rows` | `T[]` | Required | The data rows. In server mode these are rendered as-is (already filtered upstream). |
 | `value` | `T \| null` | - | Controlled selected row. The matching row is highlighted in the table. |
-| `onSelect` | `(row: T) => void` | - | Called when a row is clicked. The dropdown closes and the input shows the row's label. |
-| `getLabel` | `(row: T) => string` | First column's value | Text shown in the input after selection. |
+| `onSelect` | `(row: T) => void` | - | Called when a row is clicked. The dialog closes and the trigger shows the row's label. |
+| `getLabel` | `(row: T) => string` | First column's value | Text shown on the trigger after selection. |
 | `getRowId` | `(row: T) => string` | `JSON.stringify(row)` | Stable id/key per row, used for keys and selection matching. |
 | `searchKeys` | `(keyof T & string)[]` | Every column `key` | Which fields client-side search matches against. |
-| `placeholder` | `string` | `'Search…'` | Input placeholder text. |
-| `size` | `'XS' \| 'S' \| 'M'` | `'M'` | Input size. (`XS` maps the underlying Group to `S` with a tighter input height.) |
-| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style of the input and dropdown surface. |
-| `icon` | `ReactNode` | - | Optional leading icon rendered inside the input. |
+| `placeholder` | `string` | `'Select…'` | Trigger placeholder shown until a row is selected. |
+| `searchPlaceholder` | `string` | `'Search…'` | Placeholder for the search input inside the dialog. |
+| `title` | `string` | `'Select an item'` | Label shown on the dialog's search field (also used as the accessible dialog title). |
+| `size` | `'XS' \| 'S' \| 'M'` | `'M'` | Trigger size. (`XS` maps the underlying Group to `S` with a tighter input height.) |
+| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style of the trigger field. |
+| `icon` | `ReactNode` | - | Optional leading icon rendered inside the trigger. |
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant, applied via `data-theme`. |
-| `dir` | `string` | - | Text direction (e.g. `'rtl'`), applied to the input group and dropdown. |
-| `className` | `string` | - | Additional classes merged onto the input group. |
+| `dir` | `string` | - | Text direction (e.g. `'rtl'`), applied to the trigger and dialog. |
+| `className` | `string` | - | Additional classes merged onto the trigger group. |
 | `filterClientSide` | `boolean` | `true` | When `true`, filter `rows` locally by `searchKeys`. Set `false` for server-side search. |
 | `onSearchChange` | `(query: string) => void` | - | Debounced query callback — refetch your data here in server mode. |
 | `searchDebounceMs` | `number` | `300` | Debounce delay (ms) for `onSearchChange`. |
 | `hasMore` | `boolean` | `false` | Whether more pages are available; gates the infinite-scroll loader. |
 | `loading` | `boolean` | `false` | Whether a fetch is in flight; renders a loading row and blocks `onLoadMore`. |
 | `onLoadMore` | `() => void` | - | Called when the list nears the bottom and `hasMore && !loading`. |
-| `maxVisibleRows` | `number` | `6` | Max rows visible before the list scrolls vertically. |
 
 ### SearchableTableColumn&lt;T&gt;
 
@@ -242,7 +254,9 @@ interface SearchableTableProps<T> {
   getLabel?: (row: T) => string
   getRowId?: (row: T) => string
   searchKeys?: (keyof T & string)[]
-  placeholder?: string
+  placeholder?: string       // trigger text until selection (default 'Select…')
+  searchPlaceholder?: string // in-dialog search input (default 'Search…')
+  title?: string             // dialog search-field label / a11y title (default 'Select an item')
   size?: 'XS' | 'S' | 'M'
   variant?: 'PresentationStyle'
   icon?: React.ReactNode
@@ -256,7 +270,6 @@ interface SearchableTableProps<T> {
   hasMore?: boolean
   loading?: boolean
   onLoadMore?: () => void
-  maxVisibleRows?: number
 }
 
 // Generic function component, constrained so rows are object-shaped:
@@ -395,25 +408,26 @@ function toUser(api: ApiUser): User {
 
 ## Accessibility
 
-- The trigger is a standard text `<input>`, so it is focusable and typeable by keyboard. Focusing it opens the dropdown and starts a fresh search.
-- The chevron is a boxed icon button with `aria-label` toggling between `"Open"` and `"Close"`; it is `tabIndex={-1}` so keyboard focus stays on the input, and it uses `onMouseDown` with `preventDefault` to avoid the input blur/focus race.
-- Clicking outside the input group or the dropdown closes it (handled via `useClickOutside`).
-- The dropdown surface does not steal focus on open (`onOpenAutoFocus` is prevented), keeping the caret in the input while results update.
-- Provide a descriptive `placeholder` and a meaningful `getLabel` so screen-reader users hear a clear value after selection. Prefer human-readable headers in `columns`.
+- The trigger is a focusable group with `role="button"` and `tabIndex={0}`; activating it opens a modal dialog (Radix Dialog), which traps focus and closes on `Esc` or outside click.
+- On open, focus moves to the in-dialog search input (`onOpenAutoFocus` is intercepted to focus the search field rather than the first row), so users can type to filter immediately.
+- The dialog always renders a `DialogTitle` (visually hidden, sourced from `title`) so the modal has an accessible name even though the heading is not shown.
+- Clicking a row selects it and closes the dialog; the selected row is marked with the Table's `state="selected"`.
+- Provide a descriptive `placeholder`, a meaningful `title`, and a `getLabel` so screen-reader users hear a clear value after selection. Prefer human-readable headers in `columns`.
 
 ## Best Practices
 
 1. **Always supply `getRowId`.** The default key is `JSON.stringify(row)`, which is slow and brittle for large or nested rows. A stable id keeps keys and selection matching cheap.
-2. **Set `getLabel` for the selected display.** Otherwise the input shows the first column's raw value, which may not be the most descriptive field.
+2. **Set `getLabel` for the selected display.** Otherwise the trigger shows the first column's raw value, which may not be the most descriptive field.
 3. **Pick the right search mode.** Keep `filterClientSide` (default) for small, in-memory datasets. Switch to `filterClientSide={false}` + `onSearchChange` for backend-driven search so you never filter a partial page.
 4. **Gate pagination correctly.** `onLoadMore` only fires while `hasMore && !loading` — keep `loading` accurate so a single scroll doesn't trigger duplicate fetches, and flip `hasMore` to `false` on the last page.
-5. **The table scrolls in both directions.** Columns keep their natural width, so wide tables scroll horizontally inside the dropdown, while `maxVisibleRows` caps the vertical height and the rest scrolls vertically (which is what drives infinite scroll). Keep column count and content reasonable so horizontal scroll stays usable.
+5. **The table scrolls in both directions.** Columns keep their natural width, so wide tables scroll horizontally inside the dialog, while the table caps its vertical height (~`55vh`) and the rest scrolls vertically (which is what drives infinite scroll). Keep column count and content reasonable so horizontal scroll stays usable.
 6. **Tune `searchDebounceMs` to your backend.** The 300ms default suits most APIs; raise it for slow or rate-limited endpoints.
 7. **Match `searchKeys` to visible columns.** In client mode, search defaults to every column key — narrow `searchKeys` if some columns hold non-searchable data (ids, formatted dates).
 
 ## Related Components
 
 - [SearchableSelect](./searchable-select.md) - Single-column searchable combobox
-- [Table](./table.md) - The table primitive rendered inside the dropdown
+- [Table](./table.md) - The table primitive rendered inside the dialog
+- [Dialog](./dialog.md) - The modal surface the picker opens in
 - [DataTable](./data-table.md) - Full-featured data grid for page-level tables
 - [Select](./select.md) - Standard form select field

@@ -233,6 +233,33 @@ function RtlMenu() {
 }
 ```
 
+### Long Menu (max height + scroll)
+
+Tall menus scroll instead of overflowing off-screen. The surface caps at `maxHeight` (default `320`px) and never exceeds the space available after collision handling. Pass `maxHeight` to change the cap.
+
+```typescript
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuLabel } from '@torch-ui/components'
+
+function LongMenu() {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        <div className="flex h-40 w-72 items-center justify-center rounded-md border border-dashed">
+          Right-click here
+        </div>
+      </ContextMenuTrigger>
+      {/* Cap the surface at 220px — the rest scrolls. */}
+      <ContextMenuContent maxHeight={220}>
+        <ContextMenuLabel>Jump to section</ContextMenuLabel>
+        {Array.from({ length: 20 }, (_, i) => (
+          <ContextMenuItem key={i}>Section {i + 1}</ContextMenuItem>
+        ))}
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+```
+
 ## API Reference
 
 ### ContextMenu (Root)
@@ -264,6 +291,7 @@ The right-click zone. Wrap it around the element the menu should open from.
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant (applied as `data-theme`) |
 | `className` | `string` | - | Additional CSS classes |
 | `collisionPadding` | `number` | `8` | Min distance kept from the viewport edge |
+| `maxHeight` | `number` | `320` | Max height (px) of the surface before it scrolls. Capped at `min(maxHeight, available-height)` so the menu never overflows off-screen |
 | `autoGroup` | `boolean` | `true` | Auto-wrap loose items in a Boxed group (see Behavior notes) |
 
 ### ContextMenuItem
@@ -353,6 +381,7 @@ interface ContextMenuContentProps {
   theme?: 'dark' | 'light' | 'default'
   className?: string
   collisionPadding?: number // default 8
+  maxHeight?: number         // default 320 — surface scrolls past this
   autoGroup?: boolean        // default true
 }
 
@@ -403,6 +432,7 @@ export const ContextMenuRadioItem: React.ForwardRefExoticComponent<ContextMenuRa
 - **Opens at the pointer**: the menu opens on right-click (`contextmenu`) at the exact cursor position, not anchored to a fixed trigger button.
 - **Second right-click closes it**: the Root is made controlled and tracks `open` in context. The Trigger listens in the capture phase, and when the menu is already open it `preventDefault()` / `stopPropagation()` and closes — so a second right-click dismisses instead of re-anchoring (which Radix handles unreliably).
 - **Auto-grouping**: by default (`autoGroup` on `ContextMenuContent`, default `true`) consecutive loose items (`ContextMenuItem`, `ContextMenuCheckboxItem`, `ContextMenuRadioItem`, and `ContextMenuSub`) are automatically wrapped in a `Boxed` `ContextMenuGroup`, so they render inside a boxed container like DropdownMenu even when you do not write a group. Labels and explicit groups act as boundaries and pass through unchanged. Set `autoGroup={false}` to render children verbatim.
+- **Max height & scrolling**: the surface caps its height at `min(maxHeight, available-height)` (where `maxHeight` defaults to `320`px and `available-height` is the space Radix has after collision handling). A taller menu scrolls vertically instead of overflowing off-screen — items and groups keep their full height rather than squishing. Pass `maxHeight={N}` to change the cap.
 - **Checkbox / radio keep the menu open**: `ContextMenuCheckboxItem` and `ContextMenuRadioItem` call `event.preventDefault()` inside `onSelect`, stopping Radix's default auto-close so users can toggle multiple options in one pass.
 - **Open-only animation**: only the open (enter) state animates (`fade-in`). There is intentionally no exit animation — holding the old DOM node during close breaks close/reposition on a second right-click, so it is omitted to keep repositioning reliable.
 - **Submenus and RTL**: nested `ContextMenuSub` / `ContextMenuSubTrigger` / `ContextMenuSubContent` are supported, and `dir="rtl"` on the Root mirrors the layout (including the submenu chevron).
