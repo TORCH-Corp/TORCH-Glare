@@ -33,6 +33,8 @@ import { RangeSliderWithInputs } from "./filters/RangeSliderWithInputs"
 import { DateRangePopover } from "./filters/DateRangePopover"
 import { PresetChips } from "./filters/PresetChips"
 import { resolveBadgeVariant } from "./badgeAdapter"
+import { SearchableSelect } from "../SearchableSelect"
+import type { SearchableSelectOption } from "../SearchableSelect"
 
 type FilterPanelProps = {
   data: DynamicRecord[]
@@ -360,6 +362,26 @@ function FilterBody({
   const opts = getCategoricalOptions(data, entry.path, entry.field, entry.legacy)
   const selected = Array.isArray(value) ? value : []
   const isSingle = entry.field?.filterMode === "single"
+
+  // Searchable single-select dropdown — for fields with many options. Stores
+  // the chosen value as a 1-element array (empty when cleared) to stay
+  // consistent with the categorical FilterValue shape.
+  if (entry.field?.filterVariant === "searchable-select") {
+    const selectOptions: SearchableSelectOption[] = opts.map((opt) => ({
+      value: opt,
+      label: opt,
+    }))
+    const current = selected[0] ?? null
+    return (
+      <SearchableSelect
+        options={selectOptions}
+        value={current}
+        onValueChange={(v) => onSetFilter(v ? [v] : [])}
+        placeholder={`Select ${entry.label}…`}
+        icon={<i className="ri-search-line" />}
+      />
+    )
+  }
 
   if (isSingle) {
     const current = selected[0] ?? ""

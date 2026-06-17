@@ -160,6 +160,14 @@ export type FieldConfig = {
    * - "single": radios, single-select. FilterValue is a 1-element array.
    */
   filterMode?: "single" | "multi"
+  /**
+   * Categorical filter control style.
+   * - "checkbox" (default): inline list of checkboxes (multi) or radios (single).
+   * - "searchable-select": a single-select SearchableSelect dropdown — useful
+   *   when a field has many options. Implies single-select; the FilterValue is
+   *   a 1-element array (or empty when cleared).
+   */
+  filterVariant?: "checkbox" | "searchable-select"
   presets?: FieldPreset[]
   rangeMin?: number
   rangeMax?: number

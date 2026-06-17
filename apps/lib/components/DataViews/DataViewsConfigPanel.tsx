@@ -5,7 +5,6 @@ import {
   X,
   Settings as SettingsIcon,
   Filter as FilterIcon,
-  Plus,
 } from "lucide-react";
 import type {
   ViewConfig,
@@ -49,10 +48,6 @@ export type DataViewsConfigPanelProps = {
   // the close animation, then unmounts.
   state?: "open" | "closed";
 };
-
-const DEFAULT_SAVED_VIEWS: SavedView[] = [
-  { id: "default", label: "Default View" },
-];
 
 function SectionHeader({
   title,
@@ -113,27 +108,10 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
     filterState,
     onFilterChange,
     filterConfig,
-    savedViews = DEFAULT_SAVED_VIEWS,
-    activeSavedView,
-    onSavedViewChange,
-    onSaveNewView,
     state = "open",
   } = props;
 
   const [tab, setTab] = useState<ConfigTab>("config");
-
-  // Saved View is controlled by the parent when `activeSavedView` /
-  // `onSavedViewChange` are supplied; otherwise fall back to local state so the
-  // radios are still interactive (DataViewsLayout doesn't thread these props
-  // yet — without this the selection would snap back every click).
-  const [internalSavedView, setInternalSavedView] = useState(
-    () => savedViews[0]?.id,
-  );
-  const selectedSavedView = activeSavedView ?? internalSavedView;
-  const handleSavedViewChange = (id: string) => {
-    if (onSavedViewChange) onSavedViewChange(id);
-    else setInternalSavedView(id);
-  };
 
   const visibleFields = useMemo(
     () => fields.filter((f) => f.type !== "hidden"),
@@ -234,7 +212,7 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
           type="button"
           onClick={onClose}
           aria-label="Close panel"
-          className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-white/[0.15] text-white transition-colors hover:bg-white/25"
+          className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-white/[0.15] text-white transition-colors hover:bg-background-presentation-state-negative-primary hover:text-white"
         >
           <X className="h-[18px] w-[18px]" />
         </button>
@@ -245,35 +223,6 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
       <div className="flex-1 overflow-y-auto">
         {tab === "config" ? (
           <div className="flex flex-col gap-6 px-3 py-4">
-            {/* Saved View */}
-            <div className="space-y-3">
-              <SectionHeader title="Saved View" />
-              <RadioGroup
-                value={selectedSavedView}
-                onValueChange={handleSavedViewChange}
-                className="flex flex-col gap-1 space-y-0 rounded-[12px] bg-[#1C1D1F] p-1"
-              >
-                {savedViews.map((sv, i) => (
-                  <div key={sv.id}>
-                    {/* Divider spans edge-to-edge (Figma: no horizontal
-                        inset). */}
-                    {i > 0 && <div className="h-px bg-[#2C2D2E]" />}
-                    <RadioRow value={sv.id} label={sv.label} />
-                  </div>
-                ))}
-              </RadioGroup>
-              <button
-                type="button"
-                onClick={onSaveNewView}
-                className="flex w-full items-center justify-center gap-1.5 rounded-[4px] bg-white/[0.15] px-1.5 py-0.5 text-[12px] font-[510] text-white transition-colors hover:bg-white/25"
-              >
-                <Plus className="h-3 w-3" />
-                Save a New View
-              </button>
-            </div>
-
-            <div className="h-px w-full bg-[#2C2D2E]" />
-
             {/* Table Columns */}
             <div className="space-y-3">
               <SectionHeader title="Table Columns" />

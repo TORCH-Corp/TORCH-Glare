@@ -122,6 +122,12 @@ export const badgeStyles = cva(
     "transition-all duration-200 ease-in-out",
     "whitespace-nowrap",
     "[&_i]:!leading-none",
+    // The subtle variants blend their label/icon with `mix-blend-luminosity`.
+    // `isolate` opens a new stacking context so that blend only composites
+    // against the badge's own background — not against arbitrary page layers
+    // behind it (semi-transparent rows, gradients, masks), which otherwise
+    // ghosts/double-strokes the text in "random" places.
+    "isolate",
   ],
   {
     variants: {
