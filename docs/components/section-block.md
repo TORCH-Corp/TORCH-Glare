@@ -236,6 +236,124 @@ function RowDivider() {
 }
 ```
 
+### Bilingual Form with Language Switch (EN / AR)
+
+A real-world pattern: a `SectionBlock` form with an EN/AR language switcher in the header. The colored title badge and the `TabSwitch` stay LTR; only the field rows flip to RTL when Arabic is selected, and all labels/placeholders are translated.
+
+Key points:
+
+- Put the `TabSwitch` in a `relative` wrapper and position it `absolute top-2 right-2` so it sits at the header's top-right **outside** the colored title badge (the badge wraps the entire `title` node).
+- Apply `dir` to each field **row**, not to the `SectionBlock` root — otherwise the header (badge + switch) flips too.
+- Drive copy through a tiny `t(en, ar)` helper keyed off the selected language.
+
+```tsx
+import { type ReactNode, useState } from "react";
+import { SectionBlock } from "@/components/SectionBlock";
+import { InputField } from "@/components/InputField";
+import { ActionButton } from "@/components/ActionButton";
+import { TabSwitch } from "@/components/TabSwitch";
+
+export function BilingualFieldsForm() {
+  const [language, setLanguage] = useState<"ar" | "en">("en");
+  const isAr = language === "ar";
+  const t = (en: string, ar: string) => (isAr ? ar : en);
+
+  return (
+    <div className="relative">
+      <SectionBlock
+        color="Blue"
+        title={
+          <span className="flex items-center gap-[6px]">
+            <i className="ri-edit-box-line" />
+            {t("Custom fields", "حقول مخصصة")}
+          </span>
+        }
+      >
+        <FieldRow
+          dir={isAr ? "rtl" : "ltr"}
+          label={t("Name", "الاسم")}
+          required
+          requiredLabel={t("(Required)", "(مطلوب)")}
+          right={
+            <div className="flex flex-1 items-center gap-[12px] min-w-0">
+              <InputField placeholder={t("First Name*", "الاسم الأول*")} className="flex-1 min-w-0" />
+              <InputField placeholder={t("Last Name*", "اسم العائلة*")} className="flex-1 min-w-0" />
+            </div>
+          }
+        />
+
+        <RowDivider />
+
+        <FieldRow
+          dir={isAr ? "rtl" : "ltr"}
+          label={t("Department", "القسم")}
+          right={<InputField placeholder={t("Write Hint Here", "اكتب التلميح هنا")} className="flex-1" />}
+        />
+
+        <RowDivider />
+
+        <FieldRow
+          dir={isAr ? "rtl" : "ltr"}
+          label={t("Alias names", "الأسماء المستعارة")}
+          right={
+            <InputField
+              placeholder={t("Write Hint Here", "اكتب التلميح هنا")}
+              className="flex-1"
+              childrenSide={
+                <ActionButton aria-label={t("Add alias name", "إضافة اسم مستعار")}>
+                  <i className="ri-add-line" />
+                </ActionButton>
+              }
+            />
+          }
+        />
+      </SectionBlock>
+
+      <TabSwitch
+        className="absolute top-2 right-2 z-10"
+        size="S"
+        value={language}
+        onValueChange={setLanguage}
+        options={[
+          { value: "en", label: "English" },
+          { value: "ar", label: "العربية" },
+        ]}
+      />
+    </div>
+  );
+}
+
+interface FieldRowProps {
+  label: string;
+  required?: boolean;
+  requiredLabel?: string;
+  right: ReactNode;
+  dir?: "ltr" | "rtl";
+}
+
+function FieldRow({ label, required, requiredLabel = "(Required)", right, dir }: FieldRowProps) {
+  return (
+    <div dir={dir} className="flex items-center gap-[24px] py-[18px]">
+      <div className="flex w-[140px] shrink-0 items-center gap-[6px]">
+        <span className="typography-body-medium-regular text-content-presentation-action-light-primary">
+          {label}
+        </span>
+        {required && (
+          <span className="typography-body-small-medium text-content-presentation-state-negative">
+            {requiredLabel}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-1 items-center min-w-0">{right}</div>
+    </div>
+  );
+}
+
+function RowDivider() {
+  return <div className="h-px w-full bg-border-presentation-global-primary" />;
+}
+```
+
 ### Custom Layout (override defaults)
 
 Use `containerClassName`, `headerClassName`, and `bodyClassName` to override the built-in spacing and width without losing the title/body structure.
