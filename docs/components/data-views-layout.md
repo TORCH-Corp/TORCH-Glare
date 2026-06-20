@@ -176,7 +176,7 @@ Inbox auto-detects `isRead`, `isStarred`, `hasAttachment`, `priority`. Override 
 | `type` | `FieldType` | Renderer key (see below). Auto-inferred if omitted. |
 | `visible` | `boolean` | Show in cells. Default `true`. |
 | `order` | `number` | Display order. |
-| `filterable` | `boolean` | Surface this field in the filter panel. Set `false` to explicitly exclude a field the panel would otherwise auto-detect (e.g. an `id` or `name` with few unique values). |
+| `filterable` | `boolean` | Surface this field in the filter panel. The control adapts to the field `type`: categorical fields render checkboxes/radios (or a searchable dropdown via `filterVariant`), numeric fields a range slider, and **date / date-format fields a From + To pair of Glare `DatePicker`s** (two single-date pickers bounding the range). Set `false` to explicitly exclude a field the panel would otherwise auto-detect (e.g. an `id` or `name` with few unique values). |
 | `filterLabel` | `string` | Override the label shown above this field's filter (defaults to `label`). |
 | `filterMode` | `"single" \| "multi"` | Categorical selection mode. `"multi"` (default) renders checkboxes; `"single"` renders radios. |
 | `filterVariant` | `"checkbox" \| "searchable-select"` | Categorical control style. `"checkbox"` (default) is the inline checkbox/radio list; `"searchable-select"` renders a single-select `SearchableSelect` dropdown — useful when a field has many options. Implies single-select. |
@@ -191,6 +191,8 @@ Inbox auto-detects `isRead`, `isStarred`, `hasAttachment`, `priority`. Override 
 ### `FieldType` (built-in renderers)
 
 `text` · `number` · `date` · `date-format` · `boolean` · `currency` · `number-format` · `enum-badge` · `badge-array` · `progress-bar` · `star-rating` · `icon-text` · `two-line` · `avatar` · `link` · `image` · `hidden`
+
+> **`hidden` vs `filterable: false`** — use `type: "hidden"` to drop a field from the UI **entirely** (no column, no column-toggle in the config panel, no filter) while it stays in the data for row identity — e.g. an `id` you key rows by but never want shown. Use `filterable: false` to keep a field as a **column** but remove only its **filter**.
 
 ### `BadgeVariant`
 

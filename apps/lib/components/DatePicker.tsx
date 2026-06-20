@@ -63,7 +63,12 @@ export const DatePicker = forwardRef(
                     ? value
                     : [value]
                 : mode == "range"
-                    ? { from: value, to: value }
+                    // Accept a DateRange ({ from, to }) directly, or wrap a single
+                    // Date into a one-day range.
+                    ? value && typeof value === "object" && !(value instanceof Date) &&
+                      ("from" in value || "to" in value)
+                        ? (value as DateRange)
+                        : { from: value, to: value }
                     : value;
         const [date, setDate] = useState<Date[] | Date | DateRange | undefined>(initialDate);
         const [pickerValue, setPickerValue] = useState<TimePickerValue>({

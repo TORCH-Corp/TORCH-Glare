@@ -30,7 +30,7 @@ import {
   resolvePresets,
 } from "../../utils/dataViews/rangeUtils"
 import { RangeSliderWithInputs } from "./filters/RangeSliderWithInputs"
-import { DateRangePopover } from "./filters/DateRangePopover"
+import { DatePickerRangeFilter } from "./filters/DatePickerRangeFilter"
 import { PresetChips } from "./filters/PresetChips"
 import { resolveBadgeVariant } from "./badgeAdapter"
 import { SearchableSelect } from "../SearchableSelect"
@@ -348,15 +348,10 @@ function FilterBody({
   }
 
   if (entry.kind === "date-range" && entry.field) {
-    const presets = resolvePresets(entry.field)
     const dateValue: DateRangeFilter | undefined = isDateRange(value) ? value : undefined
-    return (
-      <DateRangePopover
-        value={dateValue}
-        onChange={onSetFilter}
-        presets={presets.length > 0 ? presets : undefined}
-      />
-    )
+    // Glare DatePicker in range mode — pick a from→to span. (No quick-preset
+    // chips: the calendar range selection is the single intended interaction.)
+    return <DatePickerRangeFilter value={dateValue} onChange={onSetFilter} />
   }
 
   const opts = getCategoricalOptions(data, entry.path, entry.field, entry.legacy)
