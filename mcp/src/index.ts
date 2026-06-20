@@ -9,9 +9,16 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import { createRequire } from "node:module";
 import { DocsLoader } from "./docs-loader.js";
 import { ComponentRegistry } from "./component-registry.js";
 import { extractSection, extractCodeExamples } from "./markdown-utils.js";
+
+// Read the server version from package.json so the MCP handshake version never
+// drifts from the published package version. dist/index.js → ../package.json.
+const { version: SERVER_VERSION } = createRequire(import.meta.url)(
+  "../package.json",
+) as { version: string };
 
 /**
  * Absolute project rules prepended to every code/docs response so any AI
@@ -45,7 +52,7 @@ async function main() {
   // 3. Create MCP server
   const server = new McpServer({
     name: "torch-glare-docs",
-    version: "1.0.0",
+    version: SERVER_VERSION,
   });
 
   // ─── TOOLS ───────────────────────────────────────────────────────────

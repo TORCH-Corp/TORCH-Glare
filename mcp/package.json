@@ -1,6 +1,6 @@
 {
   "name": "torch-glare-mcp",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "MCP server for TORCH Glare component library — gives AI assistants full access to component docs, API references, code examples, and design system info",
   "type": "module",
   "main": "dist/index.js",

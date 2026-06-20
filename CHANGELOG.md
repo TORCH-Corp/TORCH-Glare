@@ -1,3 +1,21 @@
+## 2.4.0
+
+### Added
+- **HeaderBar** component — variant-driven page/form header chip (`new` / `edit` / `detail`) pairing a colored emphasis pill with a plain title.
+- **ContextMenu** component — right-click / long-press menu sharing the DropdownMenu surface (boxed auto-grouping, checkbox/radio items, nested sub-menus, RTL).
+- **SearchableSelect** and **SearchableTable** — searchable single-select combobox and a dialog-based row picker, both with client- or server-side search and infinite-scroll pagination.
+- `maxHeight` prop on `ContextMenu` / `DropdownMenu` content — caps the surface height so long menus scroll instead of overflowing off-screen.
+- DataViews: `FieldConfig.filterVariant: "searchable-select"` renders a categorical filter as a single-select `SearchableSelect` dropdown; documented `filterMode` / `filterLabel` / `filterOptions`.
+- SectionBlock: bilingual (EN / AR) form example with an in-header language switch and per-row RTL.
+
+### Changed
+- DropdownMenu moved fully to auto-grouped (boxed) menus; the `DropdownMenuSeparator` shim was removed (use labels / explicit `DropdownMenuGroup` as section boundaries).
+- DataViews config panel: restored the Saved View section; "Save a New View" now uses the Glare `Button` (size M); the close (X) button turns red on hover.
+
+### Fixed
+- DataViews `DataViewRadio` unselected ring was invisible on the dark panel — now hardcodes the spec values (`#626467` border, `rgba(255,255,255,0.05)` fill, `#0075FF` selected) so it always renders dark regardless of host `data-theme`.
+- Badge subtle variants gained `isolate` so the `mix-blend-luminosity` label/icon composites only against the badge background, fixing ghosted/double-stroked text on layered surfaces.
+
 ## 2.1.1
 
 ### Changed
