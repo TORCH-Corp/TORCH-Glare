@@ -148,7 +148,7 @@ render `DataViewsConfigPanel` yourself (example above) or extend the layout
 | Saved View | `savedViews` / `activeSavedView` | Radio list + "Save a New View" button. |
 | Table Columns | `config.tableColumns` | Green `Switch` per column toggles `visible`; rows are drag-reorderable (HTML5 DnD) and patch `order`. |
 | Default Sort | `config.sortBy` | Single-choice radio; selecting sets `sortBy`. Direction stays on `config.sortOrder`. |
-| Filters tab | `filterState` + `fields` | Renders `FilterPanel` restyled full-width/transparent. |
+| Filters tab | `filterState` + `fields` | Renders `FilterPanel` restyled full-width/transparent. Categorical fields render as checkbox/radio lists, or a `SearchableSelect` dropdown when a field sets `filterVariant: "searchable-select"`. |
 
 ## Internal: PanelControls
 
@@ -173,8 +173,8 @@ Common changes and where to make them:
 |---|---|
 | Make Saved View work through `DataViewsLayout` | Add `savedViews` / `activeSavedView` / `onSavedViewChange` / `onSaveNewView` to `DataViewsLayoutProps`, hold them in layout state (or accept from the host), and forward them to `<DataViewsConfigPanel>` at its render site in `DataViewsLayout.tsx`. |
 | Add a new Config section | Add a new block inside the Config. tab in `DataViewsConfigPanel.tsx`, backed by a `config.*` field so `onConfigChange` persists it. |
-| Restyle a radio/toggle | Edit `PanelControls.tsx`. Keep values matching the Figma spec; do not swap in the shared `Radio`/`Label` (they impose theming/layout that fights the dark panel — this was deliberate). |
-| Change the dark chrome | The root forces `data-theme="dark"` and uses hardcoded hex (`#1C1D1F`, `#252729`, `#005ECC`, `#626467`, `#0AC713`). These are intentional Figma values, not tokens. |
+| Restyle a radio/toggle | Edit the radio ring in `DataViewRadio.tsx` (the `RadioRow` in `PanelControls.tsx` just wraps it) or the switch in `PanelControls.tsx`. Keep the hardcoded hex matching the Figma spec; do not swap in the shared `Radio`/`Label` (they impose theming/layout that fights the dark panel — this was deliberate). |
+| Change the dark chrome | The root forces `data-theme="dark"` and uses hardcoded hex (`#1C1D1F`, `#252729`, `#005ECC`, `#0075FF`, `#626467`, `#0AC713`). These are intentional Figma values, not tokens — the radio/checkbox rings hardcode them (`#626467` border, `rgba(255,255,255,0.05)` fill, `#0075FF` selected) so the panel always renders dark regardless of host `data-theme`. |
 
 After any change to the panel docs or component, update this file and rebuild
 the MCP server (`cd mcp && pnpm build`) so the docs the server serves stay in

@@ -183,6 +183,7 @@ See each view's reference: [TableView](../components/table-view.md) ·
 
 - **Empty `data`** → all views render their empty state; pass `isLoading` upstream if you fetch async.
 - **Tree tab missing?** No hierarchy was detected. Supply `treeConfig` explicitly or check your `childrenField` / `parentField`.
+- **Unwanted filters?** The panel auto-detects filterable text fields with few unique values (e.g. `id`, `name`). Set `filterable: false` on a field to exclude it. For a field with many options, set `filterVariant: "searchable-select"` to render a searchable dropdown instead of a long checkbox list.
 - **Saved Views don't persist** in tab mode — that's a known limitation documented in [`DataViewsConfigPanel`](../components/data-views-config-panel.md). Use composable mode for real persistence.
 
 ## Related

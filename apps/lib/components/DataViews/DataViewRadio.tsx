@@ -30,9 +30,16 @@ export function DataViewRadio({
       <span
         className={cn(
           "flex h-[14px] w-[14px] shrink-0 items-center justify-center rounded-full",
-          "border border-border-presentation-action-primary bg-background-presentation-form-field-primary transition-colors",
+          // Hardcoded literals so the indicator always renders dark inside the
+          // DataView regardless of the host app's data-theme (matches the
+          // always-dark panel chrome convention). Unselected ring = the spec
+          // CheckBox-Primary border (#626467) + BorderStyle fill
+          // (rgba(255,255,255,0.05)); same tokens the shared Checkbox uses.
+          "border border-[#626467] bg-white/5 transition-colors",
           "group-data-[state=checked]:border-transparent",
-          "group-data-[state=checked]:bg-border-presentation-state-focus",
+          // #0075FF = the previous selected-fill value (border-presentation-state-focus),
+          // now literal so the blue is theme-independent and visually unchanged.
+          "group-data-[state=checked]:bg-[#0075FF]",
         )}
       >
         <RadioGroupPrimitive.Indicator className="flex items-center justify-center">

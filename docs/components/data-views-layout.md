@@ -176,7 +176,11 @@ Inbox auto-detects `isRead`, `isStarred`, `hasAttachment`, `priority`. Override 
 | `type` | `FieldType` | Renderer key (see below). Auto-inferred if omitted. |
 | `visible` | `boolean` | Show in cells. Default `true`. |
 | `order` | `number` | Display order. |
-| `filterable` | `boolean` | Surface this field in the filter panel. |
+| `filterable` | `boolean` | Surface this field in the filter panel. Set `false` to explicitly exclude a field the panel would otherwise auto-detect (e.g. an `id` or `name` with few unique values). |
+| `filterLabel` | `string` | Override the label shown above this field's filter (defaults to `label`). |
+| `filterMode` | `"single" \| "multi"` | Categorical selection mode. `"multi"` (default) renders checkboxes; `"single"` renders radios. |
+| `filterVariant` | `"checkbox" \| "searchable-select"` | Categorical control style. `"checkbox"` (default) is the inline checkbox/radio list; `"searchable-select"` renders a single-select `SearchableSelect` dropdown — useful when a field has many options. Implies single-select. |
+| `filterOptions` | `string[] \| { label: string; value: string }[]` | Explicit option list for the categorical filter (otherwise options are collected from the data). |
 | `variants` | `Record<string, BadgeVariant>` | For `enum-badge`: per-value color map. |
 | `currency` | `string \| CurrencyOptions` | For `currency`: ISO code or `{ symbol, locale, decimals, code }`. |
 | `thresholds` | `[number, number]` | For `progress-bar`: warning/ok thresholds. |
