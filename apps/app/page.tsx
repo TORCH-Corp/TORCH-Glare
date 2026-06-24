@@ -64,6 +64,7 @@ import {
   SearchableSelect,
   type SearchableSelectOption,
 } from "@/components/SearchableSelect";
+import { SearchTree } from "@/components/SearchTree";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
@@ -73,6 +74,7 @@ export default function Page() {
   return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
 
     <DropdownMenuDemo />
+    <SearchTreeDemo />
     <SearchableSelectDemo />
     <SearchableTableDemo />
     <BadgeFieldDemo />
@@ -1038,6 +1040,79 @@ function RtlMenuDemo() {
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
+      </div>
+    </section>
+  );
+}
+
+// Category tree matching the real API shape (nested `children`).
+type Category = {
+  id: string;
+  name: string;
+  name_ar: string;
+  is_leaf: boolean;
+  children?: Category[];
+};
+
+const CATEGORY_TREE: Category[] = [
+  {
+    id: "all",
+    name: "All",
+    name_ar: "الكل",
+    is_leaf: false,
+    children: [
+      {
+        id: "clothing",
+        name: "Clothing",
+        name_ar: "ملابس",
+        is_leaf: false,
+        children: [
+          { id: "shirts", name: "Shirts", name_ar: "قمصان", is_leaf: true },
+          { id: "pants", name: "Pants", name_ar: "بناطيل", is_leaf: true },
+        ],
+      },
+      {
+        id: "electronics",
+        name: "Electronics",
+        name_ar: "إلكترونيات",
+        is_leaf: false,
+        children: [
+          { id: "computers", name: "Computers", name_ar: "أجهزة الكمبيوتر", is_leaf: true },
+          { id: "phones", name: "Phones", name_ar: "هواتف", is_leaf: true },
+        ],
+      },
+    ],
+  },
+];
+
+function SearchTreeDemo() {
+  const [selected, setSelected] = useState<Category | null>(null);
+
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        SearchTree
+      </h2>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Click to open dialog, search & pick a tree node
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Selected: {selected ? selected.name : "None"}
+        </p>
+        <SearchTree<Category>
+          nodes={CATEGORY_TREE}
+          getNodeId={(n) => n.id}
+          getNodeLabel={(n) => n.name}
+          getNodeChildren={(n) => n.children}
+          value={selected}
+          onSelect={setSelected}
+          icon={<i className="ri-folder-line" />}
+          placeholder="Select a category…"
+          title="Select a category"
+          searchPlaceholder="Search categories…"
+        />
       </div>
     </section>
   );
