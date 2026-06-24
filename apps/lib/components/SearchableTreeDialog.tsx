@@ -18,7 +18,7 @@ import {
   DialogTitle,
 } from "./Dialog";
 import { Icon, Input, Group } from "./Input";
-import { LoadingIcon } from "./Button";
+import { Button, LoadingIcon } from "./Button";
 
 /**
  * SearchableTreeDialog — a field that opens a modal Dialog to pick a node from a tree.
@@ -247,7 +247,24 @@ export function SearchableTreeDialog<T>({
           >
             {triggerLabel}
           </span>
-          <i className="ri-arrow-down-s-line text-[16px] shrink-0 text-content-presentation-action-light-primary" />
+          {/* Chevron toggle — boxed icon button matching the Select component. */}
+          <Button
+            as="span"
+            buttonType="icon"
+            tabIndex={-1}
+            aria-label={open ? "Close" : "Open"}
+            className={cn(
+              "shrink-0 h-[32px] w-[32px] rounded-[4px]",
+              open && "bg-background-presentation-action-hover text-white"
+            )}
+          >
+            <i
+              className={cn(
+                "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
+                open && "rotate-180"
+              )}
+            />
+          </Button>
         </Group>
       </DialogTrigger>
 

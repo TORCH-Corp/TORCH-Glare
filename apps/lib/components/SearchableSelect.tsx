@@ -227,7 +227,7 @@ export function SearchableSelect({
           >
             <i
               className={cn(
-                "ri-arrow-down-s-line text-[16px] transition-all duration-100 ease-in-out",
+                "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
                 open && "rotate-180"
               )}
             />

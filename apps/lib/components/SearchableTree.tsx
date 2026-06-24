@@ -300,7 +300,7 @@ export function SearchableTree<T>({
           >
             <i
               className={cn(
-                "ri-arrow-down-s-line text-[16px] transition-all duration-100 ease-in-out",
+                "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
                 open && "rotate-180"
               )}
             />
@@ -453,7 +453,7 @@ function TreeLevel<T>({
                     // so they read as de-emphasized (opacity-50) and get no highlight.
                     !highlightable && "opacity-50",
                     highlightable &&
-                      "group-hover:bg-white-50 group-hover:text-black-1000 group-hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+                    "group-hover:bg-white-50 group-hover:text-black-1000 group-hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
                     highlightable && selected && "bg-white-alpha-75 text-black-1000"
                   )}
                 >

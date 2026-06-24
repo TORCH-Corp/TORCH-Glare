@@ -193,7 +193,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
           >
             {value ? label(value) : placeholder}
           </span>
-          <i className="ri-arrow-down-s-line text-[16px] shrink-0 text-content-presentation-action-light-primary" />
+          <i className="ri-arrow-down-s-line text-[20px] shrink-0 text-content-presentation-action-light-primary" />
         </Group>
       </DialogTrigger>
 

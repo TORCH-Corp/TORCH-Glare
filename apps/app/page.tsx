@@ -77,8 +77,10 @@ export default function Page() {
     <DropdownMenuDemo />
     <SearchableTreeDialogDemo />
     <SelectableTreeDialogDemo />
+    <SearchableTreeDialogRtlDemo />
     <SearchableTreeDemo />
     <SelectableTreeDemo />
+    <SearchableTreeRtlDemo />
     <SearchableSelectDemo />
     <SearchableTableDemo />
     <BadgeFieldDemo />
@@ -1157,6 +1159,41 @@ function SelectableTreeDialogDemo() {
   );
 }
 
+function SearchableTreeDialogRtlDemo() {
+  const [selected, setSelected] = useState<Category | null>(null);
+
+  return (
+    <section dir="rtl" className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        SearchableTreeDialog — العربية (RTL)
+      </h2>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          انقر لفتح النافذة، ابحث واختر عقدة من الشجرة
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          المحدد: {selected ? selected.name_ar : "لا شيء"}
+        </p>
+        <SearchableTreeDialog<Category>
+          dir="rtl"
+          nodes={CATEGORY_TREE}
+          getNodeId={(n) => n.id}
+          getNodeLabel={(n) => n.name_ar}
+          getNodeChildren={(n) => n.children}
+          getSearchText={(n) => n.name_ar}
+          value={selected}
+          onSelect={setSelected}
+          icon={<i className="ri-folder-line" />}
+          placeholder="اختر فئة…"
+          title="اختر فئة"
+          searchPlaceholder="ابحث في الفئات…"
+        />
+      </div>
+    </section>
+  );
+}
+
 function SearchableTreeDemo() {
   const [selected, setSelected] = useState<Category | null>(null);
 
@@ -1217,6 +1254,40 @@ function SelectableTreeDemo() {
           icon={<i className="ri-folder-line" />}
           placeholder="Search categories…"
           title="Tree"
+        />
+      </div>
+    </section>
+  );
+}
+
+function SearchableTreeRtlDemo() {
+  const [selected, setSelected] = useState<Category | null>(null);
+
+  return (
+    <section dir="rtl" className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        SearchableTree — العربية (RTL)
+      </h2>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          حقل بقائمة منسدلة — ابحث واختر عقدة من الشجرة
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          المحدد: {selected ? selected.name_ar : "لا شيء"}
+        </p>
+        <SearchableTree<Category>
+          dir="rtl"
+          nodes={CATEGORY_TREE}
+          getNodeId={(n) => n.id}
+          getNodeLabel={(n) => n.name_ar}
+          getNodeChildren={(n) => n.children}
+          getSearchText={(n) => n.name_ar}
+          value={selected}
+          onSelect={setSelected}
+          icon={<i className="ri-folder-line" />}
+          placeholder="ابحث في الفئات…"
+          title="الشجرة"
         />
       </div>
     </section>
