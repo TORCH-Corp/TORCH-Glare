@@ -64,7 +64,7 @@ import {
   SearchableSelect,
   type SearchableSelectOption,
 } from "@/components/SearchableSelect";
-import { SearchTree } from "@/components/SearchTree";
+import { SearchableTreeDialog } from "@/components/SearchableTreeDialog";
 
 export default function Page() {
   const [singleValue, setSingleValue] = useState("option1");
@@ -74,7 +74,7 @@ export default function Page() {
   return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
 
     <DropdownMenuDemo />
-    <SearchTreeDemo />
+    <SearchableTreeDialogDemo />
     <SearchableSelectDemo />
     <SearchableTableDemo />
     <BadgeFieldDemo />
@@ -1085,13 +1085,13 @@ const CATEGORY_TREE: Category[] = [
   },
 ];
 
-function SearchTreeDemo() {
+function SearchableTreeDialogDemo() {
   const [selected, setSelected] = useState<Category | null>(null);
 
   return (
     <section className="space-y-6">
       <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
-        SearchTree
+        SearchableTreeDialog
       </h2>
 
       <div className="space-y-4 max-w-[420px]">
@@ -1101,7 +1101,7 @@ function SearchTreeDemo() {
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Selected: {selected ? selected.name : "None"}
         </p>
-        <SearchTree<Category>
+        <SearchableTreeDialog<Category>
           nodes={CATEGORY_TREE}
           getNodeId={(n) => n.id}
           getNodeLabel={(n) => n.name}

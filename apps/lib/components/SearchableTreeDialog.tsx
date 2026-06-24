@@ -21,7 +21,7 @@ import { Icon, Input, Group } from "./Input";
 import { LoadingIcon } from "./Button";
 
 /**
- * SearchTree — a field that opens a modal Dialog to pick a node from a tree.
+ * SearchableTreeDialog — a field that opens a modal Dialog to pick a node from a tree.
  *
  * Same layout as SearchableTable (trigger → dialog with a search input + a
  * scrollable area), but the area renders a hierarchical tree instead of a table.
@@ -95,7 +95,7 @@ interface TreeNode<T> {
   children: TreeNode<T>[];
 }
 
-export function SearchTree<T>({
+export function SearchableTreeDialog<T>({
   nodes,
   getNodeId,
   getNodeLabel,
@@ -308,7 +308,7 @@ export function SearchTree<T>({
   );
 }
 
-SearchTree.displayName = "SearchTree";
+SearchableTreeDialog.displayName = "SearchableTreeDialog";
 
 /* -------------------------------------------------------------------------- */
 /* Recursive tree renderer                                                    */
