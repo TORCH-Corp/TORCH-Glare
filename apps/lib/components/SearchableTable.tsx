@@ -206,7 +206,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
           inputRef.current?.focus();
         }}
         className={cn(
-          "w-[min(640px,90vw)]  bg-transparent !items-stretch rounded-[14px] gap-3 shadow-none",
+          "w-[min(640px,90vw)]  bg-transparent !items-stretch rounded-[14px]  shadow-none",
         )}
       >
         {/* Visually-hidden title for accessibility (Radix requires a DialogTitle). */}
@@ -225,72 +225,78 @@ export function SearchableTable<T extends Record<string, unknown>>({
         />
 
         {/* Scrollable table area */}
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="max-h-[55vh] overflow-auto scrollbar-hide rounded-[10px] border border-white-alpha-40 bg-[rgba(184,192,204,0.5)]"
-        >
-          {filteredRows.length > 0 && (
-            <Table
-              theme={theme as never}
-              data-theme="dark"
-              className="w-full rounded-[10px] overflow-hidden"
+        <div className=" w-full flex justify-center">
+
+          <div className="bg-[#696a6f] pt-[8px] rounded-b-[14px] pr-[4px] pb-[4px] pl-[4px] w-[95%] shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]">
+
+            <div
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="max-h-[55vh] overflow-auto scrollbar-hide rounded-[10px]  border border-white-alpha-40 bg-[rgba(184,192,204,0.5)]"
             >
-              <TableHeader className="bg-black-alpha-20 shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]">
-                <TableRow className="h-[44px] [&_button]:bg-white-alpha-40 [&>th]:border-white-alpha-20">
-                  {columns.map((col) => (
-                    <TableHead
-                      key={col.key}
-                      className="cursor-default typography-body-medium-medium text-white"
-                    >
-                      {col.header}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredRows.map((row) => {
-                  const id = rowId(row);
-                  return (
-                    <TableRow
-                      key={id}
-                      state={selectedId === id ? "selected" : undefined}
-                      onClick={() => handleSelect(row)}
-                      className={cn(
-                        "cursor-pointer h-[40px]",
-                        selectedId === id && "bg-white-alpha-50"
-                      )}
-                    >
+              {filteredRows.length > 0 && (
+                <Table
+                  theme={theme as never}
+                  data-theme="dark"
+                  className="w-full rounded-[10px] overflow-hidden"
+                >
+                  <TableHeader className="bg-black-alpha-20 shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]">
+                    <TableRow className="h-[44px] [&_button]:bg-white-alpha-40 [&>th]:border-white-alpha-20">
                       {columns.map((col) => (
-                        <TableCell
+                        <TableHead
                           key={col.key}
-                          className="border-b border-white-alpha-20 text-white px-[8px] !whitespace-nowrap !break-normal"
+                          className="cursor-default typography-body-medium-medium text-white"
                         >
-                          {col.render
-                            ? col.render(row)
-                            : String(row[col.key] ?? "")}
-                        </TableCell>
+                          {col.header}
+                        </TableHead>
                       ))}
                     </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          )}
+                  </TableHeader>
+                  <TableBody>
+                    {filteredRows.map((row) => {
+                      const id = rowId(row);
+                      return (
+                        <TableRow
+                          key={id}
+                          state={selectedId === id ? "selected" : undefined}
+                          onClick={() => handleSelect(row)}
+                          className={cn(
+                            "cursor-pointer h-[40px]",
+                            selectedId === id && "bg-white-alpha-50"
+                          )}
+                        >
+                          {columns.map((col) => (
+                            <TableCell
+                              key={col.key}
+                              className="border-b border-white-alpha-20 text-white px-[8px] !whitespace-nowrap !break-normal"
+                            >
+                              {col.render
+                                ? col.render(row)
+                                : String(row[col.key] ?? "")}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              )}
 
-          {/* Empty state — only when nothing is loading. */}
-          {filteredRows.length === 0 && !loading && (
-            <div className="px-3 py-6 text-center typography-body-small-regular text-white-alpha-75">
-              No results found
-            </div>
-          )}
+              {/* Empty state — only when nothing is loading. */}
+              {filteredRows.length === 0 && !loading && (
+                <div className="px-3 py-6 text-center typography-body-small-regular text-white-alpha-75">
+                  No results found
+                </div>
+              )}
 
-          {/* Loading row (initial load or fetching the next page). */}
-          {loading && (
-            <div className="flex items-center justify-center py-3">
-              <LoadingIcon size="M" />
+              {/* Loading row (initial load or fetching the next page). */}
+              {loading && (
+                <div className="flex items-center justify-center py-3">
+                  <LoadingIcon size="M" />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -313,41 +319,45 @@ interface SearchInputProps
 
 const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
   ({ variant = "PresentationStyle", theme, label, className, ...props }, ref) => (
-    <Group
-      data-theme={theme}
-      variant={variant}
-      size="M"
-      className={cn(
-        "group flex w-full items-center gap-2 p-1 rounded-[10px] transition-colors",
-        "border border-white-alpha-40 bg-[rgba(184,192,204,0.5)]",
-        "hover:bg-background-presentation-table-row-hover",
-        "focus-within:bg-background-presentation-table-row-hover",
-        className
-      )}
-    >
-      <Icon className="shrink-0">
-        <i className="ri-search-line text-content-presentation-global-secondary transition-colors group-hover:text-white group-focus-within:text-white" />
-      </Icon>
-
-      {label && (
-        <>
-          <span className="shrink-0 px-1 typography-labels-small-regular text-content-presentation-global-secondary text-[14px] text-white transition-colors group-hover:text-white group-focus-within:text-white">
-            {label}
-          </span>
-          <span className="h-[14px] w-px shrink-0 rounded-full bg-border-presentation-action-labelless-divider transition-colors group-hover:bg-white-alpha-40" />
-        </>
-      )}
-
-      <Input
-        ref={ref}
-        {...props}
+    <div className="flex p-[3px] flex-col gap-[10px] rounded-[14px] bg-[rgba(61,64,69,0.65)] shadow-[0_0_18px_0_rgba(0,0,0,0.40)] backdrop-blur-[21px]">
+      <Group
+        data-theme={theme}
+        variant={variant}
+        size="M"
         className={cn(
-          "min-w-[100px] flex-1 !h-[24px] bg-transparent",
-          "text-content-presentation-action-light-primary",
-          "transition-colors group-hover:!text-white group-focus-within:!text-white"
+          "group flex w-full items-center gap-2 p-1 rounded-[10px] transition-colors",
+          "border border-white-alpha-40 bg-[rgba(184,192,204,0.5)]",
+          "hover:bg-background-presentation-table-row-hover",
+          "focus-within:bg-background-presentation-table-row-hover rounded-[11px] border border-white-alpha-40 bg-[rgba(37,44,57,0.30)]",
+          className
         )}
-      />
-    </Group>
+      >
+        <Icon className="shrink-0">
+          <i className="ri-search-line text-content-presentation-global-secondary transition-colors group-hover:text-white group-focus-within:text-white" />
+        </Icon>
+
+        {label && (
+          <>
+            <span className="shrink-0 px-1 typography-labels-small-regular text-content-presentation-global-secondary text-[14px] text-white transition-colors group-hover:text-white group-focus-within:text-white">
+              {label}
+            </span>
+            <span className="h-[14px] w-px shrink-0 rounded-full bg-border-presentation-action-labelless-divider transition-colors group-hover:bg-white-alpha-40" />
+          </>
+        )}
+
+        <Input
+          ref={ref}
+          {...props}
+          className={cn(
+            "min-w-[100px] flex-1 !h-[24px] bg-transparent",
+            "text-content-presentation-action-light-primary",
+            "placeholder:hover:text-white-alpha-75",
+            "transition-colors group-hover:!text-white group-focus-within:!text-white"
+          )}
+        />
+      </Group>
+    </div>
+
   )
 );
 SearchInput.displayName = "SearchInput";
