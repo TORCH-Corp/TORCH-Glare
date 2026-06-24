@@ -78,6 +78,7 @@ export default function Page() {
     <SearchableTreeDialogDemo />
     <SelectableTreeDialogDemo />
     <SearchableTreeDemo />
+    <SelectableTreeDemo />
     <SearchableSelectDemo />
     <SearchableTableDemo />
     <BadgeFieldDemo />
@@ -1179,6 +1180,40 @@ function SearchableTreeDemo() {
           getNodeChildren={(n) => n.children}
           value={selected}
           onSelect={setSelected}
+          icon={<i className="ri-folder-line" />}
+          placeholder="Search categories…"
+          title="Tree"
+        />
+      </div>
+    </section>
+  );
+}
+
+function SelectableTreeDemo() {
+  const [selected, setSelected] = useState<Category | null>(null);
+
+  return (
+    <section className="space-y-6">
+      <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+        SearchableTree — any node selectable
+      </h2>
+
+      <div className="space-y-4 max-w-[420px]">
+        <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
+          Any node is selectable — clicking a folder OR a leaf selects it and
+          closes the dropdown, showing it in the field.
+        </h3>
+        <p className="typography-body-small-medium text-content-presentation-global-secondary">
+          Selected: {selected ? selected.name : "None"}
+        </p>
+        <SearchableTree<Category>
+          nodes={CATEGORY_TREE}
+          getNodeId={(n) => n.id}
+          getNodeLabel={(n) => n.name}
+          getNodeChildren={(n) => n.children}
+          value={selected}
+          onSelect={setSelected}
+          selectableFolders
           icon={<i className="ri-folder-line" />}
           placeholder="Search categories…"
           title="Tree"

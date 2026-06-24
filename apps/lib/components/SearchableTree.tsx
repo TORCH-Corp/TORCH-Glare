@@ -23,8 +23,9 @@ import { useClickOutside } from "../hooks/useClickOutside";
  * Popover anchored below it, containing a search bar + the scrollable tree.
  *
  * Interaction (matches the Figma `Search.Overlay` design):
- *   • A FOLDER row (a node with children) toggles expand/collapse on click —
- *     folders are not selectable.
+ *   • A FOLDER row (a node with children) toggles expand/collapse on click and
+ *     reads de-emphasized — unless `selectableFolders` is set, in which case it
+ *     selects + closes like a leaf.
  *   • A LEAF row (no children) selects the node and closes the dropdown.
  * Nesting is shown with indentation + a vertical connector rail per level
  * (no chevron). Search filters matching nodes and keeps/expands ancestors.
@@ -69,6 +70,12 @@ interface Props<T> {
    * children are visible as soon as the tree opens (matches the Figma design).
    */
   defaultExpanded?: boolean;
+  /**
+   * When true, folder rows (nodes with children) are ALSO selectable: clicking
+   * any node — folder or leaf — selects it and closes the dropdown. When false
+   * (default), folders only toggle expand/collapse and only leaves are selectable.
+   */
+  selectableFolders?: boolean;
   /** Max height (px) of the scrollable tree body before it scrolls (default 320). */
   maxBodyHeight?: number;
 
@@ -109,6 +116,7 @@ export function SearchableTree<T>({
   dir,
   className,
   defaultExpanded = true,
+  selectableFolders = false,
   maxBodyHeight = 320,
   filterClientSide = true,
   onSearchChange,
@@ -215,6 +223,12 @@ export function SearchableTree<T>({
     setSearch("");
     setSearching(false);
     setOpen(false);
+  };
+
+  // Folder rows when `selectableFolders` is on: behave just like a leaf —
+  // select the node and close the dropdown so it shows in the field.
+  const handleSelectFolder = (node: TreeNode<T>) => {
+    handleSelect(node);
   };
 
   // Field value: the live query while typing, otherwise the selected label.
@@ -329,9 +343,11 @@ export function SearchableTree<T>({
                     nodes={visibleTree}
                     depth={0}
                     selectedId={selectedId}
+                    selectableFolders={selectableFolders}
                     isExpanded={isExpanded}
                     onToggle={toggle}
                     onSelect={handleSelect}
+                    onSelectFolder={handleSelectFolder}
                   />
                 </div>
               </div>
@@ -365,16 +381,20 @@ function TreeLevel<T>({
   nodes,
   depth,
   selectedId,
+  selectableFolders = false,
   isExpanded,
   onToggle,
   onSelect,
+  onSelectFolder,
 }: {
   nodes: TreeNode<T>[];
   depth: number;
   selectedId?: string;
+  selectableFolders?: boolean;
   isExpanded: (id: string) => boolean;
   onToggle: (id: string) => void;
   onSelect: (node: TreeNode<T>) => void;
+  onSelectFolder: (node: TreeNode<T>) => void;
 }) {
   return (
     <>
@@ -382,9 +402,16 @@ function TreeLevel<T>({
         const hasChildren = node.children.length > 0;
         const open = isExpanded(node.id);
         const selected = selectedId === node.id;
-        // Folder rows toggle expand/collapse; leaf rows select + close.
+        // Leaf rows always select + close. Folder rows either select + close
+        // (selectableFolders) or just toggle expand/collapse.
         const onRowClick = () =>
-          hasChildren ? onToggle(node.id) : onSelect(node);
+          !hasChildren
+            ? onSelect(node)
+            : selectableFolders
+              ? onSelectFolder(node)
+              : onToggle(node.id);
+        // Whether THIS row participates in the selected/hover highlight.
+        const highlightable = !hasChildren || selectableFolders;
         return (
           <div key={node.id} className="flex flex-col gap-px">
             {/* item-container — full-width row with the design's grey fill. */}
@@ -421,11 +448,13 @@ function TreeLevel<T>({
                     "flex w-full items-center gap-2 px-[12px] py-[4px] rounded-[8px]",
                     "transition-all duration-300 ease-in-out",
                     "text-content-presentation-global-primary-light",
-                    // Leaf rows highlight on hover/select; folder rows only toggle,
-                    // so they get no highlight — just a pointer cursor.
-                    !hasChildren &&
+                    // Selectable rows (leaves, or folders when selectableFolders)
+                    // highlight on hover/select; non-selectable folders only toggle,
+                    // so they read as de-emphasized (opacity-50) and get no highlight.
+                    !highlightable && "opacity-50",
+                    highlightable &&
                       "group-hover:bg-white-50 group-hover:text-black-1000 group-hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
-                    !hasChildren && selected && "bg-white-alpha-75 text-black-1000"
+                    highlightable && selected && "bg-white-alpha-75 text-black-1000"
                   )}
                 >
                   <span className="flex-1 min-w-px truncate typography-body-medium-regular">
@@ -440,9 +469,11 @@ function TreeLevel<T>({
                 nodes={node.children}
                 depth={depth + 1}
                 selectedId={selectedId}
+                selectableFolders={selectableFolders}
                 isExpanded={isExpanded}
                 onToggle={onToggle}
                 onSelect={onSelect}
+                onSelectFolder={onSelectFolder}
               />
             )}
           </div>
