@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export function ButtonFieldExample() {
-  const [variants] = useState<any>([true, false]);
+  const [variants] = useState<boolean[]>([true, false]);
 
   return (
     <>
@@ -16,8 +16,8 @@ export function ButtonFieldExample() {
       >
         ButtonField Preview
       </h1>
-      {variants.map((variant: any) => (
-        <div key={variant} className="flex flex-col gap-2 w-full">
+      {variants.map((variant) => (
+        <div key={String(variant)} className="flex flex-col gap-2 w-full">
           <span
             className={cn(
               "text-sm",

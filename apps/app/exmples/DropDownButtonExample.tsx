@@ -6,10 +6,10 @@ import {
   SelectValue,
 } from "@/components/Select";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 
 export default function SelectExample() {
-  const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
+  const [ButtonSizes] = useState<NonNullable<ComponentProps<typeof SelectTrigger>["size"]>[]>(["S", "M", "L", "XL"]);
 
   return (
     <>
@@ -22,7 +22,7 @@ export default function SelectExample() {
         Select Preview
       </h1>
       <div className="flex flex-col gap-8 w-full">
-        {ButtonSizes.map((size: any) => (
+        {ButtonSizes.map((size) => (
           <div key={size}>
             <p className="text-lg font-semibold my-2">Size: {size}</p>
             <Select key={size}>

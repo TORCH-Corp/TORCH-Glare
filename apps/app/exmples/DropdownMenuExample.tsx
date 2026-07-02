@@ -17,7 +17,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function DropdownMenuExample() {
-  const [ThemeVariants] = useState<"PresentationStyle" | "SystemStyle" | any>([
+  const [ThemeVariants] = useState<("PresentationStyle" | "SystemStyle")[]>([
     "PresentationStyle",
     "SystemStyle",
   ]);
@@ -33,7 +33,7 @@ export default function DropdownMenuExample() {
           DropdownMenu Variants
         </h2>
         <div className="flex gap-8">
-          {ThemeVariants.map((variant: any) => (
+          {ThemeVariants.map((variant) => (
             <div key={variant} className="flex flex-col items-center">
               <DropdownMenu >
                 <DropdownMenuTrigger

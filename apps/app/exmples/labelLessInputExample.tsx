@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function LabelLessInputExample() {
 
-  const [anotherSizes] = useState<any>(["S", "M"]);
+  const [anotherSizes] = useState<("S" | "M")[]>(["S", "M"]);
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
 
@@ -22,7 +22,7 @@ export default function LabelLessInputExample() {
       </h1>
 
       {/* Loop through sizes and variants */}
-      {anotherSizes.map((size: any) => (
+      {anotherSizes.map((size) => (
         <div key={`${size}-labelLessInput`} className="">
           <h2
             className={cn("text-lg font-semibold", {

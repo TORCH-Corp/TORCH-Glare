@@ -1,9 +1,9 @@
 import { Badge } from "@/components/Badge";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 
 export function BadgeExample() {
-  const [variants] = useState<any>(["green", "greenLight", "cocktailGreen", "yellow", 'redOrange', 'redLight', 'rose', 'purple', 'bluePurple', 'blue', 'navy', 'gray']);
+  const [variants] = useState<NonNullable<ComponentProps<typeof Badge>["variant"]>[]>(["green", "greenLight", "cocktailGreen", "yellow", 'redOrange', 'redLight', 'rose', 'purple', 'bluePurple', 'blue', 'navy', 'gray']);
 
   return (
     <>
@@ -15,7 +15,7 @@ export function BadgeExample() {
       >
         Badge Preview
       </h1>
-      {variants.map((variant: any) => (
+      {variants.map((variant) => (
         <div key={variant} className="flex flex-col gap-2 w-full">
           <span
             className={cn(

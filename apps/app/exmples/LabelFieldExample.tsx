@@ -4,12 +4,14 @@ import { PopoverItem } from "@/components/Popover";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
+type FieldSize = "S" | "M";
+
 export default function LabelFieldExample() {
   const mockIcons = [
-    <i className="ri-user-line"></i>,
-    <i className="ri-search-line"></i>,
+    <i key="user" className="ri-user-line"></i>,
+    <i key="search" className="ri-search-line"></i>,
   ];
-  const [anotherSizes] = useState<any>(["S", "M"]);
+  const [anotherSizes] = useState<FieldSize[]>(["S", "M"]);
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
 
@@ -25,7 +27,7 @@ export default function LabelFieldExample() {
       </h1>
 
       {/* Loop through variants and sizes */}
-      {anotherSizes.map((size: any) => (
+      {anotherSizes.map((size: FieldSize) => (
         <div key={`${size}-labelField`} className="">
           <h2
             className={cn("text-lg font-semibold", {

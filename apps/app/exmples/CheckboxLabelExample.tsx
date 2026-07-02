@@ -1,9 +1,9 @@
 import { LabeledCheckBox } from "@/components/LabeledCheckBox";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 
 export default function CheckboxLabelExample() {
-  const [sizes] = useState<any>(["S", "M", "L"]);
+  const [sizes] = useState<NonNullable<ComponentProps<typeof LabeledCheckBox>["size"]>[]>(["S", "M", "L"]);
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function CheckboxLabelExample() {
       >
         LabeledCheckBox Preview
       </h1>
-      {sizes.map((size: any) => (
+      {sizes.map((size) => (
         <div key={size} className="flex flex-col gap-2 w-full">
           <span
             className={cn(

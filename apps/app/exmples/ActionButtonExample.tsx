@@ -2,8 +2,10 @@ import { ActionButton } from "@/components/ActionButton";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 
+type ActionButtonSize = "XS" | "S" | "M";
+
 export default function ActionButtonExample() {
-  const [sizes] = useState<any>(["XS", "S", "M"]);
+  const [sizes] = useState<ActionButtonSize[]>(["XS", "S", "M"]);
 
   return (
     <>
@@ -15,7 +17,7 @@ export default function ActionButtonExample() {
       >
         Action Button Preview
       </h1>
-      {sizes.map((size: any) => (
+      {sizes.map((size: ActionButtonSize) => (
         <div key={size} className="flex flex-col gap-2 w-full">
           <span
             className={cn(

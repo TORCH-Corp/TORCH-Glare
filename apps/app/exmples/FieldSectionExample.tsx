@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function FieldSectionExample() {
-  const [ButtonSizes] = useState<any>(["S", "M", "L"]);
+  const [ButtonSizes] = useState<("S" | "M" | "L")[]>(["S", "M", "L"]);
 
   return (
     <>
@@ -18,7 +18,7 @@ export default function FieldSectionExample() {
         FieldSection Styles Preview
       </h1>
 
-      {ButtonSizes.map((size: any) => (
+      {ButtonSizes.map((size) => (
         <div key={size} className="flex-1">
           <h2 className="text-lg font-semibold">Size: {size}</h2>
           <FieldSection

@@ -2,10 +2,10 @@ import { Button } from "@/components/Button";
 import { Datepicker } from "@/components/Calendar";
 import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 
 export default function DatePickerExample() {
-  const [anotherSizes] = useState<any>(["S", "M"]);
+  const [anotherSizes] = useState<NonNullable<ComponentProps<typeof InputField>["size"]>[]>(["S", "M"]);
   const [error, setError] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ export default function DatePickerExample() {
       </h1>
 
       {/* Loop through variants and sizes */}
-      {anotherSizes.map((size: any) =>
+      {anotherSizes.map((size) =>
         <div key={`${size}`} className="">
           <h2
             className={cn("text-lg font-semibold", {
@@ -30,7 +30,7 @@ export default function DatePickerExample() {
           >{`Size: ${size}`}</h2>
           <Datepicker
             customInput={<InputField errorMessage={error ? "This is an error message" : undefined} size={size} />}
-            onChange={(e: any) => console.log(e)} />
+            onChange={(e: unknown) => console.log(e)} />
         </div>
       )}
 

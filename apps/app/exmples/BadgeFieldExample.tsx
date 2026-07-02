@@ -1,8 +1,7 @@
-import { Badge } from "@/components/Badge";
 import { BadgeField } from "@/components/BadgeField";
 import { Button } from "@/components/Button";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 import { ActionButton } from "@/components/ActionButton";
 import { Tag } from "@/hooks/useTagSelection";
 
@@ -15,7 +14,7 @@ export default function BadgeFieldExample() {
     { id: '5', name: 'Sports', isSelected: false, variant: 'navy', value: 'Sports', live: false },
     { id: '8', name: 'Limited Edition', isSelected: false, variant: 'cocktailGreen', value: 'Limited Edition', live: false },
   ];
-  const [anotherSizes] = useState<any>(["XS", "S", "M"]);
+  const [anotherSizes] = useState<NonNullable<ComponentProps<typeof BadgeField>["size"]>[]>(["XS", "S", "M"]);
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
 
@@ -31,7 +30,7 @@ export default function BadgeFieldExample() {
       </h1>
 
       {/* Loop through variants and sizes */}
-      {anotherSizes.map((size: any) => (
+      {anotherSizes.map((size) => (
         <div key={`${size}-badgeField`} className="">
           <h2
             className={cn("text-lg font-semibold", {

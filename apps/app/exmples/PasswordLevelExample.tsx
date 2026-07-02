@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function PasswordLevelExample() {
-  const [value, setValue] = useState<any>("");
+  const [value, setValue] = useState("");
 
   return (
     <>
