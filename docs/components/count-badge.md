@@ -12,9 +12,15 @@ A compact circular badge component designed specifically for displaying numeric 
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-cli add count-badge
+npx torch-glare@latest init
+npx torch-glare@latest add CountBadge
 ```
+
+`add` also copies any components, hooks, and utilities that `CountBadge` depends on.
 
 ## Imports
 

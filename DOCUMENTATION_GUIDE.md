@@ -261,6 +261,15 @@ dependencies:
   - "clsx": "^2.0.0"
 ---
 
+> **TORCH Glare override — copy-in model, not npm-package.**
+> The generic `npm install your-library-name` + `import from 'your-library-name'` template
+> below is a placeholder only. TORCH Glare is a **copy-in** library (like shadcn/ui): the CLI
+> copies component source into the consumer's project. Real docs MUST use:
+> - Installation: `npx torch-glare@latest init` then `npx torch-glare@latest add <Component>`
+> - Import: `import { <Component> } from "@/components/<Component>"` (local alias, per `glare.json`)
+> Never `npm install torch-glare` / package imports / `@torch-ai/*` / `@torch-ui/*`. The
+> `pnpm run check:ai-docs` gate enforces this.
+
 # Button
 
 > A versatile, accessible button component with multiple variants, sizes, and states. Supports icons, loading states, and polymorphic rendering.
@@ -268,15 +277,15 @@ dependencies:
 ## Installation
 
 ```bash
-npm install your-library-name
+# TORCH Glare (copy-in) — see the override note above; do NOT use `npm install`.
+npx torch-glare@latest init
+npx torch-glare@latest add Button
 ```
 
 ## Import
 
 ```typescript
-import { Button } from 'your-library-name'
-// or
-import { Button } from 'your-library-name/components'
+import { Button } from "@/components/Button";
 ```
 
 ## Quick Examples

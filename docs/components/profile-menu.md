@@ -11,12 +11,22 @@ keywords: [profile-menu, user-menu, avatar-menu, account-menu, popover]
 
 ## Installation
 
-No additional dependencies required (uses internal Popover component).
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add ProfileMenu
+```
+
+`add` also copies any components, hooks, and utilities that `ProfileMenu` depends on.
 
 ## Import
 
-```typescript
-import { ProfileMenu } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { ProfileMenu } from "@/components/ProfileMenu";
 ```
 
 ## Quick Examples
@@ -24,7 +34,7 @@ import { ProfileMenu } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
 
 function Example() {
   return (
@@ -39,8 +49,8 @@ function Example() {
 ### With Dropdown Content
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 
 function ProfileDropdown() {
   return (
@@ -62,7 +72,7 @@ function ProfileDropdown() {
 ### Selected State
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
 import { useState } from 'react'
 
 function SelectedProfile() {
@@ -81,8 +91,8 @@ function SelectedProfile() {
 ### With Overlay Blur
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 
 function BlurredProfileMenu() {
   return (
@@ -105,8 +115,8 @@ function BlurredProfileMenu() {
 ### Complete User Menu
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 import { useRouter } from 'next/navigation'
 
 function UserMenu({ user }: { user: User }) {
@@ -162,8 +172,8 @@ function UserMenu({ user }: { user: User }) {
 ### With Status Indicator
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 
 function OnlineProfileMenu() {
   return (
@@ -190,8 +200,9 @@ function OnlineProfileMenu() {
 ### With Role Badge
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem, Badge } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { Badge } from "@/components/Badge";
+import { PopoverItem } from "@/components/Popover";
 
 function AdminProfileMenu({ user }: { user: User }) {
   return (
@@ -218,8 +229,8 @@ function AdminProfileMenu({ user }: { user: User }) {
 ### Dark Theme
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 
 function DarkProfileMenu() {
   return (
@@ -241,8 +252,8 @@ function DarkProfileMenu() {
 ### Multiple Profile Switcher
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 import { useState } from 'react'
 
 function ProfileSwitcher() {
@@ -290,8 +301,8 @@ function ProfileSwitcher() {
 ### With Custom Actions
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 
 function ActionsProfileMenu() {
   return (
@@ -322,8 +333,8 @@ function ActionsProfileMenu() {
 ### With Keyboard Shortcuts
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 
 function ShortcutProfileMenu() {
   return (
@@ -390,7 +401,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps>
 ### Usage with TypeScript
 
 ```typescript
-import { ProfileMenu } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
 
 interface User {
   name: string
@@ -514,8 +525,8 @@ function SidebarProfile({ user }: { user: User }) {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { ProfileMenu } from '@torch-ui/components'
-import { PopoverItem } from '@torch-ui/components'
+import { ProfileMenu } from "@/components/ProfileMenu";
+import { PopoverItem } from "@/components/Popover";
 
 describe('ProfileMenu', () => {
   it('renders user name and avatar', () => {

@@ -11,14 +11,22 @@ keywords: [toast, notification, message, alert, feedback, react-hot-toast]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install react-hot-toast
+npx torch-glare@latest init
+npx torch-glare@latest add Toast
 ```
+
+`add` also copies any components, hooks, and utilities that `Toast` depends on.
 
 ## Import
 
-```typescript
-import { Toaster, toast } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Toast } from "@/components/Toast";
 ```
 
 ## Quick Examples
@@ -26,8 +34,8 @@ import { Toaster, toast } from '@torch-ui/components'
 ### Basic Setup
 
 ```typescript
-import { Toaster, toast } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Toaster, toast } from "@/components/Toast";
+import { Button } from "@/components/Button";
 
 function App() {
   return (
@@ -44,8 +52,8 @@ function App() {
 ### Success Toast
 
 ```typescript
-import { toast } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
+import { Button } from "@/components/Button";
 
 function SuccessExample() {
   const handleSuccess = () => {
@@ -63,8 +71,8 @@ function SuccessExample() {
 ### Error Toast
 
 ```typescript
-import { toast } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
+import { Button } from "@/components/Button";
 
 function ErrorExample() {
   const handleError = () => {
@@ -82,8 +90,8 @@ function ErrorExample() {
 ### Loading Toast
 
 ```typescript
-import { toast } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
+import { Button } from "@/components/Button";
 
 function LoadingExample() {
   const handleAsync = async () => {
@@ -108,7 +116,7 @@ function LoadingExample() {
 ### Promise Toast
 
 ```typescript
-import { toast } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
 
 function PromiseExample() {
   const saveData = async () => {
@@ -132,7 +140,7 @@ function PromiseExample() {
 ### Custom Duration
 
 ```typescript
-import { toast } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
 
 function CustomDuration() {
   return (
@@ -156,7 +164,7 @@ function CustomDuration() {
 ### Custom Position
 
 ```typescript
-import { Toaster, toast } from '@torch-ui/components'
+import { Toaster, toast } from "@/components/Toast";
 
 function PositionExample() {
   return (
@@ -179,8 +187,8 @@ function PositionExample() {
 ### Dismissible Toast
 
 ```typescript
-import { toast } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
+import { Button } from "@/components/Button";
 
 function DismissibleExample() {
   const showDismissible = () => {
@@ -209,7 +217,7 @@ function DismissibleExample() {
 ### Custom Styling
 
 ```typescript
-import { toast } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
 
 function CustomStyleExample() {
   const showCustom = () => {
@@ -238,7 +246,7 @@ function CustomStyleExample() {
 ### With Icon
 
 ```typescript
-import { toast } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
 
 function IconExample() {
   return (
@@ -263,8 +271,9 @@ function IconExample() {
 ### Form Validation
 
 ```typescript
-import { toast } from '@torch-ui/components'
-import { InputField, Button } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function FormValidation() {
@@ -404,7 +413,7 @@ const dismissToast = (id: string): void => {
 ### API Error Handling
 
 ```typescript
-import { toast } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
 
 async function fetchData() {
   try {
@@ -435,7 +444,7 @@ async function fetchData() {
 ### Multi-Step Process
 
 ```typescript
-import { toast } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
 
 async function multiStepProcess() {
   const toastId = toast.loading('Step 1: Validating data...')
@@ -458,8 +467,8 @@ async function multiStepProcess() {
 ### Undo Action
 
 ```typescript
-import { toast } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
+import { Button } from "@/components/Button";
 
 function UndoExample() {
   const handleDelete = (item: Item) => {
@@ -496,7 +505,7 @@ function UndoExample() {
 ### Rate Limited Actions
 
 ```typescript
-import { toast } from '@torch-ui/components'
+import { toast } from "@/components/Toast";
 
 let lastToastTime = 0
 const TOAST_COOLDOWN = 2000 // 2 seconds
@@ -528,7 +537,7 @@ function SpamProtectedButton() {
 
 ```typescript
 import { render, screen, waitFor } from '@testing-library/react'
-import { Toaster, toast } from '@torch-ui/components'
+import { Toaster, toast } from "@/components/Toast";
 import userEvent from '@testing-library/user-event'
 
 describe('Toast', () => {

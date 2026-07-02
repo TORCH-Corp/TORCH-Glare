@@ -1,6 +1,6 @@
 ---
 name: Table
-version: 1.1.15
+version: 1.2.8
 status: stable
 category: components/data-display
 tags: [table, data, grid, sortable, resizable, accessible, compound]
@@ -19,26 +19,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Table
 ```
+
+`add` also copies any components, hooks, and utilities that `Table` depends on.
 
 ## Import
 
-```typescript
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-  TableCheckbox,
-  TableFooterButton,
-  SubTableButton
-} from 'torch-glare/lib/components/Table'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Table } from "@/components/Table";
 ```
 
 ## Quick Examples
@@ -46,7 +42,7 @@ import {
 ### Basic Table
 
 ```typescript
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from 'torch-glare/lib/components/Table'
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/Table'
 
 function BasicTable() {
   return (
@@ -210,9 +206,14 @@ function SelectableTable() {
           <TableHead size="S">
             <TableCheckbox
               id="select-all"
-              checked={selectedRows.size === data.length}
-              indeterminate={selectedRows.size > 0 && selectedRows.size < data.length}
-              onChange={toggleAll}
+              checked={
+                selectedRows.size === data.length
+                  ? true
+                  : selectedRows.size > 0
+                    ? 'indeterminate'
+                    : false
+              }
+              onCheckedChange={toggleAll}
             />
           </TableHead>
           <TableHead>Name</TableHead>
@@ -229,7 +230,7 @@ function SelectableTable() {
               <TableCheckbox
                 id={`select-${item.id}`}
                 checked={selectedRows.has(item.id)}
-                onChange={() => toggleRow(item.id)}
+                onCheckedChange={() => toggleRow(item.id)}
               />
             </TableCell>
             <TableCell>{item.name}</TableCell>
@@ -402,9 +403,8 @@ function ResizableTable() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `id` | `string` | - | Required checkbox ID |
-| `checked` | `boolean` | - | Checked state |
-| `indeterminate` | `boolean` | - | Indeterminate state |
-| `onChange` | `() => void` | - | Change handler |
+| `checked` | `boolean \| 'indeterminate'` | - | Checked state; pass `'indeterminate'` for the mixed state |
+| `onCheckedChange` | `(checked: boolean \| 'indeterminate') => void` | - | Change handler (Radix Checkbox) |
 
 ### TableFooterButton Props
 
@@ -446,8 +446,8 @@ interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
 // TableCheckbox types
 interface TableCheckboxProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   id: string
-  checked?: boolean
-  indeterminate?: boolean
+  checked?: boolean | 'indeterminate'
+  onCheckedChange?: (checked: boolean | 'indeterminate') => void
 }
 
 // Export structure
@@ -659,7 +659,7 @@ function EditableTable() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from 'torch-glare/lib/components/Table'
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/Table'
 
 describe('Table', () => {
   it('renders table with data', () => {
@@ -847,7 +847,7 @@ test('Table meets WCAG standards', async () => {
 ```diff
 // Import path changed
 - import Table from 'torch-glare/Table'
-+ import { Table, TableHeader, TableBody } from 'torch-glare/lib/components/Table'
++ import { Table, TableHeader, TableBody } from '@/components/Table'
 
 // Component structure
 - <Table headers={headers} data={data} />

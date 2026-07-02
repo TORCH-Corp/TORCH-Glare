@@ -1,6 +1,6 @@
 ---
 name: Button
-version: 1.1.15
+version: 1.2.8
 status: stable
 category: components/buttons
 tags: [interactive, form, action, accessible, polymorphic]
@@ -17,16 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Button
 ```
+
+`add` also copies any components, hooks, and utilities that `Button` depends on.
 
 ## Import
 
-```typescript
-import { Button } from 'torch-glare/lib/components/Button'
-// or
-import { Button } from 'torch-glare/lib/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Button } from "@/components/Button";
 ```
 
 ## Quick Examples
@@ -34,7 +40,7 @@ import { Button } from 'torch-glare/lib/components'
 ### Basic Usage
 
 ```typescript
-import { Button } from 'torch-glare/lib/components/Button'
+import { Button } from '@/components/Button'
 
 function Example() {
   return (
@@ -68,11 +74,11 @@ function Example() {
 ### With Sizes
 
 ```typescript
-<Button size="sm">Small</Button>
-<Button size="md">Medium (Default)</Button>
-<Button size="lg">Large</Button>
-<Button size="xl">Extra Large</Button>
-<Button size="icon">Icon Only</Button>
+<Button size="S">Small</Button>
+<Button size="M">Medium (Default)</Button>
+<Button size="L">Large</Button>
+<Button size="XL">Extra Large</Button>
+<Button buttonType="icon">Icon Only</Button>
 ```
 
 ### Loading State
@@ -117,7 +123,7 @@ import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 </Button>
 
 // Icon only
-<Button size="icon" aria-label="Add new item">
+<Button buttonType="icon" aria-label="Add new item">
   <PlusIcon className="w-5 h-5" />
 </Button>
 ```
@@ -155,7 +161,8 @@ import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `variant` | `ButtonVariant` | `'PrimeStyle'` | Visual style variant of the button |
-| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'icon'` | `'md'` | Size of the button |
+| `size` | `'S' \| 'M' \| 'L' \| 'XL'` | `'M'` | Size of the button |
+| `buttonType` | `'button' \| 'icon'` | `'button'` | Layout type; `'icon'` renders a square icon-only button |
 | `is_loading` | `boolean` | `false` | Shows loading state and disables interaction |
 | `disabled` | `boolean` | `false` | Disables the button |
 | `asChild` | `boolean` | `false` | Merges props onto child element |
@@ -192,6 +199,7 @@ interface ButtonProps extends
   disabled?: boolean
   asChild?: boolean
   variant?: ButtonVariant
+  buttonType?: 'button' | 'icon'
   as?: React.ElementType
   theme?: Themes
   containerClassName?: string
@@ -207,8 +215,8 @@ export const Button: React.ForwardRefExoticComponent<
 ### Form Submit Button
 
 ```typescript
-import { Button } from 'torch-glare/lib/components/Button'
-import { Form } from 'torch-glare/lib/components/Form'
+import { Button } from '@/components/Button'
+import { Form } from '@/components/Form'
 
 function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -247,8 +255,8 @@ function ContactForm() {
 ### Button Group
 
 ```typescript
-import { Button } from 'torch-glare/lib/components/Button'
-import { ActionsGroup } from 'torch-glare/lib/components/ActionsGroup'
+import { Button } from '@/components/Button'
+import { ActionsGroup } from '@/components/ActionsGroup'
 
 function ButtonGroup() {
   return (
@@ -271,7 +279,7 @@ function DeleteButton({ onDelete }: { onDelete: () => void }) {
     return (
       <div className="flex gap-2">
         <Button
-          size="sm"
+          size="S"
           variant="RedSecStyle"
           onClick={() => {
             onDelete()
@@ -281,7 +289,7 @@ function DeleteButton({ onDelete }: { onDelete: () => void }) {
           Confirm Delete
         </Button>
         <Button
-          size="sm"
+          size="S"
           variant="BorderStyle"
           onClick={() => setNeedsConfirm(false)}
         >
@@ -305,8 +313,8 @@ function DeleteButton({ onDelete }: { onDelete: () => void }) {
 ### With Tooltip
 
 ```typescript
-import { Button } from 'torch-glare/lib/components/Button'
-import { Tooltip } from 'torch-glare/lib/components/Tooltip'
+import { Button } from '@/components/Button'
+import { Tooltip } from '@/components/Tooltip'
 
 function SaveButton() {
   return (
@@ -325,7 +333,7 @@ function SaveButton() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Button } from 'torch-glare/lib/components/Button'
+import { Button } from '@/components/Button'
 
 describe('Button', () => {
   it('handles click events', () => {
@@ -397,20 +405,25 @@ The Button component automatically includes:
 ```typescript
 <button
   type="button"
-  role="button"
-  aria-busy={is_loading}
-  aria-disabled={disabled || is_loading}
   disabled={disabled || is_loading}
+  aria-busy={is_loading || undefined}
 >
   {children}
+  {/* While loading, the spinner is rendered with role="status" and aria-label="Loading" */}
 </button>
 ```
+
+Notes:
+- The component renders a native `<button>` (or the element passed via `as`), so it does **not** add an explicit `role="button"`.
+- It sets the native `disabled` attribute (never `aria-disabled`) when `disabled` or `is_loading` is true.
+- `aria-busy` is set only while loading; it is omitted otherwise.
+- The loading spinner itself carries `role="status"` and `aria-label="Loading"`.
 
 ### Screen Reader Support
 
 ```typescript
 // Always provide aria-label for icon-only buttons
-<Button size="icon" aria-label="Add new item">
+<Button buttonType="icon" aria-label="Add new item">
   <PlusIcon className="w-5 h-5" />
 </Button>
 
@@ -496,7 +509,7 @@ The Button component automatically includes:
 ```diff
 // Import path changed
 - import Button from 'torch-glare/Button'
-+ import { Button } from 'torch-glare/lib/components/Button'
++ import { Button } from '@/components/Button'
 
 // Loading prop renamed
 - <Button loading={true}>

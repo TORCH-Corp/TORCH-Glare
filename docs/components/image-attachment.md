@@ -11,16 +11,22 @@ keywords: [image-attachment, file-upload, drag-drop, preview, modal, expandable]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add ImageAttachment
+```
+
+`add` also copies any components, hooks, and utilities that `ImageAttachment` depends on.
 
 ## Import
 
-```typescript
-import {
-  ImageAttachment,
-  ExpandableImage,
-  AttachmentImagePreview
-} from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { ImageAttachment } from "@/components/ImageAttachment";
 ```
 
 ## Component Overview
@@ -36,7 +42,7 @@ The ImageAttachment suite consists of three components:
 ### Basic File Upload
 
 ```typescript
-import { ImageAttachment } from '@torch-ui/components'
+import { ImageAttachment } from "@/components/ImageAttachment";
 import { useState } from 'react'
 
 function Example() {
@@ -64,7 +70,7 @@ function Example() {
 ### With Preview
 
 ```typescript
-import { ImageAttachment, ExpandableImage } from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage } from "@/components/ImageAttachment";
 import { useState } from 'react'
 
 function WithPreview() {
@@ -106,12 +112,8 @@ function WithPreview() {
 ### Complete Upload Flow
 
 ```typescript
-import {
-  ImageAttachment,
-  ExpandableImage,
-  AttachmentImagePreview
-} from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage, AttachmentImagePreview } from "@/components/ImageAttachment";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function CompleteFlow() {
@@ -160,7 +162,7 @@ function CompleteFlow() {
             header={file?.name || 'Image Preview'}
           >
             <Button onClick={handleUpload}>Upload</Button>
-            <Button variant="SecondaryStyle" onClick={handleRemove}>
+            <Button variant="BlueSecStyle" onClick={handleRemove}>
               Remove
             </Button>
           </AttachmentImagePreview>
@@ -174,7 +176,7 @@ function CompleteFlow() {
 ### With Drag and Drop (React Dropzone)
 
 ```typescript
-import { ImageAttachment, ExpandableImage } from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage } from "@/components/ImageAttachment";
 import { useDropzone } from 'react-dropzone'
 import { useState } from 'react'
 
@@ -221,7 +223,7 @@ function WithDropzone() {
 ### Multiple File Upload
 
 ```typescript
-import { ImageAttachment, ExpandableImage } from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage } from "@/components/ImageAttachment";
 import { useState } from 'react'
 
 function MultipleFiles() {
@@ -267,8 +269,9 @@ function MultipleFiles() {
 ### With Validation
 
 ```typescript
-import { ImageAttachment } from '@torch-ui/components'
-import { FieldHint, toast } from '@torch-ui/components'
+import { ImageAttachment } from "@/components/ImageAttachment";
+import { FieldHint } from "@/components/FieldHint";
+import { toast } from "@/components/Toast";
 import { useState } from 'react'
 
 function WithValidation() {
@@ -327,12 +330,9 @@ function WithValidation() {
 ### Profile Picture Upload
 
 ```typescript
-import {
-  ImageAttachment,
-  ExpandableImage,
-  AttachmentImagePreview
-} from '@torch-ui/components'
-import { Avatar, Button } from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage, AttachmentImagePreview } from "@/components/ImageAttachment";
+import { Avatar } from "@/components/Avatar";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function ProfilePictureUpload() {
@@ -400,8 +400,8 @@ function ProfilePictureUpload() {
 ### Gallery Upload
 
 ```typescript
-import { ImageAttachment, ExpandableImage } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage } from "@/components/ImageAttachment";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function GalleryUpload() {
@@ -448,7 +448,7 @@ function GalleryUpload() {
               <Button
                 size="S"
                 buttonType="icon"
-                variant="SecondaryStyle"
+                variant="BlueSecStyle"
                 className="absolute top-1 right-1 opacity-0 group-hover:opacity-100"
                 onClick={() => handleRemove(image.id)}
               >
@@ -545,11 +545,7 @@ export const AttachmentImagePreview: React.FC<AttachmentImagePreviewProps>
 ### Usage with Types
 
 ```typescript
-import {
-  ImageAttachment,
-  ExpandableImage,
-  AttachmentImagePreview
-} from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage, AttachmentImagePreview } from "@/components/ImageAttachment";
 import { useRef, useState } from 'react'
 
 function TypedExample() {
@@ -585,7 +581,7 @@ function TypedExample() {
 ### Upload with Progress
 
 ```typescript
-import { ImageAttachment } from '@torch-ui/components'
+import { ImageAttachment } from "@/components/ImageAttachment";
 import { useState } from 'react'
 
 function UploadWithProgress() {
@@ -638,7 +634,7 @@ function UploadWithProgress() {
 ### Image Cropper Integration
 
 ```typescript
-import { ImageAttachment, ExpandableImage } from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage } from "@/components/ImageAttachment";
 import { useState } from 'react'
 import Cropper from 'react-easy-crop'
 
@@ -688,11 +684,7 @@ function ImageCropper() {
 
 ```typescript
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import {
-  ImageAttachment,
-  ExpandableImage,
-  AttachmentImagePreview
-} from '@torch-ui/components'
+import { ImageAttachment, ExpandableImage, AttachmentImagePreview } from "@/components/ImageAttachment";
 
 describe('ImageAttachment', () => {
   it('renders labels', () => {

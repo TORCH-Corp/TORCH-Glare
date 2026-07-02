@@ -59,11 +59,15 @@ jobs:
       - name: Run tests
         run: pnpm run test
 
-      - name: Check registry is up to date
+      - name: Check AI docs
+        run: pnpm run check:ai-docs
+
+      - name: Check generated files are up to date
         run: |
           pnpm run registry
-          git diff --exit-code apps/lib/registry.json \
-            || (echo "❌ registry.json is stale — run 'pnpm run registry' and commit." && exit 1)
+          pnpm run llms
+          git diff --exit-code apps/lib/registry.json llms.txt llms-full.txt llms-manifest.json \
+            || (echo "❌ Generated files are stale — run 'pnpm run registry && pnpm run llms' and commit." && exit 1)
 
       - name: Build CLI
         run: pnpm build

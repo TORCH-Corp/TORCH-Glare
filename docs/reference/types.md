@@ -37,7 +37,7 @@ export type Themes = "dark" | "light" | "default";
 
 **Usage:**
 ```typescript
-import type { Themes } from '@torch-ai/torch-glare';
+import type { Themes } from "@/utils/types";
 
 interface MyComponentProps {
   theme?: Themes;
@@ -870,7 +870,7 @@ Button.displayName = 'Button';
 ### Extending Button Props
 
 ```typescript
-import type { ButtonProps } from '@torch-ai/torch-glare';
+import type { ButtonProps } from "@/components/LoginButton";
 
 interface CustomButtonProps extends ButtonProps {
   isLoading?: boolean;

@@ -30,7 +30,7 @@ Tracks which tree item is most visible in the viewport using the IntersectionObs
 ### Basic Usage
 
 ```tsx
-import { useActiveTreeItem } from '@torch-ai/torch-glare';
+import { useActiveTreeItem } from "@/hooks/useActiveTreeItem";
 
 function TableOfContents() {
   const sectionIds = ['intro', 'features', 'api', 'examples'];
@@ -210,7 +210,7 @@ Detects clicks outside a referenced element and executes a callback. Perfect for
 ### Basic Usage
 
 ```tsx
-import { useClickOutside } from '@torch-ai/torch-glare';
+import { useClickOutside } from "@/hooks/useClickOutside";
 import { useState } from 'react';
 
 function Dropdown() {
@@ -383,7 +383,7 @@ Handles element resizing with support for both mouse and touch events, including
 ### Basic Usage
 
 ```tsx
-import { useResize } from '@torch-ai/torch-glare';
+import { useResize } from "@/hooks/useResize";
 import { useRef } from 'react';
 
 function ResizablePanel() {
@@ -630,7 +630,7 @@ Manages tag selection state with comprehensive keyboard navigation support. Supp
 ### Basic Multi-Select
 
 ```tsx
-import { useTagSelection } from '@torch-ai/torch-glare';
+import { useTagSelection } from "@/hooks/useTagSelection";
 import { useRef } from 'react';
 
 function TagSelector() {
@@ -1177,7 +1177,7 @@ const result = useTagSelection({
 
 ```tsx
 import { renderHook } from '@testing-library/react';
-import { useActiveTreeItem } from '@torch-ai/torch-glare';
+import { useActiveTreeItem } from "@/hooks/useActiveTreeItem";
 
 describe('useActiveTreeItem', () => {
   it('should track active item', () => {
@@ -1208,7 +1208,7 @@ describe('useActiveTreeItem', () => {
 
 ```tsx
 import { render, fireEvent } from '@testing-library/react';
-import { useClickOutside } from '@torch-ai/torch-glare';
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 describe('useClickOutside', () => {
   it('should call callback on outside click', () => {
@@ -1245,7 +1245,7 @@ describe('useClickOutside', () => {
 
 ```tsx
 import { renderHook, act } from '@testing-library/react';
-import { useResize } from '@torch-ai/torch-glare';
+import { useResize } from "@/hooks/useResize";
 
 describe('useResize', () => {
   it('should handle resize', () => {
@@ -1279,7 +1279,7 @@ describe('useResize', () => {
 
 ```tsx
 import { renderHook, act } from '@testing-library/react';
-import { useTagSelection } from '@torch-ai/torch-glare';
+import { useTagSelection } from "@/hooks/useTagSelection";
 
 describe('useTagSelection', () => {
   const mockTags = [

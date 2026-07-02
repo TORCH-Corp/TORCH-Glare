@@ -1,211 +1,123 @@
-# TORCH Glare Components Library
+# TORCH Glare
 
-> A comprehensive React component library with 55+ modern UI components. Built with TypeScript, Radix UI, and Tailwind CSS. Features dark/light theming, full accessibility, and polymorphic components.
+> A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.
 
-**Version:** 1.1.15 | **License:** MIT | **Status:** Active | **Components:** 55+
+**Version:** 1.2.8 | **License:** MIT | **Components:** 56 | **Distribution:** copy-in via CLI (you own the source)
 
-## Quick Start
+## Installation
+
+TORCH Glare is a **copy-in** component library (like shadcn/ui). The CLI copies component
+source directly into your project — you do **not** import components from the `torch-glare`
+npm package.
 
 ```bash
-npm install torch-glare
+# 1. Set up glare.json + Tailwind (run once per project)
+npx torch-glare@latest init
+
+# 2. Add a component — copies it AND its dependencies into your project
+npx torch-glare@latest add Button
 ```
 
-```typescript
-import { Button, Input, Card } from 'torch-glare/lib/components'
-import { ThemeProvider } from 'torch-glare/lib/providers'
+Then import from your local path (the alias configured in `glare.json`, e.g. `@/*`):
 
-function App() {
-  return (
-    <ThemeProvider theme="light">
-      <Card>
-        <Input placeholder="Enter text..." />
-        <Button variant="PrimeStyle">Submit</Button>
-      </Card>
-    </ThemeProvider>
-  )
+```tsx
+import { Button } from "@/components/Button";
+
+export function Example() {
+  return <Button variant="PrimeStyle">Click me</Button>;
 }
 ```
 
-## Documentation Structure
+Component names are **case-sensitive PascalCase** (e.g. `add DatePicker`, not `add datepicker`).
 
-### 📚 Learning (Tutorials)
-- [Getting Started](/docs/tutorials/getting-started.md): Installation, setup, and first component
-- [Building Your First Form](/docs/tutorials/first-form.md): Create a complete form with validation
-- [Theming Basics](/docs/tutorials/theming-basics.md): Understanding the theme system
-- [Component Composition](/docs/tutorials/component-composition.md): Building complex UIs
+## CLI Commands
 
-### 🔧 Tasks (How-to Guides)
-- [Custom Themes](/docs/how-to/custom-themes.md): Creating and applying custom themes
-- [Form Validation](/docs/how-to/form-validation.md): Implementing form validation
-- [Dark Mode](/docs/how-to/dark-mode.md): Setting up dark/light mode switching
-- [Accessibility](/docs/how-to/accessibility.md): Ensuring WCAG compliance
-- [TypeScript Integration](/docs/how-to/typescript.md): Using with TypeScript
+Run any command without an argument to pick from an interactive list.
 
-### 📖 Reference
-- [Component API](/docs/reference/components.md): Complete props reference for all components
-- [Hooks API](/docs/reference/hooks.md): Custom React hooks documentation
-- [Theme API](/docs/reference/theme.md): Theme configuration and variables
-- [Types](/docs/reference/types.md): TypeScript type definitions
-- [Utilities](/docs/reference/utilities.md): Helper functions and utilities
+- `npx torch-glare init` — create glare.json and set up Tailwind
+- `npx torch-glare add [Component]` — copy a component and its dependencies into your project
+- `npx torch-glare hook [hook]` — add a hook (usually pulled in automatically as a dependency)
+- `npx torch-glare util [util]` — add a utility (usually pulled in automatically)
+- `npx torch-glare layout [layout]` — add a layout
+- `npx torch-glare provider [provider]` — add a provider (e.g. ThemeProvider)
+- `npx torch-glare update` — re-sync installed items with the latest templates
 
-### 💡 Concepts (Explanation)
-- [Architecture](/docs/explanation/architecture.md): Library design and structure
-- [Design System](/docs/explanation/design-system.md): Design principles and patterns
-- [Theming System](/docs/explanation/theming.md): How theming works
-- [Accessibility](/docs/explanation/accessibility.md): Accessibility approach
-- [Performance](/docs/explanation/performance.md): Optimization strategies
+## Theme
 
-## Components
+Every component accepts a `theme` prop, applied as `data-theme`: `"light" | "dark" | "default"`. Wrap your app in `ThemeProvider` for global theming.
 
-### Form Controls
-- [Button](/docs/components/button.md): Interactive button with 11 variants and 5 sizes `v1.1.15`
-- [Input](/docs/components/input.md): Text input with validation and theming support `v1.1.15`
-- [InputField](/docs/components/input-field.md): Enhanced input with label and hints `v1.1.15`
-- [Textarea](/docs/components/textarea.md): Multi-line text input component `v1.1.15`
-- [Checkbox](/docs/components/checkbox.md): Checkbox input with label support `v1.1.15`
-- [LabeledCheckBox](/docs/components/labeled-checkbox.md): Checkbox with integrated label `v1.1.15`
-- [Radio](/docs/components/radio.md): Radio button for single selection `v1.1.15`
-- [LabeledRadio](/docs/components/labeled-radio.md): Radio with integrated label `v1.1.15`
-- [RadioCard](/docs/components/radio-card.md): Card-style radio selection `v1.1.15`
-- [Select](/docs/components/select.md): Dropdown select with search and multi-select `v1.1.15`
-- [SimpleSelect](/docs/components/simple-select.md): Lightweight select component `v1.1.15`
-- [Switch](/docs/components/switch.md): Toggle switch for on/off states `v1.1.15`
-- [Toggle](/docs/components/toggle.md): Toggle button with multiple states `v1.1.15`
-- [SearchField](/docs/components/search-field.md): Search input with icon and clear `v1.1.15`
-- [InputOTP](/docs/components/input-otp.md): One-time password input `v1.1.15`
-- [Form](/docs/components/form.md): Form wrapper with validation context `v1.1.15`
+## Components (56)
 
-### Buttons & Actions
-- [ActionButton](/docs/components/action-button.md): Icon button for actions `v1.1.15`
-- [ActionsGroup](/docs/components/actions-group.md): Group of action buttons `v1.1.15`
-- [LinkButton](/docs/components/link-button.md): Button styled as link `v1.1.15`
-- [LoginButton](/docs/components/login-button.md): Specialized login button `v1.1.15`
+- **ActionButton** — `npx torch-glare add ActionButton` · deps: class-variance-authority · sizes: XS, S, M · [docs](docs/components/action-button.md)
+- **ActionsGroup** — `npx torch-glare add ActionsGroup` · [docs](docs/components/actions-group.md)
+- **AlertDialog** — `npx torch-glare add AlertDialog` · deps: @radix-ui/react-alert-dialog, class-variance-authority · variants: default, info, success, warning, error · [docs](docs/components/alert-dialog.md)
+- **Avatar** — `npx torch-glare add Avatar` · deps: @radix-ui/react-avatar · [docs](docs/components/avatar.md)
+- **Badge** — `npx torch-glare add Badge` · deps: class-variance-authority · variants: highlight, green, greenLight, cocktailGreen, yellow, redOrange, redLight, rose, purple, bluePurple, blue, navy, gray · sizes: XS, S, M · [docs](docs/components/badge.md)
+- **BadgeField** — `npx torch-glare add BadgeField` · deps: class-variance-authority · [docs](docs/components/badge-field.md)
+- **Breadcrumb** — `npx torch-glare add Breadcrumb` · deps: @radix-ui/react-slot, class-variance-authority · variants: PresentationStyle, SystemStyle · sizes: S, M, L
+- **Button** — `npx torch-glare add Button` · deps: @radix-ui/react-slot, class-variance-authority · variants: PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle · sizes: S, M, L, XL · [docs](docs/components/button.md)
+- **ButtonGroup** — `npx torch-glare add ButtonGroup` · deps: @radix-ui/react-toggle-group, class-variance-authority · variants: PrimeStyle, BorderStyle, SystemStyle · sizes: S, M, L, XL
+- **Calendar** — `npx torch-glare add Calendar` · deps: react-day-picker · [docs](docs/components/calendar.md)
+- **Card** — `npx torch-glare add Card` · deps: @radix-ui/react-slot · [docs](docs/components/card.md)
+- **ChartBlockTool** — `npx torch-glare add ChartBlockTool` · deps: chart.js
+- **Checkbox** — `npx torch-glare add Checkbox` · deps: @radix-ui/react-checkbox, class-variance-authority · sizes: S, M · [docs](docs/components/checkbox.md)
+- **CountBadge** — `npx torch-glare add CountBadge` · deps: class-variance-authority · variants: default · [docs](docs/components/count-badge.md)
+- **DataTable** — `npx torch-glare add DataTable` · deps: @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table · [docs](docs/components/data-table.md)
+- **DatePicker** — `npx torch-glare add DatePicker` · deps: react-day-picker, torch-react-mobile-picker · [docs](docs/components/date-picker.md)
+- **Dialog** — `npx torch-glare add Dialog` · deps: @radix-ui/react-dialog · [docs](docs/components/dialog.md)
+- **Divider** — `npx torch-glare add Divider` · [docs](docs/components/divider.md)
+- **Drawer** — `npx torch-glare add Drawer` · deps: vaul · [docs](docs/components/drawer.md)
+- **DropdownMenu** — `npx torch-glare add DropdownMenu` · deps: @radix-ui/react-dropdown-menu, class-variance-authority · variants: Default, Warning, Negative, SystemStyle · sizes: S, M · [docs](docs/components/dropdown-menu.md)
+- **FieldHint** — `npx torch-glare add FieldHint` · deps: class-variance-authority · [docs](docs/components/field-hint.md)
+- **Form** — `npx torch-glare add Form` · deps: @radix-ui/react-label, @radix-ui/react-slot, react-hook-form · [docs](docs/components/form.md)
+- **ImageAttachment** — `npx torch-glare add ImageAttachment` · deps: class-variance-authority · [docs](docs/components/image-attachment.md)
+- **InnerLabelField** — `npx torch-glare add InnerLabelField` · [docs](docs/components/inner-label-field.md)
+- **Input** — `npx torch-glare add Input` · deps: class-variance-authority · variants: PresentationStyle, SystemStyle · sizes: S, M · [docs](docs/components/input.md)
+- **InputField** — `npx torch-glare add InputField` · [docs](docs/components/input-field.md)
+- **InputOTP** — `npx torch-glare add InputOTP` · deps: input-otp · [docs](docs/components/input-otp.md)
+- **Label** — `npx torch-glare add Label` · deps: class-variance-authority · [docs](docs/components/label.md)
+- **LabeledCheckBox** — `npx torch-glare add LabeledCheckBox` · [docs](docs/components/labeled-checkbox.md)
+- **LabeledRadio** — `npx torch-glare add LabeledRadio` · [docs](docs/components/labeled-radio.md)
+- **LabelField** — `npx torch-glare add LabelField` · [docs](docs/components/label-field.md)
+- **LinkButton** — `npx torch-glare add LinkButton` · deps: @radix-ui/react-slot, class-variance-authority · sizes: S, M · [docs](docs/components/link-button.md)
+- **LoginButton** — `npx torch-glare add LoginButton` · deps: class-variance-authority · variants: default, noBg · [docs](docs/components/login-button.md)
+- **PasswordLevel** — `npx torch-glare add PasswordLevel` · [docs](docs/components/password-level.md)
+- **Popover** — `npx torch-glare add Popover` · deps: @radix-ui/react-popover, @radix-ui/react-slot, class-variance-authority · variants: Default, Warning, Negative, SystemStyle · sizes: S, M · [docs](docs/components/popover.md)
+- **ProfileMenu** — `npx torch-glare add ProfileMenu` · deps: class-variance-authority · [docs](docs/components/profile-menu.md)
+- **Radio** — `npx torch-glare add Radio` · deps: @radix-ui/react-radio-group, class-variance-authority · sizes: S, M · [docs](docs/components/radio.md)
+- **RadioCard** — `npx torch-glare add RadioCard` · [docs](docs/components/radio-card.md)
+- **ScrollArea** — `npx torch-glare add ScrollArea` · deps: @radix-ui/react-scroll-area · [docs](docs/components/scroll-area.md)
+- **SearchField** — `npx torch-glare add SearchField` · [docs](docs/components/search-field.md)
+- **Select** — `npx torch-glare add Select` · deps: @radix-ui/react-select, class-variance-authority · variants: SystemStyle, PresentationStyle · sizes: S, M · [docs](docs/components/select.md)
+- **SimpleSelect** — `npx torch-glare add SimpleSelect` · deps: class-variance-authority · variants: SystemStyle · sizes: S, M · [docs](docs/components/simple-select.md)
+- **Skeleton** — `npx torch-glare add Skeleton` · [docs](docs/components/skeleton.md)
+- **SlideDatePicker** — `npx torch-glare add SlideDatePicker` · deps: date-fns, torch-react-mobile-picker · [docs](docs/components/slide-date-picker.md)
+- **SpinLoading** — `npx torch-glare add SpinLoading` · deps: class-variance-authority · sizes: S, M, L · [docs](docs/components/spin-loading.md)
+- **Switch** — `npx torch-glare add Switch` · deps: @radix-ui/react-switch · [docs](docs/components/switch.md)
+- **TabFormItem** — `npx torch-glare add TabFormItem` · deps: @radix-ui/react-slot, class-variance-authority · [docs](docs/components/tab-form-item.md)
+- **Table** — `npx torch-glare add Table` · deps: class-variance-authority · sizes: S, M · [docs](docs/components/table.md)
+- **Textarea** — `npx torch-glare add Textarea` · deps: class-variance-authority · [docs](docs/components/textarea.md)
+- **TextEditor** — `npx torch-glare add TextEditor` · deps: @editorjs/checklist, @editorjs/code, @editorjs/delimiter, @editorjs/editorjs, @editorjs/embed, @editorjs/header, @editorjs/inline-code, @editorjs/link, @editorjs/list, @editorjs/marker, @editorjs/nested-list, @editorjs/quote, @editorjs/raw, @editorjs/simple-image, @editorjs/table, @editorjs/text-variant-tune, @editorjs/underline, @editorjs/warning, class-variance-authority · variants: PresentationStyle · sizes: S, M, L, XL
+- **Toast** — `npx torch-glare add Toast` · deps: react-hot-toast · [docs](docs/components/toast.md)
+- **Toggle** — `npx torch-glare add Toggle` · deps: @radix-ui/react-toggle, class-variance-authority · variants: PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle · sizes: S, M, L, XL · [docs](docs/components/toggle.md)
+- **ToggleButton** — `npx torch-glare add ToggleButton` · deps: @radix-ui/react-toggle, class-variance-authority · variants: PrimeStyle, BlueSecStyle, BorderStyle, PrimeContStyle, SystemStyle · sizes: S, M, L, XL
+- **Tooltip** — `npx torch-glare add Tooltip` · deps: @radix-ui/react-tooltip, class-variance-authority · variants: primary, highlight · [docs](docs/components/tooltip.md)
+- **TransparentLabel** — `npx torch-glare add TransparentLabel` · deps: class-variance-authority · sizes: display-large-bold, display-large-semibold, display-large-medium, display-large-regular, display-medium-bold, display-medium-semibold, display-medium-medium, display-medium-regular, display-small-bold, display-small-semibold, display-small-medium, display-small-regular, headers-large-bold, headers-large-semibold, headers-large-medium, headers-large-regular, headers-medium-bold, headers-medium-semibold, headers-medium-medium, headers-medium-regular, headers-small-bold, headers-small-semibold, headers-small-medium, headers-small-regular, body-large-bold, body-large-semibold, body-large-medium, body-large-regular, body-medium-bold, body-medium-semibold, body-medium-medium, body-medium-regular, body-small-bold, body-small-semibold, body-small-medium, body-small-regular, labels-large-bold, labels-large-semibold, labels-large-medium, labels-large-regular, labels-medium-bold, labels-medium-semibold, labels-medium-medium, labels-medium-regular, labels-small-bold, labels-small-semibold, labels-small-medium, labels-small-regular · [docs](docs/components/transparent-label.md)
+- **TreeDropDown** — `npx torch-glare add TreeDropDown` · deps: class-variance-authority · variants: secondary, default · [docs](docs/components/tree-dropdown.md)
 
-### Layout & Containers
-- [Card](/docs/components/card.md): Content container with variants `v1.1.15`
-- [CNLayout](/docs/components/cn-layout.md): Complex layout system `v1.1.15`
-- [FieldSection](/docs/components/field-section.md): Form field grouping `v1.1.15`
-- [TreeSubLayout](/docs/components/tree-sub-layout.md): Tree structure layout `v1.1.15`
-- [Divider](/docs/components/divider.md): Visual separator component `v1.1.15`
-- [ScrollArea](/docs/components/scroll-area.md): Custom scrollable container `v1.1.15`
+## Hooks (4)
 
-### Data Display
-- [Badge](/docs/components/badge.md): Status and label badges `v1.1.15`
-- [BadgeField](/docs/components/badge-field.md): Badge with field integration `v1.1.15`
-- [CountBadge](/docs/components/count-badge.md): Numeric count indicator `v1.1.15`
-- [Avatar](/docs/components/avatar.md): User profile image component `v1.1.15`
-- [Table](/docs/components/table.md): Data table with sorting and selection `v1.1.15`
-- [DataTable](/docs/components/data-table.md): Advanced data table with pagination `v1.1.15`
-- [TreeDropDown](/docs/components/tree-dropdown.md): Hierarchical dropdown menu `v1.1.15`
-- [Skeleton](/docs/components/skeleton.md): Loading placeholder skeleton `v1.1.15`
+- **useActiveTreeItem** — `npx torch-glare hook useActiveTreeItem.ts`
+- **useClickOutside** — `npx torch-glare hook useClickOutside.ts`
+- **useResize** — `npx torch-glare hook useResize.ts`
+- **useTagSelection** — `npx torch-glare hook useTagSelection.ts`
 
-### Overlays & Dialogs
-- [Dialog](/docs/components/dialog.md): Modal dialog component `v1.1.15`
-- [AlertDialog](/docs/components/alert-dialog.md): Confirmation dialog `v1.1.15`
-- [Drawer](/docs/components/drawer.md): Slide-out panel component `v1.1.15`
-- [Popover](/docs/components/popover.md): Floating content popover `v1.1.15`
-- [Tooltip](/docs/components/tooltip.md): Contextual tooltips `v1.1.15`
-- [DropdownMenu](/docs/components/dropdown-menu.md): Dropdown menu system `v1.1.15`
-- [ProfileMenu](/docs/components/profile-menu.md): User profile dropdown `v1.1.15`
+## Providers (1)
 
-### Date & Time
-- [Calendar](/docs/components/calendar.md): Date selection calendar `v1.1.15`
-- [DatePicker](/docs/components/date-picker.md): Date picker with calendar `v1.1.15`
-- [SlideDatePicker](/docs/components/slide-date-picker.md): Sliding date selector `v1.1.15`
-- [IosDatePicker](/docs/components/ios-date-picker.md): iOS-style date picker `experimental`
-
-### Feedback & Status
-- [Toast](/docs/components/toast.md): Temporary notification messages `v1.1.15`
-- [SpinLoading](/docs/components/spin-loading.md): Loading spinner animation `v1.1.15`
-- [PasswordLevel](/docs/components/password-level.md): Password strength indicator `v1.1.15`
-- [FieldHint](/docs/components/field-hint.md): Form field helper text `v1.1.15`
-
-### Labels & Text
-- [Label](/docs/components/label.md): Form label component `v1.1.15`
-- [LabelField](/docs/components/label-field.md): Label with field integration `v1.1.15`
-- [InnerLabelField](/docs/components/inner-label-field.md): Field with inner label `v1.1.15`
-- [TransparentLabel](/docs/components/transparent-label.md): Transparent background label `v1.1.15`
-
-### Advanced Components
-- [Charts](/docs/components/charts.md): Data visualization charts `experimental`
-- [Command](/docs/components/command.md): Command palette component `experimental`
-- [TabFormItem](/docs/components/tab-form-item.md): Tabbed form sections `v1.1.15`
-- [ImageAttachment](/docs/components/image-attachment.md): Image upload and preview `v1.1.15`
-
-## Hooks
-
-- [useActiveTreeItem](/docs/reference/hooks.md#useactivetreeitem): Tree navigation state management
-- [useClickOutside](/docs/reference/hooks.md#useclickoutside): Detect clicks outside element
-- [useResize](/docs/reference/hooks.md#useresize): Window and element resize handling
-- [useTagSelection](/docs/reference/hooks.md#usetagselection): Multi-tag selection management
-
-## Providers
-
-- [ThemeProvider](/docs/reference/providers.md#themeprovider): Global theme context provider
-
-## Theme System
-
-### Available Themes
-- `light`: Light mode theme
-- `dark`: Dark mode theme
-- `default`: System preference
-
-### Button Variants
-- `PrimeStyle`: Primary button style
-- `BlueSecStyle`: Blue secondary style
-- `YelSecStyle`: Yellow secondary style
-- `RedSecStyle`: Red secondary style
-- `BorderStyle`: Border only style
-- `PrimeContStyle`: Primary container style
-- `BlueContStyle`: Blue container style
-- `RedContStyle`: Red container style
-
-## Plugins
-
-- [Mapping Color System](/docs/reference/plugins.md#mapping-color-system): Dynamic color mapping
-- [Mapping Color System V4](/docs/reference/plugins.md#mapping-color-system-v4): Advanced color system
-- [Torch Mode](/docs/reference/plugins.md#torch-mode): Theme mode management
-- [Typography](/docs/reference/plugins.md#typography): Typography system
-
-## CLI Tool
-
-The torch-glare CLI provides commands for:
-- Component installation
-- Plugin management
-- Theme generation
-- Project scaffolding
-
-```bash
-# Install CLI globally
-npm install -g torch-glare
-
-# Use CLI
-torch-glare init
-torch-glare add button
-torch-glare theme generate
-```
-
-## Version History
-
-- [v1.1.15](/docs/migration/changelog.md#v1115): Current version - 55+ components
-- [v1.1.14](/docs/migration/changelog.md#v1114): Date picker improvements
-- [Migration Guide](/docs/migration/v1-migration.md): Upgrading from v1.0.x
+- **ThemeProvider** — `npx torch-glare provider ThemeProvider.tsx`
 
 ## Resources
 
-- [Documentation](https://glare.torchcorp.com): Official documentation site
-- [GitHub](https://github.com/torch-corp/torch-glare): Source code repository
-- [NPM](https://www.npmjs.com/package/torch-glare): NPM package
-- [Storybook](https://storybook.glare.torchcorp.com): Interactive component demos
-- [Examples](https://github.com/torch-corp/torch-glare/tree/main/examples): Example implementations
-
-## Support
-
-- [Issues](https://github.com/torch-corp/torch-glare/issues): Bug reports and feature requests
-- [Discussions](https://github.com/torch-corp/torch-glare/discussions): Community discussions
-- [Discord](https://discord.gg/torch-glare): Community chat
-- [Email](mailto:support@torchcorp.com): Direct support
-
-## License
-
-MIT © TORCH Corporation
+- Homepage: https://glare.torchcorp.com
+- Repository: https://github.com/torch-corp/torch-glare
+- npm: https://www.npmjs.com/package/torch-glare

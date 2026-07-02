@@ -26,7 +26,7 @@ program
 
 program
   .command("init")
-  .description("Initialize torch.json configuration file")
+  .description("Initialize glare.json configuration file")
   .action(() => initConfig());
 
 program

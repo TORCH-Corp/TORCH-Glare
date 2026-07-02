@@ -11,14 +11,22 @@ keywords: [tree, dropdown, navigation, expandable, collapsible, accordion, hiera
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install class-variance-authority
+npx torch-glare@latest init
+npx torch-glare@latest add TreeDropDown
 ```
+
+`add` also copies any components, hooks, and utilities that `TreeDropDown` depends on.
 
 ## Import
 
-```typescript
-import { TreeDropDown } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { TreeDropDown } from "@/components/TreeDropDown";
 ```
 
 ## Quick Examples
@@ -26,7 +34,7 @@ import { TreeDropDown } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function Example() {
   return (
@@ -42,7 +50,7 @@ function Example() {
 ### Nested Tree Structure
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function FileTree() {
   return (
@@ -65,7 +73,7 @@ function FileTree() {
 ### Controlled State
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 import { useState } from 'react'
 
 function ControlledTree() {
@@ -92,8 +100,8 @@ function ControlledTree() {
 ### With Custom Labels
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
-import { Badge } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
+import { Badge } from "@/components/Badge";
 
 function TreeWithBadges() {
   return (
@@ -101,7 +109,7 @@ function TreeWithBadges() {
       treeLabel={
         <div className="flex items-center gap-2">
           <span>Notifications</span>
-          <Badge variant="red" label="3" size="XS" />
+          <Badge variant="redOrange" label="3" size="XS" />
         </div>
       }
     >
@@ -116,7 +124,7 @@ function TreeWithBadges() {
 ### Documentation Navigation
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function DocsNavigation() {
   return (
@@ -152,7 +160,7 @@ function DocsNavigation() {
 ### Dark Theme
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function DarkTree() {
   return (
@@ -172,7 +180,7 @@ function DarkTree() {
 ### With Icons
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function IconTree() {
   return (
@@ -200,7 +208,7 @@ function IconTree() {
 ### Multi-Level Navigation
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function MultiLevelNav() {
   return (
@@ -227,7 +235,7 @@ function MultiLevelNav() {
 ### Custom Styling
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function StyledTree() {
   return (
@@ -247,7 +255,7 @@ function StyledTree() {
 ### Initially Expanded
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 function ExpandedByDefault() {
   return (
@@ -308,7 +316,7 @@ export const TreeDropDown: React.FC<TreeDropDownProps>
 ### Usage with TypeScript
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 import { ReactNode } from 'react'
 
 interface TreeItem {
@@ -337,7 +345,7 @@ function TypedTree({ items }: { items: TreeItem[] }) {
 ### Recursive Tree Structure
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 interface TreeNode {
   id: string
@@ -383,7 +391,7 @@ const data: TreeNode[] = [
 ### Expand/Collapse All
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 import { useState } from 'react'
 
 function ExpandCollapseAll() {
@@ -412,7 +420,7 @@ function ExpandCollapseAll() {
 ### With Active State
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 import { useState } from 'react'
 
 function NavigationTree() {
@@ -491,7 +499,7 @@ function NavigationTree() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 describe('TreeDropDown', () => {
   it('renders tree label', () => {
@@ -549,7 +557,7 @@ describe('TreeDropDown', () => {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 
 test('nested trees work independently', () => {
   render(
@@ -593,7 +601,7 @@ test('nested trees work independently', () => {
 ### Enhanced Accessibility Example
 
 ```typescript
-import { TreeDropDown } from '@torch-ui/components'
+import { TreeDropDown } from "@/components/TreeDropDown";
 import { useState } from 'react'
 
 function AccessibleTree() {
@@ -658,7 +666,7 @@ function AccessibleTree() {
 
 ```diff
 - import { Accordion } from 'other-library'
-+ import { TreeDropDown } from '@torch-ui/components'
++ import { TreeDropDown } from "@/components/TreeDropDown";
 
 - <Accordion title="Section">
 + <TreeDropDown treeLabel="Section">

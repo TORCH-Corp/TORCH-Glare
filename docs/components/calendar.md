@@ -11,15 +11,22 @@ keywords: [calendar, date, day-picker, month, year, react-day-picker]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install react-day-picker date-fns
+npx torch-glare@latest init
+npx torch-glare@latest add Calendar
 ```
+
+`add` also copies any components, hooks, and utilities that `Calendar` depends on.
 
 ## Import
 
-```typescript
-import { Calendar } from '@torch-ui/components'
-import type { CalendarProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Calendar } from "@/components/Calendar";
 ```
 
 ## Quick Examples
@@ -27,7 +34,7 @@ import type { CalendarProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 import { useState } from 'react'
 
 function Example() {
@@ -46,7 +53,7 @@ function Example() {
 ### Range Selection
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 
@@ -69,7 +76,7 @@ function RangePicker() {
 ### Multiple Date Selection
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 import { useState } from 'react'
 
 function MultiplePicker() {
@@ -89,7 +96,7 @@ function MultiplePicker() {
 ### With Week Numbers
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 
 function WeekNumbers() {
   return (
@@ -104,7 +111,7 @@ function WeekNumbers() {
 ### Date Restrictions
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 
 function RestrictedCalendar() {
   const today = new Date()
@@ -127,7 +134,7 @@ function RestrictedCalendar() {
 ### Custom Caption Layout
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 
 function LabelOnly() {
   return (
@@ -151,8 +158,8 @@ function DropdownMonthsOnly() {
 ### With Footer
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
+import { Button } from "@/components/Button";
 
 function CalendarWithFooter() {
   const [selected, setSelected] = useState<Date>()
@@ -180,7 +187,7 @@ function CalendarWithFooter() {
 ### Multiple Months
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 
 function MultipleMonths() {
   return (
@@ -195,7 +202,7 @@ function MultipleMonths() {
 ### With Min/Max Date Range
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 import { DateRange } from 'react-day-picker'
 import { useState } from 'react'
 
@@ -217,7 +224,7 @@ function RangeWithLimits() {
 ### Custom Styling
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 
 function StyledCalendar() {
   return (
@@ -308,7 +315,7 @@ export const Calendar: React.FC<CalendarProps>
 ### Booking Calendar
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 
@@ -346,7 +353,7 @@ function BookingCalendar() {
 ### Event Calendar
 
 ```typescript
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 
 function EventCalendar({ events }: { events: Event[] }) {
   const eventDates = events.map(e => e.date)
@@ -371,7 +378,7 @@ function EventCalendar({ events }: { events: Event[] }) {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Calendar } from '@torch-ui/components'
+import { Calendar } from "@/components/Calendar";
 
 describe('Calendar', () => {
   it('renders current month', () => {
@@ -504,7 +511,7 @@ The Calendar component uses CSS variables and can be fully customized:
 
 ```diff
 - import { DayPicker } from 'react-day-picker'
-+ import { Calendar } from '@torch-ui/components'
++ import { Calendar } from "@/components/Calendar";
 
 - <DayPicker
 + <Calendar

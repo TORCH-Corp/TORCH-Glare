@@ -11,23 +11,22 @@ keywords: [drawer, bottom-sheet, slide-up, mobile, vaul, sheet]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install vaul
+npx torch-glare@latest init
+npx torch-glare@latest add Drawer
 ```
+
+`add` also copies any components, hooks, and utilities that `Drawer` depends on.
 
 ## Import
 
-```typescript
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerClose,
-} from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Drawer } from "@/components/Drawer";
 ```
 
 ## Quick Examples
@@ -35,8 +34,8 @@ import {
 ### Basic Usage
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/Drawer";
+import { Button } from "@/components/Button";
 
 function Example() {
   return (
@@ -60,8 +59,9 @@ function Example() {
 ### With Form
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerClose } from '@torch-ui/components'
-import { Button, Input } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerClose } from "@/components/Drawer";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
 
 function FormDrawer() {
   const handleSubmit = (e: React.FormEvent) => {
@@ -95,7 +95,7 @@ function FormDrawer() {
           <DrawerFooter>
             <Button type="submit">Submit</Button>
             <DrawerClose asChild>
-              <Button variant="SecondaryStyle">Cancel</Button>
+              <Button variant="BlueSecStyle">Cancel</Button>
             </DrawerClose>
           </DrawerFooter>
         </form>
@@ -108,7 +108,7 @@ function FormDrawer() {
 ### Controlled State
 
 ```typescript
-import { Drawer, DrawerContent, DrawerTitle } from '@torch-ui/components'
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/Drawer";
 import { useState } from 'react'
 
 function ControlledDrawer() {
@@ -131,8 +131,8 @@ function ControlledDrawer() {
 ### Action Sheet
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from "@/components/Drawer";
+import { Button } from "@/components/Button";
 
 function ActionSheet() {
   const handleShare = (platform: string) => {
@@ -186,8 +186,9 @@ function ActionSheet() {
 ### Product Details Drawer
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from '@torch-ui/components'
-import { Button, Badge } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/Drawer";
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
 
 function ProductDrawer({ product }: { product: Product }) {
   return (
@@ -215,7 +216,7 @@ function ProductDrawer({ product }: { product: Product }) {
         <DrawerFooter>
           <Button className="w-full">Add to Cart</Button>
           <DrawerClose asChild>
-            <Button variant="SecondaryStyle" className="w-full">
+            <Button variant="BlueSecStyle" className="w-full">
               Continue Shopping
             </Button>
           </DrawerClose>
@@ -229,8 +230,9 @@ function ProductDrawer({ product }: { product: Product }) {
 ### Filter Drawer
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from '@torch-ui/components'
-import { Button, Checkbox } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/Drawer";
+import { Button } from "@/components/Button";
+import { Checkbox } from "@/components/Checkbox";
 import { useState } from 'react'
 
 function FilterDrawer() {
@@ -286,7 +288,7 @@ function FilterDrawer() {
         <DrawerFooter>
           <Button>Apply Filters</Button>
           <DrawerClose asChild>
-            <Button variant="SecondaryStyle">Reset</Button>
+            <Button variant="BlueSecStyle">Reset</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -298,8 +300,8 @@ function FilterDrawer() {
 ### Settings Drawer
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from '@torch-ui/components'
-import { Switch } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/Drawer";
+import { Switch } from "@/components/Switch";
 import { useState } from 'react'
 
 function SettingsDrawer() {
@@ -362,14 +364,14 @@ function SettingsDrawer() {
 ### Confirmation Drawer
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/Drawer";
+import { Button } from "@/components/Button";
 
 function ConfirmationDrawer({ onConfirm }: { onConfirm: () => void }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="DestructiveStyle">Delete Item</Button>
+        <Button variant="RedSecStyle">Delete Item</Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -381,12 +383,12 @@ function ConfirmationDrawer({ onConfirm }: { onConfirm: () => void }) {
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="DestructiveStyle" onClick={onConfirm}>
+            <Button variant="RedSecStyle" onClick={onConfirm}>
               Yes, Delete
             </Button>
           </DrawerClose>
           <DrawerClose asChild>
-            <Button variant="SecondaryStyle">Cancel</Button>
+            <Button variant="BlueSecStyle">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -398,8 +400,9 @@ function ConfirmationDrawer({ onConfirm }: { onConfirm: () => void }) {
 ### Scrollable Content
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter } from '@torch-ui/components'
-import { Button, ScrollArea } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter } from "@/components/Drawer";
+import { Button } from "@/components/Button";
+import { ScrollArea } from "@/components/ScrollArea";
 
 function ScrollableDrawer() {
   const items = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`)
@@ -436,7 +439,7 @@ function ScrollableDrawer() {
 ### Without Background Scale
 
 ```typescript
-import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from "@/components/Drawer";
 
 function NoScaleDrawer() {
   return (
@@ -603,7 +606,7 @@ function App() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from '@torch-ui/components'
+import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from "@/components/Drawer";
 
 describe('Drawer', () => {
   it('opens when trigger is clicked', () => {
@@ -707,8 +710,8 @@ describe('Drawer', () => {
 ## Migration from Dialog
 
 ```diff
-- import { Dialog, DialogTrigger, DialogContent } from '@torch-ui/components'
-+ import { Drawer, DrawerTrigger, DrawerContent } from '@torch-ui/components'
+- import { Dialog, DialogTrigger, DialogContent } from "@/components/Dialog";
++ import { Drawer, DrawerTrigger, DrawerContent } from "@/components/Drawer";
 
 - <Dialog>
 -   <DialogTrigger>Open</DialogTrigger>

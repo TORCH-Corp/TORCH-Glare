@@ -11,13 +11,22 @@ keywords: [loading, spinner, loader, animation, spin, progress]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add SpinLoading
+```
+
+`add` also copies any components, hooks, and utilities that `SpinLoading` depends on.
 
 ## Import
 
-```typescript
-import { SpinLoading } from '@torch-ui/components'
-import type { SpinLoadingProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { SpinLoading } from "@/components/SpinLoading";
 ```
 
 ## Quick Examples
@@ -25,7 +34,7 @@ import type { SpinLoadingProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 function Example() {
   return <SpinLoading />
@@ -35,7 +44,7 @@ function Example() {
 ### With Different Sizes
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 function SizesExample() {
   return (
@@ -51,7 +60,7 @@ function SizesExample() {
 ### Dark Theme
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 function DarkTheme() {
   return (
@@ -65,7 +74,7 @@ function DarkTheme() {
 ### Light Theme
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 function LightTheme() {
   return (
@@ -79,7 +88,7 @@ function LightTheme() {
 ### With Center Content
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 function WithContent() {
   return (
@@ -96,7 +105,7 @@ function WithContent() {
 ### With Percentage
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 import { useState, useEffect } from 'react'
 
 function PercentageLoader() {
@@ -123,7 +132,7 @@ function PercentageLoader() {
 ### Loading Overlay
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 function LoadingOverlay({ loading, children }: { loading: boolean; children: React.ReactNode }) {
   return (
@@ -159,7 +168,7 @@ function App() {
 ### Full Page Loading
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 function FullPageLoading() {
   return (
@@ -177,7 +186,7 @@ function FullPageLoading() {
 ### Data Loading State
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 import { useEffect, useState } from 'react'
 
 function DataLoader() {
@@ -207,8 +216,8 @@ function DataLoader() {
 ### Card Loading
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
-import { Card } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
+import { Card } from "@/components/Card";
 
 function CardWithLoading({ loading }: { loading: boolean }) {
   return (
@@ -233,8 +242,8 @@ function CardWithLoading({ loading }: { loading: boolean }) {
 ### Button Loading State
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function LoadingButton() {
@@ -306,7 +315,7 @@ export const SpinLoading: React.FC<SpinLoadingProps>
 ### Usage with Types
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 import { useState } from 'react'
 
 function TypedExample() {
@@ -338,7 +347,7 @@ function TypedExample() {
 ### Async Operation Wrapper
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 import { ReactNode, useState } from 'react'
 
 function AsyncWrapper({
@@ -377,7 +386,7 @@ function AsyncWrapper({
 ### Suspense-Like Fallback
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 import { Suspense } from 'react'
 
 function SuspenseWithLoading({ children }: { children: React.ReactNode }) {
@@ -400,7 +409,7 @@ function SuspenseWithLoading({ children }: { children: React.ReactNode }) {
 ### Loading State Manager
 
 ```typescript
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 import { createContext, useContext, useState, ReactNode } from 'react'
 
 const LoadingContext = createContext({
@@ -448,7 +457,7 @@ function MyComponent() {
 
 ```typescript
 import { render, screen } from '@testing-library/react'
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 describe('SpinLoading', () => {
   it('renders spinner', () => {
@@ -513,7 +522,7 @@ describe('SpinLoading', () => {
 
 ```typescript
 import { render, screen, waitFor } from '@testing-library/react'
-import { SpinLoading } from '@torch-ui/components'
+import { SpinLoading } from "@/components/SpinLoading";
 
 describe('SpinLoading Integration', () => {
   it('shows loading state during async operation', async () => {

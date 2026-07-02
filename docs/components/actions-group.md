@@ -12,9 +12,15 @@ A flexible container component for grouping action buttons and controls with opt
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-cli add actions-group
+npx torch-glare@latest init
+npx torch-glare@latest add ActionsGroup
 ```
+
+`add` also copies any components, hooks, and utilities that `ActionsGroup` depends on.
 
 ## Imports
 
@@ -32,7 +38,7 @@ export function BasicActionsGroup() {
   return (
     <ActionsGroup>
       <Button variant="PrimeStyle">Save</Button>
-      <Button variant="SecStyle">Cancel</Button>
+      <Button variant="BlueSecStyle">Cancel</Button>
     </ActionsGroup>
   )
 }
@@ -56,7 +62,7 @@ export function ActionsWithDividers() {
           <i className="ri-save-line mr-2"></i>
           Save Changes
         </Button>
-        <Button variant="SecStyle" size="M">
+        <Button variant="BlueSecStyle" size="M">
           <i className="ri-close-line mr-2"></i>
           Discard
         </Button>
@@ -89,7 +95,7 @@ export function FormActions() {
       </div>
 
       <ActionsGroup className="justify-end">
-        <Button variant="SecStyle" type="button">
+        <Button variant="BlueSecStyle" type="button">
           Cancel
         </Button>
         <Button variant="PrimeStyle" type="submit">
@@ -123,10 +129,10 @@ export function ModalFooterActions() {
 
       {/* Modal Footer */}
       <ActionsGroup withDivider className="p-6 justify-end">
-        <Button variant="SecStyle">
+        <Button variant="BlueSecStyle">
           Cancel
         </Button>
-        <Button variant="DangerStyle">
+        <Button variant="RedSecStyle">
           <i className="ri-delete-bin-line mr-2"></i>
           Delete
         </Button>
@@ -156,28 +162,28 @@ export function MultiActionGroups() {
               <i className="ri-save-line mr-2"></i>
               Save
             </Button>
-            <Button variant="SecStyle" size="S">
+            <Button variant="BlueSecStyle" size="S">
               <i className="ri-file-copy-line mr-2"></i>
               Duplicate
             </Button>
           </div>
 
-          <Button variant="SecStyle" size="S">
+          <Button variant="BlueSecStyle" size="S">
             <i className="ri-more-2-fill"></i>
           </Button>
         </ActionsGroup>
 
         {/* Secondary Actions */}
         <ActionsGroup withDivider>
-          <Button variant="SecStyle" size="S">
+          <Button variant="BlueSecStyle" size="S">
             <i className="ri-share-line mr-2"></i>
             Share
           </Button>
-          <Button variant="SecStyle" size="S">
+          <Button variant="BlueSecStyle" size="S">
             <i className="ri-download-line mr-2"></i>
             Export
           </Button>
-          <Button variant="SecStyle" size="S">
+          <Button variant="BlueSecStyle" size="S">
             <i className="ri-printer-line mr-2"></i>
             Print
           </Button>
@@ -185,7 +191,7 @@ export function MultiActionGroups() {
 
         {/* Danger Zone */}
         <ActionsGroup withDivider>
-          <Button variant="DangerStyle" size="S" className="w-full">
+          <Button variant="RedSecStyle" size="S" className="w-full">
             <i className="ri-delete-bin-line mr-2"></i>
             Delete Document
           </Button>
@@ -215,7 +221,7 @@ export function CardActions() {
             </p>
 
             <ActionsGroup className="justify-end">
-              <Button variant="SecStyle" size="S">
+              <Button variant="BlueSecStyle" size="S">
                 View
               </Button>
               <Button variant="PrimeStyle" size="S">
@@ -283,7 +289,7 @@ export function ToolbarActions() {
 
         {/* Save Group */}
         <ActionsGroup>
-          <Button variant="SecStyle" size="S">
+          <Button variant="BlueSecStyle" size="S">
             Preview
           </Button>
           <Button variant="PrimeStyle" size="S">
@@ -336,7 +342,7 @@ export function WizardNavigation() {
       {/* Navigation Actions */}
       <ActionsGroup className="justify-between">
         <Button
-          variant="SecStyle"
+          variant="BlueSecStyle"
           disabled={currentStep === 1}
           onClick={() => setCurrentStep(currentStep - 1)}
         >
@@ -388,10 +394,10 @@ export function ConfirmationDialog({ title, message, onConfirm, onCancel }) {
         </div>
 
         <ActionsGroup withDivider className="p-6 justify-end gap-3">
-          <Button variant="SecStyle" onClick={onCancel}>
+          <Button variant="BlueSecStyle" onClick={onCancel}>
             Cancel
           </Button>
-          <Button variant="DangerStyle" onClick={onConfirm}>
+          <Button variant="RedSecStyle" onClick={onConfirm}>
             Confirm
           </Button>
         </ActionsGroup>
@@ -466,7 +472,7 @@ export function LoadingActions() {
   return (
     <ActionsGroup className="justify-end">
       <Button
-        variant="SecStyle"
+        variant="BlueSecStyle"
         disabled={isLoading}
       >
         Cancel
@@ -553,7 +559,7 @@ type Themes = 'light' | 'dark' | 'default'
 function ResponsiveActions() {
   return (
     <ActionsGroup className="flex-col sm:flex-row justify-end">
-      <Button variant="SecStyle" className="w-full sm:w-auto">
+      <Button variant="BlueSecStyle" className="w-full sm:w-auto">
         Cancel
       </Button>
       <Button variant="PrimeStyle" className="w-full sm:w-auto">
@@ -576,7 +582,7 @@ function GroupedActions() {
       </ActionsGroup>
 
       <ActionsGroup withDivider>
-        <Button variant="DangerStyle" className="w-full">
+        <Button variant="RedSecStyle" className="w-full">
           Dangerous Action
         </Button>
       </ActionsGroup>

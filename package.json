@@ -3,6 +3,24 @@
   "version": "1.2.8",
   "type": "module",
   "license": "MIT",
+  "description": "A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.",
+  "homepage": "https://glare.torchcorp.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/torch-corp/torch-glare"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "component-library",
+    "design-system",
+    "tailwindcss",
+    "radix-ui",
+    "typescript",
+    "copy-in",
+    "cli"
+  ],
   "files": [
     "dist",
     "apps/lib",
@@ -18,12 +36,15 @@
   "scripts": {
     "build": "tsc -b",
     "registry": "node scripts/bin/generateRegistry/index.js",
+    "llms": "node scripts/bin/generateLlms/index.js",
+    "docs:fix": "node scripts/bin/fixDocs/index.js",
+    "check:ai-docs": "node scripts/bin/checkAiDocs/index.js",
     "typecheck": "pnpm -C apps run typecheck",
     "lint": "pnpm -C apps run lint:lib",
     "format": "pnpm -C apps run format",
     "format:check": "pnpm -C apps run format:check",
     "test": "pnpm -C apps run test",
-    "deploy": "pnpm run registry && npx tsc --build --force && npm publish --access public"
+    "deploy": "pnpm run registry && pnpm run llms && npx tsc --build --force && npm publish --access public"
   },
   "dependencies": {
     "commander": "^13.1.0",

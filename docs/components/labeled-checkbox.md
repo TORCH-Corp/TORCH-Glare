@@ -1,6 +1,6 @@
 ---
 name: LabeledCheckBox
-version: 1.1.15
+version: 1.2.8
 status: stable
 category: components/forms
 tags: [form, checkbox, label, selection, accessible, compound]
@@ -17,14 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add LabeledCheckBox
 ```
+
+`add` also copies any components, hooks, and utilities that `LabeledCheckBox` depends on.
 
 ## Import
 
-```typescript
-import { LabeledCheckBox } from 'torch-glare/lib/components/LabeledCheckBox'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { LabeledCheckBox } from "@/components/LabeledCheckBox";
 ```
 
 ## Quick Examples
@@ -32,7 +40,7 @@ import { LabeledCheckBox } from 'torch-glare/lib/components/LabeledCheckBox'
 ### Basic Usage
 
 ```typescript
-import { LabeledCheckBox } from 'torch-glare/lib/components/LabeledCheckBox'
+import { LabeledCheckBox } from '@/components/LabeledCheckBox'
 
 function Example() {
   const [checked, setChecked] = useState(false)
@@ -389,7 +397,7 @@ function EmailSubscriptions() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { LabeledCheckBox } from 'torch-glare/lib/components/LabeledCheckBox'
+import { LabeledCheckBox } from '@/components/LabeledCheckBox'
 
 describe('LabeledCheckBox', () => {
   it('renders label and checkbox together', () => {
@@ -571,10 +579,10 @@ Note: Large size uses medium checkbox for visual balance.
 ```diff
 // Import path
 - import LabeledCheckBox from 'torch-glare/LabeledCheckBox'
-+ import { LabeledCheckBox } from 'torch-glare/lib/components/LabeledCheckBox'
++ import { LabeledCheckBox } from '@/components/LabeledCheckBox'
 
 // Size prop values
-- <LabeledCheckBox size="small" />
+- <LabeledCheckBox size="M" />
 + <LabeledCheckBox size="S" />
 ```
 

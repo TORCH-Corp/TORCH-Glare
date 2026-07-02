@@ -38,13 +38,13 @@ Before you begin, make sure you have:
 ### Install the Core Library
 
 ```bash
-npm install @torch-ai/torch-glare
+npx torch-glare@latest init
 ```
 
 Or using Yarn:
 
 ```bash
-yarn add @torch-ai/torch-glare
+npx torch-glare@latest init
 ```
 
 ### Install Tailwind CSS Plugins
@@ -122,7 +122,7 @@ module.exports = {
 
 ```tsx
 // app/layout.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import './globals.css';
 
 export default function RootLayout({
@@ -146,7 +146,7 @@ export default function RootLayout({
 
 ```tsx
 // pages/_app.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
@@ -165,7 +165,7 @@ export default function App({ Component, pageProps }: AppProps) {
 // main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import App from './App';
 import './index.css';
 
@@ -188,7 +188,7 @@ Let's create a simple welcome card using TORCH Glare components.
 
 ```tsx
 // components/WelcomeCard.tsx
-import { Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
 
 export default function WelcomeCard() {
   return (
@@ -238,7 +238,8 @@ Let's add a theme switcher to test the theming system.
 // components/ThemeToggle.tsx
 'use client'; // Add this for Next.js App Router
 
-import { useTheme, Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function ThemeToggle() {
   const { theme, updateTheme } = useTheme();
@@ -250,7 +251,7 @@ export default function ThemeToggle() {
   return (
     <Button
       theme={theme as any}
-      variant="ContStyle"
+      variant="PrimeContStyle"
       onClick={toggleTheme}
       buttonType="icon"
       size="M"
@@ -296,7 +297,7 @@ Now that you have the basics set up, let's try a few more components.
 ### Button Variants
 
 ```tsx
-import { Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
 
 export default function ButtonShowcase() {
   return (
@@ -304,10 +305,10 @@ export default function ButtonShowcase() {
       <Button theme="light" variant="PrimeStyle">
         Primary
       </Button>
-      <Button theme="light" variant="ContStyle">
+      <Button theme="light" variant="PrimeContStyle">
         Contrast
       </Button>
-      <Button theme="light" variant="SecondStyle">
+      <Button theme="light" variant="BlueSecStyle">
         Secondary
       </Button>
       <Button theme="light" variant="BorderStyle">
@@ -321,7 +322,7 @@ export default function ButtonShowcase() {
 ### Input Field
 
 ```tsx
-import { InputField } from '@torch-ai/torch-glare';
+import { InputField } from "@/components/InputField";
 import { useState } from 'react';
 
 export default function InputDemo() {
@@ -343,18 +344,18 @@ export default function InputDemo() {
 ### Badge Component
 
 ```tsx
-import { Badge } from '@torch-ai/torch-glare';
+import { Badge } from "@/components/Badge";
 
 export default function BadgeDemo() {
   return (
     <div className="flex gap-2">
-      <Badge theme="light" variant="SecondStyle">
+      <Badge theme="light" variant="blue">
         New
       </Badge>
-      <Badge theme="light" variant="PrimeStyle">
+      <Badge theme="light" variant="highlight">
         Featured
       </Badge>
-      <Badge theme="light" variant="ContStyle">
+      <Badge theme="light" variant="purple">
         Popular
       </Badge>
     </div>
@@ -427,12 +428,10 @@ Let's combine everything into a complete example:
 'use client';
 
 import { useState } from 'react';
-import {
-  Button,
-  InputField,
-  Badge,
-  Avatar,
-} from '@torch-ai/torch-glare';
+import { Avatar } from "@/components/Avatar";
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 
 export default function UserProfile() {
   const [name, setName] = useState('');
@@ -461,7 +460,7 @@ export default function UserProfile() {
           <h2 className="typography-headers-large-bold">
             Profile Settings
           </h2>
-          <Badge theme="light" variant="SecondStyle">
+          <Badge theme="light" variant="highlight">
             Pro Member
           </Badge>
         </div>

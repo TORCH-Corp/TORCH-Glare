@@ -12,9 +12,15 @@ A compact icon-only button component designed for toolbars, action bars, and inl
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-cli add action-button
+npx torch-glare@latest init
+npx torch-glare@latest add ActionButton
 ```
+
+`add` also copies any components, hooks, and utilities that `ActionButton` depends on.
 
 ## Imports
 
@@ -74,25 +80,25 @@ export function Toolbar() {
         <i className="ri-save-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="SecStyle">
+      <ActionButton size="S" variant="BlueSecStyle">
         <i className="ri-file-copy-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="SecStyle">
+      <ActionButton size="S" variant="BlueSecStyle">
         <i className="ri-scissors-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="SecStyle">
+      <ActionButton size="S" variant="BlueSecStyle">
         <i className="ri-clipboard-line"></i>
       </ActionButton>
 
       <div className="w-px h-6 bg-border-system-global-primary mx-1" />
 
-      <ActionButton size="S" variant="SecStyle">
+      <ActionButton size="S" variant="BlueSecStyle">
         <i className="ri-arrow-go-back-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="SecStyle">
+      <ActionButton size="S" variant="BlueSecStyle">
         <i className="ri-arrow-go-forward-line"></i>
       </ActionButton>
     </div>
@@ -112,7 +118,7 @@ export function TableRowActions({ row }) {
     <td className="flex items-center gap-1 justify-end">
       <ActionButton
         size="XS"
-        variant="SecStyle"
+        variant="BlueSecStyle"
         onClick={() => setIsEditing(true)}
         aria-label="Edit row"
       >
@@ -121,7 +127,7 @@ export function TableRowActions({ row }) {
 
       <ActionButton
         size="XS"
-        variant="SecStyle"
+        variant="BlueSecStyle"
         onClick={() => handleDuplicate(row.id)}
         aria-label="Duplicate row"
       >
@@ -130,7 +136,7 @@ export function TableRowActions({ row }) {
 
       <ActionButton
         size="XS"
-        variant="DangerStyle"
+        variant="RedSecStyle"
         onClick={() => handleDelete(row.id)}
         aria-label="Delete row"
       >
@@ -158,7 +164,7 @@ export function CardWithActions() {
         <div className="flex items-center gap-1">
           <ActionButton
             size="S"
-            variant={isFavorite ? "YelSecStyle" : "SecStyle"}
+            variant={isFavorite ? "YelSecStyle" : "BlueSecStyle"}
             onClick={() => setIsFavorite(!isFavorite)}
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           >
@@ -167,7 +173,7 @@ export function CardWithActions() {
 
           <ActionButton
             size="S"
-            variant="SecStyle"
+            variant="BlueSecStyle"
             onClick={() => setIsExpanded(!isExpanded)}
             aria-label={isExpanded ? "Collapse" : "Expand"}
           >
@@ -176,7 +182,7 @@ export function CardWithActions() {
 
           <ActionButton
             size="S"
-            variant="SecStyle"
+            variant="BlueSecStyle"
             aria-label="More options"
           >
             <i className="ri-more-2-fill"></i>
@@ -256,7 +262,7 @@ export function ActionButtonGroup() {
     <div className="inline-flex items-center border border-border-system-global-primary rounded-lg overflow-hidden">
       <ActionButton
         size="S"
-        variant={activeView === 'list' ? "PrimeStyle" : "SecStyle"}
+        variant={activeView === 'list' ? "PrimeStyle" : "BlueSecStyle"}
         onClick={() => setActiveView('list')}
         className="rounded-none border-0"
         aria-label="List view"
@@ -266,7 +272,7 @@ export function ActionButtonGroup() {
 
       <ActionButton
         size="S"
-        variant={activeView === 'grid' ? "PrimeStyle" : "SecStyle"}
+        variant={activeView === 'grid' ? "PrimeStyle" : "BlueSecStyle"}
         onClick={() => setActiveView('grid')}
         className="rounded-none border-0 border-l border-border-system-global-primary"
         aria-label="Grid view"
@@ -276,7 +282,7 @@ export function ActionButtonGroup() {
 
       <ActionButton
         size="S"
-        variant={activeView === 'kanban' ? "PrimeStyle" : "SecStyle"}
+        variant={activeView === 'kanban' ? "PrimeStyle" : "BlueSecStyle"}
         onClick={() => setActiveView('kanban')}
         className="rounded-none border-0 border-l border-border-system-global-primary"
         aria-label="Kanban view"
@@ -299,25 +305,25 @@ export function ActionButtonsWithTooltips() {
   return (
     <div className="flex items-center gap-2">
       <Tooltip content="Bold (Ctrl+B)">
-        <ActionButton size="S" variant="SecStyle">
+        <ActionButton size="S" variant="BlueSecStyle">
           <i className="ri-bold"></i>
         </ActionButton>
       </Tooltip>
 
       <Tooltip content="Italic (Ctrl+I)">
-        <ActionButton size="S" variant="SecStyle">
+        <ActionButton size="S" variant="BlueSecStyle">
           <i className="ri-italic"></i>
         </ActionButton>
       </Tooltip>
 
       <Tooltip content="Underline (Ctrl+U)">
-        <ActionButton size="S" variant="SecStyle">
+        <ActionButton size="S" variant="BlueSecStyle">
           <i className="ri-underline"></i>
         </ActionButton>
       </Tooltip>
 
       <Tooltip content="Strikethrough">
-        <ActionButton size="S" variant="SecStyle">
+        <ActionButton size="S" variant="BlueSecStyle">
           <i className="ri-strikethrough"></i>
         </ActionButton>
       </Tooltip>
@@ -437,7 +443,7 @@ function IconButtonBar({ onAction }) {
         <ActionButton
           key={item.action}
           size="S"
-          variant="SecStyle"
+          variant="BlueSecStyle"
           onClick={() => onAction(item.action)}
         >
           <i className={item.icon}></i>
@@ -469,7 +475,7 @@ function ConditionalActions({ permissions, item }) {
       {permissions.canDelete && (
         <ActionButton
           size="XS"
-          variant="DangerStyle"
+          variant="RedSecStyle"
           onClick={() => deleteItem(item.id)}
         >
           <i className="ri-delete-bin-line"></i>
@@ -609,7 +615,7 @@ items.map(item => (
 
 ```tsx
 // Before: Material-UI IconButton
-<IconButton size="small" color="primary">
+<IconButton size="S" color="primary">
   <AddIcon />
 </IconButton>
 

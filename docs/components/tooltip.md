@@ -11,16 +11,22 @@ keywords: [tooltip, hint, popover, radix-ui, hover, help]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-tooltip
+npx torch-glare@latest init
+npx torch-glare@latest add Tooltip
 ```
+
+`add` also copies any components, hooks, and utilities that `Tooltip` depends on.
 
 ## Import
 
-```typescript
-import { Tooltip } from '@torch-ui/components'
-// Or for advanced usage:
-import { TooltipProvider, ToolTipRoot, TooltipTrigger, TooltipContent, TooltipArrow } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Tooltip } from "@/components/Tooltip";
 ```
 
 ## Quick Examples
@@ -28,8 +34,8 @@ import { TooltipProvider, ToolTipRoot, TooltipTrigger, TooltipContent, TooltipAr
 ### Basic Usage
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
+import { Button } from "@/components/Button";
 
 function Example() {
   return (
@@ -43,8 +49,8 @@ function Example() {
 ### Icon with Tooltip
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
-import { ActionButton } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
+import { ActionButton } from "@/components/ActionButton";
 
 function IconTooltip() {
   return (
@@ -60,7 +66,7 @@ function IconTooltip() {
 ### Different Positions
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 
 function PositionedTooltips() {
   return (
@@ -88,7 +94,7 @@ function PositionedTooltips() {
 ### Highlight Variant
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 
 function HighlightTooltip() {
   return (
@@ -105,7 +111,7 @@ function HighlightTooltip() {
 ### Without Arrow
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 
 function NoArrowTooltip() {
   return (
@@ -119,7 +125,7 @@ function NoArrowTooltip() {
 ### Custom Delay
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 
 function CustomDelayTooltip() {
   return (
@@ -136,7 +142,7 @@ function CustomDelayTooltip() {
 ### Rich Content Tooltip
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 
 function RichTooltip() {
   return (
@@ -157,7 +163,7 @@ function RichTooltip() {
 ### Controlled Tooltip
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 import { useState } from 'react'
 
 function ControlledTooltip() {
@@ -178,18 +184,24 @@ function ControlledTooltip() {
 }
 ```
 
-### Disabled Tooltip
+### Conditionally Suppressing a Tooltip
+
+> **Note:** The `disabled` prop is accepted by the type but is **not implemented** — passing
+> `disabled` has no effect and will not hide the tooltip. To conditionally suppress a tooltip,
+> render the wrapped element with or without the `Tooltip` wrapper instead.
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 
-function DisabledTooltip({ disabled }: { disabled: boolean }) {
+function MaybeTooltip({ disabled }: { disabled: boolean }) {
+  const button = <button>Hover me</button>
+
+  // Render without the Tooltip wrapper when you don't want a tooltip.
+  if (disabled) return button
+
   return (
-    <Tooltip
-      text="This tooltip is disabled"
-      disabled={disabled}
-    >
-      <button>Hover me</button>
+    <Tooltip text="Helpful information">
+      {button}
     </Tooltip>
   )
 }
@@ -198,8 +210,8 @@ function DisabledTooltip({ disabled }: { disabled: boolean }) {
 ### Form Field Tooltip
 
 ```typescript
-import { Tooltip } from '@torch-ui/components'
-import { Input } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
+import { Input } from "@/components/Input";
 
 function FormTooltip() {
   return (
@@ -228,7 +240,7 @@ function FormTooltip() {
 | `tip` | `boolean` | `true` | Show arrow indicator |
 | `open` | `boolean` | - | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | - | Callback when state changes |
-| `disabled` | `boolean` | `false` | Disable tooltip |
+| `disabled` | `boolean` | `false` | **Not supported.** Accepted by the type but has no effect — the current implementation does not disable the tooltip. To conditionally suppress a tooltip, render it conditionally instead. |
 | `avoidCollisions` | `boolean` | `true` | Adjust position to stay in viewport |
 | `theme` | `'dark' \| 'light' \| 'default'` | `'dark'` | Theme variant |
 | `className` | `string` | - | Additional CSS classes |
@@ -259,7 +271,7 @@ interface TooltipProps {
   tip?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
-  disabled?: boolean
+  disabled?: boolean // Accepted but not implemented — has no effect
   theme?: 'dark' | 'light' | 'default'
   className?: string
 }
@@ -332,7 +344,7 @@ function ConditionalTooltip({ showTooltip, children }) {
 ```typescript
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Tooltip } from '@torch-ui/components'
+import { Tooltip } from "@/components/Tooltip";
 
 describe('Tooltip', () => {
   it('shows tooltip on hover', async () => {
@@ -432,7 +444,7 @@ describe('Tooltip', () => {
 
 ```diff
 - import { Tooltip } from '@mui/material'
-+ import { Tooltip } from '@torch-ui/components'
++ import { Tooltip } from "@/components/Tooltip";
 
 - <Tooltip title="Help text">
 + <Tooltip text="Help text">
@@ -445,7 +457,7 @@ describe('Tooltip', () => {
 
 ```diff
 - import * as Tooltip from '@radix-ui/react-tooltip'
-+ import { Tooltip } from '@torch-ui/components'
++ import { Tooltip } from "@/components/Tooltip";
 
 - <Tooltip.Provider>
 -   <Tooltip.Root>

@@ -80,8 +80,8 @@ export default {
 
 ```tsx
 // components/BrandButton.tsx
-import { Button } from '@torch-ai/torch-glare';
-import { cn } from '@torch-ai/torch-glare/utils';
+import { Button } from "@/components/Button";
+import { cn } from "@/utils/cn";
 
 export function BrandButton({ children, ...props }: any) {
   return (
@@ -103,7 +103,7 @@ export function BrandButton({ children, ...props }: any) {
 
 ```tsx
 // hooks/useCustomTheme.ts
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect } from 'react';
 
 export function useCustomTheme() {
@@ -130,7 +130,7 @@ export function useCustomTheme() {
 
 ```tsx
 // providers/BrandThemeProvider.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export function BrandThemeProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -148,7 +148,7 @@ export function BrandThemeProvider({ children }: { children: React.ReactNode }) 
 ```tsx
 // __tests__/BrandButton.test.tsx
 import { render } from '@testing-library/react';
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import { BrandButton } from '../components/BrandButton';
 
 describe('BrandButton', () => {
@@ -331,7 +331,9 @@ export const matchField = (otherField: string, message?: string) => {
 
 import { useFormValidation } from '../hooks/useFormValidation';
 import { required, email, minLength } from '../utils/validationRules';
-import { LabelField, Button, toast } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { LabelField } from "@/components/LabelField";
+import { toast } from "@/components/Toast";
 
 export default function RegistrationForm() {
   const {
@@ -455,7 +457,8 @@ Implement comprehensive dark mode support.
 // components/DarkModeToggle.tsx
 'use client';
 
-import { useTheme, Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect, useState } from 'react';
 
 export default function DarkModeToggle() {
@@ -469,7 +472,7 @@ export default function DarkModeToggle() {
 
   if (!mounted) {
     return (
-      <Button theme="light" variant="ContStyle" buttonType="icon">
+      <Button theme="light" variant="PrimeContStyle" buttonType="icon">
         <div className="w-5 h-5" />
       </Button>
     );
@@ -478,7 +481,7 @@ export default function DarkModeToggle() {
   return (
     <Button
       theme={theme as any}
-      variant="ContStyle"
+      variant="PrimeContStyle"
       buttonType="icon"
       onClick={() => updateTheme(theme === 'light' ? 'dark' : 'light')}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
@@ -506,7 +509,7 @@ export default function DarkModeToggle() {
 ```tsx
 // hooks/useSystemTheme.ts
 import { useEffect } from 'react';
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 export function useSystemTheme() {
   const { theme, updateTheme } = useTheme();
@@ -536,7 +539,7 @@ export function useSystemTheme() {
 
 ```tsx
 // components/ThemedImage.tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 import Image from 'next/image';
 
 interface ThemedImageProps {
@@ -573,7 +576,7 @@ export function ThemedImage({
 ```tsx
 // __tests__/DarkMode.test.tsx
 import { render } from '@testing-library/react';
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import userEvent from '@testing-library/user-event';
 import DarkModeToggle from '../components/DarkModeToggle';
 
@@ -616,7 +619,7 @@ Ensure your application is accessible to all users.
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
 
 export default function AccessibleMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -712,7 +715,8 @@ export default function AccessibleMenu() {
 
 ```tsx
 // components/AccessibleForm.tsx
-import { LabelField, Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { LabelField } from "@/components/LabelField";
 import { useState } from 'react';
 
 export default function AccessibleForm() {
@@ -808,7 +812,7 @@ export function useFocusTrap<T extends HTMLElement>(isActive: boolean) {
 
 ```tsx
 // components/AccessibleButton.tsx
-import { Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
 
 interface AccessibleButtonProps {
   onClick: () => void;
@@ -866,7 +870,9 @@ export type FormTouched<T> = Partial<Record<keyof T, boolean>>;
 ```tsx
 // components/TypeSafeForm.tsx
 import { useState } from 'react';
-import { LabelField, Button, toast } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { LabelField } from "@/components/LabelField";
+import { toast } from "@/components/Toast";
 import type { ContactForm, FormErrors, FormTouched } from '../types/forms';
 
 export default function TypeSafeForm() {
@@ -981,7 +987,7 @@ export function useTypedLocalStorage<T>(
 
 ```tsx
 // types/components.ts
-import type { ButtonProps } from '@torch-ai/torch-glare';
+import type { ButtonProps } from "@/components/LoginButton";
 
 export interface ExtendedButtonProps extends ButtonProps {
   isLoading?: boolean;
@@ -991,7 +997,7 @@ export interface ExtendedButtonProps extends ButtonProps {
 
 ```tsx
 // components/ExtendedButton.tsx
-import { Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
 import type { ExtendedButtonProps } from '../types/components';
 
 export function ExtendedButton({

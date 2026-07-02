@@ -34,7 +34,7 @@ Manages application theme state with support for light, dark, and system default
 ### Basic Setup
 
 ```tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 function App() {
   return (
@@ -48,7 +48,7 @@ function App() {
 ### With Default Theme
 
 ```tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 function App() {
   return (
@@ -62,7 +62,7 @@ function App() {
 ### Consuming Theme with useTheme Hook
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function ThemeToggle() {
   const { theme, updateTheme } = useTheme();
@@ -83,7 +83,7 @@ function ThemeToggle() {
 ### Theme Mode Switcher
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function ThemeModeSwitcher() {
   const { themeMode, updateMode } = useTheme();
@@ -105,7 +105,7 @@ function ThemeModeSwitcher() {
 ### Complete Theme Control Panel
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function ThemeControlPanel() {
   const { theme, themeMode, updateTheme, updateMode } = useTheme();
@@ -166,7 +166,7 @@ function ThemeControlPanel() {
 ### Theme-Aware Component
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function ThemedCard({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
@@ -188,7 +188,7 @@ function ThemedCard({ children }: { children: React.ReactNode }) {
 ### System Theme Detection
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 import { useEffect, useState } from 'react';
 
 function SystemThemeSync() {
@@ -229,7 +229,7 @@ function SystemThemeSync() {
 ### Header with Theme Toggle
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function Header() {
   const { theme, updateTheme } = useTheme();
@@ -253,7 +253,7 @@ function Header() {
 ### Settings Page
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from 'react';
 
 function SettingsPage() {
@@ -310,7 +310,7 @@ function SettingsPage() {
 
 ```tsx
 // app/layout.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -333,7 +333,7 @@ export default function RootLayout({
 
 ```tsx
 // pages/_app.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import type { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -351,7 +351,7 @@ export default function App({ Component, pageProps }: AppProps) {
 // main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -478,7 +478,7 @@ The ThemeProvider stores values in localStorage:
 Full TypeScript support with type inference:
 
 ```typescript
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function MyComponent() {
   const { theme, themeMode, updateTheme, updateMode } = useTheme();
@@ -506,7 +506,7 @@ function MyComponent() {
 
 ```tsx
 import { render } from '@testing-library/react';
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 describe('ThemedComponent', () => {
   it('should render with light theme', () => {
@@ -535,7 +535,7 @@ describe('ThemedComponent', () => {
 
 ```tsx
 import { renderHook, act } from '@testing-library/react';
-import { ThemeProvider, useTheme } from '@torch-ai/torch-glare';
+import { ThemeProvider, useTheme } from "@/providers/ThemeProvider";
 
 describe('useTheme', () => {
   it('should update theme', () => {
@@ -630,7 +630,7 @@ The ThemeProvider uses React context, which can cause re-renders. To optimize:
 
 ```tsx
 import { memo } from 'react';
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 // Memoize components that don't need theme updates
 const ExpensiveComponent = memo(() => {
@@ -647,7 +647,7 @@ function ThemedButton() {
 ### Selective Theme Consumption
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 // Only consume what you need
 function ThemeToggle() {
@@ -727,7 +727,7 @@ Avoid hydration mismatches:
 
 ```tsx
 import { useEffect, useState } from 'react';
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function ClientOnlyThemeButton() {
   const [mounted, setMounted] = useState(false);
@@ -754,7 +754,7 @@ function ClientOnlyThemeButton() {
 Show visual feedback when theme changes:
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState, useEffect } from 'react';
 
 function ThemeToggleWithFeedback() {
@@ -783,7 +783,7 @@ function ThemeToggleWithFeedback() {
 Ensure theme values are valid before updating:
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function SafeThemeUpdater({ theme }: { theme: string }) {
   const { updateTheme } = useTheme();
@@ -849,7 +849,7 @@ import { Theme } from 'old-library';
 <Theme mode="dark">
 
 // v2.x (new)
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 <ThemeProvider defaultTheme="dark">
 ```
 
@@ -860,7 +860,7 @@ import { ThemeProvider } from '@torch-ai/torch-glare';
 import { ThemeProvider as NextThemeProvider } from 'next-themes';
 
 // TORCH Glare
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 // Both can coexist if needed, but use TORCH Glare for consistency
 ```

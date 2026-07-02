@@ -11,13 +11,22 @@ keywords: [password, strength, security, validation, indicator, level]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add PasswordLevel
+```
+
+`add` also copies any components, hooks, and utilities that `PasswordLevel` depends on.
 
 ## Import
 
-```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import type { PasswordLevelProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { PasswordLevel } from "@/components/PasswordLevel";
 ```
 
 ## Quick Examples
@@ -25,8 +34,8 @@ import type { PasswordLevelProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function Example() {
@@ -49,8 +58,8 @@ function Example() {
 ### With Labels
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function WithLabels() {
@@ -96,8 +105,10 @@ function WithLabels() {
 ### Registration Form
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField, Button, FieldHint } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { Button } from "@/components/Button";
+import { FieldHint } from "@/components/FieldHint";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function RegistrationForm() {
@@ -157,8 +168,8 @@ function RegistrationForm() {
 ### With Requirements Checklist
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function PasswordWithChecklist() {
@@ -217,8 +228,9 @@ function PasswordWithChecklist() {
 ### Password Change Form
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField, Button } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function PasswordChangeForm() {
@@ -269,8 +281,8 @@ function PasswordChangeForm() {
 ### Real-time Feedback
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { InputField } from "@/components/InputField";
 import { useState, useEffect } from 'react'
 
 function RealTimeFeedback() {
@@ -327,7 +339,7 @@ function RealTimeFeedback() {
 ### Different Themes
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
 import { useState } from 'react'
 
 function ThemeExample() {
@@ -360,7 +372,7 @@ function ThemeExample() {
 ### Custom Styling
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
 import { useState } from 'react'
 
 function CustomStyling() {
@@ -387,8 +399,8 @@ function CustomStyling() {
 ### Animated Feedback
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function AnimatedFeedback() {
@@ -524,7 +536,7 @@ function isPasswordAcceptable(password: string, minLevel: number = 2): boolean {
 ### Validation Hook
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
 import { useState, useMemo } from 'react'
 
 function usePasswordValidation(password: string) {
@@ -584,8 +596,9 @@ function ValidatedPasswordField() {
 ### Password Generator
 
 ```typescript
-import { PasswordLevel } from '@torch-ui/components'
-import { InputField, Button } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function PasswordGenerator() {
@@ -638,7 +651,7 @@ function PasswordGenerator() {
 
 ```typescript
 import { render, screen } from '@testing-library/react'
-import { PasswordLevel } from '@torch-ui/components'
+import { PasswordLevel } from "@/components/PasswordLevel";
 
 describe('PasswordLevel', () => {
   it('renders three bars', () => {

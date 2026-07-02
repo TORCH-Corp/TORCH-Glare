@@ -1,6 +1,6 @@
 ---
 name: InputField
-version: 1.1.15
+version: 1.2.8
 status: stable
 category: components/forms
 tags: [form, input, field, popover, tooltip, compound, accessible]
@@ -19,14 +19,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add InputField
 ```
+
+`add` also copies any components, hooks, and utilities that `InputField` depends on.
 
 ## Import
 
-```typescript
-import { InputField } from 'torch-glare/lib/components/InputField'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { InputField } from "@/components/InputField";
 ```
 
 ## Quick Examples
@@ -34,7 +42,7 @@ import { InputField } from 'torch-glare/lib/components/InputField'
 ### Basic Usage
 
 ```typescript
-import { InputField } from 'torch-glare/lib/components/InputField'
+import { InputField } from '@/components/InputField'
 
 function Example() {
   const [value, setValue] = useState('')
@@ -133,7 +141,7 @@ function AutocompleteField() {
 ### With Trailing Actions
 
 ```typescript
-import { Button } from 'torch-glare/lib/components/Button'
+import { Button } from '@/components/Button'
 
 function PasswordField() {
   const [showPassword, setShowPassword] = useState(false)
@@ -324,7 +332,7 @@ function EmailField() {
 ### Date Input with Calendar
 
 ```typescript
-import { Calendar } from 'torch-glare/lib/components/Calendar'
+import { Calendar } from '@/components/Calendar'
 
 function DateField() {
   const [date, setDate] = useState('')
@@ -362,7 +370,7 @@ function DateField() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { InputField } from 'torch-glare/lib/components/InputField'
+import { InputField } from '@/components/InputField'
 
 describe('InputField', () => {
   it('displays error message in tooltip', () => {
@@ -505,8 +513,8 @@ test('InputField meets WCAG standards', async () => {
 
 ```diff
 // Migrating from Input to InputField
-- import { Input } from 'torch-glare/lib/components/Input'
-+ import { InputField } from 'torch-glare/lib/components/InputField'
+- import { Input } from '@/components/Input'
++ import { InputField } from '@/components/InputField'
 
 - <Input.Group error={!!error}>
 -   <Input.Icon>{icon}</Input.Icon>

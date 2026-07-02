@@ -11,29 +11,22 @@ keywords: [dropdown-menu, menu, context-menu, radix-ui, submenu, checkbox]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-dropdown-menu
+npx torch-glare@latest init
+npx torch-glare@latest add DropdownMenu
 ```
+
+`add` also copies any components, hooks, and utilities that `DropdownMenu` depends on.
 
 ## Import
 
-```typescript
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuGroup,
-} from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { DropdownMenu } from "@/components/DropdownMenu";
 ```
 
 ## Quick Examples
@@ -41,8 +34,8 @@ import {
 ### Basic Menu
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
+import { Button } from "@/components/Button";
 
 function Example() {
   return (
@@ -63,7 +56,7 @@ function Example() {
 ### With Icons
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 
 function IconMenu() {
   return (
@@ -95,7 +88,7 @@ function IconMenu() {
 ### With Keyboard Shortcuts
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut } from "@/components/DropdownMenu";
 
 function ShortcutMenu() {
   return (
@@ -125,7 +118,7 @@ function ShortcutMenu() {
 ### With Labels and Separators
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/DropdownMenu";
 
 function OrganizedMenu() {
   return (
@@ -156,7 +149,7 @@ function OrganizedMenu() {
 ### With Checkboxes
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuSeparator } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuSeparator } from "@/components/DropdownMenu";
 import { useState } from 'react'
 
 function CheckboxMenu() {
@@ -197,7 +190,7 @@ function CheckboxMenu() {
 ### With Radio Group
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/DropdownMenu";
 import { useState } from 'react'
 
 function RadioMenu() {
@@ -223,7 +216,7 @@ function RadioMenu() {
 ### With Submenu
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from "@/components/DropdownMenu";
 
 function SubmenuExample() {
   return (
@@ -256,7 +249,7 @@ function SubmenuExample() {
 ### Disabled Items
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 
 function DisabledMenu() {
   return (
@@ -277,7 +270,7 @@ function DisabledMenu() {
 ### SystemStyle Variant
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 
 function SystemMenu() {
   return (
@@ -298,7 +291,7 @@ function SystemMenu() {
 ### Context Menu Pattern
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/DropdownMenu";
 
 function ContextMenu({ x, y }: { x: number; y: number }) {
   return (
@@ -459,7 +452,7 @@ export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<DropdownMenu
 ### With State Management
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 import { useState } from 'react'
 
 function useDropdownMenu() {
@@ -498,7 +491,7 @@ function StatefulMenu() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 
 describe('DropdownMenu', () => {
   it('opens on trigger click', () => {

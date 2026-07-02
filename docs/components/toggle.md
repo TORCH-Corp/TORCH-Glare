@@ -1,6 +1,6 @@
 ---
 name: Toggle
-version: 1.1.15
+version: 1.2.8
 status: stable
 category: components/forms
 tags: [form, toggle, button, radix-ui, accessible, variants]
@@ -17,14 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Toggle
 ```
+
+`add` also copies any components, hooks, and utilities that `Toggle` depends on.
 
 ## Import
 
-```typescript
-import { Toggle } from 'torch-glare/lib/components/Toggle'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Toggle } from "@/components/Toggle";
 ```
 
 ## Quick Examples
@@ -32,7 +40,7 @@ import { Toggle } from 'torch-glare/lib/components/Toggle'
 ### Basic Usage
 
 ```typescript
-import { Toggle } from 'torch-glare/lib/components/Toggle'
+import { Toggle } from '@/components/Toggle'
 
 function Example() {
   const [pressed, setPressed] = useState(false)
@@ -544,7 +552,7 @@ function SettingsToggles() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Toggle } from 'torch-glare/lib/components/Toggle'
+import { Toggle } from '@/components/Toggle'
 
 describe('Toggle', () => {
   it('toggles pressed state on click', () => {

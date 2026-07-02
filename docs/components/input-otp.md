@@ -1,6 +1,6 @@
 ---
 name: InputOTP
-version: 1.1.15
+version: 1.2.8
 status: stable
 category: components/forms
 tags: [form, otp, input, verification, authentication, accessible]
@@ -16,19 +16,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add InputOTP
 ```
+
+`add` also copies any components, hooks, and utilities that `InputOTP` depends on.
 
 ## Import
 
-```typescript
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-  InputOTPSeparator
-} from 'torch-glare/lib/components/InputOTP'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { InputOTP } from "@/components/InputOTP";
 ```
 
 ## Quick Examples
@@ -36,7 +39,7 @@ import {
 ### Basic 6-Digit OTP
 
 ```typescript
-import { InputOTP, InputOTPGroup, InputOTPSlot } from 'torch-glare/lib/components/InputOTP'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/InputOTP'
 
 function Example() {
   const [otp, setOtp] = useState('')
@@ -508,7 +511,7 @@ function MultiStepVerification() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { InputOTP, InputOTPGroup, InputOTPSlot } from 'torch-glare/lib/components/InputOTP'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/InputOTP'
 
 describe('InputOTP', () => {
   it('handles input correctly', () => {
