@@ -1,12 +1,5 @@
 "use client";
-import {
-  forwardRef,
-  InputHTMLAttributes,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, InputHTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
 import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
@@ -14,8 +7,7 @@ import { ActionButton } from "./ActionButton";
 import { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
 
-export interface Props
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
+export interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "S" | "M"; // this is used to change the size style of the component
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
@@ -24,9 +16,8 @@ export interface Props
   errorMessage?: string; // to show tooltip component when error_message not null
   onTable?: boolean; // to change the border style of the component when it is on table
   toolTipSide?: ToolTipSide;
-  theme?: Themes
+  theme?: Themes;
 }
-
 
 export const InputField = forwardRef<HTMLInputElement, Props>(
   (
@@ -43,7 +34,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       className,
       ...props
     },
-    forwardedRef
+    forwardedRef,
   ) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [PopoverWidth, setPopoverWidth] = useState(0);
@@ -78,58 +69,66 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
               }}
               className={className}
             >
-              {icon && (
-                <Icon>
-                  {icon}
-                </Icon>
-              )}
+              {icon && <Icon>{icon}</Icon>}
               <Input
                 {...props}
                 onFocus={(e) => {
-                  setIsPopoverOpen(true)
-                  props.onFocus?.(e)
+                  setIsPopoverOpen(true);
+                  props.onFocus?.(e);
                 }}
                 onBlur={(e) => {
-                  setIsPopoverOpen(false)
-                  props.onBlur?.(e)
+                  setIsPopoverOpen(false);
+                  props.onBlur?.(e);
                 }}
                 ref={inputRef}
               />
 
-              <Trilling >
+              <Trilling>
                 {childrenSide}
                 {popoverChildren && (
-                  <PopoverActionButton size={size} variant={variant} isPopoverOpen={isPopoverOpen} disabled={props.disabled} />
+                  <PopoverActionButton
+                    size={size}
+                    variant={variant}
+                    isPopoverOpen={isPopoverOpen}
+                    disabled={props.disabled}
+                  />
                 )}
               </Trilling>
             </Group>
           </PopoverTrigger>
         </Tooltip>
 
-
-        {
-          (popoverChildren && !props.disabled) && (
-            <PopoverContent
-              theme={theme}
-              variant={variant}
-              onOpenAutoFocus={(e: any) => e.preventDefault()}
-              style={{ width: PopoverWidth }}
-              onClick={(e) => {
-                triggerRef.current?.click();
-              }}
-            >
-              {popoverChildren}
-            </PopoverContent>
-          )
-        }
-      </Popover >
+        {popoverChildren && !props.disabled && (
+          <PopoverContent
+            theme={theme}
+            variant={variant}
+            onOpenAutoFocus={(e: Event) => e.preventDefault()}
+            style={{ width: PopoverWidth }}
+            onClick={() => {
+              triggerRef.current?.click();
+            }}
+          >
+            {popoverChildren}
+          </PopoverContent>
+        )}
+      </Popover>
     );
-  }
+  },
 );
 
 InputField.displayName = "InputField";
 
-const PopoverActionButton = ({ size, variant, isPopoverOpen, disabled }: { size: "S" | "M", variant: "SystemStyle" | "PresentationStyle", isPopoverOpen: boolean, disabled?: boolean }) => {
+const PopoverActionButton = ({
+  size,
+  variant,
+  isPopoverOpen,
+  disabled,
+}: {
+  size: "S" | "M";
+  variant: "SystemStyle" | "PresentationStyle";
+  isPopoverOpen: boolean;
+  disabled?: boolean;
+}) => {
   return (
     <ActionButton disabled={disabled} size={size}>
       <i
@@ -138,10 +137,10 @@ const PopoverActionButton = ({ size, variant, isPopoverOpen, disabled }: { size:
           "transition-[transform,rotate]",
           "duration-200",
           "ease-in-out",
-          { "rotate-180": (isPopoverOpen && !disabled) },
+          { "rotate-180": isPopoverOpen && !disabled },
           { "!text-[16px]": size === "S" },
           { "!text-[26px]": size === "M" },
-          { "text-white": variant === "SystemStyle" }
+          { "text-white": variant === "SystemStyle" },
         )}
       />
     </ActionButton>

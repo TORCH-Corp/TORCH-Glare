@@ -26,17 +26,23 @@ export const linkButtonStyles = cva(
     defaultVariants: {
       size: "S",
     },
-  }
+  },
 );
 
 interface Props extends HTMLAttributes<HTMLAnchorElement | HTMLSpanElement> {
   size?: "S" | "M"; // this props will change the button style size see on figma design file
-  theme?: Themes
-  asChild?: boolean
-  href?: string
+  theme?: Themes;
+  asChild?: boolean;
+  href?: string;
 }
 
-export const LinkButton: React.FC<Props> = ({ theme, className, size = "S", asChild, ...props }) => {
+export const LinkButton: React.FC<Props> = ({
+  theme,
+  className,
+  size = "S",
+  asChild,
+  ...props
+}) => {
   const Component = asChild ? Slot : props.href ? "a" : "span";
   return (
     <Component
@@ -46,7 +52,7 @@ export const LinkButton: React.FC<Props> = ({ theme, className, size = "S", asCh
         linkButtonStyles({
           size: size,
         }),
-        className
+        className,
       )}
     >
       <div className="px-[3px] whitespace-nowrap break-keep">{props.children}</div>
@@ -60,7 +66,7 @@ export const LinkButton: React.FC<Props> = ({ theme, className, size = "S", asCh
           {
             "group-hover:w-[20px] group-hover:h-[20px]": size === "S",
             "group-hover:w-[22px] group-hover:h-[22px]": size === "M",
-          }
+          },
         )}
       >
         <Arrow
@@ -75,12 +81,7 @@ export const LinkButton: React.FC<Props> = ({ theme, className, size = "S", asCh
 };
 
 const Arrow = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 10 10"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       d="M1.81582 1.58451L3.2807 0.119629L9.12479 0.875203L9.88037 6.71929L8.41549 8.18417L7.78584 3.31409L3.35267 7.74727L2.25272 6.64733L6.6859 2.21415L1.81582 1.58451Z"
       fill="#F9F9F9"

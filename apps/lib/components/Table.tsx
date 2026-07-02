@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import * as React from "react";
 import { cn } from "../utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
@@ -6,8 +6,6 @@ import { useRef } from "react";
 import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
 import { useResize } from "../hooks/useResize";
-
-
 
 type TableHeadVariantsProps = VariantProps<typeof tableHeadVariants>;
 
@@ -22,7 +20,6 @@ const Table = React.forwardRef<
     ref={ref}
     className={cn("overflow-hidden w-auto [border-collapse:separate] border-spacing-0", className)}
     {...props}
-
   >
     {props.children}
   </table>
@@ -35,10 +32,7 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn(
-      "shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
-      className
-    )}
+    className={cn("shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]", className)}
     {...props}
   />
 ));
@@ -57,9 +51,7 @@ TableBody.displayName = "TableBody";
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <tfoot ref={ref} className={cn(className)} {...props} />
-));
+>(({ className, ...props }, ref) => <tfoot ref={ref} className={cn(className)} {...props} />);
 TableFooter.displayName = "TableFooter";
 
 const TableRow = React.forwardRef<
@@ -70,29 +62,32 @@ const TableRow = React.forwardRef<
 >(({ className, state = "", ...props }, ref) => (
   <tr
     ref={ref}
-    className={cn([
-      "[&_button]:hover:opacity-100 hover:bg-background-presentation-table-row-hover transition-colors",
-      {
-        "bg-background-presentation-table-row-negative border-border-presentation-badge-red":
-          state === "delete",
-      },
-      {
-        "bg-background-presentation-table-row-information border-border-presentation-badge-navy":
-          state === "update",
-      },
-      {
-        "bg-background-presentation-table-row-success border-border-presentation-badge-green":
-          state === "add",
-      },
-      {
-        "bg-background-presentation-table-row-selected border-t border-[2px] border-border-presentation-table-selected":
-          state === "selected",
-      },
-      {
-        "bg-background-presentation-table-row-hover border-t border-[2px] border-border-presentation-table-dropdown":
-          state === "open",
-      },
-    ], className)}
+    className={cn(
+      [
+        "[&_button]:hover:opacity-100 hover:bg-background-presentation-table-row-hover transition-colors",
+        {
+          "bg-background-presentation-table-row-negative border-border-presentation-badge-red":
+            state === "delete",
+        },
+        {
+          "bg-background-presentation-table-row-information border-border-presentation-badge-navy":
+            state === "update",
+        },
+        {
+          "bg-background-presentation-table-row-success border-border-presentation-badge-green":
+            state === "add",
+        },
+        {
+          "bg-background-presentation-table-row-selected border-t border-[2px] border-border-presentation-table-selected":
+            state === "selected",
+        },
+        {
+          "bg-background-presentation-table-row-hover border-t border-[2px] border-border-presentation-table-dropdown":
+            state === "open",
+        },
+      ],
+      className,
+    )}
     {...props}
   >
     {props.children}
@@ -103,63 +98,61 @@ TableRow.displayName = "TableRow";
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
-  TableHeadVariantsProps &
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    sortType?: "asc" | "desc" | undefined;
-    onSort?: () => void;
-    isDummy?: boolean;
-  }
->(
-  (
-    { className, size = "M", disabled, sortType, onSort, isDummy, ...props },
-    forwardedRef
-  ) => {
-    const headRef = useRef<any>(null);
-    const { width, handleStartResize } = useResize(headRef);
+    TableHeadVariantsProps &
+    React.ButtonHTMLAttributes<HTMLButtonElement> & {
+      sortType?: "asc" | "desc" | undefined;
+      onSort?: () => void;
+      isDummy?: boolean;
+    }
+>(({ className, size = "M", disabled, sortType, onSort, isDummy, ...props }, forwardedRef) => {
+  const headRef = useRef<HTMLTableCellElement>(null);
+  const { width, handleStartResize } = useResize(headRef as React.RefObject<HTMLElement>);
 
-    // Combine refs using useEffect
-    React.useEffect(() => {
-      if (!forwardedRef) return;
-      if (typeof forwardedRef === "function") forwardedRef(headRef.current);
-      else forwardedRef.current = headRef.current;
-    }, [forwardedRef]);
+  // Combine refs using useEffect
+  React.useEffect(() => {
+    if (!forwardedRef) return;
+    if (typeof forwardedRef === "function") forwardedRef(headRef.current);
+    else forwardedRef.current = headRef.current;
+  }, [forwardedRef]);
 
-    return (
-      <th
-        ref={headRef}
+  return (
+    <th
+      ref={headRef}
+      className={cn(
+        "relative py-[2px] px-[2px] border-b-[2px]  border-border-presentation-table-header",
+      )}
+    >
+      <div
+        {...props}
         className={cn(
-          "relative py-[2px] px-[2px] border-b-[2px]  border-border-presentation-table-header",
+          tableHeadVariants({ size, disabled, isDummy }),
+          { "min-w-[100px]": !isDummy },
+          className,
         )}
       >
         <div
-          {...props}
-          className={cn(
-            tableHeadVariants({ size, disabled, isDummy }),
-            { "min-w-[100px]": !isDummy },
-            className
-          )}
+          style={{ width: `${width}px` }}
+          className={cn("flex items-center justify-between flex-1", {
+            "justify-center": isDummy,
+          })}
         >
-          <div
-            style={{ width: `${width}px` }}
-            className={cn("flex items-center justify-between flex-1", {
-              "justify-center": isDummy,
-            })}
-          >
-            {props.children}
-            {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
-          </div>
+          {props.children}
+          {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
         </div>
-        <button disabled={isDummy} className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary">
-          <ResizeIcon
-            className={cn({ "!opacity-0 cursor-default": isDummy })}
-            onMouseDown={handleStartResize}
-            onTouchStart={handleStartResize}
-          />
-        </button>
-      </th>
-    );
-  }
-);
+      </div>
+      <button
+        disabled={isDummy}
+        className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary"
+      >
+        <ResizeIcon
+          className={cn({ "!opacity-0 cursor-default": isDummy })}
+          onMouseDown={handleStartResize}
+          onTouchStart={handleStartResize}
+        />
+      </button>
+    </th>
+  );
+});
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
@@ -179,7 +172,7 @@ const TableCell = React.forwardRef<
         "border-r  border-b border-border-presentation-table-header px-1 rtl:border-l rtl:border-r-0",
         "break-all",
       ],
-      className
+      className,
     )}
     {...props}
   >
@@ -189,7 +182,9 @@ const TableCell = React.forwardRef<
         "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
         "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
         "[&:has(input)]:[mask-image:none]",
-        { "min-w-fit justify-center": isDummy }, childrenClassName)}
+        { "min-w-fit justify-center": isDummy },
+        childrenClassName,
+      )}
     >
       {props.children}
     </div>
@@ -202,6 +197,7 @@ const TableCheckbox = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     id: string;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- id destructured to exclude it from the props spread onto Checkbox
 >(({ className, id, ...props }, ref) => {
   return (
     <div className={cn(["flex items-center justify-center"], className)}>
@@ -215,11 +211,7 @@ const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement>
 >(({ className, ...props }, ref) => (
-  <caption
-    ref={ref}
-    className={cn("mt-4 text-sm text-muted-foreground", className)}
-    {...props}
-  />
+  <caption ref={ref} className={cn("mt-4 text-sm text-muted-foreground", className)} {...props} />
 ));
 TableCaption.displayName = "TableCaption";
 
@@ -230,15 +222,11 @@ const TableFooterButton = React.forwardRef<
   }>
 >(({ children, className, ...props }, ref) => {
   return (
-    <TableRow
-      className={cn(
-        "h-[40px] overflow-hidden",
-        className
-      )}
-    >
+    <TableRow className={cn("h-[40px] overflow-hidden", className)}>
       <TableCell
         className={
-          "border-t-2 border-b-2 border-transparent hover:border-border-presentation-table-action-hover  hover:bg-background-presentation-table-acton-hover"}
+          "border-t-2 border-b-2 border-transparent hover:border-border-presentation-table-action-hover  hover:bg-background-presentation-table-acton-hover"
+        }
         colSpan={100}
       >
         <button
@@ -246,15 +234,16 @@ const TableFooterButton = React.forwardRef<
           {...props}
           className={cn(
             "overflow-hidden w-full flex items-center justify-start gap-2 typography-body-medium-semibold [&_i]:text-[20px]",
-            className
+            className,
           )}
-        >{children}</button>
+        >
+          {children}
+        </button>
       </TableCell>
     </TableRow>
   );
 });
 TableFooterButton.displayName = "TableFooterButton";
-
 
 const SubTableButton = ({
   isActive,
@@ -273,7 +262,7 @@ const SubTableButton = ({
           "hover:bg-transparent hover:text-black focus:bg-transparent focus:text-black active:bg-transparent active:text-black":
             dummy,
         },
-        className
+        className,
       )}
       variant={"PrimeStyle"}
       buttonType={"icon"}
@@ -283,7 +272,7 @@ const SubTableButton = ({
           "ri-arrow-right-s-line",
           "rtl:rotate-180",
           "transition-transform duration-200",
-          { "rotate-90": isActive }
+          { "rotate-90": isActive },
         )}
       ></i>
     </Button>
@@ -304,11 +293,20 @@ export {
   TableFooterButton,
 };
 
-const ResizeIcon = (props: any) => {
+interface ResizeIconProps {
+  className?: string;
+  onMouseDown?: React.MouseEventHandler<SVGElement>;
+  onTouchStart?: React.TouchEventHandler<SVGElement>;
+}
+
+const ResizeIcon = (props: ResizeIconProps) => {
   return (
     <svg
       {...props}
-      className={cn("z-50 cursor-col-resize absolute top-[50%] right-[50%] translate-x-[50%] translate-y-[-50%] opacity-0 hover:opacity-100 transition-opacity duration-200", props.className)}
+      className={cn(
+        "z-50 cursor-col-resize absolute top-[50%] right-[50%] translate-x-[50%] translate-y-[-50%] opacity-0 hover:opacity-100 transition-opacity duration-200",
+        props.className,
+      )}
       width="8"
       height="32"
       viewBox="0 0 8 40"
@@ -336,10 +334,7 @@ const SortButton = ({
   sortType?: "asc" | "desc" | undefined;
 }) => {
   return (
-    <button
-      className={cn("cursor-pointer text-[16px] z-10")}
-      onPointerDown={onSort}
-    >
+    <button className={cn("cursor-pointer text-[16px] z-10")} onPointerDown={onSort}>
       {sortType === "asc" ? (
         <i className="ri-arrow-up-line text-border-presentation-state-focus" />
       ) : sortType === "desc" ? (
@@ -350,9 +345,6 @@ const SortButton = ({
     </button>
   );
 };
-
-
-
 
 const tableHeadVariants = cva(
   [
@@ -385,14 +377,11 @@ const tableHeadVariants = cva(
         ],
       },
       isDummy: {
-        true: [
-          "hover:bg-transparent",
-          "hover:text-content-presentation-global-primary",
-        ],
+        true: ["hover:bg-transparent", "hover:text-content-presentation-global-primary"],
       },
       defaultVariants: {
         size: "M",
       },
     },
-  }
+  },
 );

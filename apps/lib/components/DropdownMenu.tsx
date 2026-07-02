@@ -4,13 +4,11 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 
-
 interface DropdownMenuProps {
   variant?: "SystemStyle" | "PresentationStyle";
   className?: string;
-  theme?: Themes
+  theme?: Themes;
 }
-
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -26,24 +24,18 @@ const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> &
-  DropdownMenuProps
->(
-  (
-    { theme, className, sideOffset = 4, variant = "PresentationStyle", ...props },
-    ref
-  ) => (
-    <DropdownMenuPrimitive.Portal>
-      <DropdownMenuPrimitive.Content
-        data-theme={theme}
-        ref={ref}
-        sideOffset={sideOffset}
-        className={cn(dropdownMenuStyles({ variant }), className)}
-        {...props}
-      />
-    </DropdownMenuPrimitive.Portal>
-  )
-);
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> & DropdownMenuProps
+>(({ theme, className, sideOffset = 4, variant = "PresentationStyle", ...props }, ref) => (
+  <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.Content
+      data-theme={theme}
+      ref={ref}
+      sideOffset={sideOffset}
+      className={cn(dropdownMenuStyles({ variant }), className)}
+      {...props}
+    />
+  </DropdownMenuPrimitive.Portal>
+));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
 const DropdownMenuSubTrigger = React.forwardRef<
@@ -55,6 +47,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   (
     {
       className,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
       inset,
       children,
       variant = "Default",
@@ -62,24 +55,19 @@ const DropdownMenuSubTrigger = React.forwardRef<
       disabled,
       ...props
     },
-    ref
+    ref,
   ) => (
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
-      className={cn(
-        MenuItemStyles({ variant, size, disabled }),
-        "justify-between",
-        className
-      )}
+      className={cn(MenuItemStyles({ variant, size, disabled }), "justify-between", className)}
       {...props}
     >
       {children}
       <i className="ri-arrow-right-s-line text-[16px]"></i>
     </DropdownMenuPrimitive.SubTrigger>
-  )
+  ),
 );
-DropdownMenuSubTrigger.displayName =
-  DropdownMenuPrimitive.SubTrigger.displayName;
+DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
 
 const DropdownMenuSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
@@ -93,8 +81,7 @@ const DropdownMenuSubContent = React.forwardRef<
     {...props}
   />
 ));
-DropdownMenuSubContent.displayName =
-  DropdownMenuPrimitive.SubContent.displayName;
+DropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayName;
 
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
@@ -105,6 +92,7 @@ const DropdownMenuItem = React.forwardRef<
   (
     {
       className,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
       inset,
       variant = "Default",
       size = "M",
@@ -112,93 +100,56 @@ const DropdownMenuItem = React.forwardRef<
       active,
       ...props
     },
-    ref
+    ref,
   ) => (
     <DropdownMenuPrimitive.Item
       {...props}
       ref={ref}
-      className={cn(
-        MenuItemStyles({ variant, size, disabled, active }),
-        className
-      )}
+      className={cn(MenuItemStyles({ variant, size, disabled, active }), className)}
     />
-  )
+  ),
 );
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
 const DropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem> &
-  VariantProps<typeof MenuItemStyles>
->(
-  (
-    {
-      className,
-      children,
-      checked,
-      variant = "Default",
-      size = "M",
-      disabled,
-      ...props
-    },
-    ref
-  ) => (
-    <DropdownMenuPrimitive.CheckboxItem
-      ref={ref}
-      className={cn(
-        MenuItemStyles({ variant, size, disabled }),
-        "relative pl-8",
-        className
-      )}
-      checked={checked}
-      {...props}
-    >
-      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-        <DropdownMenuPrimitive.ItemIndicator>
-          <i className="ri-radio-button-fill text-white text-[16px]"></i>
-        </DropdownMenuPrimitive.ItemIndicator>
-      </span>
-      {children}
-    </DropdownMenuPrimitive.CheckboxItem>
-  )
-);
-DropdownMenuCheckboxItem.displayName =
-  DropdownMenuPrimitive.CheckboxItem.displayName;
+    VariantProps<typeof MenuItemStyles>
+>(({ className, children, checked, variant = "Default", size = "M", disabled, ...props }, ref) => (
+  <DropdownMenuPrimitive.CheckboxItem
+    ref={ref}
+    className={cn(MenuItemStyles({ variant, size, disabled }), "relative pl-8", className)}
+    checked={checked}
+    {...props}
+  >
+    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+      <DropdownMenuPrimitive.ItemIndicator>
+        <i className="ri-radio-button-fill text-white text-[16px]"></i>
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+    {children}
+  </DropdownMenuPrimitive.CheckboxItem>
+));
+DropdownMenuCheckboxItem.displayName = DropdownMenuPrimitive.CheckboxItem.displayName;
 
 const DropdownMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem> &
-  VariantProps<typeof MenuItemStyles>
->(
-  (
-    {
-      className,
-      children,
-      variant = "Default",
-      size = "M",
-      disabled,
-      ...props
-    },
-    ref
-  ) => (
-    <DropdownMenuPrimitive.RadioItem
-      ref={ref}
-      className={cn(
-        MenuItemStyles({ variant, size, disabled }),
-        "relative pl-8",
-        className
-      )}
-      {...props}
-    >
-      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-        <DropdownMenuPrimitive.ItemIndicator>
-          <i className="h-2 w-2 fill-current" />
-        </DropdownMenuPrimitive.ItemIndicator>
-      </span>
-      {children}
-    </DropdownMenuPrimitive.RadioItem>
-  )
-);
+    VariantProps<typeof MenuItemStyles>
+>(({ className, children, variant = "Default", size = "M", disabled, ...props }, ref) => (
+  <DropdownMenuPrimitive.RadioItem
+    ref={ref}
+    className={cn(MenuItemStyles({ variant, size, disabled }), "relative pl-8", className)}
+    {...props}
+  >
+    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+      <DropdownMenuPrimitive.ItemIndicator>
+        <i className="h-2 w-2 fill-current" />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+    {children}
+  </DropdownMenuPrimitive.RadioItem>
+));
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
 
 const DropdownMenuLabel = React.forwardRef<
@@ -206,16 +157,19 @@ const DropdownMenuLabel = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
     inset?: boolean;
   }
->(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Label
-    ref={ref}
-    className={cn(
-      "text-content-presentation-state-disabled typography-body-medium-regular px-[12px] h-[32px] flex justify-start items-center",
-      className
-    )}
-    {...props}
-  />
-));
+>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
+  ({ className, inset, ...props }, ref) => (
+    <DropdownMenuPrimitive.Label
+      ref={ref}
+      className={cn(
+        "text-content-presentation-state-disabled typography-body-medium-regular px-[12px] h-[32px] flex justify-start items-center",
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
 DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
 
 const DropdownMenuSeparator = React.forwardRef<
@@ -226,22 +180,16 @@ const DropdownMenuSeparator = React.forwardRef<
     ref={ref}
     className={cn(
       "mx-[8px] my-[4px] border-b border-b-border-presentation-action-disabled flex-1",
-      className
+      className,
     )}
     {...props}
   />
 ));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
-const DropdownMenuShortcut = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+const DropdownMenuShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {
   return (
-    <span
-      className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
-      {...props}
-    />
+    <span className={cn("ml-auto text-xs tracking-widest opacity-60", className)} {...props} />
   );
 };
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
@@ -264,8 +212,6 @@ export {
   DropdownMenuItem,
 };
 
-
-
 export const MenuItemStyles = cva(
   [
     "text-content-presentation-action-light-primary",
@@ -283,7 +229,6 @@ export const MenuItemStyles = cva(
     "transition-all",
     "ease-in-out",
     "duration-300",
-
   ],
   {
     variants: {
@@ -332,10 +277,7 @@ export const MenuItemStyles = cva(
       },
 
       disabled: {
-        true: [
-          "text-content-presentation-state-disabled",
-          "bg-white-00",
-        ],
+        true: ["text-content-presentation-state-disabled", "bg-white-00"],
       },
 
       active: {
@@ -359,7 +301,7 @@ export const MenuItemStyles = cva(
         className: ["text-content-presentation-state-negative"],
       },
     ],
-  }
+  },
 );
 export const dropdownMenuStyles = cva(
   [
@@ -395,5 +337,5 @@ export const dropdownMenuStyles = cva(
         variant: "PresentationStyle",
       },
     },
-  }
+  },
 );

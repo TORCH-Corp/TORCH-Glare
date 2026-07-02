@@ -12,7 +12,6 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   as?: React.ElementType;
 }
 
-
 const TabFormItem: React.FC<Props> = ({
   componentType,
   active,
@@ -23,17 +22,13 @@ const TabFormItem: React.FC<Props> = ({
   as: Tag = "button",
   ...props
 }) => {
-
   const Component = asChild ? Slot : Tag;
 
   return (
     <Component
       data-theme={theme}
       {...props}
-      className={cn(
-        formBarItemStyles({ componentType, active, buttonType }),
-        className
-      )}
+      className={cn(formBarItemStyles({ componentType, active, buttonType }), className)}
     >
       {props.children}
     </Component>
@@ -41,9 +36,6 @@ const TabFormItem: React.FC<Props> = ({
 };
 
 export default TabFormItem;
-
-
-
 
 export const formBarItemStyles = cva(
   [
@@ -156,7 +148,6 @@ export const formBarItemStyles = cva(
           "text-content-presentation-tab-action-selected hover:text-content-presentation-tab-action-selected",
         ],
       },
-
     ],
-  }
+  },
 );

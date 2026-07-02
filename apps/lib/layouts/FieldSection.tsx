@@ -36,8 +36,8 @@ export function FieldSection({
         direction === "vertical" && "grid-rows-[auto_1fr] gap-[12px]",
         direction === "horizontal" && "grid-cols-[350px_1fr] gap-[24px]",
         direction === "flexible" &&
-        "grid-rows-[auto_1fr] gap-[12px] lg:grid-cols-[350px_1fr] lg:grid-rows-[1fr] lg:gap-[24px]",
-        className
+          "grid-rows-[auto_1fr] gap-[12px] lg:grid-cols-[350px_1fr] lg:grid-rows-[1fr] lg:gap-[24px]",
+        className,
       )}
     >
       {/* Fixed width section for labels */}
@@ -51,9 +51,7 @@ export function FieldSection({
           />
         )}
 
-        {secondaryLabel && (
-          <Label size={size} secondaryLabel={secondaryLabel} />
-        )}
+        {secondaryLabel && <Label size={size} secondaryLabel={secondaryLabel} />}
         {childrenUnderLabel}
       </div>
 

@@ -1,11 +1,5 @@
-'use client';
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+"use client";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 interface ThemeProps {
   theme: "light" | "dark" | "default";
@@ -30,14 +24,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   const [theme, setTheme] = useState<"light" | "dark" | "default">(() => {
     if (typeof window !== "undefined" && document) {
       const mode =
-        (document.documentElement.getAttribute("data-theme") as
-          | "light"
-          | "dark"
-          | "default") || defaultTheme;
-      const storedTheme = localStorage.getItem("theme") as
-        | "light"
-        | "dark"
-        | "default";
+        (document.documentElement.getAttribute("data-theme") as "light" | "dark" | "default") ||
+        defaultTheme;
+      const storedTheme = localStorage.getItem("theme") as "light" | "dark" | "default";
       return storedTheme || mode || defaultTheme;
     }
     return defaultTheme;
@@ -45,9 +34,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   const [themeMode, setThemeMode] = useState<"TORCH" | "CSS">(() => {
     if (typeof window !== "undefined") {
-      const storedThemeMode = localStorage.getItem("theme-mode") as
-        | "TORCH"
-        | "CSS";
+      const storedThemeMode = localStorage.getItem("theme-mode") as "TORCH" | "CSS";
       return storedThemeMode || defaultThemeMode;
     }
     return defaultThemeMode;
@@ -85,9 +72,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     themeMode,
   };
 
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
 export const useTheme = () => {

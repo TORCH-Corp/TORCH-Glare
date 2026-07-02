@@ -17,7 +17,13 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "deploy": "npx tsc --build --force && npm publish --access public"
+    "registry": "node scripts/bin/generateRegistry/index.js",
+    "typecheck": "pnpm -C apps run typecheck",
+    "lint": "pnpm -C apps run lint:lib",
+    "format": "pnpm -C apps run format",
+    "format:check": "pnpm -C apps run format:check",
+    "test": "pnpm -C apps run test",
+    "deploy": "pnpm run registry && npx tsc --build --force && npm publish --access public"
   },
   "dependencies": {
     "commander": "^13.1.0",

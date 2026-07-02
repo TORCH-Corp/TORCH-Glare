@@ -24,7 +24,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       className={cn("flex", className)}
       {...props}
     />
-  )
+  ),
 );
 Breadcrumb.displayName = "Breadcrumb";
 
@@ -32,28 +32,21 @@ Breadcrumb.displayName = "Breadcrumb";
 // Breadcrumb List
 // ============================================================================
 
-const breadcrumbListStyles = cva(
-  [
-    "flex flex-wrap items-center gap-1.5",
-    "break-words",
-  ],
-  {
-    variants: {
-      size: {
-        S: ["text-[12px]", "gap-1"],
-        M: ["text-[14px]", "gap-1.5"],
-        L: ["text-[16px]", "gap-2"],
-      },
+const breadcrumbListStyles = cva(["flex flex-wrap items-center gap-1.5", "break-words"], {
+  variants: {
+    size: {
+      S: ["text-[12px]", "gap-1"],
+      M: ["text-[14px]", "gap-1.5"],
+      L: ["text-[16px]", "gap-2"],
     },
-    defaultVariants: {
-      size: "M",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: "M",
+  },
+});
 
 interface BreadcrumbListProps
-  extends React.ComponentPropsWithoutRef<"ol">,
-    VariantProps<typeof breadcrumbListStyles> {
+  extends React.ComponentPropsWithoutRef<"ol">, VariantProps<typeof breadcrumbListStyles> {
   theme?: Themes;
 }
 
@@ -65,7 +58,7 @@ const BreadcrumbList = forwardRef<HTMLOListElement, BreadcrumbListProps>(
       className={cn(breadcrumbListStyles({ size }), className)}
       {...props}
     />
-  )
+  ),
 );
 BreadcrumbList.displayName = "BreadcrumbList";
 
@@ -73,16 +66,11 @@ BreadcrumbList.displayName = "BreadcrumbList";
 // Breadcrumb Item
 // ============================================================================
 
-const BreadcrumbItem = forwardRef<
-  HTMLLIElement,
-  React.ComponentPropsWithoutRef<"li">
->(({ className, ...props }, ref) => (
-  <li
-    ref={ref}
-    className={cn("inline-flex items-center gap-1.5", className)}
-    {...props}
-  />
-));
+const BreadcrumbItem = forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<"li">>(
+  ({ className, ...props }, ref) => (
+    <li ref={ref} className={cn("inline-flex items-center gap-1.5", className)} {...props} />
+  ),
+);
 BreadcrumbItem.displayName = "BreadcrumbItem";
 
 // ============================================================================
@@ -116,12 +104,11 @@ const breadcrumbLinkStyles = cva(
     defaultVariants: {
       variant: "PresentationStyle",
     },
-  }
+  },
 );
 
 interface BreadcrumbLinkProps
-  extends React.ComponentPropsWithoutRef<"a">,
-    VariantProps<typeof breadcrumbLinkStyles> {
+  extends React.ComponentPropsWithoutRef<"a">, VariantProps<typeof breadcrumbLinkStyles> {
   asChild?: boolean;
   theme?: Themes;
 }
@@ -138,7 +125,7 @@ const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
         {...props}
       />
     );
-  }
+  },
 );
 BreadcrumbLink.displayName = "BreadcrumbLink";
 
@@ -146,31 +133,20 @@ BreadcrumbLink.displayName = "BreadcrumbLink";
 // Breadcrumb Page (Current page - not a link)
 // ============================================================================
 
-const breadcrumbPageStyles = cva(
-  [
-    "inline-flex items-center",
-    "font-medium",
-  ],
-  {
-    variants: {
-      variant: {
-        PresentationStyle: [
-          "text-content-presentation-global-primary",
-        ],
-        SystemStyle: [
-          "text-content-system-global-primary",
-        ],
-      },
+const breadcrumbPageStyles = cva(["inline-flex items-center", "font-medium"], {
+  variants: {
+    variant: {
+      PresentationStyle: ["text-content-presentation-global-primary"],
+      SystemStyle: ["text-content-system-global-primary"],
     },
-    defaultVariants: {
-      variant: "PresentationStyle",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "PresentationStyle",
+  },
+});
 
 interface BreadcrumbPageProps
-  extends React.ComponentPropsWithoutRef<"span">,
-    VariantProps<typeof breadcrumbPageStyles> {
+  extends React.ComponentPropsWithoutRef<"span">, VariantProps<typeof breadcrumbPageStyles> {
   theme?: Themes;
 }
 
@@ -185,7 +161,7 @@ const BreadcrumbPage = forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
       className={cn(breadcrumbPageStyles({ variant }), className)}
       {...props}
     />
-  )
+  ),
 );
 BreadcrumbPage.displayName = "BreadcrumbPage";
 
@@ -193,31 +169,20 @@ BreadcrumbPage.displayName = "BreadcrumbPage";
 // Breadcrumb Separator
 // ============================================================================
 
-const breadcrumbSeparatorStyles = cva(
-  [
-    "flex items-center justify-center",
-    "[&_i]:text-[12px]",
-  ],
-  {
-    variants: {
-      variant: {
-        PresentationStyle: [
-          "text-content-presentation-global-secondary",
-        ],
-        SystemStyle: [
-          "text-content-system-global-secondary",
-        ],
-      },
+const breadcrumbSeparatorStyles = cva(["flex items-center justify-center", "[&_i]:text-[12px]"], {
+  variants: {
+    variant: {
+      PresentationStyle: ["text-content-presentation-global-secondary"],
+      SystemStyle: ["text-content-system-global-secondary"],
     },
-    defaultVariants: {
-      variant: "PresentationStyle",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "PresentationStyle",
+  },
+});
 
 interface BreadcrumbSeparatorProps
-  extends React.ComponentPropsWithoutRef<"li">,
-    VariantProps<typeof breadcrumbSeparatorStyles> {
+  extends React.ComponentPropsWithoutRef<"li">, VariantProps<typeof breadcrumbSeparatorStyles> {
   theme?: Themes;
 }
 
@@ -233,7 +198,7 @@ const BreadcrumbSeparator = forwardRef<HTMLLIElement, BreadcrumbSeparatorProps>(
     >
       {children ?? <i className="ri-arrow-right-s-line" />}
     </li>
-  )
+  ),
 );
 BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
 
@@ -267,12 +232,11 @@ const breadcrumbEllipsisStyles = cva(
     defaultVariants: {
       variant: "PresentationStyle",
     },
-  }
+  },
 );
 
 interface BreadcrumbEllipsisProps
-  extends React.ComponentPropsWithoutRef<"span">,
-    VariantProps<typeof breadcrumbEllipsisStyles> {
+  extends React.ComponentPropsWithoutRef<"span">, VariantProps<typeof breadcrumbEllipsisStyles> {
   theme?: Themes;
 }
 
@@ -289,7 +253,7 @@ const BreadcrumbEllipsis = forwardRef<HTMLSpanElement, BreadcrumbEllipsisProps>(
       <i className="ri-more-line" />
       <span className="sr-only">More</span>
     </span>
-  )
+  ),
 );
 BreadcrumbEllipsis.displayName = "BreadcrumbEllipsis";
 

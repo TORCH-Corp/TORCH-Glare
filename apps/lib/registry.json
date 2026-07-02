@@ -1,0 +1,827 @@
+{
+  "version": "1.2.8",
+  "generatedBy": "scripts/bin/generateRegistry",
+  "items": [
+    {
+      "name": "ActionButton",
+      "type": "components",
+      "path": "components/ActionButton.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "ActionsGroup",
+      "type": "components",
+      "path": "components/ActionsGroup.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Divider",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "AlertDialog",
+      "type": "components",
+      "path": "components/AlertDialog.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-alert-dialog",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Avatar",
+      "type": "components",
+      "path": "components/Avatar.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-avatar"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Badge",
+      "type": "components",
+      "path": "components/Badge.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "BadgeField",
+      "type": "components",
+      "path": "components/BadgeField.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Badge",
+        "components/Input",
+        "components/Popover",
+        "components/Tooltip",
+        "hooks/useClickOutside",
+        "hooks/useTagSelection",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Breadcrumb",
+      "type": "components",
+      "path": "components/Breadcrumb.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "components",
+      "path": "components/Button.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "ButtonGroup",
+      "type": "components",
+      "path": "components/ButtonGroup.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-toggle-group",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/ToggleButton",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Calendar",
+      "type": "components",
+      "path": "components/Calendar.tsx",
+      "npmDependencies": [
+        "react-day-picker"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "components/SimpleSelect",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Card",
+      "type": "components",
+      "path": "components/Card.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-slot"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "ChartBlockTool",
+      "type": "components",
+      "path": "components/ChartBlockTool.ts",
+      "npmDependencies": [
+        "chart.js"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "Checkbox",
+      "type": "components",
+      "path": "components/Checkbox.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-checkbox",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "CountBadge",
+      "type": "components",
+      "path": "components/CountBadge.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "DataTable",
+      "type": "components",
+      "path": "components/DataTable.tsx",
+      "npmDependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "@tanstack/react-table"
+      ],
+      "registryDependencies": [
+        "components/Checkbox",
+        "components/Table"
+      ]
+    },
+    {
+      "name": "DatePicker",
+      "type": "components",
+      "path": "components/DatePicker.tsx",
+      "npmDependencies": [
+        "react-day-picker",
+        "torch-react-mobile-picker"
+      ],
+      "registryDependencies": [
+        "components/ActionButton",
+        "components/Calendar",
+        "components/InputField",
+        "components/Popover",
+        "utils/dateFormat"
+      ]
+    },
+    {
+      "name": "Dialog",
+      "type": "components",
+      "path": "components/Dialog.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-dialog"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Divider",
+      "type": "components",
+      "path": "components/Divider.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Drawer",
+      "type": "components",
+      "path": "components/Drawer.tsx",
+      "npmDependencies": [
+        "vaul"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "DropdownMenu",
+      "type": "components",
+      "path": "components/DropdownMenu.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-dropdown-menu",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "FieldHint",
+      "type": "components",
+      "path": "components/FieldHint.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Form",
+      "type": "components",
+      "path": "components/Form.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-label",
+        "@radix-ui/react-slot",
+        "react-hook-form"
+      ],
+      "registryDependencies": [
+        "components/Label",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "ImageAttachment",
+      "type": "components",
+      "path": "components/ImageAttachment.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/AlertDialog",
+        "components/Button",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "InnerLabelField",
+      "type": "components",
+      "path": "components/InnerLabelField.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/InputField",
+        "components/Tooltip",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Input",
+      "type": "components",
+      "path": "components/Input.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "InputField",
+      "type": "components",
+      "path": "components/InputField.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/ActionButton",
+        "components/Input",
+        "components/Popover",
+        "components/Tooltip",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "InputOTP",
+      "type": "components",
+      "path": "components/InputOTP.tsx",
+      "npmDependencies": [
+        "input-otp"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Label",
+      "type": "components",
+      "path": "components/Label.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "LabeledCheckBox",
+      "type": "components",
+      "path": "components/LabeledCheckBox.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Checkbox",
+        "components/Label",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "LabeledRadio",
+      "type": "components",
+      "path": "components/LabeledRadio.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Label",
+        "components/Radio",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "LabelField",
+      "type": "components",
+      "path": "components/LabelField.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/InputField",
+        "components/Label",
+        "components/Tooltip",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "LinkButton",
+      "type": "components",
+      "path": "components/LinkButton.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "LoginButton",
+      "type": "components",
+      "path": "components/LoginButton.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "PasswordLevel",
+      "type": "components",
+      "path": "components/PasswordLevel.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Popover",
+      "type": "components",
+      "path": "components/Popover.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-popover",
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "ProfileMenu",
+      "type": "components",
+      "path": "components/ProfileMenu.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Popover",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Radio",
+      "type": "components",
+      "path": "components/Radio.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-radio-group",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "RadioCard",
+      "type": "components",
+      "path": "components/RadioCard.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Card",
+        "components/Radio",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "ScrollArea",
+      "type": "components",
+      "path": "components/ScrollArea.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-scroll-area"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "SearchField",
+      "type": "components",
+      "path": "components/SearchField.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/InputField"
+      ]
+    },
+    {
+      "name": "Select",
+      "type": "components",
+      "path": "components/Select.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-select",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "components/Tooltip",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "SimpleSelect",
+      "type": "components",
+      "path": "components/SimpleSelect.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "hooks/useClickOutside",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Skeleton",
+      "type": "components",
+      "path": "components/Skeleton.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "SlideDatePicker",
+      "type": "components",
+      "path": "components/SlideDatePicker.tsx",
+      "npmDependencies": [
+        "date-fns",
+        "torch-react-mobile-picker"
+      ],
+      "registryDependencies": [
+        "components/ActionButton",
+        "components/InputField",
+        "components/Popover",
+        "utils/dateFormat"
+      ]
+    },
+    {
+      "name": "SpinLoading",
+      "type": "components",
+      "path": "components/SpinLoading.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Switch",
+      "type": "components",
+      "path": "components/Switch.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-switch"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "TabFormItem",
+      "type": "components",
+      "path": "components/TabFormItem.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Table",
+      "type": "components",
+      "path": "components/Table.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "components/Checkbox",
+        "hooks/useResize",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "Textarea",
+      "type": "components",
+      "path": "components/Textarea.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Label",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "TextEditor",
+      "type": "components",
+      "path": "components/TextEditor.tsx",
+      "npmDependencies": [
+        "@editorjs/checklist",
+        "@editorjs/code",
+        "@editorjs/delimiter",
+        "@editorjs/editorjs",
+        "@editorjs/embed",
+        "@editorjs/header",
+        "@editorjs/inline-code",
+        "@editorjs/link",
+        "@editorjs/list",
+        "@editorjs/marker",
+        "@editorjs/nested-list",
+        "@editorjs/quote",
+        "@editorjs/raw",
+        "@editorjs/simple-image",
+        "@editorjs/table",
+        "@editorjs/text-variant-tune",
+        "@editorjs/underline",
+        "@editorjs/warning",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/ChartBlockTool",
+        "utils/cn",
+        "utils/markdownParser",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Toast",
+      "type": "components",
+      "path": "components/Toast.tsx",
+      "npmDependencies": [
+        "react-hot-toast"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "Toggle",
+      "type": "components",
+      "path": "components/Toggle.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-toggle",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "ToggleButton",
+      "type": "components",
+      "path": "components/ToggleButton.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-toggle",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Tooltip",
+      "type": "components",
+      "path": "components/Tooltip.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-tooltip",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "TransparentLabel",
+      "type": "components",
+      "path": "components/TransparentLabel.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "TreeDropDown",
+      "type": "components",
+      "path": "components/TreeDropDown.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "useActiveTreeItem",
+      "type": "hooks",
+      "path": "hooks/useActiveTreeItem.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "useClickOutside",
+      "type": "hooks",
+      "path": "hooks/useClickOutside.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "useResize",
+      "type": "hooks",
+      "path": "hooks/useResize.ts",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/resize"
+      ]
+    },
+    {
+      "name": "useTagSelection",
+      "type": "hooks",
+      "path": "hooks/useTagSelection.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "CNLayout",
+      "type": "layouts",
+      "path": "layouts/CNLayout.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/CountBadge",
+        "components/Tooltip",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "FieldSection",
+      "type": "layouts",
+      "path": "layouts/FieldSection.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Label",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "TreeSubLayout",
+      "type": "layouts",
+      "path": "layouts/TreeSubLayout.tsx",
+      "npmDependencies": [
+        "next"
+      ],
+      "registryDependencies": [
+        "components/TabFormItem",
+        "hooks/useActiveTreeItem",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "ThemeProvider",
+      "type": "providers",
+      "path": "providers/ThemeProvider.tsx",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "cn",
+      "type": "utils",
+      "path": "utils/cn.ts",
+      "npmDependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "dateFormat",
+      "type": "utils",
+      "path": "utils/dateFormat.ts",
+      "npmDependencies": [
+        "date-fns",
+        "react-day-picker"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "markdownParser",
+      "type": "utils",
+      "path": "utils/markdownParser.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "resize",
+      "type": "utils",
+      "path": "utils/resize.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "types",
+      "type": "utils",
+      "path": "utils/types.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    }
+  ]
+}

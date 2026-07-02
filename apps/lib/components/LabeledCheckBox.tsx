@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { forwardRef } from "react";
 import { Label } from "./Label";
 import { Themes } from "../utils/types";
@@ -10,23 +10,26 @@ interface Props extends Omit<React.ComponentProps<typeof Checkbox>, "size"> {
   secondaryLabel?: string;
   requiredLabel?: string;
   size?: "S" | "M" | "L";
-  theme?: Themes
+  theme?: Themes;
 }
 
 export const LabeledCheckBox = forwardRef<HTMLButtonElement, Props>(
   (
     {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
       id,
       label,
       secondaryLabel,
       requiredLabel,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
       type = "checkbox",
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
       theme,
       className,
       size = "M",
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <Label
@@ -39,17 +42,10 @@ export const LabeledCheckBox = forwardRef<HTMLButtonElement, Props>(
         className={cn(className)}
         reverseChildren
       >
-        <Checkbox
-          {...props}
-          size={size === "L" ? "M" : size}
-          ref={ref}
-        />
+        <Checkbox {...props} size={size === "L" ? "M" : size} ref={ref} />
       </Label>
-
-
     );
-  }
+  },
 );
 
 LabeledCheckBox.displayName = "LabeledCheckBox";
-

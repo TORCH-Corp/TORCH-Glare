@@ -1,23 +1,24 @@
 "use client";
 import {
+  ChangeEvent,
+  FocusEvent,
   forwardRef,
   InputHTMLAttributes,
   ReactNode,
-  useEffect,
   useRef,
   useState,
 } from "react";
+import { VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
 import { useClickOutside } from "../hooks/useClickOutside";
-import { Badge } from "./Badge";
+import { Badge, badgeBase } from "./Badge";
 import { Tag, useTagSelection } from "../hooks/useTagSelection";
 
-interface Props
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "XS" | "S" | "M"; // this is used to change the size style of the component
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
@@ -33,30 +34,30 @@ interface Props
 }
 
 export const BadgeField = forwardRef<HTMLInputElement, Props>(
-  (
-    {
-      size = "M",
-      label,
-      required,
-      icon,
-      errorMessage,
-      onTable,
-      variant = "PresentationStyle",
-      toolTipSide,
-      className,
-      actionButton,
-      theme,
-      tags,
-      children,
-      ...props
-    },
-    forwardedRef
-  ) => {
+  ({
+    size = "M",
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    label, // excluded from ...props spread
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    required, // excluded from ...props spread
+    icon,
+    errorMessage,
+    onTable,
+    variant = "PresentationStyle",
+    toolTipSide,
+    className,
+    actionButton,
+    theme,
+    tags,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    children, // excluded from ...props spread
+    ...props
+  }) => {
     const [dropDownListWidth, setDropDownListWidth] = useState(0);
     const popoverContentRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
     // this is used to close the popover when the user clicks outside the input group
-    const inputGroupRef = useClickOutside((e) => {
+    const inputGroupRef = useClickOutside<HTMLDivElement>((e) => {
       if (
         !inputGroupRef?.current?.contains(e?.target as Node) &&
         !popoverContentRef?.current?.contains(e?.target as Node)
@@ -78,24 +79,21 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       focusedPopoverIndex,
       isPopoverOpen,
       setIsPopoverOpen,
-      searchTags
+      searchTags,
     } = useTagSelection({
       Tags: tags,
-      onTagsChange: (e) => props.onChange?.({
-        target: {
-          value: e
-        }
-      } as any),
-      inputRef
+      onTagsChange: (e) =>
+        props.onChange?.({
+          target: {
+            value: e,
+          },
+        } as unknown as ChangeEvent<HTMLInputElement>),
+      inputRef,
     });
 
     return (
       <Popover open={isPopoverOpen}>
-        <Tooltip
-          toolTipSide={toolTipSide}
-          open={errorMessage !== undefined}
-          text={errorMessage}
-        >
+        <Tooltip toolTipSide={toolTipSide} open={errorMessage !== undefined} text={errorMessage}>
           <PopoverTrigger asChild>
             <Group
               error={errorMessage !== undefined}
@@ -105,8 +103,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               tabIndex={isPopoverOpen ? 0 : -1}
               onKeyDown={handleKeyDown}
               size={size === "XS" ? "S" : size}
-              ref={inputGroupRef as any}
-              onFocus={(e: any) => {
+              ref={inputGroupRef}
+              onFocus={(e: FocusEvent<HTMLDivElement>) => {
                 setDropDownListWidth(e.currentTarget.offsetWidth);
               }}
               className={cn(
@@ -115,7 +113,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   "flex-wrap justify-start": isPopoverOpen,
                   "h-fit": isPopoverOpen,
                 },
-                className
+                className,
               )}
             >
               {icon && <Icon>{icon}</Icon>}
@@ -124,13 +122,11 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 <Badge
                   key={tag.id}
                   size={size}
-                  variant={tag.variant as any}
+                  variant={tag.variant as VariantProps<typeof badgeBase>["variant"]}
                   label={tag.name}
                   isSelected={true}
                   onUnselect={() => handleUnselectTag(tag.id)}
-                  className={
-                    focusedTagIndex === index ? "ring-2 ring-blue-500" : ""
-                  }
+                  className={focusedTagIndex === index ? "ring-2 ring-blue-500" : ""}
                   tabIndex={focusedTagIndex === index ? 0 : -1}
                 />
               ))}
@@ -153,7 +149,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                     "!h-[18px]": size === "XS",
                     "!h-[22px]": size === "S",
                     "!h-[24px]": size === "M",
-                  }
+                  },
                 )}
               />
               {actionButton && (
@@ -179,25 +175,24 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 <Badge
                   key={tag.id}
                   size={size}
-                  variant={tag.variant as any}
+                  variant={tag.variant as VariantProps<typeof badgeBase>["variant"]}
                   label={tag.name}
                   onClick={() => handleSelectTag(tag.id)}
-                  className={`outline-none  ${focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""
-                    } ${index !== 0 ? "mt-1" : ""}`}
+                  className={`outline-none  ${
+                    focusedPopoverIndex === index ? "ring-2 ring-blue-500" : ""
+                  } ${index !== 0 ? "mt-1" : ""}`}
                   tabIndex={focusedPopoverIndex === index ? 0 : -1}
                 />
               ))
             ) : (
               <div className="text-sm text-gray-500 py-1 px-2">
-                {tags.length === 0
-                  ? "All tags selected"
-                  : "No matching tags found"}
+                {tags.length === 0 ? "All tags selected" : "No matching tags found"}
               </div>
             )}
           </>
         </PopoverContent>
       </Popover>
     );
-  }
+  },
 );
 BadgeField.displayName = "BadgeField";

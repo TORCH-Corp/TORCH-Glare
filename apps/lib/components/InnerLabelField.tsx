@@ -6,8 +6,7 @@ import { ToolTipSide } from "./Tooltip";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 
-interface Props
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "S" | "M"; // this is used to change the size style of the component
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
@@ -18,14 +17,15 @@ interface Props
   label?: string; // to show label
   required?: boolean; // to show required icon
   toolTipSide?: ToolTipSide;
-  theme?: Themes
+  theme?: Themes;
 }
 
 export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
   (
     {
       size = "M",
-      icon,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      icon, // excluded from ...props spread (icon is overridden below)
       childrenSide,
       popoverChildren,
       errorMessage,
@@ -38,7 +38,7 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
       toolTipSide,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [focus, setFocus] = useState(false);
     const [isEmpty, setIsEmpty] = useState(!props.value);
@@ -80,15 +80,12 @@ export const InnerLabelField = forwardRef<HTMLInputElement, Props>(
         }
       />
     );
-  }
+  },
 );
 
-InnerLabelField.displayName = "InnerLabelField"
-
-
+InnerLabelField.displayName = "InnerLabelField";
 
 const Label = ({
-
   focus,
   isEmpty,
   label,
@@ -121,16 +118,23 @@ const Label = ({
             "ease-in-out",
             "group-hover:text-content-presentation-global-primary group-hover:typography-body-small-regular",
             { "text-content-presentation-global-primary typography-body-small-regular": isEmpty },
-            { "text-content-presentation-global-primary typography-body-small-regular": focus && isEmpty },
-            { "text-content-presentation-global-primary typography-body-small-regular": error && isEmpty },
-            { "text-content-presentation-global-primary typography-body-small-regular": disabled && isEmpty },
+            {
+              "text-content-presentation-global-primary typography-body-small-regular":
+                focus && isEmpty,
+            },
+            {
+              "text-content-presentation-global-primary typography-body-small-regular":
+                error && isEmpty,
+            },
+            {
+              "text-content-presentation-global-primary typography-body-small-regular":
+                disabled && isEmpty,
+            },
           )}
         >
           {label}
         </p>
-        {required && (
-          <p className="text-content-presentation-state-negative">*</p>
-        )}
+        {required && <p className="text-content-presentation-state-negative">*</p>}
       </section>
       <span
         className={cn(

@@ -4,8 +4,7 @@ import { Label } from "./Label";
 import { ToolTipSide } from "./Tooltip";
 import { Themes } from "../utils/types";
 
-export interface Props
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
+export interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "S" | "M"; // this is used to change the size style of the component
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
@@ -19,7 +18,7 @@ export interface Props
   labelDirections?: "vertical" | "horizontal"; // to change the direction of the label
   childrenDirections?: "vertical" | "horizontal"; // to change the direction of the children
   toolTipSide?: ToolTipSide;
-  theme?: Themes
+  theme?: Themes;
 }
 
 export const LabelField = forwardRef<HTMLInputElement, Props>(
@@ -43,7 +42,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
 
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <Label
@@ -71,7 +70,7 @@ export const LabelField = forwardRef<HTMLInputElement, Props>(
         />
       </Label>
     );
-  }
+  },
 );
 
 LabelField.displayName = "LabelField";
