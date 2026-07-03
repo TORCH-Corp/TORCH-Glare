@@ -10,6 +10,10 @@
         "-y",
         "@modelcontextprotocol/server-sequential-thinking"
       ]
+    },
+    "torch-glare-docs": {
+      "command": "node",
+      "args": ["mcp/dist/index.js"]
     }
   }
 }

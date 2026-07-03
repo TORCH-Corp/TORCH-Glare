@@ -1,6 +1,6 @@
 ---
 name: Card
-version: 1.2.8
+version: 2.4.0
 status: stable
 category: components/layout
 tags: [container, layout, card, content, polymorphic]

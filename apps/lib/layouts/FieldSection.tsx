@@ -32,7 +32,7 @@ export function FieldSection({
       {...props}
       data-theme={theme}
       className={cn(
-        "grid  border-t border-border-presentation-global-primary py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] ",
+        "grid py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] ",
         direction === "vertical" && "grid-rows-[auto_1fr] gap-[12px]",
         direction === "horizontal" && "grid-cols-[350px_1fr] gap-[24px]",
         direction === "flexible" &&

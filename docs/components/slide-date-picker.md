@@ -83,7 +83,7 @@ function CustomTrigger() {
       value={date}
       onChange={(e) => setDate(e.target.value)}
     >
-      <Button variant="BlueSecStyle">
+      <Button variant="BluSecStyle">
         <i className="ri-calendar-2-line" />
         {date.toLocaleDateString()}
       </Button>

@@ -355,44 +355,47 @@ function BorderColorExamples() {
 
 ## Step 6: Badge Color System
 
-TORCH Glare provides 12 badge color variants:
+TORCH Glare provides 10 badge colors, each with `subtle` and `solid` background tokens:
 
 ```tsx
+import { Badge } from '@/components/Badge';
+
 function BadgeColors() {
   const colors = [
-    'green',
-    'green-light',
-    'cocktail-green',
-    'yellow',
-    'red-orange',
-    'red',
-    'rose',
-    'purple',
-    'blue-purple',
-    'blue',
-    'navy',
     'gray',
-  ];
+    'slate',
+    'red',
+    'orange',
+    'yellow',
+    'green',
+    'ocean',
+    'blue',
+    'purple',
+    'rose',
+  ] as const;
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {colors.map((color) => (
-        <span
-          key={color}
-          className={`
-            px-3 py-1 rounded
-            bg-background-presentation-badge-${color}
-            text-content-presentation-badge-${color}
-            border border-border-presentation-badge-${color}
-            typography-labels-small-semibold
-          `}
-        >
-          {color}
-        </span>
-      ))}
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap gap-2">
+        {colors.map((color) => (
+          <Badge key={color} color={color} badgeStyle="subtle" label={color} />
+        ))}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {colors.map((color) => (
+          <Badge key={color} color={color} badgeStyle="solid" label={color} />
+        ))}
+      </div>
     </div>
   );
 }
+```
+
+The underlying CSS variables follow this pattern:
+
+```
+--background-presentation-badge-{color}-subtle
+--background-presentation-badge-{color}-solid
 ```
 
 ---
@@ -423,7 +426,7 @@ export default function ThemedDashboard() {
           <h1 className="typography-display-medium-bold text-content-presentation-global-primary">
             Dashboard
           </h1>
-          <Badge theme={theme as any} variant="gray">
+          <Badge theme={theme as any} color="gray">
             {theme} mode
           </Badge>
         </div>

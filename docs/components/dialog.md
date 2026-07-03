@@ -84,7 +84,7 @@ function FormDialog() {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="BlueSecStyle">Cancel</Button>
+            <Button variant="BluSecStyle">Cancel</Button>
           </DialogClose>
           <Button variant="PrimeStyle">Save Changes</Button>
         </DialogFooter>
@@ -168,7 +168,7 @@ function ConfirmationDialog({ onConfirm }: { onConfirm: () => void }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="BlueSecStyle">Cancel</Button>
+            <Button variant="BluSecStyle">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
             <Button variant="RedSecStyle" onClick={onConfirm}>
@@ -298,7 +298,7 @@ function MultiStepDialog() {
 
         <DialogFooter>
           {step > 1 && (
-            <Button variant="BlueSecStyle" onClick={() => setStep(step - 1)}>
+            <Button variant="BluSecStyle" onClick={() => setStep(step - 1)}>
               Back
             </Button>
           )}
@@ -482,6 +482,195 @@ export const DialogCloseButton: React.ForwardRefExoticComponent<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>
 >
 ```
+
+## Known Limitations & Frontend Patterns
+
+### Every Dialog subcomponent ships without panel/typography defaults
+
+`DialogContent`, `DialogHeader`, `DialogFooter`, `DialogTitle`, and `DialogDescription` all ship without surfaces, padding, rounded corners, or theme-correct typography. The official "bare" example renders an invisible/transparent panel, and the shipped `DialogTitle` defaults to `text-content-system-global-primary` (a light-on-dark token) which renders white-on-white on the correct light surface.
+
+**Critical token corrections** (the previous override was wrong):
+
+- The right surface is `bg-background-presentation-body-primary` — NOT `bg-background-presentation-form-base` (form-base is for input field surfaces) and NOT `bg-background-system-action-secondary` (that's a brand-dark inverted action surface).
+- The right title token is `text-content-presentation-global-primary` — NOT `text-content-system-global-primary`.
+- The right description token is `text-content-presentation-global-secondary` — NOT the shipped triple-stack `"text-sm text-muted-foreground text-content-system-global-primary"`.
+
+**Production-tested override** — patch `Dialog.tsx` once after `npx torch-glare add Dialog`, then every consumer renders correctly with bare components:
+
+```tsx
+"use client";
+
+import * as React from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { cn } from "@/utils/cn";
+
+const Dialog = DialogPrimitive.Root;
+const DialogTrigger = DialogPrimitive.Trigger;
+const DialogPortal = DialogPrimitive.Portal;
+
+const DialogOverlay = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Overlay
+    ref={ref}
+    className={cn(
+      "fixed inset-0 z-50 bg-black/60",
+      "data-[state=open]:animate-in data-[state=closed]:animate-out",
+      "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className,
+    )}
+    {...props}
+  />
+));
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+
+const DialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        "fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]",
+        "flex flex-col items-stretch justify-start",
+        "w-[92vw] sm:max-w-lg",
+        "bg-background-presentation-body-primary",
+        "border border-border-presentation-global-primary",
+        "rounded-xl shadow-lg",
+        "p-0 gap-0 overflow-hidden",
+        "max-h-[90vh]",
+        "duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Content>
+  </DialogPortal>
+));
+DialogContent.displayName = DialogPrimitive.Content.displayName;
+
+const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("flex flex-col space-y-1.5 text-left px-6 pt-5 pb-4", className)}
+    {...props}
+  />
+);
+DialogHeader.displayName = "DialogHeader";
+
+const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("flex flex-row justify-end gap-2 px-6 py-4", className)}
+    {...props}
+  />
+);
+DialogFooter.displayName = "DialogFooter";
+
+const DialogTitle = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Title
+    ref={ref}
+    className={cn(
+      "typography-headers-small-semibold text-content-presentation-global-primary",
+      className,
+    )}
+    {...props}
+  />
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
+
+const DialogDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description
+    ref={ref}
+    className={cn(
+      "typography-body-small-regular text-content-presentation-global-secondary",
+      className,
+    )}
+    {...props}
+  />
+));
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
+
+export {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+};
+```
+
+Critical default decisions, and why:
+
+- **`bg-background-presentation-body-primary`** for the panel surface — it's the body-surface token that pairs correctly with `text-content-presentation-global-primary` across all themes. `form-base` and `action-secondary` are wrong choices that the previous version of this doc recommended.
+- **`p-0 gap-0 overflow-hidden`** on `DialogContent` — padding is delegated to `DialogHeader`/`DialogFooter` (and the form body). Keeping the content padding-free lets header/footer touch the rounded corners cleanly.
+- **`DialogHeader` → `flex flex-col space-y-1.5 ... px-6 pt-5 pb-4`** — column layout (NOT `flex justify-between` like the shipped default) so title and description stack with a tight 6 px gap. Padding lives here, not on the content.
+- **`DialogFooter` → `flex flex-row justify-end gap-2 px-6 py-4`** — horizontal on all viewports (NOT `flex-col-reverse sm:flex-row` like the shipped default). The shipped vertical-on-mobile pattern looks broken on narrow phones too.
+- **`w-[92vw] sm:max-w-lg`** — 92 % of viewport on mobile, 512 px max from `sm` up. Override per-dialog with `className="sm:max-w-110"` (440 px) or `sm:max-w-2xl` (672 px) for wider forms.
+
+### Form body lives outside the form-padded `DialogFooter`
+
+Place the `<form>` between `DialogHeader` and `DialogFooter`, with the footer as a **sibling outside the form** so its padding doesn't compound with the form body's padding. Use `type="button"` + `onClick={handleSubmit(onSubmit)}` on the submit button rather than `type="submit"`:
+
+```tsx
+<Dialog open={open} onOpenChange={onOpenChange}>
+  <DialogContent className="sm:max-w-110">
+    <DialogHeader>
+      <DialogTitle>Create Folder</DialogTitle>
+      <DialogDescription>Add a new folder.</DialogDescription>
+    </DialogHeader>
+
+    <form className="flex flex-col gap-4 px-6 py-5">
+      <LabelField
+        label="Folder Name"
+        requiredLabel="*"
+        {...register("name")}
+        className="w-full *:w-full"
+      />
+    </form>
+
+    <DialogFooter>
+      <Button type="button" variant="BorderStyle" size="M" onClick={() => onOpenChange(false)}>
+        Cancel
+      </Button>
+      <Button type="button" variant="PrimeStyle" size="M" onClick={handleSubmit(onSubmit)}>
+        Create
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+The `px-6 py-5` body padding matches the header/footer's horizontal `px-6` rhythm so the columns line up vertically across the panel.
+
+### `DialogTitle` with icon
+
+Plain `<DialogTitle>Create Account</DialogTitle>` is fine, but you can pass JSX with an icon for instant entity recognition:
+
+```tsx
+<DialogHeader>
+  <DialogTitle>
+    <div className="flex items-center gap-2">
+      <i className="ri-bank-line text-content-presentation-state-information" />
+      <span>Create Account</span>
+    </div>
+  </DialogTitle>
+</DialogHeader>
+```
+
+Pick an icon that matches the entity (`ri-bank-line` for accounts, `ri-calendar-line` for fiscal periods, `ri-receipt-line` for vouchers, etc.).
 
 ## Common Patterns
 

@@ -1,6 +1,6 @@
 ---
 name: Button
-version: 1.2.8
+version: 2.4.0
 status: stable
 category: components/buttons
 tags: [interactive, form, action, accessible, polymorphic]
@@ -59,12 +59,12 @@ function Example() {
 <Button variant="PrimeContStyle">Primary Container</Button>
 
 // Secondary styles
-<Button variant="BlueSecStyle">Blue Secondary</Button>
+<Button variant="BluSecStyle">Blue Secondary</Button>
 <Button variant="YelSecStyle">Yellow Secondary</Button>
 <Button variant="RedSecStyle">Red Secondary</Button>
 
 // Container styles
-<Button variant="BlueContStyle">Blue Container</Button>
+<Button variant="BluContStyle">Blue Container</Button>
 <Button variant="RedContStyle">Red Container</Button>
 
 // Border style
@@ -149,7 +149,7 @@ import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
   Dark Theme Button
 </Button>
 
-<Button theme="light" variant="BlueSecStyle">
+<Button theme="light" variant="BluSecStyle">
   Light Theme Button
 </Button>
 ```
@@ -182,12 +182,12 @@ import { VariantProps } from 'class-variance-authority'
 
 type ButtonVariant =
   | 'PrimeStyle'
-  | 'BlueSecStyle'
+  | 'BluSecStyle'
   | 'YelSecStyle'
   | 'RedSecStyle'
   | 'BorderStyle'
   | 'PrimeContStyle'
-  | 'BlueContStyle'
+  | 'BluContStyle'
   | 'RedContStyle'
 
 type Themes = 'light' | 'dark' | 'default'

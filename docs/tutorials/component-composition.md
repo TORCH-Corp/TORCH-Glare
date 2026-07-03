@@ -166,7 +166,7 @@ export default function FeatureCard({
           {title}
         </h3>
         {badge && (
-          <Badge theme="light" variant="gray">
+          <Badge theme="light" color="gray">
             {badge}
           </Badge>
         )}
@@ -764,7 +764,7 @@ export default function Dashboard() {
                 <p className="typography-display-small-bold text-content-presentation-global-primary mb-2">
                   {stat.value}
                 </p>
-                <Badge theme={theme as any} variant="green">
+                <Badge theme={theme as any} color="green">
                   {stat.change}
                 </Badge>
               </div>

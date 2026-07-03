@@ -1,6 +1,6 @@
 {
   "name": "torch-glare",
-  "version": "1.2.8",
+  "version": "2.4.0",
   "type": "module",
   "license": "MIT",
   "description": "A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.",
@@ -25,7 +25,8 @@
     "dist",
     "apps/lib",
     "docs",
-    "!**/*-dev.*"
+    "!**/*-dev.*",
+    "!apps/lib/components/**/*.md"
   ],
   "bin": {
     "torch-glare": "dist/bin/index.js"

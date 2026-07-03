@@ -38,7 +38,7 @@ export function BasicActionsGroup() {
   return (
     <ActionsGroup>
       <Button variant="PrimeStyle">Save</Button>
-      <Button variant="BlueSecStyle">Cancel</Button>
+      <Button variant="BluSecStyle">Cancel</Button>
     </ActionsGroup>
   )
 }
@@ -62,7 +62,7 @@ export function ActionsWithDividers() {
           <i className="ri-save-line mr-2"></i>
           Save Changes
         </Button>
-        <Button variant="BlueSecStyle" size="M">
+        <Button variant="BluSecStyle" size="M">
           <i className="ri-close-line mr-2"></i>
           Discard
         </Button>
@@ -95,7 +95,7 @@ export function FormActions() {
       </div>
 
       <ActionsGroup className="justify-end">
-        <Button variant="BlueSecStyle" type="button">
+        <Button variant="BluSecStyle" type="button">
           Cancel
         </Button>
         <Button variant="PrimeStyle" type="submit">
@@ -129,7 +129,7 @@ export function ModalFooterActions() {
 
       {/* Modal Footer */}
       <ActionsGroup withDivider className="p-6 justify-end">
-        <Button variant="BlueSecStyle">
+        <Button variant="BluSecStyle">
           Cancel
         </Button>
         <Button variant="RedSecStyle">
@@ -162,28 +162,28 @@ export function MultiActionGroups() {
               <i className="ri-save-line mr-2"></i>
               Save
             </Button>
-            <Button variant="BlueSecStyle" size="S">
+            <Button variant="BluSecStyle" size="S">
               <i className="ri-file-copy-line mr-2"></i>
               Duplicate
             </Button>
           </div>
 
-          <Button variant="BlueSecStyle" size="S">
+          <Button variant="BluSecStyle" size="S">
             <i className="ri-more-2-fill"></i>
           </Button>
         </ActionsGroup>
 
         {/* Secondary Actions */}
         <ActionsGroup withDivider>
-          <Button variant="BlueSecStyle" size="S">
+          <Button variant="BluSecStyle" size="S">
             <i className="ri-share-line mr-2"></i>
             Share
           </Button>
-          <Button variant="BlueSecStyle" size="S">
+          <Button variant="BluSecStyle" size="S">
             <i className="ri-download-line mr-2"></i>
             Export
           </Button>
-          <Button variant="BlueSecStyle" size="S">
+          <Button variant="BluSecStyle" size="S">
             <i className="ri-printer-line mr-2"></i>
             Print
           </Button>
@@ -221,7 +221,7 @@ export function CardActions() {
             </p>
 
             <ActionsGroup className="justify-end">
-              <Button variant="BlueSecStyle" size="S">
+              <Button variant="BluSecStyle" size="S">
                 View
               </Button>
               <Button variant="PrimeStyle" size="S">
@@ -289,7 +289,7 @@ export function ToolbarActions() {
 
         {/* Save Group */}
         <ActionsGroup>
-          <Button variant="BlueSecStyle" size="S">
+          <Button variant="BluSecStyle" size="S">
             Preview
           </Button>
           <Button variant="PrimeStyle" size="S">
@@ -342,7 +342,7 @@ export function WizardNavigation() {
       {/* Navigation Actions */}
       <ActionsGroup className="justify-between">
         <Button
-          variant="BlueSecStyle"
+          variant="BluSecStyle"
           disabled={currentStep === 1}
           onClick={() => setCurrentStep(currentStep - 1)}
         >
@@ -394,7 +394,7 @@ export function ConfirmationDialog({ title, message, onConfirm, onCancel }) {
         </div>
 
         <ActionsGroup withDivider className="p-6 justify-end gap-3">
-          <Button variant="BlueSecStyle" onClick={onCancel}>
+          <Button variant="BluSecStyle" onClick={onCancel}>
             Cancel
           </Button>
           <Button variant="RedSecStyle" onClick={onConfirm}>
@@ -472,7 +472,7 @@ export function LoadingActions() {
   return (
     <ActionsGroup className="justify-end">
       <Button
-        variant="BlueSecStyle"
+        variant="BluSecStyle"
         disabled={isLoading}
       >
         Cancel
@@ -559,7 +559,7 @@ type Themes = 'light' | 'dark' | 'default'
 function ResponsiveActions() {
   return (
     <ActionsGroup className="flex-col sm:flex-row justify-end">
-      <Button variant="BlueSecStyle" className="w-full sm:w-auto">
+      <Button variant="BluSecStyle" className="w-full sm:w-auto">
         Cancel
       </Button>
       <Button variant="PrimeStyle" className="w-full sm:w-auto">

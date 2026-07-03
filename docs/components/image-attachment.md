@@ -162,7 +162,7 @@ function CompleteFlow() {
             header={file?.name || 'Image Preview'}
           >
             <Button onClick={handleUpload}>Upload</Button>
-            <Button variant="BlueSecStyle" onClick={handleRemove}>
+            <Button variant="BluSecStyle" onClick={handleRemove}>
               Remove
             </Button>
           </AttachmentImagePreview>
@@ -448,7 +448,7 @@ function GalleryUpload() {
               <Button
                 size="S"
                 buttonType="icon"
-                variant="BlueSecStyle"
+                variant="BluSecStyle"
                 className="absolute top-1 right-1 opacity-0 group-hover:opacity-100"
                 onClick={() => handleRemove(image.id)}
               >

@@ -11,8 +11,8 @@ export const linkButtonStyles = cva(
     "flex items-center justify-center",
     "rounded-[6px]",
     "p-[2px]",
-    "text-content-presentation-action-link",
-    "hover:bg-background-presentation-action-link-hover hover:px-[2px]",
+    "text-content-presentation-global-link",
+    "hover:bg-background-presentation-button-link-hover hover:px-[2px]",
     "transition-all duration-250 ease-in-out",
     "group", // Add group class here
   ],
@@ -58,10 +58,10 @@ export const LinkButton: React.FC<Props> = ({
       <div className="px-[3px] whitespace-nowrap break-keep">{props.children}</div>
       <div
         className={cn(
-          "rounded-[4px]",
+          "rounded-[4px] overflow-hidden",
           "bg-background-presentation-state-information-primary",
           "transition-all duration-[100] ease-in-out",
-          "h-0 w-0  p-0",
+          "h-0 w-0 p-0",
           "opacity-0 group-hover:opacity-100 group-hover:p-[3px]",
           {
             "group-hover:w-[20px] group-hover:h-[20px]": size === "S",
@@ -70,7 +70,7 @@ export const LinkButton: React.FC<Props> = ({
         )}
       >
         <Arrow
-          className={cn("rtl:rotate-[260deg]", {
+          className={cn("w-0 h-0 rtl:rotate-[260deg]", {
             "group-hover:w-[14px] group-hover:h-[14px]": size === "S",
             "group-hover:w-[16px] group-hover:h-[16px]": size === "M",
           })}

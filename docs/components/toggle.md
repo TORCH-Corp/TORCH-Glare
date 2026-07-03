@@ -1,6 +1,6 @@
 ---
 name: Toggle
-version: 1.2.8
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, toggle, button, radix-ui, accessible, variants]
@@ -147,7 +147,7 @@ function VariantExamples() {
     <div className="space-y-4">
       <div className="flex gap-2">
         <Toggle variant="PrimeStyle">Prime</Toggle>
-        <Toggle variant="BlueSecStyle">Blue</Toggle>
+        <Toggle variant="BluSecStyle">Blue</Toggle>
         <Toggle variant="YelSecStyle">Yellow</Toggle>
         <Toggle variant="RedSecStyle">Red</Toggle>
       </div>
@@ -155,7 +155,7 @@ function VariantExamples() {
       <div className="flex gap-2">
         <Toggle variant="BorderStyle">Border</Toggle>
         <Toggle variant="PrimeContStyle">Prime Cont</Toggle>
-        <Toggle variant="BlueContStyle">Blue Cont</Toggle>
+        <Toggle variant="BluContStyle">Blue Cont</Toggle>
         <Toggle variant="RedContStyle">Red Cont</Toggle>
       </div>
     </div>
@@ -283,7 +283,7 @@ function FilterToggles() {
       <h4 className="font-semibold">Filters</h4>
       <div className="flex flex-wrap gap-2">
         <Toggle
-          variant="BlueSecStyle"
+          variant="BluSecStyle"
           pressed={filters.inStock}
           onPressedChange={() => toggleFilter('inStock')}
         >
@@ -358,12 +358,12 @@ function DisabledToggles() {
 ```typescript
 type VariantType =
   | 'PrimeStyle'
-  | 'BlueSecStyle'
+  | 'BluSecStyle'
   | 'YelSecStyle'
   | 'RedSecStyle'
   | 'BorderStyle'
   | 'PrimeContStyle'
-  | 'BlueContStyle'
+  | 'BluContStyle'
   | 'RedContStyle'
 ```
 
@@ -380,6 +380,65 @@ interface CustomToggleProps extends ToggleProps, VariantProps<typeof toggleVaria
 
 export const Toggle: React.ForwardRefExoticComponent<CustomToggleProps>
 ```
+
+## Known Limitations & Frontend Patterns
+
+> ⚠️ **`Toggle` is icon-only.** Its dimensions are hardcoded squares — `S=22×22`, `M=28×28`, `L=34×34`, `XL=40×40` — so any text label wider than ~3 characters will visually clip. The "Filter Options", "Theme Switcher with text", and similar text-label examples below are misleading: they only render correctly in environments that override the dimensions.
+
+### Use `Button` with variant swap for selectable text chips
+
+For format selectors (DOCX, MD, RTF), tag pickers, filter pills, or any case where the chip carries text wider than ~3 characters, **do not use `Toggle`**. Use `Button` with a `variant` swap to express the selected state:
+
+```tsx
+const FORMATS = ["DOCX", "MD", "RTF", "ODT", "EPUB", "TXT"];
+
+export function FormatPicker({ selected, onSelect }: Props) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {FORMATS.map((format) => {
+        const isSelected = selected === format;
+        return (
+          <Button
+            key={format}
+            type="button"
+            variant={isSelected ? "PrimeStyle" : "BorderStyle"}
+            size="S"
+            onClick={() => onSelect(format)}
+            className="uppercase"
+          >
+            {format}
+          </Button>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+This gives you:
+
+- Auto-sizing horizontal padding via the button's `px-*` defaults
+- Theme-correct surface and text tokens (button variants are pre-themed)
+- Clear pressed/unpressed visual via `PrimeStyle` (filled) vs `BorderStyle` (outlined)
+- All the focus/disabled/loading states from `Button` for free
+
+### When `Toggle` IS the right component
+
+Reserve `Toggle` for its actual designed use case — **icon-only toolbar actions** with a binary on/off state:
+
+- Bold / Italic / Underline in a rich-text toolbar
+- Play / Pause
+- Grid / List view
+- Mute / Unmute
+- Eye / Eye-slash (show/hide password)
+
+```tsx
+<Toggle pressed={isBold} onPressedChange={setBold} aria-label="Bold">
+  <i className="ri-bold" />
+</Toggle>
+```
+
+The icon must fit within the square dimension — `[&_i]:text-[14px]` for size M, etc.
 
 ## Common Patterns
 
@@ -531,7 +590,7 @@ function SettingsToggles() {
           <label className="text-sm capitalize">{key.replace(/([A-Z])/g, ' $1')}</label>
           <Toggle
             size="S"
-            variant="BlueSecStyle"
+            variant="BluSecStyle"
             pressed={value}
             onPressedChange={(pressed) =>
               setSettings(prev => ({ ...prev, [key]: pressed }))
@@ -571,7 +630,7 @@ describe('Toggle', () => {
 
   it('applies variant styles', () => {
     const { container } = render(
-      <Toggle variant="BlueSecStyle">Blue</Toggle>
+      <Toggle variant="BluSecStyle">Blue</Toggle>
     )
 
     const toggle = container.querySelector('button')
@@ -685,12 +744,12 @@ Radix UI automatically provides:
 Each variant provides different visual styles:
 
 - **PrimeStyle**: Default primary style
-- **BlueSecStyle**: Blue secondary style
+- **BluSecStyle**: Blue secondary style
 - **YelSecStyle**: Yellow secondary style
 - **RedSecStyle**: Red secondary style
 - **BorderStyle**: Border-focused style
 - **PrimeContStyle**: Primary container style
-- **BlueContStyle**: Blue container style
+- **BluContStyle**: Blue container style
 - **RedContStyle**: Red container style
 
 ### Size Classes

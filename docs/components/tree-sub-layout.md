@@ -17,10 +17,10 @@ TORCH Glare is a copy-in library: the CLI copies this component's source into yo
 
 ```bash
 npx torch-glare@latest init
-npx torch-glare@latest add tree-sub-layout
+npx torch-glare@latest add TreeSubLayout
 ```
 
-`add` also copies any components, hooks, and utilities that `tree-sub-layout` depends on.
+`add` also copies any components, hooks, and utilities that `TreeSubLayout` depends on.
 
 ## Imports
 

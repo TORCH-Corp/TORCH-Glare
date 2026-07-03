@@ -1,3 +1,47 @@
+## 2.4.0
+
+### Added
+- **HeaderBar** component — variant-driven page/form header chip (`new` / `edit` / `detail`) pairing a colored emphasis pill with a plain title.
+- **ContextMenu** component — right-click / long-press menu sharing the DropdownMenu surface (boxed auto-grouping, checkbox/radio items, nested sub-menus, RTL).
+- **SearchableSelect** and **SearchableTable** — searchable single-select combobox and a dialog-based row picker, both with client- or server-side search and infinite-scroll pagination.
+- `maxHeight` prop on `ContextMenu` / `DropdownMenu` content — caps the surface height so long menus scroll instead of overflowing off-screen.
+- DataViews: `FieldConfig.filterVariant: "searchable-select"` renders a categorical filter as a single-select `SearchableSelect` dropdown; documented `filterMode` / `filterLabel` / `filterOptions`.
+- SectionBlock: bilingual (EN / AR) form example with an in-header language switch and per-row RTL.
+
+### Changed
+- DropdownMenu moved fully to auto-grouped (boxed) menus; the `DropdownMenuSeparator` shim was removed (use labels / explicit `DropdownMenuGroup` as section boundaries).
+- DataViews config panel: restored the Saved View section; "Save a New View" now uses the Glare `Button` (size M); the close (X) button turns red on hover.
+
+### Fixed
+- DataViews `DataViewRadio` unselected ring was invisible on the dark panel — now hardcodes the spec values (`#626467` border, `rgba(255,255,255,0.05)` fill, `#0075FF` selected) so it always renders dark regardless of host `data-theme`.
+- Badge subtle variants gained `isolate` so the `mix-blend-luminosity` label/icon composites only against the badge background, fixing ghosted/double-stroked text on layered surfaces.
+
+## 2.1.1
+
+### Changed
+- **BREAKING:** `Badge` API restructured.
+  - Replaced `variant` prop with two orthogonal props: `badgeStyle` (`'subtle' | 'solid'`, default `'subtle'`) and `color` (10 options).
+  - New color set: `gray`, `slate`, `red`, `orange`, `yellow`, `green`, `ocean`, `blue`, `purple`, `rose`. Removed legacy values: `highlight`, `greenLight`, `cocktailGreen`, `redOrange`, `redLight`, `bluePurple`, `navy`.
+  - Renamed chip-removal props: `isSelected` → `isClosable`, `onUnselect` → `onClose`.
+  - Subtle text and icons are now rendered with a single neutral foreground (`--Content-Presentation-Global-subtle`, `#494949`) blended with `mix-blend-mode: luminosity`, regardless of color.
+  - Close button rebuilt as an inline 12×12 SVG (12 on XS, 14 on S, 16 on M) with a `4px`-radius hover background using `--Background-Presentation-Action-Secondary`. The button participates in the same luminosity blend.
+- The `M` size label no longer carries a `1px` top-padding shim — text is centered via flex alignment + typography line-height.
+- `BadgeField` updated internally to pass the new `color` and `isClosable`/`onClose` props.
+
+## 1.5.0
+
+### Changed
+- **BREAKING (CLI):** `SectionCard` component renamed to `SectionBlock`. The component, its props (`SectionCardProps` → `SectionBlockProps`), the docs route (`/components/sectionCard` → `/components/sectionBlock`), and the CLI scaffolder name all use the new name. Already-scaffolded `SectionCard.tsx` files in user projects are unaffected; new installs must use `npx torch-glare add SectionBlock`.
+
+## 1.4.0
+
+### Added
+- `SectionCard` component — themed container with a colored title badge (Blue, Yellow, Green, Red, Orange, Purple, Pink, Gray) and a form-base body. Title accepts any `ReactNode`; supports `containerClassName`, `headerClassName`, and `bodyClassName` slots.
+
+### Changed
+- `Button` component reworked (padding, sizing, and variant cleanup).
+- Color system updated: bumped `glare-torch-mode` and `mapping-color-system` plugin pairings to the new color tokens.
+
 ## 1.0.0
 
 - Initial release of the TORCH Glare Components Library.
@@ -94,7 +138,6 @@ and fix tailwindcss issues.
 
 ## 1.1.1
 
-<<<<<<< HEAD
 ### Added
 
 - Add support for version 4 of tailwindcss.

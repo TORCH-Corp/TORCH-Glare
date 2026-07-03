@@ -1,4 +1,4 @@
-# TORCH Glare — Full AI Reference (v1.2.8)
+# TORCH Glare — Full AI Reference (v2.4.0)
 
 > A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.
 > This single file is self-contained: an assistant can use it to write correct
@@ -38,7 +38,7 @@ Component names are **case-sensitive PascalCase** (e.g. `add DatePicker`, not `a
 
 Every component accepts `theme?: "light" | "dark" | "default"`, applied as a `data-theme` attribute. Use `ThemeProvider` for app-wide theming.
 
-## Components (56)
+## Components (68)
 
 ### ActionButton
 
@@ -170,7 +170,6 @@ export default function AlertDialogExample() {
 - Add: `npx torch-glare add Badge`
 - Import: `import { Badge } from "@/components/Badge";`
 - npm dependencies: class-variance-authority
-- Variants: highlight, green, greenLight, cocktailGreen, yellow, redOrange, redLight, rose, purple, bluePurple, blue, navy, gray
 - Sizes: XS, S, M
 - Docs: docs/components/badge.md
 
@@ -179,11 +178,24 @@ Example (apps/app/exmples/BadgeExample.tsx):
 ```tsx
 import { Badge } from "@/components/Badge";
 import { cn } from "@/utils/cn";
-import { useState, type ComponentProps } from "react";
+
+const COLORS = [
+  "gray",
+  "slate",
+  "red",
+  "orange",
+  "yellow",
+  "green",
+  "ocean",
+  "blue",
+  "purple",
+  "rose",
+] as const;
+
+const SIZES = ["XS", "S", "M"] as const;
+const STYLES = ["subtle", "solid"] as const;
 
 export function BadgeExample() {
-  const [variants] = useState<NonNullable<ComponentProps<typeof Badge>["variant"]>[]>(["green", "greenLight", "cocktailGreen", "yellow", 'redOrange', 'redLight', 'rose', 'purple', 'bluePurple', 'blue', 'navy', 'gray']);
-
   return (
     <>
       <h1
@@ -194,21 +206,63 @@ export function BadgeExample() {
       >
         Badge Preview
       </h1>
-      {variants.map((variant) => (
-        <div key={variant} className="flex flex-col gap-2 w-full">
+
+      {COLORS.map((color) => (
+        <div key={color} className="flex flex-col gap-3 w-full mb-8">
           <span
             className={cn(
-              "text-sm",
+              "text-sm capitalize",
               "text-content-system-global-primary"
             )}
           >
-            Variant: {variant}
+            {color}
           </span>
-          <div className="flex gap-2 items-start">
-            <Badge label={`${variant} size: XS`} variant={variant} size={"XS"} isSelected />
-            <Badge label={`${variant} size: S`} variant={variant} size="S" isSelected />
-            <Badge label={`${variant} size: M`} variant={variant} size="M" isSelected />
-          </div>
+
+          {STYLES.map((badgeStyle) => (
+            <div key={badgeStyle} className="flex flex-col gap-2">
+              <span
+                className={cn(
+                  "text-xs uppercase tracking-wide",
+                  "text-content-system-global-secondary"
+                )}
+              >
+                {badgeStyle}
+              </span>
+
+              <div className="flex gap-2 items-start flex-wrap">
+                {SIZES.map((size) => (
+                  <Badge
+                    key={`${size}-icon`}
+                    label={`${color} ${size}`}
+                    badgeStyle={badgeStyle}
+                    color={color}
+                    size={size}
+                  />
+                ))}
+                {SIZES.map((size) => (
+                  <Badge
+                    key={`${size}-noicon`}
+                    label={`${color} ${size} no-icon`}
+                    badgeStyle={badgeStyle}
+                    color={color}
+                    size={size}
+                    showIcon={false}
+                  />
+                ))}
+                {SIZES.map((size) => (
+                  <Badge
+                    key={`${size}-closable`}
+                    label={`${color} ${size} closable`}
+                    badgeStyle={badgeStyle}
+                    color={color}
+                    size={size}
+                    isClosable
+                    onClose={() => {}}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       ))}
     </>
@@ -221,6 +275,8 @@ export function BadgeExample() {
 - Add: `npx torch-glare add BadgeField`
 - Import: `import { BadgeField } from "@/components/BadgeField";`
 - npm dependencies: class-variance-authority
+- Variants: PresentationStyle
+- Sizes: S, M
 - Docs: docs/components/badge-field.md
 
 Example (apps/app/exmples/BadgeFieldExample.tsx):
@@ -302,13 +358,14 @@ export default function BadgeFieldExample() {
 - npm dependencies: @radix-ui/react-slot, class-variance-authority
 - Variants: PresentationStyle, SystemStyle
 - Sizes: S, M, L
+- Docs: docs/components/breadcrumb.md
 
 ### Button
 
 - Add: `npx torch-glare add Button`
 - Import: `import { Button } from "@/components/Button";`
 - npm dependencies: @radix-ui/react-slot, class-variance-authority
-- Variants: PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle
+- Variants: PrimeStyle, BluSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BluContStyle, RedContStyle, PrimeColStyle, BluColStyle, RedColStyle, GreenColStyle, YelColStyle
 - Sizes: S, M, L, XL
 - Docs: docs/components/button.md
 
@@ -325,13 +382,18 @@ type ButtonSize = "S" | "M" | "L" | "XL";
 export default function ButtonExample() {
   const [ButtonButtonVariants] = useState<ButtonVariant[]>([
     "PrimeStyle",
-    "BlueSecStyle",
+    "BluSecStyle",
     "YelSecStyle",
     "RedSecStyle",
     "BorderStyle",
     "PrimeContStyle",
-    "BlueContStyle",
+    "BluContStyle",
     "RedContStyle",
+    "PrimeColStyle",
+    "BluColStyle",
+    "RedColStyle",
+    "GreenColStyle",
+    "YelColStyle",
   ]);
   const [ButtonSizes] = useState<ButtonSize[]>(["S", "M", "L", "XL"]);
 
@@ -376,7 +438,7 @@ export default function ButtonExample() {
           </div>
 
           {/* Icon button ButtonVariants */}
-          <div className="flex gap-4 items-center w-full">
+          <div className="flex gap-4 items-center w-full mb-4">
             {ButtonSizes.map((size: ButtonSize) => (
               <div
                 key={`icon-${size}`}
@@ -392,6 +454,76 @@ export default function ButtonExample() {
                 </span>
                 <Button variant={variant} size={size} buttonType="icon">
                   <i className="ri-add-circle-fill"></i>
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Icon + label (leading icon) */}
+          <div className="flex gap-4 items-center w-full mb-4">
+            {ButtonSizes.map((size: ButtonSize) => (
+              <div
+                key={`icon-leading-${size}`}
+                className="flex flex-col items-center gap-2"
+              >
+                <span
+                  className={cn(
+                    "text-sm",
+                    "text-content-system-global-primary"
+                  )}
+                >
+                  Leading {size}
+                </span>
+                <Button variant={variant} size={size}>
+                  <i className="ri-add-circle-fill"></i>
+                  Label
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Icon + label (trailing icon) */}
+          <div className="flex gap-4 items-center w-full mb-4">
+            {ButtonSizes.map((size: ButtonSize) => (
+              <div
+                key={`icon-trailing-${size}`}
+                className="flex flex-col items-center gap-2"
+              >
+                <span
+                  className={cn(
+                    "text-sm",
+                    "text-content-system-global-primary"
+                  )}
+                >
+                  Trailing {size}
+                </span>
+                <Button variant={variant} size={size}>
+                  Label
+                  <i className="ri-arrow-right-line"></i>
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Both icons + label */}
+          <div className="flex gap-4 items-center w-full">
+            {ButtonSizes.map((size: ButtonSize) => (
+              <div
+                key={`icon-both-${size}`}
+                className="flex flex-col items-center gap-2"
+              >
+                <span
+                  className={cn(
+                    "text-sm",
+                    "text-content-system-global-primary"
+                  )}
+                >
+                  Both {size}
+                </span>
+                <Button variant={variant} size={size}>
+                  <i className="ri-search-line"></i>
+                  Label
+                  <i className="ri-arrow-down-s-line"></i>
                 </Button>
               </div>
             ))}
@@ -449,6 +581,7 @@ export default function ButtonExample() {
 - npm dependencies: @radix-ui/react-toggle-group, class-variance-authority
 - Variants: PrimeStyle, BorderStyle, SystemStyle
 - Sizes: S, M, L, XL
+- Docs: docs/components/button-group.md
 
 ### Calendar
 
@@ -477,6 +610,15 @@ export default function ButtonExample() {
 - npm dependencies: @radix-ui/react-checkbox, class-variance-authority
 - Sizes: S, M
 - Docs: docs/components/checkbox.md
+
+### ContextMenu
+
+- Add: `npx torch-glare add ContextMenu`
+- Import: `import { ContextMenu } from "@/components/ContextMenu";`
+- npm dependencies: @radix-ui/react-context-menu, class-variance-authority
+- Variants: Default, info, Negative
+- Sizes: S, M
+- Docs: docs/components/context-menu.md
 
 ### CountBadge
 
@@ -587,7 +729,7 @@ export default function DatePickerExample() {
 
 - Add: `npx torch-glare add Drawer`
 - Import: `import { Drawer } from "@/components/Drawer";`
-- npm dependencies: vaul
+- npm dependencies: class-variance-authority, vaul
 - Docs: docs/components/drawer.md
 
 ### DropdownMenu
@@ -595,7 +737,7 @@ export default function DatePickerExample() {
 - Add: `npx torch-glare add DropdownMenu`
 - Import: `import { DropdownMenu } from "@/components/DropdownMenu";`
 - npm dependencies: @radix-ui/react-dropdown-menu, class-variance-authority
-- Variants: Default, Warning, Negative, SystemStyle
+- Variants: Default, info, Negative
 - Sizes: S, M
 - Docs: docs/components/dropdown-menu.md
 
@@ -609,7 +751,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuPortal,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
@@ -680,7 +821,6 @@ export default function DropdownMenuExample() {
                       Check IT
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
                       variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
@@ -708,7 +848,6 @@ export default function DropdownMenuExample() {
                           >
                             Message
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator />
                           <DropdownMenuItem
                             variant={variant === "PresentationStyle" ? "Negative" : "SystemStyle"}
 
@@ -725,7 +864,6 @@ export default function DropdownMenuExample() {
                       <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >
@@ -741,7 +879,6 @@ export default function DropdownMenuExample() {
                   >
                     API
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     variant={variant === "PresentationStyle" ? "Default" : "SystemStyle"}
                   >
@@ -831,6 +968,207 @@ export default function FormExample() {
 
       <InputField icon={<i className="ri-mail-ai-line"></i>} />
 */
+```
+
+### FormStepper
+
+- Add: `npx torch-glare add FormStepper`
+- Import: `import { FormStepper } from "@/components/FormStepper";`
+- npm dependencies: class-variance-authority
+- Docs: docs/components/form-stepper.md
+
+Example (apps/app/exmples/FormStepperExample.tsx):
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { cn } from "@/utils/cn";
+import {
+  FormStepper,
+  FormStep,
+  FormStepIndicator,
+  FormStepLabel,
+} from "@/components/FormStepper";
+
+export default function FormStepperExample() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  return (
+    <div className="flex flex-col gap-10">
+      <h1
+        className={cn(
+          "text-xl font-bold",
+          "text-content-presentation-global-primary",
+        )}
+      >
+        FormStepper Preview
+      </h1>
+
+      {/* Type variants — Default state */}
+      <Section title="Types — Default state">
+        <FormStepper>
+          <FormStep index={0} type="default" selected={false}>
+            <FormStepIndicator />
+            <FormStepLabel>Default</FormStepLabel>
+          </FormStep>
+          <FormStep index={1} type="success" selected={false}>
+            <FormStepIndicator />
+            <FormStepLabel>Success</FormStepLabel>
+          </FormStep>
+          <FormStep index={2} type="negative" selected={false}>
+            <FormStepIndicator />
+            <FormStepLabel>Negative</FormStepLabel>
+          </FormStep>
+        </FormStepper>
+      </Section>
+
+      {/* Selected state */}
+      <Section title="Selected state">
+        <FormStepper>
+          <FormStep index={0} type="default" selected>
+            <FormStepIndicator />
+            <FormStepLabel>Default</FormStepLabel>
+          </FormStep>
+          <FormStep index={1} type="success" selected>
+            <FormStepIndicator />
+            <FormStepLabel>Success</FormStepLabel>
+          </FormStep>
+          <FormStep index={2} type="negative" selected>
+            <FormStepIndicator />
+            <FormStepLabel>Negative</FormStepLabel>
+          </FormStep>
+        </FormStepper>
+      </Section>
+
+      {/* Interactive */}
+      <Section title={`Interactive — Step ${activeStep + 1} of 4`}>
+        <FormStepper activeStep={activeStep}>
+          <FormStep index={0} type="success" onClick={() => setActiveStep(0)}>
+            <FormStepIndicator />
+            <FormStepLabel>Account</FormStepLabel>
+          </FormStep>
+          <FormStep index={1} type="default" onClick={() => setActiveStep(1)}>
+            <FormStepIndicator />
+            <FormStepLabel>Profile</FormStepLabel>
+          </FormStep>
+          <FormStep index={2} type="negative" onClick={() => setActiveStep(2)}>
+            <FormStepIndicator />
+            <FormStepLabel>Payment</FormStepLabel>
+          </FormStep>
+          <FormStep index={3} type="default" onClick={() => setActiveStep(3)}>
+            <FormStepIndicator />
+            <FormStepLabel>Confirm</FormStepLabel>
+          </FormStep>
+        </FormStepper>
+      </Section>
+
+      {/* RTL */}
+      <Section title="RTL Direction">
+        <div dir="rtl">
+          <FormStepper>
+            <FormStep index={0} type="default" selected>
+              <FormStepIndicator />
+              <FormStepLabel>افتراضي</FormStepLabel>
+            </FormStep>
+            <FormStep index={1} type="success">
+              <FormStepIndicator />
+              <FormStepLabel>نجاح</FormStepLabel>
+            </FormStep>
+            <FormStep index={2} type="negative">
+              <FormStepIndicator />
+              <FormStepLabel>خطأ</FormStepLabel>
+            </FormStep>
+          </FormStepper>
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <span
+        className={cn(
+          "text-sm font-medium",
+          "text-content-presentation-global-secondary",
+        )}
+      >
+        {title}
+      </span>
+      {children}
+    </div>
+  );
+}
+```
+
+### HeaderBar
+
+- Add: `npx torch-glare add HeaderBar`
+- Import: `import { HeaderBar } from "@/components/HeaderBar";`
+- npm dependencies: class-variance-authority
+- Variants: new, edit, detail
+- Docs: docs/components/header-bar.md
+
+Example (apps/app/exmples/HeaderBarExample.tsx):
+
+```tsx
+import HeaderBar from "@/components/HeaderBar";
+import { cn } from "@/utils/cn";
+
+const VARIANTS = [
+  {
+    variant: "new",
+    label: "New",
+    title: "sales iNVOICE",
+    caption: "new",
+  },
+  {
+    variant: "edit",
+    label: "edit",
+    title: "sales iNVOICE",
+    caption: "edit",
+  },
+  {
+    variant: "detail",
+    label: "de-344",
+    title: "sales iNVOICE",
+    caption: "detail",
+  },
+] as const;
+
+export default function HeaderBarExample() {
+  return (
+    <>
+      <h1
+        className={cn(
+          "text-xl font-bold mb-8",
+          "text-content-system-global-primary",
+        )}
+      >
+        HeaderBar Preview
+      </h1>
+
+      <div className="flex flex-col gap-6">
+        {VARIANTS.map(({ variant, label, title, caption }) => (
+          <div key={variant} className="flex flex-col items-start gap-2">
+            <span className="text-sm text-content-system-global-primary">
+              {caption}
+            </span>
+            <HeaderBar variant={variant} label={label} title={title} />
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
 ```
 
 ### ImageAttachment
@@ -996,7 +1334,7 @@ export default function InputFieldExample() {
 
 - Add: `npx torch-glare add LabeledCheckBox`
 - Import: `import { LabeledCheckBox } from "@/components/LabeledCheckBox";`
-- Docs: docs/components/labeled-checkbox.md
+- Docs: docs/components/labeled-check-box.md
 
 ### LabeledRadio
 
@@ -1273,11 +1611,189 @@ export function RadioCardExample() {
 - npm dependencies: @radix-ui/react-scroll-area
 - Docs: docs/components/scroll-area.md
 
+### SearchableSelect
+
+- Add: `npx torch-glare add SearchableSelect`
+- Import: `import { SearchableSelect } from "@/components/SearchableSelect";`
+- npm dependencies: class-variance-authority
+- Variants: PresentationStyle, SystemStyle
+- Docs: docs/components/searchable-select.md
+
+### SearchableTable
+
+- Add: `npx torch-glare add SearchableTable`
+- Import: `import { SearchableTable } from "@/components/SearchableTable";`
+- Docs: docs/components/searchable-table.md
+
+### SearchableTree
+
+- Add: `npx torch-glare add SearchableTree`
+- Import: `import { SearchableTree } from "@/components/SearchableTree";`
+
+### SearchableTreeDialog
+
+- Add: `npx torch-glare add SearchableTreeDialog`
+- Import: `import { SearchableTreeDialog } from "@/components/SearchableTreeDialog";`
+
 ### SearchField
 
 - Add: `npx torch-glare add SearchField`
 - Import: `import { SearchField } from "@/components/SearchField";`
 - Docs: docs/components/search-field.md
+
+### SectionBlock
+
+- Add: `npx torch-glare add SectionBlock`
+- Import: `import { SectionBlock } from "@/components/SectionBlock";`
+- npm dependencies: class-variance-authority
+- Docs: docs/components/section-block.md
+
+Example (apps/app/exmples/SectionBlockExample.tsx):
+
+```tsx
+import { type ReactNode } from "react";
+import { SectionBlock, type SectionColor } from "@/components/SectionBlock";
+import { InputField } from "@/components/InputField";
+import { ActionButton } from "@/components/ActionButton";
+import { cn } from "@/utils/cn";
+
+const COLORS: SectionColor[] = [
+  "Blue",
+  "Yellow",
+  "Green",
+  "Red",
+  "Orange",
+  "Purple",
+  "Pink",
+  "Gray",
+];
+
+export default function SectionBlockExample() {
+  return (
+    <div className="flex flex-col gap-[24px] w-full items-center">
+      <h1
+        className={cn(
+          "text-xl font-bold self-start",
+          "text-content-system-global-primary",
+        )}
+      >
+        SectionBlock
+      </h1>
+
+      {/* All colors, default content */}
+      {COLORS.map((color) => (
+        <SectionBlock key={color} color={color} title={`${color} section`}>
+          <p className="text-content-system-global-primary py-4">
+            This is a {color.toLowerCase()} sectioned card. The badge above
+            inherits the color variant; the body uses the form-base background
+            with a soft outer shadow.
+          </p>
+          <p className="text-content-system-global-secondary pb-2">
+            Replace this content with anything — forms, tables, lists, etc.
+          </p>
+        </SectionBlock>
+      ))}
+
+      {/* No-title variant */}
+      <SectionBlock>
+        <p className="text-content-system-global-primary py-4">
+          A SectionBlock without a title — header is hidden, body still padded.
+        </p>
+      </SectionBlock>
+
+      {/* Custom rich title */}
+      <SectionBlock
+        color="Purple"
+        title={
+          <span className="flex items-center gap-[6px]">
+            <i className="ri-magic-line" />
+            Rich title with icon
+          </span>
+        }
+      >
+        <p className="text-content-presentation-action-light-primary py-4">
+          The `title` prop accepts any ReactNode — pass JSX for icons, links,
+          counts, etc.
+        </p>
+      </SectionBlock>
+
+      {/* Custom fields form (matches reference screenshot) */}
+      <SectionBlock
+        color="Blue"
+        title={
+          <span className="flex items-center gap-[6px]">
+            <i className="ri-edit-box-line" />
+            Custom fields
+          </span>
+        }
+      >
+        <FieldRow
+          label="Name"
+          required
+          right={
+            <div className="flex flex-1 items-center gap-[12px]">
+              <InputField placeholder="First Name*" className="flex-1" />
+              <InputField placeholder="Last Name*" className="flex-1" />
+            </div>
+          }
+        />
+
+        <RowDivider />
+
+        <FieldRow
+          label="Department"
+          right={<InputField placeholder="Write Hint Here" className="flex-1" />}
+        />
+
+        <RowDivider />
+
+        <FieldRow
+          label="Alias names"
+          right={
+            <InputField
+              placeholder="Write Hint Here"
+              className="flex-1"
+              childrenSide={
+                <ActionButton aria-label="Add alias name">
+                  <i className="ri-add-line" />
+                </ActionButton>
+              }
+            />
+          }
+        />
+      </SectionBlock>
+    </div>
+  );
+}
+
+interface FieldRowProps {
+  label: string;
+  required?: boolean;
+  right: ReactNode;
+}
+
+function FieldRow({ label, required, right }: FieldRowProps) {
+  return (
+    <div className="flex items-center gap-[24px] py-[18px]">
+      <div className="flex w-[220px] shrink-0 items-center gap-[6px]">
+        <span className="typography-body-medium-regular text-content-presentation-action-light-primary">
+          {label}
+        </span>
+        {required && (
+          <span className="typography-body-small-medium text-content-presentation-state-negative">
+            (Required)
+          </span>
+        )}
+      </div>
+      <div className="flex flex-1 items-center">{right}</div>
+    </div>
+  );
+}
+
+function RowDivider() {
+  return <div className="h-px w-full bg-border-presentation-global-primary" />;
+}
+```
 
 ### Select
 
@@ -1387,6 +1903,329 @@ export default function SlideDatePickerExample() {
 - npm dependencies: class-variance-authority
 - Sizes: S, M, L
 - Docs: docs/components/spin-loading.md
+
+### Stepper
+
+- Add: `npx torch-glare add Stepper`
+- Import: `import { Stepper } from "@/components/Stepper";`
+- npm dependencies: class-variance-authority
+- Sizes: S, M, L
+- Docs: docs/components/stepper.md
+
+Example (apps/app/exmples/StepperExample.tsx):
+
+```tsx
+"use client";
+
+import { cn } from "@/utils/cn";
+import { useState } from "react";
+import { Button } from "@/components/Button";
+import {
+  Stepper,
+  Step,
+  StepIndicator,
+  StepConnector,
+  StepLabel,
+  StepDescription,
+} from "@/components/Stepper";
+
+export default function StepperExample() {
+  const [activeStep, setActiveStep] = useState(1);
+  const [verticalStep, setVerticalStep] = useState(2);
+  const totalSteps = 4;
+  const verticalTotalSteps = 4;
+
+  return (
+    <>
+      <h1
+        className={cn(
+          "text-xl font-bold mb-8",
+          "text-content-presentation-global-primary"
+        )}
+      >
+        Stepper Preview
+      </h1>
+
+      {/* Horizontal Stepper — Interactive */}
+      <div className="flex flex-col gap-4 w-full">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Horizontal — Interactive (Step {activeStep + 1} of {totalSteps})
+        </span>
+
+        <Stepper activeStep={activeStep} orientation="horizontal" size="M">
+          <Step index={0}>
+            <StepIndicator />
+            <StepLabel>Account</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator />
+            <StepLabel>Profile</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={2}>
+            <StepIndicator />
+            <StepLabel>Settings</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={3}>
+            <StepIndicator />
+            <StepLabel>Confirm</StepLabel>
+          </Step>
+        </Stepper>
+
+        <div className="flex gap-2 mt-2">
+          <Button
+            size="S"
+            variant="BorderStyle"
+            disabled={activeStep === 0}
+            onClick={() => setActiveStep((s) => Math.max(0, s - 1))}
+          >
+            <i className="ri-arrow-left-s-line" /> Back
+          </Button>
+          <Button
+            size="S"
+            variant="PrimeStyle"
+            disabled={activeStep >= totalSteps}
+            onClick={() => setActiveStep((s) => Math.min(totalSteps, s + 1))}
+          >
+            Next <i className="ri-arrow-right-s-line" />
+          </Button>
+          <Button
+            size="S"
+            variant="PrimeContStyle"
+            onClick={() => setActiveStep(0)}
+          >
+            Reset
+          </Button>
+        </div>
+      </div>
+
+      {/* Sizes */}
+      <div className="flex flex-col gap-6 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Sizes
+        </span>
+
+        {(["S", "M", "L"] as const).map((size) => (
+          <div key={size} className="flex flex-col gap-2">
+            <span
+              className={cn(
+                "text-xs",
+                "text-content-presentation-global-primary"
+              )}
+            >
+              Size: {size}
+            </span>
+            <Stepper activeStep={2} orientation="horizontal" size={size}>
+              <Step index={0}>
+                <StepIndicator />
+                <StepLabel>Step 1</StepLabel>
+              </Step>
+              <StepConnector />
+              <Step index={1}>
+                <StepIndicator />
+                <StepLabel>Step 2</StepLabel>
+              </Step>
+              <StepConnector />
+              <Step index={2}>
+                <StepIndicator />
+                <StepLabel>Step 3</StepLabel>
+              </Step>
+            </Stepper>
+          </div>
+        ))}
+      </div>
+
+      {/* With Descriptions */}
+      <div className="flex flex-col gap-4 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          With Descriptions
+        </span>
+
+        <Stepper activeStep={1} orientation="horizontal" size="L">
+          <Step index={0}>
+            <StepIndicator />
+            <StepLabel>Account</StepLabel>
+            <StepDescription>Create your account</StepDescription>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator />
+            <StepLabel>Profile</StepLabel>
+            <StepDescription>Set up your profile</StepDescription>
+          </Step>
+          <StepConnector />
+          <Step index={2}>
+            <StepIndicator />
+            <StepLabel>Complete</StepLabel>
+            <StepDescription>Review and finish</StepDescription>
+          </Step>
+        </Stepper>
+      </div>
+
+      {/* Error State */}
+      <div className="flex flex-col gap-4 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Error State
+        </span>
+
+        <Stepper activeStep={2} orientation="horizontal" size="M">
+          <Step index={0}>
+            <StepIndicator />
+            <StepLabel>Upload</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator />
+            <StepLabel>Validate</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={2} isError>
+            <StepIndicator />
+            <StepLabel>Process</StepLabel>
+            <StepDescription>Validation failed</StepDescription>
+          </Step>
+          <StepConnector />
+          <Step index={3}>
+            <StepIndicator />
+            <StepLabel>Done</StepLabel>
+          </Step>
+        </Stepper>
+      </div>
+
+      {/* Custom Icons */}
+      <div className="flex flex-col gap-4 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Custom Icons
+        </span>
+
+        <Stepper activeStep={1} orientation="horizontal" size="L">
+          <Step index={0}>
+            <StepIndicator
+              icon={<i className="ri-shopping-cart-line" />}
+              completedIcon={<i className="ri-shopping-cart-fill" />}
+            />
+            <StepLabel>Cart</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={1}>
+            <StepIndicator
+              icon={<i className="ri-map-pin-line" />}
+              completedIcon={<i className="ri-map-pin-fill" />}
+            />
+            <StepLabel>Shipping</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={2}>
+            <StepIndicator
+              icon={<i className="ri-bank-card-line" />}
+              completedIcon={<i className="ri-bank-card-fill" />}
+            />
+            <StepLabel>Payment</StepLabel>
+          </Step>
+          <StepConnector />
+          <Step index={3}>
+            <StepIndicator
+              icon={<i className="ri-check-double-line" />}
+            />
+            <StepLabel>Confirm</StepLabel>
+          </Step>
+        </Stepper>
+      </div>
+
+      {/* Vertical — Interactive */}
+      <div className="flex flex-col gap-4 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Vertical — Interactive (Step {verticalStep + 1} of {verticalTotalSteps})
+        </span>
+
+        <Stepper activeStep={verticalStep} orientation="vertical" size="M">
+          <Step index={0}>
+            <StepIndicator />
+            <div className="flex flex-col gap-1 pb-6">
+              <StepLabel>Create Account</StepLabel>
+              <StepDescription>
+                Sign up with your email address
+              </StepDescription>
+            </div>
+          </Step>
+
+          <Step index={1}>
+            <StepIndicator />
+            <div className="flex flex-col gap-1 pb-6">
+              <StepLabel>Verify Email</StepLabel>
+              <StepDescription>
+                Check your inbox for a verification link
+              </StepDescription>
+            </div>
+          </Step>
+
+          <Step index={2}>
+            <StepIndicator />
+            <div className="flex flex-col gap-1 pb-6">
+              <StepLabel>Complete Profile</StepLabel>
+              <StepDescription>
+                Add your name, photo, and preferences
+              </StepDescription>
+            </div>
+          </Step>
+
+          <Step index={3}>
+            <StepIndicator />
+            <div className="flex flex-col gap-1">
+              <StepLabel>Get Started</StepLabel>
+              <StepDescription>
+                Explore the dashboard and start building
+              </StepDescription>
+            </div>
+          </Step>
+        </Stepper>
+
+        <div className="flex gap-2 mt-2">
+          <Button
+            size="S"
+            variant="BorderStyle"
+            disabled={verticalStep === 0}
+            onClick={() => setVerticalStep((s) => Math.max(0, s - 1))}
+          >
+            <i className="ri-arrow-left-s-line" /> Back
+          </Button>
+          <Button
+            size="S"
+            variant="PrimeStyle"
+            disabled={verticalStep >= verticalTotalSteps}
+            onClick={() =>
+              setVerticalStep((s) => Math.min(verticalTotalSteps, s + 1))
+            }
+          >
+            Next <i className="ri-arrow-right-s-line" />
+          </Button>
+          <Button
+            size="S"
+            variant="PrimeContStyle"
+            onClick={() => setVerticalStep(0)}
+          >
+            Reset
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+}
+```
 
 ### Switch
 
@@ -1664,6 +2503,19 @@ const SortableHeader = ({
 };
 ```
 
+### TableDnDWrapper
+
+- Add: `npx torch-glare add TableDnDWrapper`
+- Import: `import { TableDnDWrapper } from "@/components/TableDnDWrapper";`
+
+### TabSwitch
+
+- Add: `npx torch-glare add TabSwitch`
+- Import: `import { TabSwitch } from "@/components/TabSwitch";`
+- npm dependencies: class-variance-authority
+- Sizes: S, M, L
+- Docs: docs/components/tab-switch.md
+
 ### Textarea
 
 - Add: `npx torch-glare add Textarea`
@@ -1721,6 +2573,7 @@ export default function TextareaExample() {
 - npm dependencies: @editorjs/checklist, @editorjs/code, @editorjs/delimiter, @editorjs/editorjs, @editorjs/embed, @editorjs/header, @editorjs/inline-code, @editorjs/link, @editorjs/list, @editorjs/marker, @editorjs/nested-list, @editorjs/quote, @editorjs/raw, @editorjs/simple-image, @editorjs/table, @editorjs/text-variant-tune, @editorjs/underline, @editorjs/warning, class-variance-authority
 - Variants: PresentationStyle
 - Sizes: S, M, L, XL
+- Docs: docs/components/text-editor.md
 
 Example (apps/app/exmples/TextEditorExample.tsx):
 
@@ -1977,6 +2830,237 @@ export default function TextEditorExample() {
 }
 ```
 
+### Timeline
+
+- Add: `npx torch-glare add Timeline`
+- Import: `import { Timeline } from "@/components/Timeline";`
+- npm dependencies: class-variance-authority
+- Variants: default, active, completed, error, warning
+- Sizes: S, M, L
+- Docs: docs/components/timeline.md
+
+Example (apps/app/exmples/TimelineExample.tsx):
+
+```tsx
+"use client";
+
+import { cn } from "@/utils/cn";
+import { useState } from "react";
+import {
+  Timeline,
+  TimelineItem,
+  TimelineConnector,
+  TimelineIndicator,
+  TimelineSeparator,
+  TimelineContent,
+  TimelineHeading,
+  TimelineDescription,
+} from "@/components/Timeline";
+
+export default function TimelineExample() {
+  const [sizes] = useState<("S" | "M" | "L")[]>(["S", "M", "L"]);
+
+  return (
+    <>
+      <h1
+        className={cn(
+          "text-xl font-bold mb-8",
+          "text-content-presentation-global-primary"
+        )}
+      >
+        Timeline Preview
+      </h1>
+
+      {/* Vertical Timeline — All Variants */}
+      <div className="flex flex-col gap-6 w-full">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Vertical — Status Variants
+        </span>
+        <Timeline orientation="vertical">
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator variant="completed" />
+              <TimelineSeparator active />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Order Placed</TimelineHeading>
+              <TimelineDescription>
+                Your order has been confirmed and is being processed.
+              </TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator variant="completed" />
+              <TimelineSeparator active />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Payment Verified</TimelineHeading>
+              <TimelineDescription>
+                Payment of $129.00 was successfully charged.
+              </TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator variant="active" />
+              <TimelineSeparator />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>In Transit</TimelineHeading>
+              <TimelineDescription>
+                Package is on its way — expected delivery in 2 days.
+              </TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator variant="default" />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Delivered</TimelineHeading>
+              <TimelineDescription>
+                Awaiting delivery to your address.
+              </TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+        </Timeline>
+      </div>
+
+      {/* Indicator Sizes */}
+      <div className="flex flex-col gap-6 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Indicator Sizes
+        </span>
+        <div className="flex gap-8 items-start">
+          {sizes.map((size) => (
+            <div key={size} className="flex flex-col gap-2 items-center">
+              <span
+                className={cn(
+                  "text-xs",
+                  "text-content-presentation-global-primary"
+                )}
+              >
+                {size}
+              </span>
+              <TimelineIndicator variant="active" size={size} />
+              <TimelineIndicator variant="completed" size={size} />
+              <TimelineIndicator variant="error" size={size} />
+              <TimelineIndicator variant="warning" size={size} />
+              <TimelineIndicator variant="default" size={size} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Custom Icons */}
+      <div className="flex flex-col gap-6 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Custom Icons
+        </span>
+        <Timeline orientation="vertical">
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator
+                variant="completed"
+                icon={<i className="ri-git-commit-line" />}
+              />
+              <TimelineSeparator active />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Initial Commit</TimelineHeading>
+              <TimelineDescription>feat: project scaffolding</TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator
+                variant="active"
+                icon={<i className="ri-code-s-slash-line" />}
+              />
+              <TimelineSeparator />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Code Review</TimelineHeading>
+              <TimelineDescription>PR #42 — Add authentication</TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator
+                variant="error"
+                icon={<i className="ri-bug-line" />}
+              />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Build Failed</TimelineHeading>
+              <TimelineDescription>CI pipeline error on main branch</TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+        </Timeline>
+      </div>
+
+      {/* Warning & Error States */}
+      <div className="flex flex-col gap-6 w-full mt-8">
+        <span
+          className={cn("text-sm", "text-content-presentation-global-primary")}
+        >
+          Warning & Error States
+        </span>
+        <Timeline orientation="vertical">
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator variant="completed" />
+              <TimelineSeparator active />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Upload Started</TimelineHeading>
+              <TimelineDescription>File upload initiated</TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator variant="warning" />
+              <TimelineSeparator />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Slow Connection</TimelineHeading>
+              <TimelineDescription>
+                Upload speed reduced due to network conditions.
+              </TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineConnector>
+              <TimelineIndicator variant="error" />
+            </TimelineConnector>
+            <TimelineContent>
+              <TimelineHeading>Upload Failed</TimelineHeading>
+              <TimelineDescription>
+                Connection timed out. Please try again.
+              </TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+        </Timeline>
+      </div>
+    </>
+  );
+}
+```
+
 ### Toast
 
 - Add: `npx torch-glare add Toast`
@@ -1989,7 +3073,7 @@ export default function TextEditorExample() {
 - Add: `npx torch-glare add Toggle`
 - Import: `import { Toggle } from "@/components/Toggle";`
 - npm dependencies: @radix-ui/react-toggle, class-variance-authority
-- Variants: PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle
+- Variants: PrimeStyle, BluSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BluContStyle, RedContStyle
 - Sizes: S, M, L, XL
 - Docs: docs/components/toggle.md
 
@@ -1998,8 +3082,9 @@ export default function TextEditorExample() {
 - Add: `npx torch-glare add ToggleButton`
 - Import: `import { ToggleButton } from "@/components/ToggleButton";`
 - npm dependencies: @radix-ui/react-toggle, class-variance-authority
-- Variants: PrimeStyle, BlueSecStyle, BorderStyle, PrimeContStyle, SystemStyle
+- Variants: PrimeStyle, BluSecStyle, BorderStyle, PrimeContStyle, SystemStyle
 - Sizes: S, M, L, XL
+- Docs: docs/components/toggle-button.md
 
 ### Tooltip
 
@@ -2054,12 +3139,14 @@ export default function TooltipExample() {
 - Import: `import { TreeDropDown } from "@/components/TreeDropDown";`
 - npm dependencies: class-variance-authority
 - Variants: secondary, default
-- Docs: docs/components/tree-dropdown.md
+- Docs: docs/components/tree-drop-down.md
 
-## Hooks (4)
+## Hooks (6)
 
 - useActiveTreeItem — `npx torch-glare hook useActiveTreeItem.ts`
 - useClickOutside — `npx torch-glare hook useClickOutside.ts`
+- useDataViewsState — `npx torch-glare hook useDataViewsState.ts`
+- useIsMobile — `npx torch-glare hook useIsMobile.ts`
 - useResize — `npx torch-glare hook useResize.ts`
 - useTagSelection — `npx torch-glare hook useTagSelection.ts`
 

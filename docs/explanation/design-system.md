@@ -15,7 +15,7 @@ theme uniformly.
 Component styling is defined with [class-variance-authority](https://cva.style) (`cva`). Each
 component exposes a `variant` and/or `size` prop whose allowed values come directly from its
 `cva` definition. For example, `Button` has variants
-`PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle`
+`PrimeStyle, BluSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BluContStyle, RedContStyle`
 and sizes `S, M, L, XL`.
 
 Because variant names are the source of truth, docs and the `llms.*` files generate their

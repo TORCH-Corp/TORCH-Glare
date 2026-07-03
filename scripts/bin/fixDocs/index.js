@@ -112,7 +112,15 @@ function fixComponentDoc(file) {
     const abs = path.join(DOCS, "components", file);
     let md = fs.readFileSync(abs, "utf-8");
     const before = md;
-    const name = resolveComponentName(file) || file.replace(/\.md$/, "");
+    // Fall back to a kebab->PascalCase conversion for docs whose component isn't a flat
+    // registry item (e.g. main's nested DataViews components), so the import identifier is valid.
+    const name =
+        resolveComponentName(file) ||
+        file
+            .replace(/\.md$/, "")
+            .split(/[-_]/)
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join("");
 
     const fm = md.match(/^---\n[\s\S]*?\n---\n/);
     if (fm) md = md.replace(fm[0], fm[0].replace(/^version:.*$/m, `version: ${pkg.version}`));

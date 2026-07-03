@@ -1,13 +1,13 @@
 ---
 title: DropdownMenu
-description: Comprehensive dropdown menu component with rich features including sub-menus, checkboxes, radio groups, and keyboard navigation
+description: Comprehensive dropdown menu component with rich features including sub-menus, checkboxes, radio groups, auto-grouping, and keyboard navigation
 group: Overlays & Dialogs
-keywords: [dropdown-menu, menu, context-menu, radix-ui, submenu, checkbox]
+keywords: [dropdown-menu, menu, radix-ui, submenu, checkbox, radio, auto-group]
 ---
 
 # DropdownMenu
 
-> A feature-rich dropdown menu component with support for nested submenus, checkbox items, radio groups, separators, and keyboard shortcuts. Perfect for application menus, context menus, and complex action lists.
+> A feature-rich dropdown menu component with support for nested submenus, checkbox items, radio groups, auto-grouped boxed sections, and keyboard shortcuts. Perfect for application menus and complex action lists. For right-click menus, see [ContextMenu](./context-menu.md).
 
 ## Installation
 
@@ -115,10 +115,12 @@ function ShortcutMenu() {
 }
 ```
 
-### With Labels and Separators
+### With Labels and Grouping
+
+Labels act as section boundaries. The loose items between labels are automatically wrapped in boxed groups — no separator component needed.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/DropdownMenu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from "@/components/DropdownMenu";
 
 function OrganizedMenu() {
   return (
@@ -131,13 +133,9 @@ function OrganizedMenu() {
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
 
-        <DropdownMenuSeparator />
-
         <DropdownMenuLabel>Settings</DropdownMenuLabel>
         <DropdownMenuItem>Preferences</DropdownMenuItem>
         <DropdownMenuItem>Keyboard Shortcuts</DropdownMenuItem>
-
-        <DropdownMenuSeparator />
 
         <DropdownMenuItem variant="Negative">Logout</DropdownMenuItem>
       </DropdownMenuContent>
@@ -148,8 +146,10 @@ function OrganizedMenu() {
 
 ### With Checkboxes
 
+Checkbox and radio items keep the menu **open** when toggled (the built-in `onSelect` calls `preventDefault`), so users can change several options without the menu closing each time.
+
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuSeparator } from "@/components/DropdownMenu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from "@/components/DropdownMenu";
 import { useState } from 'react'
 
 function CheckboxMenu() {
@@ -267,45 +267,49 @@ function DisabledMenu() {
 }
 ```
 
-### SystemStyle Variant
+### Right-click Menu
+
+For a true right-click (context) menu, use the dedicated [ContextMenu](./context-menu.md) component instead of DropdownMenu — it opens at the pointer on right-click / long-press.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from "@/components/ContextMenu";
 
-function SystemMenu() {
+function Example() {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button>System</button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent variant="SystemStyle">
-        <DropdownMenuItem variant="SystemStyle">Settings</DropdownMenuItem>
-        <DropdownMenuItem variant="SystemStyle">About</DropdownMenuItem>
-        <DropdownMenuItem variant="SystemStyle">Help</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <ContextMenu>
+      <ContextMenuTrigger className="rounded-md border border-dashed p-8">
+        Right-click here
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>View</ContextMenuItem>
+        <ContextMenuItem>Edit</ContextMenuItem>
+        <ContextMenuItem variant="Negative">Delete</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   )
 }
 ```
 
-### Context Menu Pattern
+### Long Menu (max height + scroll)
+
+Tall menus scroll instead of overflowing off-screen. The surface caps at `maxHeight` (default `320`px) and never exceeds the space available after collision handling. Pass `maxHeight` to change the cap.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/DropdownMenu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from "@/components/DropdownMenu";
+import { Button } from "@/components/Button";
 
-function ContextMenu({ x, y }: { x: number; y: number }) {
+function LongMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div onContextMenu={(e) => e.preventDefault()}>
-          Right-click me
-        </div>
+        <Button variant="BorderStyle">Jump to section</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>View</DropdownMenuItem>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Properties</DropdownMenuItem>
+      {/* Cap the surface at 240px — the rest scrolls. */}
+      <DropdownMenuContent align="start" maxHeight={240}>
+        <DropdownMenuLabel>Sections</DropdownMenuLabel>
+        {Array.from({ length: 20 }, (_, i) => (
+          <DropdownMenuItem key={i}>Section {i + 1}</DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -333,18 +337,22 @@ function ContextMenu({ x, y }: { x: number; y: number }) {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'SystemStyle' \| 'PresentationStyle'` | `'PresentationStyle'` | Visual style variant |
+| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style variant |
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant |
 | `className` | `string` | - | Additional CSS classes |
 | `sideOffset` | `number` | `4` | Distance from trigger |
-| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment |
+| `collisionPadding` | `number` | `8` | Gap kept from viewport edges when flipping/shifting |
+| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Alignment (inherited from Radix) |
+| `maxHeight` | `number` | `320` | Max height (px) of the surface before it scrolls. Capped at `min(maxHeight, available-height)` so the menu never overflows off-screen |
+| `autoGroup` | `boolean` | `true` | Auto-wrap loose items in boxed groups |
 
 ### DropdownMenuItem
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'Default' \| 'Warning' \| 'Negative' \| 'SystemStyle'` | `'Default'` | Item style variant |
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Item style variant |
 | `size` | `'S' \| 'M'` | `'M'` | Item size |
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
 | `disabled` | `boolean` | `false` | Disabled state |
 | `active` | `boolean` | `false` | Active state |
 | `onSelect` | `(event) => void` | - | Select handler |
@@ -355,7 +363,8 @@ function ContextMenu({ x, y }: { x: number; y: number }) {
 |------|------|---------|-------------|
 | `checked` | `boolean \| 'indeterminate'` | `false` | Checked state |
 | `onCheckedChange` | `(checked: boolean) => void` | - | Change handler |
-| `variant` | `'Default' \| 'Warning' \| 'Negative' \| 'SystemStyle'` | `'Default'` | Style variant |
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
+| `size` | `'S' \| 'M'` | `'M'` | Item size |
 
 ### DropdownMenuRadioGroup
 
@@ -369,18 +378,38 @@ function ContextMenu({ x, y }: { x: number; y: number }) {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | Required | Radio option value |
-| `variant` | `'Default' \| 'Warning' \| 'Negative' \| 'SystemStyle'` | `'Default'` | Style variant |
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
+| `size` | `'S' \| 'M'` | `'M'` | Item size |
+
+### DropdownMenuSubTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'Default' \| 'info' \| 'Negative'` | `'Default'` | Style variant |
+| `size` | `'S' \| 'M'` | `'M'` | Item size |
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
+| `className` | `string` | - | Additional CSS classes |
+
+### DropdownMenuSubContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style variant |
+| `autoGroup` | `boolean` | `true` | Auto-wrap loose items in boxed groups |
+| `className` | `string` | - | Additional CSS classes |
 
 ### DropdownMenuLabel
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `inset` | `boolean` | `false` | Add left padding to align with items that have icons |
 | `className` | `string` | - | Additional CSS classes |
 
-### DropdownMenuSeparator
+### DropdownMenuGroup
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `variant` | `'Boxed' \| 'Plain'` | `'Boxed'` | Boxed renders a bordered container; Plain is semantic-only |
 | `className` | `string` | - | Additional CSS classes |
 
 ### DropdownMenuShortcut
@@ -409,19 +438,23 @@ export const DropdownMenu: React.FC<DropdownMenuProps>
 
 // Content
 interface DropdownMenuContentProps {
-  variant?: 'SystemStyle' | 'PresentationStyle'
+  variant?: 'PresentationStyle'
   theme?: 'dark' | 'light' | 'default'
   className?: string
   sideOffset?: number
+  collisionPadding?: number
   align?: 'start' | 'center' | 'end'
+  maxHeight?: number         // default 320 — surface scrolls past this
+  autoGroup?: boolean
 }
 
 export const DropdownMenuContent: React.ForwardRefExoticComponent<DropdownMenuContentProps>
 
 // Item
 interface DropdownMenuItemProps {
-  variant?: 'Default' | 'Warning' | 'Negative' | 'SystemStyle'
+  variant?: 'Default' | 'info' | 'Negative'
   size?: 'S' | 'M'
+  inset?: boolean
   disabled?: boolean
   active?: boolean
   onSelect?: (event: Event) => void
@@ -433,7 +466,8 @@ export const DropdownMenuItem: React.ForwardRefExoticComponent<DropdownMenuItemP
 interface DropdownMenuCheckboxItemProps {
   checked?: boolean | 'indeterminate'
   onCheckedChange?: (checked: boolean) => void
-  variant?: 'Default' | 'Warning' | 'Negative' | 'SystemStyle'
+  variant?: 'Default' | 'info' | 'Negative'
+  size?: 'S' | 'M'
 }
 
 export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<DropdownMenuCheckboxItemProps>
@@ -441,7 +475,9 @@ export const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<DropdownM
 // RadioItem
 interface DropdownMenuRadioItemProps {
   value: string
-  variant?: 'Default' | 'Warning' | 'Negative' | 'SystemStyle'
+  variant?: 'Default' | 'info' | 'Negative'
+  size?: 'S' | 'M'
+  onSelect?: (event: Event) => void
 }
 
 export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<DropdownMenuRadioItemProps>
@@ -588,7 +624,7 @@ describe('DropdownMenu', () => {
 | Bundle size (minified) | ~8kb |
 | Bundle size (gzipped) | ~3kb |
 | Dependencies | @radix-ui/react-dropdown-menu (~15kb) |
-| Max height | 200px (scrollable) |
+| Max height | Radix available height (scrollable) |
 | Tree-shakeable | ✅ |
 
 ## Best Practices

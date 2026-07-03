@@ -80,25 +80,25 @@ export function Toolbar() {
         <i className="ri-save-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="BlueSecStyle">
+      <ActionButton size="S" variant="BluSecStyle">
         <i className="ri-file-copy-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="BlueSecStyle">
+      <ActionButton size="S" variant="BluSecStyle">
         <i className="ri-scissors-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="BlueSecStyle">
+      <ActionButton size="S" variant="BluSecStyle">
         <i className="ri-clipboard-line"></i>
       </ActionButton>
 
       <div className="w-px h-6 bg-border-system-global-primary mx-1" />
 
-      <ActionButton size="S" variant="BlueSecStyle">
+      <ActionButton size="S" variant="BluSecStyle">
         <i className="ri-arrow-go-back-line"></i>
       </ActionButton>
 
-      <ActionButton size="S" variant="BlueSecStyle">
+      <ActionButton size="S" variant="BluSecStyle">
         <i className="ri-arrow-go-forward-line"></i>
       </ActionButton>
     </div>
@@ -118,7 +118,7 @@ export function TableRowActions({ row }) {
     <td className="flex items-center gap-1 justify-end">
       <ActionButton
         size="XS"
-        variant="BlueSecStyle"
+        variant="BluSecStyle"
         onClick={() => setIsEditing(true)}
         aria-label="Edit row"
       >
@@ -127,7 +127,7 @@ export function TableRowActions({ row }) {
 
       <ActionButton
         size="XS"
-        variant="BlueSecStyle"
+        variant="BluSecStyle"
         onClick={() => handleDuplicate(row.id)}
         aria-label="Duplicate row"
       >
@@ -164,7 +164,7 @@ export function CardWithActions() {
         <div className="flex items-center gap-1">
           <ActionButton
             size="S"
-            variant={isFavorite ? "YelSecStyle" : "BlueSecStyle"}
+            variant={isFavorite ? "YelSecStyle" : "BluSecStyle"}
             onClick={() => setIsFavorite(!isFavorite)}
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           >
@@ -173,7 +173,7 @@ export function CardWithActions() {
 
           <ActionButton
             size="S"
-            variant="BlueSecStyle"
+            variant="BluSecStyle"
             onClick={() => setIsExpanded(!isExpanded)}
             aria-label={isExpanded ? "Collapse" : "Expand"}
           >
@@ -182,7 +182,7 @@ export function CardWithActions() {
 
           <ActionButton
             size="S"
-            variant="BlueSecStyle"
+            variant="BluSecStyle"
             aria-label="More options"
           >
             <i className="ri-more-2-fill"></i>
@@ -262,7 +262,7 @@ export function ActionButtonGroup() {
     <div className="inline-flex items-center border border-border-system-global-primary rounded-lg overflow-hidden">
       <ActionButton
         size="S"
-        variant={activeView === 'list' ? "PrimeStyle" : "BlueSecStyle"}
+        variant={activeView === 'list' ? "PrimeStyle" : "BluSecStyle"}
         onClick={() => setActiveView('list')}
         className="rounded-none border-0"
         aria-label="List view"
@@ -272,7 +272,7 @@ export function ActionButtonGroup() {
 
       <ActionButton
         size="S"
-        variant={activeView === 'grid' ? "PrimeStyle" : "BlueSecStyle"}
+        variant={activeView === 'grid' ? "PrimeStyle" : "BluSecStyle"}
         onClick={() => setActiveView('grid')}
         className="rounded-none border-0 border-l border-border-system-global-primary"
         aria-label="Grid view"
@@ -282,7 +282,7 @@ export function ActionButtonGroup() {
 
       <ActionButton
         size="S"
-        variant={activeView === 'kanban' ? "PrimeStyle" : "BlueSecStyle"}
+        variant={activeView === 'kanban' ? "PrimeStyle" : "BluSecStyle"}
         onClick={() => setActiveView('kanban')}
         className="rounded-none border-0 border-l border-border-system-global-primary"
         aria-label="Kanban view"
@@ -305,25 +305,25 @@ export function ActionButtonsWithTooltips() {
   return (
     <div className="flex items-center gap-2">
       <Tooltip content="Bold (Ctrl+B)">
-        <ActionButton size="S" variant="BlueSecStyle">
+        <ActionButton size="S" variant="BluSecStyle">
           <i className="ri-bold"></i>
         </ActionButton>
       </Tooltip>
 
       <Tooltip content="Italic (Ctrl+I)">
-        <ActionButton size="S" variant="BlueSecStyle">
+        <ActionButton size="S" variant="BluSecStyle">
           <i className="ri-italic"></i>
         </ActionButton>
       </Tooltip>
 
       <Tooltip content="Underline (Ctrl+U)">
-        <ActionButton size="S" variant="BlueSecStyle">
+        <ActionButton size="S" variant="BluSecStyle">
           <i className="ri-underline"></i>
         </ActionButton>
       </Tooltip>
 
       <Tooltip content="Strikethrough">
-        <ActionButton size="S" variant="BlueSecStyle">
+        <ActionButton size="S" variant="BluSecStyle">
           <i className="ri-strikethrough"></i>
         </ActionButton>
       </Tooltip>
@@ -368,7 +368,7 @@ Inherits all variants from the Button component:
 - `SecStyle` - Secondary action style
 - `DangerStyle` - Destructive actions
 - `YelSecStyle` - Yellow secondary style
-- `BlueSecStyle` - Blue secondary style
+- `BluSecStyle` - Blue secondary style
 - `RedSecStyle` - Red secondary style
 - `BorderStyle` - Border-only style
 - `NoBorderNoFillStyle` - Minimal style
@@ -420,7 +420,7 @@ type ButtonVariant =
   | 'SecStyle'
   | 'DangerStyle'
   | 'YelSecStyle'
-  | 'BlueSecStyle'
+  | 'BluSecStyle'
   | 'RedSecStyle'
   | 'BorderStyle'
   | 'NoBorderNoFillStyle'
@@ -443,7 +443,7 @@ function IconButtonBar({ onAction }) {
         <ActionButton
           key={item.action}
           size="S"
-          variant="BlueSecStyle"
+          variant="BluSecStyle"
           onClick={() => onAction(item.action)}
         >
           <i className={item.icon}></i>

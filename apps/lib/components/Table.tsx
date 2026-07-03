@@ -119,7 +119,7 @@ const TableHead = React.forwardRef<
     <th
       ref={headRef}
       className={cn(
-        "relative py-[2px] px-[2px] border-b-[2px]  border-border-presentation-table-header",
+        "relative py-[6px] px-[4px] border-b-[2px]  border-border-presentation-table-header",
       )}
     >
       <div
@@ -357,7 +357,7 @@ const tableHeadVariants = cva(
     "text-start",
     "bg-transparent",
     "hover:bg-background-presentation-action-hover",
-    "hover:text-content-presentation-action-hover",
+    "hover:text-content-presentation-global-hover",
     "transition-[background-color,color]",
     "duration-200",
     "rounded-[3px]",

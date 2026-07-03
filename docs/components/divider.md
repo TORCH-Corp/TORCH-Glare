@@ -288,7 +288,7 @@ export function FormWithDividers() {
       <Divider />
 
       <div className="flex justify-end gap-3">
-        <Button variant="BlueSecStyle">Cancel</Button>
+        <Button variant="BluSecStyle">Cancel</Button>
         <Button variant="PrimeStyle">Save Changes</Button>
       </div>
     </form>
@@ -323,11 +323,11 @@ export function DividerWithText() {
 
       {/* Social login */}
       <div className="space-y-2">
-        <Button className="w-full" variant="BlueSecStyle">
+        <Button className="w-full" variant="BluSecStyle">
           <i className="ri-google-fill mr-2"></i>
           Continue with Google
         </Button>
-        <Button className="w-full" variant="BlueSecStyle">
+        <Button className="w-full" variant="BluSecStyle">
           <i className="ri-github-fill mr-2"></i>
           Continue with GitHub
         </Button>

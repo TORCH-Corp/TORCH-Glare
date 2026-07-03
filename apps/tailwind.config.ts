@@ -29,8 +29,8 @@ export default {
     require('glare-typography'),
     require('glare-torch-mode'),
     function ({ addVariant }: any) {
-      addVariant("rtl", '&[dir="rtl"]');
-      addVariant("ltr", '&[dir="ltr"]');
+      addVariant("rtl", ['&[dir="rtl"]', '[dir="rtl"] &']);
+      addVariant("ltr", ['&[dir="ltr"]', '[dir="ltr"] &']);
     },
 
   ]

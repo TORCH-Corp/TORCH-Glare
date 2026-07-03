@@ -145,7 +145,7 @@ const ExpandableImage = ({
                   fill="#F9F9F9"
                 />
               </svg>
-              <p className="text-content-presentation-action-hover typography-labels-small-regular max-w-[50px] break-words m-0">
+              <p className="text-content-presentation-global-primary-inverse typography-labels-small-regular max-w-[50px] break-words m-0">
                 {expandLabel}
               </p>
             </button>

@@ -1,5 +1,5 @@
 {
-  "version": "1.2.8",
+  "version": "2.4.0",
   "generatedBy": "scripts/bin/generateRegistry",
   "items": [
     {
@@ -167,6 +167,19 @@
       ]
     },
     {
+      "name": "ContextMenu",
+      "type": "components",
+      "path": "components/ContextMenu.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-context-menu",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
       "name": "CountBadge",
       "type": "components",
       "path": "components/CountBadge.tsx",
@@ -234,6 +247,7 @@
       "type": "components",
       "path": "components/Drawer.tsx",
       "npmDependencies": [
+        "class-variance-authority",
         "vaul"
       ],
       "registryDependencies": [
@@ -249,6 +263,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
+        "components/DropdownMenu",
         "utils/cn",
         "utils/types"
       ]
@@ -276,6 +291,30 @@
       ],
       "registryDependencies": [
         "components/Label",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "FormStepper",
+      "type": "components",
+      "path": "components/FormStepper.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "HeaderBar",
+      "type": "components",
+      "path": "components/HeaderBar.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
         "utils/cn",
         "utils/types"
       ]
@@ -486,12 +525,81 @@
       ]
     },
     {
+      "name": "SearchableSelect",
+      "type": "components",
+      "path": "components/SearchableSelect.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "components/DropdownMenu",
+        "components/Input",
+        "components/Popover",
+        "hooks/useClickOutside",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "SearchableTable",
+      "type": "components",
+      "path": "components/SearchableTable.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Button",
+        "components/Dialog",
+        "components/Input",
+        "components/Table",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "SearchableTree",
+      "type": "components",
+      "path": "components/SearchableTree.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Button",
+        "components/Input",
+        "components/Popover",
+        "hooks/useClickOutside",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "SearchableTreeDialog",
+      "type": "components",
+      "path": "components/SearchableTreeDialog.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Button",
+        "components/Dialog",
+        "components/Input",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
       "name": "SearchField",
       "type": "components",
       "path": "components/SearchField.tsx",
       "npmDependencies": [],
       "registryDependencies": [
         "components/InputField"
+      ]
+    },
+    {
+      "name": "SectionBlock",
+      "type": "components",
+      "path": "components/SectionBlock.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
       ]
     },
     {
@@ -557,6 +665,18 @@
       ]
     },
     {
+      "name": "Stepper",
+      "type": "components",
+      "path": "components/Stepper.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
       "name": "Switch",
       "type": "components",
       "path": "components/Switch.tsx",
@@ -591,6 +711,25 @@
         "components/Checkbox",
         "hooks/useResize",
         "utils/cn"
+      ]
+    },
+    {
+      "name": "TableDnDWrapper",
+      "type": "components",
+      "path": "components/TableDnDWrapper.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "TabSwitch",
+      "type": "components",
+      "path": "components/TabSwitch.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
       ]
     },
     {
@@ -632,8 +771,21 @@
       ],
       "registryDependencies": [
         "components/ChartBlockTool",
+        "components/TableDnDWrapper",
         "utils/cn",
         "utils/markdownParser",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "type": "components",
+      "path": "components/Timeline.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
         "utils/types"
       ]
     },
@@ -721,6 +873,20 @@
       "registryDependencies": []
     },
     {
+      "name": "useDataViewsState",
+      "type": "hooks",
+      "path": "hooks/useDataViewsState.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "useIsMobile",
+      "type": "hooks",
+      "path": "hooks/useIsMobile.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
       "name": "useResize",
       "type": "hooks",
       "path": "hooks/useResize.ts",
@@ -747,6 +913,17 @@
       "registryDependencies": [
         "components/CountBadge",
         "components/Tooltip",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
+      "name": "DataViewCard",
+      "type": "layouts",
+      "path": "layouts/DataViewCard.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Card",
         "utils/cn",
         "utils/types"
       ]

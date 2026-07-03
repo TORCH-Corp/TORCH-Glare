@@ -1,7 +1,7 @@
 {
   "library": {
     "name": "torch-glare",
-    "version": "1.2.8",
+    "version": "2.4.0",
     "description": "A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.",
     "license": "MIT",
     "homepage": "https://glare.torchcorp.com",
@@ -26,14 +26,14 @@
     }
   },
   "statistics": {
-    "totalComponents": 56,
-    "totalHooks": 4,
+    "totalComponents": 68,
+    "totalHooks": 6,
     "totalProviders": 1,
     "totalUtils": 5,
-    "totalLayouts": 3,
-    "documentedComponents": 51,
-    "docCoverage": 91.1,
-    "exampleCoverage": 33.9
+    "totalLayouts": 4,
+    "documentedComponents": 64,
+    "docCoverage": 94.1,
+    "exampleCoverage": 35.3
   },
   "components": [
     {
@@ -121,21 +121,6 @@
         "utils/cn",
         "utils/types"
       ],
-      "variants": [
-        "highlight",
-        "green",
-        "greenLight",
-        "cocktailGreen",
-        "yellow",
-        "redOrange",
-        "redLight",
-        "rose",
-        "purple",
-        "bluePurple",
-        "blue",
-        "navy",
-        "gray"
-      ],
       "sizes": [
         "XS",
         "S",
@@ -162,6 +147,13 @@
         "utils/cn",
         "utils/types"
       ],
+      "variants": [
+        "PresentationStyle"
+      ],
+      "sizes": [
+        "S",
+        "M"
+      ],
       "doc": "docs/components/badge-field.md",
       "example": "apps/app/exmples/BadgeFieldExample.tsx"
     },
@@ -187,7 +179,7 @@
         "M",
         "L"
       ],
-      "doc": null,
+      "doc": "docs/components/breadcrumb.md",
       "example": null
     },
     {
@@ -205,13 +197,18 @@
       ],
       "variants": [
         "PrimeStyle",
-        "BlueSecStyle",
+        "BluSecStyle",
         "YelSecStyle",
         "RedSecStyle",
         "BorderStyle",
         "PrimeContStyle",
-        "BlueContStyle",
-        "RedContStyle"
+        "BluContStyle",
+        "RedContStyle",
+        "PrimeColStyle",
+        "BluColStyle",
+        "RedColStyle",
+        "GreenColStyle",
+        "YelColStyle"
       ],
       "sizes": [
         "S",
@@ -247,7 +244,7 @@
         "L",
         "XL"
       ],
-      "doc": null,
+      "doc": "docs/components/button-group.md",
       "example": null
     },
     {
@@ -309,6 +306,31 @@
         "M"
       ],
       "doc": "docs/components/checkbox.md",
+      "example": null
+    },
+    {
+      "name": "ContextMenu",
+      "add": "npx torch-glare add ContextMenu",
+      "import": "import { ContextMenu } from \"@/components/ContextMenu\";",
+      "path": "components/ContextMenu.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-context-menu",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ],
+      "variants": [
+        "Default",
+        "info",
+        "Negative"
+      ],
+      "sizes": [
+        "S",
+        "M"
+      ],
+      "doc": "docs/components/context-menu.md",
       "example": null
     },
     {
@@ -398,6 +420,7 @@
       "import": "import { Drawer } from \"@/components/Drawer\";",
       "path": "components/Drawer.tsx",
       "npmDependencies": [
+        "class-variance-authority",
         "vaul"
       ],
       "registryDependencies": [
@@ -416,14 +439,14 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
+        "components/DropdownMenu",
         "utils/cn",
         "utils/types"
       ],
       "variants": [
         "Default",
-        "Warning",
-        "Negative",
-        "SystemStyle"
+        "info",
+        "Negative"
       ],
       "sizes": [
         "S",
@@ -464,6 +487,41 @@
       ],
       "doc": "docs/components/form.md",
       "example": "apps/app/exmples/FormExample.tsx"
+    },
+    {
+      "name": "FormStepper",
+      "add": "npx torch-glare add FormStepper",
+      "import": "import { FormStepper } from \"@/components/FormStepper\";",
+      "path": "components/FormStepper.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ],
+      "doc": "docs/components/form-stepper.md",
+      "example": "apps/app/exmples/FormStepperExample.tsx"
+    },
+    {
+      "name": "HeaderBar",
+      "add": "npx torch-glare add HeaderBar",
+      "import": "import { HeaderBar } from \"@/components/HeaderBar\";",
+      "path": "components/HeaderBar.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ],
+      "variants": [
+        "new",
+        "edit",
+        "detail"
+      ],
+      "doc": "docs/components/header-bar.md",
+      "example": "apps/app/exmples/HeaderBarExample.tsx"
     },
     {
       "name": "ImageAttachment",
@@ -577,7 +635,7 @@
         "utils/cn",
         "utils/types"
       ],
-      "doc": "docs/components/labeled-checkbox.md",
+      "doc": "docs/components/labeled-check-box.md",
       "example": null
     },
     {
@@ -752,6 +810,80 @@
       "example": null
     },
     {
+      "name": "SearchableSelect",
+      "add": "npx torch-glare add SearchableSelect",
+      "import": "import { SearchableSelect } from \"@/components/SearchableSelect\";",
+      "path": "components/SearchableSelect.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "components/Button",
+        "components/DropdownMenu",
+        "components/Input",
+        "components/Popover",
+        "hooks/useClickOutside",
+        "utils/cn",
+        "utils/types"
+      ],
+      "variants": [
+        "PresentationStyle",
+        "SystemStyle"
+      ],
+      "doc": "docs/components/searchable-select.md",
+      "example": null
+    },
+    {
+      "name": "SearchableTable",
+      "add": "npx torch-glare add SearchableTable",
+      "import": "import { SearchableTable } from \"@/components/SearchableTable\";",
+      "path": "components/SearchableTable.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Button",
+        "components/Dialog",
+        "components/Input",
+        "components/Table",
+        "utils/cn",
+        "utils/types"
+      ],
+      "doc": "docs/components/searchable-table.md",
+      "example": null
+    },
+    {
+      "name": "SearchableTree",
+      "add": "npx torch-glare add SearchableTree",
+      "import": "import { SearchableTree } from \"@/components/SearchableTree\";",
+      "path": "components/SearchableTree.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Button",
+        "components/Input",
+        "components/Popover",
+        "hooks/useClickOutside",
+        "utils/cn",
+        "utils/types"
+      ],
+      "doc": null,
+      "example": null
+    },
+    {
+      "name": "SearchableTreeDialog",
+      "add": "npx torch-glare add SearchableTreeDialog",
+      "import": "import { SearchableTreeDialog } from \"@/components/SearchableTreeDialog\";",
+      "path": "components/SearchableTreeDialog.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "components/Button",
+        "components/Dialog",
+        "components/Input",
+        "utils/cn",
+        "utils/types"
+      ],
+      "doc": null,
+      "example": null
+    },
+    {
       "name": "SearchField",
       "add": "npx torch-glare add SearchField",
       "import": "import { SearchField } from \"@/components/SearchField\";",
@@ -762,6 +894,20 @@
       ],
       "doc": "docs/components/search-field.md",
       "example": null
+    },
+    {
+      "name": "SectionBlock",
+      "add": "npx torch-glare add SectionBlock",
+      "import": "import { SectionBlock } from \"@/components/SectionBlock\";",
+      "path": "components/SectionBlock.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn"
+      ],
+      "doc": "docs/components/section-block.md",
+      "example": "apps/app/exmples/SectionBlockExample.tsx"
     },
     {
       "name": "Select",
@@ -861,6 +1007,26 @@
       "example": null
     },
     {
+      "name": "Stepper",
+      "add": "npx torch-glare add Stepper",
+      "import": "import { Stepper } from \"@/components/Stepper\";",
+      "path": "components/Stepper.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "doc": "docs/components/stepper.md",
+      "example": "apps/app/exmples/StepperExample.tsx"
+    },
+    {
       "name": "Switch",
       "add": "npx torch-glare add Switch",
       "import": "import { Switch } from \"@/components/Switch\";",
@@ -911,6 +1077,36 @@
       "example": "apps/app/exmples/TableExample.tsx"
     },
     {
+      "name": "TableDnDWrapper",
+      "add": "npx torch-glare add TableDnDWrapper",
+      "import": "import { TableDnDWrapper } from \"@/components/TableDnDWrapper\";",
+      "path": "components/TableDnDWrapper.ts",
+      "npmDependencies": [],
+      "registryDependencies": [],
+      "doc": null,
+      "example": null
+    },
+    {
+      "name": "TabSwitch",
+      "add": "npx torch-glare add TabSwitch",
+      "import": "import { TabSwitch } from \"@/components/TabSwitch\";",
+      "path": "components/TabSwitch.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "doc": "docs/components/tab-switch.md",
+      "example": null
+    },
+    {
       "name": "Textarea",
       "add": "npx torch-glare add Textarea",
       "import": "import { Textarea } from \"@/components/Textarea\";",
@@ -953,6 +1149,7 @@
       ],
       "registryDependencies": [
         "components/ChartBlockTool",
+        "components/TableDnDWrapper",
         "utils/cn",
         "utils/markdownParser",
         "utils/types"
@@ -966,8 +1163,35 @@
         "L",
         "XL"
       ],
-      "doc": null,
+      "doc": "docs/components/text-editor.md",
       "example": "apps/app/exmples/TextEditorExample.tsx"
+    },
+    {
+      "name": "Timeline",
+      "add": "npx torch-glare add Timeline",
+      "import": "import { Timeline } from \"@/components/Timeline\";",
+      "path": "components/Timeline.tsx",
+      "npmDependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ],
+      "variants": [
+        "default",
+        "active",
+        "completed",
+        "error",
+        "warning"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "doc": "docs/components/timeline.md",
+      "example": "apps/app/exmples/TimelineExample.tsx"
     },
     {
       "name": "Toast",
@@ -1038,7 +1262,7 @@
         "L",
         "XL"
       ],
-      "doc": null,
+      "doc": "docs/components/toggle-button.md",
       "example": null
     },
     {
@@ -1140,7 +1364,7 @@
         "secondary",
         "default"
       ],
-      "doc": "docs/components/tree-dropdown.md",
+      "doc": "docs/components/tree-drop-down.md",
       "example": null
     }
   ],
@@ -1152,6 +1376,14 @@
     {
       "name": "useClickOutside",
       "path": "hooks/useClickOutside.ts"
+    },
+    {
+      "name": "useDataViewsState",
+      "path": "hooks/useDataViewsState.ts"
+    },
+    {
+      "name": "useIsMobile",
+      "path": "hooks/useIsMobile.ts"
     },
     {
       "name": "useResize",
@@ -1194,6 +1426,10 @@
     {
       "name": "CNLayout",
       "path": "layouts/CNLayout.tsx"
+    },
+    {
+      "name": "DataViewCard",
+      "path": "layouts/DataViewCard.tsx"
     },
     {
       "name": "FieldSection",

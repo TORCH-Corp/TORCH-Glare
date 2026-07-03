@@ -17,10 +17,10 @@ TORCH Glare is a copy-in library: the CLI copies this component's source into yo
 
 ```bash
 npx torch-glare@latest init
-npx torch-glare@latest add field-section
+npx torch-glare@latest add FieldSection
 ```
 
-`add` also copies any components, hooks, and utilities that `field-section` depends on.
+`add` also copies any components, hooks, and utilities that `FieldSection` depends on.
 
 ## Imports
 
@@ -352,7 +352,7 @@ export function ProfileSettingsForm() {
       >
         <div className="w-full flex items-center gap-4">
           <Avatar size="L" src="/default-avatar.jpg" />
-          <Button variant="BlueSecStyle" size="M">
+          <Button variant="BluSecStyle" size="M">
             Upload New Photo
           </Button>
         </div>

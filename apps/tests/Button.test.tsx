@@ -16,7 +16,7 @@ describe("Button", () => {
     // default size "M"
     expect(btn.className).toContain("h-[28px]");
     // default variant "PrimeStyle"
-    expect(btn.className).toContain("bg-background-presentation-action-secondary");
+    expect(btn.className).toContain("bg-background-presentation-button-secondary");
   });
 
   it("applies the requested variant and size", () => {
@@ -27,7 +27,7 @@ describe("Button", () => {
     );
     const btn = screen.getByRole("button");
     expect(btn.className).toContain("h-[40px]");
-    expect(btn.className).toContain("hover:text-content-presentation-action-negative-hover");
+    expect(btn.className).toContain("hover:text-content-presentation-global-negative-hover");
   });
 
   it("merges a custom className last", () => {
@@ -71,7 +71,7 @@ describe("Button", () => {
     const link = screen.getByRole("link", { name: "Home" });
     expect(link).toHaveAttribute("href", "/home");
     // The button styling is applied to the child element.
-    expect(link.className).toContain("bg-background-presentation-action-secondary");
+    expect(link.className).toContain("bg-background-presentation-button-secondary");
   });
 
   it("forwards its ref to the underlying button element", () => {

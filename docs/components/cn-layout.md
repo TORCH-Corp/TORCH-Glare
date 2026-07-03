@@ -17,10 +17,10 @@ TORCH Glare is a copy-in library: the CLI copies this component's source into yo
 
 ```bash
 npx torch-glare@latest init
-npx torch-glare@latest add cn-layout
+npx torch-glare@latest add CnLayout
 ```
 
-`add` also copies any components, hooks, and utilities that `cn-layout` depends on.
+`add` also copies any components, hooks, and utilities that `CnLayout` depends on.
 
 ## Imports
 

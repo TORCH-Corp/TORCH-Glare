@@ -210,7 +210,7 @@ function AdminProfileMenu({ user }: { user: User }) {
       label={
         <div className="flex flex-col items-start">
           <span>{user.name}</span>
-          <Badge variant="purple" size="XS" label={user.role} />
+          <Badge color="purple" size="XS" label={user.role} />
         </div>
       }
       icon={user.avatar}

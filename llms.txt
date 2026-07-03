@@ -2,7 +2,7 @@
 
 > A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.
 
-**Version:** 1.2.8 | **License:** MIT | **Components:** 56 | **Distribution:** copy-in via CLI (you own the source)
+**Version:** 2.4.0 | **License:** MIT | **Components:** 68 | **Distribution:** copy-in via CLI (you own the source)
 
 ## Installation
 
@@ -46,37 +46,40 @@ Run any command without an argument to pick from an interactive list.
 
 Every component accepts a `theme` prop, applied as `data-theme`: `"light" | "dark" | "default"`. Wrap your app in `ThemeProvider` for global theming.
 
-## Components (56)
+## Components (68)
 
 - **ActionButton** — `npx torch-glare add ActionButton` · deps: class-variance-authority · sizes: XS, S, M · [docs](docs/components/action-button.md)
 - **ActionsGroup** — `npx torch-glare add ActionsGroup` · [docs](docs/components/actions-group.md)
 - **AlertDialog** — `npx torch-glare add AlertDialog` · deps: @radix-ui/react-alert-dialog, class-variance-authority · variants: default, info, success, warning, error · [docs](docs/components/alert-dialog.md)
 - **Avatar** — `npx torch-glare add Avatar` · deps: @radix-ui/react-avatar · [docs](docs/components/avatar.md)
-- **Badge** — `npx torch-glare add Badge` · deps: class-variance-authority · variants: highlight, green, greenLight, cocktailGreen, yellow, redOrange, redLight, rose, purple, bluePurple, blue, navy, gray · sizes: XS, S, M · [docs](docs/components/badge.md)
-- **BadgeField** — `npx torch-glare add BadgeField` · deps: class-variance-authority · [docs](docs/components/badge-field.md)
-- **Breadcrumb** — `npx torch-glare add Breadcrumb` · deps: @radix-ui/react-slot, class-variance-authority · variants: PresentationStyle, SystemStyle · sizes: S, M, L
-- **Button** — `npx torch-glare add Button` · deps: @radix-ui/react-slot, class-variance-authority · variants: PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle · sizes: S, M, L, XL · [docs](docs/components/button.md)
-- **ButtonGroup** — `npx torch-glare add ButtonGroup` · deps: @radix-ui/react-toggle-group, class-variance-authority · variants: PrimeStyle, BorderStyle, SystemStyle · sizes: S, M, L, XL
+- **Badge** — `npx torch-glare add Badge` · deps: class-variance-authority · sizes: XS, S, M · [docs](docs/components/badge.md)
+- **BadgeField** — `npx torch-glare add BadgeField` · deps: class-variance-authority · variants: PresentationStyle · sizes: S, M · [docs](docs/components/badge-field.md)
+- **Breadcrumb** — `npx torch-glare add Breadcrumb` · deps: @radix-ui/react-slot, class-variance-authority · variants: PresentationStyle, SystemStyle · sizes: S, M, L · [docs](docs/components/breadcrumb.md)
+- **Button** — `npx torch-glare add Button` · deps: @radix-ui/react-slot, class-variance-authority · variants: PrimeStyle, BluSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BluContStyle, RedContStyle, PrimeColStyle, BluColStyle, RedColStyle, GreenColStyle, YelColStyle · sizes: S, M, L, XL · [docs](docs/components/button.md)
+- **ButtonGroup** — `npx torch-glare add ButtonGroup` · deps: @radix-ui/react-toggle-group, class-variance-authority · variants: PrimeStyle, BorderStyle, SystemStyle · sizes: S, M, L, XL · [docs](docs/components/button-group.md)
 - **Calendar** — `npx torch-glare add Calendar` · deps: react-day-picker · [docs](docs/components/calendar.md)
 - **Card** — `npx torch-glare add Card` · deps: @radix-ui/react-slot · [docs](docs/components/card.md)
 - **ChartBlockTool** — `npx torch-glare add ChartBlockTool` · deps: chart.js
 - **Checkbox** — `npx torch-glare add Checkbox` · deps: @radix-ui/react-checkbox, class-variance-authority · sizes: S, M · [docs](docs/components/checkbox.md)
+- **ContextMenu** — `npx torch-glare add ContextMenu` · deps: @radix-ui/react-context-menu, class-variance-authority · variants: Default, info, Negative · sizes: S, M · [docs](docs/components/context-menu.md)
 - **CountBadge** — `npx torch-glare add CountBadge` · deps: class-variance-authority · variants: default · [docs](docs/components/count-badge.md)
 - **DataTable** — `npx torch-glare add DataTable` · deps: @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table · [docs](docs/components/data-table.md)
 - **DatePicker** — `npx torch-glare add DatePicker` · deps: react-day-picker, torch-react-mobile-picker · [docs](docs/components/date-picker.md)
 - **Dialog** — `npx torch-glare add Dialog` · deps: @radix-ui/react-dialog · [docs](docs/components/dialog.md)
 - **Divider** — `npx torch-glare add Divider` · [docs](docs/components/divider.md)
-- **Drawer** — `npx torch-glare add Drawer` · deps: vaul · [docs](docs/components/drawer.md)
-- **DropdownMenu** — `npx torch-glare add DropdownMenu` · deps: @radix-ui/react-dropdown-menu, class-variance-authority · variants: Default, Warning, Negative, SystemStyle · sizes: S, M · [docs](docs/components/dropdown-menu.md)
+- **Drawer** — `npx torch-glare add Drawer` · deps: class-variance-authority, vaul · [docs](docs/components/drawer.md)
+- **DropdownMenu** — `npx torch-glare add DropdownMenu` · deps: @radix-ui/react-dropdown-menu, class-variance-authority · variants: Default, info, Negative · sizes: S, M · [docs](docs/components/dropdown-menu.md)
 - **FieldHint** — `npx torch-glare add FieldHint` · deps: class-variance-authority · [docs](docs/components/field-hint.md)
 - **Form** — `npx torch-glare add Form` · deps: @radix-ui/react-label, @radix-ui/react-slot, react-hook-form · [docs](docs/components/form.md)
+- **FormStepper** — `npx torch-glare add FormStepper` · deps: class-variance-authority · [docs](docs/components/form-stepper.md)
+- **HeaderBar** — `npx torch-glare add HeaderBar` · deps: class-variance-authority · variants: new, edit, detail · [docs](docs/components/header-bar.md)
 - **ImageAttachment** — `npx torch-glare add ImageAttachment` · deps: class-variance-authority · [docs](docs/components/image-attachment.md)
 - **InnerLabelField** — `npx torch-glare add InnerLabelField` · [docs](docs/components/inner-label-field.md)
 - **Input** — `npx torch-glare add Input` · deps: class-variance-authority · variants: PresentationStyle, SystemStyle · sizes: S, M · [docs](docs/components/input.md)
 - **InputField** — `npx torch-glare add InputField` · [docs](docs/components/input-field.md)
 - **InputOTP** — `npx torch-glare add InputOTP` · deps: input-otp · [docs](docs/components/input-otp.md)
 - **Label** — `npx torch-glare add Label` · deps: class-variance-authority · [docs](docs/components/label.md)
-- **LabeledCheckBox** — `npx torch-glare add LabeledCheckBox` · [docs](docs/components/labeled-checkbox.md)
+- **LabeledCheckBox** — `npx torch-glare add LabeledCheckBox` · [docs](docs/components/labeled-check-box.md)
 - **LabeledRadio** — `npx torch-glare add LabeledRadio` · [docs](docs/components/labeled-radio.md)
 - **LabelField** — `npx torch-glare add LabelField` · [docs](docs/components/label-field.md)
 - **LinkButton** — `npx torch-glare add LinkButton` · deps: @radix-ui/react-slot, class-variance-authority · sizes: S, M · [docs](docs/components/link-button.md)
@@ -87,28 +90,39 @@ Every component accepts a `theme` prop, applied as `data-theme`: `"light" | "dar
 - **Radio** — `npx torch-glare add Radio` · deps: @radix-ui/react-radio-group, class-variance-authority · sizes: S, M · [docs](docs/components/radio.md)
 - **RadioCard** — `npx torch-glare add RadioCard` · [docs](docs/components/radio-card.md)
 - **ScrollArea** — `npx torch-glare add ScrollArea` · deps: @radix-ui/react-scroll-area · [docs](docs/components/scroll-area.md)
+- **SearchableSelect** — `npx torch-glare add SearchableSelect` · deps: class-variance-authority · variants: PresentationStyle, SystemStyle · [docs](docs/components/searchable-select.md)
+- **SearchableTable** — `npx torch-glare add SearchableTable` · [docs](docs/components/searchable-table.md)
+- **SearchableTree** — `npx torch-glare add SearchableTree`
+- **SearchableTreeDialog** — `npx torch-glare add SearchableTreeDialog`
 - **SearchField** — `npx torch-glare add SearchField` · [docs](docs/components/search-field.md)
+- **SectionBlock** — `npx torch-glare add SectionBlock` · deps: class-variance-authority · [docs](docs/components/section-block.md)
 - **Select** — `npx torch-glare add Select` · deps: @radix-ui/react-select, class-variance-authority · variants: SystemStyle, PresentationStyle · sizes: S, M · [docs](docs/components/select.md)
 - **SimpleSelect** — `npx torch-glare add SimpleSelect` · deps: class-variance-authority · variants: SystemStyle · sizes: S, M · [docs](docs/components/simple-select.md)
 - **Skeleton** — `npx torch-glare add Skeleton` · [docs](docs/components/skeleton.md)
 - **SlideDatePicker** — `npx torch-glare add SlideDatePicker` · deps: date-fns, torch-react-mobile-picker · [docs](docs/components/slide-date-picker.md)
 - **SpinLoading** — `npx torch-glare add SpinLoading` · deps: class-variance-authority · sizes: S, M, L · [docs](docs/components/spin-loading.md)
+- **Stepper** — `npx torch-glare add Stepper` · deps: class-variance-authority · sizes: S, M, L · [docs](docs/components/stepper.md)
 - **Switch** — `npx torch-glare add Switch` · deps: @radix-ui/react-switch · [docs](docs/components/switch.md)
 - **TabFormItem** — `npx torch-glare add TabFormItem` · deps: @radix-ui/react-slot, class-variance-authority · [docs](docs/components/tab-form-item.md)
 - **Table** — `npx torch-glare add Table` · deps: class-variance-authority · sizes: S, M · [docs](docs/components/table.md)
+- **TableDnDWrapper** — `npx torch-glare add TableDnDWrapper`
+- **TabSwitch** — `npx torch-glare add TabSwitch` · deps: class-variance-authority · sizes: S, M, L · [docs](docs/components/tab-switch.md)
 - **Textarea** — `npx torch-glare add Textarea` · deps: class-variance-authority · [docs](docs/components/textarea.md)
-- **TextEditor** — `npx torch-glare add TextEditor` · deps: @editorjs/checklist, @editorjs/code, @editorjs/delimiter, @editorjs/editorjs, @editorjs/embed, @editorjs/header, @editorjs/inline-code, @editorjs/link, @editorjs/list, @editorjs/marker, @editorjs/nested-list, @editorjs/quote, @editorjs/raw, @editorjs/simple-image, @editorjs/table, @editorjs/text-variant-tune, @editorjs/underline, @editorjs/warning, class-variance-authority · variants: PresentationStyle · sizes: S, M, L, XL
+- **TextEditor** — `npx torch-glare add TextEditor` · deps: @editorjs/checklist, @editorjs/code, @editorjs/delimiter, @editorjs/editorjs, @editorjs/embed, @editorjs/header, @editorjs/inline-code, @editorjs/link, @editorjs/list, @editorjs/marker, @editorjs/nested-list, @editorjs/quote, @editorjs/raw, @editorjs/simple-image, @editorjs/table, @editorjs/text-variant-tune, @editorjs/underline, @editorjs/warning, class-variance-authority · variants: PresentationStyle · sizes: S, M, L, XL · [docs](docs/components/text-editor.md)
+- **Timeline** — `npx torch-glare add Timeline` · deps: class-variance-authority · variants: default, active, completed, error, warning · sizes: S, M, L · [docs](docs/components/timeline.md)
 - **Toast** — `npx torch-glare add Toast` · deps: react-hot-toast · [docs](docs/components/toast.md)
-- **Toggle** — `npx torch-glare add Toggle` · deps: @radix-ui/react-toggle, class-variance-authority · variants: PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle · sizes: S, M, L, XL · [docs](docs/components/toggle.md)
-- **ToggleButton** — `npx torch-glare add ToggleButton` · deps: @radix-ui/react-toggle, class-variance-authority · variants: PrimeStyle, BlueSecStyle, BorderStyle, PrimeContStyle, SystemStyle · sizes: S, M, L, XL
+- **Toggle** — `npx torch-glare add Toggle` · deps: @radix-ui/react-toggle, class-variance-authority · variants: PrimeStyle, BluSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BluContStyle, RedContStyle · sizes: S, M, L, XL · [docs](docs/components/toggle.md)
+- **ToggleButton** — `npx torch-glare add ToggleButton` · deps: @radix-ui/react-toggle, class-variance-authority · variants: PrimeStyle, BluSecStyle, BorderStyle, PrimeContStyle, SystemStyle · sizes: S, M, L, XL · [docs](docs/components/toggle-button.md)
 - **Tooltip** — `npx torch-glare add Tooltip` · deps: @radix-ui/react-tooltip, class-variance-authority · variants: primary, highlight · [docs](docs/components/tooltip.md)
 - **TransparentLabel** — `npx torch-glare add TransparentLabel` · deps: class-variance-authority · sizes: display-large-bold, display-large-semibold, display-large-medium, display-large-regular, display-medium-bold, display-medium-semibold, display-medium-medium, display-medium-regular, display-small-bold, display-small-semibold, display-small-medium, display-small-regular, headers-large-bold, headers-large-semibold, headers-large-medium, headers-large-regular, headers-medium-bold, headers-medium-semibold, headers-medium-medium, headers-medium-regular, headers-small-bold, headers-small-semibold, headers-small-medium, headers-small-regular, body-large-bold, body-large-semibold, body-large-medium, body-large-regular, body-medium-bold, body-medium-semibold, body-medium-medium, body-medium-regular, body-small-bold, body-small-semibold, body-small-medium, body-small-regular, labels-large-bold, labels-large-semibold, labels-large-medium, labels-large-regular, labels-medium-bold, labels-medium-semibold, labels-medium-medium, labels-medium-regular, labels-small-bold, labels-small-semibold, labels-small-medium, labels-small-regular · [docs](docs/components/transparent-label.md)
-- **TreeDropDown** — `npx torch-glare add TreeDropDown` · deps: class-variance-authority · variants: secondary, default · [docs](docs/components/tree-dropdown.md)
+- **TreeDropDown** — `npx torch-glare add TreeDropDown` · deps: class-variance-authority · variants: secondary, default · [docs](docs/components/tree-drop-down.md)
 
-## Hooks (4)
+## Hooks (6)
 
 - **useActiveTreeItem** — `npx torch-glare hook useActiveTreeItem.ts`
 - **useClickOutside** — `npx torch-glare hook useClickOutside.ts`
+- **useDataViewsState** — `npx torch-glare hook useDataViewsState.ts`
+- **useIsMobile** — `npx torch-glare hook useIsMobile.ts`
 - **useResize** — `npx torch-glare hook useResize.ts`
 - **useTagSelection** — `npx torch-glare hook useTagSelection.ts`
 

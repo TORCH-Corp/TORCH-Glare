@@ -1,6 +1,6 @@
 ---
 name: SearchField
-version: 1.2.8
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, search, input, field, system-style, glassmorphism]
