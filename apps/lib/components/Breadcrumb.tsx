@@ -255,7 +255,7 @@ const breadcrumbEllipsisStyles = cva(
         PresentationStyle: [
           "text-content-presentation-global-secondary",
           "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-action-hover",
+          "hover:text-content-presentation-global-primary-inverse",
         ],
         SystemStyle: [
           "text-content-system-global-secondary",

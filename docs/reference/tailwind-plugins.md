@@ -221,8 +221,28 @@ export default {
 
 ### Import CSS Variables
 
+`tailwindVars.css` ships the `@theme` block that registers every `--color-*`
+token (badge, action, state, etc.) as a Tailwind utility. Without it, classes
+like `bg-background-presentation-badge-gray-solid` resolve to nothing and
+components render with no background.
+
+**Ordering is critical.** CSS requires all `@import` statements to come before
+any other at-rule. Place this `@import` **above** every `@plugin` and `@source`
+rule — directly under `@import "tailwindcss"`. If it sits after them, the
+bundler (Vite/Lightning CSS, PostCSS) treats it as a misplaced `@import` and
+**silently drops it**, removing the entire color registration. The tell-tale
+build warning is `@import must precede all other statements`.
+
 ```css
-/* app.css or globals.css */
+/* app.css or globals.css — Tailwind v4 */
+@import "tailwindcss";
+@import "mapping-color-system-v4/tailwindVars.css"; /* MUST be before @plugin/@source */
+@plugin "glare-torch-mode";
+@plugin "mapping-color-system-v4";
+```
+
+```css
+/* Tailwind v3 */
 @import 'mapping-color-system-v4/tailwindVars.css';
 
 @tailwind base;

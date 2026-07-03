@@ -2,11 +2,15 @@ export type Themes = "dark" | "light" | "default";
 
 export type ButtonVariant =
     | "PrimeStyle"
-    | "BlueSecStyle"
+    | "BluSecStyle"
     | "YelSecStyle"
     | "RedSecStyle"
     | "BorderStyle"
     | "PrimeContStyle"
-    | "BlueContStyle"
-    | "RedContStyle";
-
+    | "BluContStyle"
+    | "RedContStyle"
+    | "PrimeColStyle"
+    | "BluColStyle"
+    | "RedColStyle"
+    | "GreenColStyle"
+    | "YelColStyle";

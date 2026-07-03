@@ -535,6 +535,30 @@ test('Select meets WCAG standards', async () => {
 })
 ```
 
+## Known Limitations & Frontend Patterns
+
+### `Select` does not stretch to fill its container by default
+
+The shipped `SelectTrigger` base styles do not include `w-full`, so when placed inside a CSS grid or flex column the trigger collapses to the width of its placeholder/selected text. This breaks row alignment in forms whenever `Select` is mixed with `InputField` or other full-width controls.
+
+**Always pass `className="w-full h-10"` on form-context `Select` usages**:
+
+```tsx
+<Select
+  className="w-full h-10"
+  value={type}
+  onValueChange={setType}
+  options={typeOptions}
+  placeholder="Select type"
+/>
+```
+
+For inline / compact / table-cell usages where you genuinely want the trigger to be content-sized, omit `w-full` (or pass `w-auto`).
+
+### Numeric/financial selects
+
+When `Select` is the source of a number (account code, fiscal period), keep the displayed `label` formatted (e.g. `"JV-001 — Journal Voucher"`) but the `value` as the raw key (`"JV"`). Do **not** put numeric formatting in the `value` itself.
+
 ## Accessibility
 
 ### Keyboard Support

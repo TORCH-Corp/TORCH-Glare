@@ -547,6 +547,40 @@ test('SimpleSelect meets WCAG standards', async () => {
 })
 ```
 
+## Known Limitations & Frontend Patterns
+
+### Empty-string option values crash at runtime
+
+`SimpleSelect` is built on Radix UI's `Select` primitive, which **forbids `<Select.Item value="" />`**. Radix reserves the empty string for "clear selection / show placeholder" semantics. Passing an option with `value: ""` throws:
+
+```
+A <Select.Item /> must have a value prop that is not an empty string.
+```
+
+This is a common footgun for filter bars where the natural "All / Any / None" option looks like `{ value: "", label: "All Statuses" }`.
+
+**Workaround — use a sentinel value and translate in both directions:**
+
+```tsx
+<SimpleSelect
+  value={statusFilter || "ALL"}
+  onValueChange={(val) => setStatusFilter(val === "ALL" ? "" : val)}
+  options={[
+    { value: "ALL", label: "All Statuses" },
+    { value: "DRAFT", label: "Draft" },
+    { value: "POSTED", label: "Posted" },
+  ]}
+  className="w-48 h-10"
+  placeholder="All Statuses"
+/>
+```
+
+Pick a sentinel that won't collide with real values (`"ALL"`, `"__NONE__"`, etc.). Map back to the empty string (or `null`/`undefined`, depending on your state shape) inside `onValueChange` so consumers downstream still see the cleared state.
+
+### Width / height — same as `Select`
+
+`SimpleSelect`'s trigger does not include `w-full` by default. For form rows and filter bars, always pass `className="w-full h-10"` (or `className="w-48 h-10"` for narrower filter selects).
+
 ## Accessibility
 
 ### Keyboard Support

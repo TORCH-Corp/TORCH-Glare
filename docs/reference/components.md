@@ -257,17 +257,18 @@ Grouped action buttons.
 Small status or label indicator.
 
 - **File**: [badge.md](../components/badge.md)
-- **Props**: `variant`, `size`, `theme`
-- **Variants**: 12 color variants (green, blue, red, purple, etc.)
-- **Use Cases**: Status indicators, labels, tags
+- **Props**: `badgeStyle`, `color`, `size`, `label`, `badgeIcon`, `showIcon`, `isClosable`, `onClose`, `theme`
+- **Styles**: `subtle` (default), `solid`
+- **Colors**: 10 — `gray`, `slate`, `red`, `orange`, `yellow`, `green`, `ocean`, `blue`, `purple`, `rose`
+- **Use Cases**: Status indicators, labels, removable tags/chips
 
 ### BadgeField
-Badge with label field.
+Tag input that renders selected items as Badges.
 
 - **File**: [badge-field.md](../components/badge-field.md)
-- **Props**: `label`, `value`, `variant`
-- **Features**: Label + badge combination
-- **Use Cases**: Status fields, labeled indicators
+- **Props**: `tags`, `size`, `variant`, `label`, `onChange`
+- **Features**: Multi-select with search, keyboard navigation, removable chips
+- **Use Cases**: Tag pickers, multi-select fields
 
 ### CountBadge
 Badge displaying a count.

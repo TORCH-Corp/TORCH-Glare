@@ -373,6 +373,65 @@ interface CustomToggleProps extends ToggleProps, VariantProps<typeof toggleVaria
 export const Toggle: React.ForwardRefExoticComponent<CustomToggleProps>
 ```
 
+## Known Limitations & Frontend Patterns
+
+> ⚠️ **`Toggle` is icon-only.** Its dimensions are hardcoded squares — `S=22×22`, `M=28×28`, `L=34×34`, `XL=40×40` — so any text label wider than ~3 characters will visually clip. The "Filter Options", "Theme Switcher with text", and similar text-label examples below are misleading: they only render correctly in environments that override the dimensions.
+
+### Use `Button` with variant swap for selectable text chips
+
+For format selectors (DOCX, MD, RTF), tag pickers, filter pills, or any case where the chip carries text wider than ~3 characters, **do not use `Toggle`**. Use `Button` with a `variant` swap to express the selected state:
+
+```tsx
+const FORMATS = ["DOCX", "MD", "RTF", "ODT", "EPUB", "TXT"];
+
+export function FormatPicker({ selected, onSelect }: Props) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {FORMATS.map((format) => {
+        const isSelected = selected === format;
+        return (
+          <Button
+            key={format}
+            type="button"
+            variant={isSelected ? "PrimeStyle" : "BorderStyle"}
+            size="S"
+            onClick={() => onSelect(format)}
+            className="uppercase"
+          >
+            {format}
+          </Button>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+This gives you:
+
+- Auto-sizing horizontal padding via the button's `px-*` defaults
+- Theme-correct surface and text tokens (button variants are pre-themed)
+- Clear pressed/unpressed visual via `PrimeStyle` (filled) vs `BorderStyle` (outlined)
+- All the focus/disabled/loading states from `Button` for free
+
+### When `Toggle` IS the right component
+
+Reserve `Toggle` for its actual designed use case — **icon-only toolbar actions** with a binary on/off state:
+
+- Bold / Italic / Underline in a rich-text toolbar
+- Play / Pause
+- Grid / List view
+- Mute / Unmute
+- Eye / Eye-slash (show/hide password)
+
+```tsx
+<Toggle pressed={isBold} onPressedChange={setBold} aria-label="Bold">
+  <i className="ri-bold" />
+</Toggle>
+```
+
+The icon must fit within the square dimension — `[&_i]:text-[14px]` for size M, etc.
+
 ## Common Patterns
 
 ### Toolbar Group

@@ -425,6 +425,46 @@ test('Textarea meets WCAG standards', async () => {
 })
 ```
 
+## Known Limitations & Frontend Patterns
+
+### `Textarea` auto-sizes to its own content and cannot be made full-width via `className`
+
+The shipped component has these hardcoded base classes:
+
+```
+field-sizing-content w-full min-w-[100px] max-w-[100%]
+```
+
+Two consequences:
+
+1. **`field-sizing-content`** sizes the textarea to its content. An empty textarea collapses to ~100 × 36 px regardless of explicit `width`/`min-height` until the user types enough to expand it.
+2. **`className` is forwarded to the wrapping `Label`**, not the inner `<textarea>` element — so passing `className="w-full min-h-24"` does not override the inner sizing.
+
+Real-world impact: a description textarea inside a full-width card renders as a tiny ~100 × 40 px box even with `className="w-full min-h-24"`.
+
+**Workaround used in production — drop the wrapper and use a plain `<textarea>` with TORCH design tokens:**
+
+```tsx
+<textarea
+  {...register("notes")}
+  placeholder="Optional notes..."
+  rows={4}
+  className={[
+    "w-full min-h-24 px-3 py-2 rounded-lg",
+    "border border-border-presentation-global-primary",
+    "bg-background-presentation-form-field-primary",
+    "text-content-presentation-action-light-primary",
+    "typography-body-medium-regular",
+    "outline-none resize-y",
+    "hover:border-border-presentation-action-hover",
+    "focus:border-border-presentation-state-focus",
+    "transition-colors",
+  ].join(" ")}
+/>
+```
+
+This gives you the TORCH look-and-feel without `field-sizing-content`. Switch back to the wrapped `Textarea` once the underlying component drops the auto-sizing default and forwards `className` correctly.
+
 ## Accessibility
 
 ### Keyboard Support

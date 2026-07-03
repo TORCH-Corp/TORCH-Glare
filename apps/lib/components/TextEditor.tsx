@@ -26,6 +26,7 @@ import CodeTool from "@editorjs/code";
 import Delimiter from "@editorjs/delimiter";
 import Embed from "@editorjs/embed";
 import Table from "@editorjs/table";
+import createTableDnDClass from "./TableDnDWrapper";
 import LinkTool from "@editorjs/link";
 import SimpleImage from "@editorjs/simple-image";
 import RawTool from "@editorjs/raw";
@@ -160,7 +161,7 @@ const getDefaultTools = (): Record<string, any> => ({
     },
   },
   table: {
-    class: Table,
+    class: createTableDnDClass(Table),
     inlineToolbar: true,
     config: { rows: 2, cols: 3 },
     shortcut: "CMD+ALT+T",
@@ -297,6 +298,57 @@ const AUTO_DIR_STYLES = `
   [data-theme="dark"] .tc-add-row svg,
   .torch-text-editor[data-theme="dark"] .tc-add-row svg {
     fill: #999;
+  }
+
+  /* ── Table DnD: toggler-based drag-and-drop ── */
+  .torch-text-editor .tc-dnd-wrap {
+    position: relative;
+  }
+  .torch-text-editor .tc-dnd-wrap .tc-toolbox__toggler {
+    cursor: grab;
+  }
+  /* Hide both toolboxes by default — show only near the relevant edge */
+  .torch-text-editor .tc-dnd-wrap .tc-toolbox--row {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 120ms ease;
+  }
+  .torch-text-editor .tc-dnd-wrap .tc-toolbox--column {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 120ms ease;
+  }
+  .torch-text-editor .tc-dnd-wrap.tc-dnd--show-row .tc-toolbox--row {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  .torch-text-editor .tc-dnd-wrap.tc-dnd--show-col .tc-toolbox--column {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  /* Dragging: purple highlight on row */
+  .torch-text-editor .tc-dnd__row--dragging {
+    outline: 2px solid #8b5cf6 !important;
+    outline-offset: -1px;
+    background: rgba(139, 92, 246, 0.06) !important;
+    position: relative;
+    z-index: 2;
+  }
+  /* Dragging: purple highlight on column cells */
+  .torch-text-editor .tc-dnd__cell--dragging {
+    outline: 2px solid #8b5cf6 !important;
+    outline-offset: -1px;
+    background: rgba(139, 92, 246, 0.06) !important;
+  }
+  /* Drop indicator line */
+  .torch-text-editor .tc-dnd__indicator {
+    position: absolute;
+    background: #8b5cf6;
+    border-radius: 2px;
+    display: none;
+    pointer-events: none;
+    z-index: 10;
+    transition: top 60ms ease-out, left 60ms ease-out;
   }
 
   /* ── Editor.js core popover: dark mode variable overrides ── */

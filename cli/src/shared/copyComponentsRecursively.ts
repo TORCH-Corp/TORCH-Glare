@@ -9,7 +9,15 @@ import path from "path";
  */
 export function copyComponentsRecursively(source: string, target: string): void {
     if (fs.lstatSync(source).isDirectory()) {
-        copyDirectorySync(source, target);
+        // If target already exists as a directory, nest the source folder
+        // inside it (so `add DataViews` ends up at ./components/DataViews/,
+        // not flattened into ./components/). Otherwise the target IS the
+        // destination directory (legacy behavior).
+        const finalTarget =
+            fs.existsSync(target) && fs.lstatSync(target).isDirectory()
+                ? path.join(target, path.basename(source))
+                : target;
+        copyDirectorySync(source, finalTarget);
     } else {
         let finalTarget = target;
 
@@ -41,9 +49,18 @@ export function copyDirectorySync(
 
         if (item.isDirectory()) {
             copyDirectorySync(sourcePath, targetPath);
-        } else {
+        } else if (isCopyableFile(item.name)) {
             fs.copyFileSync(sourcePath, targetPath);
             installDependencies(sourcePath);
         }
     }
+}
+
+/**
+ * Decide whether a file should be copied into the user's project. Skips
+ * documentation/meta files that live alongside source for maintainers but add
+ * noise to a consumer's drop-in (e.g. ARCHITECTURE.md inside a component folder).
+ */
+function isCopyableFile(fileName: string): boolean {
+    return !/\.(md|mdx)$/i.test(fileName);
 } 
