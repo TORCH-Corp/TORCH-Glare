@@ -151,7 +151,7 @@ export function TableView({
               </TableHeader>
               <TableBody>
                 {filteredAndSortedData.map((item, idx) => (
-                  <TableRow key={item.id ?? idx}>
+                  <TableRow key={(item.id ?? idx) as string | number}>
                     <TableCell isDummy className="w-12">
                       <TableCheckbox id={`row-${item.id ?? idx}`} />
                     </TableCell>
@@ -176,7 +176,7 @@ export function TableView({
           <div className="flex-1 overflow-auto">
             <div className="grid gap-3">
               {filteredAndSortedData.map((item, idx) => (
-                <Card key={item.id ?? idx} className="overflow-hidden">
+                <Card key={(item.id ?? idx) as string | number} className="overflow-hidden">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3 flex-1">

@@ -231,7 +231,7 @@ export function KanbanView({
 
     return (
       <DataViewCard
-        key={itemId}
+        key={itemId as string | number}
         draggable={!isMobile}
         onDragStart={
           !isMobile

@@ -281,7 +281,8 @@ export function renderDetailView(
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {visibleColumns.slice(2).map((col) => {
             const value = selectedItem[col.id];
-            if (value == null && value !== 0 && value !== false) return null;
+            // Skip empty cells (null/undefined); 0 and false are rendered.
+            if (value === null || value === undefined) return null;
             return (
               <div key={col.id} className="space-y-1">
                 <dt className="text-xs font-medium text-content-presentation-global-tertiary uppercase tracking-wide">

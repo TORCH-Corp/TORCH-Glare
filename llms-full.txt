@@ -3073,7 +3073,7 @@ export default function TimelineExample() {
 - Add: `npx torch-glare add Toggle`
 - Import: `import { Toggle } from "@/components/Toggle";`
 - npm dependencies: @radix-ui/react-toggle, class-variance-authority
-- Variants: PrimeStyle, BluSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BluContStyle, RedContStyle
+- Variants: PrimeStyle, BlueSecStyle, YelSecStyle, RedSecStyle, BorderStyle, PrimeContStyle, BlueContStyle, RedContStyle
 - Sizes: S, M, L, XL
 - Docs: docs/components/toggle.md
 
@@ -3082,7 +3082,7 @@ export default function TimelineExample() {
 - Add: `npx torch-glare add ToggleButton`
 - Import: `import { ToggleButton } from "@/components/ToggleButton";`
 - npm dependencies: @radix-ui/react-toggle, class-variance-authority
-- Variants: PrimeStyle, BluSecStyle, BorderStyle, PrimeContStyle, SystemStyle
+- Variants: PrimeStyle, BlueSecStyle, BorderStyle, PrimeContStyle, SystemStyle
 - Sizes: S, M, L, XL
 - Docs: docs/components/toggle-button.md
 

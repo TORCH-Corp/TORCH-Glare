@@ -330,7 +330,7 @@ function CardGrid({
         {records.map((record, idx) => {
           const labelValue = getByPath(record, labelField.path);
           return (
-            <Card key={record.id ?? idx} className="overflow-hidden">
+            <Card key={(record.id ?? idx) as string | number} className="overflow-hidden">
               <CardHeader className="pb-2">
                 <div className="text-xs uppercase tracking-wide text-content-presentation-global-tertiary">
                   {labelField.label ?? labelField.path}

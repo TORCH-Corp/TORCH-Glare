@@ -323,7 +323,7 @@ export function InboxView({
 
             return (
               <InboxViewCard
-                key={itemId}
+                key={itemId as string | number}
                 item={item}
                 rowFields={displayFields}
                 selected={selected}
