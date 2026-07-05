@@ -68,6 +68,40 @@ test("registry items (hooks/utils/layouts/providers) are discoverable", async ()
   assert.equal(registry.getCategories().includes("navigation"), true);
 });
 
+test("search is guarded, synonym-aware, and merges layouts", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+  const rl = new RegistryLoader();
+  await rl.load();
+  const registry = new ComponentRegistry();
+  registry.buildFromDocs(loader.getAllComponents());
+  registry.addRegistryItems(rl.getAllItems(), loader.getRegistryItemDescriptions());
+
+  // Empty query must not match everything.
+  assert.equal(registry.search("").length, 0);
+  assert.equal(registry.search("   ").length, 0);
+
+  // Synonym: "modal" -> Dialog family (no literal "modal" in names).
+  assert.ok(registry.search("modal").some((e) => e.name === "Dialog"));
+
+  // layout/layouts merged into one canonical bucket.
+  const layout = registry.listByCategory("layout").map((e) => e.name);
+  assert.ok(layout.includes("DataViewCard"), "registry layout folded into 'layout'");
+  assert.equal(registry.listByCategory("layouts").length, registry.listByCategory("layout").length);
+
+  // Richer description parsed from reference docs (not the generic placeholder).
+  const hook = registry.search("useClickOutside").find((e) => e.name === "useClickOutside");
+  assert.ok(hook && hook.description !== "TORCH Glare React hook", "hook got a real description");
+});
+
+test("getDependents returns reverse composition (Button used by AlertDialog)", async () => {
+  const rl = new RegistryLoader();
+  await rl.load();
+  const button = rl.getItemByName("Button")!;
+  const dependents = rl.getDependents(button).map((i) => i.name);
+  assert.ok(dependents.includes("AlertDialog"), "AlertDialog composes Button");
+});
+
 test("resolveInstallPlan returns transitive deps for AlertDialog", async () => {
   const rl = new RegistryLoader();
   await rl.load();
@@ -84,12 +118,19 @@ test("resolveInstallPlan returns transitive deps for AlertDialog", async () => {
   assert.ok(plan!.npmDependencies.includes("class-variance-authority"));
 });
 
-test("addCommand and importStatement are shaped correctly", async () => {
+test("addCommand + importPath + real exports are correct", async () => {
   const rl = new RegistryLoader();
   await rl.load();
   const button = rl.getItemByName("Button")!;
   assert.equal(rl.addCommand(button), "npx torch-glare add Button");
-  assert.equal(rl.importStatement(button), 'import { Button } from "@/components/Button";');
+  assert.equal(rl.importPath(button), "@/components/Button");
+  assert.ok((await rl.getExports(button)).values.includes("Button"));
+
+  // Regression: the registry name is the FILE name, not always an export.
+  const mdp = rl.getItemByName("markdownParser")!;
+  const { values } = await rl.getExports(mdp);
+  assert.ok(values.includes("isMarkdown"), "should list real exports");
+  assert.ok(!values.includes("markdownParser"), "file name is not an export");
 });
 
 test("getSource returns the real component file", async () => {

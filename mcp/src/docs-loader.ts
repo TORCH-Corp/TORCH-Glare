@@ -52,6 +52,7 @@ const CATEGORY_ALIASES: Record<string, string> = {
   advanced: "advanced",
   "advanced components": "advanced",
   layout: "layout",
+  layouts: "layout",
   "layout & containers": "layout",
   navigation: "navigation",
   "date & time": "dateTime",
@@ -114,6 +115,7 @@ export class DocsLoader {
   private componentDocs: Map<string, ComponentDoc> = new Map();
   private referenceDocs: Map<string, string> = new Map();
   private tutorialDocs: Map<string, string> = new Map();
+  private howToDocs: Map<string, string> = new Map();
   private docsDir = "";
 
   async loadAll(): Promise<void> {
@@ -121,6 +123,7 @@ export class DocsLoader {
     await this.loadComponentDocs();
     await this.loadReferenceDocs();
     await this.loadTutorialDocs();
+    await this.loadHowToDocs();
   }
 
   private async loadComponentDocs(): Promise<void> {
@@ -184,15 +187,24 @@ export class DocsLoader {
   }
 
   private async loadTutorialDocs(): Promise<void> {
-    const tutorialsDir = path.resolve(this.docsDir, "tutorials");
+    await this.loadFlatDocs("tutorials", this.tutorialDocs);
+  }
+
+  private async loadHowToDocs(): Promise<void> {
+    await this.loadFlatDocs("how-to", this.howToDocs);
+  }
+
+  /** Load every `*.md` in a docs subdir into a name→content map. */
+  private async loadFlatDocs(dir: string, into: Map<string, string>): Promise<void> {
+    const abs = path.resolve(this.docsDir, dir);
     try {
-      const files = await fs.readdir(tutorialsDir);
+      const files = await fs.readdir(abs);
       for (const file of files.filter((f) => f.endsWith(".md"))) {
-        const content = await fs.readFile(path.resolve(tutorialsDir, file), "utf-8");
-        this.tutorialDocs.set(file.replace(".md", ""), content);
+        const content = await fs.readFile(path.resolve(abs, file), "utf-8");
+        into.set(file.replace(".md", ""), content);
       }
     } catch {
-      // tutorials dir not found
+      // dir not found
     }
   }
 
@@ -234,5 +246,32 @@ export class DocsLoader {
 
   getAllTutorialNames(): string[] {
     return Array.from(this.tutorialDocs.keys());
+  }
+
+  /**
+   * One-line descriptions for hooks/utils/providers, parsed from the
+   * "## Available …" bullet lists in the reference docs (e.g. hooks.md:
+   * `- **useClickOutside** - Detect clicks outside a referenced element`).
+   * Used to replace the generic "TORCH Glare React hook" placeholder in search.
+   */
+  getRegistryItemDescriptions(): Map<string, string> {
+    const map = new Map<string, string>();
+    for (const content of this.referenceDocs.values()) {
+      for (const m of content.matchAll(/^[-*]\s+\*\*([A-Za-z_$][\w$]*)\*\*\s*[-–—:]\s*(.+?)\s*$/gm)) {
+        const name = m[1];
+        if (!map.has(name)) map.set(name, m[2].trim());
+      }
+    }
+    return map;
+  }
+
+  /** A guide is any tutorial or how-to doc, looked up by name. */
+  getGuide(name: string): string | undefined {
+    return this.tutorialDocs.get(name) ?? this.howToDocs.get(name);
+  }
+
+  /** All guide names (tutorials + how-to), deduplicated and sorted. */
+  getAllGuideNames(): string[] {
+    return [...new Set([...this.tutorialDocs.keys(), ...this.howToDocs.keys()])].sort();
   }
 }

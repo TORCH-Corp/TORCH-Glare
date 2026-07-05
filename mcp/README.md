@@ -35,8 +35,15 @@ Or add it manually:
 | `get-component-api` | Just the props table + TypeScript types. |
 | `get-usage-examples` | Code examples, optionally filtered by keyword. |
 | `get-design-system-info` | Theming, typography, colors, plugins, hooks, providers, utilities, installation. |
-| `get-install-info` | The `torch-glare` install command, import statement, npm deps, and the full transitive set of internal deps the CLI copies. |
+| `get-install-info` | The `torch-glare` install command, import statement (from the file's real exports), npm deps, and the full transitive set of internal deps the CLI copies. |
 | `get-component-source` | The exact `.tsx`/`.ts` source the CLI copies into a project. |
+| `get-guide` | A tutorial or how-to guide by name (call with no name to list them). |
+| `get-related-components` | What an item copies in and what other items compose it. |
+
+`list-components` / `search-components` also cover installable hooks, utils, layouts, and providers.
+`get-component-docs` returns a compact overview + table of contents by default — pass `section`
+(e.g. `"examples"`, `"api"`) or `section:"full"` to drill in. Search is token- and synonym-aware
+(e.g. `"modal"` → `Dialog`).
 
 ## Resources
 
@@ -45,9 +52,13 @@ Or add it manually:
 - `torch-glare://design-system` — theming, typography, colors, plugins
 - `torch-glare://component/{name}` — full docs for one component (templated)
 
-Every code/docs response is prefixed with an **absolute rules banner** enforcing the library's hard
-rule: never emit `system` color tokens or the `SystemStyle` variant — always use the `presentation`
-equivalents.
+The library's hard rule — never emit `system` color tokens or the `SystemStyle` variant, always use
+the `presentation` equivalents — is sent once via the server's **`instructions`** (at connect), with
+a short reminder on the code-emitting tools.
+
+> When iterating on docs or component source in this repo, run `pnpm run build` (or
+> `pnpm run mcp:build` from the repo root) so the server picks up your changes — it reads the bundled
+> copies produced by `sync-docs`.
 
 ## Development
 
