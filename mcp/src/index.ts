@@ -50,11 +50,17 @@ async function main() {
   const registryLoader = new RegistryLoader();
   await registryLoader.load();
 
-  // 2. Build component search index, enriched with npm deps from the registry
+  // 2. Build component search index, enriched with npm deps from the registry,
+  //    then fold in the non-doc registry items (hooks/utils/layouts/providers)
+  //    so everything installable is also discoverable.
   const registry = new ComponentRegistry();
   registry.buildFromDocs(loader.getAllComponents(), (name) =>
     registryLoader.getNpmDependencies(name),
   );
+  registry.addRegistryItems(registryLoader.getAllItems());
+
+  // Live category list for the list-components description, so it can't drift.
+  const categoryList = registry.getCategories().join(", ");
 
   // 3. Create MCP server
   const server = new McpServer({
@@ -67,8 +73,8 @@ async function main() {
   // Tool 1: List components
   server.tool(
     "list-components",
-    "List all TORCH Glare components, optionally filtered by category. Categories: buttons, forms, layout, dataDisplay, overlays, dateTime, feedback, labels, advanced",
-    { category: z.string().optional().describe("Filter by category (e.g., 'buttons', 'forms', 'overlays')") },
+    `List all TORCH Glare components and installable items (hooks, utils, layouts, providers), optionally filtered by category. Categories: ${categoryList}`,
+    { category: z.string().optional().describe("Filter by category (e.g., 'buttons', 'forms', 'overlays', 'hooks')") },
     async ({ category }) => {
       const entries = registry.listByCategory(category);
       if (entries.length === 0) {
@@ -87,7 +93,7 @@ async function main() {
   // Tool 2: Search components
   server.tool(
     "search-components",
-    "Search TORCH Glare components by name, description, or tags",
+    "Search TORCH Glare components and installable items (hooks, utils, layouts, providers) by name, description, or tags",
     { query: z.string().describe("Search query (component name, feature, or keyword)") },
     async ({ query }) => {
       const results = registry.search(query);

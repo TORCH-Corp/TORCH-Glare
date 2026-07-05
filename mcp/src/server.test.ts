@@ -42,6 +42,32 @@ test("list-by-category returns components (regression: filter was always empty)"
   );
 });
 
+test("registry items (hooks/utils/layouts/providers) are discoverable", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+  const rl = new RegistryLoader();
+  await rl.load();
+  const registry = new ComponentRegistry();
+  registry.buildFromDocs(loader.getAllComponents());
+  registry.addRegistryItems(rl.getAllItems());
+
+  // Hook is now findable by search even though it has no component doc.
+  assert.ok(
+    registry.search("mobile").some((e) => e.name === "useIsMobile"),
+    "search should surface the useIsMobile hook",
+  );
+
+  // Category filtering by registry type works.
+  assert.equal(registry.listByCategory("hooks").length, 6, "expected 6 hooks");
+  assert.ok(
+    registry.listByCategory("providers").some((e) => e.name === "ThemeProvider"),
+    "ThemeProvider should list under the providers category",
+  );
+
+  // Documented components keep their doc-derived description (dedup by name).
+  assert.equal(registry.getCategories().includes("navigation"), true);
+});
+
 test("resolveInstallPlan returns transitive deps for AlertDialog", async () => {
   const rl = new RegistryLoader();
   await rl.load();

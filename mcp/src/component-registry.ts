@@ -3,6 +3,7 @@
  */
 
 import { normalizeCategory, type ComponentDoc } from "./docs-loader.js";
+import type { RegistryItem } from "./registry-loader.js";
 
 export interface RegistryEntry {
   name: string;
@@ -12,6 +13,23 @@ export interface RegistryEntry {
   tags: string[];
   /** External npm packages the component pulls in (from registry.json). */
   npmDependencies: string[];
+}
+
+// Short human labels for the non-component registry types (used as their
+// description when they have no per-item doc of their own).
+const TYPE_LABEL: Record<RegistryItem["type"], string> = {
+  components: "Component",
+  hooks: "React hook",
+  utils: "Utility",
+  layouts: "Layout",
+  providers: "Context provider",
+};
+
+function toKebabCase(name: string): string {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
+    .toLowerCase();
 }
 
 export class ComponentRegistry {
@@ -31,6 +49,29 @@ export class ComponentRegistry {
       tags: doc.tags,
       npmDependencies: npmDepsFor ? npmDepsFor(doc.name) : [],
     }));
+  }
+
+  /**
+   * Fold registry items that aren't already indexed from docs into the search
+   * index — hooks, utils, layouts, providers (and any component without a doc).
+   * Their `category` is their registry `type`, so category filtering and the
+   * grouped listing work for them automatically. Docs win on name collisions,
+   * keeping the richer doc-derived description.
+   */
+  addRegistryItems(items: RegistryItem[]): void {
+    const known = new Set(this.entries.map((e) => e.name.toLowerCase()));
+    for (const item of items) {
+      if (known.has(item.name.toLowerCase())) continue;
+      known.add(item.name.toLowerCase());
+      this.entries.push({
+        name: item.name,
+        slug: toKebabCase(item.name),
+        description: `TORCH Glare ${TYPE_LABEL[item.type]}`,
+        category: item.type,
+        tags: [],
+        npmDependencies: item.npmDependencies,
+      });
+    }
   }
 
   search(query: string): RegistryEntry[] {

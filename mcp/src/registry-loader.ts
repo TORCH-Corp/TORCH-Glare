@@ -117,6 +117,11 @@ export class RegistryLoader {
     return this.version;
   }
 
+  /** Every registry item (components, hooks, utils, layouts, providers). */
+  getAllItems(): RegistryItem[] {
+    return this.items;
+  }
+
   /**
    * Look up a registry item by bare name (case-insensitive). If multiple types
    * share a name, a component wins.
