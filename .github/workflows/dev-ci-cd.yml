@@ -59,6 +59,9 @@ jobs:
       - name: Run tests
         run: pnpm run test
 
+      - name: Test MCP server
+        run: pnpm -C mcp test
+
       - name: Check AI docs
         run: pnpm run check:ai-docs
 

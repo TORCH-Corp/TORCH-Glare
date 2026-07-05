@@ -12,6 +12,7 @@ import { z } from "zod";
 import { createRequire } from "node:module";
 import { DocsLoader } from "./docs-loader.js";
 import { ComponentRegistry } from "./component-registry.js";
+import { RegistryLoader } from "./registry-loader.js";
 import { extractSection, extractCodeExamples } from "./markdown-utils.js";
 
 // Read the server version from package.json so the MCP handshake version never
@@ -45,9 +46,15 @@ async function main() {
   const loader = new DocsLoader();
   await loader.loadAll();
 
-  // 2. Build component registry
+  // 1b. Load the copy-in registry (install commands + dependency graph + source)
+  const registryLoader = new RegistryLoader();
+  await registryLoader.load();
+
+  // 2. Build component search index, enriched with npm deps from the registry
   const registry = new ComponentRegistry();
-  registry.buildFromDocs(loader.getAllComponents());
+  registry.buildFromDocs(loader.getAllComponents(), (name) =>
+    registryLoader.getNpmDependencies(name),
+  );
 
   // 3. Create MCP server
   const server = new McpServer({
@@ -166,6 +173,13 @@ async function main() {
       // Filter to only TypeScript/JSX code examples
       examples = examples.filter((e) => ["typescript", "tsx", "jsx", "ts"].includes(e.language));
 
+      // Drop examples that use `SystemStyle`/system color tokens. The RULES_BANNER
+      // forbids emitting them, so returning such examples verbatim would be
+      // self-contradictory (e.g. a doc's "System Style (Dark UI)" section).
+      const usesSystemStyle = (e: { heading: string; code: string }) =>
+        /SystemStyle|-system-/.test(e.code) || /system style/i.test(e.heading);
+      examples = examples.filter((e) => !usesSystemStyle(e));
+
       if (pattern) {
         const p = pattern.toLowerCase();
         examples = examples.filter(
@@ -239,6 +253,73 @@ async function main() {
 
       return {
         content: [{ type: "text", text: RULES_BANNER + sections.join("\n\n---\n\n") }],
+      };
+    }
+  );
+
+  // Tool 7: Get install info (CLI command + dependency graph)
+  server.tool(
+    "get-install-info",
+    "Get how to install a TORCH Glare item into a project: the `torch-glare` CLI command, the import statement, its npm dependencies, and the full transitive set of internal (registry) dependencies the CLI copies. TORCH Glare is copy-in — components are copied into your project, not imported from an npm package.",
+    { component: z.string().describe("Component/hook/util/layout/provider name (e.g., 'Button', 'AlertDialog', 'useToast')") },
+    async ({ component }) => {
+      const item = registryLoader.getItemByName(component);
+      if (!item) {
+        return {
+          content: [{ type: "text", text: `"${component}" not found in the registry. Use list-components or search-components to find the right name.` }],
+        };
+      }
+
+      const plan = registryLoader.resolveInstallPlan(item.type, item.name)!;
+      const internalDeps = plan.items
+        .filter((i) => i.name !== item.name)
+        .map((i) => `${i.name} (${i.type})`);
+
+      const lines = [
+        `# Installing ${item.name}`,
+        "",
+        "TORCH Glare is a **copy-in** library: the CLI copies source into your project.",
+        "",
+        "## Command",
+        "```bash",
+        registryLoader.addCommand(item),
+        "```",
+        "",
+        "## Import",
+        "```typescript",
+        registryLoader.importStatement(item),
+        "```",
+        "",
+        `## npm dependencies (${plan.npmDependencies.length})`,
+        plan.npmDependencies.length ? plan.npmDependencies.map((d) => `- \`${d}\``).join("\n") : "_None._",
+        "",
+        `## Internal dependencies copied alongside (${internalDeps.length})`,
+        internalDeps.length ? internalDeps.map((d) => `- ${d}`).join("\n") : "_None — this item is standalone._",
+        "",
+        "> `torch-glare add` resolves and copies these internal dependencies for you; you do not add them one by one.",
+      ];
+
+      return { content: [{ type: "text", text: RULES_BANNER + lines.join("\n") }] };
+    }
+  );
+
+  // Tool 8: Get component source (the exact code the CLI copies)
+  server.tool(
+    "get-component-source",
+    "Get the actual TypeScript/TSX source code of a TORCH Glare item — the exact file the CLI copies into a project. Use this when you need the implementation, not just the docs.",
+    { component: z.string().describe("Component/hook/util/layout/provider name (e.g., 'Button')") },
+    async ({ component }) => {
+      const source = await registryLoader.getSource(component);
+      if (!source) {
+        const item = registryLoader.getItemByName(component);
+        const hint = item
+          ? `Source file could not be read (expected apps/lib/${item.path}).`
+          : `"${component}" not found in the registry. Use search-components to find the right name.`;
+        return { content: [{ type: "text", text: hint }] };
+      }
+      const lang = source.path.endsWith(".tsx") ? "tsx" : "typescript";
+      return {
+        content: [{ type: "text", text: `${RULES_BANNER}# ${component} — source (\`apps/lib/${source.path}\`)\n\n\`\`\`${lang}\n${source.code}\n\`\`\`` }],
       };
     }
   );

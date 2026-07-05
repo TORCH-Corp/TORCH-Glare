@@ -32,17 +32,48 @@ async function resolveDocsDir(): Promise<string> {
 }
 
 /**
- * Resolve the manifest file path.
+ * Canonical category slugs used across the server. Component docs declare their
+ * grouping under two competing frontmatter conventions — `category:
+ * components/buttons` (path-style) on some docs and `group: Buttons & Actions`
+ * (human label) on others — so a raw value can arrive in many shapes. This map
+ * folds every observed form onto one slug so `list-components` filtering and the
+ * category index are consistent regardless of which convention a doc used.
  */
-async function resolveManifestPath(): Promise<string> {
-  const bundled = path.resolve(PACKAGE_ROOT, "docs", "llms-manifest.json");
-  const monorepo = path.resolve(MONOREPO_ROOT, "llms-manifest.json");
-  try {
-    await fs.access(bundled);
-    return bundled;
-  } catch {
-    return monorepo;
-  }
+const CATEGORY_ALIASES: Record<string, string> = {
+  buttons: "buttons",
+  "buttons & actions": "buttons",
+  forms: "forms",
+  "forms & inputs": "forms",
+  inputs: "forms",
+  "data-display": "dataDisplay",
+  "data display": "dataDisplay",
+  datadisplay: "dataDisplay",
+  editors: "advanced",
+  advanced: "advanced",
+  "advanced components": "advanced",
+  layout: "layout",
+  "layout & containers": "layout",
+  navigation: "navigation",
+  "date & time": "dateTime",
+  datetime: "dateTime",
+  "feedback & status": "feedback",
+  feedback: "feedback",
+  "labels & text": "labels",
+  labels: "labels",
+  "overlays & dialogs": "overlays",
+  overlays: "overlays",
+};
+
+/**
+ * Normalize a raw category/group value (or a user-supplied filter) to a canonical
+ * slug. Strips a leading `components/` path segment, then maps known aliases.
+ * Unknown values pass through lowercased so nothing is silently dropped.
+ */
+export function normalizeCategory(raw: string | undefined): string {
+  if (!raw) return "uncategorized";
+  let key = raw.trim().toLowerCase();
+  if (key.startsWith("components/")) key = key.slice("components/".length);
+  return CATEGORY_ALIASES[key] ?? key;
 }
 
 export interface ComponentDoc {
@@ -80,51 +111,17 @@ function pascalCaseToSlug(name: string): string {
     .toLowerCase();
 }
 
-// Category mapping from llms-manifest.json structure
-interface ManifestComponent {
-  name: string;
-  version: string;
-  documented: boolean;
-}
-
-interface ManifestCategory {
-  count: number;
-  items: ManifestComponent[];
-}
-
-interface Manifest {
-  components: Record<string, ManifestCategory>;
-}
-
 export class DocsLoader {
   private componentDocs: Map<string, ComponentDoc> = new Map();
   private referenceDocs: Map<string, string> = new Map();
   private tutorialDocs: Map<string, string> = new Map();
-  private categoryMap: Map<string, string> = new Map(); // componentName -> category
   private docsDir = "";
 
   async loadAll(): Promise<void> {
     this.docsDir = await resolveDocsDir();
-    await this.loadManifestCategories();
     await this.loadComponentDocs();
     await this.loadReferenceDocs();
     await this.loadTutorialDocs();
-  }
-
-  private async loadManifestCategories(): Promise<void> {
-    try {
-      const manifestPath = await resolveManifestPath();
-      const raw = await fs.readFile(manifestPath, "utf-8");
-      const manifest: Manifest = JSON.parse(raw);
-
-      for (const [category, data] of Object.entries(manifest.components)) {
-        for (const item of data.items) {
-          this.categoryMap.set(item.name, category);
-        }
-      }
-    } catch {
-      // Manifest not available, categories will fall back to frontmatter
-    }
   }
 
   private async loadComponentDocs(): Promise<void> {
@@ -145,13 +142,11 @@ export class DocsLoader {
         // Resolve description
         const description = frontmatter.description || extractDescription(content);
 
-        // Resolve category from manifest first, then frontmatter
-        const category =
-          this.categoryMap.get(name) ||
-          this.categoryMap.get(slugToPascalCase(slug)) ||
-          frontmatter.category ||
-          frontmatter.group ||
-          "uncategorized";
+        // Categories live in frontmatter under two competing conventions
+        // (`category: components/buttons` or `group: Buttons & Actions`).
+        // Normalize both onto a single canonical slug. (The llms-manifest.json
+        // carries no category field, so it can't help here.)
+        const category = normalizeCategory(frontmatter.category || frontmatter.group);
 
         // Resolve tags
         const tags = frontmatter.tags || frontmatter.keywords || [];

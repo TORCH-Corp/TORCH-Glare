@@ -2,7 +2,7 @@
  * Searchable component registry built from loaded documentation.
  */
 
-import type { ComponentDoc } from "./docs-loader.js";
+import { normalizeCategory, type ComponentDoc } from "./docs-loader.js";
 
 export interface RegistryEntry {
   name: string;
@@ -10,18 +10,26 @@ export interface RegistryEntry {
   description: string;
   category: string;
   tags: string[];
+  /** External npm packages the component pulls in (from registry.json). */
+  npmDependencies: string[];
 }
 
 export class ComponentRegistry {
   private entries: RegistryEntry[] = [];
 
-  buildFromDocs(docs: ComponentDoc[]): void {
+  /**
+   * Build the search index from loaded docs. `npmDepsFor` (backed by the
+   * registry loader) lets discovery results surface install cost without a
+   * second round-trip.
+   */
+  buildFromDocs(docs: ComponentDoc[], npmDepsFor?: (name: string) => string[]): void {
     this.entries = docs.map((doc) => ({
       name: doc.name,
       slug: doc.slug,
       description: doc.description,
       category: doc.category,
       tags: doc.tags,
+      npmDependencies: npmDepsFor ? npmDepsFor(doc.name) : [],
     }));
   }
 
@@ -62,9 +70,11 @@ export class ComponentRegistry {
 
   listByCategory(category?: string): RegistryEntry[] {
     if (!category) return [...this.entries].sort((a, b) => a.name.localeCompare(b.name));
-    const lower = category.toLowerCase();
+    // Normalize the filter with the same canonicalizer used when indexing, so
+    // "buttons", "Buttons & Actions" and "components/buttons" all match.
+    const target = normalizeCategory(category);
     return this.entries
-      .filter((e) => e.category.toLowerCase() === lower)
+      .filter((e) => e.category === target)
       .sort((a, b) => a.name.localeCompare(b.name));
   }
 
@@ -88,7 +98,11 @@ export class ComponentRegistry {
     for (const [category, items] of grouped) {
       lines.push(`\n## ${category} (${items.length})`);
       for (const item of items) {
-        lines.push(`- **${item.name}**: ${item.description}`);
+        const deps =
+          item.npmDependencies.length > 0
+            ? ` · npm: ${item.npmDependencies.join(", ")}`
+            : "";
+        lines.push(`- **${item.name}**: ${item.description}${deps}`);
       }
     }
 

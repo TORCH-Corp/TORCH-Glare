@@ -10,12 +10,15 @@
   "files": [
     "dist",
     "docs",
+    "registry.json",
+    "apps",
     "README.md"
   ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsc --watch",
+    "test": "npm run build && node --test dist/*.test.js",
     "prebuild": "node scripts/sync-docs.mjs",
     "prepublishOnly": "npm run build"
   },

@@ -45,6 +45,8 @@
     "format": "pnpm -C apps run format",
     "format:check": "pnpm -C apps run format:check",
     "test": "pnpm -C apps run test",
+    "mcp:build": "pnpm -C mcp install && pnpm -C mcp run build",
+    "prepare": "pnpm -C mcp install && pnpm -C mcp run build",
     "deploy": "pnpm run registry && pnpm run llms && npx tsc --build --force && npm publish --access public"
   },
   "dependencies": {
