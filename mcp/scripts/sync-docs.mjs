@@ -29,12 +29,6 @@ for (const dir of docDirs) {
   }
 }
 
-const manifestSrc = path.join(repoRoot, "llms-manifest.json");
-if (fs.existsSync(manifestSrc)) {
-  fs.cpSync(manifestSrc, path.join(destDocs, "llms-manifest.json"));
-  console.log("[sync-docs] llms-manifest.json -> docs/llms-manifest.json");
-}
-
 // Bundle the copy-in registry + component source so the published server can
 // answer get-install-info and get-component-source without the monorepo present.
 const registrySrc = path.join(repoRoot, "apps", "lib", "registry.json");

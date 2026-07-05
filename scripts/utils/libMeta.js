@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 
 /**
- * Shared, dependency-free helpers for the AI-doc generators (generateLlms, fixComponentDocs,
+ * Shared, dependency-free helpers for the doc tooling (generateRegistry, fixDocs,
  * checkAiDocs). Everything here is deterministic — no timestamps, no randomness — so the
  * generated output is stable and the CI staleness gate works.
  */

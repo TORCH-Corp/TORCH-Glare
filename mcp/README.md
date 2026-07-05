@@ -59,8 +59,8 @@ pnpm test           # unit tests
 ```
 
 In the monorepo the server reads docs and source directly from `../docs` and `../apps/lib`. On
-`build`, `scripts/sync-docs.mjs` bundles `docs/`, `llms-manifest.json`, `registry.json`, and the
-`apps/lib` source into the package so the published server is self-contained.
+`build`, `scripts/sync-docs.mjs` bundles `docs/`, `registry.json`, and the `apps/lib` source into
+the package so the published server is self-contained.
 
 Inspect it interactively:
 

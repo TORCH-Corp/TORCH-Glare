@@ -1,16 +1,16 @@
 import path from "path";
 import fs from "fs";
-import { ROOT, readPackageJson, loadRegistry, components, extractVariants } from "../../utils/libMeta.js";
+import { ROOT, loadRegistry, components, extractVariants } from "../../utils/libMeta.js";
 
 /**
- * AI-doc lint: fail if known-bad content appears in the AI-facing docs. Guards the copy-in
- * usage model, canonical config name, real CLI commands, valid import identifiers, and
- * variant/size values that actually exist in source.
+ * AI-doc lint: fail if known-bad content appears in the `docs/` markdown that the
+ * MCP server serves. Guards the copy-in usage model, canonical config name, real
+ * CLI commands, valid import identifiers, and variant/size values that actually
+ * exist in source.
  *
  *   node scripts/bin/checkAiDocs/index.js   (or `pnpm run check:ai-docs`)
  */
 
-const pkg = readPackageJson();
 const violations = [];
 
 /** Substring/regex patterns that must never appear in AI-facing docs. */
@@ -45,11 +45,7 @@ function walk(dir) {
     return out;
 }
 
-const targets = [
-    path.join(ROOT, "llms.txt"),
-    path.join(ROOT, "llms-full.txt"),
-    ...walk(path.join(ROOT, "docs")),
-].filter((f) => fs.existsSync(f));
+const targets = walk(path.join(ROOT, "docs")).filter((f) => fs.existsSync(f));
 
 for (const file of targets) {
     const rel = path.relative(ROOT, file);
@@ -83,29 +79,10 @@ for (const file of targets) {
     });
 }
 
-// Manifest version must match package.json.
-const manifestPath = path.join(ROOT, "llms-manifest.json");
-if (fs.existsSync(manifestPath)) {
-    const m = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
-    if (m.library?.version !== pkg.version) {
-        violations.push(`llms-manifest.json  library.version "${m.library?.version}" != package.json "${pkg.version}"`);
-    }
-}
-
-// llms.txt must advertise the current version and have only resolvable component-doc links.
-const llmsTxt = path.join(ROOT, "llms.txt");
-if (fs.existsSync(llmsTxt)) {
-    const txt = fs.readFileSync(llmsTxt, "utf-8");
-    if (!txt.includes(pkg.version)) violations.push(`llms.txt  does not mention the current version ${pkg.version}`);
-    for (const m of txt.matchAll(/\]\((docs\/[^)]+\.md)\)/g)) {
-        if (!fs.existsSync(path.join(ROOT, m[1]))) violations.push(`llms.txt  dead doc link → ${m[1]}`);
-    }
-}
-
 if (violations.length) {
     console.error(`❌ AI-doc check failed — ${violations.length} issue(s):\n`);
     for (const v of violations) console.error("  " + v);
-    console.error("\nFix with `pnpm run docs:fix` / `pnpm run llms`, or correct by hand, then re-run.");
+    console.error("\nFix with `pnpm run docs:fix`, or correct by hand, then re-run.");
     process.exit(1);
 }
 

@@ -90,7 +90,6 @@ export interface ComponentDoc {
 /**
  * Convert a kebab-case slug to PascalCase component name.
  * "action-button" -> "ActionButton"
- * "input-otp" -> "InputOTP" (special case handled via manifest)
  */
 function slugToPascalCase(slug: string): string {
   return slug
@@ -144,8 +143,7 @@ export class DocsLoader {
 
         // Categories live in frontmatter under two competing conventions
         // (`category: components/buttons` or `group: Buttons & Actions`).
-        // Normalize both onto a single canonical slug. (The llms-manifest.json
-        // carries no category field, so it can't help here.)
+        // Normalize both onto a single canonical slug.
         const category = normalizeCategory(frontmatter.category || frontmatter.group);
 
         // Resolve tags
