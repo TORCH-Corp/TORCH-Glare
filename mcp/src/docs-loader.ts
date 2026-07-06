@@ -116,6 +116,8 @@ export class DocsLoader {
   private referenceDocs: Map<string, string> = new Map();
   private tutorialDocs: Map<string, string> = new Map();
   private howToDocs: Map<string, string> = new Map();
+  private explanationDocs: Map<string, string> = new Map();
+  private migrationDocs: Map<string, string> = new Map();
   private docsDir = "";
 
   async loadAll(): Promise<void> {
@@ -124,6 +126,10 @@ export class DocsLoader {
     await this.loadReferenceDocs();
     await this.loadTutorialDocs();
     await this.loadHowToDocs();
+    // Diátaxis explanation (architecture, design-system) and migration (changelog)
+    // docs — served via get-design-system-info and get-guide.
+    await this.loadFlatDocs("explanation", this.explanationDocs);
+    await this.loadFlatDocs("migration", this.migrationDocs);
   }
 
   private async loadComponentDocs(): Promise<void> {
@@ -265,13 +271,33 @@ export class DocsLoader {
     return map;
   }
 
-  /** A guide is any tutorial or how-to doc, looked up by name. */
-  getGuide(name: string): string | undefined {
-    return this.tutorialDocs.get(name) ?? this.howToDocs.get(name);
+  /** An explanation doc (architecture, design-system), looked up by name. */
+  getExplanation(name: string): string | undefined {
+    return this.explanationDocs.get(name);
   }
 
-  /** All guide names (tutorials + how-to), deduplicated and sorted. */
+  /**
+   * A guide is any tutorial, how-to, explanation, or migration doc, looked up by
+   * name — the "read a doc by name" surface behind get-guide.
+   */
+  getGuide(name: string): string | undefined {
+    return (
+      this.tutorialDocs.get(name) ??
+      this.howToDocs.get(name) ??
+      this.explanationDocs.get(name) ??
+      this.migrationDocs.get(name)
+    );
+  }
+
+  /** All guide names (tutorials + how-to + explanation + migration), deduped and sorted. */
   getAllGuideNames(): string[] {
-    return [...new Set([...this.tutorialDocs.keys(), ...this.howToDocs.keys()])].sort();
+    return [
+      ...new Set([
+        ...this.tutorialDocs.keys(),
+        ...this.howToDocs.keys(),
+        ...this.explanationDocs.keys(),
+        ...this.migrationDocs.keys(),
+      ]),
+    ].sort();
   }
 }

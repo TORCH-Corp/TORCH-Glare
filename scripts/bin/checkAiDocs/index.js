@@ -1,12 +1,16 @@
 import path from "path";
 import fs from "fs";
-import { ROOT, loadRegistry, components, extractVariants } from "../../utils/libMeta.js";
+import { ROOT, loadRegistry, components, extractVariants, resolveDoc, normalize } from "../../utils/libMeta.js";
 
 /**
  * AI-doc lint: fail if known-bad content appears in the `docs/` markdown that the
  * MCP server serves. Guards the copy-in usage model, canonical config name, real
  * CLI commands, valid import identifiers, and variant/size values that actually
  * exist in source.
+ *
+ * Also runs a doc↔registry COVERAGE guard so the MCP server never serves a
+ * documented-but-uninstallable component, or lists an installable component with
+ * no docs, without that gap being explicitly acknowledged in the ALLOWLIST below.
  *
  *   node scripts/bin/checkAiDocs/index.js   (or `pnpm run check:ai-docs`)
  */
@@ -79,6 +83,58 @@ for (const file of targets) {
     });
 }
 
+// ── doc ↔ registry coverage guard ───────────────────────────────────────────
+//
+// Known-intentional gaps. Anything NOT listed here that violates a coverage rule
+// fails the check, so new drift is caught while today's deliberate exceptions stay
+// green. Keep entries commented — an allowlist without a reason rots into noise.
+const COVERAGE_ALLOWLIST = {
+    // Registry components with no `docs/components/<slug>.md`.
+    componentsWithoutDoc: new Set([
+        "ChartBlockTool",   // internal non-visual chart tool (.ts), not a UI component
+        "TableDnDWrapper",  // internal drag-and-drop wrapper (.ts), not a UI component
+        "SearchableTree",       // TODO: needs docs
+        "SearchableTreeDialog", // TODO: needs docs
+    ]),
+    // Component docs that resolve to no installable registry item of any type —
+    // get-install-info / get-component-source return "not found" for these. They
+    // document nested DataViews feature modules the flat registry omits by design.
+    docsWithoutRegistryItem: new Set([
+        "data-views-config-panel",
+        "data-views-layout",
+        "inbox-view",
+        "kanban-view",
+        "table-view",
+        "tree-view",
+    ]),
+};
+
+// Rule 1: every installable component should have a doc.
+for (const c of components(registry)) {
+    if (!resolveDoc(c.name) && !COVERAGE_ALLOWLIST.componentsWithoutDoc.has(c.name)) {
+        violations.push(
+            `coverage: component "${c.name}" (${c.path}) has no docs/components/*.md — ` +
+            `add a doc, or allowlist it in checkAiDocs (COVERAGE_ALLOWLIST.componentsWithoutDoc).`,
+        );
+    }
+}
+
+// Rule 2: every component doc should resolve to an installable registry item.
+const registryByNorm = new Set(registry.items.map((i) => normalize(i.name)));
+const docsComponentsDir = path.join(ROOT, "docs", "components");
+if (fs.existsSync(docsComponentsDir)) {
+    for (const file of fs.readdirSync(docsComponentsDir).filter((f) => f.endsWith(".md")).sort()) {
+        const slug = file.replace(/\.md$/, "");
+        if (!registryByNorm.has(normalize(slug)) && !COVERAGE_ALLOWLIST.docsWithoutRegistryItem.has(slug)) {
+            violations.push(
+                `coverage: docs/components/${file} resolves to no registry item — ` +
+                `get-install-info / get-component-source will return "not found". ` +
+                `Register the component, or allowlist it (COVERAGE_ALLOWLIST.docsWithoutRegistryItem).`,
+            );
+        }
+    }
+}
+
 if (violations.length) {
     console.error(`❌ AI-doc check failed — ${violations.length} issue(s):\n`);
     for (const v of violations) console.error("  " + v);
@@ -86,4 +142,4 @@ if (violations.length) {
     process.exit(1);
 }
 
-console.log(`✅ AI-doc check passed — ${targets.length} files scanned, no issues.`);
+console.log(`✅ AI-doc check passed — ${targets.length} files scanned, doc↔registry coverage OK.`);

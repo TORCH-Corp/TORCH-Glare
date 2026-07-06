@@ -14,7 +14,7 @@ const mcpRoot = path.resolve(here, "..");
 const repoRoot = path.resolve(mcpRoot, "..");
 
 const destDocs = path.join(mcpRoot, "docs");
-const docDirs = ["components", "reference", "tutorials", "how-to"];
+const docDirs = ["components", "reference", "tutorials", "how-to", "explanation", "migration"];
 
 fs.mkdirSync(destDocs, { recursive: true });
 

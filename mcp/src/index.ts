@@ -63,6 +63,12 @@ async function main() {
   // Live category list for the list-components description, so it can't drift.
   const categoryList = registry.getCategories().join(", ");
 
+  // Version of the *library* the served docs/registry describe (from registry.json),
+  // distinct from this MCP package's own version. Surfaced in output so a consumer
+  // knows which library release the docs correspond to.
+  const libVersion = registryLoader.getVersion();
+  const libTag = libVersion ? ` · library v${libVersion}` : "";
+
   // 3. Create MCP server
   const server = new McpServer(
     { name: "torch-glare-docs", version: SERVER_VERSION },
@@ -86,7 +92,7 @@ async function main() {
       }
       const formatted = registry.formatComponentList(entries);
       return {
-        content: [{ type: "text", text: `# TORCH Glare Components${category ? ` (${category})` : ""}\n\nFound ${entries.length} components.\n${formatted}` }],
+        content: [{ type: "text", text: `# TORCH Glare Components${category ? ` (${category})` : ""}${libTag}\n\nFound ${entries.length} components.\n${formatted}` }],
       };
     }
   );
@@ -281,6 +287,13 @@ async function main() {
         if (content) sections.push(content);
       }
 
+      // The design-system explanation doc covers the token model (presentation
+      // vs system) and color/theming rationale — relevant to theming/colors/all.
+      if (topic === "theming" || topic === "colors" || topic === "all") {
+        const designSystem = loader.getExplanation("design-system");
+        if (designSystem) sections.push(designSystem);
+      }
+
       // Include getting-started tutorial for installation topic
       if (topic === "installation" || topic === "all") {
         const tutorial = loader.getTutorial("getting-started");
@@ -297,6 +310,12 @@ async function main() {
         return {
           content: [{ type: "text", text: `No documentation found for topic "${topic}".` }],
         };
+      }
+
+      // Stamp the served library version on install/overview topics so a consumer
+      // knows which library release this design-system info corresponds to.
+      if ((topic === "installation" || topic === "all") && libVersion) {
+        sections.unshift(`_TORCH Glare library v${libVersion}._`);
       }
 
       return {

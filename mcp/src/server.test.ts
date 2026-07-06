@@ -141,3 +141,27 @@ test("getSource returns the real component file", async () => {
   assert.match(source!.path, /components\/Button\.tsx$/);
   assert.ok(source!.code.includes("Button"), "source should mention Button");
 });
+
+test("getVersion exposes the served library version from registry.json", async () => {
+  const rl = new RegistryLoader();
+  await rl.load();
+  // registry.json carries a top-level semver (e.g. "2.4.0") — surfaced so the
+  // MCP output can tell consumers which library release the docs describe.
+  assert.match(rl.getVersion(), /^\d+\.\d+\.\d+/, "library version should be semver");
+});
+
+test("explanation + migration docs are loaded and served as guides", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+
+  // design-system.md (explanation) backs get-design-system-info's theming/colors.
+  const designSystem = loader.getExplanation("design-system");
+  assert.ok(designSystem && designSystem.length > 0, "design-system explanation should load");
+
+  // architecture (explanation) + changelog (migration) join the guide list.
+  const guides = loader.getAllGuideNames();
+  assert.ok(guides.includes("architecture"), "architecture should be a guide");
+  assert.ok(guides.includes("changelog"), "changelog should be a guide");
+  assert.ok(loader.getGuide("architecture"), "architecture guide should be readable");
+  assert.ok(loader.getGuide("changelog"), "changelog guide should be readable");
+});
