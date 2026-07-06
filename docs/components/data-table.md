@@ -131,7 +131,7 @@ const columns: ColumnDef<Task>[] = [
         completed: 'green',
       }[status]
 
-      return <Badge variant={variant} label={status} />
+      return <Badge color={variant} label={status} />
     },
   },
   {
@@ -576,16 +576,21 @@ function PersistentOrderTable() {
 
 ## Features
 
-### Built-in Capabilities
+The component's props are `columns`, `data`, `theme`, and `onRowReorder` — see the API
+Reference. Its built-in, rendered capabilities are:
 
-- **Row Selection**: Multi-row selection with checkboxes (select all, select individual)
-- **Drag & Drop**: Reorder rows by dragging (maintains selection state)
-- **Column Sorting**: Click headers to sort ascending/descending
-- **Pagination**: Built-in pagination support (via TanStack Table)
-- **Filtering**: Client-side filtering capabilities
-- **Custom Cells**: Full control over cell rendering
-- **Keyboard Navigation**: Drag-and-drop with keyboard support
-- **Type Safety**: Full TypeScript support with generics
+- **Row Selection**: Multi-row selection checkboxes (select all / select individual) are
+  rendered and tracked internally. Selection state persists through reordering. Note: the
+  component does not expose a selection-change prop — selection is internal visual state.
+- **Drag & Drop**: Reorder rows by dragging; `onRowReorder` returns the new data array
+  (keyboard drag supported via dnd-kit).
+- **Column Sorting**: Click headers to sort ascending/descending.
+- **Custom Cells**: Full control over cell rendering via each column's `cell`.
+- **Type Safety**: Full TypeScript support with generics.
+
+> The TanStack pagination and filtering **row models** are enabled internally, but the
+> component renders **no** pagination or filter controls and exposes no page/filter props.
+> To paginate or filter, wrap the data yourself or compose your own controls around it.
 
 ### Drag-and-Drop Behavior
 

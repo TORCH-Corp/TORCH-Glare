@@ -67,6 +67,13 @@ function Example() {
 <Button variant="BluContStyle">Blue Container</Button>
 <Button variant="RedContStyle">Red Container</Button>
 
+// Color (solid) styles
+<Button variant="PrimeColStyle">Primary Color</Button>
+<Button variant="BluColStyle">Blue Color</Button>
+<Button variant="RedColStyle">Red Color</Button>
+<Button variant="GreenColStyle">Green Color</Button>
+<Button variant="YelColStyle">Yellow Color</Button>
+
 // Border style
 <Button variant="BorderStyle">Border Only</Button>
 ```
@@ -189,6 +196,11 @@ type ButtonVariant =
   | 'PrimeContStyle'
   | 'BluContStyle'
   | 'RedContStyle'
+  | 'PrimeColStyle'
+  | 'BluColStyle'
+  | 'RedColStyle'
+  | 'GreenColStyle'
+  | 'YelColStyle'
 
 type Themes = 'light' | 'dark' | 'default'
 

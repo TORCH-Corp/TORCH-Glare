@@ -91,10 +91,7 @@ for (const file of targets) {
 const COVERAGE_ALLOWLIST = {
     // Registry components with no `docs/components/<slug>.md`.
     componentsWithoutDoc: new Set([
-        "ChartBlockTool",   // internal non-visual chart tool (.ts), not a UI component
-        "TableDnDWrapper",  // internal drag-and-drop wrapper (.ts), not a UI component
-        "SearchableTree",       // TODO: needs docs
-        "SearchableTreeDialog", // TODO: needs docs
+        // Empty: every registry component now has a docs/components/<slug>.md.
     ]),
     // Component docs that resolve to no installable registry item of any type —
     // get-install-info / get-component-source return "not found" for these. They

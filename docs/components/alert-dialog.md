@@ -773,8 +773,10 @@ describe('AlertDialog', () => {
       </AlertDialog>
     )
 
+    // AlertDialogContent applies the variant as StatusTextStyle classes
+    // (it does not set a data-variant attribute).
     const content = screen.getByRole('alertdialog')
-    expect(content).toHaveAttribute('data-variant', 'error')
+    expect(content).toHaveClass('[&_strong]:text-content-presentation-state-negative')
   })
 
   it('calls action handler', () => {
