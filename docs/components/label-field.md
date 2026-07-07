@@ -11,13 +11,22 @@ keywords: [label-field, form, input, label, required, field]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add LabelField
+```
+
+`add` also copies any components, hooks, and utilities that `LabelField` depends on.
 
 ## Import
 
-```typescript
-import { LabelField } from '@torch-ui/components'
-import type { LabelFieldProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { LabelField } from "@/components/LabelField";
 ```
 
 ## Quick Examples
@@ -25,7 +34,7 @@ import type { LabelFieldProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 import { useState } from 'react'
 
 function Example() {
@@ -45,7 +54,7 @@ function Example() {
 ### With Required Indicator
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 
 function RequiredField() {
   return (
@@ -61,7 +70,7 @@ function RequiredField() {
 ### With Secondary Label
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 
 function WithSecondary() {
   return (
@@ -77,7 +86,7 @@ function WithSecondary() {
 ### With Error Message
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 import { useState } from 'react'
 
 function WithValidation() {
@@ -108,7 +117,7 @@ function WithValidation() {
 ### With Icon
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 
 function WithIcon() {
   return (
@@ -124,8 +133,8 @@ function WithIcon() {
 ### With Action Button
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
-import { ActionButton } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
+import { ActionButton } from "@/components/ActionButton";
 import { useState } from 'react'
 
 function WithActionButton() {
@@ -151,7 +160,7 @@ function WithActionButton() {
 ### Horizontal Layout
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 
 function HorizontalLayout() {
   return (
@@ -168,7 +177,7 @@ function HorizontalLayout() {
 ### Different Sizes
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 
 function Sizes() {
   return (
@@ -192,8 +201,9 @@ function Sizes() {
 ### Registration Form
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
-import { Button, PasswordLevel } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
+import { Button } from "@/components/Button";
+import { PasswordLevel } from "@/components/PasswordLevel";
 import { useState } from 'react'
 
 function RegistrationForm() {
@@ -281,7 +291,7 @@ function RegistrationForm() {
 ### With Popover Dropdown
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 import { useState } from 'react'
 
 function WithPopover() {
@@ -314,8 +324,8 @@ function WithPopover() {
 ### Profile Settings Form
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function ProfileSettings() {
@@ -426,7 +436,7 @@ export const LabelField: React.ForwardRefExoticComponent<
 ### Usage with Types
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 import { useRef, useState } from 'react'
 
 function TypedExample() {
@@ -455,7 +465,7 @@ function TypedExample() {
 ### Form Field Wrapper Hook
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 import { useState, useCallback } from 'react'
 
 function useFormField(initialValue: string = '') {
@@ -526,7 +536,7 @@ function FormWithHook() {
 ### Reusable Form Fields
 
 ```typescript
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 import { ComponentProps } from 'react'
 
 type FieldConfig = Omit<ComponentProps<typeof LabelField>, 'value' | 'onChange'> & {
@@ -580,7 +590,7 @@ function DynamicForm() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { LabelField } from '@torch-ui/components'
+import { LabelField } from "@/components/LabelField";
 import userEvent from '@testing-library/user-event'
 
 describe('LabelField', () => {

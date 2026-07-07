@@ -11,13 +11,22 @@ keywords: [field-hint, alert, validation, message, form, feedback, inline]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add FieldHint
+```
+
+`add` also copies any components, hooks, and utilities that `FieldHint` depends on.
 
 ## Import
 
-```typescript
-import { FieldHint } from '@torch-ui/components'
-import type { FieldHintProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { FieldHint } from "@/components/FieldHint";
 ```
 
 ## Quick Examples
@@ -25,7 +34,7 @@ import type { FieldHintProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 
 function Example() {
   return (
@@ -40,7 +49,7 @@ function Example() {
 ### All States
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 
 function AllStates() {
   return (
@@ -72,8 +81,8 @@ function AllStates() {
 ### With Form Field
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function WithFormField() {
@@ -115,7 +124,7 @@ function WithFormField() {
 ### Custom Icon
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 
 function CustomIcon() {
   return (
@@ -145,8 +154,9 @@ function CustomIcon() {
 ### Password Validation
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
-import { InputField, PasswordLevel } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
+import { InputField } from "@/components/InputField";
+import { PasswordLevel } from "@/components/PasswordLevel";
 import { useState } from 'react'
 
 function PasswordValidation() {
@@ -199,8 +209,9 @@ function PasswordValidation() {
 ### Form Validation
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
-import { InputField, Button } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function FormValidation() {
@@ -289,8 +300,9 @@ function FormValidation() {
 ### API Response Feedback
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
-import { InputField, Button } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function APIFeedback() {
@@ -360,7 +372,7 @@ function APIFeedback() {
 ### File Upload Feedback
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 import { useState } from 'react'
 
 function FileUploadFeedback() {
@@ -429,7 +441,7 @@ function FileUploadFeedback() {
 ### Multi-line Message
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 
 function MultilineMessage() {
   return (
@@ -456,7 +468,7 @@ Please save your work before continuing.`}
 ### Dynamic Theme
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 import { useState } from 'react'
 
 function DynamicTheme() {
@@ -488,8 +500,8 @@ function DynamicTheme() {
 ### Conditional Rendering
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function ConditionalHints() {
@@ -579,7 +591,7 @@ export const FieldHint: React.FC<FieldHintProps>
 ### Usage with Types
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 import { useState } from 'react'
 
 type ValidationState = {
@@ -607,7 +619,7 @@ function TypedExample() {
 ### Validation Hook
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 import { useState, useCallback } from 'react'
 
 function useFieldValidation<T>(
@@ -665,8 +677,8 @@ function ValidatedField() {
 ### Form Field Wrapper
 
 ```typescript
-import { FieldHint } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
+import { InputField } from "@/components/InputField";
 import { ReactNode } from 'react'
 
 interface FieldWrapperProps {
@@ -711,7 +723,7 @@ function FieldWrapper({
 
 ```typescript
 import { render, screen } from '@testing-library/react'
-import { FieldHint } from '@torch-ui/components'
+import { FieldHint } from "@/components/FieldHint";
 
 describe('FieldHint', () => {
   it('renders label text', () => {

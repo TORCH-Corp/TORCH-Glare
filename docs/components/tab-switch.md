@@ -1,6 +1,6 @@
 ---
 name: TabSwitch
-version: 1.0.0
+version: 2.4.0
 status: stable
 category: components/navigation
 tags: [tab-switch, segmented-control, view-switcher, toggle, list-cards, pills]
@@ -16,15 +16,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add TabSwitch
 ```
+
+`add` also copies any components, hooks, and utilities that `TabSwitch` depends on.
 
 ## Import
 
-```typescript
-import { TabSwitch } from 'torch-glare/lib/components/TabSwitch'
-import type { TabSwitchOption } from 'torch-glare/lib/components/TabSwitch'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { TabSwitch } from "@/components/TabSwitch";
 ```
 
 ## Quick Examples
@@ -32,7 +39,7 @@ import type { TabSwitchOption } from 'torch-glare/lib/components/TabSwitch'
 ### Basic Usage (List / Cards)
 
 ```typescript
-import { TabSwitch } from 'torch-glare/lib/components/TabSwitch'
+import { TabSwitch } from "@/components/TabSwitch";
 import { useState } from 'react'
 
 function Example() {

@@ -1,6 +1,6 @@
 ---
 name: Input
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, input, text, field, accessible, compound]
@@ -16,16 +16,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Input
 ```
+
+`add` also copies any components, hooks, and utilities that `Input` depends on.
 
 ## Import
 
-```typescript
-import { Input } from 'torch-glare/lib/components/Input'
-// Compound components
-import { Group, Icon, Trilling } from 'torch-glare/lib/components/Input'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Input } from "@/components/Input";
 ```
 
 ## Quick Examples
@@ -33,7 +39,7 @@ import { Group, Icon, Trilling } from 'torch-glare/lib/components/Input'
 ### Basic Usage
 
 ```typescript
-import { Input } from 'torch-glare/lib/components/Input'
+import { Input } from '@/components/Input'
 
 function Example() {
   const [value, setValue] = useState('')
@@ -53,7 +59,7 @@ function Example() {
 ### With Icon
 
 ```typescript
-import { Input } from 'torch-glare/lib/components/Input'
+import { Input } from '@/components/Input'
 import { SearchIcon } from '@heroicons/react/24/outline'
 
 function SearchInput() {
@@ -71,15 +77,15 @@ function SearchInput() {
 ### With Trailing Element
 
 ```typescript
-import { Input } from 'torch-glare/lib/components/Input'
-import { Button } from 'torch-glare/lib/components/Button'
+import { Input } from '@/components/Input'
+import { Button } from '@/components/Button'
 
 function InputWithButton() {
   return (
     <Input.Group>
       <Input placeholder="Enter email..." />
       <Input.Trilling>
-        <Button size="sm" variant="PrimeStyle">
+        <Button size="S" variant="PrimeStyle">
           Subscribe
         </Button>
       </Input.Trilling>
@@ -251,8 +257,8 @@ export const Input: React.ForwardRefExoticComponent<InputProps> & {
 ### Form Field with Label
 
 ```typescript
-import { Input } from 'torch-glare/lib/components/Input'
-import { Label } from 'torch-glare/lib/components/Label'
+import { Input } from '@/components/Input'
+import { Label } from '@/components/Label'
 
 function FormField() {
   const [value, setValue] = useState('')
@@ -278,7 +284,7 @@ function FormField() {
 ### Search Field
 
 ```typescript
-import { Input } from 'torch-glare/lib/components/Input'
+import { Input } from '@/components/Input'
 import { SearchIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 function SearchField() {
@@ -391,7 +397,7 @@ function CurrencyInput() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Input } from 'torch-glare/lib/components/Input'
+import { Input } from '@/components/Input'
 
 describe('Input', () => {
   it('handles user input', () => {
@@ -547,7 +553,7 @@ test('Input meets WCAG standards', async () => {
 ```diff
 // Import path changed
 - import Input from 'torch-glare/Input'
-+ import { Input } from 'torch-glare/lib/components/Input'
++ import { Input } from '@/components/Input'
 
 // Compound component structure
 - <Input icon={<SearchIcon />} />

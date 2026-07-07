@@ -21,14 +21,9 @@ const titleBadge = cva(
   },
 );
 
-export type SectionColor = NonNullable<
-  VariantProps<typeof titleBadge>["color"]
->;
+export type SectionColor = NonNullable<VariantProps<typeof titleBadge>["color"]>;
 
-export interface SectionBlockProps extends Omit<
-  HTMLAttributes<HTMLDivElement>,
-  "title"
-> {
+export interface SectionBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   color?: SectionColor;
   title?: ReactNode;
   icon?: ReactNode;
@@ -63,9 +58,7 @@ export const SectionBlock = forwardRef<HTMLDivElement, SectionBlockProps>(
         {...props}
       >
         {title && (
-          <div
-            className={cn("flex px-[6px] flex-col gap-[10px]", headerClassName)}
-          >
+          <div className={cn("flex px-[6px] flex-col gap-[10px]", headerClassName)}>
             <div className={cn(titleBadge({ color }))}>
               <span className="flex items-center gap-1.5">
                 {icon}
@@ -74,12 +67,7 @@ export const SectionBlock = forwardRef<HTMLDivElement, SectionBlockProps>(
             </div>
           </div>
         )}
-        <div
-          className={cn(
-            "flex px-[42px] flex-col gap-[2px] px-[42px]",
-            bodyClassName,
-          )}
-        >
+        <div className={cn("flex px-[42px] flex-col gap-[2px] px-[42px]", bodyClassName)}>
           <div className="flex w-full divide-y divide-gray-300 min-w-[300px]  flex-col items-start ">
             {children}
           </div>

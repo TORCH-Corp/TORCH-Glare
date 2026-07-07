@@ -32,17 +32,49 @@ async function resolveDocsDir(): Promise<string> {
 }
 
 /**
- * Resolve the manifest file path.
+ * Canonical category slugs used across the server. Component docs declare their
+ * grouping under two competing frontmatter conventions — `category:
+ * components/buttons` (path-style) on some docs and `group: Buttons & Actions`
+ * (human label) on others — so a raw value can arrive in many shapes. This map
+ * folds every observed form onto one slug so `list-components` filtering and the
+ * category index are consistent regardless of which convention a doc used.
  */
-async function resolveManifestPath(): Promise<string> {
-  const bundled = path.resolve(PACKAGE_ROOT, "docs", "llms-manifest.json");
-  const monorepo = path.resolve(MONOREPO_ROOT, "llms-manifest.json");
-  try {
-    await fs.access(bundled);
-    return bundled;
-  } catch {
-    return monorepo;
-  }
+const CATEGORY_ALIASES: Record<string, string> = {
+  buttons: "buttons",
+  "buttons & actions": "buttons",
+  forms: "forms",
+  "forms & inputs": "forms",
+  inputs: "forms",
+  "data-display": "dataDisplay",
+  "data display": "dataDisplay",
+  datadisplay: "dataDisplay",
+  editors: "advanced",
+  advanced: "advanced",
+  "advanced components": "advanced",
+  layout: "layout",
+  layouts: "layout",
+  "layout & containers": "layout",
+  navigation: "navigation",
+  "date & time": "dateTime",
+  datetime: "dateTime",
+  "feedback & status": "feedback",
+  feedback: "feedback",
+  "labels & text": "labels",
+  labels: "labels",
+  "overlays & dialogs": "overlays",
+  overlays: "overlays",
+};
+
+/**
+ * Normalize a raw category/group value (or a user-supplied filter) to a canonical
+ * slug. Strips a leading `components/` path segment, then maps known aliases.
+ * Unknown values pass through lowercased so nothing is silently dropped.
+ */
+export function normalizeCategory(raw: string | undefined): string {
+  if (!raw) return "uncategorized";
+  let key = raw.trim().toLowerCase();
+  if (key.startsWith("components/")) key = key.slice("components/".length);
+  return CATEGORY_ALIASES[key] ?? key;
 }
 
 export interface ComponentDoc {
@@ -59,7 +91,6 @@ export interface ComponentDoc {
 /**
  * Convert a kebab-case slug to PascalCase component name.
  * "action-button" -> "ActionButton"
- * "input-otp" -> "InputOTP" (special case handled via manifest)
  */
 function slugToPascalCase(slug: string): string {
   return slug
@@ -80,51 +111,25 @@ function pascalCaseToSlug(name: string): string {
     .toLowerCase();
 }
 
-// Category mapping from llms-manifest.json structure
-interface ManifestComponent {
-  name: string;
-  version: string;
-  documented: boolean;
-}
-
-interface ManifestCategory {
-  count: number;
-  items: ManifestComponent[];
-}
-
-interface Manifest {
-  components: Record<string, ManifestCategory>;
-}
-
 export class DocsLoader {
   private componentDocs: Map<string, ComponentDoc> = new Map();
   private referenceDocs: Map<string, string> = new Map();
   private tutorialDocs: Map<string, string> = new Map();
-  private categoryMap: Map<string, string> = new Map(); // componentName -> category
+  private howToDocs: Map<string, string> = new Map();
+  private explanationDocs: Map<string, string> = new Map();
+  private migrationDocs: Map<string, string> = new Map();
   private docsDir = "";
 
   async loadAll(): Promise<void> {
     this.docsDir = await resolveDocsDir();
-    await this.loadManifestCategories();
     await this.loadComponentDocs();
     await this.loadReferenceDocs();
     await this.loadTutorialDocs();
-  }
-
-  private async loadManifestCategories(): Promise<void> {
-    try {
-      const manifestPath = await resolveManifestPath();
-      const raw = await fs.readFile(manifestPath, "utf-8");
-      const manifest: Manifest = JSON.parse(raw);
-
-      for (const [category, data] of Object.entries(manifest.components)) {
-        for (const item of data.items) {
-          this.categoryMap.set(item.name, category);
-        }
-      }
-    } catch {
-      // Manifest not available, categories will fall back to frontmatter
-    }
+    await this.loadHowToDocs();
+    // Diátaxis explanation (architecture, design-system) and migration (changelog)
+    // docs — served via get-design-system-info and get-guide.
+    await this.loadFlatDocs("explanation", this.explanationDocs);
+    await this.loadFlatDocs("migration", this.migrationDocs);
   }
 
   private async loadComponentDocs(): Promise<void> {
@@ -145,13 +150,10 @@ export class DocsLoader {
         // Resolve description
         const description = frontmatter.description || extractDescription(content);
 
-        // Resolve category from manifest first, then frontmatter
-        const category =
-          this.categoryMap.get(name) ||
-          this.categoryMap.get(slugToPascalCase(slug)) ||
-          frontmatter.category ||
-          frontmatter.group ||
-          "uncategorized";
+        // Categories live in frontmatter under two competing conventions
+        // (`category: components/buttons` or `group: Buttons & Actions`).
+        // Normalize both onto a single canonical slug.
+        const category = normalizeCategory(frontmatter.category || frontmatter.group);
 
         // Resolve tags
         const tags = frontmatter.tags || frontmatter.keywords || [];
@@ -191,15 +193,24 @@ export class DocsLoader {
   }
 
   private async loadTutorialDocs(): Promise<void> {
-    const tutorialsDir = path.resolve(this.docsDir, "tutorials");
+    await this.loadFlatDocs("tutorials", this.tutorialDocs);
+  }
+
+  private async loadHowToDocs(): Promise<void> {
+    await this.loadFlatDocs("how-to", this.howToDocs);
+  }
+
+  /** Load every `*.md` in a docs subdir into a name→content map. */
+  private async loadFlatDocs(dir: string, into: Map<string, string>): Promise<void> {
+    const abs = path.resolve(this.docsDir, dir);
     try {
-      const files = await fs.readdir(tutorialsDir);
+      const files = await fs.readdir(abs);
       for (const file of files.filter((f) => f.endsWith(".md"))) {
-        const content = await fs.readFile(path.resolve(tutorialsDir, file), "utf-8");
-        this.tutorialDocs.set(file.replace(".md", ""), content);
+        const content = await fs.readFile(path.resolve(abs, file), "utf-8");
+        into.set(file.replace(".md", ""), content);
       }
     } catch {
-      // tutorials dir not found
+      // dir not found
     }
   }
 
@@ -241,5 +252,52 @@ export class DocsLoader {
 
   getAllTutorialNames(): string[] {
     return Array.from(this.tutorialDocs.keys());
+  }
+
+  /**
+   * One-line descriptions for hooks/utils/providers, parsed from the
+   * "## Available …" bullet lists in the reference docs (e.g. hooks.md:
+   * `- **useClickOutside** - Detect clicks outside a referenced element`).
+   * Used to replace the generic "TORCH Glare React hook" placeholder in search.
+   */
+  getRegistryItemDescriptions(): Map<string, string> {
+    const map = new Map<string, string>();
+    for (const content of this.referenceDocs.values()) {
+      for (const m of content.matchAll(/^[-*]\s+\*\*([A-Za-z_$][\w$]*)\*\*\s*[-–—:]\s*(.+?)\s*$/gm)) {
+        const name = m[1];
+        if (!map.has(name)) map.set(name, m[2].trim());
+      }
+    }
+    return map;
+  }
+
+  /** An explanation doc (architecture, design-system), looked up by name. */
+  getExplanation(name: string): string | undefined {
+    return this.explanationDocs.get(name);
+  }
+
+  /**
+   * A guide is any tutorial, how-to, explanation, or migration doc, looked up by
+   * name — the "read a doc by name" surface behind get-guide.
+   */
+  getGuide(name: string): string | undefined {
+    return (
+      this.tutorialDocs.get(name) ??
+      this.howToDocs.get(name) ??
+      this.explanationDocs.get(name) ??
+      this.migrationDocs.get(name)
+    );
+  }
+
+  /** All guide names (tutorials + how-to + explanation + migration), deduped and sorted. */
+  getAllGuideNames(): string[] {
+    return [
+      ...new Set([
+        ...this.tutorialDocs.keys(),
+        ...this.howToDocs.keys(),
+        ...this.explanationDocs.keys(),
+        ...this.migrationDocs.keys(),
+      ]),
+    ].sort();
   }
 }

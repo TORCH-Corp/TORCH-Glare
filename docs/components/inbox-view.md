@@ -11,13 +11,22 @@ keywords: [data-views, inbox-view, inbox, list, master-detail, read, starred, pr
 
 ## Installation
 
-Part of `torch-glare`. Ships with the `DataViews` folder when you run `npx torch-glare add DataViews` — no separate install. It depends on the shared `Badge`, `Button`, `Avatar`, `Card`, `Divider`, and `TabFormItem` components plus `lucide-react`.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add InboxView
+```
+
+`add` also copies any components, hooks, and utilities that `InboxView` depends on.
 
 ## Import
 
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
 ```tsx
-import { InboxView, useDataViewsState } from "torch-glare"
-import type { InboxViewProps, InboxConfig, FieldConfig } from "torch-glare"
+import { InboxView } from "@/components/InboxView";
 ```
 
 ## When to use it directly
@@ -42,8 +51,10 @@ Override any of them with `inboxConfig`.
 ## Composable Mode example
 
 ```tsx
-import { InboxView, useDataViewsState } from "torch-glare"
-import type { FieldConfig, InboxConfig } from "torch-glare"
+import { InboxView } from "@/components/InboxView";
+import { useDataViewsState } from "@/hooks/useDataViewsState";
+import type { FieldConfig } from "@/components/FieldConfig";
+import type { InboxConfig } from "@/components/InboxConfig";
 
 const messages = [
   { id: 1, subject: "Welcome", from: { name: "Ada" }, isRead: false, isStarred: true, sentAt: "2024-06-01" },

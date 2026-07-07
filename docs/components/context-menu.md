@@ -11,29 +11,22 @@ keywords: [context-menu, right-click, menu, radix-ui, submenu, checkbox, context
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-context-menu
+npx torch-glare@latest init
+npx torch-glare@latest add ContextMenu
 ```
+
+`add` also copies any components, hooks, and utilities that `ContextMenu` depends on.
 
 ## Import
 
-```typescript
-import {
-  ContextMenu,
-  ContextMenuTrigger,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuGroup,
-  ContextMenuRadioGroup,
-  ContextMenuCheckboxItem,
-  ContextMenuRadioItem,
-  ContextMenuLabel,
-  ContextMenuShortcut,
-  ContextMenuSub,
-  ContextMenuSubTrigger,
-  ContextMenuSubContent,
-  ContextMenuPortal,
-} from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { ContextMenu } from "@/components/ContextMenu";
 ```
 
 ## Quick Examples
@@ -43,7 +36,7 @@ import {
 Wrap the right-click zone in `ContextMenuTrigger`. The menu opens at the pointer.
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from "@/components/ContextMenu";
 
 function Example() {
   return (
@@ -66,7 +59,7 @@ function Example() {
 ### With Icons, Shortcuts, and a Negative Item
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuShortcut } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuShortcut } from "@/components/ContextMenu";
 
 function ActionsMenu() {
   return (
@@ -103,7 +96,7 @@ function ActionsMenu() {
 > Clicking a checkbox item keeps the menu open — `onSelect` calls `preventDefault()` internally so Radix does not auto-close. Toggle several options without the menu dismissing.
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuCheckboxItem } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuCheckboxItem } from "@/components/ContextMenu";
 import { useState } from 'react'
 
 function CheckboxMenu() {
@@ -148,7 +141,7 @@ function CheckboxMenu() {
 > Like checkboxes, selecting a radio item keeps the menu open (`onSelect` `preventDefault` is built in).
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuRadioGroup, ContextMenuRadioItem } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuRadioGroup, ContextMenuRadioItem } from "@/components/ContextMenu";
 import { useState } from 'react'
 
 function RadioMenu() {
@@ -176,7 +169,7 @@ function RadioMenu() {
 ### With Submenu
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from "@/components/ContextMenu";
 
 function SubmenuExample() {
   return (
@@ -211,7 +204,7 @@ function SubmenuExample() {
 Set `dir="rtl"` on the Root and the menu, items, and submenu arrows mirror automatically.
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuShortcut } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuShortcut } from "@/components/ContextMenu";
 
 function RtlMenu() {
   return (
@@ -238,7 +231,7 @@ function RtlMenu() {
 Tall menus scroll instead of overflowing off-screen. The surface caps at `maxHeight` (default `320`px) and never exceeds the space available after collision handling. Pass `maxHeight` to change the cap.
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuLabel } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuLabel } from "@/components/ContextMenu";
 
 function LongMenu() {
   return (

@@ -11,25 +11,22 @@ keywords: [alert-dialog, confirmation, modal, alert, warning, error, radix-ui]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-alert-dialog
+npx torch-glare@latest init
+npx torch-glare@latest add AlertDialog
 ```
+
+`add` also copies any components, hooks, and utilities that `AlertDialog` depends on.
 
 ## Import
 
-```typescript
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogLabel,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogCancel,
-} from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { AlertDialog } from "@/components/AlertDialog";
 ```
 
 ## Quick Examples
@@ -37,8 +34,8 @@ import {
 ### Basic Alert
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction } from "@/components/AlertDialog";
+import { Button } from "@/components/Button";
 
 function Example() {
   return (
@@ -63,8 +60,8 @@ function Example() {
 ### Delete Confirmation (Error Variant)
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/AlertDialog";
+import { Button } from "@/components/Button";
 
 function DeleteConfirmation() {
   const handleDelete = () => {
@@ -75,7 +72,7 @@ function DeleteConfirmation() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="DestructiveStyle">Delete Item</Button>
+        <Button variant="RedSecStyle">Delete Item</Button>
       </AlertDialogTrigger>
       <AlertDialogContent variant="error">
         <AlertDialogHeader>
@@ -90,7 +87,7 @@ function DeleteConfirmation() {
             <i className="ri-close-line" />
           </AlertDialogCancel>
           <AlertDialogAction
-            variant="DestructiveStyle"
+            variant="RedSecStyle"
             onClick={handleDelete}
           >
             Delete Permanently
@@ -105,7 +102,7 @@ function DeleteConfirmation() {
 ### Success Alert
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogAction } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogAction } from "@/components/AlertDialog";
 
 function SuccessAlert() {
   return (
@@ -119,7 +116,7 @@ function SuccessAlert() {
           Your task has been successfully completed and saved.
         </AlertDialogDescription>
         <AlertDialogFooter>
-          <AlertDialogAction variant="PrimaryStyle">
+          <AlertDialogAction variant="PrimeStyle">
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -132,7 +129,7 @@ function SuccessAlert() {
 ### Warning Alert
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/AlertDialog";
 
 function WarningAlert() {
   return (
@@ -150,7 +147,7 @@ function WarningAlert() {
           <AlertDialogCancel>
             <i className="ri-close-line" />
           </AlertDialogCancel>
-          <AlertDialogAction variant="PrimaryStyle">
+          <AlertDialogAction variant="PrimeStyle">
             Leave Anyway
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -163,7 +160,7 @@ function WarningAlert() {
 ### Info Alert
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogAction } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogAction } from "@/components/AlertDialog";
 
 function InfoAlert() {
   return (
@@ -178,7 +175,7 @@ function InfoAlert() {
           your next restart. This may take a few minutes.
         </AlertDialogDescription>
         <AlertDialogFooter>
-          <AlertDialogAction variant="PrimaryStyle">
+          <AlertDialogAction variant="PrimeStyle">
             Got It
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -191,7 +188,7 @@ function InfoAlert() {
 ### Controlled State
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction } from "@/components/AlertDialog";
 import { useState } from 'react'
 
 function ControlledAlert() {
@@ -229,8 +226,9 @@ function ControlledAlert() {
 ### Account Deletion Flow
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@torch-ui/components'
-import { Button, Input } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/AlertDialog";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
 import { useState } from 'react'
 
 function DeleteAccountDialog() {
@@ -240,7 +238,7 @@ function DeleteAccountDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="DestructiveStyle">Delete Account</Button>
+        <Button variant="RedSecStyle">Delete Account</Button>
       </AlertDialogTrigger>
       <AlertDialogContent variant="error">
         <AlertDialogLabel title="Delete Account" />
@@ -260,7 +258,7 @@ function DeleteAccountDialog() {
             <i className="ri-close-line" />
           </AlertDialogCancel>
           <AlertDialogAction
-            variant="DestructiveStyle"
+            variant="RedSecStyle"
             disabled={!isValid}
           >
             Delete My Account
@@ -275,7 +273,7 @@ function DeleteAccountDialog() {
 ### Multi-Action Alert
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/AlertDialog";
 
 function MultiActionAlert() {
   const handleSave = () => console.log('Saved')
@@ -295,10 +293,10 @@ function MultiActionAlert() {
           <AlertDialogCancel>
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction variant="SecondaryStyle" onClick={handleDiscard}>
+          <AlertDialogAction variant="BluSecStyle" onClick={handleDiscard}>
             Don't Save
           </AlertDialogAction>
-          <AlertDialogAction variant="PrimaryStyle" onClick={handleSave}>
+          <AlertDialogAction variant="PrimeStyle" onClick={handleSave}>
             Save Changes
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -311,8 +309,8 @@ function MultiActionAlert() {
 ### With Loading State
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@torch-ui/components'
-import { SpinLoading } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/AlertDialog";
+import { SpinLoading } from "@/components/SpinLoading";
 import { useState } from 'react'
 
 function AsyncAlert() {
@@ -358,7 +356,7 @@ function AsyncAlert() {
 ### Permission Request
 
 ```typescript
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/AlertDialog";
 
 function PermissionAlert() {
   const handleAllow = () => {
@@ -381,7 +379,7 @@ function PermissionAlert() {
           <AlertDialogCancel>
             Not Now
           </AlertDialogCancel>
-          <AlertDialogAction variant="PrimaryStyle" onClick={handleAllow}>
+          <AlertDialogAction variant="PrimeStyle" onClick={handleAllow}>
             Allow Camera Access
           </AlertDialogAction>
         </AlertDialogFooter>
@@ -648,7 +646,7 @@ Once the patches above are in place, every consumer renders correctly with bare 
 
 ```typescript
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
-import { ButtonVariant } from '@torch-ui/types'
+import { ButtonVariant } from "@/utils/types";
 
 // Root component
 interface AlertDialogProps {
@@ -693,7 +691,7 @@ export const AlertDialogCancel: React.ForwardRefExoticComponent<AlertDialogActio
 ### useAlertDialog Hook
 
 ```typescript
-import { AlertDialog, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@torch-ui/components'
+import { AlertDialog, AlertDialogContent, AlertDialogLabel, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/AlertDialog";
 import { useState } from 'react'
 
 function useAlertDialog() {
@@ -763,7 +761,7 @@ function App() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogAction } from '@torch-ui/components'
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogAction } from "@/components/AlertDialog";
 
 describe('AlertDialog', () => {
   it('renders with correct variant', () => {
@@ -775,8 +773,10 @@ describe('AlertDialog', () => {
       </AlertDialog>
     )
 
+    // AlertDialogContent applies the variant as StatusTextStyle classes
+    // (it does not set a data-variant attribute).
     const content = screen.getByRole('alertdialog')
-    expect(content).toHaveAttribute('data-variant', 'error')
+    expect(content).toHaveClass('[&_strong]:text-content-presentation-state-negative')
   })
 
   it('calls action handler', () => {
@@ -845,8 +845,8 @@ describe('AlertDialog', () => {
 ## Migration from Dialog
 
 ```diff
-- import { Dialog, DialogTrigger, DialogContent } from '@torch-ui/components'
-+ import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from '@torch-ui/components'
+- import { Dialog, DialogTrigger, DialogContent } from "@/components/Dialog";
++ import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from "@/components/AlertDialog";
 
 - <Dialog>
 -   <DialogTrigger>Delete</DialogTrigger>
@@ -891,7 +891,7 @@ describe('AlertDialog', () => {
 4. **Distinguish action buttons**: Make destructive action clear
    ```typescript
    <AlertDialogCancel>Cancel</AlertDialogCancel>
-   <AlertDialogAction variant="DestructiveStyle">Delete</AlertDialogAction>
+   <AlertDialogAction variant="RedSecStyle">Delete</AlertDialogAction>
    ```
 
 5. **Don't overuse**: Reserve for important decisions only

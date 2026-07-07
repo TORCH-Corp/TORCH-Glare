@@ -81,10 +81,7 @@ export function convertInlineMarkdown(text: string): string {
   let result = text;
 
   // Images inline (rare in inline context but handle gracefully)
-  result = result.replace(
-    /!\[([^\]]*)\]\(([^)]+)\)/g,
-    '<img src="$2" alt="$1">',
-  );
+  result = result.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
 
   // Links: [text](url)
   result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
@@ -173,9 +170,7 @@ export function parseMarkdownToBlocks(md: string): EditorBlock[] {
       type: "table",
       data: {
         withHeadings: tableRows.length > 1,
-        content: tableRows.map((row) =>
-          row.map((cell) => convertInlineMarkdown(cell.trim())),
-        ),
+        content: tableRows.map((row) => row.map((cell) => convertInlineMarkdown(cell.trim()))),
       },
     });
     tableRows = [];

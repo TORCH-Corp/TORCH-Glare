@@ -1,6 +1,6 @@
 ---
 name: RadioCard
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, radio, card, selection, compound, accessible]
@@ -17,15 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add RadioCard
 ```
+
+`add` also copies any components, hooks, and utilities that `RadioCard` depends on.
 
 ## Import
 
-```typescript
-import { RadioCard } from 'torch-glare/lib/components/RadioCard'
-import { RadioGroup } from 'torch-glare/lib/components/Radio'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { RadioCard } from "@/components/RadioCard";
 ```
 
 ## Quick Examples
@@ -33,8 +40,8 @@ import { RadioGroup } from 'torch-glare/lib/components/Radio'
 ### Basic Usage
 
 ```typescript
-import { RadioCard } from 'torch-glare/lib/components/RadioCard'
-import { RadioGroup } from 'torch-glare/lib/components/Radio'
+import { RadioCard } from '@/components/RadioCard'
+import { RadioGroup } from '@/components/Radio'
 
 function Example() {
   const [selected, setSelected] = useState('option1')
@@ -534,8 +541,8 @@ function DeploymentOptions() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { RadioCard } from 'torch-glare/lib/components/RadioCard'
-import { RadioGroup } from 'torch-glare/lib/components/Radio'
+import { RadioCard } from '@/components/RadioCard'
+import { RadioGroup } from '@/components/Radio'
 
 describe('RadioCard', () => {
   it('renders card with header and description', () => {

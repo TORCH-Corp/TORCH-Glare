@@ -7,6 +7,14 @@ Welcome to the **TORCH Glare Components Library**! This library offers a compreh
 ## Documentation
 You can find the complete documentation at: [https://glare.torchcorp.com](https://glare.torchcorp.com)
 
+## MCP Server (AI assistants)
+TORCH Glare ships an [MCP](https://modelcontextprotocol.io) server (`torch-glare-mcp`) that gives
+AI assistants full access to component docs, API references, code examples, install commands, and
+the actual source the CLI copies. See [`mcp/README.md`](mcp/README.md).
+
+Wire it into your AI client with `npx torch-glare mcp`, or, when working in this repo, run
+`pnpm run mcp:build` once — the local server is registered in [`.mcp.json`](.mcp.json).
+
 ## Contributing
 We’re excited to welcome contributors! To get started:
 

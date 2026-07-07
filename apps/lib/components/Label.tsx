@@ -17,8 +17,7 @@ const labelComponentVariants = cva("flex", {
 });
 
 interface Props
-  extends LabelHTMLAttributes<HTMLLabelElement>,
-  VariantProps<typeof labelComponentVariants> {
+  extends LabelHTMLAttributes<HTMLLabelElement>, VariantProps<typeof labelComponentVariants> {
   label?: ReactNode; // main label
   requiredLabel?: ReactNode; // normal text with required style
   secondaryLabel?: ReactNode; // normal text with secondary style
@@ -26,10 +25,10 @@ interface Props
   asChild?: boolean;
   size?: "S" | "M" | "L";
   variant?: "SystemStyle" | "PresentationStyle";
-  theme?: Themes
+  theme?: Themes;
   labelsClassName?: string;
   labelDirections?: "vertical" | "horizontal";
-  childrenDirections?: "vertical" | "horizontal"
+  childrenDirections?: "vertical" | "horizontal";
   reverseChildren?: boolean;
 }
 
@@ -48,28 +47,32 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
       labelsClassName,
       variant = "PresentationStyle",
       theme,
-      asChild,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      asChild, // excluded from ...props spread
       as: Tag = "label",
       ...props
     },
-    forwardedRef
+    forwardedRef,
   ) => {
-
     const Component = Tag;
 
     return (
       <Component
         data-theme={theme}
         ref={forwardedRef}
-        className={cn("flex flex-0 w-fit [&_p]:!leading-none gap-[8px]", {
-          "flex-col justify-start items-start": childrenDirections === "vertical",
-          "flex-row justify-start items-center": childrenDirections === "horizontal",
-          "flex-row-reverse": reverseChildren && childrenDirections === "horizontal",
-          "flex-col-reverse": reverseChildren && childrenDirections === "vertical",
-        }, className)}
+        className={cn(
+          "flex flex-0 w-fit [&_p]:!leading-none gap-[8px]",
+          {
+            "flex-col justify-start items-start": childrenDirections === "vertical",
+            "flex-row justify-start items-center": childrenDirections === "horizontal",
+            "flex-row-reverse": reverseChildren && childrenDirections === "horizontal",
+            "flex-col-reverse": reverseChildren && childrenDirections === "vertical",
+          },
+          className,
+        )}
         {...props}
       >
-        <div className={cn(labelComponentVariants({ labelDirections }), labelsClassName)} >
+        <div className={cn(labelComponentVariants({ labelDirections }), labelsClassName)}>
           {label && (
             <p
               className={cn(
@@ -80,10 +83,9 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
                   "typography-body-large-regular": size === "L",
                 },
                 {
-                  "text-content-presentation-global-primary":
-                    variant === "PresentationStyle",
+                  "text-content-presentation-global-primary": variant === "PresentationStyle",
                   "text-[#E5E5E5]": variant === "SystemStyle",
-                }
+                },
               )}
             >
               {label}
@@ -91,36 +93,30 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
           )}
           {secondaryLabel && (
             <p
-              className={cn(
-                "text-content-presentation-global-secondary text-start",
-                {
-                  "typography-labels-small-regular": size === "S",
-                  "typography-labels-medium-regular": size === "M",
-                  "typography-body-small-regular": size === "L",
-                }
-              )}
+              className={cn("text-content-presentation-global-secondary text-start", {
+                "typography-labels-small-regular": size === "S",
+                "typography-labels-medium-regular": size === "M",
+                "typography-body-small-regular": size === "L",
+              })}
             >
               {secondaryLabel}
             </p>
           )}
           {requiredLabel && (
             <p
-              className={cn(
-                "text-content-presentation-state-negative text-start",
-                {
-                  "typography-labels-small-medium": size === "S",
-                  "typography-labels-medium-medium": size === "M",
-                  "typography-body-small-medium": size === "L",
-                }
-              )}
+              className={cn("text-content-presentation-state-negative text-start", {
+                "typography-labels-small-medium": size === "S",
+                "typography-labels-medium-medium": size === "M",
+                "typography-body-small-medium": size === "L",
+              })}
             >
               {requiredLabel}
             </p>
           )}
         </div>
         {children}
-      </Component >
+      </Component>
     );
-  }
+  },
 );
 Label.displayName = "Label";

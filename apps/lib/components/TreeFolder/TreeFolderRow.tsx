@@ -4,7 +4,7 @@ import { ChevronRight, ChevronDown, GripVertical } from "lucide-react";
 import type { DragEvent } from "react";
 import { cn } from "../../utils/cn";
 import { resolveIcon } from "./icons";
-import type { TreeFolderIconResolver, TreeFolderVisibleRow } from "./types";
+import type { TreeFolderIconResolver, TreeFolderNode, TreeFolderVisibleRow } from "./types";
 
 export type TreeFolderRowDragHandlers = {
   draggable: boolean;
@@ -70,8 +70,7 @@ export function TreeFolderRow({
   // they read as "members of the selected group" without competing with the
   // selection itself. Rows stand alone — no neighbor-aware joining anymore.
   const showSelected = isSelected && !willReceiveDrop;
-  const showChildOfSelected =
-    inSubtreeOfSelected && !isSelected && !willReceiveDrop;
+  const showChildOfSelected = inSubtreeOfSelected && !isSelected && !willReceiveDrop;
   // A row is "in the selection group" if it's the selected node itself or a
   // descendant tinted by it. Neighbor-aware rounding then merges adjacent rows
   // into one continuous pill instead of stacked individual chips.
@@ -102,9 +101,7 @@ export function TreeFolderRow({
     // Token isn't exposed as channels, so Tailwind's /alpha modifier doesn't
     // work on it — paint the descendant tint with the same hex at 30% alpha.
     showChildOfSelected && "bg-[#005ECC]/30",
-    inAncestorChain &&
-      !inGroup &&
-      "bg-background-presentation-state-information-secondary",
+    inAncestorChain && !inGroup && "bg-background-presentation-state-information-secondary",
     willReceiveDrop && "bg-background-presentation-state-information-primary",
   );
 
@@ -155,9 +152,7 @@ export function TreeFolderRow({
           <GripVertical
             className={cn(
               "w-3.5 h-3.5",
-              showSelected
-                ? "text-white/80"
-                : "text-content-presentation-global-tertiary",
+              showSelected ? "text-white/80" : "text-content-presentation-global-tertiary",
             )}
           />
         </span>
@@ -228,9 +223,7 @@ export function TreeFolderRow({
         <span
           className={cn(
             "shrink-0 w-4 h-4 flex items-center justify-center",
-            showSelected
-              ? "text-white/90"
-              : "text-content-presentation-global-tertiary",
+            showSelected ? "text-white/90" : "text-content-presentation-global-tertiary",
           )}
           aria-hidden
         >
@@ -245,9 +238,7 @@ export function TreeFolderRow({
           <span
             className={cn(
               "shrink-0 text-xs tabular-nums",
-              showSelected
-                ? "text-white/80"
-                : "text-content-presentation-global-tertiary",
+              showSelected ? "text-white/80" : "text-content-presentation-global-tertiary",
             )}
           >
             ({countDescendants(node)})
@@ -348,16 +339,14 @@ function TreeConnectors({
   return <>{segments}</>;
 }
 
-function countDescendants(node: {
-  children?: { children?: any[] }[] | null;
-}): number {
+function countDescendants(node: { children?: TreeFolderNode[] | null }): number {
   if (!node.children) return 0;
   let n = 0;
-  const stack: any[] = [...node.children];
+  const stack: TreeFolderNode[] = [...node.children];
   while (stack.length) {
     n++;
     const top = stack.pop();
-    if (top.children) for (const c of top.children) stack.push(c);
+    if (top?.children) for (const c of top.children) stack.push(c);
   }
   return n;
 }

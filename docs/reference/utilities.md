@@ -29,7 +29,7 @@ Utility function to merge and deduplicate Tailwind CSS classes.
 
 **Import:**
 ```typescript
-import { cn } from '@torch-ai/torch-glare/utils';
+import { cn } from "@/utils/cn";
 ```
 
 **Signature:**
@@ -48,7 +48,7 @@ function cn(...inputs: ClassValue[]): string
 #### Basic Usage
 
 ```typescript
-import { cn } from '@torch-ai/torch-glare/utils';
+import { cn } from "@/utils/cn";
 
 // Merge multiple classes
 cn('px-4 py-2', 'bg-blue-500', 'text-white')
@@ -110,11 +110,11 @@ cn('hover:text-blue-500', 'hover:text-red-500')
 ```typescript
 interface ButtonProps {
   variant?: 'primary' | 'secondary';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'S' | 'M' | 'L';
   className?: string;
 }
 
-function Button({ variant = 'primary', size = 'md', className }: ButtonProps) {
+function Button({ variant = 'primary', size = 'M', className }: ButtonProps) {
   return (
     <button
       className={cn(
@@ -129,9 +129,9 @@ function Button({ variant = 'primary', size = 'md', className }: ButtonProps) {
 
         // Size classes
         {
-          'px-2 py-1 text-sm': size === 'sm',
-          'px-4 py-2 text-base': size === 'md',
-          'px-6 py-3 text-lg': size === 'lg',
+          'px-2 py-1 text-sm': size === 'S',
+          'px-4 py-2 text-base': size === 'M',
+          'px-6 py-3 text-lg': size === 'L',
         },
 
         // Custom classes (overrides defaults)
@@ -166,7 +166,7 @@ Applies time from a picker to a date object.
 
 **Import:**
 ```typescript
-import { applyTimeToDate } from '@torch-ai/torch-glare/utils';
+import { applyTimeToDate } from "@/utils/dateFormat";
 ```
 
 **Signature:**
@@ -206,7 +206,7 @@ Validates if a value is a valid Date object.
 
 **Import:**
 ```typescript
-import { isValidDateObject } from '@torch-ai/torch-glare/utils';
+import { isValidDateObject } from "@/utils/dateFormat";
 ```
 
 **Signature:**
@@ -223,7 +223,7 @@ function isValidDateObject(date: Date): boolean
 **Examples:**
 
 ```typescript
-import { isValidDateObject } from '@torch-ai/torch-glare/utils';
+import { isValidDateObject } from "@/utils/dateFormat";
 
 isValidDateObject(new Date())
 // Returns: true
@@ -246,7 +246,7 @@ Applies time to various date value types (single, array, or range).
 
 **Import:**
 ```typescript
-import { applyTimeToDateValue } from '@torch-ai/torch-glare/utils';
+import { applyTimeToDateValue } from "@/utils/dateFormat";
 ```
 
 **Signature:**
@@ -310,7 +310,7 @@ Formats date values to strings with time applied.
 
 **Import:**
 ```typescript
-import { formatDateValueToString } from '@torch-ai/torch-glare/utils';
+import { formatDateValueToString } from "@/utils/dateFormat";
 ```
 
 **Signature:**
@@ -398,7 +398,7 @@ Calculates new width based on mouse position with RTL support.
 
 **Import:**
 ```typescript
-import { calculateNewWidthFromMouse } from '@torch-ai/torch-glare/utils';
+import { calculateNewWidthFromMouse } from "@/utils/resize";
 ```
 
 **Signature:**
@@ -422,7 +422,7 @@ function calculateNewWidthFromMouse(
 
 ```typescript
 import { useRef, useState } from 'react';
-import { calculateNewWidthFromMouse } from '@torch-ai/torch-glare/utils';
+import { calculateNewWidthFromMouse } from "@/utils/resize";
 
 function ResizablePanel() {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -456,7 +456,7 @@ Calculates new width based on touch position with RTL support.
 
 **Import:**
 ```typescript
-import { calculateNewWidthFromTouch } from '@torch-ai/torch-glare/utils';
+import { calculateNewWidthFromTouch } from "@/utils/resize";
 ```
 
 **Signature:**
@@ -480,7 +480,7 @@ function calculateNewWidthFromTouch(
 
 ```typescript
 import { useRef, useState } from 'react';
-import { calculateNewWidthFromTouch } from '@torch-ai/torch-glare/utils';
+import { calculateNewWidthFromTouch } from "@/utils/resize";
 
 function TouchResizablePanel() {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -541,11 +541,7 @@ const time: TimePickerValue = {
 #### Date Formatting with Time
 
 ```typescript
-import {
-  applyTimeToDate,
-  formatDateValueToString,
-  isValidDateObject
-} from '@torch-ai/torch-glare/utils';
+import { applyTimeToDate, formatDateValueToString, isValidDateObject } from "@/utils/dateFormat";
 
 function formatUserSelectedDate(
   date: Date,
@@ -569,7 +565,7 @@ const formatted = formatUserSelectedDate(date, time, 'MM/dd/yyyy hh:mm a');
 #### Class Name Merging with Variants
 
 ```typescript
-import { cn } from '@torch-ai/torch-glare/utils';
+import { cn } from "@/utils/cn";
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const buttonVariants = cva(
@@ -609,10 +605,7 @@ function Button({ variant, size, className }: ButtonProps) {
 #### Resize with Constraints
 
 ```typescript
-import {
-  calculateNewWidthFromMouse,
-  calculateNewWidthFromTouch
-} from '@torch-ai/torch-glare/utils';
+import { calculateNewWidthFromMouse, calculateNewWidthFromTouch } from "@/utils/resize";
 
 function ConstrainedResize() {
   const MIN_WIDTH = 200;

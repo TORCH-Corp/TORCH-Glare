@@ -12,11 +12,15 @@ A flexible avatar component for displaying user profile images with automatic fa
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-cli add avatar
+npx torch-glare@latest init
+npx torch-glare@latest add Avatar
 ```
 
-**Dependencies**: Requires `@radix-ui/react-avatar`
+`add` also copies any components, hooks, and utilities that `Avatar` depends on.
 
 ## Imports
 

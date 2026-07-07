@@ -10,11 +10,7 @@ export type HeaderSearchProps = {
   placeholder?: string;
 };
 
-export function HeaderSearch({
-  value,
-  onChange,
-  placeholder = "Search...",
-}: HeaderSearchProps) {
+export function HeaderSearch({ value, onChange, placeholder = "Search..." }: HeaderSearchProps) {
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);

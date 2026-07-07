@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { Fragment } from "react"
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
-import { Button } from "../Button"
-import { Badge } from "../Badge"
-import { X } from "lucide-react"
-import { Checkbox } from "../Checkbox"
-import { Divider } from "../Divider"
-import { Label } from "../Label"
-import { DataViewRadio } from "./DataViewRadio"
-import { cn } from "../../utils/cn"
+import { Fragment } from "react";
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { Button } from "../Button";
+import { Badge } from "../Badge";
+import { X } from "lucide-react";
+import { Checkbox } from "../Checkbox";
+import { Divider } from "../Divider";
+import { Label } from "../Label";
+import { DataViewRadio } from "./DataViewRadio";
+import { cn } from "../../utils/cn";
 import type {
   DynamicRecord,
   DynamicFilterConfig,
@@ -19,8 +19,8 @@ import type {
   FilterValue,
   NumericRangeFilter,
   DateRangeFilter,
-} from "./types"
-import { getByPath, formatPathLabel } from "../../utils/dataViews/pathUtils"
+} from "./types";
+import { getByPath, formatPathLabel } from "../../utils/dataViews/pathUtils";
 import {
   computeNumericExtremes,
   countActiveFilters,
@@ -28,29 +28,29 @@ import {
   isDateRange,
   isNumericRange,
   resolvePresets,
-} from "../../utils/dataViews/rangeUtils"
-import { RangeSliderWithInputs } from "./filters/RangeSliderWithInputs"
-import { DatePickerRangeFilter } from "./filters/DatePickerRangeFilter"
-import { PresetChips } from "./filters/PresetChips"
-import { resolveBadgeVariant } from "./badgeAdapter"
-import { SearchableSelect } from "../SearchableSelect"
-import type { SearchableSelectOption } from "../SearchableSelect"
+} from "../../utils/dataViews/rangeUtils";
+import { RangeSliderWithInputs } from "./filters/RangeSliderWithInputs";
+import { DatePickerRangeFilter } from "./filters/DatePickerRangeFilter";
+import { PresetChips } from "./filters/PresetChips";
+import { resolveBadgeVariant } from "./badgeAdapter";
+import { SearchableSelect } from "../SearchableSelect";
+import type { SearchableSelectOption } from "../SearchableSelect";
 
 type FilterPanelProps = {
-  data: DynamicRecord[]
-  fields: FieldConfig[]
-  filters: FilterState
-  onFilterChange: (path: string, value: FilterValue) => void
-  onClearAll: () => void
-  filterConfig?: DynamicFilterConfig[]
+  data: DynamicRecord[];
+  fields: FieldConfig[];
+  filters: FilterState;
+  onFilterChange: (path: string, value: FilterValue) => void;
+  onClearAll: () => void;
+  filterConfig?: DynamicFilterConfig[];
   /**
    * "default": standalone left-rail style (border, padding, light surface).
    * "panel": matches the Config tab inside DataViewsConfigPanel — no outer
    * chrome, white section headers, categorical options inside a #1C1D1F
    * rounded container, sections separated by #2C2D2E dividers.
    */
-  variant?: "default" | "panel"
-}
+  variant?: "default" | "panel";
+};
 
 const NUMERIC_TYPES: FieldType[] = [
   "number",
@@ -58,19 +58,19 @@ const NUMERIC_TYPES: FieldType[] = [
   "currency",
   "progress-bar",
   "star-rating",
-]
+];
 
-const DATE_TYPES: FieldType[] = ["date", "date-format"]
+const DATE_TYPES: FieldType[] = ["date", "date-format"];
 
-type FilterKind = "categorical" | "numeric-range" | "date-range"
+type FilterKind = "categorical" | "numeric-range" | "date-range";
 
 type Entry = {
-  path: string
-  label: string
-  kind: FilterKind
-  field?: FieldConfig
-  legacy?: DynamicFilterConfig
-}
+  path: string;
+  label: string;
+  kind: FilterKind;
+  field?: FieldConfig;
+  legacy?: DynamicFilterConfig;
+};
 
 function buildFilterableEntries(
   data: DynamicRecord[],
@@ -79,41 +79,41 @@ function buildFilterableEntries(
 ): Entry[] {
   const legacyByPath = new Map(
     (legacy ?? []).filter((f) => f.enabled !== false).map((f) => [f.id, f]),
-  )
+  );
 
-  const entries: Entry[] = []
-  const seen = new Set<string>()
+  const entries: Entry[] = [];
+  const seen = new Set<string>();
 
   for (const f of fields) {
-    if (f.type === "hidden") continue
-    if (f.filterable === false) continue
+    if (f.type === "hidden") continue;
+    if (f.filterable === false) continue;
 
-    const isExplicit = f.filterable === true
+    const isExplicit = f.filterable === true;
     const isCategoricalAuto =
       f.type === "enum-badge" ||
       f.type === "boolean" ||
       f.type === "badge-array" ||
-      f.type === "icon-text"
-    const isNumeric = f.type != null && NUMERIC_TYPES.includes(f.type)
-    const isDate = f.type != null && DATE_TYPES.includes(f.type)
+      f.type === "icon-text";
+    const isNumeric = f.type != null && NUMERIC_TYPES.includes(f.type);
+    const isDate = f.type != null && DATE_TYPES.includes(f.type);
 
-    let include = isExplicit || isCategoricalAuto
+    let include = isExplicit || isCategoricalAuto;
 
     if (!include) {
-      if (f.type !== "text" && f.type !== undefined) continue
-      const unique = new Set<string>()
+      if (f.type !== "text" && f.type !== undefined) continue;
+      const unique = new Set<string>();
       for (const item of data) {
-        const v = getByPath(item, f.path)
-        if (v == null) continue
-        unique.add(String(v))
-        if (unique.size > 10) break
+        const v = getByPath(item, f.path);
+        if (v == null) continue;
+        unique.add(String(v));
+        if (unique.size > 10) break;
       }
-      include = unique.size > 0 && unique.size <= 10
+      include = unique.size > 0 && unique.size <= 10;
     }
 
-    if (!include) continue
+    if (!include) continue;
 
-    const kind: FilterKind = isNumeric ? "numeric-range" : isDate ? "date-range" : "categorical"
+    const kind: FilterKind = isNumeric ? "numeric-range" : isDate ? "date-range" : "categorical";
 
     entries.push({
       path: f.path,
@@ -121,21 +121,21 @@ function buildFilterableEntries(
       kind,
       field: f,
       legacy: legacyByPath.get(f.path),
-    })
-    seen.add(f.path)
+    });
+    seen.add(f.path);
   }
 
   for (const lf of legacyByPath.values()) {
-    if (seen.has(lf.id)) continue
+    if (seen.has(lf.id)) continue;
     entries.push({
       path: lf.id,
       label: lf.label ?? formatPathLabel(lf.id),
       kind: "categorical",
       legacy: lf,
-    })
+    });
   }
 
-  return entries
+  return entries;
 }
 
 function getCategoricalOptions(
@@ -145,37 +145,37 @@ function getCategoricalOptions(
   legacy?: DynamicFilterConfig,
 ): string[] {
   if (field?.filterOptions && field.filterOptions.length > 0) {
-    return normalizeOptions(field.filterOptions)
+    return normalizeOptions(field.filterOptions);
   }
   if (legacy?.options && legacy.options.length > 0) {
-    return normalizeOptions(legacy.options)
+    return normalizeOptions(legacy.options);
   }
   if (field?.variants) {
-    const fromMap = Object.keys(field.variants)
-    const fromData = collectUnique(data, path)
-    return Array.from(new Set([...fromMap, ...fromData]))
+    const fromMap = Object.keys(field.variants);
+    const fromData = collectUnique(data, path);
+    return Array.from(new Set([...fromMap, ...fromData]));
   }
-  return collectUnique(data, path)
+  return collectUnique(data, path);
 }
 
 function normalizeOptions(opts: NonNullable<FieldConfig["filterOptions"]>): string[] {
-  if (opts.length === 0) return []
-  if (typeof opts[0] === "string") return opts as string[]
-  return (opts as { label: string; value: string }[]).map((o) => o.value)
+  if (opts.length === 0) return [];
+  if (typeof opts[0] === "string") return opts as string[];
+  return (opts as { label: string; value: string }[]).map((o) => o.value);
 }
 
 function collectUnique(data: DynamicRecord[], path: string): string[] {
-  const set = new Set<string>()
+  const set = new Set<string>();
   for (const item of data) {
-    const v = getByPath(item, path)
-    if (v == null) continue
+    const v = getByPath(item, path);
+    if (v == null) continue;
     if (Array.isArray(v)) {
-      for (const x of v) set.add(String(x))
+      for (const x of v) set.add(String(x));
     } else {
-      set.add(String(v))
+      set.add(String(v));
     }
   }
-  return Array.from(set).sort()
+  return Array.from(set).sort();
 }
 
 export function FilterPanel({
@@ -187,30 +187,30 @@ export function FilterPanel({
   filterConfig,
   variant = "default",
 }: FilterPanelProps) {
-  const entries = buildFilterableEntries(data, fields, filterConfig)
+  const entries = buildFilterableEntries(data, fields, filterConfig);
 
   const setFilter = (path: string, value: FilterValue) => {
-    onFilterChange(path, value)
-    const field = fields.find((f) => f.path === path)
-    field?.onFilterChange?.(value)
+    onFilterChange(path, value);
+    const field = fields.find((f) => f.path === path);
+    field?.onFilterChange?.(value);
     if (Array.isArray(value)) {
-      const legacy = filterConfig?.find((f) => f.id === path)
-      legacy?.onChange?.(value)
+      const legacy = filterConfig?.find((f) => f.id === path);
+      legacy?.onChange?.(value);
     }
-  }
+  };
 
   const toggleCategorical = (path: string, option: string) => {
-    const current = filters[path]
-    const arr = Array.isArray(current) ? current : []
-    const next = arr.includes(option) ? arr.filter((v) => v !== option) : [...arr, option]
-    setFilter(path, next)
-  }
+    const current = filters[path];
+    const arr = Array.isArray(current) ? current : [];
+    const next = arr.includes(option) ? arr.filter((v) => v !== option) : [...arr, option];
+    setFilter(path, next);
+  };
 
-  const totalFilters = countActiveFilters(filters)
+  const totalFilters = countActiveFilters(filters);
 
-  if (entries.length === 0) return null
+  if (entries.length === 0) return null;
 
-  const countBadge = resolveBadgeVariant("gray")
+  const countBadge = resolveBadgeVariant("gray");
 
   if (variant === "panel") {
     return (
@@ -261,7 +261,7 @@ export function FilterPanel({
           </Fragment>
         ))}
       </div>
-    )
+    );
   }
 
   return (
@@ -305,7 +305,7 @@ export function FilterPanel({
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function FilterBody({
@@ -316,21 +316,23 @@ function FilterBody({
   onSetFilter,
   variant = "default",
 }: {
-  entry: Entry
-  data: DynamicRecord[]
-  value: FilterValue | undefined
-  onCategoricalToggle: (option: string) => void
-  onSetFilter: (next: FilterValue) => void
-  variant?: "default" | "panel"
+  entry: Entry;
+  data: DynamicRecord[];
+  value: FilterValue | undefined;
+  onCategoricalToggle: (option: string) => void;
+  onSetFilter: (next: FilterValue) => void;
+  variant?: "default" | "panel";
 }) {
   if (entry.kind === "numeric-range" && entry.field) {
-    const extremes = computeNumericExtremes(data, entry.path)
+    const extremes = computeNumericExtremes(data, entry.path);
     if (!extremes || extremes.min === extremes.max) {
-      return <div className="text-xs text-content-presentation-global-tertiary">No range to filter.</div>
+      return (
+        <div className="text-xs text-content-presentation-global-tertiary">No range to filter.</div>
+      );
     }
-    const step = inferStep(entry.field, extremes)
-    const presets = resolvePresets(entry.field)
-    const numericValue: NumericRangeFilter | undefined = isNumericRange(value) ? value : undefined
+    const step = inferStep(entry.field, extremes);
+    const presets = resolvePresets(entry.field);
+    const numericValue: NumericRangeFilter | undefined = isNumericRange(value) ? value : undefined;
     return (
       <div className="space-y-3">
         {presets.length > 0 && (
@@ -344,19 +346,19 @@ function FilterBody({
           onChange={onSetFilter}
         />
       </div>
-    )
+    );
   }
 
   if (entry.kind === "date-range" && entry.field) {
-    const dateValue: DateRangeFilter | undefined = isDateRange(value) ? value : undefined
+    const dateValue: DateRangeFilter | undefined = isDateRange(value) ? value : undefined;
     // Glare DatePicker in range mode — pick a from→to span. (No quick-preset
     // chips: the calendar range selection is the single intended interaction.)
-    return <DatePickerRangeFilter value={dateValue} onChange={onSetFilter} />
+    return <DatePickerRangeFilter value={dateValue} onChange={onSetFilter} />;
   }
 
-  const opts = getCategoricalOptions(data, entry.path, entry.field, entry.legacy)
-  const selected = Array.isArray(value) ? value : []
-  const isSingle = entry.field?.filterMode === "single"
+  const opts = getCategoricalOptions(data, entry.path, entry.field, entry.legacy);
+  const selected = Array.isArray(value) ? value : [];
+  const isSingle = entry.field?.filterMode === "single";
 
   // Searchable single-select dropdown — for fields with many options. Stores
   // the chosen value as a 1-element array (empty when cleared) to stay
@@ -365,8 +367,8 @@ function FilterBody({
     const selectOptions: SearchableSelectOption[] = opts.map((opt) => ({
       value: opt,
       label: opt,
-    }))
-    const current = selected[0] ?? null
+    }));
+    const current = selected[0] ?? null;
     return (
       <SearchableSelect
         options={selectOptions}
@@ -375,12 +377,12 @@ function FilterBody({
         placeholder={`Select ${entry.label}…`}
         icon={<i className="ri-search-line" />}
       />
-    )
+    );
   }
 
   if (isSingle) {
-    const current = selected[0] ?? ""
-    const onSingleChange = (next: string) => onSetFilter(next ? [next] : [])
+    const current = selected[0] ?? "";
+    const onSingleChange = (next: string) => onSetFilter(next ? [next] : []);
     return (
       <RadioGroupPrimitive.Root
         value={current}
@@ -393,26 +395,26 @@ function FilterBody({
         )}
       >
         {opts.map((opt, i) => {
-          const isSelected = current === opt
-          const badgeVariant = entry.field?.variants?.[opt]
-          const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null
+          const isSelected = current === opt;
+          const badgeVariant = entry.field?.variants?.[opt];
+          const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null;
           return (
             <div key={opt}>
-              {i > 0 && (
-                <div className="dv-divider h-px bg-[#2C2D2E]" />
-              )}
+              {i > 0 && <div className="dv-divider h-px bg-[#2C2D2E]" />}
               <DataViewRadio value={opt}>
-                {entry.legacy?.render
-                  ? entry.legacy.render(opt, isSelected)
-                  : badgeProps
-                    ? <Badge {...badgeProps} label={opt} size="XS" />
-                    : opt}
+                {entry.legacy?.render ? (
+                  entry.legacy.render(opt, isSelected)
+                ) : badgeProps ? (
+                  <Badge {...badgeProps} label={opt} size="XS" />
+                ) : (
+                  opt
+                )}
               </DataViewRadio>
             </div>
-          )
+          );
         })}
       </RadioGroupPrimitive.Root>
-    )
+    );
   }
 
   if (variant === "panel") {
@@ -426,9 +428,9 @@ function FilterBody({
         )}
       >
         {opts.map((opt, i) => {
-          const isSelected = selected.includes(opt)
-          const badgeVariant = entry.field?.variants?.[opt]
-          const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null
+          const isSelected = selected.includes(opt);
+          const badgeVariant = entry.field?.variants?.[opt];
+          const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null;
           return (
             <div key={opt}>
               {i > 0 && <div className="dv-divider h-px bg-[#2C2D2E]" />}
@@ -442,26 +444,28 @@ function FilterBody({
                   onCheckedChange={() => onCategoricalToggle(opt)}
                 />
                 <span className="flex-1 leading-none">
-                  {entry.legacy?.render
-                    ? entry.legacy.render(opt, isSelected)
-                    : badgeProps
-                      ? <Badge {...badgeProps} label={opt} size="XS" />
-                      : opt}
+                  {entry.legacy?.render ? (
+                    entry.legacy.render(opt, isSelected)
+                  ) : badgeProps ? (
+                    <Badge {...badgeProps} label={opt} size="XS" />
+                  ) : (
+                    opt
+                  )}
                 </span>
               </label>
             </div>
-          )
+          );
         })}
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-2">
       {opts.map((opt) => {
-        const isSelected = selected.includes(opt)
-        const badgeVariant = entry.field?.variants?.[opt]
-        const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null
+        const isSelected = selected.includes(opt);
+        const badgeVariant = entry.field?.variants?.[opt];
+        const badgeProps = badgeVariant ? resolveBadgeVariant(badgeVariant) : null;
         return (
           <div key={opt} className="flex items-center space-x-2">
             <Checkbox
@@ -473,15 +477,17 @@ function FilterBody({
               htmlFor={`${entry.path}-${opt}`}
               className="text-sm text-content-presentation-global-primary cursor-pointer leading-none flex-1"
             >
-              {entry.legacy?.render
-                ? entry.legacy.render(opt, isSelected)
-                : badgeProps
-                  ? <Badge {...badgeProps} label={opt} size="XS" />
-                  : opt}
+              {entry.legacy?.render ? (
+                entry.legacy.render(opt, isSelected)
+              ) : badgeProps ? (
+                <Badge {...badgeProps} label={opt} size="XS" />
+              ) : (
+                opt
+              )}
             </label>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

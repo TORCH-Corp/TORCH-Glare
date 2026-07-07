@@ -51,16 +51,12 @@ export function FieldSection({
           />
         )}
 
-        {secondaryLabel && (
-          <Label size={size} secondaryLabel={secondaryLabel} />
-        )}
+        {secondaryLabel && <Label size={size} secondaryLabel={secondaryLabel} />}
         {childrenUnderLabel}
       </div>
 
       {/* Flexible section that takes up the remaining space */}
-      <div className="grid grid-cols-1 place-items-end gap-[12px]">
-        {children}
-      </div>
+      <div className="grid grid-cols-1 place-items-end gap-[12px]">{children}</div>
     </section>
   );
 }

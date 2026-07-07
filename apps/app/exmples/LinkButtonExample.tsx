@@ -3,7 +3,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function LinkButtonExample() {
-  const [sizes] = useState<any>(["S", "M"]);
+  const [sizes] = useState<("S" | "M")[]>(["S", "M"]);
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function LinkButtonExample() {
       >
         LinkButton Preview
       </h1>
-      {sizes.map((size: any) => (
+      {sizes.map((size) => (
         <div key={size} className="flex flex-col gap-2 w-full">
           <span
             className={cn(

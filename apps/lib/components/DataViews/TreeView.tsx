@@ -21,10 +21,7 @@ import {
   pruneTree,
   type TreeNode,
 } from "../../utils/dataViews/treeUtils";
-import {
-  getByPath,
-  matchesFilterValues,
-} from "../../utils/dataViews/pathUtils";
+import { getByPath, matchesFilterValues } from "../../utils/dataViews/pathUtils";
 import { visibleFields } from "../../utils/dataViews/fieldUtils";
 import { renderField } from "./fieldRenderers";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -85,22 +82,14 @@ export function TreeView({
     return display[0] ?? { path: resolvedTree.idField, type: "text" };
   }, [resolvedTree, fields, display]);
 
-  const fullForest = useMemo(
-    () => buildTree(data, resolvedTree),
-    [data, resolvedTree],
-  );
+  const fullForest = useMemo(() => buildTree(data, resolvedTree), [data, resolvedTree]);
 
-  const filterEntries = useMemo(
-    () => Object.entries(activeFilters),
-    [activeFilters],
-  );
+  const filterEntries = useMemo(() => Object.entries(activeFilters), [activeFilters]);
 
   const visibleForest: TreeNode[] = useMemo(() => {
     if (filterEntries.length === 0) return fullForest;
     return pruneTree(fullForest, (record) =>
-      filterEntries.every(([path, value]) =>
-        matchesFilterValues(record, path, value),
-      ),
+      filterEntries.every(([path, value]) => matchesFilterValues(record, path, value)),
     );
   }, [fullForest, filterEntries]);
 
@@ -112,9 +101,7 @@ export function TreeView({
     setExpanded(initialExpansion(fullForest, resolvedTree.defaultExpanded));
   }, [fullForest, resolvedTree.defaultExpanded]);
 
-  const [selectedId, setSelectedId] = useState<string | null>(
-    () => fullForest[0]?.id ?? null,
-  );
+  const [selectedId, setSelectedId] = useState<string | null>(() => fullForest[0]?.id ?? null);
 
   useEffect(() => {
     if (selectedId && !findNodeById(visibleForest, selectedId)) {
@@ -122,9 +109,7 @@ export function TreeView({
     }
   }, [visibleForest, selectedId]);
 
-  const selectedNode = selectedId
-    ? findNodeById(visibleForest, selectedId)
-    : null;
+  const selectedNode = selectedId ? findNodeById(visibleForest, selectedId) : null;
   const recordsForRightPane = useMemo(
     () => (selectedNode ? flatten(selectedNode) : []),
     [selectedNode],
@@ -153,9 +138,7 @@ export function TreeView({
   type RightPaneMode = "table" | "card";
   const [rightPaneMode, setRightPaneMode] = useState<RightPaneMode>(
     // "details" is a deprecated alias of "card".
-    treeConfig?.defaultRightPane === "details"
-      ? "card"
-      : (treeConfig?.defaultRightPane ?? "table"),
+    treeConfig?.defaultRightPane === "details" ? "card" : (treeConfig?.defaultRightPane ?? "table"),
   );
 
   const dndEnabled = treeConfig?.dndEnabled !== false && !!onDataUpdate;
@@ -222,9 +205,7 @@ export function TreeView({
       <div className="flex-1 flex flex-col overflow-hidden rounded-[16px] border border-border-presentation-global-primary bg-background-presentation-form-base">
         <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border-presentation-global-primary bg-background-presentation-form-base">
           <div className="flex items-center gap-2 min-w-0">
-            {isMobile && (
-              <TreeDrawerTrigger onClick={() => setDrawerOpen(true)} />
-            )}
+            {isMobile && <TreeDrawerTrigger onClick={() => setDrawerOpen(true)} />}
             <span
               style={{ fontFeatureSettings: "'cv05' on" }}
               className="typography-display-medium-medium uppercase text-content-presentation-global-primary truncate"
@@ -256,9 +237,7 @@ export function TreeView({
               const showDivider = idx > 0 && !active && !prevActive;
               return (
                 <div key={tab.id} className="flex items-center">
-                  {showDivider && (
-                    <div className="mx-[3px] h-3 w-px bg-[#434446]" />
-                  )}
+                  {showDivider && <div className="mx-[3px] h-3 w-px bg-[#434446]" />}
                   <button
                     type="button"
                     aria-label={`${tab.label} mode`}
@@ -300,11 +279,7 @@ export function TreeView({
                 showFilters={false}
               />
             ) : (
-              <CardGrid
-                records={recordsForRightPane}
-                fields={fields}
-                labelField={labelField}
-              />
+              <CardGrid records={recordsForRightPane} fields={fields} labelField={labelField} />
             )
           ) : (
             <div className="h-full flex items-center justify-center text-sm text-content-presentation-global-tertiary">
@@ -355,7 +330,7 @@ function CardGrid({
         {records.map((record, idx) => {
           const labelValue = getByPath(record, labelField.path);
           return (
-            <Card key={record.id ?? idx} className="overflow-hidden">
+            <Card key={(record.id ?? idx) as string | number} className="overflow-hidden">
               <CardHeader className="pb-2">
                 <div className="text-xs uppercase tracking-wide text-content-presentation-global-tertiary">
                   {labelField.label ?? labelField.path}
@@ -369,10 +344,7 @@ function CardGrid({
                   const value = getByPath(record, f.path);
                   if (value == null) return null;
                   return (
-                    <div
-                      key={f.path}
-                      className="flex items-center justify-between gap-3 text-sm"
-                    >
+                    <div key={f.path} className="flex items-center justify-between gap-3 text-sm">
                       <span className="text-content-presentation-global-tertiary">
                         {f.label ?? f.path}
                       </span>

@@ -163,9 +163,7 @@ export const badgeStyles = cva(
 );
 
 interface BadgeProps
-  extends
-    Omit<HTMLAttributes<HTMLSpanElement>, "color">,
-    VariantProps<typeof badgeStyles> {
+  extends Omit<HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof badgeStyles> {
   label?: string;
   badgeIcon?: ReactNode;
   showIcon?: boolean;

@@ -1,9 +1,12 @@
 import { Button } from "@/components/Button";
 import { cn } from "@/utils/cn";
+import { ButtonVariant } from "@/utils/types";
 import { useState } from "react";
 
+type ButtonSize = "S" | "M" | "L" | "XL";
+
 export default function ButtonExample() {
-  const [ButtonButtonVariants] = useState<any>([
+  const [ButtonButtonVariants] = useState<ButtonVariant[]>([
     "PrimeStyle",
     "BluSecStyle",
     "YelSecStyle",
@@ -18,7 +21,7 @@ export default function ButtonExample() {
     "GreenColStyle",
     "YelColStyle",
   ]);
-  const [ButtonSizes] = useState<any>(["S", "M", "L", "XL"]);
+  const [ButtonSizes] = useState<ButtonSize[]>(["S", "M", "L", "XL"]);
 
 
   return (
@@ -32,7 +35,7 @@ export default function ButtonExample() {
         Button Variants Preview
       </h1>
 
-      {ButtonButtonVariants.map((variant: any) => (
+      {ButtonButtonVariants.map((variant: ButtonVariant) => (
         <div key={variant} className="mb-8 w-full">
           <h2
             className={cn(
@@ -43,7 +46,7 @@ export default function ButtonExample() {
             {variant}
           </h2>
           <div className="flex gap-4 items-center mb-4">
-            {ButtonSizes.map((size: any) => (
+            {ButtonSizes.map((size: ButtonSize) => (
               <div key={size} className="flex flex-col items-center gap-2">
                 <span
                   className={cn(
@@ -62,7 +65,7 @@ export default function ButtonExample() {
 
           {/* Icon button ButtonVariants */}
           <div className="flex gap-4 items-center w-full mb-4">
-            {ButtonSizes.map((size: any) => (
+            {ButtonSizes.map((size: ButtonSize) => (
               <div
                 key={`icon-${size}`}
                 className="flex flex-col items-center gap-2"
@@ -84,7 +87,7 @@ export default function ButtonExample() {
 
           {/* Icon + label (leading icon) */}
           <div className="flex gap-4 items-center w-full mb-4">
-            {ButtonSizes.map((size: any) => (
+            {ButtonSizes.map((size: ButtonSize) => (
               <div
                 key={`icon-leading-${size}`}
                 className="flex flex-col items-center gap-2"
@@ -107,7 +110,7 @@ export default function ButtonExample() {
 
           {/* Icon + label (trailing icon) */}
           <div className="flex gap-4 items-center w-full mb-4">
-            {ButtonSizes.map((size: any) => (
+            {ButtonSizes.map((size: ButtonSize) => (
               <div
                 key={`icon-trailing-${size}`}
                 className="flex flex-col items-center gap-2"
@@ -130,7 +133,7 @@ export default function ButtonExample() {
 
           {/* Both icons + label */}
           <div className="flex gap-4 items-center w-full">
-            {ButtonSizes.map((size: any) => (
+            {ButtonSizes.map((size: ButtonSize) => (
               <div
                 key={`icon-both-${size}`}
                 className="flex flex-col items-center gap-2"
@@ -165,7 +168,7 @@ export default function ButtonExample() {
           Loading State
         </h2>
         <div className="flex gap-4">
-          {ButtonSizes.map((size: any) => (
+          {ButtonSizes.map((size: ButtonSize) => (
             <Button key={size} size={size} is_loading>
               Loading
               <i className="ri-add-circle-fill"></i>
@@ -185,7 +188,7 @@ export default function ButtonExample() {
           Disabled State
         </h2>
         <div className="flex gap-4">
-          {ButtonSizes.map((size: any) => (
+          {ButtonSizes.map((size: ButtonSize) => (
             <Button key={size} size={size} disabled>
               Disabled
             </Button>

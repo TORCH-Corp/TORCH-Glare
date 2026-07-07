@@ -18,8 +18,7 @@ const timelineStyles = cva(["flex gap-0"], {
 });
 
 interface TimelineProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof timelineStyles> {
+  extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof timelineStyles> {
   theme?: Themes;
 }
 
@@ -32,7 +31,7 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
       className={cn(timelineStyles({ orientation }), className)}
       {...props}
     />
-  )
+  ),
 );
 Timeline.displayName = "Timeline";
 
@@ -62,7 +61,7 @@ const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
       className={cn(timelineItemStyles({ orientation }), className)}
       {...props}
     />
-  )
+  ),
 );
 TimelineItem.displayName = "TimelineItem";
 
@@ -114,12 +113,11 @@ const indicatorStyles = cva(
       variant: "default",
       size: "M",
     },
-  }
+  },
 );
 
 interface TimelineIndicatorProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof indicatorStyles> {
+  extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof indicatorStyles> {
   icon?: ReactNode;
 }
 
@@ -135,25 +133,18 @@ const TimelineIndicator = forwardRef<HTMLDivElement, TimelineIndicatorProps>(
     };
 
     return (
-      <div
-        ref={ref}
-        className={cn(indicatorStyles({ variant, size }), className)}
-        {...props}
-      >
+      <div ref={ref} className={cn(indicatorStyles({ variant, size }), className)} {...props}>
         {renderContent()}
       </div>
     );
-  }
+  },
 );
 TimelineIndicator.displayName = "TimelineIndicator";
 
 // ─── Timeline Separator (the connecting line) ────────────────────────────────
 
 const separatorStyles = cva(
-  [
-    "bg-border-presentation-global-primary",
-    "transition-all duration-200 ease-in-out",
-  ],
+  ["bg-border-presentation-global-primary", "transition-all duration-200 ease-in-out"],
   {
     variants: {
       orientation: {
@@ -168,21 +159,16 @@ const separatorStyles = cva(
       orientation: "vertical",
       active: false,
     },
-  }
+  },
 );
 
 interface TimelineSeparatorProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof separatorStyles> {}
+  extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof separatorStyles> {}
 
 const TimelineSeparator = forwardRef<HTMLDivElement, TimelineSeparatorProps>(
   ({ className, orientation = "vertical", active, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(separatorStyles({ orientation, active }), className)}
-      {...props}
-    />
-  )
+    <div ref={ref} className={cn(separatorStyles({ orientation, active }), className)} {...props} />
+  ),
 );
 TimelineSeparator.displayName = "TimelineSeparator";
 
@@ -198,16 +184,14 @@ const TimelineConnector = forwardRef<HTMLDivElement, TimelineConnectorProps>(
       ref={ref}
       className={cn(
         "flex items-center",
-        orientation === "vertical"
-          ? "flex-col"
-          : "flex-row",
-        className
+        orientation === "vertical" ? "flex-col" : "flex-row",
+        className,
       )}
       {...props}
     >
       {children}
     </div>
-  )
+  ),
 );
 TimelineConnector.displayName = "TimelineConnector";
 
@@ -219,14 +203,10 @@ const TimelineContent = forwardRef<HTMLDivElement, TimelineContentProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        "flex flex-col gap-1 pb-6 pt-[2px]",
-        "group-last/item:pb-0",
-        className
-      )}
+      className={cn("flex flex-col gap-1 pb-6 pt-[2px]", "group-last/item:pb-0", className)}
       {...props}
     />
-  )
+  ),
 );
 TimelineContent.displayName = "TimelineContent";
 
@@ -240,11 +220,11 @@ const TimelineHeading = forwardRef<HTMLDivElement, TimelineHeadingProps>(
       ref={ref}
       className={cn(
         "typography-body-medium-medium text-content-presentation-global-primary",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  ),
 );
 TimelineHeading.displayName = "TimelineHeading";
 
@@ -258,11 +238,11 @@ const TimelineDescription = forwardRef<HTMLDivElement, TimelineDescriptionProps>
       ref={ref}
       className={cn(
         "typography-body-small-regular text-content-presentation-global-secondary",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  ),
 );
 TimelineDescription.displayName = "TimelineDescription";
 

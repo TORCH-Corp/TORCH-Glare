@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { type ChangeEventHandler } from "react"
-import { DatePicker } from "../../DatePicker"
-import { InputField } from "../../InputField"
-import { ActionButton } from "../../ActionButton"
-import type { DateRangeFilter } from "../types"
-import { toIsoDate } from "../../../utils/dataViews/rangeUtils"
+import { type ChangeEventHandler } from "react";
+import { DatePicker } from "../../DatePicker";
+import { InputField } from "../../InputField";
+import { ActionButton } from "../../ActionButton";
+import type { DateRangeFilter } from "../types";
+import { toIsoDate } from "../../../utils/dataViews/rangeUtils";
 
 type Props = {
-  value: DateRangeFilter | undefined
-  onChange: (next: DateRangeFilter) => void
-}
+  value: DateRangeFilter | undefined;
+  onChange: (next: DateRangeFilter) => void;
+};
 
 /** Parse an ISO `yyyy-MM-dd` string to a local Date (noon-safe, no TZ drift). */
 function parseIso(iso?: string): Date | undefined {
-  return iso ? new Date(iso + "T00:00:00") : undefined
+  return iso ? new Date(iso + "T00:00:00") : undefined;
 }
 
 /** One labeled single-date Glare DatePicker bound to one end of the range. */
@@ -24,10 +24,10 @@ function DateBound({
   placeholder,
   onPick,
 }: {
-  caption: string
-  iso?: string
-  placeholder: string
-  onPick: (next?: string) => void
+  caption: string;
+  iso?: string;
+  placeholder: string;
+  onPick: (next?: string) => void;
 }) {
   return (
     <label className="flex items-center gap-2">
@@ -41,10 +41,12 @@ function DateBound({
           value={parseIso(iso) ?? (undefined as never)}
           dateFormat="yyyy-MM-dd"
           // Single mode reports `{ target: { value: Date } }` (it casts internally).
-          onChange={((e: { target: { value: Date | undefined } }) => {
-            const d = e?.target?.value
-            onPick(d instanceof Date ? toIsoDate(d) : undefined)
-          }) as unknown as ChangeEventHandler<HTMLInputElement>}
+          onChange={
+            ((e: { target: { value: Date | undefined } }) => {
+              const d = e?.target?.value;
+              onPick(d instanceof Date ? toIsoDate(d) : undefined);
+            }) as unknown as ChangeEventHandler<HTMLInputElement>
+          }
         >
           <InputField
             readOnly
@@ -59,7 +61,7 @@ function DateBound({
         </DatePicker>
       </div>
     </label>
-  )
+  );
 }
 
 /**
@@ -69,12 +71,17 @@ function DateBound({
  */
 export function DatePickerRangeFilter({ value, onChange }: Props) {
   const setBound = (key: "from" | "to") => (next?: string) =>
-    onChange({ kind: "date", from: value?.from, to: value?.to, [key]: next })
+    onChange({ kind: "date", from: value?.from, to: value?.to, [key]: next });
 
   return (
     <div className="space-y-2">
-      <DateBound caption="From" iso={value?.from} placeholder="Start date" onPick={setBound("from")} />
+      <DateBound
+        caption="From"
+        iso={value?.from}
+        placeholder="Start date"
+        onPick={setBound("from")}
+      />
       <DateBound caption="To" iso={value?.to} placeholder="End date" onPick={setBound("to")} />
     </div>
-  )
+  );
 }

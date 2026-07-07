@@ -11,12 +11,22 @@ keywords: [skeleton, loading, placeholder, shimmer, pulse, loader, content-loade
 
 ## Installation
 
-No additional dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add Skeleton
+```
+
+`add` also copies any components, hooks, and utilities that `Skeleton` depends on.
 
 ## Import
 
-```typescript
-import { Skeleton } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Skeleton } from "@/components/Skeleton";
 ```
 
 ## Quick Examples
@@ -24,7 +34,7 @@ import { Skeleton } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function Example() {
   return <Skeleton className="h-4 w-[250px]" />
@@ -34,7 +44,7 @@ function Example() {
 ### Text Lines
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function TextSkeleton() {
   return (
@@ -50,7 +60,7 @@ function TextSkeleton() {
 ### Card Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function CardSkeleton() {
   return (
@@ -67,7 +77,7 @@ function CardSkeleton() {
 ### Profile Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function ProfileSkeleton() {
   return (
@@ -88,7 +98,7 @@ function ProfileSkeleton() {
 ### Table Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function TableSkeleton() {
   return (
@@ -118,7 +128,7 @@ function TableSkeleton() {
 ### Button Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function ButtonSkeleton() {
   return <Skeleton className="h-10 w-32 rounded-md" />
@@ -128,7 +138,7 @@ function ButtonSkeleton() {
 ### Image Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function ImageSkeleton() {
   return (
@@ -146,7 +156,7 @@ function ImageSkeleton() {
 ### List Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function ListSkeleton() {
   return (
@@ -168,7 +178,7 @@ function ListSkeleton() {
 ### Dashboard Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function DashboardSkeleton() {
   return (
@@ -194,7 +204,7 @@ function DashboardSkeleton() {
 ### Conditional Loading
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 import { useState, useEffect } from 'react'
 
 interface User {
@@ -241,7 +251,7 @@ function UserProfile() {
 ### Grid Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function GridSkeleton() {
   return (
@@ -289,7 +299,7 @@ export const Skeleton: React.FC<SkeletonProps>
 ### Usage with TypeScript
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function TypedSkeleton() {
   const skeletonProps: React.ComponentProps<typeof Skeleton> = {
@@ -306,14 +316,14 @@ function TypedSkeleton() {
 ### Reusable Skeleton Components
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 // Avatar skeleton
-export function AvatarSkeleton({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
+export function AvatarSkeleton({ size = 'M' }: { size?: 'S' | 'M' | 'L' }) {
   const sizeClasses = {
-    sm: 'h-8 w-8',
-    md: 'h-12 w-12',
-    lg: 'h-16 w-16',
+    S: 'h-8 w-8',
+    M: 'h-12 w-12',
+    L: 'h-16 w-16',
   }
 
   return <Skeleton className={`${sizeClasses[size]} rounded-full`} />
@@ -334,14 +344,14 @@ export function TextSkeleton({ lines = 3 }: { lines?: number }) {
 }
 
 // Usage
-<AvatarSkeleton size="lg" />
+<AvatarSkeleton size="L" />
 <TextSkeleton lines={4} />
 ```
 
 ### With Suspense
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 import { Suspense } from 'react'
 
 function ProfileSkeleton() {
@@ -368,7 +378,7 @@ function App() {
 ### Loading States Hook
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 import { useState, useEffect } from 'react'
 
 function useLoading<T>(fetchFn: () => Promise<T>) {
@@ -399,7 +409,7 @@ function DataDisplay() {
 ### Delayed Skeleton
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 import { useState, useEffect } from 'react'
 
 function DelayedSkeleton({ delay = 300, children }) {
@@ -477,7 +487,7 @@ function FastLoading() {
 
 ```typescript
 import { render, screen } from '@testing-library/react'
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 describe('Skeleton', () => {
   it('renders skeleton with correct classes', () => {
@@ -500,7 +510,7 @@ describe('Skeleton', () => {
 
 ```typescript
 import { render, screen, waitFor } from '@testing-library/react'
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function ComponentWithLoading() {
   const [loading, setLoading] = useState(true)
@@ -553,7 +563,7 @@ test('shows skeleton then content', async () => {
 ### Enhanced Accessibility
 
 ```typescript
-import { Skeleton } from '@torch-ui/components'
+import { Skeleton } from "@/components/Skeleton";
 
 function AccessibleSkeleton() {
   return (
@@ -600,7 +610,7 @@ function AccessibleSkeleton() {
 
 ```diff
 - import Skeleton from 'react-loading-skeleton'
-+ import { Skeleton } from '@torch-ui/components'
++ import { Skeleton } from "@/components/Skeleton";
 
 - <Skeleton count={3} />
 + {[...Array(3)].map((_, i) => (
@@ -612,12 +622,12 @@ function AccessibleSkeleton() {
 
 ```diff
 - import { Skeleton } from '@mui/material'
-+ import { Skeleton } from '@torch-ui/components'
++ import { Skeleton } from "@/components/Skeleton";
 
-- <Skeleton variant="text" width={210} height={60} />
+- <Skeleton width={210} height={60} />          {/* MUI text variant */}
 + <Skeleton className="h-[60px] w-[210px]" />
 
-- <Skeleton variant="circular" width={40} height={40} />
+- <Skeleton width={40} height={40} />            {/* MUI circular variant */}
 + <Skeleton className="h-10 w-10 rounded-full" />
 ```
 
@@ -625,12 +635,12 @@ function AccessibleSkeleton() {
 
 ```diff
 - import { Skeleton } from 'antd'
-+ import { Skeleton } from '@torch-ui/components'
++ import { Skeleton } from "@/components/Skeleton";
 
 - <Skeleton active />
 + <Skeleton className="h-4 w-full" />
 
-- <Skeleton.Avatar active size="large" />
+- <Skeleton.Avatar active />                     {/* Ant large avatar */}
 + <Skeleton className="h-16 w-16 rounded-full" />
 ```
 

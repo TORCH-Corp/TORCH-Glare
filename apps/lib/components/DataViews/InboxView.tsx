@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useMemo,
-  useState,
-  type ElementType,
-  type ReactNode,
-} from "react";
+import { useEffect, useMemo, useState, type ElementType, type ReactNode } from "react";
 import { Badge } from "../Badge";
 import { FilterPanel } from "./FilterPanel";
 import {
@@ -37,16 +31,9 @@ import { Avatar, AvatarFallback } from "../Avatar";
 import { Card } from "../Card";
 import { Divider } from "../Divider";
 import { renderDetailView } from "../../utils/dataViews/nestedDataUtils";
-import {
-  getByPath,
-  setByPath,
-  matchesFilterValues,
-} from "../../utils/dataViews/pathUtils";
+import { getByPath, setByPath, matchesFilterValues } from "../../utils/dataViews/pathUtils";
 import { renderField } from "./fieldRenderers";
-import {
-  resolveInboxConfig,
-  visibleFields,
-} from "../../utils/dataViews/fieldUtils";
+import { resolveInboxConfig, visibleFields } from "../../utils/dataViews/fieldUtils";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { resolveBadgeVariant } from "./badgeAdapter";
 import { InboxViewCard } from "./InboxViewCard";
@@ -62,24 +49,20 @@ export type InboxViewProps = {
   filterState?: FilterState;
   onFilterChange?: (filters: FilterState) => void;
   showFilters?: boolean;
-  itemHref?: (item: DynamicRecord, id: any) => string;
+  itemHref?: (item: DynamicRecord, id: unknown) => string;
   /**
    * Component used to render each item's link when `itemHref` is set. Defaults
    * to a plain `<a>` (full-page navigation). Pass your router's link
    * (e.g. Next.js `Link`, React Router `Link`) for client-side navigation.
    */
   linkComponent?: ElementType;
-  selectedItemId?: any;
+  selectedItemId?: unknown;
   renderDetail?: (item: DynamicRecord | null) => ReactNode;
 };
 
 type InboxFilter = "all" | "starred" | "priority";
 
-function getId(
-  item: DynamicRecord,
-  fallbackPath: string | undefined,
-  idx: number,
-): any {
+function getId(item: DynamicRecord, fallbackPath: string | undefined, idx: number): unknown {
   if (item?.id != null) return item.id;
   if (fallbackPath) {
     const v = getByPath(item, fallbackPath);
@@ -88,7 +71,7 @@ function getId(
   return idx;
 }
 
-function getInitials(name: any): string {
+function getInitials(name: unknown): string {
   const s = String(name ?? "?").trim();
   if (!s) return "?";
   return (
@@ -117,9 +100,7 @@ export function InboxView({
   renderDetail,
 }: InboxViewProps) {
   const isMobile = useIsMobile();
-  const [selectedItem, setSelectedItem] = useState<DynamicRecord | null>(
-    data[0] || null,
-  );
+  const [selectedItem, setSelectedItem] = useState<DynamicRecord | null>(data[0] || null);
   const [inboxFilter, setInboxFilter] = useState<InboxFilter>("all");
   const [internalFilters, setInternalFilters] = useState<FilterState>({});
 
@@ -186,7 +167,7 @@ export function InboxView({
     return String(v).toLowerCase() === "high";
   };
 
-  const toggleStar = (itemId: any) => {
+  const toggleStar = (itemId: unknown) => {
     if (!inboxCfg.starredField) return;
     const updatedData = data.map((item, idx) => {
       const cur = getId(item, idPath, idx);
@@ -201,11 +182,7 @@ export function InboxView({
     if (selectedItem && getId(selectedItem, idPath, -1) === itemId) {
       setSelectedItem((prev) =>
         prev && inboxCfg.starredField
-          ? setByPath(
-              prev,
-              inboxCfg.starredField,
-              !getByPath(prev, inboxCfg.starredField),
-            )
+          ? setByPath(prev, inboxCfg.starredField, !getByPath(prev, inboxCfg.starredField))
           : prev,
       );
     }
@@ -233,8 +210,8 @@ export function InboxView({
         (inboxFilter === "starred" && isStarred(item)) ||
         (inboxFilter === "priority" && isHighPriority(item));
 
-      const matchesFilters = Object.entries(activeFilters).every(
-        ([path, filterValues]) => matchesFilterValues(item, path, filterValues),
+      const matchesFilters = Object.entries(activeFilters).every(([path, filterValues]) =>
+        matchesFilterValues(item, path, filterValues),
       );
 
       return matchesInboxFilter && matchesFilters;
@@ -242,12 +219,8 @@ export function InboxView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, inboxFilter, activeFilters, inboxCfg]);
 
-  const starredCount = inboxCfg.starredField
-    ? data.filter((i) => isStarred(i)).length
-    : 0;
-  const priorityCount = inboxCfg.priorityField
-    ? data.filter((i) => isHighPriority(i)).length
-    : 0;
+  const starredCount = inboxCfg.starredField ? data.filter((i) => isStarred(i)).length : 0;
+  const priorityCount = inboxCfg.priorityField ? data.filter((i) => isHighPriority(i)).length : 0;
 
   const filtersEnabled = showFilters && config.showFilters !== false;
   const countBadge = resolveBadgeVariant("gray");
@@ -272,12 +245,7 @@ export function InboxView({
             >
               <InboxIcon className="h-4 w-4" />
               All Items
-              <Badge
-                {...countBadge}
-                label={String(data.length)}
-                className="ml-auto"
-                size="XS"
-              />
+              <Badge {...countBadge} label={String(data.length)} className="ml-auto" size="XS" />
             </TabFormItem>
             {inboxCfg.starredField && (
               <TabFormItem
@@ -350,14 +318,12 @@ export function InboxView({
           {filteredData.map((item, idx) => {
             const itemId = getId(item, idPath, idx);
             const selected =
-              (selectedItemId != null &&
-                String(selectedItemId) === String(itemId)) ||
-              (selectedItem != null &&
-                getId(selectedItem, idPath, -1) === itemId);
+              (selectedItemId != null && String(selectedItemId) === String(itemId)) ||
+              (selectedItem != null && getId(selectedItem, idPath, -1) === itemId);
 
             return (
               <InboxViewCard
-                key={itemId}
+                key={itemId as string | number}
                 item={item}
                 rowFields={displayFields}
                 selected={selected}
@@ -396,22 +362,14 @@ export function InboxView({
               <div className="flex items-start gap-4 mb-6">
                 <Avatar className="h-12 w-12">
                   <AvatarFallback className="bg-background-presentation-action-primary text-content-presentation-action-primary">
-                    {getInitials(
-                      previewField
-                        ? getByPath(selectedItem, previewField.path)
-                        : "",
-                    )}
+                    {getInitials(previewField ? getByPath(selectedItem, previewField.path) : "")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-4 mb-2">
                     <div>
                       <h2 className="text-xl font-semibold text-content-presentation-global-primary mb-1">
-                        {String(
-                          titleField
-                            ? getByPath(selectedItem, titleField.path)
-                            : "",
-                        )}
+                        {String(titleField ? getByPath(selectedItem, titleField.path) : "")}
                       </h2>
                       {previewField && (
                         <p className="text-sm text-content-presentation-global-tertiary">
@@ -424,9 +382,7 @@ export function InboxView({
                     </div>
                     {inboxCfg.starredField && (
                       <button
-                        onClick={() =>
-                          toggleStar(getId(selectedItem, idPath, -1))
-                        }
+                        onClick={() => toggleStar(getId(selectedItem, idPath, -1))}
                         className="hover:text-content-presentation-badge-yellow transition-colors"
                         aria-label="Toggle star"
                       >
@@ -446,9 +402,7 @@ export function InboxView({
                       const value = getByPath(selectedItem, field.path);
                       if (value == null) return null;
                       return (
-                        <span key={field.path}>
-                          {renderField(value, field, selectedItem)}
-                        </span>
+                        <span key={field.path}>{renderField(value, field, selectedItem)}</span>
                       );
                     })}
                   </div>

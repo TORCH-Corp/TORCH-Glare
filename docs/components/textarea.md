@@ -1,6 +1,6 @@
 ---
 name: Textarea
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, textarea, multiline, input, field, accessible, auto-resize]
@@ -17,14 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Textarea
 ```
+
+`add` also copies any components, hooks, and utilities that `Textarea` depends on.
 
 ## Import
 
-```typescript
-import { Textarea } from 'torch-glare/lib/components/Textarea'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Textarea } from "@/components/Textarea";
 ```
 
 ## Quick Examples
@@ -32,7 +40,7 @@ import { Textarea } from 'torch-glare/lib/components/Textarea'
 ### Basic Usage
 
 ```typescript
-import { Textarea } from 'torch-glare/lib/components/Textarea'
+import { Textarea } from '@/components/Textarea'
 
 function Example() {
   const [value, setValue] = useState('')
@@ -346,7 +354,7 @@ function AutoSaveTextarea() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Textarea } from 'torch-glare/lib/components/Textarea'
+import { Textarea } from '@/components/Textarea'
 
 describe('Textarea', () => {
   it('handles user input', () => {
@@ -580,7 +588,7 @@ This gives you the TORCH look-and-feel without `field-sizing-content`. Switch ba
 ```diff
 // Import path changed
 - import Textarea from 'torch-glare/Textarea'
-+ import { Textarea } from 'torch-glare/lib/components/Textarea'
++ import { Textarea } from '@/components/Textarea'
 
 // Label integration
 - <div>

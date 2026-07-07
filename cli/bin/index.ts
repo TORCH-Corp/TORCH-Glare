@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { Command } from "commander";
 import { add } from "../src/commands/add.js";
 import { initConfig } from "../src/commands/init.js";
@@ -9,16 +12,22 @@ import { addProvider } from "../src/commands/provider.js";
 import { updateInstalledComponents } from "../src/commands/update.js";
 import { setupMcp } from "../src/commands/mcp.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Single source of truth: read the version from the published package.json.
+const { version } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../../package.json"), "utf-8")
+);
+
 const program = new Command();
 
 program
   .name("torch-glare")
   .description("Torch Glare for managing React components")
-  .version("2.2.0");
+  .version(version);
 
 program
   .command("init")
-  .description("Initialize torch.json configuration file")
+  .description("Initialize glare.json configuration file")
   .action(() => initConfig());
 
 program

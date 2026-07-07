@@ -30,7 +30,7 @@ Interactive button component with multiple variants and sizes.
 
 - **File**: [button.md](../components/button.md)
 - **Props**: `variant`, `size`, `theme`, `buttonType`, `disabled`
-- **Variants**: `PrimeStyle`, `ContStyle`, `SecondStyle`, `BorderStyle`, `ErrorStyle`, `SuccessStyle`, `PrimeContStyle`
+- **Variants**: `PrimeStyle`, `BluSecStyle`, `YelSecStyle`, `RedSecStyle`, `BorderStyle`, `PrimeContStyle`, `BluContStyle`, `RedContStyle`
 - **Use Cases**: Primary actions, secondary actions, icon buttons, loading states
 
 ### Input
@@ -521,12 +521,13 @@ Components with size variants typically support:
 
 Button variants:
 - `PrimeStyle` - Primary action
-- `ContStyle` - Contrast style
-- `SecondStyle` - Secondary action
+- `BluSecStyle` - Blue secondary action
+- `YelSecStyle` - Yellow secondary action
+- `RedSecStyle` - Red secondary action
 - `BorderStyle` - Outlined
-- `ErrorStyle` - Destructive action
-- `SuccessStyle` - Success action
-- `PrimeContStyle` - Primary contrast
+- `PrimeContStyle` - Primary container (transparent)
+- `BluContStyle` - Blue container (transparent)
+- `RedContStyle` - Red container (transparent)
 
 ---
 
@@ -535,12 +536,10 @@ Button variants:
 All components are fully typed with TypeScript. Import types from the library:
 
 ```typescript
-import type {
-  ButtonProps,
-  InputProps,
-  SelectProps,
-  // ... other types
-} from '@torch-ai/torch-glare';
+import type { ButtonProps } from "@/components/Button";
+import type { InputProps } from "@/components/InputProps";
+import type { ButtonProps } from "@/components/LoginButton";
+import type { SelectProps } from "@/components/SelectProps";
 ```
 
 ---

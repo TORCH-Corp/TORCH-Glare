@@ -13,16 +13,22 @@ keywords: [data-views, config panel, config-panel, settings panel, saved view, s
 
 ## Installation
 
-Part of `torch-glare`. Ships with the `DataViews` folder when you run
-`npx torch-glare add DataViews` — no separate install. It depends on the
-shared `Radio`, `Switch`, `Label`, `FilterPanel`, and a colocated internal
-`PanelControls` file (see "Internal: PanelControls" below).
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add DataViewsConfigPanel
+```
+
+`add` also copies any components, hooks, and utilities that `DataViewsConfigPanel` depends on.
 
 ## Import
 
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
 ```tsx
-import { DataViewsConfigPanel } from "torch-glare"
-import type { DataViewsConfigPanelProps } from "torch-glare"
+import { DataViewsConfigPanel } from "@/components/DataViewsConfigPanel";
 ```
 
 ## When to use it directly
@@ -36,11 +42,9 @@ import type { DataViewsConfigPanelProps } from "torch-glare"
 ## Standalone Example (composable mode)
 
 ```tsx
-import {
-  DataViewsConfigPanel,
-  TableView,
-  useDataViewsState,
-} from "torch-glare"
+import { DataViewsConfigPanel } from "@/components/DataViewsConfigPanel";
+import { TableView } from "@/components/TableView";
+import { useDataViewsState } from "@/hooks/useDataViewsState";
 import { useState } from "react"
 
 function CustomScreen({ data, fields }) {

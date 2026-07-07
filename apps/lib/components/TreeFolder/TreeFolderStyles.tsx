@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 /**
  * Component-scoped CSS for TreeFolder. Rendered once by TreeFolder itself so
@@ -47,7 +47,7 @@ const CSS = `
   background: rgba(0, 0, 0, 0.35);
   background-clip: content-box;
 }
-`
+`;
 
 /**
  * Renders a single <style> tag containing TreeFolder's scoped CSS.
@@ -56,5 +56,5 @@ const CSS = `
  * keeps just one DOM node when it can.
  */
 export function TreeFolderStyles() {
-  return <style id="torch-treefolder-styles" dangerouslySetInnerHTML={{ __html: CSS }} />
+  return <style id="torch-treefolder-styles" dangerouslySetInnerHTML={{ __html: CSS }} />;
 }

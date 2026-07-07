@@ -6,7 +6,7 @@ category: layout
 group: Layout & Containers
 tags: [layout, card, section, container, form, group]
 status: stable
-version: 1.1.22
+version: 2.4.0
 dependencies:
   - "class-variance-authority": "^0.7.0"
 ---
@@ -17,14 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-glare add SectionBlock
+npx torch-glare@latest init
+npx torch-glare@latest add SectionBlock
 ```
+
+`add` also copies any components, hooks, and utilities that `SectionBlock` depends on.
 
 ## Import
 
-```typescript
-import { SectionBlock, type SectionColor } from "@/components/SectionBlock";
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { SectionBlock } from "@/components/SectionBlock";
 ```
 
 ## Basic Usage

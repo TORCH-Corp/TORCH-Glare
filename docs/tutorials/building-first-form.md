@@ -43,7 +43,7 @@ Let's start with a basic form structure:
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
@@ -84,7 +84,8 @@ export default function RegistrationForm() {
 
 ```tsx
 import { useState } from 'react';
-import { LabelField, Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { LabelField } from "@/components/LabelField";
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
@@ -164,7 +165,9 @@ Let's add comprehensive validation:
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { LabelField, Button, FieldHint } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { FieldHint } from "@/components/FieldHint";
+import { LabelField } from "@/components/LabelField";
 
 interface FormErrors {
   fullName?: string;
@@ -360,7 +363,9 @@ export default function RegistrationForm() {
 Use the `PasswordLevel` component to show password strength:
 
 ```tsx
-import { LabelField, PasswordLevel, Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { LabelField } from "@/components/LabelField";
+import { PasswordLevel } from "@/components/PasswordLevel";
 
 // Inside your form component, add this after the password field:
 
@@ -393,7 +398,9 @@ import { LabelField, PasswordLevel, Button } from '@torch-ai/torch-glare';
 Use `FieldHint` to provide helpful guidance:
 
 ```tsx
-import { LabelField, FieldHint, Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { FieldHint } from "@/components/FieldHint";
+import { LabelField } from "@/components/LabelField";
 
 <div>
   <LabelField
@@ -468,7 +475,9 @@ const handleSubmit = async (e: FormEvent) => {
 Use the `toast` function for success notifications:
 
 ```tsx
-import { LabelField, Button, toast } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { LabelField } from "@/components/LabelField";
+import { toast } from "@/components/Toast";
 
 const handleSubmit = async (e: FormEvent) => {
   e.preventDefault();
@@ -513,13 +522,11 @@ Here's the complete, production-ready form:
 'use client';
 
 import { useState, FormEvent } from 'react';
-import {
-  LabelField,
-  Button,
-  PasswordLevel,
-  FieldHint,
-  toast,
-} from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { FieldHint } from "@/components/FieldHint";
+import { LabelField } from "@/components/LabelField";
+import { PasswordLevel } from "@/components/PasswordLevel";
+import { toast } from "@/components/Toast";
 
 interface FormErrors {
   fullName?: string;

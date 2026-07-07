@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { forwardRef } from "react";
 import { Label } from "./Label";
 import { Radio } from "./Radio";
@@ -20,13 +20,15 @@ export const LabeledRadio = forwardRef<HTMLButtonElement, Props>(
       secondaryLabel,
       requiredLabel,
       size = "M",
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
       type = "radio",
       className,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
       name,
       id,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <Label
@@ -40,10 +42,10 @@ export const LabeledRadio = forwardRef<HTMLButtonElement, Props>(
         id={id}
         reverseChildren
       >
-        <Radio id={id}  {...props} data-theme={theme} ref={ref} />
+        <Radio id={id} {...props} data-theme={theme} ref={ref} />
       </Label>
     );
-  }
+  },
 );
 
 LabeledRadio.displayName = "LabeledRadio";

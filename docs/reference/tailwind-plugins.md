@@ -352,7 +352,7 @@ The TORCH mode plugin defines the actual color values for:
 ### Integration with ThemeProvider
 
 ```tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 function App() {
   return (
@@ -622,7 +622,7 @@ export default {
 
 ```tsx
 // app/layout.tsx (Next.js App Router)
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import './globals.css';
 
 export default function RootLayout({

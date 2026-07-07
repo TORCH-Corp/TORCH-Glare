@@ -38,15 +38,7 @@ const rowStyles = cva(["flex", "items-center"], {
 
 // Colored pill holding `label`.
 const badgeStyles = cva(
-  [
-    "flex",
-    "h-8",
-    "items-center",
-    "justify-center",
-    "gap-2.5",
-    "rounded-lg",
-    "px-1",
-  ],
+  ["flex", "h-8", "items-center", "justify-center", "gap-2.5", "rounded-lg", "px-1"],
   {
     variants: {
       variant: {

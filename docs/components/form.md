@@ -1,6 +1,6 @@
 ---
 name: Form
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, validation, react-hook-form, accessible, compound]
@@ -18,25 +18,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare react-hook-form
+npx torch-glare@latest init
+npx torch-glare@latest add Form
 ```
+
+`add` also copies any components, hooks, and utilities that `Form` depends on.
 
 ## Import
 
-```typescript
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage
-} from 'torch-glare/lib/components/Form'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
 
-// Also import from react-hook-form
-import { useForm } from 'react-hook-form'
+```tsx
+import { Form } from "@/components/Form";
 ```
 
 ## Quick Examples
@@ -52,9 +49,9 @@ import {
   FormLabel,
   FormControl,
   FormMessage
-} from 'torch-glare/lib/components/Form'
-import { Input } from 'torch-glare/lib/components/Input'
-import { Button } from 'torch-glare/lib/components/Button'
+} from '@/components/Form'
+import { Input } from '@/components/Input'
+import { Button } from '@/components/Button'
 
 function BasicForm() {
   const form = useForm({
@@ -213,9 +210,9 @@ function ValidatedForm() {
 ### With Multiple Field Types
 
 ```typescript
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from 'torch-glare/lib/components/Select'
-import { Checkbox } from 'torch-glare/lib/components/Checkbox'
-import { RadioGroup, RadioGroupItem } from 'torch-glare/lib/components/Radio'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/Select'
+import { Checkbox } from '@/components/Checkbox'
+import { RadioGroup, RadioGroupItem } from '@/components/Radio'
 
 function MultiFieldForm() {
   const form = useForm({

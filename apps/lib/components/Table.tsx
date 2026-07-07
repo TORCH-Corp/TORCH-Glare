@@ -18,10 +18,7 @@ const Table = React.forwardRef<
   <table
     data-theme={theme}
     ref={ref}
-    className={cn(
-      "overflow-hidden w-auto [border-collapse:separate] border-spacing-0",
-      className,
-    )}
+    className={cn("overflow-hidden w-auto [border-collapse:separate] border-spacing-0", className)}
     {...props}
   >
     {props.children}
@@ -54,9 +51,7 @@ TableBody.displayName = "TableBody";
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <tfoot ref={ref} className={cn(className)} {...props} />
-));
+>(({ className, ...props }, ref) => <tfoot ref={ref} className={cn(className)} {...props} />);
 TableFooter.displayName = "TableFooter";
 
 const TableRow = React.forwardRef<
@@ -103,68 +98,61 @@ TableRow.displayName = "TableRow";
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
-  TableHeadVariantsProps &
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    sortType?: "asc" | "desc" | undefined;
-    onSort?: () => void;
-    isDummy?: boolean;
-  }
->(
-  (
-    { className, size = "M", disabled, sortType, onSort, isDummy, ...props },
-    forwardedRef,
-  ) => {
-    const headRef = useRef<any>(null);
-    const { width, handleStartResize } = useResize(headRef);
+    TableHeadVariantsProps &
+    React.ButtonHTMLAttributes<HTMLButtonElement> & {
+      sortType?: "asc" | "desc" | undefined;
+      onSort?: () => void;
+      isDummy?: boolean;
+    }
+>(({ className, size = "M", disabled, sortType, onSort, isDummy, ...props }, forwardedRef) => {
+  const headRef = useRef<HTMLTableCellElement>(null);
+  const { width, handleStartResize } = useResize(headRef as React.RefObject<HTMLElement>);
 
-    // Combine refs using useEffect
-    React.useEffect(() => {
-      if (!forwardedRef) return;
-      if (typeof forwardedRef === "function") forwardedRef(headRef.current);
-      else forwardedRef.current = headRef.current;
-    }, [forwardedRef]);
+  // Combine refs using useEffect
+  React.useEffect(() => {
+    if (!forwardedRef) return;
+    if (typeof forwardedRef === "function") forwardedRef(headRef.current);
+    else forwardedRef.current = headRef.current;
+  }, [forwardedRef]);
 
-    return (
-      <th
-        ref={headRef}
+  return (
+    <th
+      ref={headRef}
+      className={cn(
+        "relative py-[6px] px-[4px] border-b-[2px]  border-border-presentation-table-header",
+      )}
+    >
+      <div
+        {...props}
         className={cn(
-          "relative py-[6px] px-[4px] border-b-[2px]  border-border-presentation-table-header",
+          tableHeadVariants({ size, disabled, isDummy }),
+          { "min-w-[100px]": !isDummy },
+          className,
         )}
       >
         <div
-          {...props}
-          className={cn(
-            tableHeadVariants({ size, disabled, isDummy }),
-            { "min-w-[100px]": !isDummy },
-            className,
-          )}
+          style={{ width: `${width}px` }}
+          className={cn("flex items-center justify-between flex-1", {
+            "justify-center": isDummy,
+          })}
         >
-          <div
-            style={{ width: `${width}px` }}
-            className={cn("flex items-center justify-between flex-1", {
-              "justify-center": isDummy,
-            })}
-          >
-            {props.children}
-            {isDummy || !onSort ? null : (
-              <SortButton onSort={onSort} sortType={sortType} />
-            )}
-          </div>
+          {props.children}
+          {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
         </div>
-        <button
-          disabled={isDummy}
-          className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary"
-        >
-          <ResizeIcon
-            className={cn({ "!opacity-0 cursor-default": isDummy })}
-            onMouseDown={handleStartResize}
-            onTouchStart={handleStartResize}
-          />
-        </button>
-      </th>
-    );
-  },
-);
+      </div>
+      <button
+        disabled={isDummy}
+        className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary"
+      >
+        <ResizeIcon
+          className={cn({ "!opacity-0 cursor-default": isDummy })}
+          onMouseDown={handleStartResize}
+          onTouchStart={handleStartResize}
+        />
+      </button>
+    </th>
+  );
+});
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
@@ -209,6 +197,7 @@ const TableCheckbox = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     id: string;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- id destructured to exclude it from the props spread onto Checkbox
 >(({ className, id, ...props }, ref) => {
   return (
     <div className={cn(["flex items-center justify-center"], className)}>
@@ -222,11 +211,7 @@ const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement>
 >(({ className, ...props }, ref) => (
-  <caption
-    ref={ref}
-    className={cn("mt-4 text-sm text-muted-foreground", className)}
-    {...props}
-  />
+  <caption ref={ref} className={cn("mt-4 text-sm text-muted-foreground", className)} {...props} />
 ));
 TableCaption.displayName = "TableCaption";
 
@@ -308,7 +293,13 @@ export {
   TableFooterButton,
 };
 
-const ResizeIcon = (props: any) => {
+interface ResizeIconProps {
+  className?: string;
+  onMouseDown?: React.MouseEventHandler<SVGElement>;
+  onTouchStart?: React.TouchEventHandler<SVGElement>;
+}
+
+const ResizeIcon = (props: ResizeIconProps) => {
   return (
     <svg
       {...props}
@@ -343,10 +334,7 @@ const SortButton = ({
   sortType?: "asc" | "desc" | undefined;
 }) => {
   return (
-    <button
-      className={cn("cursor-pointer text-[16px] z-10")}
-      onPointerDown={onSort}
-    >
+    <button className={cn("cursor-pointer text-[16px] z-10")} onPointerDown={onSort}>
       {sortType === "asc" ? (
         <i className="ri-arrow-up-line text-border-presentation-state-focus" />
       ) : sortType === "desc" ? (
@@ -389,10 +377,7 @@ const tableHeadVariants = cva(
         ],
       },
       isDummy: {
-        true: [
-          "hover:bg-transparent",
-          "hover:text-content-presentation-global-primary",
-        ],
+        true: ["hover:bg-transparent", "hover:text-content-presentation-global-primary"],
       },
       defaultVariants: {
         size: "M",

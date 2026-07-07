@@ -1,6 +1,6 @@
 ---
 name: Card
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/layout
 tags: [container, layout, card, content, polymorphic]
@@ -16,19 +16,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Card
 ```
+
+`add` also copies any components, hooks, and utilities that `Card` depends on.
 
 ## Import
 
-```typescript
-import {
-  Card,
-  CardHeader,
-  CardDescription,
-  CardContent
-} from 'torch-glare/lib/components/Card'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Card } from "@/components/Card";
 ```
 
 ## Quick Examples
@@ -36,7 +39,7 @@ import {
 ### Basic Usage
 
 ```typescript
-import { Card, CardHeader, CardContent } from 'torch-glare/lib/components/Card'
+import { Card, CardHeader, CardContent } from '@/components/Card'
 
 function Example() {
   return (
@@ -139,8 +142,8 @@ function CardGrid() {
 ### Card with Form
 
 ```typescript
-import { Input } from 'torch-glare/lib/components/Input'
-import { Button } from 'torch-glare/lib/components/Button'
+import { Input } from '@/components/Input'
+import { Button } from '@/components/Button'
 
 function LoginCard() {
   return (
@@ -305,8 +308,8 @@ function StatsCard({ title, value, change, icon }) {
 ### Profile Card
 
 ```typescript
-import { Avatar } from 'torch-glare/lib/components/Avatar'
-import { Badge } from 'torch-glare/lib/components/Badge'
+import { Avatar } from '@/components/Avatar'
+import { Badge } from '@/components/Badge'
 
 function ProfileCard({ user }) {
   return (
@@ -388,7 +391,7 @@ function ProductCard({ product }) {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Card, CardHeader, CardContent } from 'torch-glare/lib/components/Card'
+import { Card, CardHeader, CardContent } from '@/components/Card'
 
 describe('Card', () => {
   it('renders card content', () => {
@@ -550,7 +553,7 @@ test('Card meets WCAG standards', async () => {
 ```diff
 // Import path changed
 - import Card from 'torch-glare/Card'
-+ import { Card, CardHeader, CardContent } from 'torch-glare/lib/components/Card'
++ import { Card, CardHeader, CardContent } from '@/components/Card'
 
 // Structure changed to compound
 - <Card title="Title" description="Description">

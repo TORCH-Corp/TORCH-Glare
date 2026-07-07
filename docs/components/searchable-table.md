@@ -11,17 +11,22 @@ keywords: [searchable-table, dialog, table, search, async, infinite-scroll, pagi
 
 ## Installation
 
-`SearchableTable` is part of the TORCH Glare component library. It composes the [Dialog](./dialog.md) (built on Radix Dialog) and the [Table](./table.md) component internally, so both must be available — they ship with the library.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
 
 ```bash
-npm install @torch-ui/components @radix-ui/react-dialog
+npx torch-glare@latest init
+npx torch-glare@latest add SearchableTable
 ```
+
+`add` also copies any components, hooks, and utilities that `SearchableTable` depends on.
 
 ## Import
 
-```typescript
-import { SearchableTable } from '@torch-ui/components'
-import type { SearchableTableColumn } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { SearchableTable } from "@/components/SearchableTable";
 ```
 
 ## Quick Examples
@@ -31,8 +36,8 @@ import type { SearchableTableColumn } from '@torch-ui/components'
 Provide a `columns` config and a `rows` array. Single-select is controlled via `value` / `onSelect`. Use `getLabel` to control the text shown in the input after selection, and `getRowId` to give each row a stable key.
 
 ```typescript
-import { SearchableTable } from '@torch-ui/components'
-import type { SearchableTableColumn } from '@torch-ui/components'
+import { SearchableTable } from "@/components/SearchableTable";
+import type { SearchableTableColumn } from "@/components/SearchableTable";
 import { useState } from 'react'
 
 type User = { id: string; name: string; role: string; email: string }
@@ -97,8 +102,8 @@ const columns: SearchableTableColumn<User>[] = [
 Set `filterClientSide={false}` and treat `rows` as already-filtered server data. `onSearchChange` fires (debounced by `searchDebounceMs`, default 300ms) whenever the query settles — refetch there. As the list nears the bottom, `onLoadMore` fires while `hasMore && !loading`; a loading row renders whenever `loading` is true.
 
 ```typescript
-import { SearchableTable } from '@torch-ui/components'
-import type { SearchableTableColumn } from '@torch-ui/components'
+import { SearchableTable } from "@/components/SearchableTable";
+import type { SearchableTableColumn } from "@/components/SearchableTable";
 import { useEffect, useState } from 'react'
 
 type User = { id: string; name: string; role: string; email: string }
@@ -244,7 +249,7 @@ export interface SearchableTableColumn<T> {
 ### Component signature
 
 ```typescript
-import { Themes } from '@torch-ui/components'
+import { Themes } from "@/utils/types";
 
 interface SearchableTableProps<T> {
   columns: SearchableTableColumn<T>[]
@@ -287,8 +292,8 @@ Always pass the type argument explicitly (`<SearchableTable<User> … />`) so `c
 Wire pagination through `useInfiniteQuery`, flatten the pages into `rows`, and map the query's state onto `hasMore` / `loading` / `onLoadMore`.
 
 ```typescript
-import { SearchableTable } from '@torch-ui/components'
-import type { SearchableTableColumn } from '@torch-ui/components'
+import { SearchableTable } from "@/components/SearchableTable";
+import type { SearchableTableColumn } from "@/components/SearchableTable";
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -354,7 +359,7 @@ function UserPicker() {
 ### SWR — `useSWRInfinite`
 
 ```typescript
-import { SearchableTable } from '@torch-ui/components'
+import { SearchableTable } from "@/components/SearchableTable";
 import useSWRInfinite from 'swr/infinite'
 import { useState } from 'react'
 

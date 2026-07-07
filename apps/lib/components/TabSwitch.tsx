@@ -59,21 +59,9 @@ const optionStyles = cva(
   {
     variants: {
       size: {
-        S: [
-          "h-5 px-2 text-[12px]",
-          "[&_svg]:h-3 [&_svg]:w-3",
-          "[&_i]:text-[12px]",
-        ],
-        M: [
-          "h-6 px-3 text-[14px]",
-          "[&_svg]:h-[14px] [&_svg]:w-[14px]",
-          "[&_i]:text-[14px]",
-        ],
-        L: [
-          "h-8 px-4 text-[16px]",
-          "[&_svg]:h-4 [&_svg]:w-4",
-          "[&_i]:text-[16px]",
-        ],
+        S: ["h-5 px-2 text-[12px]", "[&_svg]:h-3 [&_svg]:w-3", "[&_i]:text-[12px]"],
+        M: ["h-6 px-3 text-[14px]", "[&_svg]:h-[14px] [&_svg]:w-[14px]", "[&_i]:text-[14px]"],
+        L: ["h-8 px-4 text-[16px]", "[&_svg]:h-4 [&_svg]:w-4", "[&_i]:text-[16px]"],
       },
       active: {
         // Active option = a solid raised WHITE pill with dark text, in every
@@ -102,9 +90,7 @@ const optionStyles = cva(
 );
 
 interface Props<T extends string = string>
-  extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
-    VariantProps<typeof trackStyles> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">, VariantProps<typeof trackStyles> {
   options: TabSwitchOption<T>[];
   /** Controlled selected value. */
   value: T;
@@ -114,16 +100,7 @@ interface Props<T extends string = string>
 }
 
 function TabSwitchInner<T extends string = string>(
-  {
-    options,
-    value,
-    onValueChange,
-    size,
-    theme,
-    disabled,
-    className,
-    ...props
-  }: Props<T>,
+  { options, value, onValueChange, size, theme, disabled, className, ...props }: Props<T>,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   return (
@@ -157,9 +134,7 @@ function TabSwitchInner<T extends string = string>(
               className={cn(optionStyles({ size, active }))}
             >
               {option.icon && (
-                <span className="flex items-center justify-center">
-                  {option.icon}
-                </span>
+                <span className="flex items-center justify-center">{option.icon}</span>
               )}
               {option.label}
             </button>
@@ -171,9 +146,7 @@ function TabSwitchInner<T extends string = string>(
 }
 
 // forwardRef loses the generic, so we cast to preserve `<TabSwitch<T> />` typing.
-export const TabSwitch = forwardRef(TabSwitchInner) as <
-  T extends string = string,
->(
+export const TabSwitch = forwardRef(TabSwitchInner) as <T extends string = string>(
   props: Props<T> & { ref?: React.ForwardedRef<HTMLDivElement> },
 ) => ReturnType<typeof TabSwitchInner>;
 

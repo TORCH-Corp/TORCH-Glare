@@ -11,13 +11,22 @@ keywords: [inner-label, floating-label, input, animated, material-design]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add InnerLabelField
+```
+
+`add` also copies any components, hooks, and utilities that `InnerLabelField` depends on.
 
 ## Import
 
-```typescript
-import { InnerLabelField } from '@torch-ui/components'
-import type { InnerLabelFieldProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { InnerLabelField } from "@/components/InnerLabelField";
 ```
 
 ## Quick Examples
@@ -25,7 +34,7 @@ import type { InnerLabelFieldProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 import { useState } from 'react'
 
 function Example() {
@@ -44,7 +53,7 @@ function Example() {
 ### With Required Indicator
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 
 function RequiredField() {
   return (
@@ -59,7 +68,7 @@ function RequiredField() {
 ### Different Input Types
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 import { useState } from 'react'
 
 function InputTypes() {
@@ -92,7 +101,7 @@ function InputTypes() {
 ### With Error Message
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 import { useState } from 'react'
 
 function WithValidation() {
@@ -123,8 +132,8 @@ function WithValidation() {
 ### With Action Button
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
-import { ActionButton } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
+import { ActionButton } from "@/components/ActionButton";
 import { useState } from 'react'
 
 function WithActionButton() {
@@ -150,8 +159,9 @@ function WithActionButton() {
 ### Login Form
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
-import { Button, FieldHint } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
+import { Button } from "@/components/Button";
+import { FieldHint } from "@/components/FieldHint";
 import { useState } from 'react'
 
 function LoginForm() {
@@ -224,8 +234,8 @@ function LoginForm() {
 ### Contact Form
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function ContactForm() {
@@ -278,7 +288,7 @@ function ContactForm() {
 ### Different Sizes
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 
 function Sizes() {
   return (
@@ -300,7 +310,7 @@ function Sizes() {
 ### Style Variants
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 
 function Variants() {
   return (
@@ -325,7 +335,7 @@ function Variants() {
 ### With Popover Autocomplete
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 import { useState } from 'react'
 
 function AutocompleteField() {
@@ -370,7 +380,7 @@ function AutocompleteField() {
 ### Disabled State
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 
 function DisabledField() {
   return (
@@ -448,7 +458,7 @@ export const InnerLabelField: React.ForwardRefExoticComponent<
 ### Usage with Types
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 import { useRef, useState } from 'react'
 
 function TypedExample() {
@@ -478,8 +488,8 @@ function TypedExample() {
 ### Controlled Form with Validation
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function ValidatedForm() {
@@ -567,8 +577,8 @@ function ValidatedForm() {
 ### Real-time Search
 
 ```typescript
-import { InnerLabelField } from '@torch-ui/components'
-import { ActionButton } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
+import { ActionButton } from "@/components/ActionButton";
 import { useState, useEffect } from 'react'
 
 function SearchField() {
@@ -629,7 +639,7 @@ function SearchField() {
 
 ```typescript
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { InnerLabelField } from '@torch-ui/components'
+import { InnerLabelField } from "@/components/InnerLabelField";
 import userEvent from '@testing-library/user-event'
 
 describe('InnerLabelField', () => {

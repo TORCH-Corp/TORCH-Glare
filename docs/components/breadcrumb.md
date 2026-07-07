@@ -1,6 +1,6 @@
 ---
 name: Breadcrumb
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/navigation
 tags: [navigation, breadcrumb, wayfinding, compound, accessible, rtl]
@@ -17,32 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Breadcrumb
 ```
+
+`add` also copies any components, hooks, and utilities that `Breadcrumb` depends on.
 
 ## Import
 
-```typescript
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
-} from 'torch-glare/lib/components/Breadcrumb'
-// or
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
-} from 'torch-glare/lib/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Breadcrumb } from "@/components/Breadcrumb";
 ```
 
 ## Quick Examples
@@ -50,14 +40,7 @@ import {
 ### Basic Usage
 
 ```typescript
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from 'torch-glare/lib/components/Breadcrumb'
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from "@/components/Breadcrumb";
 
 function Example() {
   return (
@@ -463,7 +446,7 @@ function DynamicBreadcrumb({ segments }: { segments: { label: string; href: stri
 ### Collapsible Breadcrumb with Dropdown
 
 ```typescript
-import { DropdownMenu } from 'torch-glare/lib/components/DropdownMenu'
+import { DropdownMenu } from "@/components/DropdownMenu";
 
 function CollapsibleBreadcrumb({
   items,
@@ -639,15 +622,7 @@ function FileExplorerBreadcrumb({
 
 ```typescript
 import { render, screen } from '@testing-library/react'
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
-} from 'torch-glare/lib/components/Breadcrumb'
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis } from "@/components/Breadcrumb";
 
 describe('Breadcrumb', () => {
   it('renders navigation landmark', () => {

@@ -14,47 +14,22 @@ keywords: [drawer, sheet, side-panel, bottom-sheet, slide, vaul, form, create, e
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
+npx torch-glare@latest init
 npx torch-glare@latest add Drawer
 ```
 
-The Drawer's only third-party dependency is [`vaul`](https://www.npmjs.com/package/vaul), which the CLI installs automatically.
-
-> [!NOTE]
-> **Building create / edit forms?** The Drawer ships on its own. The form examples on this page also use `SectionBlock`, `InputField`, and `Button`. Install them alongside it:
->
-> ```bash
-> npx torch-glare@latest add Drawer SectionBlock InputField Button
-> ```
->
-> These are *not* auto-installed by `add Drawer`, because `Drawer.tsx` does not import them — they are only needed for the form composition pattern, not for the Drawer itself.
+`add` also copies any components, hooks, and utilities that `Drawer` depends on.
 
 ## Import
 
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
 ```tsx
-import {
-  Drawer,
-  DrawerNested,
-  DrawerTrigger,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerHeaderTitle,
-  DrawerHeaderActions,
-  DrawerBadge,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
-  // Notch (the tab that sticks out of the top edge)
-  DrawerNotch,
-  DrawerNotchClose,
-  DrawerNotchPill,
-  DrawerNotchDivider,
-  DrawerNotchApp,
-  // Lower-level primitives (rarely needed directly)
-  DrawerPortal,
-  DrawerOverlay,
-} from "@/components/Drawer";
+import { Drawer } from "@/components/Drawer";
 ```
 
 ## Anatomy

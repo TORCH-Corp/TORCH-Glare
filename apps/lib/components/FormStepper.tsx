@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  forwardRef,
-  HTMLAttributes,
-  ReactNode,
-  createContext,
-  useContext,
-} from "react";
+import React, { forwardRef, HTMLAttributes, ReactNode, createContext, useContext } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
@@ -80,18 +74,14 @@ const formStepStyles = cva(
   },
 );
 
-interface FormStepProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "type"> {
+interface FormStepProps extends Omit<HTMLAttributes<HTMLDivElement>, "type"> {
   index?: number;
   type?: FormStepperType;
   selected?: boolean;
 }
 
 const FormStep = forwardRef<HTMLDivElement, FormStepProps>(
-  (
-    { className, index = 0, type = "default", selected, children, ...props },
-    ref,
-  ) => {
+  ({ className, index = 0, type = "default", selected, children, ...props }, ref) => {
     const { activeStep } = useFormStepperContext();
     const isSelected = selected ?? index === activeStep;
 
@@ -105,7 +95,7 @@ const FormStep = forwardRef<HTMLDivElement, FormStepProps>(
       >
         {React.Children.map(children, (child) => {
           if (!React.isValidElement(child)) return child;
-          return React.cloneElement(child as React.ReactElement<any>, {
+          return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
             _selected: isSelected,
             _type: type,
             _index: index,
@@ -196,33 +186,15 @@ interface FormStepIndicatorProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const FormStepIndicator = forwardRef<HTMLDivElement, FormStepIndicatorProps>(
-  (
-    {
-      className,
-      badgeIcon,
-      _selected,
-      _type = "default",
-      _index = 0,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, badgeIcon, _selected, _type = "default", _index = 0, children, ...props }, ref) => {
     const showBadge = _type === "success" || _type === "negative";
     const defaultBadgeIcon =
-      _type === "success" ? (
-        <i className="ri-check-line" />
-      ) : (
-        <i className="ri-information-fill" />
-      );
+      _type === "success" ? <i className="ri-check-line" /> : <i className="ri-information-fill" />;
 
     return (
       <div
         ref={ref}
-        className={cn(
-          formStepIndicatorStyles({ type: _type, selected: !!_selected }),
-          className,
-        )}
+        className={cn(formStepIndicatorStyles({ type: _type, selected: !!_selected }), className)}
         {...props}
       >
         {children ?? _index + 1}
@@ -276,13 +248,11 @@ interface FormStepLabelProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const FormStepLabel = forwardRef<HTMLDivElement, FormStepLabelProps>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
   ({ className, _selected, _type: _t, _index: _i, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        formStepLabelStyles({ selected: !!_selected }),
-        className,
-      )}
+      className={cn(formStepLabelStyles({ selected: !!_selected }), className)}
       {...props}
     />
   ),

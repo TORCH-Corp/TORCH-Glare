@@ -11,13 +11,22 @@ keywords: [label, form, input, required, text, typography]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add Label
+```
+
+`add` also copies any components, hooks, and utilities that `Label` depends on.
 
 ## Import
 
-```typescript
-import { Label } from '@torch-ui/components'
-import type { LabelProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Label } from "@/components/Label";
 ```
 
 ## Quick Examples
@@ -25,8 +34,8 @@ import type { LabelProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 
 function Example() {
   return (
@@ -40,8 +49,8 @@ function Example() {
 ### With Required Indicator
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 
 function RequiredField() {
   return (
@@ -58,8 +67,8 @@ function RequiredField() {
 ### With Secondary Label
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 
 function WithSecondary() {
   return (
@@ -76,8 +85,8 @@ function WithSecondary() {
 ### All Labels Combined
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 
 function AllLabels() {
   return (
@@ -95,8 +104,8 @@ function AllLabels() {
 ### Horizontal Layout
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { Switch } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { Switch } from "@/components/Switch";
 
 function HorizontalLabel() {
   return (
@@ -113,8 +122,8 @@ function HorizontalLabel() {
 ### Vertical Label Direction
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 
 function VerticalLabels() {
   return (
@@ -132,8 +141,8 @@ function VerticalLabels() {
 ### Reversed Children
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { Checkbox } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { Checkbox } from "@/components/Checkbox";
 
 function ReversedLayout() {
   return (
@@ -151,8 +160,8 @@ function ReversedLayout() {
 ### Different Sizes
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 
 function Sizes() {
   return (
@@ -176,8 +185,8 @@ function Sizes() {
 ### Style Variants
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 
 function Variants() {
   return (
@@ -203,7 +212,7 @@ function Variants() {
 ### Polymorphic Rendering
 
 ```typescript
-import { Label } from '@torch-ui/components'
+import { Label } from "@/components/Label";
 
 function PolymorphicLabel() {
   return (
@@ -233,8 +242,9 @@ function PolymorphicLabel() {
 ### Form Example
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField, Button } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function RegistrationForm() {
@@ -359,7 +369,7 @@ export const Label: React.ForwardRefExoticComponent<
 ### Usage with Types
 
 ```typescript
-import { Label } from '@torch-ui/components'
+import { Label } from "@/components/Label";
 import { useRef } from 'react'
 
 function TypedExample() {
@@ -387,8 +397,8 @@ function TypedExample() {
 ### Responsive Layout
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { InputField } from "@/components/InputField";
 import { useState, useEffect } from 'react'
 
 function ResponsiveLabel() {
@@ -417,8 +427,9 @@ function ResponsiveLabel() {
 ### Dynamic Required State
 
 ```typescript
-import { Label } from '@torch-ui/components'
-import { InputField, Checkbox } from '@torch-ui/components'
+import { Label } from "@/components/Label";
+import { Checkbox } from "@/components/Checkbox";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function DynamicRequired() {
@@ -452,7 +463,7 @@ function DynamicRequired() {
 ### Label Group Component
 
 ```typescript
-import { Label } from '@torch-ui/components'
+import { Label } from "@/components/Label";
 import { ReactNode } from 'react'
 
 interface LabelGroupProps {
@@ -508,7 +519,7 @@ function FormWithGroup() {
 
 ```typescript
 import { render, screen } from '@testing-library/react'
-import { Label } from '@torch-ui/components'
+import { Label } from "@/components/Label";
 
 describe('Label', () => {
   it('renders label text', () => {

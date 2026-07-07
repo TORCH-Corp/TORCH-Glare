@@ -12,9 +12,15 @@ A structured form section component that provides consistent layout for form fie
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-cli add field-section
+npx torch-glare@latest init
+npx torch-glare@latest add FieldSection
 ```
+
+`add` also copies any components, hooks, and utilities that `FieldSection` depends on.
 
 ## Imports
 
@@ -346,7 +352,7 @@ export function ProfileSettingsForm() {
       >
         <div className="w-full flex items-center gap-4">
           <Avatar size="L" src="/default-avatar.jpg" />
-          <Button variant="SecStyle" size="M">
+          <Button variant="BluSecStyle" size="M">
             Upload New Photo
           </Button>
         </div>
@@ -490,7 +496,7 @@ export function AccountSettings() {
         }
       >
         <div className="w-full space-y-2">
-          <Button variant="DangerStyle" size="M">
+          <Button variant="RedSecStyle" size="M">
             Delete Account
           </Button>
         </div>

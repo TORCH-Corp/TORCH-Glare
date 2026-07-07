@@ -11,12 +11,7 @@ export interface DataViewRadioProps {
   className?: string;
 }
 
-export function DataViewRadio({
-  value,
-  label,
-  children,
-  className,
-}: DataViewRadioProps) {
+export function DataViewRadio({ value, label, children, className }: DataViewRadioProps) {
   return (
     <RadioGroupPrimitive.Item
       value={value}

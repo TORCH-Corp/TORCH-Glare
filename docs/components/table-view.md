@@ -11,13 +11,22 @@ keywords: [data-views, table-view, table, sortable, columns, selection, filter, 
 
 ## Installation
 
-Part of `torch-glare`. Ships with the `DataViews` folder when you run `npx torch-glare add DataViews` — no separate install. It depends on the shared `Card`, `Checkbox`, and `Table` components plus the colocated `FilterPanel`.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add TableView
+```
+
+`add` also copies any components, hooks, and utilities that `TableView` depends on.
 
 ## Import
 
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
 ```tsx
-import { TableView, useDataViewsState } from "torch-glare"
-import type { TableViewProps, FieldConfig } from "torch-glare"
+import { TableView } from "@/components/TableView";
 ```
 
 ## When to use it directly
@@ -33,8 +42,9 @@ import type { TableViewProps, FieldConfig } from "torch-glare"
 `TableView` is controlled — it does not own field detection or config. Pull those from `useDataViewsState` (which auto-detects fields and columns from your data) and pass them down.
 
 ```tsx
-import { TableView, useDataViewsState } from "torch-glare"
-import type { FieldConfig } from "torch-glare"
+import { TableView } from "@/components/TableView";
+import { useDataViewsState } from "@/hooks/useDataViewsState";
+import type { FieldConfig } from "@/components/FieldConfig";
 
 const employees = [
   { id: 1, name: "Ada Lovelace", role: "Engineer", salary: 120000, joinDate: "2024-04-12" },

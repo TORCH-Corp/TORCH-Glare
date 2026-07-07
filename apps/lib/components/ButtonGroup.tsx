@@ -11,44 +11,34 @@ import { ToggleButton, toggleButtonStyles } from "./ToggleButton";
 // ButtonGroup Root
 // ============================================================================
 
-const buttonGroupStyles = cva(
-  [
-    "inline-flex",
-    "rounded-[4px]",
-    "overflow-hidden",
-  ],
-  {
-    variants: {
-      variant: {
-        PrimeStyle: [
-          "bg-background-presentation-action-secondary",
-          "border border-border-presentation-action-disabled",
-        ],
-        BorderStyle: [
-          "bg-background-presentation-action-borderstyle",
-          "border border-border-presentation-action-disabled",
-        ],
-        SystemStyle: [
-          "bg-black-alpha-20",
-          "border border-[#2C2D2E]",
-        ],
-      },
-      size: {
-        S: "h-[22px]",
-        M: "h-[28px]",
-        L: "h-[34px]",
-        XL: "h-[40px]",
-      },
-      fullWidth: {
-        true: "w-full",
-      },
+const buttonGroupStyles = cva(["inline-flex", "rounded-[4px]", "overflow-hidden"], {
+  variants: {
+    variant: {
+      PrimeStyle: [
+        "bg-background-presentation-action-secondary",
+        "border border-border-presentation-action-disabled",
+      ],
+      BorderStyle: [
+        "bg-background-presentation-action-borderstyle",
+        "border border-border-presentation-action-disabled",
+      ],
+      SystemStyle: ["bg-black-alpha-20", "border border-[#2C2D2E]"],
     },
-    defaultVariants: {
-      variant: "PrimeStyle",
-      size: "M",
+    size: {
+      S: "h-[22px]",
+      M: "h-[28px]",
+      L: "h-[34px]",
+      XL: "h-[40px]",
     },
-  }
-);
+    fullWidth: {
+      true: "w-full",
+    },
+  },
+  defaultVariants: {
+    variant: "PrimeStyle",
+    size: "M",
+  },
+});
 
 type ButtonGroupSingleProps = {
   type: "single";
@@ -77,11 +67,11 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
       ref={ref}
       data-theme={theme}
       className={cn(buttonGroupStyles({ variant, size, fullWidth }), className)}
-      {...(props as any)}
+      {...(props as React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>)}
     >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<any>, {
+          return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
             _groupVariant: variant,
             _groupSize: size,
           });
@@ -89,7 +79,7 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
         return child;
       })}
     </ToggleGroupPrimitive.Root>
-  )
+  ),
 );
 ButtonGroup.displayName = "ButtonGroup";
 
@@ -154,7 +144,7 @@ const buttonGroupItemStyles = cva(
       variant: "PrimeStyle",
       size: "M",
     },
-  }
+  },
 );
 
 type ButtonGroupItemProps = React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
@@ -177,7 +167,7 @@ const ButtonGroupItem = React.forwardRef<
         variant: variant ?? _groupVariant ?? "PrimeStyle",
         size: size ?? _groupSize ?? "M",
       }),
-      className
+      className,
     )}
     {...props}
   >

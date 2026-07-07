@@ -1,25 +1,21 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
-import { X, GripVertical, ArrowUp, ArrowDown, Minus } from "lucide-react"
-import type {
-  ViewConfig,
-  ViewType,
-  FieldConfig,
-} from "./types"
-import { Button } from "../Button"
-import { Switch } from "../Switch"
-import { Divider } from "../Divider"
-import { Label } from "../Label"
-import { RadioGroup, Radio } from "../Radio"
+import { useMemo, useState } from "react";
+import { X, GripVertical, ArrowUp, ArrowDown, Minus } from "lucide-react";
+import type { ViewConfig, ViewType, FieldConfig } from "./types";
+import { Button } from "../Button";
+import { Switch } from "../Switch";
+import { Divider } from "../Divider";
+import { Label } from "../Label";
+import { RadioGroup, Radio } from "../Radio";
 
 type SettingsPanelProps = {
-  config: ViewConfig
-  onConfigChange: (config: Partial<ViewConfig>) => void
-  onClose: () => void
-  currentView: ViewType
-  fields: FieldConfig[]
-}
+  config: ViewConfig;
+  onConfigChange: (config: Partial<ViewConfig>) => void;
+  onClose: () => void;
+  currentView: ViewType;
+  fields: FieldConfig[];
+};
 
 export function SettingsPanel({
   config,
@@ -28,58 +24,49 @@ export function SettingsPanel({
   currentView,
   fields,
 }: SettingsPanelProps) {
-  const visibleFields = useMemo(
-    () => fields.filter((f) => f.type !== "hidden"),
-    [fields],
-  )
+  const visibleFields = useMemo(() => fields.filter((f) => f.type !== "hidden"), [fields]);
 
-  const groupableFields = useMemo(
-    () => fields.filter((f) => f.type === "enum-badge"),
-    [fields],
-  )
+  const groupableFields = useMemo(() => fields.filter((f) => f.type === "enum-badge"), [fields]);
 
-  const visiblePaths = useMemo(
-    () => new Set(visibleFields.map((f) => f.path)),
-    [visibleFields],
-  )
+  const visiblePaths = useMemo(() => new Set(visibleFields.map((f) => f.path)), [visibleFields]);
   const fieldByPath = useMemo(
     () => new Map(visibleFields.map((f) => [f.path, f])),
     [visibleFields],
-  )
+  );
   const orderedColumns = useMemo(
     () =>
       [...config.tableColumns]
         .filter((c) => visiblePaths.has(c.id))
         .sort((a, b) => a.order - b.order),
     [config.tableColumns, visiblePaths],
-  )
+  );
 
   const toggleColumnVisibility = (path: string) => {
     const next = config.tableColumns.map((c) =>
       c.id === path ? { ...c, visible: !c.visible } : c,
-    )
-    onConfigChange({ tableColumns: next })
-  }
+    );
+    onConfigChange({ tableColumns: next });
+  };
 
-  const [dragPath, setDragPath] = useState<string | null>(null)
-  const [dragOverPath, setDragOverPath] = useState<string | null>(null)
+  const [dragPath, setDragPath] = useState<string | null>(null);
+  const [dragOverPath, setDragOverPath] = useState<string | null>(null);
 
   const reorderColumn = (sourcePath: string, targetPath: string) => {
-    if (sourcePath === targetPath) return
-    const ids = orderedColumns.map((c) => c.id)
-    const from = ids.indexOf(sourcePath)
-    const to = ids.indexOf(targetPath)
-    if (from === -1 || to === -1) return
-    const reordered = [...ids]
-    const [moved] = reordered.splice(from, 1)
-    reordered.splice(to, 0, moved)
-    const orderByPath = new Map(reordered.map((id, i) => [id, i]))
+    if (sourcePath === targetPath) return;
+    const ids = orderedColumns.map((c) => c.id);
+    const from = ids.indexOf(sourcePath);
+    const to = ids.indexOf(targetPath);
+    if (from === -1 || to === -1) return;
+    const reordered = [...ids];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+    const orderByPath = new Map(reordered.map((id, i) => [id, i]));
     const next = config.tableColumns.map((c) => {
-      const newOrder = orderByPath.get(c.id)
-      return newOrder == null ? c : { ...c, order: newOrder }
-    })
-    onConfigChange({ tableColumns: next })
-  }
+      const newOrder = orderByPath.get(c.id);
+      return newOrder == null ? c : { ...c, order: newOrder };
+    });
+    onConfigChange({ tableColumns: next });
+  };
 
   return (
     <div className="w-80 border-l border-border-presentation-global-primary bg-background-presentation-body-overlay-primary overflow-y-auto">
@@ -110,44 +97,48 @@ export function SettingsPanel({
         {currentView === "table" && (
           <>
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-content-presentation-global-primary">Table Columns</h3>
+              <h3 className="text-sm font-medium text-content-presentation-global-primary">
+                Table Columns
+              </h3>
               <p className="text-xs text-content-presentation-global-tertiary">
                 Show or hide columns in table view
               </p>
               {orderedColumns.length === 0 ? (
-                <p className="text-xs text-content-presentation-global-tertiary">No fields detected.</p>
+                <p className="text-xs text-content-presentation-global-tertiary">
+                  No fields detected.
+                </p>
               ) : (
                 <div className="space-y-2">
                   {orderedColumns.map((col) => {
-                    const field = fieldByPath.get(col.id)
-                    const isDragging = dragPath === col.id
-                    const isDropTarget = dragOverPath === col.id && dragPath !== col.id
+                    const field = fieldByPath.get(col.id);
+                    const isDragging = dragPath === col.id;
+                    const isDropTarget = dragOverPath === col.id && dragPath !== col.id;
                     return (
                       <div
                         key={col.id}
                         draggable
                         onDragStart={(e) => {
-                          setDragPath(col.id)
-                          e.dataTransfer.effectAllowed = "move"
-                          e.dataTransfer.setData("text/plain", col.id)
+                          setDragPath(col.id);
+                          e.dataTransfer.effectAllowed = "move";
+                          e.dataTransfer.setData("text/plain", col.id);
                         }}
                         onDragOver={(e) => {
-                          e.preventDefault()
-                          e.dataTransfer.dropEffect = "move"
-                          if (dragOverPath !== col.id) setDragOverPath(col.id)
+                          e.preventDefault();
+                          e.dataTransfer.dropEffect = "move";
+                          if (dragOverPath !== col.id) setDragOverPath(col.id);
                         }}
                         onDragLeave={() => {
-                          if (dragOverPath === col.id) setDragOverPath(null)
+                          if (dragOverPath === col.id) setDragOverPath(null);
                         }}
                         onDrop={(e) => {
-                          e.preventDefault()
-                          if (dragPath) reorderColumn(dragPath, col.id)
-                          setDragPath(null)
-                          setDragOverPath(null)
+                          e.preventDefault();
+                          if (dragPath) reorderColumn(dragPath, col.id);
+                          setDragPath(null);
+                          setDragOverPath(null);
                         }}
                         onDragEnd={() => {
-                          setDragPath(null)
-                          setDragOverPath(null)
+                          setDragPath(null);
+                          setDragOverPath(null);
                         }}
                         className={
                           "flex items-center gap-2 rounded-lg border p-2 cursor-grab active:cursor-grabbing transition-colors " +
@@ -167,7 +158,7 @@ export function SettingsPanel({
                           onCheckedChange={() => toggleColumnVisibility(col.id)}
                         />
                       </div>
-                    )
+                    );
                   })}
                 </div>
               )}
@@ -179,11 +170,16 @@ export function SettingsPanel({
         {currentView === "kanban" && (
           <>
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-content-presentation-global-primary">Kanban Grouping</h3>
-              <p className="text-xs text-content-presentation-global-tertiary">Group cards by field</p>
+              <h3 className="text-sm font-medium text-content-presentation-global-primary">
+                Kanban Grouping
+              </h3>
+              <p className="text-xs text-content-presentation-global-tertiary">
+                Group cards by field
+              </p>
               {groupableFields.length === 0 ? (
                 <p className="text-xs text-content-presentation-global-tertiary">
-                  No groupable fields detected. Declare a field with type "enum-badge" to enable grouping.
+                  No groupable fields detected. Declare a field with type &quot;enum-badge&quot; to
+                  enable grouping.
                 </p>
               ) : (
                 <RadioGroup
@@ -206,7 +202,9 @@ export function SettingsPanel({
         {currentView === "inbox" && (
           <>
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-content-presentation-global-primary">Inbox Layout</h3>
+              <h3 className="text-sm font-medium text-content-presentation-global-primary">
+                Inbox Layout
+              </h3>
               <div className="flex items-center justify-between">
                 <Label htmlFor="preview-pane" className="text-sm">
                   Show Preview Pane
@@ -230,21 +228,17 @@ export function SettingsPanel({
             </p>
             <div className="space-y-2">
               {orderedColumns.map((col) => {
-                const field = fieldByPath.get(col.id)
-                const isActive = config.sortBy === col.id
-                const dir: "asc" | "desc" | "none" = isActive ? config.sortOrder : "none"
+                const field = fieldByPath.get(col.id);
+                const isActive = config.sortBy === col.id;
+                const dir: "asc" | "desc" | "none" = isActive ? config.sortOrder : "none";
                 const setDir = (next: "asc" | "desc" | "none") => {
                   if (next === "none") {
-                    onConfigChange({ sortBy: "" })
+                    onConfigChange({ sortBy: "" });
                   } else {
-                    onConfigChange({ sortBy: col.id, sortOrder: next })
+                    onConfigChange({ sortBy: col.id, sortOrder: next });
                   }
-                }
-                const btn = (
-                  mode: "none" | "asc" | "desc",
-                  Icon: typeof Minus,
-                  label: string,
-                ) => (
+                };
+                const btn = (mode: "none" | "asc" | "desc", Icon: typeof Minus, label: string) => (
                   <button
                     type="button"
                     aria-label={`${label} ${col.label || col.id}`}
@@ -259,7 +253,7 @@ export function SettingsPanel({
                   >
                     <Icon className="h-3.5 w-3.5" />
                   </button>
-                )
+                );
                 return (
                   <div
                     key={col.id}
@@ -274,12 +268,12 @@ export function SettingsPanel({
                       {btn("desc", ArrowDown, "Sort descending")}
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }

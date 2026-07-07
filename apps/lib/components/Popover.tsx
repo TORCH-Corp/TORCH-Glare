@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import React, { useEffect, useRef } from "react";
@@ -12,21 +12,17 @@ interface LocalPopOverProps extends VariantProps<typeof popoverStyles> {
   overlayBlur?: boolean;
 }
 
-
 const Popover = PopoverPrimitive.Root;
 
 const PopoverTrigger = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger> & {
-    className?: string
+    className?: string;
   }
 >(({ className, ...props }, ref) => (
   <PopoverPrimitive.Trigger
     ref={ref}
-    className={cn(
-      "z-[20] transition-all duration-300 data-[state=open]:z-[49]",
-      className
-    )}
+    className={cn("z-[20] transition-all duration-300 data-[state=open]:z-[49]", className)}
     {...props}
   />
 ));
@@ -36,9 +32,9 @@ PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
-  LocalPopOverProps & {
-    theme?: Themes
-  }
+    LocalPopOverProps & {
+      theme?: Themes;
+    }
 >(
   (
     {
@@ -50,7 +46,7 @@ const PopoverContent = React.forwardRef<
       theme,
       ...props
     },
-    ref
+    ref,
   ) => (
     <PopoverPrimitive.Portal>
       {overlayBlur ? (
@@ -60,10 +56,7 @@ const PopoverContent = React.forwardRef<
             ref={ref}
             align={align}
             sideOffset={sideOffset}
-            className={cn(
-              popoverStyles({ variant, overlayBlur }),
-              className
-            )}
+            className={cn(popoverStyles({ variant, overlayBlur }), className)}
             {...props}
           />
         </div>
@@ -73,22 +66,18 @@ const PopoverContent = React.forwardRef<
           ref={ref}
           align={align}
           sideOffset={sideOffset}
-          className={cn(
-            popoverStyles({ variant, overlayBlur }),
-            className
-          )}
+          className={cn(popoverStyles({ variant, overlayBlur }), className)}
           {...props}
         />
       )}
     </PopoverPrimitive.Portal>
-  )
+  ),
 );
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
 // Define the Props interface with a generic type parameter
 interface Props<T extends React.ElementType = "li">
-  extends React.HTMLAttributes<HTMLElement>,
-  VariantProps<typeof PopoverItemStyles> {
+  extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof PopoverItemStyles> {
   asChild?: boolean;
   as?: T; // The `as` prop can be any valid HTML element or React component
 }
@@ -123,7 +112,7 @@ const PopoverItem = <T extends React.ElementType = "li">({
           size,
           active,
         }),
-        className
+        className,
       )}
       /// <reference path="" />
       ref={ref}
@@ -133,10 +122,7 @@ const PopoverItem = <T extends React.ElementType = "li">({
   );
 };
 
-
 export { Popover, PopoverTrigger, PopoverContent, PopoverItem };
-
-
 
 const PopoverItemStyles = cva(
   [
@@ -155,7 +141,6 @@ const PopoverItemStyles = cva(
     "transition-all",
     "ease-in-out",
     "duration-300",
-
   ],
   {
     variants: {
@@ -204,10 +189,7 @@ const PopoverItemStyles = cva(
       },
 
       disabled: {
-        true: [
-          "text-content-presentation-state-disabled",
-          "bg-white-00",
-        ],
+        true: ["text-content-presentation-state-disabled", "bg-white-00"],
       },
 
       active: {
@@ -231,7 +213,7 @@ const PopoverItemStyles = cva(
         className: ["text-content-presentation-state-negative"],
       },
     ],
-  }
+  },
 );
 
 const popoverStyles = cva(
@@ -270,5 +252,5 @@ const popoverStyles = cva(
         variant: "PresentationStyle",
       },
     },
-  }
+  },
 );

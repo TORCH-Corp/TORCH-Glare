@@ -1,6 +1,6 @@
 ---
 name: TextEditor
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/editors
 tags: [editor, rich-text, block-editor, editorjs, markdown, rtl, accessible]
@@ -34,16 +34,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add TextEditor
 ```
+
+`add` also copies any components, hooks, and utilities that `TextEditor` depends on.
 
 ## Import
 
-```typescript
-import { TextEditor } from 'torch-glare/lib/components/TextEditor'
-// or
-import { TextEditor } from 'torch-glare/lib/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { TextEditor } from "@/components/TextEditor";
 ```
 
 ## Quick Examples
@@ -51,7 +57,7 @@ import { TextEditor } from 'torch-glare/lib/components'
 ### Basic Usage
 
 ```typescript
-import { TextEditor } from 'torch-glare/lib/components/TextEditor'
+import { TextEditor } from "@/components/TextEditor";
 
 function Example() {
   return (
@@ -66,7 +72,7 @@ function Example() {
 ### With Initial Data
 
 ```typescript
-import { TextEditor } from 'torch-glare/lib/components/TextEditor'
+import { TextEditor } from "@/components/TextEditor";
 import type { OutputData } from '@editorjs/editorjs'
 
 function Example() {
@@ -97,7 +103,7 @@ function Example() {
 
 ```typescript
 import { useRef } from 'react'
-import { TextEditor, TextEditorRef } from 'torch-glare/lib/components/TextEditor'
+import { TextEditor, TextEditorRef } from "@/components/TextEditor";
 
 function EditorWithControls() {
   const editorRef = useRef<TextEditorRef>(null)
@@ -342,8 +348,8 @@ export type { TextEditorProps, OutputData }
 
 ```typescript
 import { useRef, useState } from 'react'
-import { TextEditor, TextEditorRef } from 'torch-glare/lib/components/TextEditor'
-import { Button } from 'torch-glare/lib/components/Button'
+import { TextEditor, TextEditorRef } from "@/components/TextEditor";
+import { Button } from "@/components/Button";
 import type { OutputData } from '@editorjs/editorjs'
 
 function BlogPostEditor() {
@@ -478,7 +484,7 @@ function ArticleForm() {
 
 ```typescript
 import { render, screen, waitFor } from '@testing-library/react'
-import { TextEditor, TextEditorRef } from 'torch-glare/lib/components/TextEditor'
+import { TextEditor, TextEditorRef } from "@/components/TextEditor";
 
 describe('TextEditor', () => {
   it('renders the editor container', () => {
@@ -652,7 +658,7 @@ The PresentationStyle variant maps to the following design tokens:
 ```typescript
 "use client"
 
-import { TextEditor } from 'torch-glare/lib/components/TextEditor'
+import { TextEditor } from "@/components/TextEditor";
 
 export default function Page() {
   return <TextEditor />

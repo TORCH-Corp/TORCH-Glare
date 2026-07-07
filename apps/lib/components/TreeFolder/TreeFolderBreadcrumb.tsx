@@ -1,22 +1,17 @@
-"use client"
+"use client";
 
-import { ChevronRight } from "lucide-react"
-import { cn } from "../../utils/cn"
-import type { TreeFolderBreadcrumb as BreadcrumbItems } from "./types"
+import { ChevronRight } from "lucide-react";
+import { cn } from "../../utils/cn";
+import type { TreeFolderBreadcrumb as BreadcrumbItems } from "./types";
 
 type Props = {
-  items: BreadcrumbItems
-  onSelect?: (id: string) => void
-  className?: string
-  maxItems?: number
-}
+  items: BreadcrumbItems;
+  onSelect?: (id: string) => void;
+  className?: string;
+  maxItems?: number;
+};
 
-export function TreeFolderBreadcrumb({
-  items,
-  onSelect,
-  className,
-  maxItems = 4,
-}: Props) {
+export function TreeFolderBreadcrumb({ items, onSelect, className, maxItems = 4 }: Props) {
   if (items.length === 0) {
     return (
       <div
@@ -27,13 +22,13 @@ export function TreeFolderBreadcrumb({
       >
         No selection
       </div>
-    )
+    );
   }
 
   const display =
     items.length > maxItems
       ? [items[0], { id: "__ellipsis", name: "…" }, ...items.slice(-(maxItems - 2))]
-      : items
+      : items;
 
   return (
     <nav
@@ -45,8 +40,8 @@ export function TreeFolderBreadcrumb({
     >
       <ol className="flex items-center gap-1 min-w-0 flex-1">
         {display.map((item, idx) => {
-          const isLast = idx === display.length - 1
-          const isEllipsis = item.id === "__ellipsis"
+          const isLast = idx === display.length - 1;
+          const isEllipsis = item.id === "__ellipsis";
           return (
             <li key={`${item.id}-${idx}`} className="flex items-center gap-1 min-w-0">
               {idx > 0 && (
@@ -72,9 +67,9 @@ export function TreeFolderBreadcrumb({
                 </button>
               )}
             </li>
-          )
+          );
         })}
       </ol>
     </nav>
-  )
+  );
 }

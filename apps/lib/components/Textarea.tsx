@@ -29,7 +29,7 @@ const textareaStyles = cva(
     "disabled:text-border-presentation-action-disabled",
     "disabled:cursor-not-allowed",
     "disabled:placeholder-border-presentation-action-disabled",
-    "field-sizing-content w-full min-w-[100px] max-w-[100%]"
+    "field-sizing-content w-full min-w-[100px] max-w-[100%]",
   ],
   {
     variants: {
@@ -43,13 +43,12 @@ const textareaStyles = cva(
       },
     },
     defaultVariants: {},
-  }
+  },
 );
 
 // Define the prop types for the Textarea component
 interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  VariantProps<typeof textareaStyles> {
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>, VariantProps<typeof textareaStyles> {
   label?: string; // Optional label text
   requiredLabel?: string; // Text for required field indicator
   secondaryLabel?: string; // Additional label text
@@ -67,10 +66,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       requiredLabel,
       secondaryLabel,
       direction = "row",
-      theme,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      theme, // excluded from ...props spread
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <Label
@@ -82,14 +82,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         size={"M"}
         className={cn(className)}
       >
-        <textarea
-          className={cn(textareaStyles({ state }))}
-          ref={ref}
-          {...props}
-        />
+        <textarea className={cn(textareaStyles({ state }))} ref={ref} {...props} />
       </Label>
     );
-  }
+  },
 );
 Textarea.displayName = "Textarea";
 

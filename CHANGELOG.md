@@ -138,7 +138,6 @@ and fix tailwindcss issues.
 
 ## 1.1.1
 
-<<<<<<< HEAD
 ### Added
 
 - Add support for version 4 of tailwindcss.

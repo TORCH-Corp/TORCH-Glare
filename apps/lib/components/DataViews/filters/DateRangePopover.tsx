@@ -1,47 +1,50 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { DayPicker, type DateRange } from "react-day-picker"
-import "react-day-picker/style.css"
-import * as PopoverPrimitive from "@radix-ui/react-popover"
-import { Calendar, X } from "lucide-react"
-import { cn } from "../../../utils/cn"
-import type { DateRangeFilter, FieldConfig } from "../types"
-import { toIsoDate } from "../../../utils/dataViews/rangeUtils"
-import { PresetChips } from "./PresetChips"
+import { useState } from "react";
+import { DayPicker, type DateRange } from "react-day-picker";
+import "react-day-picker/style.css";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { Calendar, X } from "lucide-react";
+import { cn } from "../../../utils/cn";
+import type { DateRangeFilter, FieldConfig, FilterValue } from "../types";
+import { toIsoDate } from "../../../utils/dataViews/rangeUtils";
+import { PresetChips } from "./PresetChips";
 
 type Props = {
-  value: DateRangeFilter | undefined
-  onChange: (next: DateRangeFilter) => void
-  presets: FieldConfig["presets"]
-}
+  value: DateRangeFilter | undefined;
+  onChange: (next: DateRangeFilter) => void;
+  presets: FieldConfig["presets"];
+};
 
 export function DateRangePopover({ value, onChange, presets }: Props) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const range: DateRange | undefined =
     value && (value.from || value.to)
       ? {
           from: value.from ? new Date(value.from + "T00:00:00") : undefined,
-          to:   value.to   ? new Date(value.to   + "T00:00:00") : undefined,
+          to: value.to ? new Date(value.to + "T00:00:00") : undefined,
         }
-      : undefined
+      : undefined;
 
   const label =
-    value?.from && value?.to ? `${value.from} → ${value.to}`
-    : value?.from           ? `from ${value.from}`
-    : value?.to             ? `until ${value.to}`
-    : "Any date"
+    value?.from && value?.to
+      ? `${value.from} → ${value.to}`
+      : value?.from
+        ? `from ${value.from}`
+        : value?.to
+          ? `until ${value.to}`
+          : "Any date";
 
   const handleSelect = (next: DateRange | undefined) => {
     onChange({
       kind: "date",
       from: next?.from ? toIsoDate(next.from) : undefined,
-      to:   next?.to   ? toIsoDate(next.to)   : undefined,
-    })
-  }
+      to: next?.to ? toIsoDate(next.to) : undefined,
+    });
+  };
 
-  const isActive = !!(value?.from || value?.to)
+  const isActive = !!(value?.from || value?.to);
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -63,14 +66,14 @@ export function DateRangePopover({ value, onChange, presets }: Props) {
               tabIndex={0}
               aria-label="Clear date filter"
               onClick={(e) => {
-                e.stopPropagation()
-                onChange({ kind: "date" })
+                e.stopPropagation();
+                onChange({ kind: "date" });
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                  e.stopPropagation()
-                  e.preventDefault()
-                  onChange({ kind: "date" })
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onChange({ kind: "date" });
                 }
               }}
               className="text-content-presentation-global-tertiary hover:text-content-presentation-global-primary cursor-pointer"
@@ -87,7 +90,11 @@ export function DateRangePopover({ value, onChange, presets }: Props) {
           className="z-50 bg-background-presentation-body-primary border border-border-presentation-global-primary rounded-lg shadow-lg p-3 space-y-3"
         >
           {presets && presets.length > 0 && (
-            <PresetChips presets={presets} current={value} onSelect={onChange as any} />
+            <PresetChips
+              presets={presets}
+              current={value}
+              onSelect={onChange as (value: FilterValue) => void}
+            />
           )}
           <DayPicker
             mode="range"
@@ -109,5 +116,5 @@ export function DateRangePopover({ value, onChange, presets }: Props) {
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>
-  )
+  );
 }

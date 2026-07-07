@@ -91,7 +91,7 @@ const menuContentStyles = cva(
       },
     },
     defaultVariants: { variant: "PresentationStyle" },
-  }
+  },
 );
 
 export function SearchableSelect({
@@ -123,10 +123,7 @@ export function SearchableSelect({
 
   const groupRef = useClickOutside<HTMLDivElement>((e) => {
     const target = e?.target as Node;
-    if (
-      !groupRef.current?.contains(target) &&
-      !popoverContentRef.current?.contains(target)
-    ) {
+    if (!groupRef.current?.contains(target) && !popoverContentRef.current?.contains(target)) {
       setOpen(false);
     }
   });
@@ -168,7 +165,7 @@ export function SearchableSelect({
   };
 
   // Solid value: search text while typing, otherwise the selected label.
-  const displayValue = searching ? search : selectedOption?.label ?? "";
+  const displayValue = searching ? search : (selectedOption?.label ?? "");
 
   return (
     <Popover open={open}>
@@ -222,13 +219,13 @@ export function SearchableSelect({
             }}
             className={cn(
               "shrink-0 h-[32px] w-[32px] rounded-[4px]",
-              open && "bg-background-presentation-action-hover text-white"
+              open && "bg-background-presentation-action-hover text-white",
             )}
           >
             <i
               className={cn(
                 "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
-                open && "rotate-180"
+                open && "rotate-180",
               )}
             />
           </Button>
@@ -269,15 +266,13 @@ export function SearchableSelect({
                     data-highlighted={isSelected ? "" : undefined}
                     className={cn(
                       MenuItemStyles({ variant: "Default", size: "M" }),
-                      "shrink-0" // keep full row height; the list scrolls instead of squishing
+                      "shrink-0", // keep full row height; the list scrolls instead of squishing
                     )}
                   >
                     <div>
                       {option.icon}
                       <span className="flex-1 text-start">{option.label}</span>
-                      {isSelected && (
-                        <i className="ri-check-line text-[16px] shrink-0" />
-                      )}
+                      {isSelected && <i className="ri-check-line text-[16px] shrink-0" />}
                     </div>
                   </button>
                 );
@@ -298,7 +293,6 @@ export function SearchableSelect({
               <LoadingIcon size="M" />
             </div>
           )}
-
         </div>
       </PopoverContent>
     </Popover>

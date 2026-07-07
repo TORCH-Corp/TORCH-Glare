@@ -11,19 +11,22 @@ keywords: [popover, overlay, dropdown, radix-ui, menu, non-modal]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-popover
+npx torch-glare@latest init
+npx torch-glare@latest add Popover
 ```
+
+`add` also copies any components, hooks, and utilities that `Popover` depends on.
 
 ## Import
 
-```typescript
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverItem,
-} from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Popover } from "@/components/Popover";
 ```
 
 ## Quick Examples
@@ -31,8 +34,8 @@ import {
 ### Basic Usage
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/Popover";
+import { Button } from "@/components/Button";
 
 function Example() {
   return (
@@ -53,7 +56,7 @@ function Example() {
 ### With PopoverItem List
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 
 function SelectPopover() {
   const items = ['Option 1', 'Option 2', 'Option 3']
@@ -81,7 +84,7 @@ function SelectPopover() {
 ### SystemStyle Variant
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 
 function SystemStylePopover() {
   return (
@@ -102,7 +105,7 @@ function SystemStylePopover() {
 ### With Icons
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 
 function IconPopover() {
   return (
@@ -132,7 +135,7 @@ function IconPopover() {
 ### With Active State
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 import { useState } from 'react'
 
 function SelectablePopover() {
@@ -171,7 +174,7 @@ function SelectablePopover() {
 ### With Overlay Blur
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 
 function BlurredPopover() {
   return (
@@ -191,7 +194,7 @@ function BlurredPopover() {
 ### Warning Items
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 
 function WarningPopover() {
   return (
@@ -217,7 +220,7 @@ function WarningPopover() {
 ### Size Variants
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 
 function SizedPopover() {
   return (
@@ -237,7 +240,7 @@ function SizedPopover() {
 ### Controlled Popover
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 import { useState } from 'react'
 
 function ControlledPopover() {
@@ -265,7 +268,7 @@ function ControlledPopover() {
 ### Positioning
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/Popover";
 
 function PositionedPopover() {
   return (
@@ -420,7 +423,7 @@ export const PopoverItem: <T extends React.ElementType = 'button'>(
 ### Select Pattern
 
 ```typescript
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 import { useState } from 'react'
 
 function SelectField() {
@@ -481,7 +484,7 @@ function ContextMenu({ onEdit, onDelete }) {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from '@torch-ui/components'
+import { Popover, PopoverTrigger, PopoverContent, PopoverItem } from "@/components/Popover";
 
 describe('Popover', () => {
   it('opens on trigger click', () => {
@@ -590,8 +593,8 @@ describe('Popover', () => {
 ## Migration from DropdownMenu
 
 ```diff
-- import { DropdownMenu } from '@torch-ui/components'
-+ import { Popover } from '@torch-ui/components'
+- import { DropdownMenu } from "@/components/DropdownMenu";
++ import { Popover } from "@/components/Popover";
 
 - <DropdownMenu>
 -   <DropdownMenuTrigger>Open</DropdownMenuTrigger>

@@ -3,7 +3,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function TextareaExample() {
-  const [dir] = useState<any>(["row", "column"]);
+  const [dir] = useState<("row" | "column")[]>(["row", "column"]);
 
   return (
     <>
@@ -16,7 +16,7 @@ export default function TextareaExample() {
         Textarea Preview
       </h1>
       {
-        dir.map((e: any) => (
+        dir.map((e) => (
           <div key={e}
             className="flex flex-col gap-2 w-full">
 

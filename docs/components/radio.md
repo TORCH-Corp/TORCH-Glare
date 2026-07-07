@@ -1,6 +1,6 @@
 ---
 name: Radio
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, radio, selection, radix-ui, accessible, group, controlled]
@@ -17,14 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Radio
 ```
+
+`add` also copies any components, hooks, and utilities that `Radio` depends on.
 
 ## Import
 
-```typescript
-import { Radio, RadioGroup } from 'torch-glare/lib/components/Radio'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Radio } from "@/components/Radio";
 ```
 
 ## Quick Examples
@@ -32,7 +40,7 @@ import { Radio, RadioGroup } from 'torch-glare/lib/components/Radio'
 ### Basic Radio Group
 
 ```typescript
-import { Radio, RadioGroup } from 'torch-glare/lib/components/Radio'
+import { Radio, RadioGroup } from '@/components/Radio'
 
 function Example() {
   const [value, setValue] = useState('option1')
@@ -442,7 +450,7 @@ function ConditionalForm() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Radio, RadioGroup } from 'torch-glare/lib/components/Radio'
+import { Radio, RadioGroup } from '@/components/Radio'
 
 describe('Radio', () => {
   it('handles selection changes', () => {
@@ -659,10 +667,10 @@ Radix UI automatically handles:
 ```diff
 // Import path
 - import Radio from 'torch-glare/Radio'
-+ import { Radio, RadioGroup } from 'torch-glare/lib/components/Radio'
++ import { Radio, RadioGroup } from '@/components/Radio'
 
 // Size prop values
-- <Radio size="small" />
+- <Radio size="M" />
 + <Radio size="S" />
 ```
 

@@ -12,9 +12,15 @@ A flexible separator component for creating visual divisions between content sec
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-cli add divider
+npx torch-glare@latest init
+npx torch-glare@latest add Divider
 ```
+
+`add` also copies any components, hooks, and utilities that `Divider` depends on.
 
 ## Imports
 
@@ -282,7 +288,7 @@ export function FormWithDividers() {
       <Divider />
 
       <div className="flex justify-end gap-3">
-        <Button variant="SecStyle">Cancel</Button>
+        <Button variant="BluSecStyle">Cancel</Button>
         <Button variant="PrimeStyle">Save Changes</Button>
       </div>
     </form>
@@ -317,11 +323,11 @@ export function DividerWithText() {
 
       {/* Social login */}
       <div className="space-y-2">
-        <Button className="w-full" variant="SecStyle">
+        <Button className="w-full" variant="BluSecStyle">
           <i className="ri-google-fill mr-2"></i>
           Continue with Google
         </Button>
-        <Button className="w-full" variant="SecStyle">
+        <Button className="w-full" variant="BluSecStyle">
           <i className="ri-github-fill mr-2"></i>
           Continue with GitHub
         </Button>

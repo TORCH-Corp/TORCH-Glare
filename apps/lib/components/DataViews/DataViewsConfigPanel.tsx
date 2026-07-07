@@ -1,12 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  X,
-  Settings as SettingsIcon,
-  Filter as FilterIcon,
-  Plus,
-} from "lucide-react";
+import { X, Settings as SettingsIcon, Filter as FilterIcon, Plus } from "lucide-react";
 import type {
   ViewConfig,
   ViewType,
@@ -51,17 +46,9 @@ export type DataViewsConfigPanelProps = {
   state?: "open" | "closed";
 };
 
-const DEFAULT_SAVED_VIEWS: SavedView[] = [
-  { id: "default", label: "Default View" },
-];
+const DEFAULT_SAVED_VIEWS: SavedView[] = [{ id: "default", label: "Default View" }];
 
-function SectionHeader({
-  title,
-  action,
-}: {
-  title: string;
-  action?: React.ReactNode;
-}) {
+function SectionHeader({ title, action }: { title: string; action?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between">
       <h3 className="text-[18px] font-[510] leading-[1.32] tracking-[-0.01em] text-white">
@@ -87,9 +74,7 @@ function GripDots() {
       fill="currentColor"
     >
       {[5.33, 9.33].flatMap((cx) =>
-        [3.33, 8, 12.67].map((cy) => (
-          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1" />
-        )),
+        [3.33, 8, 12.67].map((cy) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1" />),
       )}
     </svg>
   );
@@ -127,23 +112,15 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
   // `onSavedViewChange` are supplied; otherwise fall back to local state so the
   // radios are still interactive (DataViewsLayout doesn't thread these props
   // yet — without this the selection would snap back every click).
-  const [internalSavedView, setInternalSavedView] = useState(
-    () => savedViews[0]?.id,
-  );
+  const [internalSavedView, setInternalSavedView] = useState(() => savedViews[0]?.id);
   const selectedSavedView = activeSavedView ?? internalSavedView;
   const handleSavedViewChange = (id: string) => {
     if (onSavedViewChange) onSavedViewChange(id);
     else setInternalSavedView(id);
   };
 
-  const visibleFields = useMemo(
-    () => fields.filter((f) => f.type !== "hidden"),
-    [fields],
-  );
-  const visiblePaths = useMemo(
-    () => new Set(visibleFields.map((f) => f.path)),
-    [visibleFields],
-  );
+  const visibleFields = useMemo(() => fields.filter((f) => f.type !== "hidden"), [fields]);
+  const visiblePaths = useMemo(() => new Set(visibleFields.map((f) => f.path)), [visibleFields]);
   const fieldByPath = useMemo(
     () => new Map(visibleFields.map((f) => [f.path, f])),
     [visibleFields],
@@ -307,10 +284,8 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                           onDragOver={(e) => {
                             e.preventDefault();
                             e.dataTransfer.dropEffect = "move";
-                            const rect =
-                              e.currentTarget.getBoundingClientRect();
-                            const before =
-                              e.clientY < rect.top + rect.height / 2;
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            const before = e.clientY < rect.top + rect.height / 2;
                             const slot = before ? index : index + 1;
                             if (dropSlot !== slot) setDropSlot(slot);
                           }}
@@ -342,9 +317,7 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                           <span className="flex shrink-0 items-center">
                             <DataViewsSwitch
                               checked={col.visible}
-                              onCheckedChange={() =>
-                                toggleColumnVisibility(col.id)
-                              }
+                              onCheckedChange={() => toggleColumnVisibility(col.id)}
                             />
                           </span>
                         </div>
@@ -353,9 +326,7 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                   })}
                   {/* Drop-at-end indicator: only ever rendered when the slot
                       points past the last row, so still exactly one line. */}
-                  {dropSlot === orderedColumns.length && dragPath && (
-                    <DropLine />
-                  )}
+                  {dropSlot === orderedColumns.length && dragPath && <DropLine />}
                 </div>
               )}
             </div>
@@ -394,13 +365,8 @@ export function DataViewsConfigPanel(props: DataViewsConfigPanelProps) {
                       <div key={col.id}>
                         {/* Edge-to-edge divider (Figma: no horizontal
                             inset). */}
-                        {i > 0 && (
-                          <div className="dv-divider h-px bg-[#2C2D2E]" />
-                        )}
-                        <RadioRow
-                          value={col.id}
-                          label={col.label || field?.label || col.id}
-                        />
+                        {i > 0 && <div className="dv-divider h-px bg-[#2C2D2E]" />}
+                        <RadioRow value={col.id} label={col.label || field?.label || col.id} />
                       </div>
                     );
                   })}

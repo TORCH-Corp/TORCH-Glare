@@ -11,15 +11,22 @@ keywords: [table, datatable, grid, sorting, selection, drag-drop, reorder, pagin
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @tanstack/react-table @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
+npx torch-glare@latest init
+npx torch-glare@latest add DataTable
 ```
+
+`add` also copies any components, hooks, and utilities that `DataTable` depends on.
 
 ## Import
 
-```typescript
-import { DataTable } from '@torch-ui/components'
-import { ColumnDef } from '@tanstack/react-table'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { DataTable } from "@/components/DataTable";
 ```
 
 ## Quick Examples
@@ -27,7 +34,7 @@ import { ColumnDef } from '@tanstack/react-table'
 ### Basic Usage
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { ColumnDef } from '@tanstack/react-table'
 
 interface User {
@@ -66,7 +73,7 @@ function Example() {
 ### With Row Reordering
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { useState } from 'react'
 
 function ReorderableTable() {
@@ -97,8 +104,8 @@ function ReorderableTable() {
 ### With Custom Cell Rendering
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
-import { Badge } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/components/Badge";
 import { ColumnDef } from '@tanstack/react-table'
 
 interface Task {
@@ -124,7 +131,7 @@ const columns: ColumnDef<Task>[] = [
         completed: 'green',
       }[status]
 
-      return <Badge variant={variant} label={status} />
+      return <Badge color={variant} label={status} />
     },
   },
   {
@@ -147,7 +154,7 @@ function TaskTable() {
 ### With Sortable Columns
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { ColumnDef } from '@tanstack/react-table'
 
 interface Product {
@@ -190,8 +197,8 @@ function ProductTable() {
 ### With Actions Column
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
-import { ActionButton } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
+import { ActionButton } from "@/components/ActionButton";
 import { ColumnDef } from '@tanstack/react-table'
 
 interface User {
@@ -246,7 +253,7 @@ function UserTable() {
 ### With Selection Handling
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { useState } from 'react'
 
 function SelectableTable() {
@@ -280,7 +287,7 @@ function SelectableTable() {
 ### Dark Theme
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 
 function DarkTable() {
   const columns = [
@@ -300,7 +307,7 @@ function DarkTable() {
 ### Complex Data with Nested Objects
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { ColumnDef } from '@tanstack/react-table'
 
 interface Order {
@@ -363,7 +370,7 @@ function OrderTable() {
 ### Empty State
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 
 function EmptyTable() {
   const columns = [
@@ -468,7 +475,7 @@ DataTable<TData extends { id: string | number }, TValue>
 ### Controlled Row Selection
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { useState } from 'react'
 
 function ControlledSelectionTable() {
@@ -495,8 +502,8 @@ function ControlledSelectionTable() {
 ### With Search/Filter
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
-import { Input } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
+import { Input } from "@/components/Input";
 import { useState, useMemo } from 'react'
 
 function SearchableTable() {
@@ -536,7 +543,7 @@ function SearchableTable() {
 ### Persisting Row Order
 
 ```typescript
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { useState, useEffect } from 'react'
 
 function PersistentOrderTable() {
@@ -569,16 +576,21 @@ function PersistentOrderTable() {
 
 ## Features
 
-### Built-in Capabilities
+The component's props are `columns`, `data`, `theme`, and `onRowReorder` — see the API
+Reference. Its built-in, rendered capabilities are:
 
-- **Row Selection**: Multi-row selection with checkboxes (select all, select individual)
-- **Drag & Drop**: Reorder rows by dragging (maintains selection state)
-- **Column Sorting**: Click headers to sort ascending/descending
-- **Pagination**: Built-in pagination support (via TanStack Table)
-- **Filtering**: Client-side filtering capabilities
-- **Custom Cells**: Full control over cell rendering
-- **Keyboard Navigation**: Drag-and-drop with keyboard support
-- **Type Safety**: Full TypeScript support with generics
+- **Row Selection**: Multi-row selection checkboxes (select all / select individual) are
+  rendered and tracked internally. Selection state persists through reordering. Note: the
+  component does not expose a selection-change prop — selection is internal visual state.
+- **Drag & Drop**: Reorder rows by dragging; `onRowReorder` returns the new data array
+  (keyboard drag supported via dnd-kit).
+- **Column Sorting**: Click headers to sort ascending/descending.
+- **Custom Cells**: Full control over cell rendering via each column's `cell`.
+- **Type Safety**: Full TypeScript support with generics.
+
+> The TanStack pagination and filtering **row models** are enabled internally, but the
+> component renders **no** pagination or filter controls and exposes no page/filter props.
+> To paginate or filter, wrap the data yourself or compose your own controls around it.
 
 ### Drag-and-Drop Behavior
 
@@ -601,7 +613,7 @@ function PersistentOrderTable() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 import { ColumnDef } from '@tanstack/react-table'
 
 const mockData = [
@@ -651,7 +663,7 @@ describe('DataTable', () => {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { DataTable } from '@torch-ui/components'
+import { DataTable } from "@/components/DataTable";
 
 test('row selection works correctly', () => {
   const columns = [{ accessorKey: 'name', header: 'Name' }]
@@ -767,7 +779,7 @@ const columns: ColumnDef<User>[] = [
 
 ```diff
 - import { DataGrid } from '@mui/x-data-grid'
-+ import { DataTable } from '@torch-ui/components'
++ import { DataTable } from "@/components/DataTable";
 + import { ColumnDef } from '@tanstack/react-table'
 
 - <DataGrid rows={data} columns={columns} />
@@ -778,7 +790,7 @@ const columns: ColumnDef<User>[] = [
 
 ```diff
 - import { useTable } from 'react-table'
-+ import { DataTable } from '@torch-ui/components'
++ import { DataTable } from "@/components/DataTable";
 + import { ColumnDef } from '@tanstack/react-table'
 
 - const { getTableProps, rows } = useTable({ columns, data })

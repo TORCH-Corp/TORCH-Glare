@@ -1,6 +1,6 @@
 ---
 name: SearchField
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, search, input, field, system-style, glassmorphism]
@@ -16,14 +16,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add SearchField
 ```
+
+`add` also copies any components, hooks, and utilities that `SearchField` depends on.
 
 ## Import
 
-```typescript
-import { SearchField } from 'torch-glare/lib/components/SearchField'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { SearchField } from "@/components/SearchField";
 ```
 
 ## Quick Examples
@@ -31,7 +39,7 @@ import { SearchField } from 'torch-glare/lib/components/SearchField'
 ### Basic Usage
 
 ```typescript
-import { SearchField } from 'torch-glare/lib/components/SearchField'
+import { SearchField } from '@/components/SearchField'
 
 function Example() {
   const [search, setSearch] = useState('')
@@ -471,7 +479,7 @@ function NavigationSearch() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { SearchField } from 'torch-glare/lib/components/SearchField'
+import { SearchField } from '@/components/SearchField'
 
 describe('SearchField', () => {
   it('displays placeholder text when empty', () => {

@@ -14,7 +14,7 @@ back from an API to the props that turn them into a working view.
 ## TL;DR
 
 ```tsx
-import { DataViewsLayout } from "torch-glare"
+import { DataViewsLayout } from "@/components/DataViewsLayout";
 
 // the simplest possible case — just pass the array
 <DataViewsLayout title="Records" data={await api.get("/records")} />
@@ -37,7 +37,7 @@ Add a declarative `fields` map when you want typed rendering (currencies,
 badges, dates) and filters:
 
 ```tsx
-import type { FieldConfig } from "torch-glare"
+import type { FieldConfig } from "@/components/FieldConfig";
 
 const fields: FieldConfig[] = [
   { path: "name", label: "Name", type: "text" },
@@ -134,7 +134,7 @@ changes. This keeps the URL/server as the source of truth.
 
 ```tsx
 import { useState, useEffect } from "react"
-import type { FilterState } from "torch-glare"
+import type { FilterState } from "@/components/FilterState";
 
 function ServerDriven() {
   const [rows, setRows] = useState([])
@@ -161,7 +161,9 @@ When tabs aren't what you want — e.g. a table beside a kanban — bypass
 `DataViewsLayout` and compose the views with `useDataViewsState`.
 
 ```tsx
-import { TableView, KanbanView, useDataViewsState } from "torch-glare"
+import { KanbanView } from "@/components/KanbanView";
+import { TableView } from "@/components/TableView";
+import { useDataViewsState } from "@/hooks/useDataViewsState";
 
 function SplitScreen({ data, fields }) {
   const state = useDataViewsState({ data, fields })

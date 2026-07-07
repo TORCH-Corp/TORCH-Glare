@@ -25,18 +25,16 @@ export const glareCounterStyles = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 // Extracting the types of the variants used in glareCounterStyles
 export type GlareCounterStylesProps = VariantProps<typeof glareCounterStyles>;
 
-interface Props
-  extends HTMLAttributes<HTMLDivElement>,
-  GlareCounterStylesProps {
+interface Props extends HTMLAttributes<HTMLDivElement>, GlareCounterStylesProps {
   label: number; // label of the counter it should be a number
-  theme?: Themes
-  className?: string
+  theme?: Themes;
+  className?: string;
 }
 
 export const CountBadge: React.FC<Props> = ({ theme, label, variant, className, ...props }) => {

@@ -13,7 +13,7 @@ export default function FormExample() {
         },
     });
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = (data: { username: string }) => {
         console.log(data);
     }
     return (

@@ -16,11 +16,11 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-  VariantProps<typeof PopoverTriggerStyles> & {
-    errors?: string;
-    icon?: string
-    theme?: Themes
-  }
+    VariantProps<typeof PopoverTriggerStyles> & {
+      errors?: string;
+      icon?: string;
+      theme?: Themes;
+    }
 >(
   (
     {
@@ -33,7 +33,7 @@ const SelectTrigger = React.forwardRef<
       icon,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <Tooltip toolTipSide={"top"} open={errors !== undefined} text={errors}>
@@ -46,23 +46,25 @@ const SelectTrigger = React.forwardRef<
               variant,
               error: errors !== undefined,
             }),
-            className
+            className,
           )}
           {...props}
         >
-          <p className={cn({
-            "[&_span]:text-[#A0A0A0]": !props.value
-          })}>{children}</p>
+          <p
+            className={cn({
+              "[&_span]:text-[#A0A0A0]": !props.value,
+            })}
+          >
+            {children}
+          </p>
 
           <Button
             as={"span"}
             buttonType="icon"
-            className={cn(
-              [
-                "group-aria-expanded:bg-background-presentation-action-hover",
-                "group-aria-expanded:text-white",
-              ]
-            )}
+            className={cn([
+              "group-aria-expanded:bg-background-presentation-action-hover",
+              "group-aria-expanded:text-white",
+            ])}
           >
             <i
               className={cn(
@@ -71,14 +73,14 @@ const SelectTrigger = React.forwardRef<
                 { "!text-[16px]": size === "M" },
                 { "!text-[18px]": size === "L" },
                 { "!text-[26px]": size === "XL" },
-                { icon: icon }
+                { icon: icon },
               )}
             />
           </Button>
         </SelectPrimitive.Trigger>
       </Tooltip>
     );
-  }
+  },
 );
 SelectTrigger.displayName = "SelectTrigger";
 
@@ -88,10 +90,7 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton
     ref={ref}
-    className={cn(
-      "flex cursor-default items-center justify-center py-1 ",
-      className
-    )}
+    className={cn("flex cursor-default items-center justify-center py-1 ", className)}
     {...props}
   >
     <i
@@ -108,10 +107,7 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton
     ref={ref}
-    className={cn(
-      "flex cursor-default items-center justify-center py-1",
-      className
-    )}
+    className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
     <i
@@ -125,20 +121,13 @@ SelectScrollDownButton.displayName = "SelectScrollDownButton";
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-  VariantProps<typeof SelectContentStyles> & {
-    theme?: Themes
-  }
+    VariantProps<typeof SelectContentStyles> & {
+      theme?: Themes;
+    }
 >(
   (
-    {
-      className,
-      children,
-      variant = "PresentationStyle",
-      position = "popper",
-      theme,
-      ...props
-    },
-    ref
+    { className, children, variant = "PresentationStyle", position = "popper", theme, ...props },
+    ref,
   ) => (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -151,7 +140,7 @@ const SelectContent = React.forwardRef<
         <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
-  )
+  ),
 );
 SelectContent.displayName = "SelectContent";
 
@@ -170,28 +159,23 @@ SelectLabel.displayName = "SelectLabel";
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
-  VariantProps<typeof SelectItemStyles>
->(
-  (
-    { className, children, size = "M", variant = "Default", active, ...props },
-    ref
-  ) => (
-    <SelectPrimitive.Item
-      ref={ref}
-      className={cn(
-        SelectItemStyles({
-          variant,
-          active,
-          size,
-        }),
-        className
-      )}
-      {...props}
-    >
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-    </SelectPrimitive.Item>
-  )
-);
+    VariantProps<typeof SelectItemStyles>
+>(({ className, children, size = "M", variant = "Default", active, ...props }, ref) => (
+  <SelectPrimitive.Item
+    ref={ref}
+    className={cn(
+      SelectItemStyles({
+        variant,
+        active,
+        size,
+      }),
+      className,
+    )}
+    {...props}
+  >
+    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+  </SelectPrimitive.Item>
+));
 
 SelectItem.displayName = "SelectItem";
 
@@ -219,7 +203,6 @@ export {
   SelectScrollUpButton,
   SelectScrollDownButton,
 };
-
 
 // NOTE: radix select as DropDownButton
 
@@ -257,7 +240,7 @@ const SelectContentStyles = cva(
         variant: "PresentationStyle",
       },
     },
-  }
+  },
 );
 
 const SelectItemStyles = cva(
@@ -277,7 +260,6 @@ const SelectItemStyles = cva(
     "transition-all",
     "ease-in-out",
     "duration-300",
-
   ],
   {
     variants: {
@@ -326,10 +308,7 @@ const SelectItemStyles = cva(
       },
 
       disabled: {
-        true: [
-          "text-content-presentation-state-disabled",
-          "bg-white-00",
-        ],
+        true: ["text-content-presentation-state-disabled", "bg-white-00"],
       },
 
       active: {
@@ -353,7 +332,7 @@ const SelectItemStyles = cva(
         className: ["text-content-presentation-state-negative"],
       },
     ],
-  }
+  },
 );
 
 const PopoverTriggerStyles = cva(
@@ -398,15 +377,9 @@ const PopoverTriggerStyles = cva(
         ],
       },
       size: {
-        S: [
-          "[&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium",
-        ],
-        M: [
-          "[&_span]:h-[26px] [&_span]:w-[26px] [&_p]:typography-body-medium-medium",
-        ],
-        L: [
-          "[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium",
-        ],
+        S: ["[&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium"],
+        M: ["[&_span]:h-[26px] [&_span]:w-[26px] [&_p]:typography-body-medium-medium"],
+        L: ["[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium"],
         XL: [
           "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-large-regular [&_p]:px-[4px]",
         ],
@@ -415,5 +388,5 @@ const PopoverTriggerStyles = cva(
     defaultVariants: {
       size: "M",
     },
-  }
+  },
 );

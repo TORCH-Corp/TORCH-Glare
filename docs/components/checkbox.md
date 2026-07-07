@@ -1,6 +1,6 @@
 ---
 name: Checkbox
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, checkbox, selection, radix-ui, accessible, controlled]
@@ -17,14 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Checkbox
 ```
+
+`add` also copies any components, hooks, and utilities that `Checkbox` depends on.
 
 ## Import
 
-```typescript
-import { Checkbox } from 'torch-glare/lib/components/Checkbox'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Checkbox } from "@/components/Checkbox";
 ```
 
 ## Quick Examples
@@ -32,7 +40,7 @@ import { Checkbox } from 'torch-glare/lib/components/Checkbox'
 ### Basic Usage
 
 ```typescript
-import { Checkbox } from 'torch-glare/lib/components/Checkbox'
+import { Checkbox } from '@/components/Checkbox'
 
 function Example() {
   const [checked, setChecked] = useState(false)
@@ -402,7 +410,7 @@ function FilterPanel() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Checkbox } from 'torch-glare/lib/components/Checkbox'
+import { Checkbox } from '@/components/Checkbox'
 
 describe('Checkbox', () => {
   it('handles checked state changes', () => {
@@ -609,10 +617,10 @@ Radix UI automatically handles ARIA attributes:
 ```diff
 // Import path changed
 - import Checkbox from 'torch-glare/Checkbox'
-+ import { Checkbox } from 'torch-glare/lib/components/Checkbox'
++ import { Checkbox } from '@/components/Checkbox'
 
 // Size prop values changed
-- <Checkbox size="small" />
+- <Checkbox size="M" />
 + <Checkbox size="S" />
 ```
 

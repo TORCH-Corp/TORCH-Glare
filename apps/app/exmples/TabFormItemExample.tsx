@@ -3,7 +3,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export function TabFormItemExample() {
-  const [variants] = useState<any>(["top", "side"]);
+  const [variants] = useState<("top" | "side" | "tree")[]>(["top", "side"]);
 
   return (
     <>
@@ -15,7 +15,7 @@ export function TabFormItemExample() {
       >
         TabFormItem Preview
       </h1>
-      {variants.map((variant: any) => (
+      {variants.map((variant) => (
         <div key={variant} className="flex flex-col gap-2 w-full">
           <span
             className={cn(

@@ -11,13 +11,22 @@ keywords: [data-views, kanban-view, kanban, board, columns, group-by, cards, com
 
 ## Installation
 
-Part of `torch-glare`. Ships with the `DataViews` folder when you run `npx torch-glare add DataViews` — no separate install. It depends on the shared `Button` component, the `DataViewCard` layout, and `lucide-react`.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add KanbanView
+```
+
+`add` also copies any components, hooks, and utilities that `KanbanView` depends on.
 
 ## Import
 
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
 ```tsx
-import { KanbanView, useDataViewsState } from "torch-glare"
-import type { KanbanViewProps, FieldConfig } from "torch-glare"
+import { KanbanView } from "@/components/KanbanView";
 ```
 
 ## When to use it directly
@@ -34,8 +43,9 @@ column. Column colors are assigned deterministically, or per-value via the
 field's `kanbanVariants`.
 
 ```tsx
-import { KanbanView, useDataViewsState } from "torch-glare"
-import type { FieldConfig } from "torch-glare"
+import { KanbanView } from "@/components/KanbanView";
+import { useDataViewsState } from "@/hooks/useDataViewsState";
+import type { FieldConfig } from "@/components/FieldConfig";
 
 const tasks = [
   { id: 1, title: "Spec API", status: "Todo", assignee: "Ada" },

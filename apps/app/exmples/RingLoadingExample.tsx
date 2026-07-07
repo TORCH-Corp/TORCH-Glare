@@ -3,7 +3,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function RingLoadingExample() {
-  const [sizes] = useState<any>(["S", "M", "L"]);
+  const [sizes] = useState<("S" | "M" | "L")[]>(["S", "M", "L"]);
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function RingLoadingExample() {
       >
         RingLoading Preview
       </h1>
-      {sizes.map((size: any) => (
+      {sizes.map((size) => (
         <div key={size} className="flex flex-col gap-2 w-full">
           <span
             className={cn(

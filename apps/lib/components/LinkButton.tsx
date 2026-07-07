@@ -55,9 +55,7 @@ export const LinkButton: React.FC<Props> = ({
         className,
       )}
     >
-      <div className="px-[3px] whitespace-nowrap break-keep">
-        {props.children}
-      </div>
+      <div className="px-[3px] whitespace-nowrap break-keep">{props.children}</div>
       <div
         className={cn(
           "rounded-[4px] overflow-hidden",
@@ -83,12 +81,7 @@ export const LinkButton: React.FC<Props> = ({
 };
 
 const Arrow = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 10 10"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       d="M1.81582 1.58451L3.2807 0.119629L9.12479 0.875203L9.88037 6.71929L8.41549 8.18417L7.78584 3.31409L3.35267 7.74727L2.25272 6.64733L6.6859 2.21415L1.81582 1.58451Z"
       fill="#F9F9F9"

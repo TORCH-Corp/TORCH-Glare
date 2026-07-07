@@ -190,6 +190,23 @@ export function extractSection(markdown: string, ...headingNames: string[]): str
 }
 
 /**
+ * List the level-2 (`## `) section headings of a markdown doc, in order — used
+ * to give an AI a table of contents so it can request one section instead of
+ * pulling the whole file.
+ */
+export function listSectionHeadings(markdown: string): string[] {
+  const headings: string[] = [];
+  let inFence = false;
+  for (const line of markdown.split("\n")) {
+    if (line.startsWith("```")) inFence = !inFence;
+    if (inFence) continue;
+    const m = line.match(/^##\s+(.+)/);
+    if (m) headings.push(m[1].trim());
+  }
+  return headings;
+}
+
+/**
  * Extract all code blocks with their preceding heading context.
  */
 export function extractCodeExamples(markdown: string): CodeExample[] {

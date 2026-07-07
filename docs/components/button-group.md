@@ -1,6 +1,6 @@
 ---
 name: ButtonGroup
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/buttons
 tags: [toggle-group, button-group, selection, radix-ui, accessible, compound]
@@ -17,19 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add ButtonGroup
 ```
+
+`add` also copies any components, hooks, and utilities that `ButtonGroup` depends on.
 
 ## Import
 
-```typescript
-import { ButtonGroup, ButtonGroupItem } from 'torch-glare/lib/components/ButtonGroup'
-// or
-import { ButtonGroup, ButtonGroupItem } from 'torch-glare/lib/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
 
-// Also re-exports ToggleButton from ToggleButton.tsx
-import { ToggleButton } from 'torch-glare/lib/components/ButtonGroup'
+```tsx
+import { ButtonGroup } from "@/components/ButtonGroup";
 ```
 
 ## Quick Examples
@@ -37,7 +40,7 @@ import { ToggleButton } from 'torch-glare/lib/components/ButtonGroup'
 ### Basic Usage (Single Selection)
 
 ```typescript
-import { ButtonGroup, ButtonGroupItem } from 'torch-glare/lib/components/ButtonGroup'
+import { ButtonGroup, ButtonGroupItem } from "@/components/ButtonGroup";
 
 function Example() {
   const [value, setValue] = useState('left')
@@ -420,7 +423,7 @@ function DarkToolbar() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { ButtonGroup, ButtonGroupItem } from 'torch-glare/lib/components/ButtonGroup'
+import { ButtonGroup, ButtonGroupItem } from "@/components/ButtonGroup";
 
 describe('ButtonGroup', () => {
   it('selects a single value', () => {

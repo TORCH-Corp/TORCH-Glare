@@ -11,22 +11,10 @@ import {
 } from "react";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-} from "./Dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "./Dialog";
 import { Icon, Input, Group } from "./Input";
 import { LoadingIcon } from "./Button";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "./Table";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "./Table";
 
 /**
  * SearchableTable — a field that opens a modal Dialog to pick a row from a Table.
@@ -119,8 +107,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const rowId = (row: T) => getRowId?.(row) ?? JSON.stringify(row);
-  const label = (row: T) =>
-    getLabel?.(row) ?? String(row[columns[0]?.key] ?? "");
+  const label = (row: T) => getLabel?.(row) ?? String(row[columns[0]?.key] ?? "");
 
   const keysToSearch = searchKeys ?? columns.map((c) => c.key);
 
@@ -154,8 +141,10 @@ export function SearchableTable<T extends Record<string, unknown>>({
     if (!q) return rows;
     return rows.filter((row) =>
       keysToSearch.some((k) =>
-        String(row[k] ?? "").toLowerCase().includes(q)
-      )
+        String(row[k] ?? "")
+          .toLowerCase()
+          .includes(q),
+      ),
     );
   }, [rows, search, keysToSearch, filterClientSide]);
 
@@ -177,10 +166,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
           size={size === "XS" ? "S" : size}
           role="button"
           tabIndex={0}
-          className={cn(
-            "flex w-full items-center gap-1 p-1 cursor-pointer",
-            className
-          )}
+          className={cn("flex w-full items-center gap-1 p-1 cursor-pointer", className)}
         >
           {icon && <Icon>{icon}</Icon>}
           <span
@@ -188,7 +174,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
               "flex-1 px-1 truncate typography-body-medium-regular",
               value
                 ? "text-content-presentation-action-light-primary"
-                : "text-content-presentation-action-light-secondary"
+                : "text-content-presentation-action-light-secondary",
             )}
           >
             {value ? label(value) : placeholder}
@@ -226,9 +212,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
 
         {/* Scrollable table area */}
         <div className=" w-full flex justify-center">
-
           <div className="bg-[#696a6f] pt-[8px] rounded-b-[14px] pr-[4px] pb-[4px] pl-[4px] w-[95%] shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]">
-
             <div
               ref={scrollRef}
               onScroll={handleScroll}
@@ -262,7 +246,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
                           onClick={() => handleSelect(row)}
                           className={cn(
                             "cursor-pointer h-[40px]",
-                            selectedId === id && "bg-white-alpha-50"
+                            selectedId === id && "bg-white-alpha-50",
                           )}
                         >
                           {columns.map((col) => (
@@ -270,9 +254,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
                               key={col.key}
                               className="border-b border-white-alpha-20 text-white px-[8px] !whitespace-nowrap !break-normal"
                             >
-                              {col.render
-                                ? col.render(row)
-                                : String(row[col.key] ?? "")}
+                              {col.render ? col.render(row) : String(row[col.key] ?? "")}
                             </TableCell>
                           ))}
                         </TableRow>
@@ -310,8 +292,7 @@ SearchableTable.displayName = "SearchableTable";
 /* The whole field + its text turn white on hover/focus, fully controlled here. */
 /* -------------------------------------------------------------------------- */
 
-interface SearchInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   variant?: "SystemStyle" | "PresentationStyle";
   theme?: Themes;
   label?: string;
@@ -329,7 +310,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           "border border-white-alpha-40 bg-[rgba(184,192,204,0.5)]",
           "hover:bg-background-presentation-table-row-hover",
           "focus-within:bg-background-presentation-table-row-hover rounded-[11px] border border-white-alpha-40 bg-[rgba(37,44,57,0.30)]",
-          className
+          className,
         )}
       >
         <Icon className="shrink-0">
@@ -352,12 +333,11 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             "min-w-[100px] flex-1 !h-[24px] bg-transparent",
             "text-content-presentation-action-light-primary",
             "placeholder:hover:text-white-alpha-75",
-            "transition-colors group-hover:!text-white group-focus-within:!text-white"
+            "transition-colors group-hover:!text-white group-focus-within:!text-white",
           )}
         />
       </Group>
     </div>
-
-  )
+  ),
 );
 SearchInput.displayName = "SearchInput";

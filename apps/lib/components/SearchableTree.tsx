@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
@@ -133,16 +127,12 @@ export function SearchableTree<T>({
   // Close when clicking outside both the trigger and the popover surface.
   const groupRef = useClickOutside<HTMLDivElement>((e) => {
     const target = e?.target as Node;
-    if (
-      !groupRef.current?.contains(target) &&
-      !popoverContentRef.current?.contains(target)
-    ) {
+    if (!groupRef.current?.contains(target) && !popoverContentRef.current?.contains(target)) {
       setOpen(false);
     }
   });
 
-  const searchTextOf = (node: T) =>
-    getSearchText?.(node) ?? String(getNodeLabel(node) ?? "");
+  const searchTextOf = (node: T) => getSearchText?.(node) ?? String(getNodeLabel(node) ?? "");
 
   // Normalize raw data (nested OR flat) into a uniform nested TreeNode shape.
   const tree = useMemo<TreeNode<T>[]>(() => {
@@ -170,8 +160,7 @@ export function SearchableTree<T>({
     }
 
     // Nested mode: recurse via getNodeChildren.
-    const build = (raw: T): TreeNode<T> =>
-      toNode(raw, (getNodeChildren?.(raw) ?? []).map(build));
+    const build = (raw: T): TreeNode<T> => toNode(raw, (getNodeChildren?.(raw) ?? []).map(build));
     return nodes.map(build);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, parentIdKey, getNodeChildren]);
@@ -233,11 +222,7 @@ export function SearchableTree<T>({
 
   // Field value: the live query while typing, otherwise the selected label.
   const selectedLabel = value != null ? getNodeLabel(value) : "";
-  const displayValue = searching
-    ? search
-    : typeof selectedLabel === "string"
-      ? selectedLabel
-      : "";
+  const displayValue = searching ? search : typeof selectedLabel === "string" ? selectedLabel : "";
 
   return (
     <Popover open={open}>
@@ -295,13 +280,13 @@ export function SearchableTree<T>({
             }}
             className={cn(
               "shrink-0 h-[32px] w-[32px] rounded-[4px]",
-              open && "bg-background-presentation-action-hover text-white"
+              open && "bg-background-presentation-action-hover text-white",
             )}
           >
             <i
               className={cn(
                 "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
-                open && "rotate-180"
+                open && "rotate-180",
               )}
             />
           </Button>
@@ -427,7 +412,7 @@ function TreeLevel<T>({
                 }
               }}
               className={cn(
-                "group flex items-center px-[2px] cursor-pointer bg-[rgba(184,192,204,0.36)]"
+                "group flex items-center px-[2px] cursor-pointer bg-[rgba(184,192,204,0.36)]",
               )}
             >
               {/* Connector rails — one full-height vertical line per ancestor level. */}
@@ -453,8 +438,8 @@ function TreeLevel<T>({
                     // so they read as de-emphasized (opacity-50) and get no highlight.
                     !highlightable && "opacity-50",
                     highlightable &&
-                    "group-hover:bg-white-50 group-hover:text-black-1000 group-hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
-                    highlightable && selected && "bg-white-alpha-75 text-black-1000"
+                      "group-hover:bg-white-50 group-hover:text-black-1000 group-hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+                    highlightable && selected && "bg-white-alpha-75 text-black-1000",
                   )}
                 >
                   <span className="flex-1 min-w-px truncate typography-body-medium-regular">

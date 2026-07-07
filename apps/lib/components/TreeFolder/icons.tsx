@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Folder,
@@ -14,14 +14,11 @@ import {
   Link as LinkIcon,
   Square,
   LayoutGrid,
-} from "lucide-react"
-import type { ReactNode } from "react"
-import type { TreeFolderIconResolver, TreeFolderNode } from "./types"
+} from "lucide-react";
+import type { ReactNode } from "react";
+import type { TreeFolderIconResolver, TreeFolderNode } from "./types";
 
-export const defaultIconRegistry: Record<
-  string,
-  (state: { isOpen: boolean }) => ReactNode
-> = {
+export const defaultIconRegistry: Record<string, (state: { isOpen: boolean }) => ReactNode> = {
   folder: ({ isOpen }) =>
     isOpen ? <FolderOpen className="w-3.5 h-3.5" /> : <Folder className="w-3.5 h-3.5" />,
   file: () => <File className="w-3.5 h-3.5" />,
@@ -35,19 +32,19 @@ export const defaultIconRegistry: Record<
   link: () => <LinkIcon className="w-3.5 h-3.5" />,
   section: () => <LayoutGrid className="w-3.5 h-3.5" />,
   container: () => <Square className="w-3.5 h-3.5" />,
-}
+};
 
 export function defaultIconFor(
   node: TreeFolderNode,
   state: { isOpen: boolean; isInternal: boolean; isSelected: boolean },
 ): ReactNode {
-  if (node.icon !== undefined) return node.icon
-  const type = node.type ?? (state.isInternal ? "folder" : "file")
-  const resolver = defaultIconRegistry[type]
-  if (resolver) return resolver({ isOpen: state.isOpen })
+  if (node.icon !== undefined) return node.icon;
+  const type = node.type ?? (state.isInternal ? "folder" : "file");
+  const resolver = defaultIconRegistry[type];
+  if (resolver) return resolver({ isOpen: state.isOpen });
   return state.isInternal
     ? defaultIconRegistry.folder({ isOpen: state.isOpen })
-    : defaultIconRegistry.file({ isOpen: state.isOpen })
+    : defaultIconRegistry.file({ isOpen: state.isOpen });
 }
 
 export function resolveIcon(
@@ -56,8 +53,8 @@ export function resolveIcon(
   state: { isOpen: boolean; isInternal: boolean; isSelected: boolean },
 ): ReactNode {
   if (iconFor) {
-    const custom = iconFor(node, state)
-    if (custom !== undefined && custom !== null) return custom
+    const custom = iconFor(node, state);
+    if (custom !== undefined && custom !== null) return custom;
   }
-  return defaultIconFor(node, state)
+  return defaultIconFor(node, state);
 }

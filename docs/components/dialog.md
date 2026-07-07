@@ -11,24 +11,22 @@ keywords: [dialog, modal, overlay, popup, radix-ui, compound-component]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-dialog
+npx torch-glare@latest init
+npx torch-glare@latest add Dialog
 ```
+
+`add` also copies any components, hooks, and utilities that `Dialog` depends on.
 
 ## Import
 
-```typescript
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-  DialogCloseButton,
-} from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Dialog } from "@/components/Dialog";
 ```
 
 ## Quick Examples
@@ -36,8 +34,8 @@ import {
 ### Basic Usage
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/Dialog";
+import { Button } from "@/components/Button";
 
 function Example() {
   return (
@@ -61,8 +59,8 @@ function Example() {
 ### With Header and Footer
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from "@/components/Dialog";
+import { Button } from "@/components/Button";
 
 function FormDialog() {
   return (
@@ -86,9 +84,9 @@ function FormDialog() {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="SecondaryStyle">Cancel</Button>
+            <Button variant="BluSecStyle">Cancel</Button>
           </DialogClose>
-          <Button variant="PrimaryStyle">Save Changes</Button>
+          <Button variant="PrimeStyle">Save Changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -99,7 +97,7 @@ function FormDialog() {
 ### Controlled State
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogTitle } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/Dialog";
 import { useState } from 'react'
 
 function ControlledDialog() {
@@ -123,8 +121,8 @@ function ControlledDialog() {
 ### With Custom Close Button
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogCloseButton } from '@torch-ui/components'
-import { ActionButton } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogCloseButton } from "@/components/Dialog";
+import { ActionButton } from "@/components/ActionButton";
 
 function CustomCloseDialog() {
   return (
@@ -150,14 +148,14 @@ function CustomCloseDialog() {
 ### Confirmation Dialog
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from "@/components/Dialog";
+import { Button } from "@/components/Button";
 
 function ConfirmationDialog({ onConfirm }: { onConfirm: () => void }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="DestructiveStyle">Delete Account</Button>
+        <Button variant="RedSecStyle">Delete Account</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -170,10 +168,10 @@ function ConfirmationDialog({ onConfirm }: { onConfirm: () => void }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="SecondaryStyle">Cancel</Button>
+            <Button variant="BluSecStyle">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant="DestructiveStyle" onClick={onConfirm}>
+            <Button variant="RedSecStyle" onClick={onConfirm}>
               Delete Account
             </Button>
           </DialogClose>
@@ -187,8 +185,9 @@ function ConfirmationDialog({ onConfirm }: { onConfirm: () => void }) {
 ### Nested Form Dialog
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from '@torch-ui/components'
-import { Button, Input } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/Dialog";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
 import { useForm } from 'react-hook-form'
 
 interface FormData {
@@ -236,8 +235,9 @@ function FormDialog() {
 ### Content-Heavy Dialog
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@torch-ui/components'
-import { Button, ScrollArea } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/Dialog";
+import { Button } from "@/components/Button";
+import { ScrollArea } from "@/components/ScrollArea";
 
 function ContentDialog() {
   return (
@@ -273,8 +273,8 @@ function ContentDialog() {
 ### Multi-Step Dialog
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "@/components/Dialog";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function MultiStepDialog() {
@@ -298,7 +298,7 @@ function MultiStepDialog() {
 
         <DialogFooter>
           {step > 1 && (
-            <Button variant="SecondaryStyle" onClick={() => setStep(step - 1)}>
+            <Button variant="BluSecStyle" onClick={() => setStep(step - 1)}>
               Back
             </Button>
           )}
@@ -317,7 +317,7 @@ function MultiStepDialog() {
 ### Image Preview Dialog
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent } from "@/components/Dialog";
 
 function ImageDialog({ src, alt }: { src: string; alt: string }) {
   return (
@@ -340,8 +340,9 @@ function ImageDialog({ src, alt }: { src: string; alt: string }) {
 ### Loading State Dialog
 
 ```typescript
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@torch-ui/components'
-import { Button, SpinLoading } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/Dialog";
+import { Button } from "@/components/Button";
+import { SpinLoading } from "@/components/SpinLoading";
 import { useState } from 'react'
 
 function LoadingDialog() {
@@ -676,8 +677,8 @@ Pick an icon that matches the entity (`ri-bank-line` for accounts, `ri-calendar-
 ### Alert/Confirmation Pattern
 
 ```typescript
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/Dialog";
+import { Button } from "@/components/Button";
 
 function useConfirmDialog() {
   const [open, setOpen] = useState(false)
@@ -730,7 +731,7 @@ function useConfirmDialog() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Dialog, DialogTrigger, DialogContent, DialogTitle } from '@torch-ui/components'
+import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/Dialog";
 
 describe('Dialog', () => {
   it('opens when trigger is clicked', () => {
@@ -839,7 +840,7 @@ describe('Dialog', () => {
 
 ```diff
 - import { Dialog, DialogTitle, DialogContent } from '@mui/material'
-+ import { Dialog, DialogTrigger, DialogContent, DialogTitle } from '@torch-ui/components'
++ import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/Dialog";
 
 - <Dialog open={open} onClose={() => setOpen(false)}>
 -   <DialogTitle>Title</DialogTitle>
@@ -858,7 +859,7 @@ describe('Dialog', () => {
 
 ```diff
 - import { Dialog } from '@headlessui/react'
-+ import { Dialog, DialogContent, DialogTitle } from '@torch-ui/components'
++ import { Dialog, DialogContent, DialogTitle } from "@/components/Dialog";
 
 - <Dialog open={open} onClose={setOpen}>
 -   <Dialog.Panel>

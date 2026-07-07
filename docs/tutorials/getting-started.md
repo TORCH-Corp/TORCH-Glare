@@ -202,8 +202,8 @@ export default function ButtonShowcase() {
   return (
     <div className="flex gap-2 flex-wrap">
       <Button variant="PrimeStyle">Primary</Button>
-      <Button variant="ContStyle">Contrast</Button>
-      <Button variant="SecondStyle">Secondary</Button>
+      <Button variant="PrimeContStyle">Contrast</Button>
+      <Button variant="BluSecStyle">Secondary</Button>
       <Button variant="BorderStyle">Outline</Button>
     </div>
   );

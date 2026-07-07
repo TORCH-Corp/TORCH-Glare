@@ -37,7 +37,7 @@ export type Themes = "dark" | "light" | "default";
 
 **Usage:**
 ```typescript
-import type { Themes } from '@torch-ai/torch-glare';
+import type { Themes } from "@/utils/types";
 
 interface MyComponentProps {
   theme?: Themes;
@@ -60,12 +60,12 @@ interface MyComponentProps {
 ```typescript
 export type ButtonVariant =
   | "PrimeStyle"      // Primary action
-  | "BlueSecStyle"    // Blue secondary
+  | "BluSecStyle"    // Blue secondary
   | "YelSecStyle"     // Yellow secondary
   | "RedSecStyle"     // Red secondary
   | "BorderStyle"     // Outlined
   | "PrimeContStyle"  // Primary contrast
-  | "BlueContStyle"   // Blue contrast
+  | "BluContStyle"   // Blue contrast
   | "RedContStyle";   // Red contrast
 ```
 
@@ -878,7 +878,7 @@ Button.displayName = 'Button';
 ### Extending Button Props
 
 ```typescript
-import type { ButtonProps } from '@torch-ai/torch-glare';
+import type { ButtonProps } from "@/components/LoginButton";
 
 interface CustomButtonProps extends ButtonProps {
   isLoading?: boolean;

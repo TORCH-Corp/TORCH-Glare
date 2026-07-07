@@ -1,24 +1,26 @@
-import type { ReactElement } from "react"
-import { Badge } from "../../components/Badge"
-import { Divider } from "../../components/Divider"
-import { cn } from "../cn"
-import type { DynamicRecord, DynamicColumnConfig } from "../../components/DataViews/types"
+import type { ReactElement } from "react";
+import { Badge } from "../../components/Badge";
+import { Divider } from "../../components/Divider";
+import { cn } from "../cn";
+import type { DynamicRecord, DynamicColumnConfig } from "../../components/DataViews/types";
 
 export type NestedFieldMetadata = {
-  key: string
-  label: string
-  type: 'object' | 'array' | 'primitive'
-  valueType?: 'string' | 'number' | 'boolean' | 'date'
-  isArrayOfObjects?: boolean
-  depth: number
-}
+  key: string;
+  label: string;
+  type: "object" | "array" | "primitive";
+  valueType?: "string" | "number" | "boolean" | "date";
+  isArrayOfObjects?: boolean;
+  depth: number;
+};
 
-export function isPlainObject(value: any): boolean {
-  return value !== null &&
-         typeof value === 'object' &&
-         !Array.isArray(value) &&
-         !(value instanceof Date) &&
-         Object.keys(value).length > 0
+export function isPlainObject(value: unknown): boolean {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    !(value instanceof Date) &&
+    Object.keys(value).length > 0
+  );
 }
 
 export function formatFieldName(fieldName: string): string {
@@ -26,84 +28,85 @@ export function formatFieldName(fieldName: string): string {
     return fieldName
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
+      .join(" ");
   }
 
   return fieldName
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, (str) => str.toUpperCase())
-    .trim()
+    .trim();
 }
 
 export function analyzeNestedFields(
   item: DynamicRecord,
   visibleColumnIds: Set<string> = new Set(),
-  excludeKeys: string[] = ['id', 'isRead', 'isStarred', 'hasAttachment', 'priority']
+  excludeKeys: string[] = ["id", "isRead", "isStarred", "hasAttachment", "priority"],
 ): NestedFieldMetadata[] {
-  const nestedFields: NestedFieldMetadata[] = []
+  const nestedFields: NestedFieldMetadata[] = [];
 
   Object.entries(item).forEach(([key, value]) => {
     if (visibleColumnIds.has(key) || excludeKeys.includes(key)) {
-      return
+      return;
     }
 
     if (isPlainObject(value)) {
       nestedFields.push({
         key,
         label: formatFieldName(key),
-        type: 'object',
-        depth: 0
-      })
+        type: "object",
+        depth: 0,
+      });
     } else if (Array.isArray(value) && value.length > 0) {
       nestedFields.push({
         key,
         label: formatFieldName(key),
-        type: 'array',
+        type: "array",
         isArrayOfObjects: isPlainObject(value[0]),
-        depth: 0
-      })
+        depth: 0,
+      });
     }
-  })
+  });
 
-  return nestedFields
+  return nestedFields;
 }
 
 export function isCurrencyField(key: string): boolean {
-  const lowerKey = key.toLowerCase()
-  return lowerKey.includes('salary') ||
-         lowerKey.includes('price') ||
-         lowerKey.includes('cost') ||
-         lowerKey.includes('amount') ||
-         lowerKey.includes('pay') ||
-         lowerKey.includes('fee')
+  const lowerKey = key.toLowerCase();
+  return (
+    lowerKey.includes("salary") ||
+    lowerKey.includes("price") ||
+    lowerKey.includes("cost") ||
+    lowerKey.includes("amount") ||
+    lowerKey.includes("pay") ||
+    lowerKey.includes("fee")
+  );
 }
 
 export function isRatingField(key: string): boolean {
-  const lowerKey = key.toLowerCase()
-  return lowerKey.includes('rating') ||
-         lowerKey.includes('score')
+  const lowerKey = key.toLowerCase();
+  return lowerKey.includes("rating") || lowerKey.includes("score");
 }
 
 export function renderPrimitiveValue(
   key: string,
-  value: any,
+  value: unknown,
   options: {
-    showLabel?: boolean
-    labelClassName?: string
-    valueClassName?: string
-  } = {}
+    showLabel?: boolean;
+    labelClassName?: string;
+    valueClassName?: string;
+  } = {},
 ): ReactElement | null {
   const {
     showLabel = true,
     labelClassName = "text-content-presentation-global-tertiary",
-    valueClassName = "text-content-presentation-global-primary"
-  } = options
+    valueClassName = "text-content-presentation-global-primary",
+  } = options;
 
-  if (value == null) return null
+  if (value == null) return null;
 
-  const label = showLabel ? formatFieldName(key) : null
+  const label = showLabel ? formatFieldName(key) : null;
 
-  if (typeof value === 'boolean') {
+  if (typeof value === "boolean") {
     return (
       <div className="flex items-center gap-2">
         {label && <span className={labelClassName}>{label}:</span>}
@@ -112,15 +115,14 @@ export function renderPrimitiveValue(
           badgeStyle={value ? "solid" : "subtle"}
           label={value ? "Yes" : "No"}
           size="XS"
-         
         />
       </div>
-    )
+    );
   }
 
-  if (typeof value === 'number') {
-    const isCurrency = isCurrencyField(key)
-    const isRating = isRatingField(key)
+  if (typeof value === "number") {
+    const isCurrency = isCurrencyField(key);
+    const isRating = isRatingField(key);
 
     if (isRating && value <= 5) {
       return (
@@ -129,7 +131,10 @@ export function renderPrimitiveValue(
           <div className="flex items-center gap-2">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className={i < Math.floor(value) ? 'text-yellow-500' : 'text-gray-300'}>
+                <span
+                  key={i}
+                  className={i < Math.floor(value) ? "text-yellow-500" : "text-gray-300"}
+                >
                   ⭐
                 </span>
               ))}
@@ -137,20 +142,17 @@ export function renderPrimitiveValue(
             <span className="font-semibold text-sm">{value}</span>
           </div>
         </div>
-      )
+      );
     }
 
     return (
       <div className="flex items-center gap-2">
         {label && <span className={labelClassName}>{label}:</span>}
-        <span className={cn(
-          valueClassName,
-          isCurrency && "font-semibold text-green-600"
-        )}>
+        <span className={cn(valueClassName, isCurrency && "font-semibold text-green-600")}>
           {isCurrency ? `$${value.toLocaleString()}` : value.toLocaleString()}
         </span>
       </div>
-    )
+    );
   }
 
   return (
@@ -158,24 +160,24 @@ export function renderPrimitiveValue(
       {label && <span className={labelClassName}>{label}:</span>}
       <span className={valueClassName}>{String(value)}</span>
     </div>
-  )
+  );
 }
 
 export function renderArrayValue(
   key: string,
-  value: any[],
+  value: unknown[],
   options: {
-    showLabel?: boolean
-    maxItems?: number
-    renderItem?: (item: any, index: number) => ReactElement
-  } = {}
+    showLabel?: boolean;
+    maxItems?: number;
+    renderItem?: (item: unknown, index: number) => ReactElement;
+  } = {},
 ): ReactElement | null {
-  const { showLabel = true, maxItems, renderItem } = options
+  const { showLabel = true, maxItems, renderItem } = options;
 
-  if (!Array.isArray(value) || value.length === 0) return null
+  if (!Array.isArray(value) || value.length === 0) return null;
 
-  const label = showLabel ? formatFieldName(key) : null
-  const displayItems = maxItems ? value.slice(0, maxItems) : value
+  const label = showLabel ? formatFieldName(key) : null;
+  const displayItems = maxItems ? value.slice(0, maxItems) : value;
 
   if (isPlainObject(value[0])) {
     return (
@@ -186,15 +188,15 @@ export function renderArrayValue(
           </div>
         )}
         <div className="space-y-2">
-          {displayItems.map((item: any, idx: number) => {
+          {displayItems.map((item: unknown, idx: number) => {
             if (renderItem) {
-              return renderItem(item, idx)
+              return renderItem(item, idx);
             }
             return (
               <div key={idx} className="p-2 rounded bg-background-presentation-form-field-primary">
                 {renderNestedObject(item, 1)}
               </div>
-            )
+            );
           })}
           {maxItems && value.length > maxItems && (
             <div className="text-xs text-content-presentation-global-tertiary">
@@ -203,14 +205,14 @@ export function renderArrayValue(
           )}
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="flex items-start gap-2">
       {label && <span className="text-content-presentation-global-tertiary">{label}:</span>}
       <div className="flex flex-wrap gap-1">
-        {displayItems.map((item: any, idx: number) => (
+        {displayItems.map((item: unknown, idx: number) => (
           <Badge key={idx} color="blue" badgeStyle="solid" label={String(item)} size="XS" />
         ))}
         {maxItems && value.length > maxItems && (
@@ -218,26 +220,26 @@ export function renderArrayValue(
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export function renderNestedObject(
-  obj: any,
+  obj: unknown,
   depth: number = 0,
   options: {
-    maxDepth?: number
-    showSeparators?: boolean
-  } = {}
+    maxDepth?: number;
+    showSeparators?: boolean;
+  } = {},
 ): ReactElement {
-  const { maxDepth = 3 } = options
+  const { maxDepth = 3 } = options;
 
   if (depth >= maxDepth) {
-    return <div className="text-xs text-content-presentation-global-tertiary">...</div>
+    return <div className="text-xs text-content-presentation-global-tertiary">...</div>;
   }
 
   return (
     <div className="space-y-2 text-sm">
-      {Object.entries(obj).map(([key, value]) => {
+      {Object.entries(obj as Record<string, unknown>).map(([key, value]) => {
         if (isPlainObject(value)) {
           return (
             <div key={key} className="space-y-1">
@@ -248,34 +250,39 @@ export function renderNestedObject(
                 {renderNestedObject(value, depth + 1, options)}
               </div>
             </div>
-          )
+          );
         }
 
         if (Array.isArray(value)) {
-          return <div key={key}>{renderArrayValue(key, value)}</div>
+          return <div key={key}>{renderArrayValue(key, value)}</div>;
         }
 
-        return <div key={key}>{renderPrimitiveValue(key, value)}</div>
+        return <div key={key}>{renderPrimitiveValue(key, value)}</div>;
       })}
     </div>
-  )
+  );
 }
 
 export function renderDetailView(
   selectedItem: DynamicRecord,
   visibleColumns: DynamicColumnConfig[],
-  renderCellValue: (value: any, column: DynamicColumnConfig, row: DynamicRecord) => React.ReactNode
+  renderCellValue: (
+    value: unknown,
+    column: DynamicColumnConfig,
+    row: DynamicRecord,
+  ) => React.ReactNode,
 ): ReactElement {
-  const visibleColumnIds = new Set(visibleColumns.map(col => col.id))
-  const nestedFields = analyzeNestedFields(selectedItem, visibleColumnIds)
+  const visibleColumnIds = new Set(visibleColumns.map((col) => col.id));
+  const nestedFields = analyzeNestedFields(selectedItem, visibleColumnIds);
 
   return (
     <div className="space-y-6">
       {visibleColumns.slice(2).length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {visibleColumns.slice(2).map((col) => {
-            const value = selectedItem[col.id]
-            if (value == null && value !== 0 && value !== false) return null
+            const value = selectedItem[col.id];
+            // Skip empty cells (null/undefined); 0 and false are rendered.
+            if (value === null || value === undefined) return null;
             return (
               <div key={col.id} className="space-y-1">
                 <dt className="text-xs font-medium text-content-presentation-global-tertiary uppercase tracking-wide">
@@ -285,15 +292,15 @@ export function renderDetailView(
                   {renderCellValue(value, col, selectedItem)}
                 </dd>
               </div>
-            )
+            );
           })}
         </div>
       )}
 
       {nestedFields.map((field, index) => {
-        const value = selectedItem[field.key]
+        const value = selectedItem[field.key];
 
-        if (field.type === 'object' && isPlainObject(value)) {
+        if (field.type === "object" && isPlainObject(value)) {
           return (
             <div key={field.key}>
               {index > 0 && <Divider />}
@@ -304,10 +311,10 @@ export function renderDetailView(
                 {renderNestedObject(value)}
               </div>
             </div>
-          )
+          );
         }
 
-        if (field.type === 'array' && Array.isArray(value)) {
+        if (field.type === "array" && Array.isArray(value)) {
           return (
             <div key={field.key}>
               {index > 0 && <Divider />}
@@ -318,47 +325,47 @@ export function renderDetailView(
                 {renderArrayValue(field.key, value, { showLabel: false })}
               </div>
             </div>
-          )
+          );
         }
 
-        return null
+        return null;
       })}
     </div>
-  )
+  );
 }
 
 export function getDataStructureSummary(data: DynamicRecord[]): {
-  totalFields: number
-  nestedFields: string[]
-  arrayFields: string[]
-  primitiveFields: string[]
+  totalFields: number;
+  nestedFields: string[];
+  arrayFields: string[];
+  primitiveFields: string[];
 } {
   if (!data || data.length === 0) {
-    return { totalFields: 0, nestedFields: [], arrayFields: [], primitiveFields: [] }
+    return { totalFields: 0, nestedFields: [], arrayFields: [], primitiveFields: [] };
   }
 
-  const allKeys = new Set<string>()
-  const nestedKeys = new Set<string>()
-  const arrayKeys = new Set<string>()
-  const primitiveKeys = new Set<string>()
+  const allKeys = new Set<string>();
+  const nestedKeys = new Set<string>();
+  const arrayKeys = new Set<string>();
+  const primitiveKeys = new Set<string>();
 
-  data.forEach(item => {
+  data.forEach((item) => {
     Object.entries(item).forEach(([key, value]) => {
-      allKeys.add(key)
+      allKeys.add(key);
       if (isPlainObject(value)) {
-        nestedKeys.add(key)
+        nestedKeys.add(key);
       } else if (Array.isArray(value)) {
-        arrayKeys.add(key)
+        arrayKeys.add(key);
       } else {
-        primitiveKeys.add(key)
+        primitiveKeys.add(key);
       }
-    })
-  })
+    });
+  });
 
   return {
     totalFields: allKeys.size,
     nestedFields: Array.from(nestedKeys),
     arrayFields: Array.from(arrayKeys),
-    primitiveFields: Array.from(primitiveKeys)
-  }
+    primitiveFields: Array.from(primitiveKeys),
+  };
 }

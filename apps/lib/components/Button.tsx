@@ -5,9 +5,7 @@ import { cn } from "../utils/cn";
 import { ButtonVariant, Themes } from "../utils/types";
 
 interface Props
-  extends
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   is_loading?: boolean;
   disabled?: boolean;
   asChild?: boolean;
@@ -42,6 +40,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         {...props}
         data-theme={theme}
         disabled={disabled || is_loading}
+        aria-busy={is_loading || undefined}
         ref={ref}
         type={type}
         className={cn(
@@ -65,7 +64,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
                 containerClassName,
               )}
             >
-              {(children as React.ReactElement<any>).props.children}
+              {(children as React.ReactElement<{ children?: React.ReactNode }>).props.children}
               {is_loading && <LoadingIcon size={size} />}
             </div>,
           )
@@ -87,6 +86,20 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
 
 Button.displayName = "Button";
 
+const loadingIconVariants = cva("animate-spin ", {
+  variants: {
+    size: {
+      S: "w-[12px] h-[12px]",
+      M: "w-[18px] h-[18px]",
+      L: "w-[20px] h-[20px]",
+      XL: "w-[20px] h-[20px]",
+    },
+  },
+  defaultVariants: {
+    size: "M",
+  },
+});
+
 export function LoadingIcon({
   size,
   className,
@@ -94,26 +107,14 @@ export function LoadingIcon({
   size?: "S" | "M" | "L" | "XL" | null;
   className?: string;
 }) {
-  const iconVariants = cva("animate-spin ", {
-    variants: {
-      size: {
-        S: "w-[12px] h-[12px]",
-        M: "w-[18px] h-[18px]",
-        L: "w-[20px] h-[20px]",
-        XL: "w-[20px] h-[20px]",
-      },
-    },
-    defaultVariants: {
-      size: "M",
-    },
-  });
-
   return (
     <svg
-      className={cn(iconVariants({ size, className }))}
+      className={cn(loadingIconVariants({ size, className }))}
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      role="status"
+      aria-label="Loading"
     >
       <path
         d="M11 6C11 8.76142 8.76142 11 6 11C3.23858 11 1 8.76142 1 6C1 3.23858 3.23858 1 6 1C8.76142 1 11 3.23858 11 6ZM2.25 6C2.25 8.07107 3.92893 9.75 6 9.75C8.07107 9.75 9.75 8.07107 9.75 6C9.75 3.92893 8.07107 2.25 6 2.25C3.92893 2.25 2.25 3.92893 2.25 6Z"

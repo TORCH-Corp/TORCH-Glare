@@ -20,7 +20,7 @@ export const glareFieldAlert = cva(
     defaultVariants: {
       state: "info",
     },
-  }
+  },
 );
 
 type FieldAlertVariant = "success" | "error" | "warning" | "info";
@@ -29,17 +29,10 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   label: ReactNode;
   state?: FieldAlertVariant;
   icon?: ReactNode;
-  theme?: Themes
+  theme?: Themes;
 }
 
-export const FieldHint: React.FC<Props> = ({
-  label,
-  state,
-  theme,
-  icon,
-  className,
-  ...props
-}) => {
+export const FieldHint: React.FC<Props> = ({ label, state, theme, icon, className, ...props }) => {
   return (
     <section
       {...props}
@@ -48,7 +41,7 @@ export const FieldHint: React.FC<Props> = ({
         glareFieldAlert({
           state,
         }),
-        className
+        className,
       )}
     >
       <section className="flex items-center justify-center min-w-[26px] min-h-[26px] h-full rounded-[4px] text-[18px]">

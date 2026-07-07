@@ -61,14 +61,14 @@ export type DataViewsLayoutProps = {
   onAddNew?: () => void;
   addNewLabel?: string;
 
-  inboxItemHref?: (item: DynamicRecord, id: any) => string;
+  inboxItemHref?: (item: DynamicRecord, id: unknown) => string;
   /**
    * Component used to render inbox item links when `inboxItemHref` is set.
    * Defaults to a plain `<a>` (full-page navigation). Pass your router's link
    * (e.g. Next.js `Link`, React Router `Link`) for client-side navigation.
    */
   inboxLinkComponent?: ElementType;
-  inboxSelectedId?: any;
+  inboxSelectedId?: unknown;
   inboxRenderDetail?: (item: DynamicRecord | null) => ReactNode;
 
   searchValue?: string;
@@ -79,10 +79,7 @@ export type DataViewsLayoutProps = {
   theme?: Themes;
 };
 
-const VIEW_META: Record<
-  ViewType,
-  { label: string; icon: DataViewsHeaderView["icon"] }
-> = {
+const VIEW_META: Record<ViewType, { label: string; icon: DataViewsHeaderView["icon"] }> = {
   table: { label: "List", icon: <List /> },
   kanban: { label: "Board", icon: <LayoutGrid /> },
   inbox: { label: "Inbox", icon: <InboxIcon /> },
@@ -163,9 +160,7 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
       // Mount at width 0 first, then flip to open on the next frame so the
       // width transition animates from 0 → 260px instead of snapping.
       setPanelMounted(true);
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => setPanelOpen(true)),
-      );
+      requestAnimationFrame(() => requestAnimationFrame(() => setPanelOpen(true)));
     }, []);
 
     const closePanel = useCallback(() => {
@@ -250,9 +245,7 @@ export const DataViewsLayout = forwardRef<HTMLDivElement, DataViewsLayoutProps>(
                     fields={resolvedFields}
                     config={effectiveConfig}
                     onDataUpdate={onDataUpdate}
-                    onSortChange={(sortBy, sortOrder) =>
-                      setConfig({ sortBy, sortOrder })
-                    }
+                    onSortChange={(sortBy, sortOrder) => setConfig({ sortBy, sortOrder })}
                     filters={filters}
                     filterState={filterState}
                     onFilterChange={setFilterState}

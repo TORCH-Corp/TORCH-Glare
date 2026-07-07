@@ -14,7 +14,7 @@ const mcpRoot = path.resolve(here, "..");
 const repoRoot = path.resolve(mcpRoot, "..");
 
 const destDocs = path.join(mcpRoot, "docs");
-const docDirs = ["components", "reference", "tutorials", "how-to"];
+const docDirs = ["components", "reference", "tutorials", "how-to", "explanation", "migration"];
 
 fs.mkdirSync(destDocs, { recursive: true });
 
@@ -29,8 +29,25 @@ for (const dir of docDirs) {
   }
 }
 
-const manifestSrc = path.join(repoRoot, "llms-manifest.json");
-if (fs.existsSync(manifestSrc)) {
-  fs.cpSync(manifestSrc, path.join(destDocs, "llms-manifest.json"));
-  console.log("[sync-docs] llms-manifest.json -> docs/llms-manifest.json");
+// Bundle the copy-in registry + component source so the published server can
+// answer get-install-info and get-component-source without the monorepo present.
+const registrySrc = path.join(repoRoot, "apps", "lib", "registry.json");
+if (fs.existsSync(registrySrc)) {
+  fs.cpSync(registrySrc, path.join(mcpRoot, "registry.json"));
+  console.log("[sync-docs] apps/lib/registry.json -> registry.json");
+}
+
+const srcDirs = ["components", "hooks", "utils", "layouts", "providers"];
+const destLib = path.join(mcpRoot, "apps", "lib");
+fs.rmSync(destLib, { recursive: true, force: true });
+for (const dir of srcDirs) {
+  const src = path.join(repoRoot, "apps", "lib", dir);
+  if (fs.existsSync(src)) {
+    // Only the source the CLI copies — skip co-located *-dev.* and *.md files.
+    fs.cpSync(src, path.join(destLib, dir), {
+      recursive: true,
+      filter: (s) => !/-dev\.|\.md$/.test(s),
+    });
+    console.log(`[sync-docs] apps/lib/${dir}/ -> apps/lib/${dir}/`);
+  }
 }

@@ -17,20 +17,19 @@ const buttonVariants = cva("!rounded-[4px]", {
   },
 });
 
-
 interface Props
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   is_loading?: boolean;
   disabled?: boolean;
   asChild?: boolean;
   as?: React.ElementType;
-  theme?: Themes
-  variant?: ButtonVariant
+  theme?: Themes;
+  variant?: ButtonVariant;
 }
 export const ActionButton = function ({
   size,
   asChild,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
   as: Tag = "button",
   className,
   variant,
@@ -45,17 +44,13 @@ export const ActionButton = function ({
       asChild={asChild}
       buttonType="icon"
       type={type}
-      size={
-        size == "XS" ? "S" :
-          size == "S" ? "M" :
-            size == "M" ? "L" : "S"
-      }
+      size={size == "XS" ? "S" : size == "S" ? "M" : size == "M" ? "L" : "S"}
       variant={variant}
       className={cn(
         buttonVariants({
           size,
-        })
-        , className
+        }),
+        className,
       )}
       {...props}
     >

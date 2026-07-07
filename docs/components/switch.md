@@ -1,6 +1,6 @@
 ---
 name: Switch
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, switch, toggle, radix-ui, accessible, controlled]
@@ -16,14 +16,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Switch
 ```
+
+`add` also copies any components, hooks, and utilities that `Switch` depends on.
 
 ## Import
 
-```typescript
-import { Switch } from 'torch-glare/lib/components/Switch'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Switch } from "@/components/Switch";
 ```
 
 ## Quick Examples
@@ -31,7 +39,7 @@ import { Switch } from 'torch-glare/lib/components/Switch'
 ### Basic Usage
 
 ```typescript
-import { Switch } from 'torch-glare/lib/components/Switch'
+import { Switch } from '@/components/Switch'
 
 function Example() {
   const [enabled, setEnabled] = useState(false)
@@ -488,7 +496,7 @@ function SyncSettings() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Switch } from 'torch-glare/lib/components/Switch'
+import { Switch } from '@/components/Switch'
 
 describe('Switch', () => {
   it('toggles state on click', () => {

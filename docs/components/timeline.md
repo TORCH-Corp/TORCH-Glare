@@ -14,9 +14,15 @@ The component is composed of `Timeline`, `TimelineItem`, `TimelineIndicator`, `T
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
+npx torch-glare@latest init
 npx torch-glare@latest add Timeline
 ```
+
+`add` also copies any components, hooks, and utilities that `Timeline` depends on.
 
 ## Imports
 

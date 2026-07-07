@@ -11,13 +11,22 @@ keywords: [data-views, tree-view, tree, hierarchy, nested, sidebar, parent-child
 
 ## Installation
 
-Part of `torch-glare`. Ships with the `DataViews` folder when you run `npx torch-glare add DataViews` — no separate install. It reuses the sibling `TableView`, the `Card` component, a colocated tree sidebar/drawer, and `lucide-react`.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add TreeView
+```
+
+`add` also copies any components, hooks, and utilities that `TreeView` depends on.
 
 ## Import
 
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
 ```tsx
-import { TreeView, useDataViewsState } from "torch-glare"
-import type { TreeViewProps, TreeConfig, FieldConfig } from "torch-glare"
+import { TreeView } from "@/components/TreeView";
 ```
 
 ## When to use it directly
@@ -54,8 +63,10 @@ const rows = [
 ## Composable Mode example
 
 ```tsx
-import { TreeView, useDataViewsState } from "torch-glare"
-import type { FieldConfig, TreeConfig } from "torch-glare"
+import { TreeView } from "@/components/TreeView";
+import { useDataViewsState } from "@/hooks/useDataViewsState";
+import type { FieldConfig } from "@/components/FieldConfig";
+import type { TreeConfig } from "@/components/TreeConfig";
 
 const fields: FieldConfig[] = [
   { path: "name", type: "text" },

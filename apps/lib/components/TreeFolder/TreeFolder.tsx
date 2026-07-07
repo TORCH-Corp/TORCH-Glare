@@ -14,13 +14,7 @@ import type { Themes } from "../../utils/types";
 import { TreeFolderBreadcrumb } from "./TreeFolderBreadcrumb";
 import { TreeFolderRow } from "./TreeFolderRow";
 import { TreeFolderStyles } from "./TreeFolderStyles";
-import {
-  applyMove,
-  descendantIds,
-  findNode,
-  findPath,
-  toBreadcrumb,
-} from "./treeFolderUtils";
+import { applyMove, descendantIds, findNode, findPath, toBreadcrumb } from "./treeFolderUtils";
 import type {
   TreeFolderIconResolver,
   TreeFolderMoveArgs,
@@ -85,21 +79,14 @@ function rootIds(nodes: TreeFolderNode[]): string[] {
   return nodes.map((n) => n.id);
 }
 
-function flattenVisible(
-  data: TreeFolderNode[],
-  expanded: Set<string>,
-): TreeFolderVisibleRow[] {
+function flattenVisible(data: TreeFolderNode[], expanded: Set<string>): TreeFolderVisibleRow[] {
   const out: TreeFolderVisibleRow[] = [];
   // `ancestorHasMore` tracks, for each open ancestor depth on the descent
   // path, whether that ancestor still has more siblings to render. We push
   // before descending and pop on the way back up; each row snapshots the
   // current state so its connector gutters know which verticals to draw.
   const ancestorHasMore: boolean[] = [];
-  const walk = (
-    nodes: TreeFolderNode[],
-    level: number,
-    parentId: string | null,
-  ) => {
+  const walk = (nodes: TreeFolderNode[], level: number, parentId: string | null) => {
     nodes.forEach((node, idx) => {
       const isInternal = !!(node.children && node.children.length > 0);
       const isOpen = isInternal && expanded.has(node.id);
@@ -156,11 +143,8 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
     const scrollRef = useRef<HTMLDivElement | null>(null);
 
     // ---- Selection state ----
-    const [internalSelected, setInternalSelected] = useState<string | null>(
-      defaultSelectedId,
-    );
-    const selectedId =
-      controlledSelected !== undefined ? controlledSelected : internalSelected;
+    const [internalSelected, setInternalSelected] = useState<string | null>(defaultSelectedId);
+    const selectedId = controlledSelected !== undefined ? controlledSelected : internalSelected;
     const isSelectionControlled = controlledSelected !== undefined;
 
     // ---- Expansion state ----
@@ -175,10 +159,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
     const expandedSet = useMemo(() => new Set(expandedIds), [expandedIds]);
 
     // ---- Visible rows ----
-    const visibleRows = useMemo(
-      () => flattenVisible(data, expandedSet),
-      [data, expandedSet],
-    );
+    const visibleRows = useMemo(() => flattenVisible(data, expandedSet), [data, expandedSet]);
     const rowsById = useMemo(() => {
       const m = new Map<string, TreeFolderVisibleRow>();
       for (const r of visibleRows) m.set(r.node.id, r);
@@ -244,9 +225,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
     );
 
     const scrollToId = useCallback((id: string) => {
-      const el = scrollRef.current?.querySelector<HTMLElement>(
-        `[data-row-id="${CSS.escape(id)}"]`,
-      );
+      const el = scrollRef.current?.querySelector<HTMLElement>(`[data-row-id="${CSS.escape(id)}"]`);
       el?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, []);
 
@@ -299,9 +278,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
     );
 
     const isEmpty = data.length === 0;
-    const stripStyle = contentMinWidth
-      ? { minWidth: contentMinWidth }
-      : undefined;
+    const stripStyle = contentMinWidth ? { minWidth: contentMinWidth } : undefined;
 
     return (
       <div
@@ -333,11 +310,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
         )}
 
         <TreeFolderStyles />
-        <div
-          ref={scrollRef}
-          role="tree"
-          className="tf-scroll flex-1 min-h-0 overflow-auto"
-        >
+        <div ref={scrollRef} role="tree" className="tf-scroll flex-1 min-h-0 overflow-auto">
           {isEmpty ? (
             (emptyState ?? (
               <div className="text-xs text-content-presentation-global-tertiary p-3">
@@ -350,8 +323,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
                 const prevRow = visibleRows[idx - 1];
                 const nextRow = visibleRows[idx + 1];
                 const isSelected = selectedId === row.node.id;
-                const isDescendant =
-                  isDescendantOfSelected(row.node.id) && !isSelected;
+                const isDescendant = isDescendantOfSelected(row.node.id) && !isSelected;
                 const inBand = isSelected || isDescendant;
 
                 // Neighbour-aware band rounding: a row is "in-band" if it's the selected
@@ -359,24 +331,19 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
                 const prevInBand =
                   inBand &&
                   !!prevRow &&
-                  (prevRow.node.id === selectedId ||
-                    descendantIdSet.has(prevRow.node.id));
+                  (prevRow.node.id === selectedId || descendantIdSet.has(prevRow.node.id));
                 const nextInBand =
                   inBand &&
                   !!nextRow &&
-                  (nextRow.node.id === selectedId ||
-                    descendantIdSet.has(nextRow.node.id));
+                  (nextRow.node.id === selectedId || descendantIdSet.has(nextRow.node.id));
 
                 const isDragging = dragIdSet.has(row.node.id);
                 const isDropTargetInside =
-                  dropTarget?.rowId === row.node.id &&
-                  dropTarget.position === "inside";
+                  dropTarget?.rowId === row.node.id && dropTarget.position === "inside";
                 const isDropBefore =
-                  dropTarget?.rowId === row.node.id &&
-                  dropTarget.position === "before";
+                  dropTarget?.rowId === row.node.id && dropTarget.position === "before";
                 const isDropAfter =
-                  dropTarget?.rowId === row.node.id &&
-                  dropTarget.position === "after";
+                  dropTarget?.rowId === row.node.id && dropTarget.position === "after";
 
                 return (
                   <TreeFolderRow

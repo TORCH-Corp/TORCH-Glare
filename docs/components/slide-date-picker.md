@@ -11,15 +11,22 @@ keywords: [slide-picker, date, wheel, mobile, picker, scroll]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-react-mobile-picker date-fns
+npx torch-glare@latest init
+npx torch-glare@latest add SlideDatePicker
 ```
+
+`add` also copies any components, hooks, and utilities that `SlideDatePicker` depends on.
 
 ## Import
 
-```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import type { SlideDatePickerProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 ```
 
 ## Quick Examples
@@ -27,7 +34,7 @@ import type { SlideDatePickerProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import { useState } from 'react'
 
 function Example() {
@@ -45,7 +52,7 @@ function Example() {
 ### Custom Date Format
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import { useState } from 'react'
 
 function CustomFormat() {
@@ -64,8 +71,8 @@ function CustomFormat() {
 ### With Custom Trigger
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
+import { Button } from "@/components/Button";
 import { useState } from 'react'
 
 function CustomTrigger() {
@@ -76,7 +83,7 @@ function CustomTrigger() {
       value={date}
       onChange={(e) => setDate(e.target.value)}
     >
-      <Button variant="SecondaryStyle">
+      <Button variant="BluSecStyle">
         <i className="ri-calendar-2-line" />
         {date.toLocaleDateString()}
       </Button>
@@ -88,7 +95,7 @@ function CustomTrigger() {
 ### Dark/Light Theme
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 
 function ThemedPicker() {
   const [date, setDate] = useState<Date>(new Date())
@@ -114,8 +121,8 @@ function ThemedPicker() {
 ### Birthday Picker
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function BirthdayPicker() {
@@ -139,8 +146,8 @@ function BirthdayPicker() {
 ### Appointment Scheduler
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function AppointmentScheduler() {
@@ -179,7 +186,7 @@ function AppointmentScheduler() {
 ### With Initial Date
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import { useState } from 'react'
 
 function WithInitialDate() {
@@ -201,8 +208,8 @@ function WithInitialDate() {
 ### Multiple Date Pickers
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function DateRangePicker() {
@@ -248,8 +255,9 @@ function DateRangePicker() {
 ### Form Integration
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import { InputField, Button } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function RegistrationForm() {
@@ -292,7 +300,7 @@ function RegistrationForm() {
 ### Localized Date Format
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import { useState } from 'react'
 
 function LocalizedPicker() {
@@ -359,7 +367,7 @@ type SlideValues = {
 
 ```typescript
 import { ComponentProps, ReactElement } from 'react'
-import { InputField } from '@torch-ui/components'
+import { InputField } from "@/components/InputField";
 
 interface SlideDatePickerProps extends Omit<ComponentProps<typeof InputField>, 'onChange'> {
   onChange?: (e: { target: { value: Date } }) => void
@@ -377,7 +385,7 @@ export const SlideDatePicker: React.ForwardRefExoticComponent<
 ### Usage with Types
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import { useRef, useState } from 'react'
 
 function TypedExample() {
@@ -405,8 +413,8 @@ function TypedExample() {
 ### Age Verification
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function AgeVerification() {
@@ -457,8 +465,8 @@ function AgeVerification() {
 ### Expiration Date Picker
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function ExpirationPicker() {
@@ -490,7 +498,7 @@ function ExpirationPicker() {
 ### Historical Date Picker
 
 ```typescript
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import { useState } from 'react'
 
 function HistoricalDatePicker() {
@@ -522,7 +530,7 @@ function HistoricalDatePicker() {
 
 ```typescript
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 import userEvent from '@testing-library/user-event'
 
 describe('SlideDatePicker', () => {
@@ -647,7 +655,7 @@ describe('SlideDatePicker', () => {
 ```typescript
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { SlideDatePicker } from '@torch-ui/components'
+import { SlideDatePicker } from "@/components/SlideDatePicker";
 
 describe('SlideDatePicker Integration', () => {
   it('updates form value on date selection', async () => {

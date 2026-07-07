@@ -1,10 +1,10 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogLabel, AlertDialogTitle, AlertDialogTrigger } from "@/components/AlertDialog";
 import { Button } from "@/components/Button";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { useState, type ComponentProps } from "react";
 
 export default function AlertDialogExample() {
-  const [variant] = useState<any>(["info", "success", "warning", "error", "default"]);
+  const [variant] = useState<NonNullable<ComponentProps<typeof AlertDialogContent>["variant"]>[]>(["info", "success", "warning", "error", "default"]);
 
   return (
     <>
@@ -17,8 +17,8 @@ export default function AlertDialogExample() {
         StatusAlertDialog Preview
       </h1>
       {
-        variant.map((item: any) => (
-          <div className="flex flex-col gap-2 w-full">
+        variant.map((item) => (
+          <div key={item} className="flex flex-col gap-2 w-full">
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="BorderStyle">{`Show Dialog type  ${item}`}</Button>

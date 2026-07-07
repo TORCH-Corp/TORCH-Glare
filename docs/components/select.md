@@ -1,6 +1,6 @@
 ---
 name: Select
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, select, dropdown, accessible, radix-ui]
@@ -17,23 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Select
 ```
+
+`add` also copies any components, hooks, and utilities that `Select` depends on.
 
 ## Import
 
-```typescript
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator
-} from 'torch-glare/lib/components/Select'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Select } from "@/components/Select";
 ```
 
 ## Quick Examples
@@ -47,7 +46,7 @@ import {
   SelectContent,
   SelectItem,
   SelectValue
-} from 'torch-glare/lib/components/Select'
+} from '@/components/Select'
 
 function Example() {
   const [value, setValue] = useState('')
@@ -265,6 +264,9 @@ function Uncontrolled() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | - | Item value (required) |
+| `variant` | `'Default' \| 'Warning' \| 'Negative' \| 'SystemStyle'` | `'Default'` | Visual variant |
+| `size` | `'S' \| 'M'` | `'M'` | Item size |
+| `active` | `boolean` | `false` | Renders the item in its selected/active style |
 | `disabled` | `boolean` | `false` | Disable item |
 | `className` | `string` | - | Additional CSS classes |
 | `children` | `React.ReactNode` | - | Item content |
@@ -272,7 +274,7 @@ function Uncontrolled() {
 ### TypeScript
 
 ```typescript
-import type { Themes } from 'torch-glare/lib/utils/types'
+import type { Themes } from '@/utils/types'
 
 // Select component types
 interface SelectProps {
@@ -316,6 +318,9 @@ interface SelectContentProps {
 // Item types
 interface SelectItemProps {
   value: string
+  variant?: 'Default' | 'Warning' | 'Negative' | 'SystemStyle'
+  size?: 'S' | 'M'
+  active?: boolean
   disabled?: boolean
   className?: string
   children: React.ReactNode
@@ -363,8 +368,8 @@ function CountrySelect() {
 ### Form Integration
 
 ```typescript
-import { Form } from 'torch-glare/lib/components/Form'
-import { Label } from 'torch-glare/lib/components/Label'
+import { Form } from '@/components/Form'
+import { Label } from '@/components/Label'
 
 function FormSelect() {
   const [formData, setFormData] = useState({
@@ -464,7 +469,7 @@ function DynamicSelect() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from 'torch-glare/lib/components/Select'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/Select'
 
 describe('Select', () => {
   it('opens dropdown on trigger click', () => {

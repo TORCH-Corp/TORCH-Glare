@@ -7,7 +7,6 @@ import { useRef, useState } from "react";
 
 export default function AttachmentExample() {
   const [preview, setPreview] = useState<string | null>(null);
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
 
   // Add a ref to access the file input
   const fileInputRef = useRef<HTMLInputElement>(null);

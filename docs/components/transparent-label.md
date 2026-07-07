@@ -11,13 +11,22 @@ keywords: [transparent-label, text, typography, gradient, fade, truncate]
 
 ## Installation
 
-No external dependencies required.
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
+```bash
+npx torch-glare@latest init
+npx torch-glare@latest add TransparentLabel
+```
+
+`add` also copies any components, hooks, and utilities that `TransparentLabel` depends on.
 
 ## Import
 
-```typescript
-import { TransparentLabel } from '@torch-ui/components'
-import type { TransparentLabelProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { TransparentLabel } from "@/components/TransparentLabel";
 ```
 
 ## Quick Examples
@@ -25,7 +34,7 @@ import type { TransparentLabelProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function Example() {
   return (
@@ -39,7 +48,7 @@ function Example() {
 ### Different Sizes
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function Sizes() {
   return (
@@ -67,7 +76,7 @@ function Sizes() {
 ### Truncating Long Text
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function TruncatedText() {
   const longText = "This is a very long text that needs to be truncated gracefully with a fade-out effect instead of showing ellipsis or cutting off abruptly"
@@ -85,7 +94,7 @@ function TruncatedText() {
 ### Typography Variants
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function TypographyShowcase() {
   return (
@@ -125,8 +134,8 @@ function TypographyShowcase() {
 ### Card with Fade Effect
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
-import { Card } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
+import { Card } from "@/components/Card";
 
 function ProductCard() {
   return (
@@ -148,7 +157,7 @@ function ProductCard() {
 ### List with Truncated Items
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function TruncatedList() {
   const items = [
@@ -175,7 +184,7 @@ function TruncatedList() {
 ### Navigation with Fade
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function Navigation() {
   const navItems = [
@@ -207,7 +216,7 @@ function Navigation() {
 ### Breadcrumbs
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function Breadcrumbs() {
   const crumbs = [
@@ -240,7 +249,7 @@ function Breadcrumbs() {
 ### Table Cell with Fade
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function DataTable() {
   const data = [
@@ -287,7 +296,7 @@ function DataTable() {
 ### Custom Color with Fade
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function ColoredLabels() {
   return (
@@ -320,7 +329,7 @@ function ColoredLabels() {
 ### RTL Support
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 function RTLExample() {
   return (
@@ -451,7 +460,7 @@ export const TransparentLabel: React.FC<TransparentLabelProps>
 ### Usage with Types
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 import { useState } from 'react'
 
 type Size = 'body-medium-regular' | 'body-large-bold' | 'headers-medium-semibold'
@@ -483,7 +492,7 @@ function TypedExample() {
 ### Truncated Text Component
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 import { useState } from 'react'
 
 interface TruncatedTextProps {
@@ -518,7 +527,7 @@ function TruncatedText({ text, maxWidth = '200px', size = 'body-medium-regular' 
 ### Responsive Typography
 
 ```typescript
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 function ResponsiveText() {
@@ -540,7 +549,7 @@ function ResponsiveText() {
 
 ```typescript
 import { render, screen } from '@testing-library/react'
-import { TransparentLabel } from '@torch-ui/components'
+import { TransparentLabel } from "@/components/TransparentLabel";
 
 describe('TransparentLabel', () => {
   it('renders text content', () => {

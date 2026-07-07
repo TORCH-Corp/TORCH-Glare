@@ -22,10 +22,7 @@ import {
   TableCell,
   TableCheckbox,
 } from "../Table";
-import {
-  getByPath,
-  matchesFilterValues,
-} from "../../utils/dataViews/pathUtils";
+import { getByPath, matchesFilterValues } from "../../utils/dataViews/pathUtils";
 import { renderField } from "./fieldRenderers";
 import { visibleFields } from "../../utils/dataViews/fieldUtils";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -144,9 +141,7 @@ export function TableView({
                     <TableHead
                       key={field.path}
                       size="M"
-                      sortType={
-                        sortPath === field.path ? sortDirection : undefined
-                      }
+                      sortType={sortPath === field.path ? sortDirection : undefined}
                       onSort={() => handleSort(field.path)}
                     >
                       {field.label}
@@ -156,7 +151,7 @@ export function TableView({
               </TableHeader>
               <TableBody>
                 {filteredAndSortedData.map((item, idx) => (
-                  <TableRow key={item.id ?? idx}>
+                  <TableRow key={(item.id ?? idx) as string | number}>
                     <TableCell isDummy className="w-12">
                       <TableCheckbox id={`row-${item.id ?? idx}`} />
                     </TableCell>
@@ -168,11 +163,7 @@ export function TableView({
                             post-mount column reflow repaints cleanly instead
                             of leaving a ghosted/doubled badge frame. */}
                         <span className="isolate inline-flex transform-gpu">
-                          {renderField(
-                            getByPath(item, field.path),
-                            field,
-                            item,
-                          )}
+                          {renderField(getByPath(item, field.path), field, item)}
                         </span>
                       </TableCell>
                     ))}
@@ -185,7 +176,7 @@ export function TableView({
           <div className="flex-1 overflow-auto">
             <div className="grid gap-3">
               {filteredAndSortedData.map((item, idx) => (
-                <Card key={item.id ?? idx} className="overflow-hidden">
+                <Card key={(item.id ?? idx) as string | number} className="overflow-hidden">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3 flex-1">
@@ -193,9 +184,7 @@ export function TableView({
                         <div className="flex-1">
                           {displayFields[0] && (
                             <p className="font-medium">
-                              {String(
-                                getByPath(item, displayFields[0].path) ?? "",
-                              )}
+                              {String(getByPath(item, displayFields[0].path) ?? "")}
                             </p>
                           )}
                         </div>
@@ -204,20 +193,11 @@ export function TableView({
                   </CardHeader>
                   <CardContent className="space-y-2 pt-0">
                     {displayFields.slice(1).map((field) => (
-                      <div
-                        key={field.path}
-                        className="flex items-center justify-between text-sm"
-                      >
+                      <div key={field.path} className="flex items-center justify-between text-sm">
                         <span className="text-content-presentation-global-tertiary">
                           {field.label}:
                         </span>
-                        <span>
-                          {renderField(
-                            getByPath(item, field.path),
-                            field,
-                            item,
-                          )}
-                        </span>
+                        <span>{renderField(getByPath(item, field.path), field, item)}</span>
                       </div>
                     ))}
                   </CardContent>

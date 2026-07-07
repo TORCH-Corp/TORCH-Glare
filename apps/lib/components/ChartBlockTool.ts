@@ -133,16 +133,12 @@ export default class ChartBlockTool {
       }
 
       // Click on the block → expand editing panel
-      this.wrapper.addEventListener("click", (e) => {
+      this.wrapper.addEventListener("click", () => {
         if (
           this.editorPanel &&
-          this.editorPanel.classList.contains(
-            "cdx-chart-block__editor-panel--hidden",
-          )
+          this.editorPanel.classList.contains("cdx-chart-block__editor-panel--hidden")
         ) {
-          this.editorPanel.classList.remove(
-            "cdx-chart-block__editor-panel--hidden",
-          );
+          this.editorPanel.classList.remove("cdx-chart-block__editor-panel--hidden");
           // Re-create chart since canvas may have been resized
           this.createChart();
         }
@@ -150,14 +146,8 @@ export default class ChartBlockTool {
 
       // Click outside → collapse
       this.boundOnClickOutside = (e: MouseEvent) => {
-        if (
-          this.wrapper &&
-          this.editorPanel &&
-          !this.wrapper.contains(e.target as Node)
-        ) {
-          this.editorPanel.classList.add(
-            "cdx-chart-block__editor-panel--hidden",
-          );
+        if (this.wrapper && this.editorPanel && !this.wrapper.contains(e.target as Node)) {
+          this.editorPanel.classList.add("cdx-chart-block__editor-panel--hidden");
           // Re-create chart to fit new size
           this.createChart();
         }
@@ -407,8 +397,7 @@ export default class ChartBlockTool {
         dataInput.className = "cdx-chart-block__data-input";
         dataInput.value = String(dataset.data[colIdx] ?? 0);
         dataInput.addEventListener("input", () => {
-          this.data.datasets[rowIdx].data[colIdx] =
-            parseFloat(dataInput.value) || 0;
+          this.data.datasets[rowIdx].data[colIdx] = parseFloat(dataInput.value) || 0;
           this.scheduleChartUpdate();
         });
         td.appendChild(dataInput);
@@ -425,14 +414,8 @@ export default class ChartBlockTool {
       colorPicker.value = this.rgbaToHex(dataset.backgroundColor);
       colorPicker.title = "Dataset color";
       colorPicker.addEventListener("input", () => {
-        this.data.datasets[rowIdx].backgroundColor = this.hexToRgba(
-          colorPicker.value,
-          0.5,
-        );
-        this.data.datasets[rowIdx].borderColor = this.hexToRgba(
-          colorPicker.value,
-          1,
-        );
+        this.data.datasets[rowIdx].backgroundColor = this.hexToRgba(colorPicker.value, 0.5);
+        this.data.datasets[rowIdx].borderColor = this.hexToRgba(colorPicker.value, 1);
         this.scheduleChartUpdate();
       });
       controlsCell.appendChild(colorPicker);
@@ -470,9 +453,7 @@ export default class ChartBlockTool {
     const gridColor = dark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)";
     const legendColor = dark ? "#ccc" : "#666";
 
-    const isPieType = ["pie", "doughnut", "polarArea"].includes(
-      this.data.chartType,
-    );
+    const isPieType = ["pie", "doughnut", "polarArea"].includes(this.data.chartType);
 
     // For pie/doughnut/polar, use per-segment colors from all datasets flattened
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -482,12 +463,8 @@ export default class ChartBlockTool {
           label: ds.label,
           data: [...ds.data],
           borderWidth: 2,
-          backgroundColor: ds.data.map(
-            (_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].bg,
-          ),
-          borderColor: ds.data.map(
-            (_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].border,
-          ),
+          backgroundColor: ds.data.map((_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].bg),
+          borderColor: ds.data.map((_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].border),
         };
       }
       return {
@@ -557,9 +534,7 @@ export default class ChartBlockTool {
       this.updateTimeout = null;
       if (!this.chart) return;
 
-      const isPieType = ["pie", "doughnut", "polarArea"].includes(
-        this.data.chartType,
-      );
+      const isPieType = ["pie", "doughnut", "polarArea"].includes(this.data.chartType);
 
       this.chart.data.labels = [...this.data.labels];
       this.chart.data.datasets = this.data.datasets.map((ds) => {
@@ -571,12 +546,8 @@ export default class ChartBlockTool {
         };
 
         if (isPieType) {
-          base.backgroundColor = ds.data.map(
-            (_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].bg,
-          );
-          base.borderColor = ds.data.map(
-            (_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].border,
-          );
+          base.backgroundColor = ds.data.map((_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].bg);
+          base.borderColor = ds.data.map((_, i) => COLOR_PALETTE[i % COLOR_PALETTE.length].border);
         } else {
           base.backgroundColor = ds.backgroundColor;
           base.borderColor = ds.borderColor;
@@ -637,9 +608,7 @@ export default class ChartBlockTool {
 
   private updateTypeSelector(): void {
     if (!this.wrapper) return;
-    const buttons = this.wrapper.querySelectorAll<HTMLButtonElement>(
-      ".cdx-chart-block__type-btn",
-    );
+    const buttons = this.wrapper.querySelectorAll<HTMLButtonElement>(".cdx-chart-block__type-btn");
     buttons.forEach((btn) => {
       btn.classList.toggle(
         "cdx-chart-block__type-btn--active",
@@ -651,17 +620,13 @@ export default class ChartBlockTool {
   private normalizeData(data: Partial<ChartBlockData>): ChartBlockData {
     const chartType =
       data.chartType &&
-      ["bar", "line", "pie", "doughnut", "radar", "polarArea"].includes(
-        data.chartType,
-      )
+      ["bar", "line", "pie", "doughnut", "radar", "polarArea"].includes(data.chartType)
         ? data.chartType
         : DEFAULT_DATA.chartType;
 
     const title = data.title ?? DEFAULT_DATA.title;
     const labels =
-      Array.isArray(data.labels) && data.labels.length > 0
-        ? data.labels
-        : [...DEFAULT_DATA.labels];
+      Array.isArray(data.labels) && data.labels.length > 0 ? data.labels : [...DEFAULT_DATA.labels];
 
     const datasets =
       Array.isArray(data.datasets) && data.datasets.length > 0

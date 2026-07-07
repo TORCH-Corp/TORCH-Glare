@@ -27,9 +27,7 @@ interface DragState {
   startY: number;
 }
 
-export default function createTableDnDClass(
-  OriginalTable: TableClass,
-): TableClass {
+export default function createTableDnDClass(OriginalTable: TableClass): TableClass {
   return class TableDnD extends OriginalTable {
     private _drag: DragState = {
       active: false,
@@ -101,9 +99,7 @@ export default function createTableDnDClass(
 
       // Proximity-based toolbox visibility:
       // Only show row handle near left edge, column handle near top edge
-      wrapper.addEventListener("mousemove", (e) =>
-        this._onWrapperMouseMove(e),
-      );
+      wrapper.addEventListener("mousemove", (e) => this._onWrapperMouseMove(e));
       wrapper.addEventListener("mouseleave", () => {
         wrapper.classList.remove("tc-dnd--show-row", "tc-dnd--show-col");
       });
@@ -140,8 +136,7 @@ export default function createTableDnDClass(
     // ─── Proximity-based toolbox visibility ──────────────────────────────
 
     private _onWrapperMouseMove(e: MouseEvent): void {
-      const tableEl =
-        this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
+      const tableEl = this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
       if (!tableEl || !this._wrapperRef) return;
 
       const tableRect = tableEl.getBoundingClientRect();
@@ -172,20 +167,13 @@ export default function createTableDnDClass(
         this._wrapperRef.classList.add("tc-dnd--show-col");
         this._wrapperRef.classList.remove("tc-dnd--show-row");
       } else {
-        this._wrapperRef.classList.remove(
-          "tc-dnd--show-row",
-          "tc-dnd--show-col",
-        );
+        this._wrapperRef.classList.remove("tc-dnd--show-row", "tc-dnd--show-col");
       }
     }
 
     // ─── Toggler pointerdown (start pending drag) ───────────────────────
 
-    private _onTogglerDown(
-      type: "row" | "col",
-      wrapper: HTMLElement,
-      e: PointerEvent,
-    ): void {
+    private _onTogglerDown(type: "row" | "col", wrapper: HTMLElement, e: PointerEvent): void {
       // Detect which row/col is currently hovered by the table plugin
       const index = this._detectHoveredIndex(type, wrapper);
       if (index < 0) return;
@@ -208,10 +196,7 @@ export default function createTableDnDClass(
 
     // ─── Detect hovered row/col index ───────────────────────────────────
 
-    private _detectHoveredIndex(
-      type: "row" | "col",
-      wrapper: HTMLElement,
-    ): number {
+    private _detectHoveredIndex(type: "row" | "col", wrapper: HTMLElement): number {
       const tableEl = wrapper.querySelector<HTMLElement>(".tc-table");
       if (!tableEl) return -1;
 
@@ -230,9 +215,7 @@ export default function createTableDnDClass(
         }
         return -1;
       } else {
-        const toolbox = wrapper.querySelector<HTMLElement>(
-          ".tc-toolbox--column",
-        );
+        const toolbox = wrapper.querySelector<HTMLElement>(".tc-toolbox--column");
         if (!toolbox) return -1;
         const toolboxRect = toolbox.getBoundingClientRect();
         const toolboxMid = toolboxRect.left + toolboxRect.width / 2;
@@ -265,8 +248,7 @@ export default function createTableDnDClass(
         d.active = true;
 
         // Close any open popover from the table plugin
-        const openPopover =
-          this._wrapperRef?.querySelector<HTMLElement>(".tc-popover--opened");
+        const openPopover = this._wrapperRef?.querySelector<HTMLElement>(".tc-popover--opened");
         openPopover?.classList.remove("tc-popover--opened");
 
         this._highlight(d.type!, d.index, true);
@@ -338,13 +320,10 @@ export default function createTableDnDClass(
     // ─── Move Row / Column ──────────────────────────────────────────────
 
     private _moveRow(from: number, to: number): void {
-      const tableEl =
-        this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
+      const tableEl = this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
       if (!tableEl) return;
 
-      const rows = Array.from(
-        tableEl.querySelectorAll<HTMLElement>(".tc-row"),
-      );
+      const rows = Array.from(tableEl.querySelectorAll<HTMLElement>(".tc-row"));
       if (from < 0 || from >= rows.length) return;
 
       const target = to > from ? to - 1 : to;
@@ -360,17 +339,14 @@ export default function createTableDnDClass(
     }
 
     private _moveCol(from: number, to: number): void {
-      const tableEl =
-        this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
+      const tableEl = this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
       if (!tableEl) return;
 
       const target = to > from ? to - 1 : to;
       if (target === from) return;
 
       tableEl.querySelectorAll<HTMLElement>(".tc-row").forEach((row) => {
-        const cells = Array.from(
-          row.querySelectorAll<HTMLElement>(".tc-cell"),
-        );
+        const cells = Array.from(row.querySelectorAll<HTMLElement>(".tc-cell"));
         if (from >= cells.length) return;
 
         const cell = cells[from];
@@ -385,11 +361,7 @@ export default function createTableDnDClass(
 
     // ─── Drop Index Calc ────────────────────────────────────────────────
 
-    private _calcDrop(
-      wrapper: HTMLElement,
-      cx: number,
-      cy: number,
-    ): number {
+    private _calcDrop(wrapper: HTMLElement, cx: number, cy: number): number {
       const tableEl = wrapper.querySelector<HTMLElement>(".tc-table");
       if (!tableEl) return this._drag.index;
 
@@ -414,13 +386,8 @@ export default function createTableDnDClass(
 
     // ─── Visual Feedback ────────────────────────────────────────────────
 
-    private _highlight(
-      type: "row" | "col",
-      idx: number,
-      on: boolean,
-    ): void {
-      const tableEl =
-        this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
+    private _highlight(type: "row" | "col", idx: number, on: boolean): void {
+      const tableEl = this._wrapperRef?.querySelector<HTMLElement>(".tc-table");
       if (!tableEl) return;
 
       if (type === "row") {

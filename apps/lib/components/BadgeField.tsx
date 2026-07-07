@@ -3,9 +3,10 @@ import {
   forwardRef,
   InputHTMLAttributes,
   ReactNode,
-  useEffect,
   useRef,
   useState,
+  ChangeEvent,
+  FocusEvent,
 } from "react";
 import { cn } from "../utils/cn";
 import { Tooltip, ToolTipSide } from "./Tooltip";
@@ -13,12 +14,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
 import { useClickOutside } from "../hooks/useClickOutside";
-import { Badge } from "./Badge";
+import { Badge, badgeStyles } from "./Badge";
 import { Tag, useTagSelection } from "../hooks/useTagSelection";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
-interface Props
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "variant"> {
   size?: "XS" | "S" | "M"; // this is used to change the size style of the component
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
@@ -31,37 +31,37 @@ interface Props
   actionButton?: ReactNode;
   tags: Tag[];
   onValueChange?: (tags: Tag[]) => void;
-  addLabel?: string
+  addLabel?: string;
 }
 
 export const BadgeField = forwardRef<HTMLInputElement, Props>(
-  (
-    {
-      size = "M",
-      label,
-      required,
-      icon,
-      errorMessage,
-      onTable,
-      variant = "PresentationStyle",
-      toolTipSide,
-      className,
-      actionButton,
-      theme,
-      tags,
-      addLabel = "add",
-      dir,
-      children,
-      onValueChange,
-      ...props
-    },
-    forwardedRef
-  ) => {
+  ({
+    size = "M",
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
+    label,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
+    required,
+    icon,
+    errorMessage,
+    onTable,
+    variant = "PresentationStyle",
+    toolTipSide,
+    className,
+    actionButton,
+    theme,
+    tags,
+    addLabel = "add",
+    dir,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
+    children,
+    onValueChange,
+    ...props
+  }) => {
     const [dropDownListWidth, setDropDownListWidth] = useState(0);
     const popoverContentRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
     // this is used to close the popover when the user clicks outside the input group
-    const inputGroupRef = useClickOutside((e) => {
+    const inputGroupRef = useClickOutside<HTMLDivElement>((e) => {
       if (
         !inputGroupRef?.current?.contains(e?.target as Node) &&
         !popoverContentRef?.current?.contains(e?.target as Node)
@@ -83,7 +83,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       focusedPopoverIndex,
       isPopoverOpen,
       setIsPopoverOpen,
-      searchTags
+      searchTags,
     } = useTagSelection({
       Tags: tags,
       onTagsChange: (e) => {
@@ -92,21 +92,17 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
         // callback consumers and the docs use.
         props.onChange?.({
           target: {
-            value: e
-          }
-        } as any);
+            value: e,
+          },
+        } as unknown as ChangeEvent<HTMLInputElement>);
         onValueChange?.(e);
       },
-      inputRef
+      inputRef,
     });
 
     return (
       <Popover open={isPopoverOpen}>
-        <Tooltip
-          toolTipSide={toolTipSide}
-          open={errorMessage !== undefined}
-          text={errorMessage}
-        >
+        <Tooltip toolTipSide={toolTipSide} open={errorMessage !== undefined} text={errorMessage}>
           <PopoverTrigger asChild>
             <Group
               dir={dir}
@@ -117,8 +113,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               tabIndex={isPopoverOpen ? 0 : -1}
               onKeyDown={handleKeyDown}
               size={size === "XS" ? "S" : size}
-              ref={inputGroupRef as any}
-              onFocus={(e: any) => {
+              ref={inputGroupRef}
+              onFocus={(e: FocusEvent<HTMLDivElement>) => {
                 setDropDownListWidth(e.currentTarget.offsetWidth);
               }}
               className={cn(
@@ -127,7 +123,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   "flex-wrap justify-start": isPopoverOpen,
                   "h-fit": isPopoverOpen,
                 },
-                className
+                className,
               )}
             >
               {icon && <Icon>{icon}</Icon>}
@@ -136,13 +132,11 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 <Badge
                   key={tag.id}
                   size={size}
-                  color={tag.variant as any}
+                  color={tag.variant as VariantProps<typeof badgeStyles>["color"]}
                   label={tag.name}
                   isClosable={true}
                   onClose={() => handleUnselectTag(tag.id)}
-                  className={
-                    focusedTagIndex === index ? "ring-2 ring-blue-500" : ""
-                  }
+                  className={focusedTagIndex === index ? "ring-2 ring-blue-500" : ""}
                   tabIndex={focusedTagIndex === index ? 0 : -1}
                 />
               ))}
@@ -165,7 +159,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                     "!h-[18px]": size === "XS",
                     "!h-[22px]": size === "S",
                     "!h-[24px]": size === "M",
-                  }
+                  },
                 )}
               />
               {actionButton && (
@@ -185,14 +179,14 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           style={{ width: dropDownListWidth }}
           variant={variant}
           onKeyDown={handleKeyDown}
-          className={cn(menuContentContinerStyles({ variant: "PresentationStyle" }), "p-1 rounded-[17px]")}
+          className={cn(
+            menuContentContinerStyles({ variant: "PresentationStyle" }),
+            "p-1 rounded-[17px]",
+          )}
 
-        // Reuse the DropdownMenu surface so the list matches the menu design.
+          // Reuse the DropdownMenu surface so the list matches the menu design.
         >
-          <div
-            className={cn(menuContentStyles({ variant: "PresentationStyle" }), "p-0")}
-
-          >
+          <div className={cn(menuContentStyles({ variant: "PresentationStyle" }), "p-0")}>
             {filteredTags.length > 0 ? (
               filteredTags.map((tag, index) => (
                 <button
@@ -203,15 +197,30 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                   tabIndex={focusedPopoverIndex === index ? 0 : -1}
                   className={cn(
                     MenuItemStyles({ variant: "Default", size: "M" }),
-                    "w-full p-1 shrink-0 h-fit"
+                    "w-full p-1 shrink-0 h-fit",
                   )}
                 >
                   <div className="flex items-center justify-between w-full">
-                    <Badge size={size} badgeStyle={"solid"} color={tag.variant as any} label={tag.name} />
+                    <Badge
+                      size={size}
+                      badgeStyle={"solid"}
+                      color={tag.variant as VariantProps<typeof badgeStyles>["color"]}
+                      label={tag.name}
+                    />
 
                     <div className="flex group-hover:opacity-100 opacity-0 px-[4px] py-[2px] items-center rounded-[6px] bg-white-50">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" className="rtl:rotate-180" fill="none">
-                        <path d="M3.91422 5.49995H10V6.49995H3.91422L6.5962 9.1819L5.8891 9.889L2 5.99995L5.8891 2.11084L6.5962 2.81794L3.91422 5.49995Z" fill="black" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        className="rtl:rotate-180"
+                        fill="none"
+                      >
+                        <path
+                          d="M3.91422 5.49995H10V6.49995H3.91422L6.5962 9.1819L5.8891 9.889L2 5.99995L5.8891 2.11084L6.5962 2.81794L3.91422 5.49995Z"
+                          fill="black"
+                        />
                       </svg>
                       <p className="text-black-1000 text-right text-[12px] font-[510] leading-[148%]">
                         {addLabel}
@@ -222,15 +231,14 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               ))
             ) : (
               <div className="px-3 py-2 typography-body-small-regular text-white-alpha-75">
-                {tags.length === 0
-                  ? "All tags selected"
-                  : "No matching tags found"}
+                {tags.length === 0 ? "All tags selected" : "No matching tags found"}
               </div>
-            )} </div>
+            )}{" "}
+          </div>
         </PopoverContent>
-      </Popover >
+      </Popover>
     );
-  }
+  },
 );
 BadgeField.displayName = "BadgeField";
 
@@ -251,14 +259,13 @@ const menuContentStyles = cva(
   {
     variants: {
       variant: {
-        PresentationStyle: [
-        ],
+        PresentationStyle: [],
       },
       defaultVariants: {
         variant: "PresentationStyle",
       },
     },
-  }
+  },
 );
 const menuContentContinerStyles = cva(
   [
@@ -285,7 +292,7 @@ const menuContentContinerStyles = cva(
         variant: "PresentationStyle",
       },
     },
-  }
+  },
 );
 
 const MenuItemStyles = cva(
@@ -312,9 +319,7 @@ const MenuItemStyles = cva(
   {
     variants: {
       variant: {
-        Default: [
-          "hover:bg-[rgba(184,192,204,0.50)] ",
-        ],
+        Default: ["hover:bg-[rgba(184,192,204,0.50)] "],
       },
       size: {
         S: ["typography-body-small-regular", "h-[24px]"],
@@ -325,5 +330,5 @@ const MenuItemStyles = cva(
         size: "M",
       },
     },
-  }
+  },
 );

@@ -11,12 +11,7 @@ import {
 } from "react";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-} from "./Dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "./Dialog";
 import { Icon, Input, Group } from "./Input";
 import { Button, LoadingIcon } from "./Button";
 
@@ -130,8 +125,7 @@ export function SearchableTreeDialog<T>({
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const searchTextOf = (node: T) =>
-    getSearchText?.(node) ?? String(getNodeLabel(node) ?? "");
+  const searchTextOf = (node: T) => getSearchText?.(node) ?? String(getNodeLabel(node) ?? "");
 
   // Normalize raw data (nested OR flat) into a uniform nested TreeNode shape.
   const tree = useMemo<TreeNode<T>[]>(() => {
@@ -159,8 +153,7 @@ export function SearchableTreeDialog<T>({
     }
 
     // Nested mode: recurse via getNodeChildren.
-    const build = (raw: T): TreeNode<T> =>
-      toNode(raw, (getNodeChildren?.(raw) ?? []).map(build));
+    const build = (raw: T): TreeNode<T> => toNode(raw, (getNodeChildren?.(raw) ?? []).map(build));
     return nodes.map(build);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, parentIdKey, getNodeChildren]);
@@ -231,10 +224,7 @@ export function SearchableTreeDialog<T>({
           size={size === "XS" ? "S" : size}
           role="button"
           tabIndex={0}
-          className={cn(
-            "flex w-full items-center gap-1 p-1 cursor-pointer",
-            className
-          )}
+          className={cn("flex w-full items-center gap-1 p-1 cursor-pointer", className)}
         >
           {icon && <Icon>{icon}</Icon>}
           <span
@@ -242,7 +232,7 @@ export function SearchableTreeDialog<T>({
               "flex-1 px-1 truncate typography-body-medium-regular",
               value != null
                 ? "text-content-presentation-action-light-primary"
-                : "text-content-presentation-action-light-secondary"
+                : "text-content-presentation-action-light-secondary",
             )}
           >
             {triggerLabel}
@@ -255,13 +245,13 @@ export function SearchableTreeDialog<T>({
             aria-label={open ? "Close" : "Open"}
             className={cn(
               "shrink-0 h-[32px] w-[32px] rounded-[4px]",
-              open && "bg-background-presentation-action-hover text-white"
+              open && "bg-background-presentation-action-hover text-white",
             )}
           >
             <i
               className={cn(
                 "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
-                open && "rotate-180"
+                open && "rotate-180",
               )}
             />
           </Button>
@@ -396,7 +386,7 @@ function TreeLevel<T>({
                 }
               }}
               className={cn(
-                "group flex items-center px-[2px] cursor-pointer bg-[rgba(184,192,204,0.36)]"
+                "group flex items-center px-[2px] cursor-pointer bg-[rgba(184,192,204,0.36)]",
               )}
             >
               {/* Connector rails — one full-height vertical line per ancestor level. */}
@@ -422,8 +412,8 @@ function TreeLevel<T>({
                     // so they read as de-emphasized (opacity-50) and get no highlight.
                     !highlightable && "opacity-50",
                     highlightable &&
-                    "group-hover:bg-white-50  group-hover:text-black-1000 group-hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
-                    highlightable && selected && "bg-white-alpha-75 text-black-1000"
+                      "group-hover:bg-white-50  group-hover:text-black-1000 group-hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+                    highlightable && selected && "bg-white-alpha-75 text-black-1000",
                   )}
                 >
                   <span className="flex-1 min-w-px truncate typography-body-medium-regular">
@@ -456,8 +446,7 @@ function TreeLevel<T>({
 /* Inline-label search field (self-contained, mirrors SearchableTable's).     */
 /* -------------------------------------------------------------------------- */
 
-interface TreeSearchInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+interface TreeSearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   variant?: "SystemStyle" | "PresentationStyle";
   theme?: Themes;
   label?: string;
@@ -475,7 +464,7 @@ const TreeSearchInput = forwardRef<HTMLInputElement, TreeSearchInputProps>(
           "border border-white-alpha-40 bg-[rgba(37,44,57,0.30)]",
           "hover:bg-background-presentation-table-row-hover",
           "focus-within:bg-background-presentation-table-row-hover",
-          className
+          className,
         )}
       >
         <Icon className="shrink-0">
@@ -494,11 +483,11 @@ const TreeSearchInput = forwardRef<HTMLInputElement, TreeSearchInputProps>(
           className={cn(
             "min-w-[100px] flex-1 !h-[24px]  bg-transparent",
             "text-content-presentation-action-light-primary placeholder:hover:text-white-alpha-75",
-            "transition-colors group-hover:!text-white group-focus-within:!text-white"
+            "transition-colors group-hover:!text-white group-focus-within:!text-white",
           )}
         />
       </Group>
     </div>
-  )
+  ),
 );
 TreeSearchInput.displayName = "TreeSearchInput";

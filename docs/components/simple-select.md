@@ -1,6 +1,6 @@
 ---
 name: SimpleSelect
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, select, dropdown, custom, system-style, accessible]
@@ -17,18 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add SimpleSelect
 ```
+
+`add` also copies any components, hooks, and utilities that `SimpleSelect` depends on.
 
 ## Import
 
-```typescript
-import {
-  SimpleSelectValue,
-  SimpleSelectItem,
-  SimpleSelectDropDown
-} from 'torch-glare/lib/components/SimpleSelect'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { SimpleSelect } from "@/components/SimpleSelect";
 ```
 
 ## Quick Examples
@@ -36,7 +40,7 @@ import {
 ### Basic Usage
 
 ```typescript
-import { SimpleSelectValue, SimpleSelectItem } from 'torch-glare/lib/components/SimpleSelect'
+import { SimpleSelectValue, SimpleSelectItem } from '@/components/SimpleSelect'
 
 function Example() {
   const [value, setValue] = useState('option1')
@@ -470,7 +474,7 @@ function DynamicSelect() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { SimpleSelectValue, SimpleSelectItem } from 'torch-glare/lib/components/SimpleSelect'
+import { SimpleSelectValue, SimpleSelectItem } from '@/components/SimpleSelect'
 
 describe('SimpleSelect', () => {
   it('opens dropdown on click', () => {

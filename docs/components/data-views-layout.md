@@ -11,28 +11,22 @@ keywords: [data-views, layout, table, kanban, inbox, tree, multi-view, filter, s
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-glare@latest add DataViews
+npx torch-glare@latest init
+npx torch-glare@latest add DataViewsLayout
 ```
 
-The CLI transitively installs everything DataViews imports — the sibling views,
-the `DataViewCard` layout, the `useDataViewsState` hook, the `dataViews` utils,
-and the `TreeFolder` component — plus the 3rd-party deps it uses
-(`@radix-ui/react-slider`, `react-day-picker`, `lucide-react`, `vaul`).
-
-> **Badge version:** DataViews uses the current Badge API
-> (`color` / `badgeStyle` / `showIcon`). If your project vendored an older
-> `Badge.tsx` (with `variant` / `isSelected`), refresh it with
-> `npx torch-glare@latest add Badge --force` and migrate call sites
-> (`variant=` → `color=`, `isSelected`+`onUnselect` → `isClosable`+`onClose`).
-> The Badge also needs `mapping-color-system-v4` tokens
-> (`--background-presentation-badge-{color}-{subtle|solid}`) in your CSS.
+`add` also copies any components, hooks, and utilities that `DataViewsLayout` depends on.
 
 ## Import
 
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
 ```tsx
-import { DataViewsLayout } from "torch-glare"
-import type { FieldConfig, ViewVisibility } from "torch-glare"
+import { DataViewsLayout } from "@/components/DataViewsLayout";
 ```
 
 ## Quick Examples
@@ -247,7 +241,10 @@ passes `savedViews` to `DataViewsLayout` expecting it to work.
 When you want a custom layout (e.g. Table on the left, Kanban on the right), bypass `DataViewsLayout` and compose the views directly.
 
 ```tsx
-import { TableView, KanbanView, FilterPanel, useDataViewsState } from "torch-glare"
+import { FilterPanel } from "@/components/FilterPanel";
+import { KanbanView } from "@/components/KanbanView";
+import { TableView } from "@/components/TableView";
+import { useDataViewsState } from "@/hooks/useDataViewsState";
 
 function CustomScreen({ data, fields }: Props) {
   const state = useDataViewsState({ data, fields })

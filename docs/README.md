@@ -24,7 +24,7 @@ npx torch-glare@latest init
 
 This command will:
 - Create or modify the `tailwind.config.js` file to support Tailwind CSS for Tailwind versions less then 4.
-- Generate a `torch.json` file where you can customize the installation path for components.
+- Generate a `glare.json` file where you can customize the installation path for components.
 
 ### Tailwind CSS Requirement
 Ensure that Tailwind CSS is installed in your project before running the initialization command.
@@ -108,7 +108,7 @@ export default App;
 ```sh
 npx torch-glare@latest init
 ```
-- Creates a `torch.json` configuration file.
+- Creates a `glare.json` configuration file.
 - Create or modify `tailwind.config.ts` file for tailwind support.
 
 ### Add Components
@@ -134,6 +134,14 @@ Adds a specific utility or runs an interactive prompt if no name is provided.
 npx torch-glare@latest provider [provider]
 ```
 Adds a specific provider or runs an interactive prompt if no name is provided.
+
+### Add Layouts
+```sh
+npx torch-glare@latest layout [layout]
+```
+Adds a specific layout or runs an interactive prompt if no name is provided.
+
+> Component names are case-sensitive and PascalCase (e.g. `add DatePicker`).
 
 ### Update Installed Resources
 

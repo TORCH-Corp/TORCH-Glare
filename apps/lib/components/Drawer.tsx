@@ -10,16 +10,13 @@ const Drawer = ({
   shouldScaleBackground = true,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerPrimitive.Root
-    shouldScaleBackground={shouldScaleBackground}
-    {...props}
-  />
+  <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
 );
 Drawer.displayName = "Drawer";
 
-const DrawerNested = (
-  props: React.ComponentProps<typeof DrawerPrimitive.NestedRoot>,
-) => <DrawerPrimitive.NestedRoot {...props} />;
+const DrawerNested = (props: React.ComponentProps<typeof DrawerPrimitive.NestedRoot>) => (
+  <DrawerPrimitive.NestedRoot {...props} />
+);
 DrawerNested.displayName = "DrawerNested";
 
 const DrawerTrigger = DrawerPrimitive.Trigger;
@@ -32,11 +29,7 @@ const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Overlay
-    ref={ref}
-    className={cn("fixed inset-0 z-50 ", className)}
-    {...props}
-  />
+  <DrawerPrimitive.Overlay ref={ref} className={cn("fixed inset-0 z-50 ", className)} {...props} />
 ));
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
@@ -77,77 +70,70 @@ const DrawerContent = React.forwardRef<
   ) => {
     const framed = framedProp ?? true;
     return (
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerPrimitive.Content
-        ref={ref}
-        className={cn(
-          "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col items-stretch m-1",
-          wrapperClassName,
-        )}
-        {...props}
-      >
-        {notch && (
-          <div className={notchSide === "right" ? "self-end" : "self-start"}>
-            {React.isValidElement(notch)
-              ? React.cloneElement(
-                  notch as React.ReactElement<{ side?: "left" | "right" }>,
-                  { side: notchSide },
-                )
-              : notch}
-          </div>
-        )}
-        <div
+      <DrawerPortal>
+        <DrawerOverlay />
+        <DrawerPrimitive.Content
+          ref={ref}
           className={cn(
-            "flex flex-1 flex-col min-h-0",
-            framed
-              ? "p-1.5 bg-black-400 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]"
-              : "p-0",
-            framed && notch
-              ? notchSide === "right"
-                ? "rounded-tr-none rounded-tl-[22px] rounded-b-[22px]"
-                : "rounded-tl-none rounded-tr-[22px] rounded-b-[22px]"
-              : framed
-                ? "rounded-t-[22px]"
-                : "",
-            trayClassName,
+            "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col items-stretch m-1",
+            wrapperClassName,
           )}
+          {...props}
         >
+          {notch && (
+            <div className={notchSide === "right" ? "self-end" : "self-start"}>
+              {React.isValidElement(notch)
+                ? React.cloneElement(notch as React.ReactElement<{ side?: "left" | "right" }>, {
+                    side: notchSide,
+                  })
+                : notch}
+            </div>
+          )}
           <div
-            // The content surface is always light (#F0F0F0) regardless of the
-            // page theme, so pin a light theme here. This makes theme-aware
-            // content tokens (DrawerTitle/Description and any consumer content)
-            // resolve to their dark-on-light values instead of following a dark
-            // page theme (which would render white-on-light = invisible).
-            data-theme="light"
             className={cn(
-              "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
-              framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
-              className,
+              "flex flex-1 flex-col min-h-0",
+              framed
+                ? "p-1.5 bg-black-400 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]"
+                : "p-0",
+              framed && notch
+                ? notchSide === "right"
+                  ? "rounded-tr-none rounded-tl-[22px] rounded-b-[22px]"
+                  : "rounded-tl-none rounded-tr-[22px] rounded-b-[22px]"
+                : framed
+                  ? "rounded-t-[22px]"
+                  : "",
+              trayClassName,
             )}
           >
-            {showHandle && !notch && (
-              <div className="mx-auto h-2 w-[100px] rounded-full bg-[#D4D4D4]" />
-            )}
-            {children}
+            <div
+              // The content surface is always light (#F0F0F0) regardless of the
+              // page theme, so pin a light theme here. This makes theme-aware
+              // content tokens (DrawerTitle/Description and any consumer content)
+              // resolve to their dark-on-light values instead of following a dark
+              // page theme (which would render white-on-light = invisible).
+              data-theme="light"
+              className={cn(
+                "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
+                framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
+                className,
+              )}
+            >
+              {showHandle && !notch && (
+                <div className="mx-auto h-2 w-[100px] rounded-full bg-[#D4D4D4]" />
+              )}
+              {children}
+            </div>
           </div>
-        </div>
-      </DrawerPrimitive.Content>
-    </DrawerPortal>
+        </DrawerPrimitive.Content>
+      </DrawerPortal>
     );
   },
 );
 DrawerContent.displayName = "DrawerContent";
 
-const DrawerHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const DrawerHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      "flex flex-row justify-between items-stretch gap-2 px-1 pt-1",
-      className,
-    )}
+    className={cn("flex flex-row justify-between items-stretch gap-2 px-1 pt-1", className)}
     {...props}
   />
 );
@@ -159,25 +145,15 @@ const drawerHeaderPane = cva(
   "flex items-center gap-2 rounded-[14px] border p-2 bg-[#131415] border-[#2C2D2E] shadow-[0_0_32px_2px_rgba(0,0,0,0.05)] [&_[data-slot=drawer-title]]:text-white [&_[data-slot=drawer-description]]:text-[#9FA0A1]",
 );
 
-const DrawerHeaderTitle = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const DrawerHeaderTitle = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   // Dark surface — pin a dark theme so any buttons/content inside resolve their
   // theme tokens for dark (the surrounding content surface is data-theme=light).
   <div data-theme="dark" className={cn(drawerHeaderPane(), className)} {...props} />
 );
 DrawerHeaderTitle.displayName = "DrawerHeaderTitle";
 
-const DrawerHeaderActions = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    data-theme="dark"
-    className={cn(drawerHeaderPane(), "justify-end", className)}
-    {...props}
-  />
+const DrawerHeaderActions = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div data-theme="dark" className={cn(drawerHeaderPane(), "justify-end", className)} {...props} />
 );
 DrawerHeaderActions.displayName = "DrawerHeaderActions";
 
@@ -199,29 +175,17 @@ const drawerBadge = cva(
 );
 
 interface DrawerBadgeProps
-  extends
-    Omit<React.HTMLAttributes<HTMLSpanElement>, "color">,
-    VariantProps<typeof drawerBadge> {}
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> {}
 
 const DrawerBadge = React.forwardRef<HTMLSpanElement, DrawerBadgeProps>(
   ({ className, color, ...props }, ref) => (
-    <span
-      ref={ref}
-      className={cn(drawerBadge({ color }), className)}
-      {...props}
-    />
+    <span ref={ref} className={cn(drawerBadge({ color }), className)} {...props} />
   ),
 );
 DrawerBadge.displayName = "DrawerBadge";
 
-const DrawerFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("mt-auto flex flex-col gap-2 p-4", className)}
-    {...props}
-  />
+const DrawerFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("mt-auto flex flex-col gap-2 p-4", className)} {...props} />
 );
 DrawerFooter.displayName = "DrawerFooter";
 
@@ -229,23 +193,12 @@ interface DrawerNotchProps extends React.HTMLAttributes<HTMLDivElement> {
   side?: "left" | "right";
 }
 
-const DrawerNotch = ({
-  className,
-  children,
-  side = "left",
-  ...props
-}: DrawerNotchProps) => {
+const DrawerNotch = ({ className, children, side = "left", ...props }: DrawerNotchProps) => {
   // Wedge bridges the notch's bottom-edge corner into the tray's top edge.
   // For a left-attached notch (the default), the wedge sits at the notch's
   // bottom-right; for a right-attached notch, mirror it to the bottom-left.
   const wedge = (
-    <svg
-      aria-hidden
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      className="block shrink-0 self-end"
-    >
+    <svg aria-hidden width="12" height="12" viewBox="0 0 12 12" className="block shrink-0 self-end">
       <path
         d={
           side === "right"
@@ -314,30 +267,22 @@ interface DrawerNotchPillProps
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
     VariantProps<typeof drawerNotchPill> {}
 
-const DrawerNotchPill = React.forwardRef<
-  HTMLButtonElement,
-  DrawerNotchPillProps
->(({ className, color, children, ...props }, ref) => (
-  <button
-    ref={ref}
-    type="button"
-    className={cn(drawerNotchPill({ color }), className)}
-    {...props}
-  >
-    {children}
-  </button>
-));
+const DrawerNotchPill = React.forwardRef<HTMLButtonElement, DrawerNotchPillProps>(
+  ({ className, color, children, ...props }, ref) => (
+    <button
+      ref={ref}
+      type="button"
+      className={cn(drawerNotchPill({ color }), className)}
+      {...props}
+    >
+      {children}
+    </button>
+  ),
+);
 DrawerNotchPill.displayName = "DrawerNotchPill";
 
-const DrawerNotchDivider = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    aria-hidden
-    className={cn("h-[18px] w-px bg-white/20", className)}
-    {...props}
-  />
+const DrawerNotchDivider = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div aria-hidden className={cn("h-[18px] w-px bg-white/20", className)} {...props} />
 );
 DrawerNotchDivider.displayName = "DrawerNotchDivider";
 
@@ -346,12 +291,7 @@ interface DrawerNotchAppProps extends React.HTMLAttributes<HTMLDivElement> {
   name: React.ReactNode;
 }
 
-const DrawerNotchApp = ({
-  className,
-  icon,
-  name,
-  ...props
-}: DrawerNotchAppProps) => (
+const DrawerNotchApp = ({ className, icon, name, ...props }: DrawerNotchAppProps) => (
   <div className={cn("flex items-center gap-2.5 px-1", className)} {...props}>
     {icon && (
       <div className="flex h-[22px] w-[22px] items-center justify-center overflow-hidden rounded-[5.6px] bg-black shadow-[0_0_4.66px_rgba(0,0,0,0.3),0_0.75px_0.75px_rgba(0,0,0,0.2)]">

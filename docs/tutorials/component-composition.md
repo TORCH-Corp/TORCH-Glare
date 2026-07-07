@@ -60,13 +60,11 @@ Composition is combining simple components to create more complex ones. Think of
 ```tsx
 'use client';
 
-import {
-  LabelField,
-  TextArea,
-  Button,
-  FieldHint,
-  toast,
-} from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { FieldHint } from "@/components/FieldHint";
+import { LabelField } from "@/components/LabelField";
+import { TextArea } from "@/components/TextArea";
+import { toast } from "@/components/Toast";
 import { useState } from 'react';
 
 export default function ContactForm() {
@@ -136,7 +134,8 @@ export default function ContactForm() {
 ### Feature Card Component
 
 ```tsx
-import { Button, Badge } from '@torch-ai/torch-glare';
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
 
 interface FeatureCardProps {
   title: string;
@@ -167,7 +166,7 @@ export default function FeatureCard({
           {title}
         </h3>
         {badge && (
-          <Badge theme="light" variant="SecondStyle">
+          <Badge theme="light" color="gray">
             {badge}
           </Badge>
         )}
@@ -227,14 +226,10 @@ export default function FeatureCard({
 ```tsx
 'use client';
 
-import {
-  Avatar,
-  Button,
-  Badge,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from '@torch-ai/torch-glare';
+import { Avatar } from "@/components/Avatar";
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/Popover";
 
 interface User {
   id: string;
@@ -337,7 +332,7 @@ export default function UserList({ users, onEdit, onDelete }: UserListProps) {
                 <PopoverTrigger asChild>
                   <Button
                     theme="light"
-                    variant="ContStyle"
+                    variant="PrimeContStyle"
                     buttonType="icon"
                     size="S"
                   >
@@ -393,20 +388,13 @@ export default function UserList({ users, onEdit, onDelete }: UserListProps) {
 'use client';
 
 import { useState } from 'react';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  LabelField,
-  TextArea,
-  Select,
-  SimpleOption,
-  Button,
-  toast,
-} from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/Dialog";
+import { LabelField } from "@/components/LabelField";
+import { Select } from "@/components/Select";
+import { SimpleOption } from "@/components/SimpleOption";
+import { TextArea } from "@/components/TextArea";
+import { toast } from "@/components/Toast";
 
 export default function CreateProjectModal() {
   const [open, setOpen] = useState(false);
@@ -509,14 +497,12 @@ export default function CreateProjectModal() {
 'use client';
 
 import { useState } from 'react';
-import {
-  Table,
-  InputField,
-  Select,
-  SimpleOption,
-  Badge,
-  Button,
-} from '@torch-ai/torch-glare';
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
+import { InputField } from "@/components/InputField";
+import { Select } from "@/components/Select";
+import { SimpleOption } from "@/components/SimpleOption";
+import { Table } from "@/components/Table";
 
 interface TableRow {
   id: string;
@@ -630,7 +616,7 @@ export default function DataTableWithFilters() {
                   ${row.revenue.toLocaleString()}
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <Button theme="light" variant="ContStyle" size="S">
+                  <Button theme="light" variant="PrimeContStyle" size="S">
                     View
                   </Button>
                 </td>
@@ -661,12 +647,10 @@ export default function DataTableWithFilters() {
 ```tsx
 'use client';
 
-import {
-  Button,
-  Avatar,
-  Badge,
-  useTheme,
-} from '@torch-ai/torch-glare';
+import { Avatar } from "@/components/Avatar";
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
+import { useTheme } from "@/providers/ThemeProvider";
 import { useState } from 'react';
 
 export default function Dashboard() {
@@ -726,7 +710,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-4">
               <Button
                 theme={theme as any}
-                variant="ContStyle"
+                variant="PrimeContStyle"
                 buttonType="icon"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
               >
@@ -740,7 +724,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-4">
               <Button
                 theme={theme as any}
-                variant="ContStyle"
+                variant="PrimeContStyle"
                 buttonType="icon"
                 onClick={() => updateTheme(theme === 'light' ? 'dark' : 'light')}
               >
@@ -780,7 +764,7 @@ export default function Dashboard() {
                 <p className="typography-display-small-bold text-content-presentation-global-primary mb-2">
                   {stat.value}
                 </p>
-                <Badge theme={theme as any} variant="SecondStyle">
+                <Badge theme={theme as any} color="green">
                   {stat.change}
                 </Badge>
               </div>

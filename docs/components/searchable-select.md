@@ -11,17 +11,22 @@ keywords: [searchable-select, combobox, select, search, async, infinite-scroll, 
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-popover
+npx torch-glare@latest init
+npx torch-glare@latest add SearchableSelect
 ```
 
-SearchableSelect is built on the TORCH `Popover` component (which wraps `@radix-ui/react-popover`) and reuses the `Input`, `Button`, and `DropdownMenu` item styles. All imports come from `@torch-ui/components`.
+`add` also copies any components, hooks, and utilities that `SearchableSelect` depends on.
 
 ## Import
 
-```typescript
-import { SearchableSelect } from '@torch-ui/components'
-import type { SearchableSelectOption } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { SearchableSelect } from "@/components/SearchableSelect";
 ```
 
 ## Quick Examples
@@ -31,8 +36,8 @@ import type { SearchableSelectOption } from '@torch-ui/components'
 Pass a static `options` array and control the selection with `value` / `onValueChange`. Options may include an `icon`. Filtering happens locally by default.
 
 ```typescript
-import { SearchableSelect } from '@torch-ui/components'
-import type { SearchableSelectOption } from '@torch-ui/components'
+import { SearchableSelect } from "@/components/SearchableSelect";
+import type { SearchableSelectOption } from "@/components/SearchableSelect";
 import { useState } from 'react'
 
 const options: SearchableSelectOption[] = [
@@ -62,8 +67,8 @@ function FrameworkPicker() {
 For large or remote datasets, set `filterClientSide={false}` and drive everything from controlled props: refetch in `onSearchChange` (debounced), append pages in `onLoadMore`, and report `hasMore` / `loading`. Options are rendered as-is — the component does not filter them locally in this mode.
 
 ```typescript
-import { SearchableSelect } from '@torch-ui/components'
-import type { SearchableSelectOption } from '@torch-ui/components'
+import { SearchableSelect } from "@/components/SearchableSelect";
+import type { SearchableSelectOption } from "@/components/SearchableSelect";
 import { useEffect, useState } from 'react'
 
 const PAGE_SIZE = 20
@@ -125,7 +130,7 @@ function UserPicker() {
 The list shows up to `maxVisibleItems` rows (default `5`) before it scrolls internally.
 
 ```typescript
-import { SearchableSelect } from '@torch-ui/components'
+import { SearchableSelect } from "@/components/SearchableSelect";
 
 function CompactList({ options, value, onValueChange }) {
   return (
@@ -144,7 +149,7 @@ function CompactList({ options, value, onValueChange }) {
 Pass `dir="rtl"` to lay out the input, chevron, and dropdown right-to-left.
 
 ```typescript
-import { SearchableSelect } from '@torch-ui/components'
+import { SearchableSelect } from "@/components/SearchableSelect";
 
 function ArabicPicker({ options, value, onValueChange }) {
   return (
@@ -236,8 +241,8 @@ export function SearchableSelect(props: SearchableSelectProps): JSX.Element
 React Query's `useInfiniteQuery` maps cleanly onto the controlled async props. Track the debounced query in state, flatten pages into `options`, and wire `fetchNextPage`/`hasNextPage`/`isFetching` to `onLoadMore`/`hasMore`/`loading`.
 
 ```typescript
-import { SearchableSelect } from '@torch-ui/components'
-import type { SearchableSelectOption } from '@torch-ui/components'
+import { SearchableSelect } from "@/components/SearchableSelect";
+import type { SearchableSelectOption } from "@/components/SearchableSelect";
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 
@@ -283,7 +288,7 @@ function UserPicker() {
 The same shape works with SWR's `useSWRInfinite` — increment `size` in `onLoadMore`, flatten the page array into `options`, and derive `hasMore` from the last page length.
 
 ```typescript
-import { SearchableSelect } from '@torch-ui/components'
+import { SearchableSelect } from "@/components/SearchableSelect";
 import useSWRInfinite from 'swr/infinite'
 import { useState } from 'react'
 

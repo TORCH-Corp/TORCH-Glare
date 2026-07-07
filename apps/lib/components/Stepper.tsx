@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  forwardRef,
-  HTMLAttributes,
-  ReactNode,
-  createContext,
-  useContext,
-} from "react";
+import React, { forwardRef, HTMLAttributes, ReactNode, createContext, useContext } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
@@ -41,25 +35,14 @@ const stepperStyles = cva(["flex gap-0"], {
   },
 });
 
-interface StepperProps
-  extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof stepperStyles> {
+interface StepperProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof stepperStyles> {
   theme?: Themes;
   activeStep?: number;
   size?: "S" | "M" | "L";
 }
 
 const Stepper = forwardRef<HTMLDivElement, StepperProps>(
-  (
-    {
-      className,
-      orientation = "horizontal",
-      theme,
-      activeStep = 0,
-      size = "M",
-      ...props
-    },
-    ref,
-  ) => (
+  ({ className, orientation = "horizontal", theme, activeStep = 0, size = "M", ...props }, ref) => (
     <StepperContext.Provider
       value={{
         activeStep,
@@ -89,18 +72,7 @@ interface StepProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const Step = forwardRef<HTMLDivElement, StepProps>(
-  (
-    {
-      className,
-      index = 0,
-      isCompleted,
-      isActive,
-      isError,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, index = 0, isCompleted, isActive, isError, children, ...props }, ref) => {
     const { activeStep, orientation } = useStepperContext();
 
     const computedActive = isActive ?? index === activeStep;
@@ -116,16 +88,14 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
         data-orientation={orientation}
         className={cn(
           "flex group/step",
-          orientation === "horizontal"
-            ? "shrink-0 flex-col items-center gap-2"
-            : "flex-row gap-3",
+          orientation === "horizontal" ? "shrink-0 flex-col items-center gap-2" : "flex-row gap-3",
           className,
         )}
         {...props}
       >
         {React.Children.map(children, (child) => {
           if (!React.isValidElement(child)) return child;
-          return React.cloneElement(child as React.ReactElement<any>, {
+          return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
             _active: computedActive,
             _completed: computedCompleted,
             _error: computedError,
@@ -213,13 +183,7 @@ const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
   ) => {
     const { size } = useStepperContext();
 
-    const state = _error
-      ? "error"
-      : _completed
-        ? "completed"
-        : _active
-          ? "active"
-          : "pending";
+    const state = _error ? "error" : _completed ? "completed" : _active ? "active" : "pending";
 
     const renderContent = () => {
       if (_error && errorIcon) return errorIcon;
@@ -232,11 +196,7 @@ const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
     };
 
     return (
-      <div
-        ref={ref}
-        className={cn(stepIndicatorStyles({ state, size }), className)}
-        {...props}
-      >
+      <div ref={ref} className={cn(stepIndicatorStyles({ state, size }), className)} {...props}>
         {renderContent()}
       </div>
     );
@@ -277,10 +237,8 @@ interface StepConnectorProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const StepConnector = forwardRef<HTMLDivElement, StepConnectorProps>(
-  (
-    { className, _completed, _active: _a, _error: _e, _index: _i, ...props },
-    ref,
-  ) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
+  ({ className, _completed, _active: _a, _error: _e, _index: _i, ...props }, ref) => {
     const { orientation } = useStepperContext();
 
     return (
@@ -310,6 +268,7 @@ interface StepLabelProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const StepLabel = forwardRef<HTMLDivElement, StepLabelProps>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
   ({ className, _active, _completed, _error, _index: _i, ...props }, ref) => (
     <div
       ref={ref}
@@ -340,10 +299,8 @@ interface StepDescriptionProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const StepDescription = forwardRef<HTMLDivElement, StepDescriptionProps>(
-  (
-    { className, _active, _completed: _c, _error: _e, _index: _i, ...props },
-    ref,
-  ) => (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
+  ({ className, _active, _completed: _c, _error: _e, _index: _i, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(

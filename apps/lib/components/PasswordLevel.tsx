@@ -4,7 +4,7 @@ import { HTMLAttributes, useEffect, useState } from "react";
 
 interface PassCheckProps extends HTMLAttributes<HTMLDivElement> {
   value: string; // The password value to check
-  theme?: Themes
+  theme?: Themes;
 }
 
 export function PasswordLevel({ theme, value, className, ...props }: PassCheckProps) {
@@ -26,7 +26,7 @@ export function PasswordLevel({ theme, value, className, ...props }: PassCheckPr
       {...props}
       className={cn(
         "bg-background-system-body-secondary rounded-[4px] border border-solid border-border-system-global-primary p-[4px] grid grid-cols-3 gap-[4px] w-full ",
-        className
+        className,
       )}
     >
       <div
@@ -34,7 +34,7 @@ export function PasswordLevel({ theme, value, className, ...props }: PassCheckPr
           "h-[4px] rounded-[8px] transition-all duration-300 ease-in-out bg-border-system-global-secondary",
           {
             "bg-border-presentation-state-negative": level >= 1,
-          }
+          },
         )}
       />
       <div
@@ -42,7 +42,7 @@ export function PasswordLevel({ theme, value, className, ...props }: PassCheckPr
           "h-[4px] rounded-[8px] transition-all duration-300 ease-in-out bg-border-system-global-secondary",
           {
             "bg-border-presentation-state-warning": level >= 2,
-          }
+          },
         )}
       />
       <div
@@ -50,7 +50,7 @@ export function PasswordLevel({ theme, value, className, ...props }: PassCheckPr
           "h-[4px] rounded-[8px] transition-all duration-300 ease-in-out bg-border-system-global-secondary",
           {
             "bg-border-presentation-state-success": level >= 3,
-          }
+          },
         )}
       />
     </div>

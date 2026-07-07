@@ -11,15 +11,22 @@ keywords: [date-picker, calendar, time, datetime, input, popover]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install react-day-picker date-fns torch-react-mobile-picker
+npx torch-glare@latest init
+npx torch-glare@latest add DatePicker
 ```
+
+`add` also copies any components, hooks, and utilities that `DatePicker` depends on.
 
 ## Import
 
-```typescript
-import { DatePicker } from '@torch-ui/components'
-import type { DatePickerProps } from '@torch-ui/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { DatePicker } from "@/components/DatePicker";
 ```
 
 ## Quick Examples
@@ -27,7 +34,7 @@ import type { DatePickerProps } from '@torch-ui/components'
 ### Basic Usage
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 
 function Example() {
@@ -46,7 +53,7 @@ function Example() {
 ### With Time Picker
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 
 function DateTimePicker() {
@@ -66,7 +73,7 @@ function DateTimePicker() {
 ### Range Selection
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 
@@ -91,7 +98,7 @@ function RangePicker() {
 ### Multiple Date Selection
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 
 function MultipleDates() {
@@ -111,7 +118,7 @@ function MultipleDates() {
 ### Custom Date Format
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 
 function CustomFormat() {
   const [date, setDate] = useState<Date>(new Date())
@@ -129,8 +136,8 @@ function CustomFormat() {
 ### Custom Trigger Element
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
+import { Button } from "@/components/Button";
 
 function CustomTrigger() {
   const [date, setDate] = useState<Date>(new Date())
@@ -140,7 +147,7 @@ function CustomTrigger() {
       value={date}
       onChange={(e) => setDate(e.target.value)}
     >
-      <Button variant="SecondaryStyle">
+      <Button variant="BluSecStyle">
         <i className="ri-calendar-line" />
         Select Date
       </Button>
@@ -152,8 +159,8 @@ function CustomTrigger() {
 ### With Controlled Input
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
-import { InputField } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
+import { InputField } from "@/components/InputField";
 import { useState } from 'react'
 
 function ControlledInput() {
@@ -176,7 +183,7 @@ function ControlledInput() {
 ### Date Restrictions
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 
 function RestrictedDates() {
   const [date, setDate] = useState<Date>()
@@ -201,7 +208,7 @@ function RestrictedDates() {
 ### Booking System
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 
@@ -243,7 +250,7 @@ function BookingPicker() {
 ### Deadline Picker with Time
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 
 function DeadlinePicker() {
@@ -356,7 +363,7 @@ type RangeDatePicker = DatePickerProps & {
 ### Event Scheduler
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 
 function EventScheduler() {
@@ -399,7 +406,7 @@ function EventScheduler() {
 ### Birthday Picker
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 
 function BirthdayPicker() {
@@ -431,7 +438,7 @@ function BirthdayPicker() {
 ### Work Schedule Picker
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useState } from 'react'
 
 function WorkSchedule() {
@@ -462,7 +469,7 @@ function WorkSchedule() {
 
 ```typescript
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import userEvent from '@testing-library/user-event'
 
 describe('DatePicker', () => {
@@ -753,7 +760,7 @@ Reverse-engineer the implementation from the call sites in `DatePicker.tsx` unti
 ### With Form Libraries
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useForm, Controller } from 'react-hook-form'
 
 function FormExample() {
@@ -788,7 +795,7 @@ function FormExample() {
 ### With State Management
 
 ```typescript
-import { DatePicker } from '@torch-ui/components'
+import { DatePicker } from "@/components/DatePicker";
 import { useStore } from './store'
 
 function DatePickerWithStore() {

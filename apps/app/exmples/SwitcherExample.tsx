@@ -3,7 +3,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function SwitcherExample() {
-  const [isActive, setISActive] = useState<any>(false);
+  const [isActive, setISActive] = useState(false);
 
   return (
     <>

@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export default function IosDatePickerExample() {
-  const [anotherSizes] = useState<any>(["M"]);
+  const [anotherSizes] = useState<("S" | "M")[]>(["M"]);
   const [error, setError] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ export default function IosDatePickerExample() {
       </h1>
 
       {/* Loop through variants and sizes */}
-      {anotherSizes.map((size: any) =>
+      {anotherSizes.map((size) =>
         <div key={`${size}`} className="">
           <h2
             className={cn("text-lg font-semibold", {

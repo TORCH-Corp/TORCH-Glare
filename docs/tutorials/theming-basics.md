@@ -56,7 +56,7 @@ First, ensure `ThemeProvider` wraps your application:
 
 ```tsx
 // app/layout.tsx
-import { ThemeProvider } from '@torch-ai/torch-glare';
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -95,7 +95,8 @@ Let users switch between light and dark modes:
 // components/ThemeToggle.tsx
 'use client';
 
-import { useTheme, Button } from '@torch-ai/torch-glare';
+import { Button } from "@/components/Button";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function ThemeToggle() {
   const { theme, updateTheme } = useTheme();
@@ -103,7 +104,7 @@ export default function ThemeToggle() {
   return (
     <Button
       theme={theme as any}
-      variant="ContStyle"
+      variant="PrimeContStyle"
       buttonType="icon"
       onClick={() => updateTheme(theme === 'light' ? 'dark' : 'light')}
       aria-label="Toggle theme"
@@ -119,7 +120,7 @@ export default function ThemeToggle() {
 ```tsx
 'use client';
 
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function ThemeSelector() {
   const { theme, updateTheme } = useTheme();
@@ -219,7 +220,7 @@ export default function ThemedCard({
 ### Theme-Aware Button
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function CustomButton({
   children,
@@ -406,7 +407,9 @@ Here's a complete example combining everything:
 ```tsx
 'use client';
 
-import { useTheme, Button, Badge } from '@torch-ai/torch-glare';
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function ThemedDashboard() {
   const { theme } = useTheme();
@@ -423,7 +426,7 @@ export default function ThemedDashboard() {
           <h1 className="typography-display-medium-bold text-content-presentation-global-primary">
             Dashboard
           </h1>
-          <Badge theme={theme as any} variant="SecondStyle">
+          <Badge theme={theme as any} color="gray">
             {theme} mode
           </Badge>
         </div>
@@ -503,7 +506,7 @@ export default function ThemedDashboard() {
         <Button theme={theme as any} variant="PrimeStyle">
           Create Project
         </Button>
-        <Button theme={theme as any} variant="ContStyle">
+        <Button theme={theme as any} variant="PrimeContStyle">
           View Reports
         </Button>
         <Button theme={theme as any} variant="BorderStyle">
@@ -686,7 +689,7 @@ Ensure theme toggle is keyboard accessible:
 ### Conditional Styling Based on Theme
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function ThemedComponent() {
   const { theme } = useTheme();
@@ -707,7 +710,7 @@ function ThemedComponent() {
 ### Theme-Specific Images
 
 ```tsx
-import { useTheme } from '@torch-ai/torch-glare';
+import { useTheme } from "@/providers/ThemeProvider";
 
 function Logo() {
   const { theme } = useTheme();

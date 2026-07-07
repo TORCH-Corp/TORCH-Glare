@@ -3,25 +3,14 @@ import React, { HTMLAttributes } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 interface Props extends Omit<
-  HTMLAttributes<
-    | HTMLDivElement
-    | HTMLHeadingElement
-    | HTMLParagraphElement
-    | HTMLLabelElement
-  >,
+  HTMLAttributes<HTMLDivElement | HTMLHeadingElement | HTMLParagraphElement | HTMLLabelElement>,
   "htmlFor"
 > {
   as?: React.ElementType;
   asChild?: boolean;
   htmlFor?: string;
 }
-export const Card = ({
-  className,
-  htmlFor,
-  asChild,
-  as: Tag = "section",
-  ...props
-}: Props) => {
+export const Card = ({ className, htmlFor, asChild, as: Tag = "section", ...props }: Props) => {
   const Component = asChild ? Slot : Tag;
   return (
     <Component

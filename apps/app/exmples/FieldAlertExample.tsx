@@ -3,7 +3,12 @@ import { cn } from "@/utils/cn";
 import { useState } from "react";
 
 export function FieldAlertExample() {
-  const [variants] = useState<any>(["info", "warning", "error", "success"]);
+  const [variants] = useState<("info" | "warning" | "error" | "success")[]>([
+    "info",
+    "warning",
+    "error",
+    "success",
+  ]);
 
   return (
     <>
@@ -15,7 +20,7 @@ export function FieldAlertExample() {
       >
         FieldAlert Preview
       </h1>
-      {variants.map((variant: any) => (
+      {variants.map((variant) => (
         <div key={variant} className="flex flex-col gap-2 w-full">
           <span
             className={cn(

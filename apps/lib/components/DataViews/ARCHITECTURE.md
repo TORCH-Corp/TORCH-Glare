@@ -16,10 +16,15 @@ A composable multi-view layout. One backend response (array of records) renders 
   title="Orders"
   data={orders}
   fields={[
-    { path: "status", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue" }, filterable: true },
-    { path: "total",  type: "currency", currency: "USD", filterable: true },
+    {
+      path: "status",
+      type: "enum-badge",
+      variants: { Pending: "yellow", Shipped: "blue" },
+      filterable: true,
+    },
+    { path: "total", type: "currency", currency: "USD", filterable: true },
   ]}
-  views={{ table: true, kanban: true }}   // only these tabs render
+  views={{ table: true, kanban: true }} // only these tabs render
   showFilters
   showSettings
 />
@@ -34,6 +39,7 @@ A composable multi-view layout. One backend response (array of records) renders 
 The **frame**. Orchestrator, not a UI piece on its own.
 
 Owns:
+
 - Page header (title + description)
 - View-switcher tab bar
 - Settings cog button
@@ -44,15 +50,15 @@ Does **not** render the filter panel or settings panel directly — it passes `s
 
 ### 🟩 The DataViews Components (new — 6 total)
 
-| Component | File | Role |
-|---|---|---|
-| `DataViewsLayout` | `DataViewsLayout.tsx` | The frame (header + tabs + settings toggle) |
-| `TableView` | `TableView.tsx` | Sortable table + search + optional filter panel |
-| `KanbanView` | `KanbanView.tsx` | Drag-and-drop board grouped by an enum-badge field |
-| `InboxView` | `InboxView.tsx` | Three-pane mail-style list (filters \| list \| detail) |
-| `TreeView` | `TreeView.tsx` | Two-pane explorer (tree sidebar + right pane) |
-| `FilterPanel` | `FilterPanel.tsx` | Left-sidebar filter panel (used by Table/Inbox/Tree) |
-| `SettingsPanel` | `SettingsPanel.tsx` | Right-sidebar configurator (column toggles + sort + view-specific settings) |
+| Component         | File                  | Role                                                                        |
+| ----------------- | --------------------- | --------------------------------------------------------------------------- |
+| `DataViewsLayout` | `DataViewsLayout.tsx` | The frame (header + tabs + settings toggle)                                 |
+| `TableView`       | `TableView.tsx`       | Sortable table + search + optional filter panel                             |
+| `KanbanView`      | `KanbanView.tsx`      | Drag-and-drop board grouped by an enum-badge field                          |
+| `InboxView`       | `InboxView.tsx`       | Three-pane mail-style list (filters \| list \| detail)                      |
+| `TreeView`        | `TreeView.tsx`        | Two-pane explorer (tree sidebar + right pane)                               |
+| `FilterPanel`     | `FilterPanel.tsx`     | Left-sidebar filter panel (used by Table/Inbox/Tree)                        |
+| `SettingsPanel`   | `SettingsPanel.tsx`   | Right-sidebar configurator (column toggles + sort + view-specific settings) |
 
 ### 🟨 Built-ins (existing torch-glare components, reused)
 
@@ -70,7 +76,7 @@ These already exist in glare and were not modified for this feature:
 - `RadioGroup`, `Radio` — Kanban groupBy picker in settings
 - `Table`, `TableHeader`, `TableBody`, `TableHead`, `TableRow`, `TableCell`, `TableCheckbox` — the actual `<table>` primitive
 - `TabFormItem` — view-switcher tabs (top variant) + inbox sidebar chips (side variant)
-- `Tooltip` — *(available, not currently mounted)*
+- `Tooltip` — _(available, not currently mounted)_
 - `Drawer` (from `vaul`) — mobile tree drawer
 - Radix `Popover` — date-range filter popover
 - Radix `Slider` — numeric range filter
@@ -114,16 +120,16 @@ Each view decides where filters go in its own internal grid. The layout just pas
 When you want a custom layout (e.g. Table on the left, Kanban on the right), bypass `DataViewsLayout` and compose the views directly using the shared state hook:
 
 ```tsx
-import { TableView, KanbanView, FilterPanel, useDataViewsState } from "@/components/DataViews"
+import { TableView, KanbanView, FilterPanel, useDataViewsState } from "@/components/DataViews";
 
-const state = useDataViewsState({ data, fields })
+const state = useDataViewsState({ data, fields });
 
 return (
   <div className="grid grid-cols-2 gap-4 h-screen">
-    <TableView   {...state} showFilters={false} />
-    <KanbanView  {...state} groupByField="status" />
+    <TableView {...state} showFilters={false} />
+    <KanbanView {...state} groupByField="status" />
   </div>
-)
+);
 ```
 
 `useDataViewsState` (`apps/lib/hooks/useDataViewsState.ts`) owns: filter state, sort state, field detection, column visibility config, tree shape detection, enabled-views resolution.
@@ -153,16 +159,16 @@ Backend → data: DynamicRecord[] (array of plain objects)
 
 ### Where state lives
 
-| State | Owner | Notes |
-|---|---|---|
-| `currentView` | `useDataViewsState` | View tab selection |
-| `config` (sort, columns, kanbanGroupBy) | `useDataViewsState` | Single source of truth for sort + column visibility |
-| `items` | `useDataViewsState` | Mutable copy of `data` (kanban drag-drop edits this) |
-| `filterState` | `useDataViewsState` OR consumer | Controlled when `onFilterChange` is passed |
-| `selectedItem` | Per view | Inbox + Tree pick their own |
-| `expanded`, `selectedId` | TreeView | Tree-only |
-| `searchQuery` | TableView / InboxView | Local |
-| `showSettingsPanel` | `DataViewsLayout` | Toggled by cog button |
+| State                                   | Owner                           | Notes                                                |
+| --------------------------------------- | ------------------------------- | ---------------------------------------------------- |
+| `currentView`                           | `useDataViewsState`             | View tab selection                                   |
+| `config` (sort, columns, kanbanGroupBy) | `useDataViewsState`             | Single source of truth for sort + column visibility  |
+| `items`                                 | `useDataViewsState`             | Mutable copy of `data` (kanban drag-drop edits this) |
+| `filterState`                           | `useDataViewsState` OR consumer | Controlled when `onFilterChange` is passed           |
+| `selectedItem`                          | Per view                        | Inbox + Tree pick their own                          |
+| `expanded`, `selectedId`                | TreeView                        | Tree-only                                            |
+| `searchQuery`                           | TableView / InboxView           | Local                                                |
+| `showSettingsPanel`                     | `DataViewsLayout`               | Toggled by cog button                                |
 
 ---
 
@@ -170,14 +176,14 @@ Backend → data: DynamicRecord[] (array of plain objects)
 
 Located in `apps/lib/utils/dataViews/`. Pure data — no React UI imports.
 
-| File | Purpose |
-|---|---|
-| `pathUtils.ts` | `getByPath`, `setByPath`, `matchesFilterValues`, `formatPathLabel` — dot-path traversal & filter matching |
-| `fieldUtils.ts` | `detectFields`, `mergeFields`, `inferFieldType`, `resolveInboxConfig`, `visibleFields` — declarative field API |
-| `columnUtils.ts` | `detectColumns`, `mergeColumns` — legacy column config (kept for back-compat) |
-| `rangeUtils.ts` | `computeNumericExtremes`, `inferStep`, `presetToFilterValue`, `resolvePresets` — numeric/date range filters |
-| `treeUtils.ts` | `autoDetectTreeShape`, `buildTree`, `pruneTree`, `flattenAll` — hierarchy primitives |
-| `nestedDataUtils.tsx` | `renderDetailView`, `renderNestedObject`, `isPlainObject`, `isCurrencyField` — nested-object detail rendering |
+| File                  | Purpose                                                                                                        |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `pathUtils.ts`        | `getByPath`, `setByPath`, `matchesFilterValues`, `formatPathLabel` — dot-path traversal & filter matching      |
+| `fieldUtils.ts`       | `detectFields`, `mergeFields`, `inferFieldType`, `resolveInboxConfig`, `visibleFields` — declarative field API |
+| `columnUtils.ts`      | `detectColumns`, `mergeColumns` — legacy column config (kept for back-compat)                                  |
+| `rangeUtils.ts`       | `computeNumericExtremes`, `inferStep`, `presetToFilterValue`, `resolvePresets` — numeric/date range filters    |
+| `treeUtils.ts`        | `autoDetectTreeShape`, `buildTree`, `pruneTree`, `flattenAll` — hierarchy primitives                           |
+| `nestedDataUtils.tsx` | `renderDetailView`, `renderNestedObject`, `isPlainObject`, `isCurrencyField` — nested-object detail rendering  |
 
 The only non-pure one is `nestedDataUtils.tsx` because it returns JSX for the inbox detail pane.
 
@@ -187,19 +193,19 @@ The only non-pure one is `nestedDataUtils.tsx` because it returns JSX for the in
 
 Key types exported from `apps/lib/components/DataViews/types.ts`:
 
-| Type | Shape |
-|---|---|
-| `DynamicRecord` | `Record<string, any>` — any backend object |
-| `ViewType` | `"table" \| "kanban" \| "inbox" \| "tree"` |
-| `ViewVisibility` | `{ table?, kanban?, inbox?, tree?: boolean }` |
-| `FieldConfig` | The declarative field definition (path, type, variants, filterable, etc.) |
-| `FieldType` | 17 renderer keys (text, number, enum-badge, currency, progress-bar, …) |
-| `BadgeVariant` | Internal dataviews badge palette — translated by `badgeAdapter.ts` |
-| `FilterState` | `Record<string, FilterValue>` |
-| `FilterValue` | `string[] \| { kind: "number", min?, max? } \| { kind: "date", from?, to? }` |
-| `ViewConfig` | `defaultView, tableColumns, kanbanGroupBy, showFilters, showPreviewPane, sortBy, sortOrder` |
-| `InboxConfig` | `starredField, readField, attachmentField, priorityField, titlePath, previewPath` |
-| `TreeConfig` | `childrenField, parentField, idField, nodeLabel, defaultExpanded, defaultRightPane` |
+| Type             | Shape                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------- |
+| `DynamicRecord`  | `Record<string, any>` — any backend object                                                  |
+| `ViewType`       | `"table" \| "kanban" \| "inbox" \| "tree"`                                                  |
+| `ViewVisibility` | `{ table?, kanban?, inbox?, tree?: boolean }`                                               |
+| `FieldConfig`    | The declarative field definition (path, type, variants, filterable, etc.)                   |
+| `FieldType`      | 17 renderer keys (text, number, enum-badge, currency, progress-bar, …)                      |
+| `BadgeVariant`   | Internal dataviews badge palette — translated by `badgeAdapter.ts`                          |
+| `FilterState`    | `Record<string, FilterValue>`                                                               |
+| `FilterValue`    | `string[] \| { kind: "number", min?, max? } \| { kind: "date", from?, to? }`                |
+| `ViewConfig`     | `defaultView, tableColumns, kanbanGroupBy, showFilters, showPreviewPane, sortBy, sortOrder` |
+| `InboxConfig`    | `starredField, readField, attachmentField, priorityField, titlePath, previewPath`           |
+| `TreeConfig`     | `childrenField, parentField, idField, nodeLabel, defaultExpanded, defaultRightPane`         |
 
 ---
 
@@ -207,27 +213,28 @@ Key types exported from `apps/lib/components/DataViews/types.ts`:
 
 Defined in `fieldRenderers.tsx`. Map of `FieldType` → JSX renderer:
 
-| `type` | What it renders | Key field config props |
-|---|---|---|
-| `text` | Plain string | — |
-| `number` | Tabular numeric | — |
-| `date` | Raw date string | — |
-| `date-format` | `Intl.DateTimeFormat`-style or token-based | `dateFormat: "YYYY-MM-DD"` or `Intl.DateTimeFormatOptions` |
-| `boolean` | Yes/No Badge | `trueVariant`, `falseVariant`, `trueLabel`, `falseLabel` |
-| `currency` | `Intl.NumberFormat` currency | `currency: "USD"` or `{ symbol, locale, decimals, code }` |
-| `number-format` | `Intl.NumberFormat` formatted | `format: Intl.NumberFormatOptions` |
-| `enum-badge` | Single colored badge | `variants: { Value: "green" \| "yellow" \| ... }` |
-| `badge-array` | Row of badges with overflow `+N` | `variant`, `limit` |
-| `progress-bar` | Horizontal bar with % | `thresholds: [warn, ok]` |
-| `star-rating` | Filled-star row | `max` (default 5) |
-| `icon-text` | Icon + text | `icon` (lucide name or emoji), `iconPosition` |
-| `two-line` | Bold primary + small secondary | `secondaryPath` (dot-path) |
-| `avatar` | torch-glare Avatar | `fallbackPath` (for initials) |
-| `link` | `<a>` with mailto/tel/url | `linkType` |
-| `image` | `<img>` thumbnail | — |
-| `hidden` | Renders nothing | — |
+| `type`          | What it renders                            | Key field config props                                     |
+| --------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| `text`          | Plain string                               | —                                                          |
+| `number`        | Tabular numeric                            | —                                                          |
+| `date`          | Raw date string                            | —                                                          |
+| `date-format`   | `Intl.DateTimeFormat`-style or token-based | `dateFormat: "YYYY-MM-DD"` or `Intl.DateTimeFormatOptions` |
+| `boolean`       | Yes/No Badge                               | `trueVariant`, `falseVariant`, `trueLabel`, `falseLabel`   |
+| `currency`      | `Intl.NumberFormat` currency               | `currency: "USD"` or `{ symbol, locale, decimals, code }`  |
+| `number-format` | `Intl.NumberFormat` formatted              | `format: Intl.NumberFormatOptions`                         |
+| `enum-badge`    | Single colored badge                       | `variants: { Value: "green" \| "yellow" \| ... }`          |
+| `badge-array`   | Row of badges with overflow `+N`           | `variant`, `limit`                                         |
+| `progress-bar`  | Horizontal bar with %                      | `thresholds: [warn, ok]`                                   |
+| `star-rating`   | Filled-star row                            | `max` (default 5)                                          |
+| `icon-text`     | Icon + text                                | `icon` (lucide name or emoji), `iconPosition`              |
+| `two-line`      | Bold primary + small secondary             | `secondaryPath` (dot-path)                                 |
+| `avatar`        | torch-glare Avatar                         | `fallbackPath` (for initials)                              |
+| `link`          | `<a>` with mailto/tel/url                  | `linkType`                                                 |
+| `image`         | `<img>` thumbnail                          | —                                                          |
+| `hidden`        | Renders nothing                            | —                                                          |
 
 Auto-inference rules live in `inferFieldType()` (fieldUtils.ts):
+
 - `status` / `priority` keys → `enum-badge`
 - `email` / `phone` / `url` / `website` → `link`
 - `tags` / `labels` → `badge-array`
@@ -259,24 +266,24 @@ Want per-field control? → it could be exposed on `FieldConfig` as a new `badge
 
 ### Background tokens used
 
-| Surface | Token | Dark | Light |
-|---|---|---|---|
-| Page | `bg-background-presentation-body-primary` | `#252729` | `#F0F0F0` |
+| Surface                             | Token                                             | Dark      | Light     |
+| ----------------------------------- | ------------------------------------------------- | --------- | --------- |
+| Page                                | `bg-background-presentation-body-primary`         | `#252729` | `#F0F0F0` |
 | Side panels / Kanban column headers | `bg-background-presentation-body-overlay-primary` | `#1C1D1F` | `#F0F0F0` |
-| Subtle fills (chips, drop zones) | `bg-background-presentation-form-field-primary` | `#1C1D1F` | white-ish |
+| Subtle fills (chips, drop zones)    | `bg-background-presentation-form-field-primary`   | `#1C1D1F` | white-ish |
 
 **Do not use `bg-background-presentation-global-*`** — those tokens don't exist in this design system. They were inherited from the original data-views source and resolve to nothing. The Tailwind classes still validate but render as transparent. We swapped them all out; if you see one come back, it's a regression.
 
 ### Borders / text
 
-| Token | Use |
-|---|---|
-| `border-border-presentation-global-primary` | Panel borders, dividers |
-| `text-content-presentation-global-primary` | Primary text |
-| `text-content-presentation-global-secondary` | Secondary text |
-| `text-content-presentation-global-tertiary` | Muted labels |
-| `text-content-presentation-action-primary` | Active state text |
-| `bg-content-presentation-action-primary` | Active-tab + slider track + selected-mode bg |
+| Token                                        | Use                                          |
+| -------------------------------------------- | -------------------------------------------- |
+| `border-border-presentation-global-primary`  | Panel borders, dividers                      |
+| `text-content-presentation-global-primary`   | Primary text                                 |
+| `text-content-presentation-global-secondary` | Secondary text                               |
+| `text-content-presentation-global-tertiary`  | Muted labels                                 |
+| `text-content-presentation-action-primary`   | Active state text                            |
+| `bg-content-presentation-action-primary`     | Active-tab + slider track + selected-mode bg |
 
 These `content-presentation-global-*` tokens **do exist** for text/borders — only the `background-*-global-*` family is missing.
 
@@ -291,6 +298,7 @@ These `content-presentation-global-*` tokens **do exist** for text/borders — o
 `TreeView.tsx` has the most complex layout. Worth a separate note.
 
 **Three columns** in desktop mode:
+
 1. **Tree sidebar** (`TreeSidebar`) — the tree itself
 2. **Filter panel** (`FilterPanel`) — only when `showFilters && hasFilterableFields`
 3. **Right pane** — toggles between two modes via the toolbar:
@@ -302,6 +310,7 @@ The tree owns the filter state; the embedded `TableView` is told `showFilters={f
 **Mobile** collapses the tree sidebar into a left-edge drawer (`TreeDrawer` via `vaul`). The right pane gets a hamburger trigger.
 
 **Auto-detection**: if neither `treeConfig.childrenField` nor `treeConfig.parentField` is set, the view inspects the first record:
+
 - nested: `children`, `items`, `kids`, `subItems`, `nodes`
 - flat: `parentId`, `parent_id`, `parent`, `managerId`, `manager`
 
@@ -312,6 +321,7 @@ If nothing matches and no `views.tree` override, the Tree tab auto-hides.
 ## 12. Filter panel rules
 
 A field becomes filterable when any of:
+
 1. `field.filterable === true` (explicit opt-in)
 2. `type` is `enum-badge`, `boolean`, `badge-array`, or `icon-text` (auto)
 3. type is text with ≤10 unique values (heuristic fallback)
@@ -319,16 +329,18 @@ A field becomes filterable when any of:
 Numeric / date fields **require explicit `filterable: true`** — they get range sliders / date pickers respectively.
 
 The panel renders three filter kinds:
+
 - **Categorical** — checkbox list (multi-select OR semantics)
 - **Numeric range** — Radix slider + min/max inputs + preset chips
 - **Date range** — Radix popover with `react-day-picker` + preset chips (`Today`, `Last 7 days`, `Last 30 days`, `This year`)
 
 Filter state shape:
+
 ```ts
 type FilterValue =
-  | string[]                                          // categorical
-  | { kind: "number"; min?: number; max?: number }    // numeric range
-  | { kind: "date";   from?: string;  to?: string }   // date range, ISO YYYY-MM-DD
+  | string[] // categorical
+  | { kind: "number"; min?: number; max?: number } // numeric range
+  | { kind: "date"; from?: string; to?: string }; // date range, ISO YYYY-MM-DD
 ```
 
 ---
@@ -337,19 +349,20 @@ type FilterValue =
 
 `SettingsPanel.tsx` renders sections conditionally based on `currentView`:
 
-| Section | When | What it controls |
-|---|---|---|
-| General → Show Filters | always | `config.showFilters` |
-| Table Columns | `currentView === "table"` | Column visibility (Switch) + reorder (HTML5 DnD) |
-| Kanban Grouping | `currentView === "kanban"` | Radio over enum-badge fields → `kanbanGroupBy` |
-| Inbox Layout → Show Preview Pane | `currentView === "inbox"` | `config.showPreviewPane` |
-| Sort | always (if columns exist) | Per-column three-state: none/asc/desc |
+| Section                          | When                       | What it controls                                 |
+| -------------------------------- | -------------------------- | ------------------------------------------------ |
+| General → Show Filters           | always                     | `config.showFilters`                             |
+| Table Columns                    | `currentView === "table"`  | Column visibility (Switch) + reorder (HTML5 DnD) |
+| Kanban Grouping                  | `currentView === "kanban"` | Radio over enum-badge fields → `kanbanGroupBy`   |
+| Inbox Layout → Show Preview Pane | `currentView === "inbox"`  | `config.showPreviewPane`                         |
+| Sort                             | always (if columns exist)  | Per-column three-state: none/asc/desc            |
 
 ---
 
 ## 14. CLI distribution
 
 The DataViews folder + utils folder + hooks are **not yet** distributable via `torch-glare add <Component>` — the existing CLI scans top-level `.tsx` files only. Adding `DataViews/` as a unit requires extending the CLI to recognize folder-based components and copy:
+
 - `apps/lib/components/DataViews/` (whole folder)
 - `apps/lib/utils/dataViews/` (whole folder)
 - `apps/lib/hooks/useDataViewsState.ts`

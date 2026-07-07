@@ -11,40 +11,31 @@ keywords: [dropdown-menu, menu, radix-ui, submenu, checkbox, radio, auto-group]
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install @radix-ui/react-dropdown-menu
+npx torch-glare@latest init
+npx torch-glare@latest add DropdownMenu
 ```
+
+`add` also copies any components, hooks, and utilities that `DropdownMenu` depends on.
 
 ## Import
 
-```typescript
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
-} from '@torch-ui/components'
-```
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
 
-> **Auto-grouping:** Loose items placed directly in `DropdownMenuContent` (or `DropdownMenuSubContent`) are automatically wrapped in a boxed group, so they render inside a rounded container without you writing `DropdownMenuGroup` yourself. A `DropdownMenuLabel`, an explicit `DropdownMenuGroup`, or a `DropdownMenuRadioGroup` acts as a boundary that starts a new box. Disable this with `autoGroup={false}` on the content. (There is no `DropdownMenuSeparator` — separation comes from labels and the boxed groups.)
+```tsx
+import { DropdownMenu } from "@/components/DropdownMenu";
+```
 
 ## Quick Examples
 
 ### Basic Menu
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
+import { Button } from "@/components/Button";
 
 function Example() {
   return (
@@ -65,7 +56,7 @@ function Example() {
 ### With Icons
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 
 function IconMenu() {
   return (
@@ -97,7 +88,7 @@ function IconMenu() {
 ### With Keyboard Shortcuts
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut } from "@/components/DropdownMenu";
 
 function ShortcutMenu() {
   return (
@@ -129,7 +120,7 @@ function ShortcutMenu() {
 Labels act as section boundaries. The loose items between labels are automatically wrapped in boxed groups — no separator component needed.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from "@/components/DropdownMenu";
 
 function OrganizedMenu() {
   return (
@@ -158,7 +149,7 @@ function OrganizedMenu() {
 Checkbox and radio items keep the menu **open** when toggled (the built-in `onSelect` calls `preventDefault`), so users can change several options without the menu closing each time.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from "@/components/DropdownMenu";
 import { useState } from 'react'
 
 function CheckboxMenu() {
@@ -199,7 +190,7 @@ function CheckboxMenu() {
 ### With Radio Group
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/DropdownMenu";
 import { useState } from 'react'
 
 function RadioMenu() {
@@ -225,7 +216,7 @@ function RadioMenu() {
 ### With Submenu
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from "@/components/DropdownMenu";
 
 function SubmenuExample() {
   return (
@@ -258,7 +249,7 @@ function SubmenuExample() {
 ### Disabled Items
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 
 function DisabledMenu() {
   return (
@@ -281,7 +272,7 @@ function DisabledMenu() {
 For a true right-click (context) menu, use the dedicated [ContextMenu](./context-menu.md) component instead of DropdownMenu — it opens at the pointer on right-click / long-press.
 
 ```typescript
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from '@torch-ui/components'
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from "@/components/ContextMenu";
 
 function Example() {
   return (
@@ -304,8 +295,8 @@ function Example() {
 Tall menus scroll instead of overflowing off-screen. The surface caps at `maxHeight` (default `320`px) and never exceeds the space available after collision handling. Pass `maxHeight` to change the cap.
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@torch-ui/components'
-import { Button } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from "@/components/DropdownMenu";
+import { Button } from "@/components/Button";
 
 function LongMenu() {
   return (
@@ -497,7 +488,7 @@ export const DropdownMenuRadioItem: React.ForwardRefExoticComponent<DropdownMenu
 ### With State Management
 
 ```typescript
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 import { useState } from 'react'
 
 function useDropdownMenu() {
@@ -536,7 +527,7 @@ function StatefulMenu() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@torch-ui/components'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/DropdownMenu";
 
 describe('DropdownMenu', () => {
   it('opens on trigger click', () => {

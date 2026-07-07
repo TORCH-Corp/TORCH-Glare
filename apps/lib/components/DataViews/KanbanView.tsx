@@ -70,11 +70,7 @@ type KanbanColumn = {
   items: DynamicRecord[];
 };
 
-function getId(
-  item: DynamicRecord,
-  fallbackPath: string | undefined,
-  idx: number,
-): any {
+function getId(item: DynamicRecord, fallbackPath: string | undefined, idx: number): unknown {
   if (item?.id != null) return item.id;
   if (fallbackPath) {
     const v = getByPath(item, fallbackPath);
@@ -117,9 +113,7 @@ export function KanbanView({
     // palette rotation.
     const resolve = (key: string, paletteIdx: number) => ({
       title: overrides?.[key]?.label ?? key,
-      color:
-        overrides?.[key]?.color ??
-        COLUMN_PALETTE[paletteIdx % COLUMN_PALETTE.length],
+      color: overrides?.[key]?.color ?? COLUMN_PALETTE[paletteIdx % COLUMN_PALETTE.length],
     });
 
     if (groupField?.variants) {
@@ -200,12 +194,9 @@ export function KanbanView({
 
   const renderCard = (item: DynamicRecord, idx: number) => {
     const itemId = getId(item, idPath, idx);
-    const isDraggingThis =
-      draggedItem != null && getId(draggedItem.item, idPath, -1) === itemId;
+    const isDraggingThis = draggedItem != null && getId(draggedItem.item, idPath, -1) === itemId;
     const titleFieldResolved = resolvedTitleField;
-    const titleValue = titleFieldResolved
-      ? getByPath(item, titleFieldResolved.path)
-      : "";
+    const titleValue = titleFieldResolved ? getByPath(item, titleFieldResolved.path) : "";
     const bodyFields = displayFields.filter(
       (f) => f.path !== groupByField && f.path !== titleFieldResolved?.path,
     );
@@ -240,15 +231,11 @@ export function KanbanView({
 
     return (
       <DataViewCard
-        key={itemId}
+        key={itemId as string | number}
         draggable={!isMobile}
         onDragStart={
           !isMobile
-            ? () =>
-                handleDragStart(
-                  item,
-                  String(getByPath(item, groupByField) ?? "Uncategorized"),
-                )
+            ? () => handleDragStart(item, String(getByPath(item, groupByField) ?? "Uncategorized"))
             : undefined
         }
         onDragEnd={!isMobile ? handleDragEnd : undefined}
@@ -258,10 +245,7 @@ export function KanbanView({
             : "cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow",
           !isMobile && isDraggingThis && "opacity-40",
         )}
-        title={
-          titleFieldResolved &&
-          renderField(titleValue, titleFieldResolved, item)
-        }
+        title={titleFieldResolved && renderField(titleValue, titleFieldResolved, item)}
         rows={rows}
       />
     );
@@ -288,8 +272,7 @@ export function KanbanView({
     <div className="h-full overflow-x-auto p-2 bg-background-presentation-body-primary">
       <div className="flex h-full gap-4" style={{ minWidth: "max-content" }}>
         {kanbanColumns.map((column, i) => {
-          const isDropTarget =
-            draggedItem != null && dragOverColumnId === column.id;
+          const isDropTarget = draggedItem != null && dragOverColumnId === column.id;
           return (
             <Fragment key={column.id}>
               <div

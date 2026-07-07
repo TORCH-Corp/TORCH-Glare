@@ -1,6 +1,6 @@
 ---
 name: Toggle
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/forms
 tags: [form, toggle, button, radix-ui, accessible, variants]
@@ -17,14 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add Toggle
 ```
+
+`add` also copies any components, hooks, and utilities that `Toggle` depends on.
 
 ## Import
 
-```typescript
-import { Toggle } from 'torch-glare/lib/components/Toggle'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+
+```tsx
+import { Toggle } from "@/components/Toggle";
 ```
 
 ## Quick Examples
@@ -32,7 +40,7 @@ import { Toggle } from 'torch-glare/lib/components/Toggle'
 ### Basic Usage
 
 ```typescript
-import { Toggle } from 'torch-glare/lib/components/Toggle'
+import { Toggle } from '@/components/Toggle'
 
 function Example() {
   const [pressed, setPressed] = useState(false)
@@ -139,7 +147,7 @@ function VariantExamples() {
     <div className="space-y-4">
       <div className="flex gap-2">
         <Toggle variant="PrimeStyle">Prime</Toggle>
-        <Toggle variant="BlueSecStyle">Blue</Toggle>
+        <Toggle variant="BluSecStyle">Blue</Toggle>
         <Toggle variant="YelSecStyle">Yellow</Toggle>
         <Toggle variant="RedSecStyle">Red</Toggle>
       </div>
@@ -147,7 +155,7 @@ function VariantExamples() {
       <div className="flex gap-2">
         <Toggle variant="BorderStyle">Border</Toggle>
         <Toggle variant="PrimeContStyle">Prime Cont</Toggle>
-        <Toggle variant="BlueContStyle">Blue Cont</Toggle>
+        <Toggle variant="BluContStyle">Blue Cont</Toggle>
         <Toggle variant="RedContStyle">Red Cont</Toggle>
       </div>
     </div>
@@ -275,7 +283,7 @@ function FilterToggles() {
       <h4 className="font-semibold">Filters</h4>
       <div className="flex flex-wrap gap-2">
         <Toggle
-          variant="BlueSecStyle"
+          variant="BluSecStyle"
           pressed={filters.inStock}
           onPressedChange={() => toggleFilter('inStock')}
         >
@@ -350,12 +358,12 @@ function DisabledToggles() {
 ```typescript
 type VariantType =
   | 'PrimeStyle'
-  | 'BlueSecStyle'
+  | 'BluSecStyle'
   | 'YelSecStyle'
   | 'RedSecStyle'
   | 'BorderStyle'
   | 'PrimeContStyle'
-  | 'BlueContStyle'
+  | 'BluContStyle'
   | 'RedContStyle'
 ```
 
@@ -582,7 +590,7 @@ function SettingsToggles() {
           <label className="text-sm capitalize">{key.replace(/([A-Z])/g, ' $1')}</label>
           <Toggle
             size="S"
-            variant="BlueSecStyle"
+            variant="BluSecStyle"
             pressed={value}
             onPressedChange={(pressed) =>
               setSettings(prev => ({ ...prev, [key]: pressed }))
@@ -603,7 +611,7 @@ function SettingsToggles() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { Toggle } from 'torch-glare/lib/components/Toggle'
+import { Toggle } from '@/components/Toggle'
 
 describe('Toggle', () => {
   it('toggles pressed state on click', () => {
@@ -622,7 +630,7 @@ describe('Toggle', () => {
 
   it('applies variant styles', () => {
     const { container } = render(
-      <Toggle variant="BlueSecStyle">Blue</Toggle>
+      <Toggle variant="BluSecStyle">Blue</Toggle>
     )
 
     const toggle = container.querySelector('button')
@@ -736,12 +744,12 @@ Radix UI automatically provides:
 Each variant provides different visual styles:
 
 - **PrimeStyle**: Default primary style
-- **BlueSecStyle**: Blue secondary style
+- **BluSecStyle**: Blue secondary style
 - **YelSecStyle**: Yellow secondary style
 - **RedSecStyle**: Red secondary style
 - **BorderStyle**: Border-focused style
 - **PrimeContStyle**: Primary container style
-- **BlueContStyle**: Blue container style
+- **BluContStyle**: Blue container style
 - **RedContStyle**: Red container style
 
 ### Size Classes

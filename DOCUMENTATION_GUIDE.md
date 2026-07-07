@@ -1,6 +1,6 @@
 # The Complete Guide to LLM-Ready Component Library Documentation
 
-> **A comprehensive, production-ready guide for documenting your component library to work seamlessly with AI tools like Context7, Claude, Cursor, and other LLM-powered assistants.**
+> **A comprehensive, production-ready guide for documenting your component library to work seamlessly with AI tools like Claude, Cursor, and other LLM-powered assistants.**
 
 **Version:** 2.0.0 | **Last Updated:** November 2024 | **Status:** Production Ready
 
@@ -19,11 +19,10 @@
 9. [Versioning Strategy](#versioning-strategy)
 10. [Token Optimization](#token-optimization)
 11. [Automation & CI/CD](#automation--cicd)
-12. [Context7 Integration](#context7-integration)
-13. [Monorepo Support](#monorepo-support)
-14. [Migration Guides](#migration-guides)
-15. [Performance Metrics](#performance-metrics)
-16. [Validation & Testing](#validation--testing)
+12. [Monorepo Support](#monorepo-support)
+13. [Migration Guides](#migration-guides)
+14. [Performance Metrics](#performance-metrics)
+15. [Validation & Testing](#validation--testing)
 
 ---
 
@@ -261,6 +260,15 @@ dependencies:
   - "clsx": "^2.0.0"
 ---
 
+> **TORCH Glare override — copy-in model, not npm-package.**
+> The generic `npm install your-library-name` + `import from 'your-library-name'` template
+> below is a placeholder only. TORCH Glare is a **copy-in** library (like shadcn/ui): the CLI
+> copies component source into the consumer's project. Real docs MUST use:
+> - Installation: `npx torch-glare@latest init` then `npx torch-glare@latest add <Component>`
+> - Import: `import { <Component> } from "@/components/<Component>"` (local alias, per `glare.json`)
+> Never `npm install torch-glare` / package imports / `@torch-ai/*` / `@torch-ui/*`. The
+> `pnpm run check:ai-docs` gate enforces this.
+
 # Button
 
 > A versatile, accessible button component with multiple variants, sizes, and states. Supports icons, loading states, and polymorphic rendering.
@@ -268,15 +276,15 @@ dependencies:
 ## Installation
 
 ```bash
-npm install your-library-name
+# TORCH Glare (copy-in) — see the override note above; do NOT use `npm install`.
+npx torch-glare@latest init
+npx torch-glare@latest add Button
 ```
 
 ## Import
 
 ```typescript
-import { Button } from 'your-library-name'
-// or
-import { Button } from 'your-library-name/components'
+import { Button } from "@/components/Button";
 ```
 
 ## Quick Examples
@@ -1001,48 +1009,6 @@ jobs:
 
 ---
 
-## 🌐 Context7 Integration
-
-### Adding Your Library to Context7
-
-1. **Submit Your Library**
-   ```bash
-   # Via CLI
-   npx @context7/cli submit \
-     --repo https://github.com/your-org/your-library \
-     --docs /docs \
-     --llms /llms.txt
-   ```
-
-2. **Configure MCP Server**
-
-   Create `.context7/config.json`:
-   ```json
-   {
-     "name": "your-library-name",
-     "version": "2.0.0",
-     "docs": {
-       "navigation": "/llms.txt",
-       "full": "/llms-full.txt",
-       "interactive": "https://your-library.dev/playground"
-     },
-     "mcp": {
-       "server": "@your-org/mcp-server",
-       "transport": "stdio"
-     }
-   }
-   ```
-
-3. **Usage in AI Tools**
-   ```
-   # In Cursor/Claude
-   use context7
-
-   Create a form with validation using your-library-name
-   ```
-
----
-
 ## 📦 Monorepo Support
 
 ### Monorepo Documentation Strategy
@@ -1402,12 +1368,6 @@ describe('Documentation', () => {
 - [ ] Automated version management
 - [ ] Bundle size tracking
 
-### Context7 Integration ✅
-- [ ] Library submitted to Context7
-- [ ] MCP server configured
-- [ ] Documentation accessible via AI tools
-- [ ] Version-specific docs available
-
 ### Testing & Validation ✅
 - [ ] Documentation tests written
 - [ ] Link validation implemented
@@ -1436,7 +1396,6 @@ describe('Documentation', () => {
 ## 📚 Resources
 
 - [llms.txt Specification](https://llmstxt.org/)
-- [Context7 Documentation](https://context7.com/docs)
 - [Diátaxis Framework](https://diataxis.fr/)
 - [Model Context Protocol](https://modelcontext.dev/)
 - [Documentation.js](https://documentation.js.org/)

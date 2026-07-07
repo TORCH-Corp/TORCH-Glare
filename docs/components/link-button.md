@@ -12,9 +12,15 @@ A stylized link button component featuring an animated arrow that appears on hov
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npx torch-cli add link-button
+npx torch-glare@latest init
+npx torch-glare@latest add LinkButton
 ```
+
+`add` also copies any components, hooks, and utilities that `LinkButton` depends on.
 
 ## Imports
 

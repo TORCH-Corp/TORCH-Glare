@@ -66,7 +66,10 @@ function setDirIfChanged(el: HTMLElement, dir: "rtl" | "ltr") {
   }
 }
 
-function applyDirectionToBlock(block: HTMLElement, fallbackDir: "rtl" | "ltr" = "ltr"): "rtl" | "ltr" {
+function applyDirectionToBlock(
+  block: HTMLElement,
+  fallbackDir: "rtl" | "ltr" = "ltr",
+): "rtl" | "ltr" {
   // Skip non-text blocks (delimiters, embeds, code)
   if (block.querySelector(".ce-delimiter, .cdx-embed, .embed-tool")) return fallbackDir;
 
@@ -78,9 +81,7 @@ function applyDirectionToBlock(block: HTMLElement, fallbackDir: "rtl" | "ltr" = 
   if (listItems.length > 0) {
     let prevDir: "rtl" | "ltr" = fallbackDir;
     listItems.forEach((item) => {
-      const editable = item.querySelector<HTMLElement>(
-        '[contenteditable="true"]',
-      );
+      const editable = item.querySelector<HTMLElement>('[contenteditable="true"]');
       if (!editable) return;
       const text = (editable.textContent || "").trim();
       const dir = text ? getTextDirection(text) : prevDir;
@@ -93,9 +94,7 @@ function applyDirectionToBlock(block: HTMLElement, fallbackDir: "rtl" | "ltr" = 
 
   // Handle regular blocks (paragraph, header, quote, warning, etc.)
   let lastDir = fallbackDir;
-  const editables = block.querySelectorAll<HTMLElement>(
-    '[contenteditable="true"]',
-  );
+  const editables = block.querySelectorAll<HTMLElement>('[contenteditable="true"]');
   editables.forEach((el) => {
     const text = (el.textContent || "").trim();
     const dir = text ? getTextDirection(text) : fallbackDir;
@@ -169,7 +168,7 @@ const getDefaultTools = (): Record<string, any> => ({
   linkTool: { class: LinkTool },
   image: { class: SimpleImage },
   raw: { class: RawTool },
-  chart: { class: ChartBlockTool as any },
+  chart: { class: ChartBlockTool },
   marker: { class: Marker, shortcut: "CMD+SHIFT+M" },
   inlineCode: { class: InlineCode, shortcut: "CMD+SHIFT+I" },
   underline: { class: Underline },
@@ -754,9 +753,7 @@ export interface TextEditorRef {
 }
 
 interface TextEditorProps
-  extends
-    Omit<HTMLAttributes<HTMLDivElement>, "onChange">,
-    VariantProps<typeof textEditorStyles> {
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onChange">, VariantProps<typeof textEditorStyles> {
   theme?: Themes;
   data?: OutputData;
   onChange?: (data: OutputData) => void;
@@ -793,9 +790,7 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
     const editorRef = useRef<EditorJS | null>(null);
     const holderRef = useRef<HTMLDivElement>(null);
     const observerRef = useRef<MutationObserver | null>(null);
-    const [holderId] = useState(
-      () => `torch-editor-${Math.random().toString(36).substring(2, 9)}`,
-    );
+    const [holderId] = useState(() => `torch-editor-${Math.random().toString(36).substring(2, 9)}`);
     const isInitializing = useRef(false);
     const pasteHandlerRef = useRef<((e: ClipboardEvent) => void) | null>(null);
     const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -839,107 +834,104 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
     }, []);
 
     // ── Markdown paste handler ──
-    const setupMarkdownPaste = useCallback(
-      (holderEl: HTMLElement) => {
-        const handler = async (e: ClipboardEvent) => {
-          if (readOnlyRef.current || !editorRef.current) return;
+    const setupMarkdownPaste = useCallback((holderEl: HTMLElement) => {
+      const handler = async (e: ClipboardEvent) => {
+        if (readOnlyRef.current || !editorRef.current) return;
 
-          const plain = e.clipboardData?.getData("text/plain") || "";
+        const plain = e.clipboardData?.getData("text/plain") || "";
 
-          // Only intercept if the plain text is markdown
-          if (!isMarkdown(plain)) return;
+        // Only intercept if the plain text is markdown
+        if (!isMarkdown(plain)) return;
 
-          e.preventDefault();
-          e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
 
-          const parsedBlocks = parseMarkdownToBlocks(plain);
-          if (parsedBlocks.length === 0) return;
+        const parsedBlocks = parseMarkdownToBlocks(plain);
+        if (parsedBlocks.length === 0) return;
 
-          const editor = editorRef.current;
+        const editor = editorRef.current;
 
-          // Save existing content, merge new blocks at cursor, render once
-          // This avoids per-block insert which freezes the editor on large pastes
+        // Save existing content, merge new blocks at cursor, render once
+        // This avoids per-block insert which freezes the editor on large pastes
+        try {
+          const existingData = await editor.save();
+          const existingBlocks = existingData.blocks || [];
+
+          // Determine insertion point
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const blocks = (editor as any).blocks;
+          let insertIdx = existingBlocks.length;
           try {
-            const existingData = await editor.save();
-            const existingBlocks = existingData.blocks || [];
-
-            // Determine insertion point
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const blocks = (editor as any).blocks;
-            let insertIdx = existingBlocks.length;
-            try {
-              if (blocks?.getCurrentBlockIndex) {
-                insertIdx = blocks.getCurrentBlockIndex() + 1;
-              }
-            } catch {
-              // Use end of document
-            }
-
-            // Convert parsed blocks to OutputData block format
-            const newBlocks = parsedBlocks.map((block) => ({
-              type: block.type,
-              data: block.data,
-            }));
-
-            // Remove empty paragraph at cursor if it's the only content there
-            const filteredExisting = [...existingBlocks];
-            if (insertIdx > 0) {
-              const cursorBlock = filteredExisting[insertIdx - 1];
-              if (
-                cursorBlock &&
-                cursorBlock.type === "paragraph" &&
-                (!cursorBlock.data.text ||
-                  cursorBlock.data.text.trim() === "" ||
-                  cursorBlock.data.text === "<br>")
-              ) {
-                filteredExisting.splice(insertIdx - 1, 1);
-                insertIdx = Math.max(0, insertIdx - 1);
-              }
-            }
-
-            // Merge: existing blocks before cursor + new blocks + existing blocks after cursor
-            const mergedBlocks = [
-              ...filteredExisting.slice(0, insertIdx),
-              ...newBlocks,
-              ...filteredExisting.slice(insertIdx),
-            ];
-
-            // Pause MutationObserver during bulk render to prevent O(n^2) direction checks
-            observerRef.current?.disconnect();
-
-            // Single render pass — no per-block DOM thrashing
-            await editor.render({
-              time: Date.now(),
-              version: existingData.version,
-              blocks: mergedBlocks,
-            });
-
-            // Reconnect observer on the redactor element
-            if (observerRef.current) {
-              const redactor = holderEl.querySelector(".codex-editor__redactor") || holderEl;
-              observerRef.current.observe(redactor, {
-                childList: true,
-                subtree: false,
-              });
-            }
-            // Defer direction scan to next frame — let the browser paint first
-            requestAnimationFrame(() => applyAutoDirection(holderEl));
-
-            // Trigger onChange with merged data
-            if (onChangeRef.current) {
-              const savedData = await editor.save();
-              onChangeRef.current(savedData);
+            if (blocks?.getCurrentBlockIndex) {
+              insertIdx = blocks.getCurrentBlockIndex() + 1;
             }
           } catch {
-            // Fallback: if render approach fails, do nothing rather than freeze
+            // Use end of document
           }
-        };
 
-        holderEl.addEventListener("paste", handler as unknown as EventListener, true);
-        pasteHandlerRef.current = handler;
-      },
-      [],
-    );
+          // Convert parsed blocks to OutputData block format
+          const newBlocks = parsedBlocks.map((block) => ({
+            type: block.type,
+            data: block.data,
+          }));
+
+          // Remove empty paragraph at cursor if it's the only content there
+          const filteredExisting = [...existingBlocks];
+          if (insertIdx > 0) {
+            const cursorBlock = filteredExisting[insertIdx - 1];
+            if (
+              cursorBlock &&
+              cursorBlock.type === "paragraph" &&
+              (!cursorBlock.data.text ||
+                cursorBlock.data.text.trim() === "" ||
+                cursorBlock.data.text === "<br>")
+            ) {
+              filteredExisting.splice(insertIdx - 1, 1);
+              insertIdx = Math.max(0, insertIdx - 1);
+            }
+          }
+
+          // Merge: existing blocks before cursor + new blocks + existing blocks after cursor
+          const mergedBlocks = [
+            ...filteredExisting.slice(0, insertIdx),
+            ...newBlocks,
+            ...filteredExisting.slice(insertIdx),
+          ];
+
+          // Pause MutationObserver during bulk render to prevent O(n^2) direction checks
+          observerRef.current?.disconnect();
+
+          // Single render pass — no per-block DOM thrashing
+          await editor.render({
+            time: Date.now(),
+            version: existingData.version,
+            blocks: mergedBlocks,
+          });
+
+          // Reconnect observer on the redactor element
+          if (observerRef.current) {
+            const redactor = holderEl.querySelector(".codex-editor__redactor") || holderEl;
+            observerRef.current.observe(redactor, {
+              childList: true,
+              subtree: false,
+            });
+          }
+          // Defer direction scan to next frame — let the browser paint first
+          requestAnimationFrame(() => applyAutoDirection(holderEl));
+
+          // Trigger onChange with merged data
+          if (onChangeRef.current) {
+            const savedData = await editor.save();
+            onChangeRef.current(savedData);
+          }
+        } catch {
+          // Fallback: if render approach fails, do nothing rather than freeze
+        }
+      };
+
+      holderEl.addEventListener("paste", handler as unknown as EventListener, true);
+      pasteHandlerRef.current = handler;
+    }, []);
 
     // ── Auto-direction: watch for DOM changes & input ──
     const inputHandlerRef = useRef<((e: Event) => void) | null>(null);
@@ -1052,10 +1044,7 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
           (window.cancelIdleCallback || clearTimeout)(idleCallbackRef.current);
         }
 
-        if (
-          editorRef.current &&
-          typeof editorRef.current.destroy === "function"
-        ) {
+        if (editorRef.current && typeof editorRef.current.destroy === "function") {
           editorRef.current.destroy();
           editorRef.current = null;
         }

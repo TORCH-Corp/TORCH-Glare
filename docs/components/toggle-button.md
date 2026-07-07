@@ -1,6 +1,6 @@
 ---
 name: ToggleButton
-version: 1.1.15
+version: 2.4.0
 status: stable
 category: components/buttons
 tags: [toggle, button, pressed, radix-ui, accessible, variants]
@@ -17,19 +17,22 @@ dependencies:
 
 ## Installation
 
+TORCH Glare is a copy-in library: the CLI copies this component's source into your project
+(you do **not** install it from the npm package). Run `init` once, then `add`:
+
 ```bash
-npm install torch-glare
+npx torch-glare@latest init
+npx torch-glare@latest add ToggleButton
 ```
+
+`add` also copies any components, hooks, and utilities that `ToggleButton` depends on.
 
 ## Import
 
-```typescript
-import { ToggleButton } from 'torch-glare/lib/components/ToggleButton'
-// or
-import { ToggleButton } from 'torch-glare/lib/components'
+Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
 
-// Also available via ButtonGroup re-export
-import { ToggleButton } from 'torch-glare/lib/components/ButtonGroup'
+```tsx
+import { ToggleButton } from "@/components/ToggleButton";
 ```
 
 ## Quick Examples
@@ -37,7 +40,7 @@ import { ToggleButton } from 'torch-glare/lib/components/ButtonGroup'
 ### Basic Usage
 
 ```typescript
-import { ToggleButton } from 'torch-glare/lib/components/ToggleButton'
+import { ToggleButton } from "@/components/ButtonGroup";
 
 function Example() {
   const [pressed, setPressed] = useState(false)
@@ -57,7 +60,7 @@ function Example() {
 
 ```typescript
 <ToggleButton variant="PrimeStyle">Prime</ToggleButton>
-<ToggleButton variant="BlueSecStyle">Blue Secondary</ToggleButton>
+<ToggleButton variant="BluSecStyle">Blue Secondary</ToggleButton>
 <ToggleButton variant="BorderStyle">Border</ToggleButton>
 <ToggleButton variant="PrimeContStyle">Prime Container</ToggleButton>
 <ToggleButton variant="SystemStyle">System</ToggleButton>
@@ -110,7 +113,7 @@ function BookmarkButton() {
 
   return (
     <ToggleButton
-      variant={bookmarked ? 'BlueSecStyle' : 'BorderStyle'}
+      variant={bookmarked ? 'BluSecStyle' : 'BorderStyle'}
       pressed={bookmarked}
       onPressedChange={setBookmarked}
       buttonType="icon"
@@ -145,7 +148,7 @@ function BookmarkButton() {
   Dark Theme
 </ToggleButton>
 
-<ToggleButton theme="light" variant="BlueSecStyle">
+<ToggleButton theme="light" variant="BluSecStyle">
   Light Theme
 </ToggleButton>
 ```
@@ -172,7 +175,7 @@ function BookmarkButton() {
 | Variant | Background | Active State | Description |
 |---------|-----------|-------------|-------------|
 | `PrimeStyle` | Secondary | Hover highlight | Default primary toggle style |
-| `BlueSecStyle` | Secondary | Information blue | Blue secondary accent |
+| `BluSecStyle` | Secondary | Information blue | Blue secondary accent |
 | `BorderStyle` | Border-style bg | Hover highlight | Bordered toggle style |
 | `PrimeContStyle` | Transparent | Container hover | Minimal container style |
 | `SystemStyle` | Black alpha 20 | White alpha 20 | Dark/system UI style |
@@ -229,7 +232,7 @@ function FavoriteButton({ itemId }: { itemId: string }) {
 
   return (
     <ToggleButton
-      variant={isFavorite ? 'BlueSecStyle' : 'BorderStyle'}
+      variant={isFavorite ? 'BluSecStyle' : 'BorderStyle'}
       buttonType="icon"
       size="M"
       pressed={isFavorite}
@@ -368,7 +371,7 @@ function ThemeSwitcher() {
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react'
-import { ToggleButton } from 'torch-glare/lib/components/ToggleButton'
+import { ToggleButton } from "@/components/ButtonGroup";
 
 describe('ToggleButton', () => {
   it('toggles pressed state on click', () => {
@@ -403,7 +406,7 @@ describe('ToggleButton', () => {
 
   it('applies variant styles', () => {
     const { container } = render(
-      <ToggleButton variant="BlueSecStyle">Blue</ToggleButton>
+      <ToggleButton variant="BluSecStyle">Blue</ToggleButton>
     )
 
     const button = container.querySelector('button')
@@ -507,7 +510,7 @@ Radix UI Toggle automatically provides:
 ### Variant Details
 
 - **PrimeStyle**: `bg-background-presentation-action-secondary` with hover/active highlight
-- **BlueSecStyle**: Same base as PrimeStyle but active state uses information blue (`bg-background-presentation-state-information-primary`)
+- **BluSecStyle**: Same base as PrimeStyle but active state uses information blue (`bg-background-presentation-state-information-primary`)
 - **BorderStyle**: `bg-background-presentation-action-borderstyle` with visible border (`border-border-presentation-action-disabled`)
 - **PrimeContStyle**: Transparent background, minimal with container-style hover
 - **SystemStyle**: `bg-black-alpha-20` with white text and `border-[#2C2D2E]`, white alpha hover/active
@@ -521,7 +524,7 @@ All variants use `data-[state=on]` for the active/pressed visual:
 data-[state=on]:bg-background-presentation-action-hover
 data-[state=on]:text-content-presentation-action-hover
 
-/* BlueSecStyle active */
+/* BluSecStyle active */
 data-[state=on]:bg-background-presentation-state-information-primary
 data-[state=on]:text-content-presentation-action-hover
 
@@ -580,8 +583,8 @@ focus-visible:ring-2 focus-visible:ring-white/50
 ```diff
 // Toggle and ToggleButton share a similar API
 // ToggleButton adds buttonType="icon" mode and slightly different variants
-- import { Toggle } from 'torch-glare/lib/components/Toggle'
-+ import { ToggleButton } from 'torch-glare/lib/components/ToggleButton'
+- import { Toggle } from "@/components/Toggle";
++ import { ToggleButton } from "@/components/ButtonGroup";
 
 - <Toggle pressed={value} onPressedChange={setValue}>
 + <ToggleButton pressed={value} onPressedChange={setValue}>
@@ -634,7 +637,7 @@ focus-visible:ring-2 focus-visible:ring-white/50
 
 ### v1.1.15
 - Initial stable release
-- 5 visual variants (PrimeStyle, BlueSecStyle, BorderStyle, PrimeContStyle, SystemStyle)
+- 5 visual variants (PrimeStyle, BluSecStyle, BorderStyle, PrimeContStyle, SystemStyle)
 - 4 size variants (S, M, L, XL)
 - Icon-only mode via buttonType="icon" with compound variants
 - Re-exported from ButtonGroup module

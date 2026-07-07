@@ -57,9 +57,7 @@ export function DataViewsHeader({
     >
       {/* Title pill */}
       <div className="flex h-9 shrink-0 items-center gap-2 rounded-[12px] border border-[#434446] bg-[#252729] px-[10px]">
-        <span className="text-[28px] font-[510] uppercase leading-[1.19] text-white">
-          {title}
-        </span>
+        <span className="text-[28px] font-[510] uppercase leading-[1.19] text-white">{title}</span>
       </div>
 
       {/* Divider */}
