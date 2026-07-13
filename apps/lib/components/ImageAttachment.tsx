@@ -37,7 +37,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLDivElement> {
   mainLabel: string;
   secondaryLabel: string;
   theme?: Themes;
-  expandLabel: ReactNode;
+  expandLabel?: ReactNode;
   children?: ReactNode;
   getRootProps?: () => Record<string, unknown>;
 }
@@ -52,6 +52,8 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
       className,
       getRootProps,
       children,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} so it isn't leaked onto the <input>
+      expandLabel,
       ...props
     }: Props,
     ref,
