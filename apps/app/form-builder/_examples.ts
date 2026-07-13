@@ -4,5 +4,6 @@ export const EXAMPLES = [
   { href: "/form-builder/stepper", title: "Stepper", blurb: "Steps as components, full form registered." },
   { href: "/form-builder/drawer", title: "Drawer", blurb: "A form hosted in a FormDrawer." },
   { href: "/form-builder/fields", title: "Field types", blurb: "Every field type in one form." },
+  { href: "/form-builder/summary", title: "Form summary", blurb: "A live calculation panel beside the form." },
   { href: "/form-builder/renderer", title: "FormRenderer", blurb: "The config-object adapter." },
 ];

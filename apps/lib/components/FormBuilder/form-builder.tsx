@@ -67,6 +67,14 @@ function isHeaderElement(node: React.ReactNode): node is React.ReactElement {
   );
 }
 
+/** A `FormSummary` child — detected by flag so FormBuilder needn't import it. */
+function isSummaryElement(node: React.ReactNode): node is React.ReactElement {
+  return (
+    React.isValidElement(node) &&
+    (node.type as { __isFormSummary?: boolean })?.__isFormSummary === true
+  );
+}
+
 // ─── Root ────────────────────────────────────────────────────────────────────
 
 function FormBuilderRoot<T extends FieldValues = FieldValues>({
@@ -92,21 +100,33 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   };
 
   // Split out a FormBuilder.Header (if any): it renders absolutely and the rest
-  // of the form scrolls beneath it.
+  // of the form scrolls beneath it. A FormSummary child (if any) moves to a
+  // right-hand column beside the form.
   const childArray = React.Children.toArray(children);
   const header = childArray.find(isHeaderElement);
-  const rest = header ? childArray.filter((n) => !isHeaderElement(n)) : childArray;
+  const summary = childArray.find(isSummaryElement);
+  const rest = childArray.filter((n) => !isHeaderElement(n) && !isSummaryElement(n));
+
+  // The form fields, plus the summary panel alongside them when present.
+  const content = summary ? (
+    <div className="flex w-full items-start gap-4">
+      <div className={cn("flex min-w-0 flex-1 flex-col gap-4", className)}>{rest}</div>
+      <div className="sticky top-4 shrink-0">{summary}</div>
+    </div>
+  ) : (
+    <div className={cn("flex flex-col gap-4", className)}>{rest}</div>
+  );
 
   const body = header ? (
     // Scroll shell: absolute header floats over a scrollable, centered body.
     <div className="relative isolate flex size-full flex-col overflow-hidden rounded-2xl bg-background-presentation-body-primary">
       {header}
       <div className="relative z-[1] flex h-full w-full flex-col items-center overflow-y-auto px-6 py-6 pt-[72px] max-h-[85vh] scrollbar-hide">
-        <div className={cn("flex w-full max-w-[1100px] flex-col gap-4", className)}>{rest}</div>
+        <div className="flex w-full max-w-[1100px] flex-col gap-4">{content}</div>
       </div>
     </div>
   ) : (
-    <div className={cn("flex flex-col gap-4", className)}>{rest}</div>
+    content
   );
 
   return (

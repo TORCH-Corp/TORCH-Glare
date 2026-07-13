@@ -308,6 +308,18 @@
       ]
     },
     {
+      "name": "FormSummary",
+      "type": "components",
+      "path": "components/FormSummary.tsx",
+      "npmDependencies": [
+        "react-hook-form"
+      ],
+      "registryDependencies": [
+        "components/Input",
+        "utils/cn"
+      ]
+    },
+    {
       "name": "HeaderBar",
       "type": "components",
       "path": "components/HeaderBar.tsx",

@@ -150,6 +150,12 @@ errors (shown with a red indicator). The **Submit** button appears on the last s
 > [FormRenderer](./form-renderer.md) (pass `fieldDirection="vertical"` to the
 > form), or use `FormRenderer` with `display="drawer"`.
 
+## Calculation panel
+
+Drop a [FormSummary](./form-summary.md) in as a child and `FormBuilder` renders it
+**beside the form** (form-left, panel-right). Its rows compute from the live form values,
+so totals update as the user types.
+
 ## Edit & view modes
 
 - **Edit**: pass `values` (not just `defaultValues`); the form repopulates when the
