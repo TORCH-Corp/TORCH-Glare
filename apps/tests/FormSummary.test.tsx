@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useForm } from "react-hook-form";
 
 import { FormBuilder } from "@/components/FormBuilder";
 import { FormSummary } from "@/components/FormSummary";
@@ -15,23 +16,27 @@ const subTotal = (v: Invoice) => (v.qty ?? 0) * (v.price ?? 0);
 const totalTax = (v: Invoice) => subTotal(v) * ((v.taxRate ?? 0) / 100);
 const overall = (v: Invoice) => subTotal(v) + totalTax(v);
 
+/**
+ * The panel renders OUTSIDE the form, beside it — both share one hoisted `useForm`.
+ */
 function InvoiceForm() {
-  return (
-    <FormBuilder<Invoice>
-      onSubmit={() => {}}
-      defaultValues={{ qty: 0, price: 0, taxRate: 10 }}
-    >
-      <FormBuilder.Number name="qty" label="Qty" />
-      <FormBuilder.Currency name="price" label="Price" currencySymbol="$" />
+  const form = useForm<Invoice>({ defaultValues: { qty: 0, price: 0, taxRate: 10 } });
 
-      <FormSummary title="Invoice" subtitle="Summary">
+  return (
+    <div>
+      <FormBuilder<Invoice> form={form} onSubmit={() => {}}>
+        <FormBuilder.Number name="qty" label="Qty" />
+        <FormBuilder.Currency name="price" label="Price" currencySymbol="$" />
+      </FormBuilder>
+
+      <FormSummary form={form} title="Invoice" subtitle="Summary">
         <FormSummary.Group title="Total">
           <FormSummary.Row label="Sub Total" compute={subTotal} />
           <FormSummary.Row label="Total Tax" compute={totalTax} />
           <FormSummary.Row label="Overall Total" emphasized compute={overall} />
         </FormSummary.Group>
       </FormSummary>
-    </FormBuilder>
+    </div>
   );
 }
 

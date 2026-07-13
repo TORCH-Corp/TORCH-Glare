@@ -1,5 +1,6 @@
 "use client";
 
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -49,6 +50,9 @@ const overallTotal = (v: Invoice) => taxable(v) + totalTax(v);
 export default function SummaryExample() {
   const { submitting, result, onSubmit } = useDemoSubmit<Invoice>("summary");
 
+  // Hoisted so both the form and the summary beside it share the same values.
+  const form = useForm<Invoice>({ resolver, defaultValues: DEFAULTS });
+
   return (
     <div className="flex flex-col gap-6">
       <DemoHeader
@@ -56,12 +60,13 @@ export default function SummaryExample() {
         blurb="A FormSummary panel beside the form. Every total recomputes live as you type."
       />
 
+      <div className="flex items-start gap-4">
       <FormBuilder
+        form={form}
         onSubmit={onSubmit}
         loading={submitting}
-        resolver={resolver}
-        defaultValues={DEFAULTS}
         fieldDirection="vertical"
+        className="min-w-0 flex-1"
       >
         <FormBuilder.Section title="Customer" color="Blue">
           <FormBuilder.Text name="customer" label="Customer" required placeholder="Acme Corp." />
@@ -96,9 +101,10 @@ export default function SummaryExample() {
         </FormBuilder.Section>
 
         <FormBuilder.Submit loadingText="Saving…">Save invoice</FormBuilder.Submit>
+      </FormBuilder>
 
-        {/* Sits to the right of the form — FormBuilder detects it and splits the layout. */}
-        <FormSummary title="Invoice" subtitle="Summary">
+      {/* Rendered OUTSIDE the form, beside it — it reads the same hoisted `form`. */}
+      <FormSummary form={form} title="Invoice" subtitle="Summary">
           <FormSummary.Group title="Customer">
             <FormSummary.Row
               label="Balance"
@@ -140,8 +146,8 @@ export default function SummaryExample() {
           <FormSummary.Group title="Quantity">
             <FormSummary.Row label="Total Qty" compute={totalQty} decimals={0} />
           </FormSummary.Group>
-        </FormSummary>
-      </FormBuilder>
+      </FormSummary>
+      </div>
 
       <SubmitResult result={result} />
     </div>

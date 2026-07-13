@@ -48,6 +48,12 @@ interface DrawerContentProps extends React.ComponentPropsWithoutRef<
   framed?: boolean;
   wrapperClassName?: string;
   trayClassName?: string;
+  /**
+   * Content rendered **outside** the drawer panel — a sibling of it inside the
+   * portal, so it sits beside the drawer rather than inside its scrollable body
+   * (e.g. a `FormSummary` conclusion panel). Position it with its own classes.
+   */
+  childrenOutside?: React.ReactNode;
 }
 
 const DrawerContent = React.forwardRef<
@@ -58,6 +64,7 @@ const DrawerContent = React.forwardRef<
     {
       className,
       children,
+      childrenOutside,
       showHandle = true,
       notch,
       notchSide = "left",
@@ -84,14 +91,14 @@ const DrawerContent = React.forwardRef<
             <div className={notchSide === "right" ? "self-end" : "self-start"}>
               {React.isValidElement(notch)
                 ? React.cloneElement(notch as React.ReactElement<{ side?: "left" | "right" }>, {
-                    side: notchSide,
-                  })
+                  side: notchSide,
+                })
                 : notch}
             </div>
           )}
           <div
             className={cn(
-              "flex flex-1 flex-col min-h-0",
+              "flex flex-1 min-h-0 gap-[6px]",
               framed
                 ? "p-1.5 bg-black-400 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]"
                 : "p-0",
@@ -113,7 +120,7 @@ const DrawerContent = React.forwardRef<
               // page theme (which would render white-on-light = invisible).
               data-theme="light"
               className={cn(
-                "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
+                "flex flex-1 gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
                 framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
                 className,
               )}
@@ -123,8 +130,13 @@ const DrawerContent = React.forwardRef<
               )}
               {children}
             </div>
+            {childrenOutside && <div>{childrenOutside}</div>}
+
           </div>
+
         </DrawerPrimitive.Content>
+
+        {/* Outside the drawer panel — a sibling of it. Position via its own classes. */}
       </DrawerPortal>
     );
   },
@@ -175,7 +187,7 @@ const drawerBadge = cva(
 );
 
 interface DrawerBadgeProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> {}
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> { }
 
 const DrawerBadge = React.forwardRef<HTMLSpanElement, DrawerBadgeProps>(
   ({ className, color, ...props }, ref) => (
@@ -264,8 +276,8 @@ const drawerNotchPill = cva(
 
 interface DrawerNotchPillProps
   extends
-    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
-    VariantProps<typeof drawerNotchPill> {}
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
+  VariantProps<typeof drawerNotchPill> { }
 
 const DrawerNotchPill = React.forwardRef<HTMLButtonElement, DrawerNotchPillProps>(
   ({ className, color, children, ...props }, ref) => (

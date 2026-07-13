@@ -67,19 +67,12 @@ function isHeaderElement(node: React.ReactNode): node is React.ReactElement {
   );
 }
 
-/** A `FormSummary` child — detected by flag so FormBuilder needn't import it. */
-function isSummaryElement(node: React.ReactNode): node is React.ReactElement {
-  return (
-    React.isValidElement(node) &&
-    (node.type as { __isFormSummary?: boolean })?.__isFormSummary === true
-  );
-}
-
 // ─── Root ────────────────────────────────────────────────────────────────────
 
 function FormBuilderRoot<T extends FieldValues = FieldValues>({
   children,
   id,
+  form: formProp,
   onSubmit,
   onInvalid,
   resolver,
@@ -91,7 +84,10 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   resetOnSuccess,
   className,
 }: FormBuilderRootProps<T>) {
-  const form = useForm<T>({ resolver, defaultValues, values });
+  // Hooks can't be conditional, so always create one; `formProp` wins when given
+  // (the caller hoisted `useForm` to share values with something outside the form).
+  const ownForm = useForm<T>({ resolver, defaultValues, values });
+  const form = formProp ?? ownForm;
   const direction = fieldDirection ?? "horizontal";
 
   const handleValid = async (v: T) => {
@@ -100,22 +96,12 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   };
 
   // Split out a FormBuilder.Header (if any): it renders absolutely and the rest
-  // of the form scrolls beneath it. A FormSummary child (if any) moves to a
-  // right-hand column beside the form.
+  // of the form scrolls beneath it.
   const childArray = React.Children.toArray(children);
   const header = childArray.find(isHeaderElement);
-  const summary = childArray.find(isSummaryElement);
-  const rest = childArray.filter((n) => !isHeaderElement(n) && !isSummaryElement(n));
+  const rest = header ? childArray.filter((n) => !isHeaderElement(n)) : childArray;
 
-  // The form fields, plus the summary panel alongside them when present.
-  const content = summary ? (
-    <div className="flex w-full items-start gap-4">
-      <div className={cn("flex min-w-0 flex-1 flex-col gap-4", className)}>{rest}</div>
-      <div className="sticky top-4 shrink-0">{summary}</div>
-    </div>
-  ) : (
-    <div className={cn("flex flex-col gap-4", className)}>{rest}</div>
-  );
+  const content = <div className="flex w-full flex-col gap-4">{rest}</div>;
 
   const body = header ? (
     // Scroll shell: absolute header floats over a scrollable, centered body.
@@ -129,15 +115,24 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
     content
   );
 
+  // `className` lands on the OUTERMOST element — that's the one a parent lays out
+  // (e.g. `flex-1` beside a FormSummary). Putting it on an inner div would leave
+  // the <form> itself sizing to its content.
+  const outerClassName = cn("w-full", className);
+
   return (
     <LoadingContext.Provider value={loading}>
       <ModeContext.Provider value={mode}>
         <DirectionContext.Provider value={direction}>
           <Form {...form}>
             {mode === "view" ? (
-              body
+              <div className={outerClassName}>{body}</div>
             ) : (
-              <form id={id} onSubmit={form.handleSubmit(handleValid, onInvalid)}>
+              <form
+                id={id}
+                className={outerClassName}
+                onSubmit={form.handleSubmit(handleValid, onInvalid)}
+              >
                 {body}
               </form>
             )}

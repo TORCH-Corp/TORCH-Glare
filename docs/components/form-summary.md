@@ -15,11 +15,18 @@ fields.
 Each `FormSummary.Row` declares a **`compute(values)`** that runs against the **live**
 form values, so every total recalculates as the user types.
 
-```tsx
-<FormBuilder onSubmit={save} resolver={r} defaultValues={d}>
-  <FormBuilder.Section title="Line items">…fields…</FormBuilder.Section>
+The panel renders **outside** the form, beside it. Both read the same form, so
+**hoist `useForm`** and hand the instance to each:
 
-  <FormSummary title="Invoice" subtitle="Summary">
+```tsx
+const form = useForm({ resolver: zodResolver(schema), defaultValues })
+
+<div className="flex items-start gap-4">
+  <FormBuilder form={form} onSubmit={save} className="min-w-0 flex-1">
+    <FormBuilder.Section title="Line items">…fields…</FormBuilder.Section>
+  </FormBuilder>
+
+  <FormSummary form={form} title="Invoice" subtitle="Summary">
     <FormSummary.Group title="Total">
       <FormSummary.Row label="Total Discount" compute={totalDiscount} />
       <FormSummary.Row label="Overall Total" emphasized compute={overallTotal} />
@@ -28,12 +35,15 @@ form values, so every total recalculates as the user types.
       <FormSummary.Row label="Overall Total" currency="USD" tone="info" compute={overallTotal} />
     </FormSummary.Group>
   </FormSummary>
-</FormBuilder>
+</div>
 ```
 
-> **Place it as a child of `FormBuilder`.** The root detects it and lays out
-> form-left / panel-right automatically. It must be inside a `FormBuilder` — it reads
-> the live values from the form context.
+`FormBuilder` stays purely an input renderer — it knows nothing about the panel, and
+**you** own the side-by-side layout. Passing `form` to `FormBuilder` makes it use that
+instance instead of creating its own.
+
+> Hoisting the form means a remount `key` no longer resets it. Call `form.reset(defaults)`
+> instead (e.g. when opening a drawer).
 
 ## Installation
 
@@ -54,6 +64,7 @@ import { FormSummary } from '@/components/FormSummary'
 |---|---|---|
 | `title` | `ReactNode` | Panel title, e.g. `"Invoice"`. |
 | `subtitle` | `ReactNode` | Muted text beside the title, e.g. `"Summary"`. |
+| `form` | `UseFormReturn` | The form to read values from — required when rendered outside the `<FormBuilder>`. |
 | `width` | `number \| string` | Panel width; default `229`. |
 | `children` | `ReactNode` | `FormSummary.Group` children. |
 

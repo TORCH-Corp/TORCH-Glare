@@ -20,6 +20,11 @@ export interface FormDrawerProps {
   onOpenChange: (open: boolean) => void;
   /** The `<FormBuilder>` (or any content) to host inside the drawer. */
   children: ReactNode;
+  /**
+   * Content rendered **outside** the drawer panel, beside it — e.g. a `FormSummary`
+   * conclusion. Give it its own positioning classes.
+   */
+  childrenOutside?: ReactNode;
   /** Header title shown in the drawer's dark title pill (also the a11y title). */
   title?: ReactNode;
   /** Optional badge in the header pill, e.g. "New" / "Edit". */
@@ -44,6 +49,7 @@ export function FormDrawer({
   open,
   onOpenChange,
   children,
+  childrenOutside,
   title = "Form",
   badge,
   actions,
@@ -51,9 +57,11 @@ export function FormDrawer({
 }: FormDrawerProps) {
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
+      {/* The panel fills the available width (minus the 8px insets), capped at 1048px. */}
       <DrawerContent
+        childrenOutside={childrenOutside}
         showHandle={false}
-        wrapperClassName="top-2 right-2 bottom-2 left-auto mt-0 h-auto w-[640px] max-w-[1046px]"
+        wrapperClassName="top-2 right-2 bottom-2 left-auto mt-0 h-auto w-[calc(100vw-1rem)] max-w-[1048px]"
         className="rounded-tr-[16px] rounded-b-[16px]"
         notch={
           <DrawerNotch>

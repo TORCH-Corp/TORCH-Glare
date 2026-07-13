@@ -6,6 +6,7 @@ import type {
   FieldErrors,
   FieldValues,
   Resolver,
+  UseFormReturn,
 } from "react-hook-form";
 import type { FieldDirection, FormBuilderMode } from "./context";
 
@@ -166,6 +167,19 @@ export interface FormBuilderRootProps<T extends FieldValues = FieldValues> {
   children: ReactNode;
   /** `id` on the underlying `<form>` — lets an outside button submit it via `form={id}`. */
   id?: string;
+  /**
+   * An existing react-hook-form instance. Pass one when something **outside** the
+   * form needs the same values — e.g. a `FormSummary` rendered beside it:
+   *
+   * ```tsx
+   * const form = useForm({ resolver, defaultValues })
+   * <FormBuilder form={form} …>…</FormBuilder>
+   * <FormSummary form={form}>…</FormSummary>
+   * ```
+   *
+   * When omitted, FormBuilder creates its own from `resolver`/`defaultValues`/`values`.
+   */
+  form?: UseFormReturn<T>;
   onSubmit: (values: T) => void | Promise<void>;
   onInvalid?: (errors: FieldErrors<T>) => void;
   /** RHF resolver — e.g. `zodResolver(schema)`. Library stays validation-agnostic. */

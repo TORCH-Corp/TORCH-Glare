@@ -152,9 +152,20 @@ errors (shown with a red indicator). The **Submit** button appears on the last s
 
 ## Calculation panel
 
-Drop a [FormSummary](./form-summary.md) in as a child and `FormBuilder` renders it
-**beside the form** (form-left, panel-right). Its rows compute from the live form values,
-so totals update as the user types.
+To show computed totals **beside** the form, render a [FormSummary](./form-summary.md)
+next to it (not inside it) and share one hoisted form via the `form` prop:
+
+```tsx
+const form = useForm({ resolver: r, defaultValues: d })
+
+<div className="flex items-start gap-4">
+  <FormBuilder form={form} onSubmit={save} className="min-w-0 flex-1">…fields…</FormBuilder>
+  <FormSummary form={form} title="Invoice">…rows…</FormSummary>
+</div>
+```
+
+`form` makes FormBuilder use an existing react-hook-form instance instead of creating its
+own — that's what lets something outside the form read the same live values.
 
 ## Edit & view modes
 
