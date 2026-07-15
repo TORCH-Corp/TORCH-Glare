@@ -14,6 +14,7 @@ import { DocsLoader } from "./docs-loader.js";
 import { ComponentRegistry } from "./component-registry.js";
 import { RegistryLoader } from "./registry-loader.js";
 import { extractSection, extractCodeExamples, listSectionHeadings } from "./markdown-utils.js";
+import { parseFields, mappingTable, skeleton } from "./form-fields.js";
 
 // Read the server version from package.json so the MCP handshake version never
 // drifts from the published package version. dist/index.js → ../package.json.
@@ -37,7 +38,9 @@ Never generate code that uses \`system\` color tokens or the \`SystemStyle\` var
 
 Applies to new components, edits, response examples, and copy-paste suggestions. If a doc/example uses \`SystemStyle\` or system tokens, translate it to the presentation equivalent before showing it. Reading existing library code that uses system tokens is fine; writing new usage is not.
 
-This library is copy-in: components are added with \`npx torch-glare add <Name>\` (hooks via \`hook\`, utils via \`util\`, etc.) and imported from the local \`@/\` alias — never from an npm package.`;
+This library is copy-in: components are added with \`npx torch-glare add <Name>\` (hooks via \`hook\`, utils via \`util\`, etc.) and imported from the local \`@/\` alias — never from an npm package.
+
+FORMS — always build them with \`FormBuilder\`. Each field is one JSX child (\`<FormBuilder.Text name="…" label="…" required />\`); validation comes from a react-hook-form resolver (e.g. \`zodResolver(schema)\`). Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never track field state with \`useState\` — that is the boilerplate FormBuilder exists to remove. Add \`FormRenderer\` for page-vs-drawer display + header + Submit placement, and \`FormSummary\` for a live calculation panel (totals) beside the form. Read \`get-guide "forms-with-form-builder"\` before writing form code. Older docs that hand-roll forms (\`form-and-list-recipes\`, the validation section of \`guides\`) are the escape hatch for non-form layouts, not the default.`;
 
 // Short reminder appended only to code-emitting tool responses.
 const RULES_HINT = `> ⚠️ **TORCH Glare rule:** never use \`SystemStyle\` / \`*-system-*\` tokens — use the \`presentation\` equivalents (full rules in the server instructions).\n\n`;
@@ -426,6 +429,93 @@ async function main() {
     }
   );
 
+  // Tool: create-form — the autonomous entry point for "build me a form".
+  //
+  // This exists as a TOOL (not just the build-form prompt) because most clients never
+  // surface prompts to the model, so an AI asked for a form would otherwise fall back to
+  // guessing — which is how hand-rolled `useState` + `InputField` forms get written. The
+  // field mapping is deterministic (see form-fields.ts), so "price (currency)" reliably
+  // becomes `FormBuilder.Currency` instead of a `FormBuilder.Text` holding a string.
+  server.tool(
+    "create-form",
+    "Create a form with TORCH Glare. Call this WHENEVER the user asks for a form, create/edit dialog, wizard, or invoice — before writing any form code. Give it the fields and it returns the exact FormBuilder.* component for each, the install commands, and a complete wired starting point (optionally a stepper, a drawer, and a FormSummary panel with live computed totals).",
+    {
+      fields: z
+        .string()
+        .describe(
+          "Comma-separated fields, with an optional type hint in parentheses. e.g. \"name, email, price (currency), role (select), agree (checkbox)\". The hint wins; otherwise the type is inferred from the field name.",
+        ),
+      layout: z.enum(["single", "stepper"]).optional().describe("'single' (default) or 'stepper' for a multi-step wizard."),
+      display: z.enum(["page", "drawer"]).optional().describe("'page' (default) or 'drawer' to host the form in a side drawer."),
+      summary: z.boolean().optional().describe("Add a FormSummary conclusion panel beside the form with live computed totals (invoices, orders)."),
+    },
+    async ({ fields, layout = "single", display = "page", summary = false }) => {
+      const parsed = parseFields(fields);
+      if (parsed.length === 0) {
+        return { content: [{ type: "text", text: "No fields parsed. Pass e.g. `name, email, price (currency)`." }] };
+      }
+
+      const items = ["FormBuilder", ...(display === "drawer" ? ["FormRenderer"] : []), ...(summary ? ["FormSummary"] : [])];
+      const installs = items.map((i) => `npx torch-glare add ${i}`).join("\n");
+      const guessed = parsed.filter((f) => f.guessed);
+
+      const notes = [
+        ...new Set(parsed.map((f) => f.spec.note).filter(Boolean) as string[]),
+      ].map((n) => `- ${n}`);
+
+      const text = [
+        RULES_HINT.trim(),
+        ``,
+        `# Form: ${parsed.length} field(s) — ${layout} / ${display}${summary ? " / with summary panel" : ""}`,
+        ``,
+        `## 1. Field mapping`,
+        ``,
+        mappingTable(parsed),
+        ``,
+        guessed.length
+          ? `> ⚠️ No type hint matched for ${guessed.map((f) => `\`${f.name}\``).join(", ")} — defaulted to \`FormBuilder.Text\`. Re-call with an explicit hint, e.g. \`${guessed[0].name} (select)\`, if that's wrong.`
+          : ``,
+        notes.length ? `\n${notes.join("\n")}` : ``,
+        ``,
+        `## 2. Install`,
+        ``,
+        "```bash",
+        installs,
+        `npm install zod @hookform/resolvers   # validation is resolver-agnostic; bring your own`,
+        "```",
+        ``,
+        `## 3. Starting point`,
+        ``,
+        "```tsx",
+        skeleton(parsed, { layout, display, summary }),
+        "```",
+        ``,
+        `## 4. Fill in the gaps`,
+        ``,
+        ...[
+          `- Replace the placeholder \`*_OPTIONS\` arrays and tighten the zod schema (messages, required/optional).`,
+          summary
+            ? `- Write the \`compute(values)\` functions as plain functions of the form values (\`subTotal\`, \`overallTotal\`, …). They run against the **live** values, so totals update as the user types.`
+            : ``,
+          summary
+            ? `- The form is **hoisted** (\`useForm\` in the component), so a remount \`key\` no longer resets it — call \`form.reset(DEFAULTS)\` instead.`
+            : ``,
+          display === "drawer"
+            ? `- The drawer header is outside the \`<form>\`; Save submits it via \`form={FORM_ID}\`. Don't move the button inside.`
+            : ``,
+          `- Use \`required\` on fields — never type a literal "*".`,
+          `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
+        ].filter(Boolean),
+        ``,
+        `Full reference: call \`get-guide "forms-with-form-builder"\` (steppers, drawers, edit/view, totals, gotchas) or \`get-component-docs "form-builder"\` for every field type.`,
+      ]
+        .filter((l) => l !== ``)
+        .join("\n");
+
+      return { content: [{ type: "text", text }] };
+    },
+  );
+
   // Tool 10: Get related components ("composes with")
   server.tool(
     "get-related-components",
@@ -565,19 +655,70 @@ async function main() {
 
   server.prompt(
     "build-form",
-    "Scaffold a form with TORCH Glare form components",
-    { fields: z.string().describe("The fields you want, e.g. 'name, email, role (dropdown), agree (checkbox)'") },
-    ({ fields }) => ({
-      messages: [
-        {
-          role: "user",
-          content: {
-            type: "text",
-            text: `Build a form with TORCH Glare for these fields: ${fields}.\n\nSteps:\n1. Call list-components with category "forms" to pick the field components (Form, InputField, Select, Checkbox, Switch, etc.).\n2. Call get-install-info for each chosen component to get the exact \`npx torch-glare add\` commands and dependencies.\n3. Call get-component-api for each to use real props.\n4. Assemble the form; follow the server's absolute rules (never SystemStyle/system tokens).`,
+    "Create a form with TORCH Glare's FormBuilder (+ optional stepper, drawer, and live totals panel)",
+    {
+      fields: z
+        .string()
+        .describe("The fields you want, e.g. 'name, email, role (select), price (currency), agree (checkbox)'"),
+      layout: z
+        .string()
+        .optional()
+        .describe("'single' (default) or 'stepper' for a multi-step wizard"),
+      display: z
+        .string()
+        .optional()
+        .describe("'page' (default) or 'drawer' to host the form in a side drawer"),
+      summary: z
+        .string()
+        .optional()
+        .describe("'true' to add a FormSummary conclusion panel with live computed totals"),
+    },
+    ({ fields, layout, display, summary }) => {
+      const wantsStepper = layout === "stepper";
+      const wantsDrawer = display === "drawer";
+      const wantsSummary = summary === "true" || summary === "yes";
+
+      const add = ["FormBuilder"];
+      if (wantsDrawer) add.push("FormRenderer");
+      if (wantsSummary) add.push("FormSummary");
+
+      const extras = [
+        wantsStepper
+          ? "- Layout: a STEPPER. Wrap the sections in `FormBuilder.Stepper` with a `FormBuilder.Step title=\"…\"` per step. Every step stays mounted; navigation is the step buttons; Submit shows on the last step."
+          : "- Layout: a single page form.",
+        wantsDrawer
+          ? "- Display: in a DRAWER. Use `FormDrawer` from `@/components/FormRenderer`. Give `FormBuilder` an `id` and wire the drawer header's Save with `form={id}` (the header sits outside the `<form>`). Pass `fieldDirection=\"vertical\"`."
+          : "- Display: a normal page. Use `FormBuilder.Header` for the title pill + action bar.",
+        wantsSummary
+          ? "- Totals: add a `FormSummary` conclusion panel BESIDE the form. Hoist `useForm` and pass the SAME instance to both `<FormBuilder form={form}>` and `<FormSummary form={form}>`. Each `FormSummary.Row` takes a `compute(values)` that runs against the live values. In a drawer, pass the panel via the drawer's `childrenOutside` prop."
+          : "",
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+      return {
+        messages: [
+          {
+            role: "user",
+            content: {
+              type: "text",
+              text:
+                `Build a form with TORCH Glare for these fields: ${fields}.\n\n` +
+                `Use **FormBuilder** — each field is one JSX child. Do NOT hand-wire ` +
+                `\`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows and do NOT track field state with \`useState\`.\n\n` +
+                `${extras}\n\n` +
+                `Steps:\n` +
+                `1. Call the **create-form** tool with fields="${fields}"${wantsStepper ? `, layout="stepper"` : ``}${wantsDrawer ? `, display="drawer"` : ``}${wantsSummary ? `, summary=true` : ``} — it returns the exact \`FormBuilder.*\` component per field, the install commands, and a wired starting point.\n` +
+                `2. Call get-guide "forms-with-form-builder" for the full reference (single, stepper, drawer, totals, gotchas).\n` +
+                `3. Run the \`npx torch-glare add\` commands it gives you.\n` +
+                `4. Fill in the zod schema and any \`options\` arrays. Validation is resolver-agnostic; the library never depends on zod.\n` +
+                `5. Use \`required\` on fields (never a literal "*"), group with \`FormBuilder.Section\`, and end with \`FormBuilder.Submit\`.\n\n` +
+                `Follow the server's absolute rules (never SystemStyle / *-system-* tokens).`,
+            },
           },
-        },
-      ],
-    }),
+        ],
+      };
+    },
   );
 
   server.prompt(

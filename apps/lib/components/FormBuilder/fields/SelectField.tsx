@@ -39,7 +39,7 @@ export function MultiSelectField(props: OptionsFieldProps) {
       {...props}
       view={(v) => formatFieldView({ kind: "multi", value: v, options: props.options })}
     >
-      {(field, fieldState) => {
+      {(field) => {
         const selected = new Set<string>(Array.isArray(field.value) ? field.value : []);
         const tags: Tag[] = props.options.map((opt) => ({
           id: opt.value,
@@ -51,7 +51,6 @@ export function MultiSelectField(props: OptionsFieldProps) {
           <BadgeField
             tags={tags}
             onValueChange={(picked) => field.onChange(picked.map((t) => t.value ?? t.id))}
-            errorMessage={fieldState.error?.message}
             className="w-full"
           />
         );

@@ -37,7 +37,7 @@ export function PhoneField(props: PhoneFieldProps) {
 
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
-      {(field, fieldState) => {
+      {(field) => {
         const { dial, number } = splitPhone(field.value, defaultDial);
         const commit = (d: string, n: string) => field.onChange(n ? `${d} ${n}` : d);
         return (
@@ -66,7 +66,6 @@ export function PhoneField(props: PhoneFieldProps) {
                 onChange={(e) => commit(dial, e.target.value.replace(/[^\d\s-]/g, ""))}
                 placeholder={props.placeholder ?? "Phone number"}
                 disabled={props.disabled || loading}
-                errorMessage={fieldState.error?.message}
                 className="w-full"
               />
             </div>

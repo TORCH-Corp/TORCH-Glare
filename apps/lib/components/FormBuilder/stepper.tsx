@@ -85,6 +85,10 @@ function StepSlot({
 
 // ─── Stepper navigation (style only) ─────────────────────────────────────────
 
+/**
+ * Vertical step rail (matches `Tabs.svg`): the numbered state badges stacked top
+ * to bottom, joined by a short vertical connector between consecutive steps.
+ */
 function StepperNav() {
   const { titles, currentStep, goToStep, stepFields } = useStepper();
   const { errors } = useFormState();
@@ -93,17 +97,23 @@ function StepperNav() {
     [...(stepFields[index] ?? [])].some((name) => name in errors);
 
   return (
-    <FormStepper activeStep={currentStep} className="flex-wrap">
+    <FormStepper activeStep={currentStep} className="shrink-0 flex-col items-start gap-[4px]">
       {titles.map((title, index) => {
         // The step buttons ARE the navigation: click to move. Backward is free;
         // clicking forward validates the steps in between (goToStep) and stops at
         // the first one with errors. Errored steps show a red indicator.
         const type = stepHasError(index) ? "negative" : index < currentStep ? "success" : "default";
         return (
-          <FormStep key={title} index={index} type={type} onClick={() => void goToStep(index)}>
-            <FormStepIndicator />
-            <FormStepLabel>{title}</FormStepLabel>
-          </FormStep>
+          <React.Fragment key={title}>
+            <FormStep index={index} type={type} onClick={() => void goToStep(index)}>
+              <FormStepIndicator />
+              <FormStepLabel>{title}</FormStepLabel>
+            </FormStep>
+            {/* Connector between steps — a 3×16 rounded bar centred under the badge. */}
+            {index < titles.length - 1 && (
+              <div aria-hidden className="ms-[12.5px] mt-[2px] h-[16px] w-[3px] rounded-full bg-[#A0A0A0]" />
+            )}
+          </React.Fragment>
         );
       })}
     </FormStepper>
@@ -209,14 +219,17 @@ export function Stepper({ children }: StepperProps) {
 
   return (
     <StepperContext.Provider value={value}>
-      <div className="flex flex-col gap-6">
+      {/* Vertical rail on the left, the active step's fields on the right. */}
+      <div className="flex flex-col gap-6 md:flex-row md:gap-8">
         <StepperNav />
-        {steps.map((step, i) => (
-          <StepSlot key={i} index={i} active={i === currentStep}>
-            {step.props.children}
-          </StepSlot>
-        ))}
-        {extras.length > 0 ? extras : <StepFooter />}
+        <div className="flex min-w-0 flex-1 flex-col gap-4">
+          {steps.map((step, i) => (
+            <StepSlot key={i} index={i} active={i === currentStep}>
+              {step.props.children}
+            </StepSlot>
+          ))}
+          {extras.length > 0 ? extras : <StepFooter />}
+        </div>
       </div>
     </StepperContext.Provider>
   );

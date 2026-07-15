@@ -9,7 +9,9 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { DocsLoader, normalizeCategory } from "./docs-loader.js";
+import { FIELD_TYPES, parseFields, skeleton } from "./form-fields.js";
 import { ComponentRegistry } from "./component-registry.js";
 import { RegistryLoader } from "./registry-loader.js";
 
@@ -164,4 +166,111 @@ test("explanation + migration docs are loaded and served as guides", async () =>
   assert.ok(guides.includes("changelog"), "changelog should be a guide");
   assert.ok(loader.getGuide("architecture"), "architecture guide should be readable");
   assert.ok(loader.getGuide("changelog"), "changelog guide should be readable");
+});
+
+test("the FormBuilder forms guide is served and covers all three form components", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+
+  assert.ok(
+    loader.getAllGuideNames().includes("forms-with-form-builder"),
+    "forms-with-form-builder should be listed by get-guide",
+  );
+
+  const guide = loader.getGuide("forms-with-form-builder");
+  assert.ok(guide, "forms-with-form-builder guide should be readable");
+  for (const name of ["FormBuilder", "FormRenderer", "FormSummary"]) {
+    assert.ok(guide.includes(name), `forms guide should cover ${name}`);
+  }
+  // The composition that only works via the hoisted form + the drawer's outside slot.
+  assert.match(guide, /useForm/, "forms guide should show hoisting useForm");
+  assert.match(guide, /childrenOutside/, "forms guide should show the drawer's childrenOutside slot");
+});
+
+test("form component docs are loaded (get-component-docs can serve them)", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+
+  for (const slug of ["form-builder", "form-renderer", "form-summary"]) {
+    const doc = loader.getComponent(slug);
+    assert.ok(doc, `${slug} component doc should load`);
+  }
+});
+
+test("every field in the create-form map is a real FormBuilder static (no drift)", async () => {
+  // The map is what makes create-form deterministic, so it must not name a component
+  // that doesn't exist. Read the real Object.assign block and diff against it.
+  const src = await readFile(
+    new URL("../../apps/lib/components/FormBuilder/form-builder.tsx", import.meta.url),
+    "utf-8",
+  );
+  const block = src.match(/Object\.assign\(FormBuilderRoot,\s*\{([\s\S]*?)\n\}\)/);
+  assert.ok(block, "should find the Object.assign statics block");
+  const statics = new Set([...block[1].matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]));
+
+  for (const spec of FIELD_TYPES) {
+    assert.ok(
+      statics.has(spec.static),
+      `FIELD_TYPES names FormBuilder.${spec.static}, which no longer exists in form-builder.tsx`,
+    );
+  }
+});
+
+test("create-form maps field hints to the right component", () => {
+  const parsed = parseFields("name, email, price (currency), role (select), agree (checkbox), signature");
+  const got = Object.fromEntries(parsed.map((f) => [f.name, f.spec.static]));
+
+  assert.equal(got.name, "Text");
+  assert.equal(got.email, "Email");         // inferred from the field name
+  assert.equal(got.price, "Currency");      // explicit hint wins over "Text"
+  assert.equal(got.role, "Select");
+  assert.equal(got.agree, "Checkbox");
+  assert.equal(got.signature, "Signature");
+
+  // Longest-alias-first: "multi select" must not be swallowed by "select".
+  const [multi] = parseFields("labels (multi select)");
+  assert.equal(multi.spec.static, "MultiSelect");
+  const [range] = parseFields("period (date range)");
+  assert.equal(range.spec.static, "DateRange");
+});
+
+test("field matching is word-boundary, not substring (regression)", () => {
+  // Substring matching made "customer" hit the `custom` alias -> FormBuilder.Custom,
+  // silently producing a broken form. Aliases must match whole words only.
+  const [customer] = parseFields("customer");
+  assert.equal(customer.spec.static, "Text", "'customer' must not match the 'custom' alias");
+
+  const [country] = parseFields("country");
+  assert.notEqual(country.spec.static, "Color", "'country' must not match 'color'/'colour'");
+
+  // camelCase is still split, so a compound name resolves on its parts.
+  const [dueDate] = parseFields("dueDate");
+  assert.equal(dueDate.spec.static, "Date");
+  const [unitPrice] = parseFields("unitPrice");
+  assert.equal(unitPrice.spec.static, "Currency");
+});
+
+test("create-form skeleton wires the drawer + summary composition correctly", () => {
+  const parsed = parseFields("name, price (currency)");
+  const code = skeleton(parsed, { layout: "single", display: "drawer", summary: true });
+
+  // The three things a model reliably gets wrong when writing this by hand.
+  assert.match(code, /const form = useForm<Values>/, "summary requires a hoisted useForm");
+  assert.match(code, /<FormBuilder id=\{FORM_ID\} form=\{form\}/, "form must be shared with the summary");
+  assert.match(code, /form=\{FORM_ID\}/, "drawer header Save submits across the boundary via form={id}");
+  assert.match(code, /childrenOutside=\{/, "summary goes outside the drawer panel");
+  assert.match(code, /<FormBuilder\.Currency name="price"/, "currency field mapped");
+});
+
+test("the form docs the server hands out point at FormBuilder, not hand-rolled forms", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+
+  // These previously taught useState + hand-wired InputField rows, so an AI asking the
+  // server "how do I build a form?" got the exact boilerplate FormBuilder replaces.
+  for (const name of ["building-first-form", "form-and-list-recipes", "guides"]) {
+    const doc = loader.getGuide(name);
+    assert.ok(doc, `${name} should be readable`);
+    assert.match(doc, /FormBuilder/, `${name} should steer to FormBuilder`);
+  }
 });

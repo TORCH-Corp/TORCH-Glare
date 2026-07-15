@@ -6,74 +6,84 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormBuilder } from "@/components/FormBuilder";
 import { DemoHeader, SubmitResult, useDemoSubmit } from "../_shared";
 
+// Every field is required so that submitting empty surfaces an error on each one —
+// a testbed for the inline FieldHint error display.
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
-  email: z.string().email("Enter a valid email").or(z.literal("")),
-  password: z.string(),
-  qty: z.number().int("Whole numbers only").optional(),
-  price: z.number().positive("Must be positive").optional(),
-  notes: z.string(),
-  category: z.string(),
-  priority: z.string(),
-  labels: z.array(z.string()),
-  tags: z.array(z.string()),
-  plan: z.string(),
-  active: z.boolean(),
-  agree: z.boolean(),
-  dueDate: z.date().optional(),
-  attachment: z.any().optional(),
-  bio: z.any().optional(),
-  signature: z.string(),
-  segment: z.string(),
-  toggles: z.array(z.string()),
-  tier: z.string(),
-  pin: z.string().optional(),
-  range: z.any().optional(),
-  when: z.date().optional(),
-  categoryId: z.string(),
-  toggled: z.boolean(),
-  volume: z.number(),
-  rangeVals: z.any().optional(),
-  colorHex: z.string(),
-  phone2: z.string().optional(),
-  day: z.date().optional(),
-  contacts: z.array(z.object({ name: z.string(), email: z.string() })),
+  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  password: z.string().min(8, "At least 8 characters"),
+  qty: z.number({ required_error: "Quantity is required", invalid_type_error: "Quantity is required" }).int("Whole numbers only"),
+  price: z.number({ required_error: "Price is required", invalid_type_error: "Price is required" }).positive("Must be positive"),
+  notes: z.string().min(1, "Notes are required"),
+  category: z.string().min(1, "Select a category"),
+  priority: z.string().min(1, "Select a priority"),
+  labels: z.array(z.string()).min(1, "Pick at least one label"),
+  tags: z.array(z.string()).min(1, "Add at least one tag"),
+  plan: z.string().min(1, "Choose a plan"),
+  active: z.boolean().refine((v) => v === true, "Toggle this on"),
+  agree: z.boolean().refine((v) => v === true, "You must agree to continue"),
+  dueDate: z.date({ required_error: "Pick a date", invalid_type_error: "Pick a date" }),
+  attachment: z.any().refine((v) => v != null, "Attach a file"),
+  bio: z.any().refine((v) => v != null, "Bio is required"),
+  signature: z.string().min(1, "Signature is required"),
+  segment: z.string().min(1, "Pick a segment"),
+  toggles: z.array(z.string()).min(1, "Select at least one"),
+  tier: z.string().min(1, "Choose a tier"),
+  pin: z.string().min(6, "Enter the 6-digit code"),
+  range: z.any().refine((v) => v?.from && v?.to, "Pick a date range"),
+  when: z.date({ required_error: "Pick date & time", invalid_type_error: "Pick date & time" }),
+  categoryId: z.string().min(1, "Pick a category"),
+  toggled: z.boolean().refine((v) => v === true, "Enable this"),
+  volume: z.number().min(1, "Set a volume above 0"),
+  rangeVals: z.any().refine((v) => Array.isArray(v) && v[0] >= 30, "Range start must be ≥ 30"),
+  colorHex: z.string().min(1, "Pick a color"),
+  phone2: z.string().min(1, "Phone is required"),
+  day: z.date({ required_error: "Pick a day", invalid_type_error: "Pick a day" }),
+  contacts: z
+    .array(
+      z.object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().min(1, "Email is required").email("Enter a valid email"),
+      }),
+    )
+    .min(1, "Add at least one contact"),
 });
 
 type AllFields = z.infer<typeof schema>;
 const resolver = zodResolver(schema);
 
+// Empty / falsy so every required rule fails on submit.
 const DEFAULTS: AllFields = {
   title: "",
   email: "",
   password: "",
-  qty: undefined,
-  price: undefined,
+  qty: undefined as unknown as number,
+  price: undefined as unknown as number,
   notes: "",
   category: "",
   priority: "",
   labels: [],
   tags: [],
-  plan: "monthly",
-  active: true,
+  plan: "",
+  active: false,
   agree: false,
-  dueDate: undefined,
+  dueDate: undefined as unknown as Date,
   attachment: undefined,
   bio: undefined,
   signature: "",
-  segment: "list",
+  segment: "",
   toggles: [],
   tier: "",
   pin: "",
   range: undefined,
-  when: undefined,
+  when: undefined as unknown as Date,
   categoryId: "",
   toggled: false,
-  volume: 50,
+  volume: 0,
   rangeVals: [20, 80],
-  colorHex: "#005ECC",
+  colorHex: "",
   phone2: "",
-  day: undefined,
+  day: undefined as unknown as Date,
   contacts: [{ name: "", email: "" }],
 };
 
@@ -104,7 +114,10 @@ export default function FieldTypesExample() {
 
   return (
     <div className="flex flex-col gap-6">
-      <DemoHeader title="Field types" blurb="Every FormBuilder field component in one form." />
+      <DemoHeader
+        title="Field types"
+        blurb="Every field is required — press Save to surface a validation error on each one."
+      />
 
       <FormBuilder onSubmit={onSubmit} loading={submitting} resolver={resolver} defaultValues={DEFAULTS}>
         <FormBuilder.Header title="Field types" variant="new">
@@ -113,34 +126,35 @@ export default function FieldTypesExample() {
 
         <FormBuilder.Section title="Text inputs" color="Blue">
           <FormBuilder.Text name="title" label="Title" required placeholder="Text" />
-          <FormBuilder.Email name="email" label="Email" placeholder="name@example.com" />
-          <FormBuilder.Password name="password" label="Password" placeholder="••••••••" />
-          <FormBuilder.Number name="qty" label="Quantity" placeholder="0" />
-          <FormBuilder.Currency name="price" label="Price" currencySymbol="$" placeholder="0.00" />
-          <FormBuilder.Textarea name="notes" label="Notes" fullWidth placeholder="Longer text…" />
+          <FormBuilder.Email name="email" label="Email" required placeholder="name@example.com" />
+          <FormBuilder.Password name="password" label="Password" required placeholder="••••••••" />
+          <FormBuilder.Number name="qty" label="Quantity" required placeholder="0" />
+          <FormBuilder.Currency name="price" label="Price" required currencySymbol="$" placeholder="0.00" />
+          <FormBuilder.Textarea name="notes" label="Notes" required fullWidth placeholder="Longer text…" />
         </FormBuilder.Section>
 
         <FormBuilder.Section title="Choices" color="Red">
-          <FormBuilder.Select name="category" label="Select" options={OPTS} />
-          <FormBuilder.SearchableSelect name="priority" label="Searchable select" options={OPTS} />
-          <FormBuilder.MultiSelect name="labels" label="Multi-select" options={OPTS} />
-          <FormBuilder.Tags name="tags" label="Tags" options={OPTS} />
-          <FormBuilder.Radio name="plan" label="Radio" options={OPTS} />
-          <FormBuilder.Switch name="active" label="Switch" />
-          <FormBuilder.Checkbox name="agree" label="Checkbox" />
+          <FormBuilder.Select name="category" label="Select" required options={OPTS} />
+          <FormBuilder.SearchableSelect name="priority" label="Searchable select" required options={OPTS} />
+          <FormBuilder.MultiSelect name="labels" label="Multi-select" required options={OPTS} />
+          <FormBuilder.Tags name="tags" label="Tags" required options={OPTS} />
+          <FormBuilder.Radio name="plan" label="Radio" required options={OPTS} />
+          <FormBuilder.Switch name="active" label="Switch" required />
+          <FormBuilder.Checkbox name="agree" label="Checkbox" required />
         </FormBuilder.Section>
 
         <FormBuilder.Section title="Rich inputs" color="Purple">
-          <FormBuilder.Date name="dueDate" label="Date" />
-          <FormBuilder.File name="attachment" label="File" accept=".pdf,.png,.jpg" />
-          <FormBuilder.RichText name="bio" label="Bio" placeholder="Write something…" fullWidth />
-          <FormBuilder.Signature name="signature" label="Signature" fullWidth />
+          <FormBuilder.Date name="dueDate" label="Date" required />
+          <FormBuilder.File name="attachment" label="File" required accept=".pdf,.png,.jpg" />
+          <FormBuilder.RichText name="bio" label="Bio" required placeholder="Write something…" fullWidth />
+          <FormBuilder.Signature name="signature" label="Signature" required fullWidth />
         </FormBuilder.Section>
 
         <FormBuilder.Section title="More inputs" color="Orange">
           <FormBuilder.Segmented
             name="segment"
             label="Segmented"
+            required
             options={[
               { label: "List", value: "list" },
               { label: "Grid", value: "grid" },
@@ -150,6 +164,7 @@ export default function FieldTypesExample() {
           <FormBuilder.ToggleGroup
             name="toggles"
             label="Toggle group"
+            required
             multiple
             options={[
               { label: "Bold", value: "bold" },
@@ -160,18 +175,20 @@ export default function FieldTypesExample() {
           <FormBuilder.RadioCards
             name="tier"
             label="Radio cards"
+            required
             fullWidth
             options={[
               { label: "Starter", value: "starter", description: "For individuals" },
               { label: "Pro", value: "pro", description: "For teams" },
             ]}
           />
-          <FormBuilder.Otp name="pin" label="OTP / PIN" length={6} />
-          <FormBuilder.DateRange name="range" label="Date range" />
-          <FormBuilder.DateTime name="when" label="Date & time" />
+          <FormBuilder.Otp name="pin" label="OTP / PIN" required length={6} />
+          <FormBuilder.DateRange name="range" label="Date range" required />
+          <FormBuilder.DateTime name="when" label="Date & time" required />
           <FormBuilder.TreeSelect
             name="categoryId"
             label="Tree select"
+            required
             nodes={TREE}
             getNodeId={(n) => n.id}
             getNodeLabel={(n) => n.name}
@@ -180,12 +197,12 @@ export default function FieldTypesExample() {
         </FormBuilder.Section>
 
         <FormBuilder.Section title="Advanced inputs" color="Blue">
-          <FormBuilder.ToggleButton name="toggled" label="Toggle button" />
-          <FormBuilder.Slider name="volume" label="Slider" min={0} max={100} />
-          <FormBuilder.Slider name="rangeVals" label="Range" min={0} max={100} range />
-          <FormBuilder.Color name="colorHex" label="Color" presets={["#005ECC", "#047854", "#E30C30", "#F5A623"]} />
-          <FormBuilder.Phone name="phone2" label="Phone" />
-          <FormBuilder.InlineCalendar name="day" label="Inline calendar" />
+          <FormBuilder.ToggleButton name="toggled" label="Toggle button" required />
+          <FormBuilder.Slider name="volume" label="Slider" required min={0} max={100} />
+          <FormBuilder.Slider name="rangeVals" label="Range" required min={0} max={100} range />
+          <FormBuilder.Color name="colorHex" label="Color" required presets={["#005ECC", "#047854", "#E30C30", "#F5A623"]} />
+          <FormBuilder.Phone name="phone2" label="Phone" required />
+          <FormBuilder.InlineCalendar name="day" label="Inline calendar" required />
         </FormBuilder.Section>
 
         <FormBuilder.Section title="Field array" color="Green">
@@ -197,8 +214,8 @@ export default function FieldTypesExample() {
           >
             {(rowName) => (
               <>
-                <FormBuilder.Text name={`${rowName}.name`} label="Name" />
-                <FormBuilder.Email name={`${rowName}.email`} label="Email" />
+                <FormBuilder.Text name={`${rowName}.name`} label="Name" required />
+                <FormBuilder.Email name={`${rowName}.email`} label="Email" required />
               </>
             )}
           </FormBuilder.FieldArray>

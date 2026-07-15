@@ -8,7 +8,7 @@ import {
   useState,
   type ChangeEvent,
 } from "react";
-import type { ControllerRenderProps, ControllerFieldState, FieldValues } from "react-hook-form";
+import type { ControllerRenderProps, FieldValues } from "react-hook-form";
 
 import { InputField } from "../../InputField";
 import { Textarea } from "../../Textarea";
@@ -29,13 +29,11 @@ const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : use
  */
 function NumberInput({
   field,
-  fieldState,
   icon,
   placeholder,
   disabled,
 }: {
   field: ControllerRenderProps<FieldValues, string>;
-  fieldState: ControllerFieldState;
   icon?: ReactNode;
   placeholder?: string;
   disabled?: boolean;
@@ -105,7 +103,6 @@ function NumberInput({
       value={text}
       placeholder={placeholder}
       disabled={disabled}
-      errorMessage={fieldState.error?.message}
       className="w-full"
       onChange={handleChange}
       onBlur={() => field.onBlur()}
@@ -117,14 +114,13 @@ function TextLike({ props, type }: { props: BaseFieldProps; type: "text" | "emai
   const loading = useLoading();
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
-      {(field, fieldState) => (
+      {(field) => (
         <InputField
           {...field}
           type={type}
           value={field.value ?? ""}
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
-          errorMessage={fieldState.error?.message}
           className="w-full"
         />
       )}
@@ -142,7 +138,7 @@ export function PasswordField(props: PasswordFieldProps) {
   const loading = useLoading();
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v ? "••••••••" : "" })}>
-      {(field, fieldState) => (
+      {(field) => (
         <div className="flex w-full flex-col gap-2">
           <InputField
             {...field}
@@ -150,7 +146,6 @@ export function PasswordField(props: PasswordFieldProps) {
             value={field.value ?? ""}
             placeholder={props.placeholder}
             disabled={props.disabled || loading}
-            errorMessage={fieldState.error?.message}
             className="w-full"
           />
           {props.strengthMeter && <PasswordLevel value={field.value ?? ""} />}
@@ -164,10 +159,9 @@ export function NumberField(props: BaseFieldProps) {
   const loading = useLoading();
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "number", value: v })}>
-      {(field, fieldState) => (
+      {(field) => (
         <NumberInput
           field={field}
-          fieldState={fieldState}
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
         />
@@ -183,10 +177,9 @@ export function CurrencyField(props: CurrencyFieldProps) {
       {...props}
       view={(v) => formatFieldView({ kind: "currency", value: v, currencySymbol: props.currencySymbol })}
     >
-      {(field, fieldState) => (
+      {(field) => (
         <NumberInput
           field={field}
-          fieldState={fieldState}
           icon={
             props.currencySymbol ? (
               <span className="typography-body-small-medium">{props.currencySymbol}</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Switch } from "../../Switch";
-import { LabeledCheckBox } from "../../LabeledCheckBox";
+import { Checkbox } from "../../Checkbox";
 import { RadioGroup } from "../../Radio";
 import { LabeledRadio } from "../../LabeledRadio";
 import { TabSwitch } from "../../TabSwitch";
@@ -23,16 +23,20 @@ import { FieldShell } from "./FieldShell";
 /** `FormBuilder.ToggleButton` — a pressed/unpressed button (Glare `ToggleButton`). */
 export function ToggleButtonField(props: ToggleButtonFieldProps) {
   const loading = useLoading();
+  // Renders like a normal field: label (+ required + error hint) in the left column,
+  // the toggle button in the control column.
   return (
-    <FieldShell {...props} inline view={(v) => formatFieldView({ kind: "boolean", value: v })}>
+    <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
       {(field) => (
-        <ToggleButton
-          pressed={!!field.value}
-          onPressedChange={(pressed: boolean) => field.onChange(pressed)}
-          disabled={props.disabled || loading}
-        >
-          {props.label}
-        </ToggleButton>
+        <div className="flex w-full items-center">
+          <ToggleButton
+            pressed={!!field.value}
+            onPressedChange={(pressed: boolean) => field.onChange(pressed)}
+            disabled={props.disabled || loading}
+          >
+            {props.label}
+          </ToggleButton>
+        </div>
       )}
     </FieldShell>
   );
@@ -40,29 +44,18 @@ export function ToggleButtonField(props: ToggleButtonFieldProps) {
 
 export function SwitchField(props: BaseFieldProps) {
   const loading = useLoading();
+  // Renders like a normal field: label (+ required + error hint) in the left column,
+  // the switch in the control column.
   return (
-    <FieldShell {...props} inline view={(v) => formatFieldView({ kind: "boolean", value: v })}>
+    <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
       {(field) => (
-        <div className="flex w-fit items-center gap-2">
+        <div className="flex w-full items-center">
           <Switch
             id={props.name}
             checked={!!field.value}
             onCheckedChange={field.onChange}
             disabled={props.disabled || loading}
           />
-          {props.label != null && (
-            <label
-              htmlFor={props.name}
-              className="cursor-pointer typography-body-medium-regular text-content-presentation-action-light-primary"
-            >
-              {props.label}
-              {props.required && (
-                <span className="ml-1 typography-body-small-medium text-content-presentation-state-negative">
-                  (Required)
-                </span>
-              )}
-            </label>
-          )}
         </div>
       )}
     </FieldShell>
@@ -71,17 +64,19 @@ export function SwitchField(props: BaseFieldProps) {
 
 export function CheckboxField(props: BaseFieldProps) {
   const loading = useLoading();
+  // Renders like a normal field: label (+ required + error hint) in the left column,
+  // the checkbox left-aligned in the control column.
   return (
-    <FieldShell {...props} inline view={(v) => formatFieldView({ kind: "boolean", value: v })}>
+    <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
       {(field) => (
-        <LabeledCheckBox
-          id={props.name}
-          label={typeof props.label === "string" ? props.label : ""}
-          requiredLabel={props.required ? "(Required)" : undefined}
-          checked={!!field.value}
-          onCheckedChange={field.onChange}
-          disabled={props.disabled || loading}
-        />
+        <div className="flex w-full items-center">
+          <Checkbox
+            id={props.name}
+            checked={!!field.value}
+            onCheckedChange={(checked) => field.onChange(checked === true)}
+            disabled={props.disabled || loading}
+          />
+        </div>
       )}
     </FieldShell>
   );
