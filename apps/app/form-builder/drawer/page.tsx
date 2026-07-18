@@ -53,7 +53,9 @@ export default function DrawerExample() {
       />
 
       <div>
-        <Button variant="PrimeStyle" onClick={openDrawer}>New item</Button>
+        <Button variant="PrimeStyle" onClick={openDrawer}>
+          New item
+        </Button>
       </div>
 
       <FormDrawer
@@ -66,13 +68,9 @@ export default function DrawerExample() {
             Save
           </Button>
         }
-        // Rendered OUTSIDE the drawer panel, beside it — reading the same hoisted `form`.
-        childrenOutside={
-          <FormSummary
-            form={form}
-            title="Item"
-            subtitle="Summary"
-          >
+        // Rendered beside the drawer's form panel — reading the same hoisted `form`.
+        summary={
+          <FormSummary form={form} title="Item" subtitle="Summary">
             <FormSummary.Group title="Pricing">
               <FormSummary.Row label="Base price" compute={basePrice} />
               <FormSummary.Row label="Tax (15%)" compute={tax} />

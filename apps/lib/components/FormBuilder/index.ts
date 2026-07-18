@@ -1,6 +1,7 @@
 export { FormBuilder } from "./form-builder";
 export type { SectionProps } from "./form-builder";
-export type { HeaderProps, HeaderVariant } from "./header";
+export { FormHeaderBar } from "./header";
+export type { HeaderProps, HeaderVariant, FormHeaderBarProps } from "./header";
 export { DisplayField } from "./DisplayField";
 export type { DisplayFieldProps } from "./DisplayField";
 export { RichTextField } from "./RichTextField";

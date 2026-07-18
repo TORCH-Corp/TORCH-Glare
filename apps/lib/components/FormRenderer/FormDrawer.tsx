@@ -5,15 +5,14 @@ import { ReactNode } from "react";
 import {
   Drawer,
   DrawerContent,
-  DrawerHeaderTitle,
-  DrawerHeaderActions,
-  DrawerBadge,
+  DrawerPanel,
   DrawerTitle,
   DrawerNotch,
   DrawerNotchClose,
   DrawerNotchDivider,
   DrawerNotchPill,
 } from "../Drawer";
+import { FormHeaderBar, type HeaderVariant } from "../FormBuilder/header";
 
 export interface FormDrawerProps {
   open: boolean;
@@ -21,14 +20,24 @@ export interface FormDrawerProps {
   /** The `<FormBuilder>` (or any content) to host inside the drawer. */
   children: ReactNode;
   /**
-   * Content rendered **outside** the drawer panel, beside it — e.g. a `FormSummary`
-   * conclusion. Give it its own positioning classes.
+   * The conclusion panel rendered **beside** the form, outside the drawer's scrollable
+   * body — typically a `<FormSummary>` reading the same hoisted `form`. `FormDrawer` owns
+   * the box around it (full height, shrinkable), which is what lets the panel's own
+   * `h-full` and internal scrolling work. The panel sizes itself — a `FormSummary` is
+   * 228px wide by default — and brings its own (dark) background.
    */
+  summary?: ReactNode;
+  /** @deprecated Renamed to `summary`. */
   childrenOutside?: ReactNode;
-  /** Header title shown in the drawer's dark title pill (also the a11y title). */
-  title?: ReactNode;
-  /** Optional badge in the header pill, e.g. "New" / "Edit". */
-  badge?: ReactNode;
+  /**
+   * Plain title text (uppercased) in the header's title pill — also the a11y title.
+   * A string, because it renders through the same `HeaderBar` as the page form.
+   */
+  title?: string;
+  /** Badge text in the title pill. Defaults from `variant` (New / Edit / View). */
+  badge?: string;
+  /** Colored badge variant, matching the page form's header. Default `"new"`. */
+  variant?: HeaderVariant;
   /** Action buttons shown on the right of the drawer header (e.g. a Save submit). */
   actions?: ReactNode;
   /** Shows an "Open in new tab" pill in the notch when provided. */
@@ -44,25 +53,32 @@ export interface FormDrawerProps {
  *
  * The `wrapperClassName` includes `mt-0 h-auto` to cancel `DrawerContent`'s base
  * bottom-sheet offset (the Glare right-side form-drawer recipe).
+ *
+ * It owns the arrangement of its two slots: the form goes in a `DrawerPanel` (the light
+ * surface), and `summary` sits beside it in the tray with a 6px gutter. The tray itself
+ * paints nothing, so each panel brings its own background.
  */
 export function FormDrawer({
   open,
   onOpenChange,
   children,
+  summary,
   childrenOutside,
   title = "Form",
   badge,
+  variant,
   actions,
   onOpenInNewTab,
 }: FormDrawerProps) {
+  const conclusion = summary ?? childrenOutside;
+
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      {/* The panel fills the available width (minus the 8px insets), capped at 1048px. */}
+      {/* The panel fills the available width (minus the 8px insets), capped at 1048px.
+          `gap-[6px]` is the gutter between the form panel and the conclusion beside it. */}
       <DrawerContent
-        childrenOutside={childrenOutside}
-        showHandle={false}
         wrapperClassName="top-2 right-2 bottom-2 left-auto mt-0 h-auto w-[calc(100vw-1rem)] max-w-[1048px]"
-        className="rounded-tr-[16px] rounded-b-[16px]"
+        className="gap-[6px]"
         notch={
           <DrawerNotch>
             <DrawerNotchClose onClick={() => onOpenChange(false)} />
@@ -78,20 +94,27 @@ export function FormDrawer({
           </DrawerNotch>
         }
       >
-        {/* Absolute header floating over the scrollable body (matches the page). */}
-        <div className="relative flex min-h-0 flex-1 flex-col">
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] flex items-start justify-between gap-2 px-1 pt-1">
-            <DrawerHeaderTitle className="pointer-events-auto">
-              {badge && <DrawerBadge color="Blue">{badge}</DrawerBadge>}
-              <DrawerTitle>{title}</DrawerTitle>
-            </DrawerHeaderTitle>
-            {actions && (
-              <DrawerHeaderActions className="pointer-events-auto">{actions}</DrawerHeaderActions>
-            )}
-          </div>
+        <DrawerPanel className="rounded-tr-[16px] rounded-b-[16px]">
+          <div className="relative flex min-h-0 flex-1 flex-col">
+            {/* Vaul requires a Drawer.Title for the a11y name; the visible title is the
+                HeaderBar below, so this one is for screen readers only. */}
+            <DrawerTitle className="sr-only">{title}</DrawerTitle>
 
-          <div className="h-full overflow-y-auto px-3 pb-3 pt-[78px]">{children}</div>
-        </div>
+            {/* The SAME floating header the page form uses, so a form's title looks
+                identical in either surface. */}
+            <FormHeaderBar title={title} label={badge} variant={variant}>
+              {actions}
+            </FormHeaderBar>
+
+            {/* pt-[72px] clears the 44px header pill (inset 4px) — same as the page shell. */}
+            <div className="h-full overflow-y-auto px-3 pb-3 pt-[72px]">{children}</div>
+          </div>
+        </DrawerPanel>
+
+        {/* `flex min-h-0` so the conclusion stretches to the tray's full height and can
+            still shrink — without `min-h-0` it would grow past the tray instead of
+            scrolling inside it. No `flex-1`: the panel sizes itself. */}
+        {conclusion && <div className="flex min-h-0">{conclusion}</div>}
       </DrawerContent>
     </Drawer>
   );

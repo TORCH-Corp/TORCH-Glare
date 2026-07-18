@@ -172,6 +172,7 @@
       "path": "components/ConclusionHeader.tsx",
       "npmDependencies": [],
       "registryDependencies": [
+        "components/Badge",
         "utils/cn",
         "utils/types"
       ]

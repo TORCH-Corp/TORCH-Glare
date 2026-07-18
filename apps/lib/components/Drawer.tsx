@@ -47,14 +47,57 @@ interface DrawerContentProps extends React.ComponentPropsWithoutRef<
    */
   framed?: boolean;
   wrapperClassName?: string;
-  trayClassName?: string;
   /**
-   * Content rendered **outside** the drawer panel — a sibling of it inside the
-   * portal, so it sits beside the drawer rather than inside its scrollable body
-   * (e.g. a `FormSummary` conclusion panel). Position it with its own classes.
+   * @deprecated Use `className` — it now targets the tray directly. Kept as an
+   * alias (merged last, so it still wins) for the pre-`DrawerPanel` API.
    */
-  childrenOutside?: React.ReactNode;
+  trayClassName?: string;
 }
+
+interface DrawerPanelProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Panel border + inset shadow that pairs with the tray's frame. Default `true`. */
+  framed?: boolean;
+  /** Show the drag handle (bottom sheets). Default `false`. */
+  showHandle?: boolean;
+}
+
+/**
+ * The light `#F0F0F0` content surface inside a `DrawerContent`.
+ *
+ * It is an ordinary child, not something the tray paints — so a drawer can hold a panel
+ * and something else beside it (e.g. a `FormSummary`), each bringing its own background.
+ * Give the tray a `gap-*` to space them.
+ *
+ * ```tsx
+ * <DrawerContent className="gap-[6px]">
+ *   <DrawerPanel>…form…</DrawerPanel>
+ *   <FormSummary … />
+ * </DrawerContent>
+ * ```
+ */
+const DrawerPanel = React.forwardRef<HTMLDivElement, DrawerPanelProps>(
+  ({ className, framed = true, showHandle = false, children, ...props }, ref) => (
+    <div
+      ref={ref}
+      // The content surface is always light (#F0F0F0) regardless of the page
+      // theme, so pin a light theme here. This makes theme-aware content tokens
+      // (DrawerTitle/Description and any consumer content) resolve to their
+      // dark-on-light values instead of following a dark page theme (which
+      // would render white-on-light = invisible).
+      data-theme="light"
+      className={cn(
+        "flex flex-1 gap-2 rounded-t-[16px] p-1 bg-[#F0F0F0] min-h-0",
+        framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
+        className,
+      )}
+      {...props}
+    >
+      {showHandle && <div className="mx-auto h-2 w-[100px] rounded-full bg-[#D4D4D4]" />}
+      {children}
+    </div>
+  ),
+);
+DrawerPanel.displayName = "DrawerPanel";
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
@@ -64,8 +107,6 @@ const DrawerContent = React.forwardRef<
     {
       className,
       children,
-      childrenOutside,
-      showHandle = true,
       notch,
       notchSide = "left",
       framed: framedProp,
@@ -91,14 +132,17 @@ const DrawerContent = React.forwardRef<
             <div className={notchSide === "right" ? "self-end" : "self-start"}>
               {React.isValidElement(notch)
                 ? React.cloneElement(notch as React.ReactElement<{ side?: "left" | "right" }>, {
-                    side: notchSide,
-                  })
+                  side: notchSide,
+                })
                 : notch}
             </div>
           )}
+          {/* The tray. It frames and positions, but paints nothing over its children —
+              each child brings its own background (see `DrawerPanel`). Supply a `gap-*`
+              via `className` when the tray holds more than one. */}
           <div
             className={cn(
-              "flex flex-1 min-h-0 gap-[6px]",
+              "flex flex-1 min-h-0",
               framed
                 ? "p-1.5 bg-black-400 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]"
                 : "p-0",
@@ -109,35 +153,13 @@ const DrawerContent = React.forwardRef<
                 : framed
                   ? "rounded-t-[22px]"
                   : "",
+              className,
               trayClassName,
             )}
           >
-            <div
-              // The content surface is always light (#F0F0F0) regardless of the
-              // page theme, so pin a light theme here. This makes theme-aware
-              // content tokens (DrawerTitle/Description and any consumer content)
-              // resolve to their dark-on-light values instead of following a dark
-              // page theme (which would render white-on-light = invisible).
-              data-theme="light"
-              className={cn(
-                "flex flex-1 gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
-                framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
-                className,
-              )}
-            >
-              {showHandle && !notch && (
-                <div className="mx-auto h-2 w-[100px] rounded-full bg-[#D4D4D4]" />
-              )}
-              {children}
-            </div>
-            {/* `flex min-h-0` so the outside content (e.g. a `FormSummary`) stretches to
-                the tray's full height and can still shrink — without `min-h-0` it would
-                grow past the tray instead of scrolling inside it. */}
-            {childrenOutside && <div className="flex min-h-0">{childrenOutside}</div>}
+            {children}
           </div>
         </DrawerPrimitive.Content>
-
-        {/* Outside the drawer panel — a sibling of it. Position via its own classes. */}
       </DrawerPortal>
     );
   },
@@ -188,7 +210,7 @@ const drawerBadge = cva(
 );
 
 interface DrawerBadgeProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> {}
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> { }
 
 const DrawerBadge = React.forwardRef<HTMLSpanElement, DrawerBadgeProps>(
   ({ className, color, ...props }, ref) => (
@@ -277,8 +299,8 @@ const drawerNotchPill = cva(
 
 interface DrawerNotchPillProps
   extends
-    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
-    VariantProps<typeof drawerNotchPill> {}
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
+  VariantProps<typeof drawerNotchPill> { }
 
 const DrawerNotchPill = React.forwardRef<HTMLButtonElement, DrawerNotchPillProps>(
   ({ className, color, children, ...props }, ref) => (
@@ -359,6 +381,7 @@ export {
   DrawerTrigger,
   DrawerClose,
   DrawerContent,
+  DrawerPanel,
   DrawerHeader,
   DrawerHeaderTitle,
   DrawerHeaderActions,

@@ -30,14 +30,19 @@ export interface FormRendererProps<T extends FieldValues = FieldValues> {
 
   // --- display ---
   display?: FormRendererDisplay;
-  /** Absolute title header + action bar (page display; the drawer has its own). */
+  /**
+   * Absolute title header + action bar. Used by **both** displays — the page and the
+   * drawer render the same `HeaderBar` title pill, so a form looks identical in either.
+   */
   header?: { title: string; label?: string; variant?: "new" | "edit" | "detail" };
   submitLabel?: ReactNode;
 
   /** Drawer control (when `display === "drawer"`). */
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  title?: ReactNode;
-  badge?: ReactNode;
+  /** Overrides `header.title` for the drawer. Plain text — it renders via `HeaderBar`. */
+  title?: string;
+  /** Overrides `header.label` for the drawer. */
+  badge?: string;
   onOpenInNewTab?: () => void;
 }

@@ -91,6 +91,7 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
         onOpenChange={onOpenChange ?? (() => {})}
         title={title ?? header?.title}
         badge={badge ?? header?.label}
+        variant={header?.variant}
         actions={
           drawerSubmitInHeader ? (
             <Button type="submit" form={formId} variant="PrimeStyle" is_loading={loading}>

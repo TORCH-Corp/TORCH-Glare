@@ -66,7 +66,7 @@ import { FormBuilder } from '@/components/FormBuilder'
 | `display` | `'page' \| 'drawer'` | `'drawer'` wraps the form in `FormDrawer`. |
 | `header` | `{ title; label?; variant? }` | Absolute title header + action bar (page display); Submit moves into it. |
 | `submitLabel` | `ReactNode` | Default `"Save"`. |
-| `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | — | Drawer control (when `display="drawer"`). |
+| `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | — | Drawer control (when `display="drawer"`). `title` / `badge` are strings that override `header.title` / `header.label`. |
 
 ## Drawer & view
 
@@ -117,5 +117,58 @@ outside the `<form>`, wire the Save button to the form via `id` / `form={id}`:
 </FormDrawer>
 ```
 
-`FormDrawer` props: `open`, `onOpenChange`, `title`, `badge`, `actions`,
-`onOpenInNewTab`, `children`. It owns no form state.
+`FormDrawer` props: `open`, `onOpenChange`, `title`, `badge`, `variant`, `actions`,
+`onOpenInNewTab`, `children`, `summary`. It owns no form state.
+
+### The title
+
+The drawer renders the **same floating header as the page form** — a [HeaderBar](./header-bar.md)
+title pill on the left, a dark action pill on the right — so a form's title looks identical in
+either display. `title` is the plain (uppercased) text, `badge` the colored emphasis pill, and
+`variant` (`new` / `edit` / `detail`) picks the badge colors; `badge` defaults from it
+(New / Edit / View).
+
+```tsx
+<FormDrawer title="Sales Invoice" badge="New" variant="new" … />
+```
+
+Driving it through `FormRenderer`, the `header` prop feeds both displays — including
+`header.variant`, which the drawer previously ignored:
+
+```tsx
+<FormRenderer display="drawer" header={{ title: "Sales Invoice", variant: "edit" }} … />
+```
+
+`title` and `badge` are **plain strings** (they were `ReactNode` before this shared-header
+change) because they render through `HeaderBar`'s uppercase text treatment.
+
+### A summary beside the form
+
+`summary` renders a conclusion panel — typically a [FormSummary](./form-summary.md) — *beside*
+the form rather than inside its scrollable body. `FormDrawer` puts the form in a
+[`DrawerPanel`](./drawer.md#drawerpanel) (the light surface) and the summary next to it with a
+6px gutter; the tray paints nothing, so the summary keeps its own dark background and full
+height, scrolling internally when it outruns the drawer.
+
+Hoist the form so both read the same instance:
+
+```tsx
+const form = useForm({ resolver, defaultValues })
+
+<FormDrawer
+  open={open} onOpenChange={setOpen} title="New item" badge="New"
+  summary={
+    <FormSummary form={form} title="Item" subtitle="Summary">
+      <FormSummary.Group title="Pricing">…rows…</FormSummary.Group>
+    </FormSummary>
+  }
+>
+  <FormBuilder form={form} id="item-form" onSubmit={save} fieldDirection="vertical">
+    …fields…
+  </FormBuilder>
+</FormDrawer>
+```
+
+> `childrenOutside` is the deprecated former name for `summary`. It still works.
+
+`FormRenderer` does **not** forward `summary` — use `FormDrawer` directly when you need one.
