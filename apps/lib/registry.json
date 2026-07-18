@@ -167,6 +167,16 @@
       ]
     },
     {
+      "name": "ConclusionHeader",
+      "type": "components",
+      "path": "components/ConclusionHeader.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
       "name": "ContextMenu",
       "type": "components",
       "path": "components/ContextMenu.tsx",
@@ -315,6 +325,7 @@
         "react-hook-form"
       ],
       "registryDependencies": [
+        "components/ConclusionHeader",
         "components/Input",
         "utils/cn"
       ]

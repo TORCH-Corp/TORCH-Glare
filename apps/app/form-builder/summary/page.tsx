@@ -60,51 +60,57 @@ export default function SummaryExample() {
         blurb="A FormSummary panel beside the form. Every total recomputes live as you type."
       />
 
-      <div className="flex items-start gap-4">
-      <FormBuilder
-        form={form}
-        onSubmit={onSubmit}
-        loading={submitting}
-        fieldDirection="vertical"
-        className="min-w-0 flex-1"
-      >
-        <FormBuilder.Section title="Customer" color="Blue">
-          <FormBuilder.Text name="customer" label="Customer" required placeholder="Acme Corp." />
-          <FormBuilder.Currency name="balance" label="Balance" currencySymbol="$" />
-        </FormBuilder.Section>
+      {/* `items-stretch` (the default) — not `items-start`, which would collapse the
+          panel to its content height instead of letting it match the form's. */}
+      <div className="flex gap-4">
+        <FormBuilder
+          form={form}
+          onSubmit={onSubmit}
+          loading={submitting}
+          fieldDirection="vertical"
+          className="min-w-0 flex-1"
+        >
+          <FormBuilder.Section title="Customer" color="Blue">
+            <FormBuilder.Text name="customer" label="Customer" required placeholder="Acme Corp." />
+            <FormBuilder.Currency name="balance" label="Balance" currencySymbol="$" />
+          </FormBuilder.Section>
 
-        <FormBuilder.Section title="Line items" color="Green">
-          <FormBuilder.FieldArray
-            name="items"
-            label="Items"
-            addLabel="Add item"
-            defaultItem={{ name: "", qty: 1, price: 0, discount: 0 }}
-          >
-            {(rowName) => (
-              <>
-                <FormBuilder.Text name={`${rowName}.name`} label="Item" />
-                <FormBuilder.Number name={`${rowName}.qty`} label="Qty" />
-                <FormBuilder.Currency name={`${rowName}.price`} label="Price" currencySymbol="$" />
-                <FormBuilder.Currency
-                  name={`${rowName}.discount`}
-                  label="Discount"
-                  currencySymbol="$"
-                />
-              </>
-            )}
-          </FormBuilder.FieldArray>
-        </FormBuilder.Section>
+          <FormBuilder.Section title="Line items" color="Green">
+            <FormBuilder.FieldArray
+              name="items"
+              label="Items"
+              addLabel="Add item"
+              defaultItem={{ name: "", qty: 1, price: 0, discount: 0 }}
+            >
+              {(rowName) => (
+                <>
+                  <FormBuilder.Text name={`${rowName}.name`} label="Item" />
+                  <FormBuilder.Number name={`${rowName}.qty`} label="Qty" />
+                  <FormBuilder.Currency
+                    name={`${rowName}.price`}
+                    label="Price"
+                    currencySymbol="$"
+                  />
+                  <FormBuilder.Currency
+                    name={`${rowName}.discount`}
+                    label="Discount"
+                    currencySymbol="$"
+                  />
+                </>
+              )}
+            </FormBuilder.FieldArray>
+          </FormBuilder.Section>
 
-        <FormBuilder.Section title="Rates" color="Purple">
-          <FormBuilder.Number name="taxRate" label="Tax rate (%)" />
-          <FormBuilder.Number name="iqdRate" label="USD → IQD rate" />
-        </FormBuilder.Section>
+          <FormBuilder.Section title="Rates" color="Purple">
+            <FormBuilder.Number name="taxRate" label="Tax rate (%)" />
+            <FormBuilder.Number name="iqdRate" label="USD → IQD rate" />
+          </FormBuilder.Section>
 
-        <FormBuilder.Submit loadingText="Saving…">Save invoice</FormBuilder.Submit>
-      </FormBuilder>
+          <FormBuilder.Submit loadingText="Saving…">Save invoice</FormBuilder.Submit>
+        </FormBuilder>
 
-      {/* Rendered OUTSIDE the form, beside it — it reads the same hoisted `form`. */}
-      <FormSummary form={form} title="Invoice" subtitle="Summary">
+        {/* Rendered OUTSIDE the form, beside it — it reads the same hoisted `form`. */}
+        <FormSummary form={form} title="Invoice" subtitle="Summary">
           <FormSummary.Group title="Customer">
             <FormSummary.Row
               label="Balance"
@@ -127,7 +133,12 @@ export default function SummaryExample() {
               compute={(v: Invoice) => overallTotal(v) * (v.iqdRate ?? 0)}
               decimals={0}
             />
-            <FormSummary.Row label="Overall Total" currency="USD" tone="info" compute={overallTotal} />
+            <FormSummary.Row
+              label="Overall Total"
+              currency="USD"
+              tone="info"
+              compute={overallTotal}
+            />
           </FormSummary.Group>
 
           <FormSummary.Group title="Tax">
@@ -146,7 +157,7 @@ export default function SummaryExample() {
           <FormSummary.Group title="Quantity">
             <FormSummary.Row label="Total Qty" compute={totalQty} decimals={0} />
           </FormSummary.Group>
-      </FormSummary>
+        </FormSummary>
       </div>
 
       <SubmitResult result={result} />

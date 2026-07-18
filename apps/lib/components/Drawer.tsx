@@ -91,8 +91,8 @@ const DrawerContent = React.forwardRef<
             <div className={notchSide === "right" ? "self-end" : "self-start"}>
               {React.isValidElement(notch)
                 ? React.cloneElement(notch as React.ReactElement<{ side?: "left" | "right" }>, {
-                  side: notchSide,
-                })
+                    side: notchSide,
+                  })
                 : notch}
             </div>
           )}
@@ -130,10 +130,11 @@ const DrawerContent = React.forwardRef<
               )}
               {children}
             </div>
-            {childrenOutside && <div>{childrenOutside}</div>}
-
+            {/* `flex min-h-0` so the outside content (e.g. a `FormSummary`) stretches to
+                the tray's full height and can still shrink — without `min-h-0` it would
+                grow past the tray instead of scrolling inside it. */}
+            {childrenOutside && <div className="flex min-h-0">{childrenOutside}</div>}
           </div>
-
         </DrawerPrimitive.Content>
 
         {/* Outside the drawer panel — a sibling of it. Position via its own classes. */}
@@ -187,7 +188,7 @@ const drawerBadge = cva(
 );
 
 interface DrawerBadgeProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> { }
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> {}
 
 const DrawerBadge = React.forwardRef<HTMLSpanElement, DrawerBadgeProps>(
   ({ className, color, ...props }, ref) => (
@@ -276,8 +277,8 @@ const drawerNotchPill = cva(
 
 interface DrawerNotchPillProps
   extends
-  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
-  VariantProps<typeof drawerNotchPill> { }
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
+    VariantProps<typeof drawerNotchPill> {}
 
 const DrawerNotchPill = React.forwardRef<HTMLButtonElement, DrawerNotchPillProps>(
   ({ className, color, children, ...props }, ref) => (

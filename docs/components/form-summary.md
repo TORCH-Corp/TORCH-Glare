@@ -21,7 +21,7 @@ The panel renders **outside** the form, beside it. Both read the same form, so
 ```tsx
 const form = useForm({ resolver: zodResolver(schema), defaultValues })
 
-<div className="flex items-start gap-4">
+<div className="flex gap-4">
   <FormBuilder form={form} onSubmit={save} className="min-w-0 flex-1">
     <FormBuilder.Section title="Line items">…fields…</FormBuilder.Section>
   </FormBuilder>
@@ -41,6 +41,22 @@ const form = useForm({ resolver: zodResolver(schema), defaultValues })
 `FormBuilder` stays purely an input renderer — it knows nothing about the panel, and
 **you** own the side-by-side layout. Passing `form` to `FormBuilder` makes it use that
 instance instead of creating its own.
+
+### Height
+
+The panel is `h-full` and fills whatever height its parent gives it, scrolling its groups
+(header pinned) once they outrun it. That means **the parent has to have a height** — the
+usual mistake is `items-start` on the flex row, which collapses the panel to its content
+instead. Leave the row at its default `items-stretch`, as above.
+
+To make the panel own the viewport rather than grow with the form, bound the row:
+
+```tsx
+<div className="flex h-[calc(100vh-2rem)] gap-4">
+  <FormBuilder … className="min-w-0 flex-1 overflow-y-auto" />
+  <FormSummary … />
+</div>
+```
 
 > Hoisting the form means a remount `key` no longer resets it. Call `form.reset(defaults)`
 > instead (e.g. when opening a drawer).
@@ -65,12 +81,18 @@ import { FormSummary } from '@/components/FormSummary'
 | `title` | `ReactNode` | Panel title, e.g. `"Invoice"`. |
 | `subtitle` | `ReactNode` | Muted text beside the title, e.g. `"Summary"`. |
 | `form` | `UseFormReturn` | The form to read values from — required when rendered outside the `<FormBuilder>`. |
-| `width` | `number \| string` | Panel width; default `229`. |
+| `width` | `number \| string` | Panel width; default `228`. |
 | `children` | `ReactNode` | `FormSummary.Group` children. |
 
 ## `FormSummary.Group` props
 
-`title` — the group heading (Customer / Total / Tax / …). Groups are separated by a divider.
+| Prop | Type | Notes |
+|---|---|---|
+| `title` | `ReactNode` | The group heading (Customer / Total / Tax / …). Groups are separated by a divider. |
+| `collapsible` | `boolean` | When titled, the heading is a [ConclusionHeader](./conclusion-header.md) that opens/closes **this group's** rows; default `true`. |
+| `defaultOpen` | `boolean` | Initial open state when collapsible; default `true`. |
+
+The main panel title is a plain header — collapsing happens **per group**, not on the whole panel.
 
 ## `FormSummary.Row` props
 
@@ -79,11 +101,11 @@ import { FormSummary } from '@/components/FormSummary'
 | `label` | `ReactNode` | Row label, above the value. |
 | `compute` | `(values) => number \| string` | **The calculation** — receives the live form values. |
 | `value` | `number \| string` | Static value, when there's nothing to compute. |
-| `currency` | `ReactNode` | Currency code beside the label, e.g. `"IQD"`. |
+| `currency` | `ReactNode` | Currency code, e.g. `"IQD"` — rendered **inside** the field's trailing edge. |
 | `tone` | `'neutral' \| 'success' \| 'info'` | Color of the currency code (green / blue). |
 | `emphasized` | `boolean` | The primary result — lighter, emphasized border. |
 | `decimals` | `number` | Decimal places; default `2` (→ `0.00`). |
-| `action` | `ReactNode` | Trailing slot inside the field, e.g. an `ActionButton`. |
+| `action` | `ReactNode` | Trailing slot inside the field, e.g. an `ActionButton`. Shares the slot with `currency`. |
 | `format` | `(value) => string` | Override the default number formatting. |
 
 ## Computing totals
