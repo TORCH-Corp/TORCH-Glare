@@ -13,6 +13,13 @@
 ### Changed
 - `FormBuilder.Checkbox` gained an optional `subLabel` — text rendered inline beside the
   checkbox (via the clickable `LabeledCheckBox`), in addition to the field `label`.
+- Restyled `ImageAttachment` to match the *Attachment-Field-1.0 / Pic-Container-1.0* design: a
+  `#f9f9f9` field box around a transparent dashed drop zone, a fixed 65×65 square thumbnail, an
+  ocean/blue-purple "ratio" placeholder (gray on hover), and a `black/50` + fullscreen-icon
+  expand overlay. Fixes the placeholder, which previously referenced a non-existent
+  `badge-blue-purple` token (its colors were silently no-ops). `ExpandableImage` no longer
+  aspect-ratio-fits (now a fixed square); `FileField` / `FormBuilder.File`/`.Image` behavior is
+  unchanged.
 
 ### Removed
 - **BREAKING:** removed the non-boxed `FormBuilder.Radio` and `FormBuilder.Switch` fields —

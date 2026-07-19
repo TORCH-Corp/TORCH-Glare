@@ -29,6 +29,7 @@ const schema = z.object({
   darkMode: z.boolean().refine((v) => v === true, "Enable this"),
   dueDate: z.date({ required_error: "Pick a date", invalid_type_error: "Pick a date" }),
   attachment: z.any().refine((v) => v != null, "Attach a file"),
+  photo: z.any().refine((v) => v != null, "Add an image"),
   bio: z.any().refine((v) => v != null, "Bio is required"),
   signature: z.string().min(1, "Signature is required"),
   segment: z.string().min(1, "Pick a segment"),
@@ -75,6 +76,7 @@ const DEFAULTS: AllFields = {
   darkMode: false,
   dueDate: undefined as unknown as Date,
   attachment: undefined,
+  photo: undefined,
   bio: undefined,
   signature: "",
   segment: "",
@@ -194,7 +196,14 @@ export default function FieldTypesExample() {
 
         <FormBuilder.Section title="Rich inputs" color="Purple">
           <FormBuilder.Date name="dueDate" label="Date" required />
-          <FormBuilder.File name="attachment" label="File" required accept=".pdf,.png,.jpg" />
+          <FormBuilder.File
+            name="attachment"
+            label="File"
+            description="PDF, PNG or JPG"
+            required
+            accept=".pdf,.png,.jpg"
+          />
+          <FormBuilder.Image name="photo" label="Image" required accept="image/*" />
           <FormBuilder.RichText
             name="bio"
             label="Bio"
