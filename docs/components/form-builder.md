@@ -72,11 +72,13 @@ Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 | `FormBuilder.Phone` (`defaultCountry`) | `SearchableSelect` + `InputField` | `string` |
 | `FormBuilder.Select` / `.SearchableSelect` (`options`, async props) | `SearchableSelect` | `string` |
 | `FormBuilder.MultiSelect` / `.Tags` (`options`) | `BadgeField` | `string[]` |
-| `FormBuilder.Radio` (`options`) | `RadioGroup` | `string` |
+| `FormBuilder.RadioList` (`options`, each with optional `description`) | boxed radio list | `string` |
+| `FormBuilder.CheckboxGroup` (`options`, each with optional `description`) | boxed checkbox list | `string[]` |
 | `FormBuilder.RadioCards` (`options` with `description`) | `RadioCard` | `string` |
 | `FormBuilder.Segmented` (`options`) | `TabSwitch` | `string` |
 | `FormBuilder.ToggleGroup` (`options`, `multiple`) | `ButtonGroup` | `string` / `string[]` |
-| `FormBuilder.Checkbox` / `.Switch` | `Checkbox` / `Switch` | `boolean` |
+| `FormBuilder.Checkbox` (`subLabel`) | `Checkbox` + inline label | `boolean` |
+| `FormBuilder.SwitchBox` (`subLabel`) | `Switch` in a `#f9f9f9` box | `boolean` |
 | `FormBuilder.ToggleButton` | `ToggleButton` | `boolean` |
 | `FormBuilder.Otp` (`length`) | `InputOTP` | `string` |
 | `FormBuilder.Date` | `DatePicker` | `Date` |
@@ -94,6 +96,15 @@ Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 `FormBuilder.Password` accepts `strengthMeter` (shows a `PasswordLevel` meter). `FormBuilder.FieldArray`
 renders a repeating list — its `children` is a render fn `(rowName, index, remove) => …` and sub-fields
 are named `${rowName}.field`.
+
+`FormBuilder.RadioList` (single-select, `string`) and `FormBuilder.CheckboxGroup` (multi-select,
+`string[]`) render their `options` as a boxed, divided list — control on the left, primary
+label, and an optional per-option `description` shown as a secondary label. The whole row is
+clickable. Multi-select is also available as `.MultiSelect` / `.Tags` (a tag-chip picker).
+
+`FormBuilder.SwitchBox` (value `boolean`) is a switch wrapped in a `#f9f9f9` field box. It
+renders like any other field — the `label` sits in the normal label column — and the box holds
+an optional inline `subLabel`, a vertical divider, and the switch.
 
 `FormBuilder.Section` (props `title`, `color`, `icon`) groups fields in a Glare
 `SectionBlock`. `FormBuilder.Submit` is a loading-aware submit button (hidden in view mode).

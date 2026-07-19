@@ -1,9 +1,7 @@
 "use client";
 
-import { Switch } from "../../Switch";
-import { Checkbox } from "../../Checkbox";
+import { LabeledCheckBox } from "../../LabeledCheckBox";
 import { RadioGroup } from "../../Radio";
-import { LabeledRadio } from "../../LabeledRadio";
 import { TabSwitch } from "../../TabSwitch";
 import { ButtonGroup, ButtonGroupItem } from "../../ButtonGroup";
 import { RadioCard } from "../../RadioCard";
@@ -11,14 +9,37 @@ import { ToggleButton } from "../../ToggleButton";
 import { useLoading } from "../context";
 import { formatFieldView } from "../viewFormat";
 import type {
-  BaseFieldProps,
-  OptionsFieldProps,
+  CheckboxFieldProps,
   SegmentedFieldProps,
   ToggleGroupFieldProps,
   RadioCardsFieldProps,
   ToggleButtonFieldProps,
 } from "../types";
 import { FieldShell } from "./FieldShell";
+
+/**
+ * `FormBuilder.Checkbox` — a single boolean checkbox. The field `label` sits in the
+ * normal label column; an optional `subLabel` renders inline beside the checkbox (via
+ * the clickable `LabeledCheckBox`).
+ */
+export function CheckboxField({ subLabel, ...props }: CheckboxFieldProps) {
+  const loading = useLoading();
+  return (
+    <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
+      {(field) => (
+        <div className="flex w-full items-center">
+          <LabeledCheckBox
+            id={props.name}
+            label={subLabel ?? ""}
+            checked={!!field.value}
+            onCheckedChange={(checked) => field.onChange(checked === true)}
+            disabled={props.disabled || loading}
+          />
+        </div>
+      )}
+    </FieldShell>
+  );
+}
 
 /** `FormBuilder.ToggleButton` — a pressed/unpressed button (Glare `ToggleButton`). */
 export function ToggleButtonField(props: ToggleButtonFieldProps) {
@@ -37,74 +58,6 @@ export function ToggleButtonField(props: ToggleButtonFieldProps) {
             {props.label}
           </ToggleButton>
         </div>
-      )}
-    </FieldShell>
-  );
-}
-
-export function SwitchField(props: BaseFieldProps) {
-  const loading = useLoading();
-  // Renders like a normal field: label (+ required + error hint) in the left column,
-  // the switch in the control column.
-  return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
-      {(field) => (
-        <div className="flex w-full items-center">
-          <Switch
-            id={props.name}
-            checked={!!field.value}
-            onCheckedChange={field.onChange}
-            disabled={props.disabled || loading}
-          />
-        </div>
-      )}
-    </FieldShell>
-  );
-}
-
-export function CheckboxField(props: BaseFieldProps) {
-  const loading = useLoading();
-  // Renders like a normal field: label (+ required + error hint) in the left column,
-  // the checkbox left-aligned in the control column.
-  return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
-      {(field) => (
-        <div className="flex w-full items-center">
-          <Checkbox
-            id={props.name}
-            checked={!!field.value}
-            onCheckedChange={(checked) => field.onChange(checked === true)}
-            disabled={props.disabled || loading}
-          />
-        </div>
-      )}
-    </FieldShell>
-  );
-}
-
-export function RadioField(props: OptionsFieldProps) {
-  const loading = useLoading();
-  return (
-    <FieldShell
-      {...props}
-      view={(v) => formatFieldView({ kind: "option", value: v, options: props.options })}
-    >
-      {(field) => (
-        <RadioGroup
-          value={field.value ?? ""}
-          onValueChange={field.onChange}
-          className="flex flex-col gap-2"
-        >
-          {props.options.map((opt) => (
-            <LabeledRadio
-              key={opt.value}
-              id={`${props.name}-${opt.value}`}
-              value={opt.value}
-              label={opt.label}
-              disabled={props.disabled || loading}
-            />
-          ))}
-        </RadioGroup>
       )}
     </FieldShell>
   );
@@ -136,7 +89,11 @@ export function ToggleGroupField(props: ToggleGroupFieldProps) {
     <FieldShell
       {...props}
       view={(v) =>
-        formatFieldView({ kind: props.multiple ? "multi" : "option", value: v, options: props.options })
+        formatFieldView({
+          kind: props.multiple ? "multi" : "option",
+          value: v,
+          options: props.options,
+        })
       }
     >
       {(field) => {

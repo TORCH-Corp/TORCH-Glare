@@ -23,7 +23,12 @@ export default function StepperExample() {
         blurb="Steps are components; every step's fields stay registered — the nav only toggles visibility."
       />
 
-      <FormBuilder onSubmit={onSubmit} loading={submitting} resolver={resolver} defaultValues={DEFAULTS}>
+      <FormBuilder
+        onSubmit={onSubmit}
+        loading={submitting}
+        resolver={resolver}
+        defaultValues={DEFAULTS}
+      >
         <FormBuilder.Header title="New item" variant="new" />
         <FormBuilder.Stepper>
           <FormBuilder.Step title="Identity">
@@ -35,7 +40,7 @@ export default function StepperExample() {
           <FormBuilder.Step title="Classification">
             <FormBuilder.Section title="Classification" color="Red">
               <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
-              <FormBuilder.Radio name="plan" label="Billing plan" options={PLAN} />
+              <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
               <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
             </FormBuilder.Section>
           </FormBuilder.Step>
@@ -46,8 +51,13 @@ export default function StepperExample() {
           </FormBuilder.Step>
           <FormBuilder.Step title="Settings">
             <FormBuilder.Section title="Settings" color="Purple">
-              <FormBuilder.Switch name="active" label="Active" />
-              <FormBuilder.Checkbox name="agree" label="I agree to the terms" required />
+              <FormBuilder.SwitchBox name="active" label="Active" />
+              <FormBuilder.Checkbox
+                name="agree"
+                label="Terms"
+                subLabel="I agree to the terms"
+                required
+              />
             </FormBuilder.Section>
           </FormBuilder.Step>
         </FormBuilder.Stepper>

@@ -25,6 +25,8 @@ export type {
   ToggleButtonFieldProps,
   RadioCardOption,
   RadioCardsFieldProps,
+  SwitchBoxFieldProps,
+  CheckboxFieldProps,
   TreeSelectFieldProps,
   PasswordFieldProps,
   SliderFieldProps,

@@ -126,20 +126,30 @@ export function CoreFields() {
     <>
       <FormBuilder.Section title="Identity" color="Blue">
         <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
-        <FormBuilder.Textarea name="description" label="Description" fullWidth placeholder="Short summary…" />
+        <FormBuilder.Textarea
+          name="description"
+          label="Description"
+          fullWidth
+          placeholder="Short summary…"
+        />
       </FormBuilder.Section>
       <FormBuilder.Section title="Classification" color="Red">
         <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
         <FormBuilder.SearchableSelect name="priority" label="Priority" options={PRIORITY} />
-        <FormBuilder.Radio name="plan" label="Billing plan" options={PLAN} />
+        <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
         <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
       </FormBuilder.Section>
       <FormBuilder.Section title="Financial" color="Green">
-        <FormBuilder.Currency name="price" label="Base price" currencySymbol="$" placeholder="0.00" />
+        <FormBuilder.Currency
+          name="price"
+          label="Base price"
+          currencySymbol="$"
+          placeholder="0.00"
+        />
       </FormBuilder.Section>
       <FormBuilder.Section title="Settings" color="Purple">
-        <FormBuilder.Switch name="active" label="Active" />
-        <FormBuilder.Checkbox name="agree" label="I agree to the terms" required />
+        <FormBuilder.SwitchBox name="active" label="Active" />
+        <FormBuilder.Checkbox name="agree" label="Terms" subLabel="I agree to the terms" required />
       </FormBuilder.Section>
     </>
   );
@@ -176,8 +186,12 @@ export function DemoNav() {
 export function DemoHeader({ title, blurb }: { title: string; blurb: string }) {
   return (
     <header className="flex flex-col gap-1">
-      <h1 className="typography-headers-large-medium text-content-presentation-global-primary">{title}</h1>
-      <p className="typography-body-medium-regular text-content-presentation-global-secondary">{blurb}</p>
+      <h1 className="typography-headers-large-medium text-content-presentation-global-primary">
+        {title}
+      </h1>
+      <p className="typography-body-medium-regular text-content-presentation-global-secondary">
+        {blurb}
+      </p>
     </header>
   );
 }

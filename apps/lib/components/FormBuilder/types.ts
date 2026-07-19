@@ -27,6 +27,8 @@ export interface OptionItem {
   label: string;
   value: string;
   icon?: ReactNode;
+  /** Secondary row label — shown by `FormBuilder.RadioList` / `.CheckboxGroup`. */
+  description?: string;
 }
 
 /** `FormBuilder.Select` / `.SearchableSelect` — supports async option loading. */
@@ -76,6 +78,18 @@ export interface DateFieldProps extends BaseFieldProps {
 export interface OtpFieldProps extends BaseFieldProps {
   /** Number of digit slots (default 6). */
   length?: number;
+}
+
+/** `FormBuilder.SwitchBox` — a switch inside a `#f9f9f9` field box. */
+export interface SwitchBoxFieldProps extends BaseFieldProps {
+  /** Text shown inside the box, left of the divider (the design's "Sub-Field-Header"). */
+  subLabel?: string;
+}
+
+/** `FormBuilder.Checkbox` — a single boolean checkbox with an optional inline label. */
+export interface CheckboxFieldProps extends BaseFieldProps {
+  /** Text shown inline next to the checkbox (in addition to the field `label`). */
+  subLabel?: string;
 }
 
 /** `FormBuilder.Segmented` (TabSwitch) — single-select segmented control. */

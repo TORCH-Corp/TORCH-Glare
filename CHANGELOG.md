@@ -1,5 +1,25 @@
 ## Unreleased
 
+### Added
+- **`FormBuilder.RadioList`** and **`FormBuilder.CheckboxGroup`** — option-group fields that
+  render as a boxed, divided list (light `#f9f9f9` container, full-width row dividers, control
+  on the left, primary + optional secondary label). `RadioList` is single-select (`string`);
+  `CheckboxGroup` is multi-select (`string[]`). `OptionItem` gained an optional `description`
+  for the per-row secondary label.
+- **`FormBuilder.SwitchBox`** — a switch wrapped in a `#f9f9f9` field box (value `boolean`).
+  Renders like any other field (label in the normal label column); the box holds an optional
+  inline `subLabel`, a vertical divider, and the switch.
+
+### Changed
+- `FormBuilder.Checkbox` gained an optional `subLabel` — text rendered inline beside the
+  checkbox (via the clickable `LabeledCheckBox`), in addition to the field `label`.
+
+### Removed
+- **BREAKING:** removed the non-boxed `FormBuilder.Radio` and `FormBuilder.Switch` fields —
+  their boxed versions are the only style now. Migrate `.Radio` → `.RadioList` and
+  `.Switch` → `.SwitchBox` (same value contracts). The single boolean `FormBuilder.Checkbox`
+  is unchanged and still available.
+
 ### Changed
 - **BREAKING:** `DrawerContent` no longer paints the light content surface. That surface is now
   a separate exported **`DrawerPanel`** — wrap your drawer body in it. This is what lets a

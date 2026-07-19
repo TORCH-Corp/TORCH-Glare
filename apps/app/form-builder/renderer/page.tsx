@@ -38,7 +38,7 @@ export default function FormRendererExample() {
       <FormBuilder.Section title="Classification" color="Red">
         <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
         <FormBuilder.SearchableSelect name="priority" label="Priority" options={PRIORITY} />
-        <FormBuilder.Radio name="plan" label="Billing plan" options={PLAN} />
+        <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
         <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
       </FormBuilder.Section>
 
@@ -47,8 +47,8 @@ export default function FormRendererExample() {
       </FormBuilder.Section>
 
       <FormBuilder.Section title="Settings" color="Purple">
-        <FormBuilder.Switch name="active" label="Active" />
-        <FormBuilder.Checkbox name="agree" label="I agree to the terms" required />
+        <FormBuilder.SwitchBox name="active" label="Active" />
+        <FormBuilder.Checkbox name="agree" label="Terms" subLabel="I agree to the terms" required />
       </FormBuilder.Section>
     </>
   );
@@ -61,8 +61,20 @@ export default function FormRendererExample() {
       />
 
       <div className="flex gap-1 rounded-[8px] bg-black-alpha-10 p-1 w-fit">
-        <Button size="S" variant={display === "page" ? "PrimeStyle" : "BorderStyle"} onClick={() => setDisplay("page")}>Page</Button>
-        <Button size="S" variant={display === "drawer" ? "PrimeStyle" : "BorderStyle"} onClick={() => setDisplay("drawer")}>Drawer</Button>
+        <Button
+          size="S"
+          variant={display === "page" ? "PrimeStyle" : "BorderStyle"}
+          onClick={() => setDisplay("page")}
+        >
+          Page
+        </Button>
+        <Button
+          size="S"
+          variant={display === "drawer" ? "PrimeStyle" : "BorderStyle"}
+          onClick={() => setDisplay("drawer")}
+        >
+          Drawer
+        </Button>
       </div>
 
       {display === "page" ? (
@@ -77,7 +89,9 @@ export default function FormRendererExample() {
         </FormRenderer>
       ) : (
         <div>
-          <Button variant="PrimeStyle" onClick={() => setOpen(true)}>Open in drawer</Button>
+          <Button variant="PrimeStyle" onClick={() => setOpen(true)}>
+            Open in drawer
+          </Button>
           <FormRenderer
             display="drawer"
             open={open}
