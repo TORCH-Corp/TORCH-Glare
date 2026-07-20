@@ -135,6 +135,8 @@ export interface SliderFieldProps extends BaseFieldProps {
 /** `FormBuilder.Color` — color picker; value hex `string`. */
 export interface ColorFieldProps extends BaseFieldProps {
   presets?: string[];
+  /** Enable the opacity slider and `#rrggbbaa` output (default true). */
+  alpha?: boolean;
 }
 
 /** `FormBuilder.Phone` — country dial-code + number; value `string`. */

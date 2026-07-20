@@ -68,7 +68,7 @@ Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 | `FormBuilder.Currency` (`currencySymbol`) | `InputField` + symbol | `number` |
 | `FormBuilder.Textarea` | `Textarea` | `string` |
 | `FormBuilder.Slider` (`min,max,step,range`) | `@radix-ui/react-slider` | `number` / `[number,number]` |
-| `FormBuilder.Color` (`presets`) | native color + hex | hex `string` |
+| `FormBuilder.Color` (`presets`, `alpha`) | `ColorPicker` (full palette: SV area, hue, opacity, eyedropper, HEX/RGB/HSL, presets) | hex `string` (`#rrggbb`, or `#rrggbbaa` when opacity < 100%) |
 | `FormBuilder.Phone` (`defaultCountry`) | `SearchableSelect` + `InputField` | `string` |
 | `FormBuilder.Select` / `.SearchableSelect` (`options`, async props) | `SearchableSelect` | `string` |
 | `FormBuilder.MultiSelect` / `.Tags` (`options`) | `BadgeField` | `string[]` |

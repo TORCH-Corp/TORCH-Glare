@@ -158,6 +158,21 @@
       ]
     },
     {
+      "name": "ColorPicker",
+      "type": "components",
+      "path": "components/ColorPicker.tsx",
+      "npmDependencies": [
+        "@radix-ui/react-slider"
+      ],
+      "registryDependencies": [
+        "components/Input",
+        "components/Popover",
+        "utils/cn",
+        "utils/color",
+        "utils/types"
+      ]
+    },
+    {
       "name": "ConclusionHeader",
       "type": "components",
       "path": "components/ConclusionHeader.tsx",
@@ -942,6 +957,13 @@
         "clsx",
         "tailwind-merge"
       ],
+      "registryDependencies": []
+    },
+    {
+      "name": "color",
+      "type": "utils",
+      "path": "utils/color.ts",
+      "npmDependencies": [],
       "registryDependencies": []
     },
     {
