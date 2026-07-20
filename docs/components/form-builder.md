@@ -75,17 +75,13 @@ Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 | `FormBuilder.RadioList` (`options`, each with optional `description`) | boxed radio list | `string` |
 | `FormBuilder.CheckboxGroup` (`options`, each with optional `description`) | boxed checkbox list | `string[]` |
 | `FormBuilder.RadioCards` (`options` with `description`) | `RadioCard` | `string` |
-| `FormBuilder.Segmented` (`options`) | `TabSwitch` | `string` |
-| `FormBuilder.ToggleGroup` (`options`, `multiple`) | `ButtonGroup` | `string` / `string[]` |
 | `FormBuilder.Checkbox` (`subLabel`) | `Checkbox` + inline label | `boolean` |
 | `FormBuilder.SwitchBox` (`subLabel`) | `Switch` in a `#f9f9f9` box | `boolean` |
-| `FormBuilder.ToggleButton` | `ToggleButton` | `boolean` |
 | `FormBuilder.Otp` (`length`) | `InputOTP` | `string` |
 | `FormBuilder.Date` | `DatePicker` | `Date` |
 | `FormBuilder.DateRange` | `DatePicker` (range) | `{from,to}` |
 | `FormBuilder.DateMultiple` | `DatePicker` (multiple) | `Date[]` |
 | `FormBuilder.DateTime` | `DatePicker` (timePicker) | `Date` |
-| `FormBuilder.InlineCalendar` | `Calendar` | `Date` |
 | `FormBuilder.TreeSelect` (`nodes`, `getNodeId`, `getNodeLabel`, …) | `SearchableTree` | node id (`string`) |
 | `FormBuilder.File` / `.Image` (`accept`, `multiple`) | `ImageAttachment` | `File \| File[]` |
 | `FormBuilder.RichText` | `TextEditor` (EditorJS) | `OutputData` |

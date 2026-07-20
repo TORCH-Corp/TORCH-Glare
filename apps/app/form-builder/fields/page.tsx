@@ -32,19 +32,15 @@ const schema = z.object({
   photo: z.any().refine((v) => v != null, "Add an image"),
   bio: z.any().refine((v) => v != null, "Bio is required"),
   signature: z.string().min(1, "Signature is required"),
-  segment: z.string().min(1, "Pick a segment"),
-  toggles: z.array(z.string()).min(1, "Select at least one"),
   tier: z.string().min(1, "Choose a tier"),
   pin: z.string().min(6, "Enter the 6-digit code"),
   range: z.any().refine((v) => v?.from && v?.to, "Pick a date range"),
   when: z.date({ required_error: "Pick date & time", invalid_type_error: "Pick date & time" }),
   categoryId: z.string().min(1, "Pick a category"),
-  toggled: z.boolean().refine((v) => v === true, "Enable this"),
   volume: z.number().min(1, "Set a volume above 0"),
   rangeVals: z.any().refine((v) => Array.isArray(v) && v[0] >= 30, "Range start must be ≥ 30"),
   colorHex: z.string().min(1, "Pick a color"),
   phone2: z.string().min(1, "Phone is required"),
-  day: z.date({ required_error: "Pick a day", invalid_type_error: "Pick a day" }),
   contacts: z
     .array(
       z.object({
@@ -79,19 +75,15 @@ const DEFAULTS: AllFields = {
   photo: undefined,
   bio: undefined,
   signature: "",
-  segment: "",
-  toggles: [],
   tier: "",
   pin: "",
   range: undefined,
   when: undefined as unknown as Date,
   categoryId: "",
-  toggled: false,
   volume: 0,
   rangeVals: [20, 80],
   colorHex: "",
   phone2: "",
-  day: undefined as unknown as Date,
   contacts: [{ name: "", email: "" }],
 };
 
@@ -215,27 +207,6 @@ export default function FieldTypesExample() {
         </FormBuilder.Section>
 
         <FormBuilder.Section title="More inputs" color="Orange">
-          <FormBuilder.Segmented
-            name="segment"
-            label="Segmented"
-            required
-            options={[
-              { label: "List", value: "list" },
-              { label: "Grid", value: "grid" },
-              { label: "Board", value: "board" },
-            ]}
-          />
-          <FormBuilder.ToggleGroup
-            name="toggles"
-            label="Toggle group"
-            required
-            multiple
-            options={[
-              { label: "Bold", value: "bold" },
-              { label: "Italic", value: "italic" },
-              { label: "Underline", value: "underline" },
-            ]}
-          />
           <FormBuilder.RadioCards
             name="tier"
             label="Radio cards"
@@ -261,7 +232,6 @@ export default function FieldTypesExample() {
         </FormBuilder.Section>
 
         <FormBuilder.Section title="Advanced inputs" color="Blue">
-          <FormBuilder.ToggleButton name="toggled" label="Toggle button" required />
           <FormBuilder.Slider name="volume" label="Slider" required min={0} max={100} />
           <FormBuilder.Slider name="rangeVals" label="Range" required min={0} max={100} range />
           <FormBuilder.Color
@@ -271,7 +241,6 @@ export default function FieldTypesExample() {
             presets={["#005ECC", "#047854", "#E30C30", "#F5A623"]}
           />
           <FormBuilder.Phone name="phone2" label="Phone" required />
-          <FormBuilder.InlineCalendar name="day" label="Inline calendar" required />
         </FormBuilder.Section>
 
         <FormBuilder.Section title="Field array" color="Green">

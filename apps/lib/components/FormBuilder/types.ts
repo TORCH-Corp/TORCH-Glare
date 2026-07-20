@@ -92,15 +92,6 @@ export interface CheckboxFieldProps extends BaseFieldProps {
   subLabel?: string;
 }
 
-/** `FormBuilder.Segmented` (TabSwitch) — single-select segmented control. */
-export type SegmentedFieldProps = OptionsFieldProps;
-
-/** `FormBuilder.ToggleGroup` (ButtonGroup) — single or multi toggle group. */
-export interface ToggleGroupFieldProps extends OptionsFieldProps {
-  /** Multi-select — value becomes `string[]`. */
-  multiple?: boolean;
-}
-
 /** One option for `FormBuilder.RadioCards`. */
 export interface RadioCardOption {
   label: ReactNode;
@@ -131,12 +122,6 @@ export interface TreeSelectFieldProps<T = unknown> extends BaseFieldProps {
 export interface PasswordFieldProps extends BaseFieldProps {
   strengthMeter?: boolean;
 }
-
-/** `FormBuilder.InlineCalendar` — always-visible calendar; value `Date`. */
-export type CalendarFieldProps = BaseFieldProps;
-
-/** `FormBuilder.ToggleButton` — a pressed/unpressed button; value `boolean`. */
-export type ToggleButtonFieldProps = BaseFieldProps;
 
 /** `FormBuilder.Slider` — numeric slider; value `number` (or `[number, number]` with `range`). */
 export interface SliderFieldProps extends BaseFieldProps {
