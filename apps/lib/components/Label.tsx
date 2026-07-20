@@ -56,6 +56,11 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
   ) => {
     const Component = Tag;
 
+    // When there's no label text at all, skip the label container entirely so its
+    // sibling `gap-[8px]` doesn't leave an empty gap above the children (e.g. a
+    // label-less Textarea/Input should sit flush).
+    const hasLabelContent = Boolean(label || secondaryLabel || requiredLabel);
+
     return (
       <Component
         data-theme={theme}
@@ -72,48 +77,50 @@ export const Label = React.forwardRef<HTMLLabelElement, Props>(
         )}
         {...props}
       >
-        <div className={cn(labelComponentVariants({ labelDirections }), labelsClassName)}>
-          {label && (
-            <p
-              className={cn(
-                "text-start",
-                {
-                  "typography-body-small-regular": size === "S",
-                  "typography-body-medium-regular": size === "M",
-                  "typography-body-large-regular": size === "L",
-                },
-                {
-                  "text-content-presentation-global-primary": variant === "PresentationStyle",
-                  "text-[#E5E5E5]": variant === "SystemStyle",
-                },
-              )}
-            >
-              {label}
-            </p>
-          )}
-          {secondaryLabel && (
-            <p
-              className={cn("text-content-presentation-global-secondary text-start", {
-                "typography-labels-small-regular": size === "S",
-                "typography-labels-medium-regular": size === "M",
-                "typography-body-small-regular": size === "L",
-              })}
-            >
-              {secondaryLabel}
-            </p>
-          )}
-          {requiredLabel && (
-            <p
-              className={cn("text-content-presentation-state-negative text-start", {
-                "typography-labels-small-medium": size === "S",
-                "typography-labels-medium-medium": size === "M",
-                "typography-body-small-medium": size === "L",
-              })}
-            >
-              {requiredLabel}
-            </p>
-          )}
-        </div>
+        {hasLabelContent && (
+          <div className={cn(labelComponentVariants({ labelDirections }), labelsClassName)}>
+            {label && (
+              <p
+                className={cn(
+                  "text-start",
+                  {
+                    "typography-body-small-regular": size === "S",
+                    "typography-body-medium-regular": size === "M",
+                    "typography-body-large-regular": size === "L",
+                  },
+                  {
+                    "text-content-presentation-global-primary": variant === "PresentationStyle",
+                    "text-[#E5E5E5]": variant === "SystemStyle",
+                  },
+                )}
+              >
+                {label}
+              </p>
+            )}
+            {secondaryLabel && (
+              <p
+                className={cn("text-content-presentation-global-secondary text-start", {
+                  "typography-labels-small-regular": size === "S",
+                  "typography-labels-medium-regular": size === "M",
+                  "typography-body-small-regular": size === "L",
+                })}
+              >
+                {secondaryLabel}
+              </p>
+            )}
+            {requiredLabel && (
+              <p
+                className={cn("text-content-presentation-state-negative text-start", {
+                  "typography-labels-small-medium": size === "S",
+                  "typography-labels-medium-medium": size === "M",
+                  "typography-body-small-medium": size === "L",
+                })}
+              >
+                {requiredLabel}
+              </p>
+            )}
+          </div>
+        )}
         {children}
       </Component>
     );
