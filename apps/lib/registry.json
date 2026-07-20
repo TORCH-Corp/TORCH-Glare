@@ -146,15 +146,6 @@
       ]
     },
     {
-      "name": "ChartBlockTool",
-      "type": "components",
-      "path": "components/ChartBlockTool.ts",
-      "npmDependencies": [
-        "chart.js"
-      ],
-      "registryDependencies": []
-    },
-    {
       "name": "Checkbox",
       "type": "components",
       "path": "components/Checkbox.tsx",
@@ -738,13 +729,6 @@
       ]
     },
     {
-      "name": "TableDnDWrapper",
-      "type": "components",
-      "path": "components/TableDnDWrapper.ts",
-      "npmDependencies": [],
-      "registryDependencies": []
-    },
-    {
       "name": "TabSwitch",
       "type": "components",
       "path": "components/TabSwitch.tsx",
@@ -766,39 +750,6 @@
       "registryDependencies": [
         "components/Label",
         "utils/cn"
-      ]
-    },
-    {
-      "name": "TextEditor",
-      "type": "components",
-      "path": "components/TextEditor.tsx",
-      "npmDependencies": [
-        "@editorjs/checklist",
-        "@editorjs/code",
-        "@editorjs/delimiter",
-        "@editorjs/editorjs",
-        "@editorjs/embed",
-        "@editorjs/header",
-        "@editorjs/inline-code",
-        "@editorjs/link",
-        "@editorjs/list",
-        "@editorjs/marker",
-        "@editorjs/nested-list",
-        "@editorjs/quote",
-        "@editorjs/raw",
-        "@editorjs/simple-image",
-        "@editorjs/table",
-        "@editorjs/text-variant-tune",
-        "@editorjs/underline",
-        "@editorjs/warning",
-        "class-variance-authority"
-      ],
-      "registryDependencies": [
-        "components/ChartBlockTool",
-        "components/TableDnDWrapper",
-        "utils/cn",
-        "utils/markdownParser",
-        "utils/types"
       ]
     },
     {
@@ -1001,13 +952,6 @@
         "date-fns",
         "react-day-picker"
       ],
-      "registryDependencies": []
-    },
-    {
-      "name": "markdownParser",
-      "type": "utils",
-      "path": "utils/markdownParser.ts",
-      "npmDependencies": [],
       "registryDependencies": []
     },
     {

@@ -11,9 +11,7 @@ import type { OutputData } from "@editorjs/editorjs";
  * would pull it into the SSR bundle; loading it lazily + only after mount keeps
  * the builder SSR-safe — the editor is imported on the client, on demand.
  */
-const TextEditorLazy = lazy(() =>
-  import("../TextEditor").then((m) => ({ default: m.TextEditor })),
-);
+const TextEditorLazy = lazy(() => import("./TextEditor").then((m) => ({ default: m.TextEditor })));
 
 export interface RichTextFieldProps {
   data?: OutputData;
@@ -36,7 +34,11 @@ export function RichTextField({ size = "M", ...props }: RichTextFieldProps) {
 
   return (
     <Suspense fallback={placeholderBox}>
-      <TextEditorLazy size={size} className="border border-border-presentation-action-primary" {...props} />
+      <TextEditorLazy
+        size={size}
+        className="border border-border-presentation-action-primary"
+        {...props}
+      />
     </Suspense>
   );
 }

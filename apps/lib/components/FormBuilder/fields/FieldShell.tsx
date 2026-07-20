@@ -25,6 +25,8 @@ export interface FieldShellProps {
   required?: boolean;
   fullWidth?: boolean;
   hidden?: boolean;
+  /** Force the field's layout direction, overriding the form's `useDirection()` context. */
+  direction?: "horizontal" | "vertical" | "flexible";
   /** Edit-mode input, wired to the react-hook-form field. */
   children: (
     field: ControllerRenderProps<FieldValues, string>,
@@ -47,12 +49,15 @@ export function FieldShell({
   required,
   fullWidth,
   hidden,
+  direction: directionProp,
   children,
   view,
 }: FieldShellProps) {
   const form = useFormContext();
   const mode = useMode();
-  const direction = useDirection();
+  const ctxDirection = useDirection();
+  // A field may pin its own direction (e.g. RichText forces vertical); otherwise use the form's.
+  const direction = directionProp ?? ctxDirection;
   const step = useStepRegistry();
 
   // Read this field's error at the shell level (not inside the FormField render) so
@@ -125,7 +130,10 @@ function FieldError({ message }: { message?: string }) {
 function resolveFieldError(errors: FieldErrors, name: string): string | undefined {
   const node = name
     .split(".")
-    .reduce<unknown>((acc, key) => (acc == null ? undefined : (acc as Record<string, unknown>)[key]), errors);
+    .reduce<unknown>(
+      (acc, key) => (acc == null ? undefined : (acc as Record<string, unknown>)[key]),
+      errors,
+    );
   const message = (node as { message?: unknown } | undefined)?.message;
   return typeof message === "string" ? message : undefined;
 }

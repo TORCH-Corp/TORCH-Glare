@@ -1,6 +1,13 @@
 ## Unreleased
 
 ### Added
+- **Rich text editor toolbar** — `TextEditor` now shows a fixed, sticky formatting toolbar by
+  default (new `toolbar?: boolean` prop; auto-hidden for `readOnly`/`disabled`): undo/redo,
+  block-type (Normal / Heading 1–3), alignment, text color, bold/italic/underline/strikethrough/
+  clear, bullet & ordered lists, and insert-image. Adds `editorjs-undo` plus small custom
+  Editor.js tools — a `StrikethroughInlineTool`, `ColorInlineTool`, and `AlignmentTune`
+  (`lib/components/editor-tools/`) — whose sanitize/tune plumbing makes the formatting persist
+  through `save()`. Also made the `/text-editor` demo SSR-safe (lazy-loads the editor).
 - **`FormBuilder.RadioList`** and **`FormBuilder.CheckboxGroup`** — option-group fields that
   render as a boxed, divided list (light `#f9f9f9` container, full-width row dividers, control
   on the left, primary + optional secondary label). `RadioList` is single-select (`string`);

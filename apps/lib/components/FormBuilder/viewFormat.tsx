@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import type { OutputData } from "@editorjs/editorjs";
 
 import { Badge } from "../Badge";
-import { RichTextField } from "./RichTextField";
+import { RichTextField } from "../TextEditor/RichTextField";
 import { formatNumber } from "./numberFormat";
 
 /** A read-only value for `DisplayField`: a plain string, or a rich node. */

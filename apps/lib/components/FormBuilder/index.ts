@@ -4,7 +4,7 @@ export { FormHeaderBar } from "./header";
 export type { HeaderProps, HeaderVariant, FormHeaderBarProps } from "./header";
 export { DisplayField } from "./DisplayField";
 export type { DisplayFieldProps } from "./DisplayField";
-export { RichTextField } from "./RichTextField";
+export { RichTextField } from "../TextEditor/RichTextField";
 export { formatFieldView } from "./viewFormat";
 export type { FieldView, ViewKind, ViewFormatOptions } from "./viewFormat";
 export type { StepProps } from "./stepper";

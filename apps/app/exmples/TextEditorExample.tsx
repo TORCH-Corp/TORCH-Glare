@@ -1,7 +1,13 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { TextEditor, TextEditorRef, OutputData } from "@/components/TextEditor";
+import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
+import type { TextEditorRef, OutputData } from "@/components/TextEditor";
+
+// EditorJS references DOM globals at module load, so load the editor on the client only
+// (matches the SSR-safe pattern in `RichTextField`). React.lazy forwards the ref.
+const TextEditor = lazy(() =>
+  import("@/components/TextEditor").then((m) => ({ default: m.TextEditor })),
+);
 
 const MIXED_SAMPLE_DATA: OutputData = {
   time: Date.now(),
@@ -120,8 +126,7 @@ const SAMPLE_DATA: OutputData = {
       type: "warning",
       data: {
         title: "Note",
-        message:
-          "This editor outputs clean JSON data that can be rendered anywhere.",
+        message: "This editor outputs clean JSON data that can be rendered anywhere.",
       },
     },
   ],
@@ -131,6 +136,8 @@ const SAMPLE_DATA: OutputData = {
 export default function TextEditorExample() {
   const editorRef = useRef<TextEditorRef>(null);
   const [savedData, setSavedData] = useState<OutputData | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const handleSave = async () => {
     if (editorRef.current) {
@@ -144,107 +151,110 @@ export default function TextEditorExample() {
     setSavedData(null);
   };
 
+  if (!mounted) return null;
+
   return (
-    <div className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
-      <h1 className="typography-display-medium-bold text-content-presentation-global-primary">
-        TextEditor Component
-      </h1>
+    <Suspense fallback={null}>
+      <div className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
+        <h1 className="typography-display-medium-bold text-content-presentation-global-primary">
+          TextEditor Component
+        </h1>
 
-      {/* ── Auto-Direction: Mixed Arabic & English ── */}
-      <section className="space-y-4">
-        <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
-          Auto-Direction (Mixed Arabic & English)
-        </h2>
-        <p className="typography-body-medium-regular text-content-presentation-global-secondary">
-          Each block automatically detects its text direction based on the first
-          character. Arabic text becomes RTL, English text stays LTR — all in
-          the same editor.
-        </p>
+        {/* ── Auto-Direction: Mixed Arabic & English ── */}
+        <section className="space-y-4">
+          <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+            Auto-Direction (Mixed Arabic & English)
+          </h2>
+          <p className="typography-body-medium-regular text-content-presentation-global-secondary">
+            Each block automatically detects its text direction based on the first character. Arabic
+            text becomes RTL, English text stays LTR — all in the same editor.
+          </p>
 
-        <div className="flex gap-3">
-          <button
-            onClick={handleSave}
-            className="h-[28px] px-[14px] typography-body-small-medium rounded-[4px] bg-background-presentation-action-primary text-content-presentation-action-primary-contrast hover:bg-background-presentation-action-hover transition-all"
-          >
-            Save Content
-          </button>
-          <button
-            onClick={handleClear}
-            className="h-[28px] px-[14px] typography-body-small-medium rounded-[4px] border border-border-presentation-action-primary text-content-presentation-action-light-primary hover:bg-background-presentation-action-hover transition-all"
-          >
-            Clear
-          </button>
-        </div>
-
-        <TextEditor
-          ref={editorRef}
-          data={MIXED_SAMPLE_DATA}
-          size="L"
-          placeholder="Start writing in any language..."
-          onChange={(data) => console.log("Content changed:", data)}
-          onReady={() => console.log("Editor ready!")}
-        />
-
-        {savedData && (
-          <div className="mt-4 p-4 rounded-[6px] bg-background-presentation-action-secondary border border-border-presentation-action-primary">
-            <h3 className="typography-body-medium-medium text-content-presentation-global-primary mb-2">
-              Saved JSON Output:
-            </h3>
-            <pre className="typography-body-small-regular text-content-presentation-global-secondary overflow-auto max-h-[300px] whitespace-pre-wrap">
-              {JSON.stringify(savedData, null, 2)}
-            </pre>
+          <div className="flex gap-3">
+            <button
+              onClick={handleSave}
+              className="h-[28px] px-[14px] typography-body-small-medium rounded-[4px] bg-background-presentation-action-primary text-content-presentation-action-primary-contrast hover:bg-background-presentation-action-hover transition-all"
+            >
+              Save Content
+            </button>
+            <button
+              onClick={handleClear}
+              className="h-[28px] px-[14px] typography-body-small-medium rounded-[4px] border border-border-presentation-action-primary text-content-presentation-action-light-primary hover:bg-background-presentation-action-hover transition-all"
+            >
+              Clear
+            </button>
           </div>
-        )}
-      </section>
 
-      {/* ── Sizes ── */}
-      <section className="space-y-4">
-        <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
-          Sizes
-        </h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <span className="typography-body-small-medium text-content-presentation-global-secondary">
-              Size S (200px)
-            </span>
-            <TextEditor size="S" placeholder="Small editor..." />
-          </div>
-          <div className="space-y-2">
-            <span className="typography-body-small-medium text-content-presentation-global-secondary">
-              Size M (300px)
-            </span>
-            <TextEditor size="M" placeholder="Medium editor..." />
-          </div>
-          <div className="space-y-2">
-            <span className="typography-body-small-medium text-content-presentation-global-secondary">
-              Size L (400px)
-            </span>
-            <TextEditor size="L" placeholder="Large editor..." />
-          </div>
-          <div className="space-y-2">
-            <span className="typography-body-small-medium text-content-presentation-global-secondary">
-              Size XL (500px)
-            </span>
-            <TextEditor size="XL" placeholder="Extra large editor..." />
-          </div>
-        </div>
-      </section>
+          <TextEditor
+            ref={editorRef}
+            data={MIXED_SAMPLE_DATA}
+            size="L"
+            placeholder="Start writing in any language..."
+            onChange={(data) => console.log("Content changed:", data)}
+            onReady={() => console.log("Editor ready!")}
+          />
 
-      {/* ── Read Only ── */}
-      <section className="space-y-4">
-        <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
-          Read Only
-        </h2>
-        <TextEditor data={SAMPLE_DATA} size="M" readOnly />
-      </section>
+          {savedData && (
+            <div className="mt-4 p-4 rounded-[6px] bg-background-presentation-action-secondary border border-border-presentation-action-primary">
+              <h3 className="typography-body-medium-medium text-content-presentation-global-primary mb-2">
+                Saved JSON Output:
+              </h3>
+              <pre className="typography-body-small-regular text-content-presentation-global-secondary overflow-auto max-h-[300px] whitespace-pre-wrap">
+                {JSON.stringify(savedData, null, 2)}
+              </pre>
+            </div>
+          )}
+        </section>
 
-      {/* ── Disabled ── */}
-      <section className="space-y-4">
-        <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
-          Disabled
-        </h2>
-        <TextEditor size="S" disabled placeholder="Disabled editor..." />
-      </section>
-    </div>
+        {/* ── Sizes ── */}
+        <section className="space-y-4">
+          <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+            Sizes
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <span className="typography-body-small-medium text-content-presentation-global-secondary">
+                Size S (200px)
+              </span>
+              <TextEditor size="S" placeholder="Small editor..." />
+            </div>
+            <div className="space-y-2">
+              <span className="typography-body-small-medium text-content-presentation-global-secondary">
+                Size M (300px)
+              </span>
+              <TextEditor size="M" placeholder="Medium editor..." />
+            </div>
+            <div className="space-y-2">
+              <span className="typography-body-small-medium text-content-presentation-global-secondary">
+                Size L (400px)
+              </span>
+              <TextEditor size="L" placeholder="Large editor..." />
+            </div>
+            <div className="space-y-2">
+              <span className="typography-body-small-medium text-content-presentation-global-secondary">
+                Size XL (500px)
+              </span>
+              <TextEditor size="XL" placeholder="Extra large editor..." />
+            </div>
+          </div>
+        </section>
+
+        {/* ── Read Only ── */}
+        <section className="space-y-4">
+          <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+            Read Only
+          </h2>
+          <TextEditor data={SAMPLE_DATA} size="M" readOnly />
+        </section>
+
+        {/* ── Disabled ── */}
+        <section className="space-y-4">
+          <h2 className="typography-headers-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
+            Disabled
+          </h2>
+          <TextEditor size="S" disabled placeholder="Disabled editor..." />
+        </section>
+      </div>
+    </Suspense>
   );
 }

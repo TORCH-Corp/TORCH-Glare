@@ -39,3 +39,22 @@ declare module "@editorjs/text-variant-tune" {
   const TextVariantTune: BlockTuneConstructable;
   export default TextVariantTune;
 }
+
+declare module "editorjs-undo" {
+  import EditorJS from "@editorjs/editorjs";
+  interface UndoConfig {
+    editor: EditorJS;
+    config?: { debounceTimer?: number; shortcuts?: { undo?: string; redo?: string } };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onUpdate?: () => void;
+  }
+  export default class Undo {
+    constructor(options: UndoConfig);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    initialize(data: any): void;
+    undo(): void;
+    redo(): void;
+    clear(): void;
+    setReadOnly(readOnly: boolean): void;
+  }
+}
