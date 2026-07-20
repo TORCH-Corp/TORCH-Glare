@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { FormBuilder } from "@/components/FormBuilder";
-import { FormDrawer } from "@/components/FormRenderer";
+import { FormRenderer } from "@/components/FormRenderer";
 import { FormSummary } from "@/components/FormSummary";
 import { Button } from "@/components/Button";
 import {
@@ -28,9 +27,8 @@ const overallTotal = (v: Values) => basePrice(v) + tax(v);
 export default function DrawerExample() {
   const [open, setOpen] = useState(false);
   const { submitting, result, onSubmit } = useDemoSubmit<Values>("drawer");
-  const formId = "drawer-item-form";
 
-  // Hoisted so the summary beside the form can read the same values.
+  // Hoisted so the summary beside the form can read the same live values.
   const form = useForm<Values>({ resolver, defaultValues: DEFAULTS });
 
   // Close the drawer once the dummy request succeeds.
@@ -39,7 +37,7 @@ export default function DrawerExample() {
     setOpen(false);
   };
 
-  // The form is hoisted now, so a remount `key` can't reset it — reset on open.
+  // The form is hoisted, so a remount `key` can't reset it — reset on open instead.
   const openDrawer = () => {
     form.reset(DEFAULTS);
     setOpen(true);
@@ -58,17 +56,16 @@ export default function DrawerExample() {
         </Button>
       </div>
 
-      <FormDrawer
+      {/* FormRenderer owns the drawer, its header Save action, and lays the summary in the
+          tray — it just needs the same hoisted `form` the summary reads from. */}
+      <FormRenderer<Values>
+        display="drawer"
         open={open}
         onOpenChange={setOpen}
-        title="New item"
-        badge="New"
-        actions={
-          <Button type="submit" form={formId} variant="PrimeStyle" is_loading={submitting}>
-            Save
-          </Button>
-        }
-        // Rendered beside the drawer's form panel — reading the same hoisted `form`.
+        header={{ title: "New item", label: "New", variant: "new" }}
+        form={form}
+        onSubmit={handleSubmit}
+        loading={submitting}
         summary={
           <FormSummary form={form} title="Item" subtitle="Summary">
             <FormSummary.Group title="Pricing">
@@ -92,16 +89,8 @@ export default function DrawerExample() {
           </FormSummary>
         }
       >
-        <FormBuilder
-          form={form}
-          id={formId}
-          onSubmit={handleSubmit}
-          loading={submitting}
-          fieldDirection="vertical"
-        >
-          <CoreFields />
-        </FormBuilder>
-      </FormDrawer>
+        <CoreFields />
+      </FormRenderer>
 
       <SubmitResult result={result} />
     </div>

@@ -1,13 +1,15 @@
 "use client";
 
 import { FormBuilder } from "@/components/FormBuilder";
+import { FormRenderer } from "@/components/FormRenderer";
 import {
-  CATEGORY,
+  ClassificationSection,
   DEFAULTS,
   DemoHeader,
-  LABELS,
-  PLAN,
+  FinancialSection,
+  IdentitySection,
   resolver,
+  SettingsSection,
   SubmitResult,
   useDemoSubmit,
   type Values,
@@ -23,45 +25,30 @@ export default function StepperExample() {
         blurb="Steps are components; every step's fields stay registered — the nav only toggles visibility."
       />
 
-      <FormBuilder
+      {/* FormRenderer detects the Stepper child and lets it own its own Submit (no header submit).
+          Each step reuses the same shared section component as the flat forms. */}
+      <FormRenderer<Values>
         onSubmit={onSubmit}
         loading={submitting}
         resolver={resolver}
         defaultValues={DEFAULTS}
+        header={{ title: "New item", variant: "new" }}
       >
-        <FormBuilder.Header title="New item" variant="new" />
         <FormBuilder.Stepper>
           <FormBuilder.Step title="Identity">
-            <FormBuilder.Section title="Identity" color="Blue">
-              <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
-              <FormBuilder.Textarea name="description" label="Description" fullWidth />
-            </FormBuilder.Section>
+            <IdentitySection />
           </FormBuilder.Step>
           <FormBuilder.Step title="Classification">
-            <FormBuilder.Section title="Classification" color="Red">
-              <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
-              <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
-              <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
-            </FormBuilder.Section>
+            <ClassificationSection />
           </FormBuilder.Step>
           <FormBuilder.Step title="Financial">
-            <FormBuilder.Section title="Financial" color="Green">
-              <FormBuilder.Currency name="price" label="Base price" currencySymbol="$" />
-            </FormBuilder.Section>
+            <FinancialSection />
           </FormBuilder.Step>
           <FormBuilder.Step title="Settings">
-            <FormBuilder.Section title="Settings" color="Purple">
-              <FormBuilder.SwitchBox name="active" label="Active" />
-              <FormBuilder.Checkbox
-                name="agree"
-                label="Terms"
-                subLabel="I agree to the terms"
-                required
-              />
-            </FormBuilder.Section>
+            <SettingsSection />
           </FormBuilder.Step>
         </FormBuilder.Stepper>
-      </FormBuilder>
+      </FormRenderer>
 
       <SubmitResult result={result} />
     </div>

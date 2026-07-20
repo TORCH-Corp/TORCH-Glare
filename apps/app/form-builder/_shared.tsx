@@ -120,37 +120,59 @@ export function SubmitResult<T>({ result }: { result: SubmitResultState<T> | nul
 }
 
 // ─── The reusable field set ──────────────────────────────────────────────────
+//
+// Each section is its own component so both the flat forms (`CoreFields`) and the
+// stepper can compose the exact same fields — one source of truth, no re-inlining.
+
+export function IdentitySection() {
+  return (
+    <FormBuilder.Section title="Identity" color="Blue">
+      <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
+      <FormBuilder.Textarea
+        name="description"
+        label="Description"
+        fullWidth
+        placeholder="Short summary…"
+      />
+    </FormBuilder.Section>
+  );
+}
+
+export function ClassificationSection() {
+  return (
+    <FormBuilder.Section title="Classification" color="Red">
+      <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
+      <FormBuilder.SearchableSelect name="priority" label="Priority" options={PRIORITY} />
+      <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
+      <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
+    </FormBuilder.Section>
+  );
+}
+
+export function FinancialSection() {
+  return (
+    <FormBuilder.Section title="Financial" color="Green">
+      <FormBuilder.Currency name="price" label="Base price" currencySymbol="$" placeholder="0.00" />
+    </FormBuilder.Section>
+  );
+}
+
+export function SettingsSection() {
+  return (
+    <FormBuilder.Section title="Settings" color="Purple">
+      <FormBuilder.SwitchBox name="active" label="Active" />
+      <FormBuilder.Checkbox name="agree" label="Terms" subLabel="I agree to the terms" required />
+    </FormBuilder.Section>
+  );
+}
 
 export function CoreFields() {
   return (
     <>
-      <FormBuilder.Section title="Identity" color="Blue">
-        <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
-        <FormBuilder.Textarea
-          name="description"
-          label="Description"
-          fullWidth
-          placeholder="Short summary…"
-        />
-      </FormBuilder.Section>
-      <FormBuilder.Section title="Classification" color="Red">
-        <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
-        <FormBuilder.SearchableSelect name="priority" label="Priority" options={PRIORITY} />
-        <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
-        <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
-      </FormBuilder.Section>
-      <FormBuilder.Section title="Financial" color="Green">
-        <FormBuilder.Currency
-          name="price"
-          label="Base price"
-          currencySymbol="$"
-          placeholder="0.00"
-        />
-      </FormBuilder.Section>
-      <FormBuilder.Section title="Settings" color="Purple">
-        <FormBuilder.SwitchBox name="active" label="Active" />
-        <FormBuilder.Checkbox name="agree" label="Terms" subLabel="I agree to the terms" required />
-      </FormBuilder.Section>
+      <IdentitySection />
+      <ClassificationSection />
+      <FinancialSection />
+      <SettingsSection />
     </>
   );
 }

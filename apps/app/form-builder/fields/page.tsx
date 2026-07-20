@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FormBuilder } from "@/components/FormBuilder";
+import { FormRenderer } from "@/components/FormRenderer";
 import { DemoHeader, SubmitResult, useDemoSubmit } from "../_shared";
 
 // Every field is required so that submitting empty surfaces an error on each one —
@@ -136,16 +137,13 @@ export default function FieldTypesExample() {
         blurb="Every field is required — press Save to surface a validation error on each one."
       />
 
-      <FormBuilder
+      <FormRenderer<AllFields>
         onSubmit={onSubmit}
         loading={submitting}
         resolver={resolver}
         defaultValues={DEFAULTS}
+        header={{ title: "Field types", variant: "new" }}
       >
-        <FormBuilder.Header title="Field types" variant="new">
-          <FormBuilder.Submit loadingText="Saving…">Save</FormBuilder.Submit>
-        </FormBuilder.Header>
-
         <FormBuilder.Section title="Text inputs" color="Blue">
           <FormBuilder.Text name="title" label="Title" required placeholder="Text" />
           <FormBuilder.Email name="email" label="Email" required placeholder="name@example.com" />
@@ -266,7 +264,7 @@ export default function FieldTypesExample() {
             )}
           </FormBuilder.FieldArray>
         </FormBuilder.Section>
-      </FormBuilder>
+      </FormRenderer>
 
       <SubmitResult result={result} />
     </div>

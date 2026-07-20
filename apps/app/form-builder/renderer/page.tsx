@@ -2,16 +2,12 @@
 
 import { useState } from "react";
 
-import { FormBuilder } from "@/components/FormBuilder";
 import { FormRenderer } from "@/components/FormRenderer";
 import { Button } from "@/components/Button";
 import {
-  CATEGORY,
+  CoreFields,
   DEFAULTS,
   DemoHeader,
-  LABELS,
-  PLAN,
-  PRIORITY,
   resolver,
   SubmitResult,
   useDemoSubmit,
@@ -28,30 +24,8 @@ export default function FormRendererExample() {
     setOpen(false);
   };
 
-  const fields = (
-    <>
-      <FormBuilder.Section title="Identity" color="Blue">
-        <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
-        <FormBuilder.Textarea name="description" label="Description" fullWidth />
-      </FormBuilder.Section>
-
-      <FormBuilder.Section title="Classification" color="Red">
-        <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
-        <FormBuilder.SearchableSelect name="priority" label="Priority" options={PRIORITY} />
-        <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
-        <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
-      </FormBuilder.Section>
-
-      <FormBuilder.Section title="Financial" color="Green">
-        <FormBuilder.Currency name="price" label="Base price" currencySymbol="$" />
-      </FormBuilder.Section>
-
-      <FormBuilder.Section title="Settings" color="Purple">
-        <FormBuilder.SwitchBox name="active" label="Active" />
-        <FormBuilder.Checkbox name="agree" label="Terms" subLabel="I agree to the terms" required />
-      </FormBuilder.Section>
-    </>
-  );
+  // Same field JSX drives both displays — the single source of truth is `CoreFields`.
+  const fields = <CoreFields />;
 
   return (
     <div className="flex flex-col gap-6">

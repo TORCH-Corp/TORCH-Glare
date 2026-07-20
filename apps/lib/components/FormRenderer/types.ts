@@ -1,5 +1,11 @@
 import { ReactNode } from "react";
-import type { DefaultValues, FieldErrors, FieldValues, Resolver } from "react-hook-form";
+import type {
+  DefaultValues,
+  FieldErrors,
+  FieldValues,
+  Resolver,
+  UseFormReturn,
+} from "react-hook-form";
 
 /**
  * FormRenderer — a thin wrapper around the compound `FormBuilder`. You author the
@@ -27,9 +33,20 @@ export interface FormRendererProps<T extends FieldValues = FieldValues> {
   resetOnSuccess?: boolean;
   /** Row layout; defaults to vertical inside a drawer. */
   fieldDirection?: FieldDirection;
+  /**
+   * A hoisted `useForm` instance to bind the form to. Pass this when something outside the
+   * form (e.g. a `summary` `FormSummary`) must read the same live values; the caller owns
+   * `resolver`/`defaultValues` on that instance. Omit to let FormRenderer create its own.
+   */
+  form?: UseFormReturn<T>;
 
   // --- display ---
   display?: FormRendererDisplay;
+  /**
+   * A live panel rendered beside the form (page) or in the drawer tray (drawer) — typically a
+   * `FormSummary`. Give FormRenderer the same hoisted `form` so the panel reads live values.
+   */
+  summary?: ReactNode;
   /**
    * Absolute title header + action bar. Used by **both** displays — the page and the
    * drawer render the same `HeaderBar` title pill, so a form looks identical in either.

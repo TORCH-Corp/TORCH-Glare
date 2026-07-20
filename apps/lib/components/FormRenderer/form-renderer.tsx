@@ -31,8 +31,10 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
   loading,
   resetOnSuccess,
   fieldDirection,
+  form,
   display = "page",
   header,
+  summary,
   submitLabel = "Save",
   open = false,
   onOpenChange,
@@ -56,6 +58,7 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
   const inner = (
     <FormBuilder
       id={formId}
+      form={form}
       onSubmit={onSubmit}
       onInvalid={onInvalid}
       resolver={resolver}
@@ -92,6 +95,7 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
         title={title ?? header?.title}
         badge={badge ?? header?.label}
         variant={header?.variant}
+        summary={summary}
         actions={
           drawerSubmitInHeader ? (
             <Button type="submit" form={formId} variant="PrimeStyle" is_loading={loading}>
@@ -103,6 +107,16 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
       >
         {inner}
       </FormDrawer>
+    );
+  }
+
+  // Page display: a `summary` panel (e.g. FormSummary) sits beside the form column.
+  if (summary) {
+    return (
+      <div className="flex flex-col gap-[16px] lg:flex-row">
+        <div className="min-w-0 flex-1">{inner}</div>
+        {summary}
+      </div>
     );
   }
 

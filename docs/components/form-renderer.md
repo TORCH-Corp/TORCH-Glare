@@ -63,8 +63,10 @@ import { FormBuilder } from '@/components/FormBuilder'
 | `mode` | `'edit' \| 'view'` | `'view'` renders read-only, no Submit. |
 | `loading` / `resetOnSuccess` | `boolean` | Forwarded to `FormBuilder`. |
 | `fieldDirection` | `'horizontal' \| 'vertical'` | Defaults to vertical inside a drawer. |
+| `form` | `UseFormReturn<T>` | A hoisted `useForm` to bind to — pass when a sibling (e.g. a `summary` `FormSummary`) must read the same live values; the caller owns `resolver`/`defaultValues` on it. Omit to let FormRenderer create its own. |
 | `display` | `'page' \| 'drawer'` | `'drawer'` wraps the form in `FormDrawer`. |
 | `header` | `{ title; label?; variant? }` | Absolute title header + action bar (page display); Submit moves into it. |
+| `summary` | `ReactNode` | A live panel (typically `FormSummary`) rendered beside the form (page) or in the drawer tray (drawer). Give the same hoisted `form` so it reads live values. |
 | `submitLabel` | `ReactNode` | Default `"Save"`. |
 | `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | — | Drawer control (when `display="drawer"`). `title` / `badge` are strings that override `header.title` / `header.label`. |
 
@@ -99,6 +101,34 @@ its own Submit (the stepper shows Submit on the last step).
   </FormBuilder.Stepper>
 </FormRenderer>
 ```
+
+## Summary panel
+
+Pass a hoisted `useForm` as `form` and a `FormSummary` as `summary` — FormRenderer binds
+the form to that instance and lays the panel beside the form (page) or in the drawer tray
+(drawer), so it recomputes live as fields change.
+
+```tsx
+const form = useForm<Invoice>({ resolver, defaultValues })
+
+<FormRenderer
+  form={form}
+  onSubmit={save}
+  header={{ title: 'Invoice', variant: 'new' }}
+  submitLabel="Save invoice"
+  summary={
+    <FormSummary form={form} title="Invoice" subtitle="Summary">
+      <FormSummary.Group title="Total">
+        <FormSummary.Row label="Overall Total" emphasized compute={overallTotal} />
+      </FormSummary.Group>
+    </FormSummary>
+  }
+>
+  {fields}
+</FormRenderer>
+```
+
+Works with `display="drawer"` too — the summary moves into the drawer's tray.
 
 ## `FormDrawer` — the drawer wrapper
 

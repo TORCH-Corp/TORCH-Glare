@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FormBuilder } from "@/components/FormBuilder";
+import { FormRenderer } from "@/components/FormRenderer";
 import { FormSummary } from "@/components/FormSummary";
 import { ActionButton } from "@/components/ActionButton";
 import { DemoHeader, SubmitResult, useDemoSubmit } from "../_shared";
@@ -60,105 +61,98 @@ export default function SummaryExample() {
         blurb="A FormSummary panel beside the form. Every total recomputes live as you type."
       />
 
-      {/* `items-stretch` (the default) — not `items-start`, which would collapse the
-          panel to its content height instead of letting it match the form's. */}
-      <div className="flex gap-4">
-        <FormBuilder
-          form={form}
-          onSubmit={onSubmit}
-          loading={submitting}
-          fieldDirection="vertical"
-          className="min-w-0 flex-1"
-        >
-          <FormBuilder.Section title="Customer" color="Blue">
-            <FormBuilder.Text name="customer" label="Customer" required placeholder="Acme Corp." />
-            <FormBuilder.Currency name="balance" label="Balance" currencySymbol="$" />
-          </FormBuilder.Section>
+      {/* FormRenderer hosts the form and lays the FormSummary beside it — both bound to the
+          same hoisted `form`. Vertical fields keep the form column readable next to the panel. */}
+      <FormRenderer<Invoice>
+        form={form}
+        onSubmit={onSubmit}
+        loading={submitting}
+        fieldDirection="vertical"
+        header={{ title: "Invoice", variant: "new" }}
+        submitLabel="Save invoice"
+        summary={
+          <FormSummary form={form} title="Invoice" subtitle="Summary">
+            <FormSummary.Group title="Customer">
+              <FormSummary.Row
+                label="Balance"
+                compute={(v: Invoice) => v.balance}
+                action={
+                  <ActionButton size="S" onClick={() => alert("Open customer balance")}>
+                    <i className="ri-arrow-right-up-line" />
+                  </ActionButton>
+                }
+              />
+            </FormSummary.Group>
 
-          <FormBuilder.Section title="Line items" color="Green">
-            <FormBuilder.FieldArray
-              name="items"
-              label="Items"
-              addLabel="Add item"
-              defaultItem={{ name: "", qty: 1, price: 0, discount: 0 }}
-            >
-              {(rowName) => (
-                <>
-                  <FormBuilder.Text name={`${rowName}.name`} label="Item" />
-                  <FormBuilder.Number name={`${rowName}.qty`} label="Qty" />
-                  <FormBuilder.Currency
-                    name={`${rowName}.price`}
-                    label="Price"
-                    currencySymbol="$"
-                  />
-                  <FormBuilder.Currency
-                    name={`${rowName}.discount`}
-                    label="Discount"
-                    currencySymbol="$"
-                  />
-                </>
-              )}
-            </FormBuilder.FieldArray>
-          </FormBuilder.Section>
+            <FormSummary.Group title="Total">
+              <FormSummary.Row label="Total Discount" compute={totalDiscount} />
+              <FormSummary.Row label="Overall Total" emphasized compute={overallTotal} />
+              <FormSummary.Row
+                label="Overall Total"
+                currency="IQD"
+                tone="success"
+                compute={(v: Invoice) => overallTotal(v) * (v.iqdRate ?? 0)}
+                decimals={0}
+              />
+              <FormSummary.Row
+                label="Overall Total"
+                currency="USD"
+                tone="info"
+                compute={overallTotal}
+              />
+            </FormSummary.Group>
 
-          <FormBuilder.Section title="Rates" color="Purple">
-            <FormBuilder.Number name="taxRate" label="Tax rate (%)" />
-            <FormBuilder.Number name="iqdRate" label="USD → IQD rate" />
-          </FormBuilder.Section>
+            <FormSummary.Group title="Tax">
+              <FormSummary.Row label="Sub Total" compute={subTotal} />
+              <FormSummary.Row label="Total Tax" compute={totalTax} />
+              <FormSummary.Row
+                label="Total Tax"
+                currency="IQD"
+                tone="success"
+                compute={(v: Invoice) => totalTax(v) * (v.iqdRate ?? 0)}
+                decimals={0}
+              />
+              <FormSummary.Row label="Total Tax" currency="USD" tone="info" compute={totalTax} />
+            </FormSummary.Group>
 
-          <FormBuilder.Submit loadingText="Saving…">Save invoice</FormBuilder.Submit>
-        </FormBuilder>
+            <FormSummary.Group title="Quantity">
+              <FormSummary.Row label="Total Qty" compute={totalQty} decimals={0} />
+            </FormSummary.Group>
+          </FormSummary>
+        }
+      >
+        <FormBuilder.Section title="Customer" color="Blue">
+          <FormBuilder.Text name="customer" label="Customer" required placeholder="Acme Corp." />
+          <FormBuilder.Currency name="balance" label="Balance" currencySymbol="$" />
+        </FormBuilder.Section>
 
-        {/* Rendered OUTSIDE the form, beside it — it reads the same hoisted `form`. */}
-        <FormSummary form={form} title="Invoice" subtitle="Summary">
-          <FormSummary.Group title="Customer">
-            <FormSummary.Row
-              label="Balance"
-              compute={(v: Invoice) => v.balance}
-              action={
-                <ActionButton size="S" onClick={() => alert("Open customer balance")}>
-                  <i className="ri-arrow-right-up-line" />
-                </ActionButton>
-              }
-            />
-          </FormSummary.Group>
+        <FormBuilder.Section title="Line items" color="Green">
+          <FormBuilder.FieldArray
+            name="items"
+            label="Items"
+            addLabel="Add item"
+            defaultItem={{ name: "", qty: 1, price: 0, discount: 0 }}
+          >
+            {(rowName) => (
+              <>
+                <FormBuilder.Text name={`${rowName}.name`} label="Item" />
+                <FormBuilder.Number name={`${rowName}.qty`} label="Qty" />
+                <FormBuilder.Currency name={`${rowName}.price`} label="Price" currencySymbol="$" />
+                <FormBuilder.Currency
+                  name={`${rowName}.discount`}
+                  label="Discount"
+                  currencySymbol="$"
+                />
+              </>
+            )}
+          </FormBuilder.FieldArray>
+        </FormBuilder.Section>
 
-          <FormSummary.Group title="Total">
-            <FormSummary.Row label="Total Discount" compute={totalDiscount} />
-            <FormSummary.Row label="Overall Total" emphasized compute={overallTotal} />
-            <FormSummary.Row
-              label="Overall Total"
-              currency="IQD"
-              tone="success"
-              compute={(v: Invoice) => overallTotal(v) * (v.iqdRate ?? 0)}
-              decimals={0}
-            />
-            <FormSummary.Row
-              label="Overall Total"
-              currency="USD"
-              tone="info"
-              compute={overallTotal}
-            />
-          </FormSummary.Group>
-
-          <FormSummary.Group title="Tax">
-            <FormSummary.Row label="Sub Total" compute={subTotal} />
-            <FormSummary.Row label="Total Tax" compute={totalTax} />
-            <FormSummary.Row
-              label="Total Tax"
-              currency="IQD"
-              tone="success"
-              compute={(v: Invoice) => totalTax(v) * (v.iqdRate ?? 0)}
-              decimals={0}
-            />
-            <FormSummary.Row label="Total Tax" currency="USD" tone="info" compute={totalTax} />
-          </FormSummary.Group>
-
-          <FormSummary.Group title="Quantity">
-            <FormSummary.Row label="Total Qty" compute={totalQty} decimals={0} />
-          </FormSummary.Group>
-        </FormSummary>
-      </div>
+        <FormBuilder.Section title="Rates" color="Purple">
+          <FormBuilder.Number name="taxRate" label="Tax rate (%)" />
+          <FormBuilder.Number name="iqdRate" label="USD → IQD rate" />
+        </FormBuilder.Section>
+      </FormRenderer>
 
       <SubmitResult result={result} />
     </div>
