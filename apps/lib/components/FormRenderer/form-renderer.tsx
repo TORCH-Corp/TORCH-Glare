@@ -35,6 +35,7 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
   display = "page",
   header,
   summary,
+  className,
   submitLabel = "Save",
   open = false,
   onOpenChange,
@@ -68,6 +69,8 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
       loading={loading}
       fieldDirection={effectiveDirection}
       resetOnSuccess={resetOnSuccess}
+      // Page display only — in a drawer the panel owns the sizing.
+      className={!isDrawer ? className : undefined}
       // Page display: FormBuilder lays the conclusion as the grid's right column (a stepper adds
       // the left nav column too). In a drawer the summary goes to FormDrawer's tray instead.
       conclusion={!isDrawer ? summary : undefined}

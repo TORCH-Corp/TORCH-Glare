@@ -48,6 +48,11 @@ export interface FormRendererProps<T extends FieldValues = FieldValues> {
    */
   summary?: ReactNode;
   /**
+   * Lands on the form's outermost element (page display). Use it to let the form fill its
+   * parent — e.g. `"flex-1 min-h-0"` inside a flex column that has a height.
+   */
+  className?: string;
+  /**
    * Absolute title header + action bar. Used by **both** displays — the page and the
    * drawer render the same `HeaderBar` title pill, so a form looks identical in either.
    */

@@ -27,7 +27,7 @@ export default function StepperExample() {
   const form = useForm<Values>({ resolver, defaultValues: DEFAULTS });
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="Stepper"
         blurb="Three columns: the step rail, the active step's fields, and a live conclusion — every step's fields stay registered."
@@ -39,6 +39,7 @@ export default function StepperExample() {
         form={form}
         onSubmit={onSubmit}
         loading={submitting}
+        className="min-h-0 flex-1"
         header={{ title: "New item", variant: "new" }}
         summary={
           <FormSummary form={form} title="Item" subtitle="Summary">

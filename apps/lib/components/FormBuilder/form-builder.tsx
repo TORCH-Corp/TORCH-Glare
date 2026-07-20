@@ -162,10 +162,12 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   );
 
   const surface = header ? (
-    // Scroll shell: the absolute header floats over the scrollable body.
-    <div className="relative isolate flex size-full flex-col overflow-hidden rounded-2xl bg-background-presentation-body-primary">
+    // Scroll shell: the absolute header floats over the scrollable body. No fixed height — it
+    // fills whatever the parent gives it (like the drawer's panel fills its tray) and the body
+    // scrolls internally.
+    <div className="relative isolate flex h-full w-full flex-col overflow-hidden rounded-2xl bg-background-presentation-body-primary">
       {header}
-      <div className="relative z-[1] flex h-full w-full flex-col overflow-y-auto px-6 py-6 pt-[72px] max-h-[85vh] scrollbar-hide">
+      <div className="relative z-[1] flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-6 py-6 pt-[72px] scrollbar-hide">
         {bodyInner}
       </div>
     </div>
@@ -176,16 +178,17 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   // The conclusion lives OUTSIDE the form surface — its own panel beside it, exactly like the
   // drawer's tray (`FormDrawer` puts the conclusion next to the form panel with a 6px gutter).
   const body = conclusion ? (
-    <div className="flex flex-col gap-[6px] lg:flex-row lg:items-stretch">
-      <div className="min-w-0 flex-1">{surface}</div>
+    <div className="flex h-full flex-col gap-[6px] lg:flex-row lg:items-stretch">
+      <div className="min-h-0 min-w-0 flex-1">{surface}</div>
       <div className="flex min-h-0">{conclusion}</div>
     </div>
   ) : (
     surface
   );
 
-  // `className` lands on the OUTERMOST element — the one a parent lays out (e.g. `flex-1`).
-  const outerClassName = cn("w-full", className);
+  // `className` lands on the OUTERMOST element — the one a parent lays out (e.g. `flex-1 min-h-0`
+  // to fill a flex column). `h-full` lets the form fill a parent that has a definite height.
+  const outerClassName = cn("h-full w-full", className);
 
   const tree = (
     <Form {...form}>
