@@ -66,7 +66,7 @@ import { FormBuilder } from '@/components/FormBuilder'
 | `form` | `UseFormReturn<T>` | A hoisted `useForm` to bind to — pass when a sibling (e.g. a `summary` `FormSummary`) must read the same live values; the caller owns `resolver`/`defaultValues` on it. Omit to let FormRenderer create its own. |
 | `display` | `'page' \| 'drawer'` | `'drawer'` wraps the form in `FormDrawer`. |
 | `header` | `{ title; label?; variant? }` | Absolute title header + action bar (page display); Submit moves into it. |
-| `summary` | `ReactNode` | A live panel (typically `FormSummary`) rendered beside the form (page) or in the drawer tray (drawer). Give the same hoisted `form` so it reads live values. |
+| `summary` | `ReactNode` | A live panel (typically `FormSummary`) rendered beside the form (page) or in the drawer tray (drawer). Give the same hoisted `form` so it reads live values. On a page, a `summary` **plus** a `FormBuilder.Stepper` lays out as three columns — stepper nav · fields · summary. |
 | `submitLabel` | `ReactNode` | Default `"Save"`. |
 | `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | — | Drawer control (when `display="drawer"`). `title` / `badge` are strings that override `header.title` / `header.label`. |
 

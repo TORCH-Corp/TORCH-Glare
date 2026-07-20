@@ -7,7 +7,7 @@ import { useForm, type FieldValues } from "react-hook-form";
 import { cn } from "../../utils/cn";
 import { Form } from "../Form";
 import { SectionBlock, type SectionColor } from "../SectionBlock";
-import { LoadingContext, ModeContext, DirectionContext } from "./context";
+import { LoadingContext, ModeContext, DirectionContext, StepperContext } from "./context";
 import { Header } from "./header";
 import type { FormBuilderRootProps } from "./types";
 import {
@@ -36,7 +36,18 @@ import {
   RichTextField,
   CustomField,
 } from "./fields";
-import { Stepper, Step, Back, Next } from "./stepper";
+import {
+  Stepper,
+  Step,
+  Back,
+  Next,
+  StepperNav,
+  StepSlot,
+  StepFooter,
+  useStepperState,
+  isStepElement,
+  isStepperElement,
+} from "./stepper";
 import { SubmitButton } from "./submit";
 
 // ─── Section ─────────────────────────────────────────────────────────────────
@@ -79,6 +90,7 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   mode = "edit",
   fieldDirection,
   resetOnSuccess,
+  conclusion,
   className,
 }: FormBuilderRootProps<T>) {
   // Hooks can't be conditional, so always create one; `formProp` wins when given
@@ -92,48 +104,104 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
     if (resetOnSuccess) form.reset();
   };
 
-  // Split out a FormBuilder.Header (if any): it renders absolutely and the rest
-  // of the form scrolls beneath it.
+  // Split out a FormBuilder.Header (renders absolutely) and detect a Stepper child.
   const childArray = React.Children.toArray(children);
   const header = childArray.find(isHeaderElement);
-  const rest = header ? childArray.filter((n) => !isHeaderElement(n)) : childArray;
+  const rest = childArray.filter((n) => !isHeaderElement(n));
 
-  const content = <div className="flex w-full flex-col gap-4">{rest}</div>;
+  const isView = mode === "view";
+  const stepperEl = rest.find(isStepperElement);
+  const stepChildren = stepperEl ? React.Children.toArray(stepperEl.props.children) : [];
+  const steps = stepChildren.filter(isStepElement);
+  const stepExtras = stepChildren.filter((n) => !isStepElement(n));
+  const isStepper = !!stepperEl && !isView;
 
-  const body = header ? (
-    // Scroll shell: absolute header floats over a scrollable, centered body.
+  // Stepper state is lifted HERE so the nav can live in its own grid column, outside the
+  // `<form>`. Called unconditionally (inert when there are no steps) to keep hooks order stable.
+  const stepper = useStepperState(steps, form.trigger as Parameters<typeof useStepperState>[1]);
+
+  // The stepper nav is its own column beside the fields, inside the form surface.
+  const nav = isStepper ? <StepperNav /> : null;
+
+  // The fields the `<form>` wraps: the stepper's steps (+ footer), or the plain children.
+  const fields = isStepper ? (
+    <>
+      {steps.map((step, i) => (
+        <StepSlot key={i} index={i} active={i === stepper.currentStep}>
+          {step.props.children}
+        </StepSlot>
+      ))}
+      {stepExtras.length > 0 ? stepExtras : <StepFooter />}
+    </>
+  ) : (
+    rest
+  );
+
+  // The fields column caps at 1200px and centers — as the middle column of the grid, and
+  // standalone.
+  const fieldsInner = (
+    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-4">{fields}</div>
+  );
+
+  const formEl = isView ? (
+    <div className="w-full min-w-0">{fieldsInner}</div>
+  ) : (
+    <form id={id} className="w-full min-w-0" onSubmit={form.handleSubmit(handleValid, onInvalid)}>
+      {fieldsInner}
+    </form>
+  );
+
+  // Inside the form surface: the stepper rail beside the fields.
+  const bodyInner = nav ? (
+    <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-8">
+      {nav}
+      {formEl}
+    </div>
+  ) : (
+    formEl
+  );
+
+  const surface = header ? (
+    // Scroll shell: the absolute header floats over the scrollable body.
     <div className="relative isolate flex size-full flex-col overflow-hidden rounded-2xl bg-background-presentation-body-primary">
       {header}
-      <div className="relative z-[1] flex h-full w-full flex-col items-center overflow-y-auto px-6 py-6 pt-[72px] max-h-[85vh] scrollbar-hide">
-        <div className="flex w-full max-w-[1100px] flex-col gap-4">{content}</div>
+      <div className="relative z-[1] flex h-full w-full flex-col overflow-y-auto px-6 py-6 pt-[72px] max-h-[85vh] scrollbar-hide">
+        {bodyInner}
       </div>
     </div>
   ) : (
-    content
+    bodyInner
   );
 
-  // `className` lands on the OUTERMOST element — that's the one a parent lays out
-  // (e.g. `flex-1` beside a FormSummary). Putting it on an inner div would leave
-  // the <form> itself sizing to its content.
+  // The conclusion lives OUTSIDE the form surface — its own panel beside it, exactly like the
+  // drawer's tray (`FormDrawer` puts the conclusion next to the form panel with a 6px gutter).
+  const body = conclusion ? (
+    <div className="flex flex-col gap-[6px] lg:flex-row lg:items-stretch">
+      <div className="min-w-0 flex-1">{surface}</div>
+      <div className="flex min-h-0">{conclusion}</div>
+    </div>
+  ) : (
+    surface
+  );
+
+  // `className` lands on the OUTERMOST element — the one a parent lays out (e.g. `flex-1`).
   const outerClassName = cn("w-full", className);
+
+  const tree = (
+    <Form {...form}>
+      <div className={outerClassName}>{body}</div>
+    </Form>
+  );
 
   return (
     <LoadingContext.Provider value={loading}>
       <ModeContext.Provider value={mode}>
         <DirectionContext.Provider value={direction}>
-          <Form {...form}>
-            {mode === "view" ? (
-              <div className={outerClassName}>{body}</div>
-            ) : (
-              <form
-                id={id}
-                className={outerClassName}
-                onSubmit={form.handleSubmit(handleValid, onInvalid)}
-              >
-                {body}
-              </form>
-            )}
-          </Form>
+          {isStepper ? (
+            <StepperContext.Provider value={stepper}>{tree}</StepperContext.Provider>
+          ) : (
+            tree
+          )}
         </DirectionContext.Provider>
       </ModeContext.Provider>
     </LoadingContext.Provider>

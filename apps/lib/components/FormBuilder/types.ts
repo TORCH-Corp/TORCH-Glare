@@ -196,5 +196,11 @@ export interface FormBuilderRootProps<T extends FieldValues = FieldValues> {
   fieldDirection?: FieldDirection;
   /** Reset to defaults after a successful submit. */
   resetOnSuccess?: boolean;
+  /**
+   * A live panel (e.g. `FormSummary`) rendered **outside** the `<form>`, as the right column of the
+   * adaptive grid — with a stepper it makes a 3-column layout (nav · fields · conclusion), otherwise
+   * 2 columns (fields · conclusion). It reads the shared values via its own `form` prop.
+   */
+  conclusion?: ReactNode;
   className?: string;
 }

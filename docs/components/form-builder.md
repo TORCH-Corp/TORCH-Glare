@@ -55,6 +55,16 @@ import { FormBuilder } from '@/components/FormBuilder'
 | `loading` | `boolean` | Submit shows a spinner; inputs disable. |
 | `fieldDirection` | `'horizontal' \| 'vertical'` | Row layout (auto-vertical inside a drawer). |
 | `resetOnSuccess` | `boolean` | Reset to defaults after a successful submit. |
+| `form` | `UseFormReturn` | A hoisted `useForm` to bind to — pass when a `conclusion` panel must read the same values. |
+| `conclusion` | `ReactNode` | A live panel (e.g. `FormSummary`) rendered **outside** the `<form>` as the grid's right column. |
+
+**Adaptive layout.** FormBuilder lays out responsively: a `FormBuilder.Stepper` puts its nav rail in
+a **left** column beside the fields (both inside the form surface, under the title header), and a
+`conclusion` renders as its own panel **outside** the form surface, beside it — the same structure
+`FormDrawer` uses in the drawer tray (6px gutter). So a stepper + conclusion reads as three columns
+(nav · fields · conclusion), a conclusion alone as two, and a plain form as one. The fields column
+caps at 1100px and centers. The conclusion is outside the `<form>` and reads values via its own
+`form` prop.
 
 ## Field components
 

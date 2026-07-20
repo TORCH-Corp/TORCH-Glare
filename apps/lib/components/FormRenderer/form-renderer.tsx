@@ -68,6 +68,9 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
       loading={loading}
       fieldDirection={effectiveDirection}
       resetOnSuccess={resetOnSuccess}
+      // Page display: FormBuilder lays the conclusion as the grid's right column (a stepper adds
+      // the left nav column too). In a drawer the summary goes to FormDrawer's tray instead.
+      conclusion={!isDrawer ? summary : undefined}
     >
       {useHeader && (
         <FormBuilder.Header title={header!.title} label={header!.label} variant={header!.variant}>
@@ -110,15 +113,6 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
     );
   }
 
-  // Page display: a `summary` panel (e.g. FormSummary) sits beside the form column.
-  if (summary) {
-    return (
-      <div className="flex flex-col gap-[16px] lg:flex-row">
-        <div className="min-w-0 flex-1">{inner}</div>
-        {summary}
-      </div>
-    );
-  }
-
+  // Page display: FormBuilder already placed `summary` as the grid's conclusion column.
   return inner;
 }
