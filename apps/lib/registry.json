@@ -642,6 +642,7 @@
       ],
       "registryDependencies": [
         "components/Button",
+        "components/DropdownMenu",
         "components/Tooltip",
         "utils/cn",
         "utils/types"
