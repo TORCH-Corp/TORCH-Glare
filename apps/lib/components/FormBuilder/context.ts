@@ -13,8 +13,12 @@ export const useLoading = () => useContext(LoadingContext);
 export const ModeContext = createContext<FormBuilderMode>("edit");
 export const useMode = () => useContext(ModeContext);
 
-/** Field row direction — set via `FormBuilder`'s `fieldDirection` prop. */
-export const DirectionContext = createContext<FieldDirection>("horizontal");
+/**
+ * Field row direction — set via `FormBuilder`'s `fieldDirection` prop. `undefined` (the default)
+ * means "don't force one": `FieldSection` then uses its own responsive `flexible` layout, which
+ * stacks on small screens and goes two-column at `lg`. Only set this to pin a direction.
+ */
+export const DirectionContext = createContext<FieldDirection | undefined>(undefined);
 export const useDirection = () => useContext(DirectionContext);
 
 /**

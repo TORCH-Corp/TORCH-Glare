@@ -56,7 +56,9 @@ export function FieldShell({
   const form = useFormContext();
   const mode = useMode();
   const ctxDirection = useDirection();
-  // A field may pin its own direction (e.g. RichText forces vertical); otherwise use the form's.
+  // A field may pin its own direction (e.g. RichText forces vertical), else the form's. When
+  // neither is set this stays `undefined` — FieldSection then falls back to its responsive
+  // `flexible` layout rather than a fixed two-column one.
   const direction = directionProp ?? ctxDirection;
   const step = useStepRegistry();
 

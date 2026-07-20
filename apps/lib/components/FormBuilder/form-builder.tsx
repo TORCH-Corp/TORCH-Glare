@@ -97,7 +97,10 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   // (the caller hoisted `useForm` to share values with something outside the form).
   const ownForm = useForm<T>({ resolver, defaultValues, values });
   const form = formProp ?? ownForm;
-  const direction = fieldDirection ?? "horizontal";
+  // Don't force a direction — left undefined, FieldSection uses its responsive `flexible`
+  // layout (stacked on small screens, two-column at `lg`). Only a caller-set `fieldDirection`
+  // (e.g. vertical inside a drawer) pins it.
+  const direction = fieldDirection;
 
   const handleValid = async (v: T) => {
     await onSubmit(v);
