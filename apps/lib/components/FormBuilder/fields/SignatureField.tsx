@@ -13,6 +13,9 @@ import { FieldShell } from "./FieldShell";
  * `FormBuilder.Signature` — a freehand signature pad (native `<canvas>` + pointer
  * events, no dependency). Value is a PNG data-URL string (`""` when empty), so it
  * registers/validates/submits/views like any other field via `FieldShell`.
+ *
+ * Forced to a **vertical, full-width** layout (label on top, pad below spanning the whole
+ * section) — like `FormBuilder.RichText`: the canvas needs the full width, not the right column.
  */
 export function SignatureField(props: SignatureFieldProps) {
   const loading = useLoading();
@@ -21,6 +24,8 @@ export function SignatureField(props: SignatureFieldProps) {
   return (
     <FieldShell
       {...props}
+      direction="vertical"
+      fullWidth
       view={(v) =>
         typeof v === "string" && v
           ? {
