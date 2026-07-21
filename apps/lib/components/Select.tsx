@@ -17,11 +17,11 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-    VariantProps<typeof PopoverTriggerStyles> & {
-      errors?: string;
-      icon?: string;
-      theme?: Themes;
-    }
+  VariantProps<typeof PopoverTriggerStyles> & {
+    errors?: string;
+    icon?: string;
+    theme?: Themes;
+  }
 >(
   (
     {
@@ -62,6 +62,7 @@ const SelectTrigger = React.forwardRef<
           <Button
             as={"span"}
             buttonType="icon"
+            size={"L"}
             className={cn([
               "group-aria-expanded:bg-background-presentation-action-hover",
               "group-aria-expanded:text-white",
@@ -122,9 +123,9 @@ SelectScrollDownButton.displayName = "SelectScrollDownButton";
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-    VariantProps<typeof SelectContentStyles> & {
-      theme?: Themes;
-    }
+  VariantProps<typeof SelectContentStyles> & {
+    theme?: Themes;
+  }
 >(
   (
     { className, children, variant = "PresentationStyle", position = "popper", theme, ...props },

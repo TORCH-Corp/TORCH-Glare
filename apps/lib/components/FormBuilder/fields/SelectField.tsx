@@ -1,14 +1,50 @@
 "use client";
 
 import { SearchableSelect } from "../../SearchableSelect";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Select";
 import { BadgeField } from "../../BadgeField";
 import type { Tag } from "../../../hooks/useTagSelection";
+import { useLoading } from "../context";
 import { formatFieldView } from "../viewFormat";
-import type { SelectFieldProps, OptionsFieldProps } from "../types";
+import type { SelectFieldProps, SearchableSelectFieldProps, OptionsFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
-/** `FormBuilder.Select` (client-filtered) and `.SearchableSelect` (async-capable). */
-export function SelectField(props: SelectFieldProps & { async?: boolean }) {
+/** `FormBuilder.Select` — the plain `Select` dropdown. */
+export function SelectField(props: SelectFieldProps) {
+  const loading = useLoading();
+
+  return (
+    <FieldShell
+      {...props}
+      view={(v) => formatFieldView({ kind: "option", value: v, options: props.options })}
+    >
+      {(field) => (
+        <Select
+          value={typeof field.value === "string" ? field.value : ""}
+          onValueChange={field.onChange}
+          disabled={props.disabled || loading}
+        >
+          <SelectTrigger size="XL" className="w-full">
+            <SelectValue placeholder={props.placeholder ?? "Select…"} />
+          </SelectTrigger>
+          <SelectContent>
+            {props.options.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    </FieldShell>
+  );
+}
+
+/**
+ * `FormBuilder.SearchableSelect` — the `SearchableSelect` combobox: a search box with
+ * client-side filtering, or server-side search + infinite scroll via the async props.
+ */
+export function SearchableSelectField(props: SearchableSelectFieldProps) {
   return (
     <FieldShell
       {...props}
@@ -20,7 +56,7 @@ export function SelectField(props: SelectFieldProps & { async?: boolean }) {
           value={field.value ?? null}
           onValueChange={(value) => field.onChange(value)}
           placeholder={props.placeholder ?? "Select…"}
-          filterClientSide={props.filterClientSide ?? !props.async}
+          filterClientSide={props.filterClientSide ?? true}
           onSearchChange={props.onSearchChange}
           onLoadMore={props.onLoadMore}
           hasMore={props.hasMore}

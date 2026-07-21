@@ -32,10 +32,21 @@ export interface OptionItem {
 }
 
 /** `FormBuilder.Select` / `.SearchableSelect` — supports async option loading. */
+/** `FormBuilder.Select` — the plain `Select` dropdown. */
 export interface SelectFieldProps extends BaseFieldProps {
   options: OptionItem[];
+}
+
+/**
+ * `FormBuilder.SearchableSelect` — the `SearchableSelect` combobox: a search box with
+ * client-side filtering, or server-side search + infinite scroll via the async props.
+ */
+export interface SearchableSelectFieldProps extends SelectFieldProps {
+  /** Filter `options` locally (default). Set false for server-side search. */
   filterClientSide?: boolean;
+  /** Debounced as the user types — refetch your data here. */
   onSearchChange?: (query: string) => void;
+  /** Called when the list bottom scrolls into view and `hasMore && !loading`. */
   onLoadMore?: () => void;
   hasMore?: boolean;
   loading?: boolean;

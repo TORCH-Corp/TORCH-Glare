@@ -305,7 +305,7 @@ export const buttonVariants = cva(
       {
         buttonType: "icon",
         size: "L",
-        className: "w-[34px] h-[34px] p-0 leading-[0]",
+        className: "w-[30px] h-[30px] p-0 leading-[0]",
       },
       {
         buttonType: "icon",

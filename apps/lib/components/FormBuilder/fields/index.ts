@@ -6,7 +6,7 @@ export {
   CurrencyField,
   TextareaField,
 } from "./TextField";
-export { SelectField, MultiSelectField } from "./SelectField";
+export { SelectField, SearchableSelectField, MultiSelectField } from "./SelectField";
 export { CheckboxField, RadioCardsField } from "./ChoiceFields";
 export { RadioListField, CheckboxGroupField } from "./OptionListFields";
 export { SwitchBoxField } from "./SwitchBoxField";

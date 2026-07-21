@@ -23,7 +23,6 @@ const schema = z.object({
   category: z.string().min(1, "Select a category"),
   priority: z.string().min(1, "Select a priority"),
   labels: z.array(z.string()).min(1, "Pick at least one label"),
-  tags: z.array(z.string()).min(1, "Add at least one tag"),
   planList: z.string().min(1, "Choose a plan"),
   perms: z.array(z.string()).min(1, "Pick at least one"),
   agree: z.boolean().refine((v) => v === true, "You must agree to continue"),
@@ -41,7 +40,6 @@ const schema = z.object({
   volume: z.number().min(1, "Set a volume above 0"),
   rangeVals: z.any().refine((v) => Array.isArray(v) && v[0] >= 30, "Range start must be ≥ 30"),
   colorHex: z.string().min(1, "Pick a color"),
-  colorAlpha: z.string().min(1, "Pick a color"),
   phone2: z.string().min(1, "Phone is required"),
   contacts: z
     .array(
@@ -67,7 +65,6 @@ const DEFAULTS: AllFields = {
   category: "",
   priority: "",
   labels: [],
-  tags: [],
   planList: "",
   perms: [],
   agree: false,
@@ -85,7 +82,6 @@ const DEFAULTS: AllFields = {
   volume: 0,
   rangeVals: [20, 80],
   colorHex: "",
-  colorAlpha: "#3B82F680",
   phone2: "",
   contacts: [{ name: "", email: "" }],
 };
@@ -175,7 +171,6 @@ export default function FieldTypesExample() {
             options={OPTS}
           />
           <FormBuilder.MultiSelect name="labels" label="Multi-select" required options={OPTS} />
-          <FormBuilder.Tags name="tags" label="Tags" required options={OPTS} />
           <FormBuilder.RadioList name="planList" label="Radio list" required options={PLAN_OPTS} />
           <FormBuilder.CheckboxGroup name="perms" label="Checkbox group" required options={OPTS} />
           <FormBuilder.Checkbox
@@ -240,12 +235,6 @@ export default function FieldTypesExample() {
             label="Color"
             required
             presets={["#005ECC", "#047854", "#E30C30", "#F5A623"]}
-          />
-          <FormBuilder.Color
-            name="colorAlpha"
-            label="Color (with opacity)"
-            required
-            presets={["#3B82F6", "#8B5CF6", "#EC4899", "#10B981"]}
           />
           <FormBuilder.Phone name="phone2" label="Phone" required />
         </FormBuilder.Section>

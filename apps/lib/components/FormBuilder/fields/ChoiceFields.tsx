@@ -18,11 +18,12 @@ export function CheckboxField({ subLabel, ...props }: CheckboxFieldProps) {
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
       {(field) => (
-        <div className="flex w-full items-center">
+        <div className="flex w-full items-center ps-2.5">
           <LabeledCheckBox
             id={props.name}
             label={subLabel ?? ""}
             checked={!!field.value}
+            size="S"
             onCheckedChange={(checked) => field.onChange(checked === true)}
             disabled={props.disabled || loading}
           />

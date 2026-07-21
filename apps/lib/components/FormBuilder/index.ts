@@ -13,6 +13,7 @@ export type {
   BaseFieldProps,
   OptionItem,
   SelectFieldProps,
+  SearchableSelectFieldProps,
   OptionsFieldProps,
   CurrencyFieldProps,
   FileFieldProps,
