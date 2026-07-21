@@ -12,7 +12,7 @@ dependencies:
 
 # Card
 
-> A flexible container component for grouping and displaying content. Supports compound architecture with header, description, and content sections. Features hover states and polymorphic rendering.
+> A flexible container component for grouping and displaying content. Supports compound architecture with header, description, and content sections, and polymorphic rendering. Static by default — opt into hover states with `variant="clickable"`.
 
 ## Installation
 
@@ -74,10 +74,11 @@ function Example() {
 ### Clickable Card
 
 ```typescript
+// `variant="clickable"` gives the hover highlight + pointer cursor.
 <Card
   as="button"
+  variant="clickable"
   onClick={() => console.log('Card clicked')}
-  className="cursor-pointer"
 >
   <CardHeader>Interactive Card</CardHeader>
   <CardDescription>Click me to perform an action</CardDescription>
@@ -205,6 +206,7 @@ function ImageCard() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `variant` | `'default' \| 'clickable'` | `'default'` | `'default'` is a static container with **no hover effect**. `'clickable'` adds the hover border highlight + pointer cursor — use it when the whole card is an interactive target. |
 | `as` | `React.ElementType` | `'section'` | Element type to render as |
 | `asChild` | `boolean` | `false` | Merge props onto child element |
 | `htmlFor` | `string` | - | For label association when as="label" |
