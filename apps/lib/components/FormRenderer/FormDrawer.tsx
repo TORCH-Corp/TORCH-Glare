@@ -94,7 +94,7 @@ export function FormDrawer({
           </DrawerNotch>
         }
       >
-        <DrawerPanel className="rounded-tr-[16px] rounded-b-[16px]">
+        <DrawerPanel className="rounded-tr-[16px] rounded-b-[16px] p-0">
           <div className="relative flex min-h-0 flex-1 flex-col">
             {/* Vaul requires a Drawer.Title for the a11y name; the visible title is the
                 HeaderBar below, so this one is for screen readers only. */}

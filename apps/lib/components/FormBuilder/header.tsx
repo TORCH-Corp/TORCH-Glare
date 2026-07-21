@@ -46,7 +46,7 @@ export function FormHeaderBar({
   return (
     <div
       className={cn(
-        "absolute inset-x-0 top-0 z-[2] flex w-full items-start justify-between gap-2",
+        "absolute inset-x-0 top-0 z-[2] flex w-full items-start justify-between gap-2 p-1",
         className,
       )}
     >
