@@ -158,9 +158,11 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   // Inside the form surface: the stepper rail beside the fields. Columns never wrap — the
   // layout stays side-by-side at every screen size (the fields column shrinks instead).
   const bodyInner = nav ? (
-    <div className="grid w-full grid-cols-[auto_minmax(0,1fr)] gap-8">
+    <div className="grid w-full grid-cols-[1fr_minmax(0,1100px)_1fr] gap-8">
       {nav}
       {formEl}
+      {/* Empty third column — balances the rail's gutter so the middle column is centred. */}
+      <div />
     </div>
   ) : (
     formEl
