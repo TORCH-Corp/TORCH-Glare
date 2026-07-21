@@ -218,7 +218,7 @@ export function SearchableSelect({
               }
             }}
             className={cn(
-              "shrink-0 h-[32px] w-[32px] rounded-[4px]",
+              "shrink-0 h-[30px] w-[30px] rounded-[4px]",
               open && "bg-background-presentation-action-hover text-white",
             )}
           >
