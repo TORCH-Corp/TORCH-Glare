@@ -131,7 +131,7 @@ export default function FieldTypesExample() {
   const { submitting, result, onSubmit } = useDemoSubmit<AllFields>("fields");
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-6">
+    <div className="flex flex-col gap-6 lg:min-h-0 lg:flex-1">
       <DemoHeader
         title="Field types"
         blurb="Every field is required — press Save to surface a validation error on each one."
@@ -142,7 +142,7 @@ export default function FieldTypesExample() {
         loading={submitting}
         resolver={resolver}
         defaultValues={DEFAULTS}
-        className="min-h-0 flex-1"
+        className="lg:min-h-0 lg:flex-1"
         header={{ title: "Field types", variant: "new" }}
       >
         <FormBuilder.Section title="Text inputs" color="Blue">

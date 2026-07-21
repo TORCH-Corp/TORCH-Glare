@@ -55,7 +55,7 @@ export default function SummaryExample() {
   const form = useForm<Invoice>({ resolver, defaultValues: DEFAULTS });
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-6">
+    <div className="flex flex-col gap-6 lg:min-h-0 lg:flex-1">
       <DemoHeader
         title="Form summary"
         blurb="A FormSummary panel beside the form. Every total recomputes live as you type."
@@ -68,7 +68,7 @@ export default function SummaryExample() {
         onSubmit={onSubmit}
         loading={submitting}
         fieldDirection="vertical"
-        className="min-h-0 flex-1"
+        className="lg:min-h-0 lg:flex-1"
         header={{ title: "Invoice", variant: "new" }}
         submitLabel="Save invoice"
         summary={

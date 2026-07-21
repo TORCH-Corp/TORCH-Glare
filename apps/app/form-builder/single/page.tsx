@@ -21,7 +21,7 @@ export default function SingleFormExample() {
   const { submitting, result, onSubmit } = useDemoSubmit<Values>("single");
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-6">
+    <div className="flex flex-col gap-6 lg:min-h-0 lg:flex-1">
       <DemoHeader
         title="Single form"
         blurb="Compound fields. Toggle edit / view, and load a record to edit."
@@ -67,7 +67,7 @@ export default function SingleFormExample() {
         resolver={resolver}
         defaultValues={DEFAULTS}
         values={loaded}
-        className="min-h-0 flex-1"
+        className="lg:min-h-0 lg:flex-1"
         mode={mode}
         header={{
           title: loaded ? "Acme Widget Pro" : "Item",
