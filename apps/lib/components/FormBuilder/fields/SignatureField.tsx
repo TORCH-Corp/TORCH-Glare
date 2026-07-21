@@ -143,7 +143,7 @@ function SignaturePad({ value, onChange, disabled, penColor }: SignaturePadProps
     <div
       className={cn(
         GroupStyles({ size: "M", variant: "PresentationStyle" }),
-        "relative h-[160px] w-full overflow-hidden p-0",
+        "relative h-[440px] w-full overflow-hidden p-0",
         disabled && "opacity-60",
       )}
     >

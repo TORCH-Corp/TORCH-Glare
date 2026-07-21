@@ -19,7 +19,7 @@ export default function StepperExample() {
   const { submitting, result, onSubmit } = useDemoSubmit<Values>("stepper");
 
   return (
-    <div className="flex flex-col gap-6 lg:min-h-0 lg:flex-1">
+    <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="Stepper"
         blurb="Steps are components; every step's fields stay registered — the nav only toggles visibility."
@@ -32,7 +32,7 @@ export default function StepperExample() {
         loading={submitting}
         resolver={resolver}
         defaultValues={DEFAULTS}
-        className="lg:min-h-0 lg:flex-1"
+        className="min-h-0 flex-1"
         header={{ title: "New item", variant: "new" }}
       >
         <FormBuilder.Stepper>

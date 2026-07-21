@@ -28,7 +28,7 @@ export default function FormRendererExample() {
   const fields = <CoreFields />;
 
   return (
-    <div className="flex flex-col gap-6 lg:min-h-0 lg:flex-1">
+    <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="FormRenderer"
         blurb="FormBuilder JSX + the renderer's display handling. Toggle page vs drawer."

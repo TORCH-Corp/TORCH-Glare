@@ -154,9 +154,10 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
     </form>
   );
 
-  // Inside the form surface: the stepper rail beside the fields.
+  // Inside the form surface: the stepper rail beside the fields. Columns never wrap — the
+  // layout stays side-by-side at every screen size (the fields column shrinks instead).
   const bodyInner = nav ? (
-    <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-8">
+    <div className="grid w-full grid-cols-[auto_minmax(0,1fr)] gap-8">
       {nav}
       {formEl}
     </div>
@@ -180,21 +181,19 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
 
   // The conclusion lives OUTSIDE the form surface — its own panel beside it, exactly like the
   // drawer's tray (`FormDrawer` puts the conclusion next to the form panel with a 6px gutter).
-  // Below `lg` the columns stack and the page scrolls naturally — only side-by-side (lg+) do the
-  // form and conclusion share a constrained height.
+  // It never wraps below the form: the two stay side-by-side at every screen size.
   const body = conclusion ? (
-    <div className="flex flex-col gap-[6px] lg:h-full lg:flex-row lg:items-stretch">
-      <div className="min-w-0 lg:min-h-0 lg:flex-1">{surface}</div>
-      <div className="flex lg:min-h-0">{conclusion}</div>
+    <div className="flex h-full flex-row items-stretch gap-[6px]">
+      <div className="min-h-0 min-w-0 flex-1">{surface}</div>
+      <div className="flex min-h-0">{conclusion}</div>
     </div>
   ) : (
     surface
   );
 
   // `className` lands on the OUTERMOST element — the one a parent lays out (e.g. `flex-1 min-h-0`
-  // to fill a flex column). `lg:h-full` fills a parent with a definite height; below `lg` the
-  // form keeps its natural height so the page scrolls instead of squeezing it.
-  const outerClassName = cn("w-full lg:h-full", className);
+  // to fill a flex column). `h-full` fills a parent that has a definite height.
+  const outerClassName = cn("h-full w-full", className);
 
   const tree = (
     <Form {...form}>
