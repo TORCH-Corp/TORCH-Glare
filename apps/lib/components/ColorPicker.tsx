@@ -1,6 +1,15 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  cloneElement,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactElement,
+} from "react";
 import * as Slider from "@radix-ui/react-slider";
 
 import { cn } from "../utils/cn";
@@ -20,6 +29,17 @@ import {
 } from "../utils/color";
 
 export interface ColorPickerProps {
+  /**
+   * The trigger — a single element that opens the picker (rendered via `asChild`, so it must
+   * forward its ref/props to a DOM node). ColorPicker renders **no trigger of its own**; it
+   * hands the current color to whatever you pass:
+   *
+   * - an **input** (native `<input>`/`<textarea>`, or any element already given a `value` prop)
+   *   receives the hex as its `value`;
+   * - **anything else** receives the hex as its `children` — unless it already has children of
+   *   its own, which are left untouched.
+   */
+  children: ReactElement;
   /** Current color as a hex string (`#rrggbb` or `#rrggbbaa`). Defaults to `#000000`. */
   value?: string;
   /** Called with the new hex string on every change. */
@@ -30,7 +50,12 @@ export interface ColorPickerProps {
   alpha?: boolean;
   disabled?: boolean;
   theme?: Themes;
-  className?: string;
+}
+
+/** Native form controls, or any element already driven by a `value` prop, take the hex as `value`. */
+function isInputLike(el: ReactElement): boolean {
+  if (typeof el.type === "string") return el.type === "input" || el.type === "textarea";
+  return "value" in ((el.props ?? {}) as Record<string, unknown>);
 }
 
 type Mode = "hex" | "rgb" | "hsl";
@@ -39,7 +64,7 @@ const HUE_GRADIENT =
   "linear-gradient(to right,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%)";
 
 /** Small 8px checkerboard so transparency reads clearly behind swatches / the alpha track. */
-const CHECKERBOARD: React.CSSProperties = {
+export const CHECKERBOARD: React.CSSProperties = {
   backgroundColor: "#fff",
   backgroundImage:
     "linear-gradient(45deg,#c8c8c8 25%,transparent 25%),linear-gradient(-45deg,#c8c8c8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#c8c8c8 75%),linear-gradient(-45deg,transparent 75%,#c8c8c8 75%)",
@@ -63,8 +88,8 @@ const NUM_INPUT_CLS =
  * The value is always a hex string, kept `#rrggbb` while fully opaque and promoted to
  * `#rrggbbaa` only when opacity drops below 100%.
  */
-export const ColorPicker = forwardRef<HTMLButtonElement, ColorPickerProps>(
-  ({ value, onChange, presets, alpha = true, disabled, theme, className }, ref) => {
+export const ColorPicker = forwardRef<HTMLElement, ColorPickerProps>(
+  ({ children, value, onChange, presets, alpha = true, disabled, theme }, ref) => {
     // Internal source of truth is HSV + alpha: keeping HSV (not RGB/hex) means dragging in the
     // grey column or the black row doesn't discard the chosen hue.
     const [hsv, setHsv] = useState<HSV>({ h: 0, s: 0, v: 0 });
@@ -160,36 +185,37 @@ export const ColorPicker = forwardRef<HTMLButtonElement, ColorPickerProps>(
     };
 
     const opacityPct = round(a * 100);
-    const swatchStyle: React.CSSProperties = { backgroundColor: hex };
+
+    // The trigger is the caller's child — ColorPicker renders none of its own. An input gets the
+    // hex as `value`; anything else gets it as `children` (unless it already has its own).
+    const trigger = useMemo(() => {
+      const childProps = (children.props ?? {}) as Record<string, unknown>;
+
+      if (isInputLike(children)) {
+        return cloneElement(children as ReactElement<Record<string, unknown>>, {
+          value: hex,
+          // A controlled input with no `onChange` warns in React — commit typed hex instead.
+          ...(childProps.onChange
+            ? {}
+            : {
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const parsed = parseHex(e.target.value);
+                  if (parsed) applyRgba(parsed.r, parsed.g, parsed.b, parsed.a);
+                },
+              }),
+        });
+      }
+
+      if (childProps.children == null) {
+        return cloneElement(children as ReactElement<Record<string, unknown>>, {}, hex);
+      }
+      return children;
+    }, [children, hex, applyRgba]);
 
     return (
       <Popover>
-        <PopoverTrigger asChild disabled={disabled}>
-          <button
-            ref={ref}
-            type="button"
-            disabled={disabled}
-            data-theme={theme}
-            className={cn(
-              "flex h-[40px] w-full items-center gap-2 rounded-[8px] border px-3",
-              "border-border-presentation-action-primary bg-background-presentation-form-field-primary",
-              "transition-all duration-200 ease-in-out",
-              "hover:border-border-presentation-action-hover hover:bg-background-presentation-form-field-hover",
-              "focus:border-border-presentation-state-focus focus:outline-none",
-              "disabled:cursor-not-allowed disabled:border-border-presentation-action-disabled disabled:bg-background-presentation-action-disabled",
-              className,
-            )}
-          >
-            <span
-              className="h-[20px] w-[20px] shrink-0 rounded-[4px] border border-border-presentation-action-primary"
-              style={alpha ? { ...CHECKERBOARD } : undefined}
-            >
-              <span className="block h-full w-full rounded-[3px]" style={swatchStyle} />
-            </span>
-            <span className="typography-body-large-regular text-content-presentation-action-light-primary">
-              {hex}
-            </span>
-          </button>
+        <PopoverTrigger asChild disabled={disabled} ref={ref as React.Ref<HTMLButtonElement>}>
+          {trigger}
         </PopoverTrigger>
 
         <PopoverContent

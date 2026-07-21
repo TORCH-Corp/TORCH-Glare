@@ -7,7 +7,7 @@ keywords: [color-picker, color, palette, hex, rgb, hsl, hsv, opacity, alpha, eye
 
 # ColorPicker
 
-> A full Figma-style color palette opened from a field-styled swatch trigger: a draggable
+> A full Figma-style color palette opened from **a trigger you supply**: a draggable
 > saturation/value area, a hue slider, an optional opacity slider, an eyedropper (where the
 > browser supports it), switchable **HEX / RGB / HSL** numeric inputs, and preset swatches.
 > The value is always a hex string.
@@ -30,10 +30,35 @@ import { ColorPicker } from "@/components/ColorPicker";
 
 ## Usage
 
+ColorPicker renders **no trigger of its own** — you pass one as its child (rendered via `asChild`,
+so it must forward ref/props to a DOM node). The current color is handed to that child based on
+what it is:
+
+| Child | Receives |
+|---|---|
+| an **input** — native `<input>`/`<textarea>`, or any element already given a `value` prop | the hex as **`value`** (plus an `onChange` that commits a typed hex, if you didn't supply one) |
+| **anything else** | the hex as **`children`** — unless it already has children, which are left untouched |
+
 ```tsx
 const [color, setColor] = useState("#3B82F6");
 
-<ColorPicker value={color} onChange={setColor} />;
+// input child → gets `value={color}`
+<ColorPicker value={color} onChange={setColor}>
+  <input className="…" />
+</ColorPicker>
+
+// non-input child → gets the hex as its content
+<ColorPicker value={color} onChange={setColor}>
+  <Button variant="BorderStyle" />
+</ColorPicker>
+
+// a child with its own content keeps it — render the value yourself
+<ColorPicker value={color} onChange={setColor}>
+  <button type="button">
+    <span style={{ backgroundColor: color }} />
+    {color}
+  </button>
+</ColorPicker>
 ```
 
 With presets and opacity disabled (always emits `#rrggbb`):
@@ -44,20 +69,22 @@ With presets and opacity disabled (always emits `#rrggbb`):
   onChange={setColor}
   alpha={false}
   presets={["#005ECC", "#047854", "#E30C30", "#F5A623"]}
-/>
+>
+  <Button variant="BorderStyle" />
+</ColorPicker>
 ```
 
 ## Props
 
 | Prop        | Type                       | Default       | Description                                                                 |
 | ----------- | -------------------------- | ------------- | --------------------------------------------------------------------------- |
+| `children`  | `ReactElement`             | — (required)  | The trigger. Gets the hex as `value` if it's an input, else as `children`.   |
 | `value`     | `string`                   | `"#000000"`   | Current color as a hex string (`#rrggbb` or `#rrggbbaa`).                    |
 | `onChange`  | `(hex: string) => void`    | —             | Called on every change. Emits `#rrggbbaa` only when opacity < 100%.         |
 | `presets`   | `string[]`                 | —             | Quick-pick swatches shown at the bottom of the panel.                       |
 | `alpha`     | `boolean`                  | `true`        | Show the opacity slider + input and allow 8-digit output.                    |
 | `disabled`  | `boolean`                  | `false`       | Disable the trigger and all controls.                                       |
 | `theme`     | `"dark" \| "light" \| "default"` | —       | Applied as `data-theme`.                                                     |
-| `className` | `string`                   | —             | Merged onto the trigger button.                                             |
 
 ## Value format
 

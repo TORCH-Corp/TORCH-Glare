@@ -92,7 +92,9 @@ export function rgbToHsv({ r, g, b }: { r: number; g: number; b: number }): HSV 
     if (h < 0) h += 360;
   }
   const s = max === 0 ? 0 : d / max;
-  return { h: round(h), s: round(s * 100), v: round(max * 100) };
+  // Keep 2 decimals: HSV is the picker's internal state, so rounding to whole degrees/percents
+  // here would visibly shift a color that was only ever passed in (e.g. #10B981 → #11BA82).
+  return { h: round(h, 2), s: round(s * 100, 2), v: round(max * 100, 2) };
 }
 
 /** HSV (h 0–360, s/v 0–100) → RGB (0–255). */
