@@ -27,40 +27,235 @@ export interface FieldSpec {
   note?: string;
 }
 
-/** Ordered: earlier entries win an ambiguous alias match. */
+/**
+ * Every entry's `static` is a real `FormBuilder.*` component — kept honest by the drift
+ * test in server.test.ts, which diffs this list against the `Object.assign(FormBuilderRoot,
+ * { … })` block in form-builder.tsx. Ordering only breaks ties between equal-length aliases
+ * (matching is longest-alias-first); keep `Text` last as the catch-all fallback.
+ */
 export const FIELD_TYPES: FieldSpec[] = [
-  { static: "Email", value: "string", zod: "z.string().email('Enter a valid email')", aliases: ["email", "e-mail"] },
-  { static: "Password", value: "string", zod: "z.string().min(8, 'At least 8 characters')", aliases: ["password", "pass"], props: "strengthMeter", note: "`strengthMeter` shows a PasswordLevel meter." },
-  { static: "Currency", value: "number", zod: "z.number().positive('Must be positive').optional()", aliases: ["currency", "price", "amount", "cost", "money", "total", "salary", "fee"], props: 'currencySymbol="$"' },
-  { static: "Number", value: "number", zod: "z.number().optional()", aliases: ["number", "numeric", "qty", "quantity", "count", "age", "rate", "percent"] },
-  { static: "Textarea", value: "string", zod: "z.string()", aliases: ["textarea", "description", "notes", "bio", "comment", "message", "long text"], props: "fullWidth" },
-  { static: "RichText", value: "OutputData", zod: "z.any().optional()", aliases: ["richtext", "rich text", "editor", "wysiwyg", "content", "body"], props: "fullWidth" },
-  { static: "SearchableSelect", value: "string", zod: "z.string()", aliases: ["searchable select", "searchable-select", "combobox", "autocomplete", "async select"], options: true },
-  { static: "MultiSelect", value: "string[]", zod: "z.array(z.string())", aliases: ["multiselect", "multi-select", "multi select", "tags", "labels", "categories"], options: true },
-  { static: "RadioCards", value: "string", zod: "z.string()", aliases: ["radio cards", "radio-cards", "cards", "plan picker"], options: true, note: "Options may carry a `description`." },
-  { static: "Radio", value: "string", zod: "z.string()", aliases: ["radio", "radio group", "choice"], options: true },
-  { static: "Segmented", value: "string", zod: "z.string()", aliases: ["segmented", "tab switch", "segment"], options: true },
-  { static: "ToggleGroup", value: "string | string[]", zod: "z.array(z.string())", aliases: ["toggle group", "toggle-group", "button group"], options: true, props: "multiple" },
-  { static: "Select", value: "string", zod: "z.string().min(1, 'Required')", aliases: ["select", "dropdown", "drop-down", "picker", "role", "category", "status", "type"], options: true },
-  { static: "Checkbox", value: "boolean", zod: "z.boolean()", aliases: ["checkbox", "check", "agree", "accept", "terms", "consent"] },
-  { static: "Switch", value: "boolean", zod: "z.boolean()", aliases: ["switch", "toggle", "active", "enabled"] },
-  { static: "ToggleButton", value: "boolean", zod: "z.boolean()", aliases: ["toggle button", "toggle-button"] },
-  { static: "DateRange", value: "{ from, to }", zod: "z.any().optional()", aliases: ["date range", "date-range", "range of dates", "period"] },
-  { static: "DateMultiple", value: "Date[]", zod: "z.array(z.date()).optional()", aliases: ["multi date", "multiple dates", "multi-date"] },
-  { static: "DateTime", value: "Date", zod: "z.date().optional()", aliases: ["datetime", "date & time", "date and time", "timestamp"] },
-  { static: "InlineCalendar", value: "Date", zod: "z.date().optional()", aliases: ["inline calendar", "calendar"] },
-  { static: "Date", value: "Date", zod: "z.date().optional()", aliases: ["date", "due", "birthday", "dob", "deadline"] },
-  { static: "Phone", value: "string", zod: "z.string().optional()", aliases: ["phone", "tel", "mobile", "telephone"] },
-  { static: "Otp", value: "string", zod: "z.string().optional()", aliases: ["otp", "pin", "code", "verification"], props: "length={6}" },
-  { static: "Slider", value: "number | [number, number]", zod: "z.number()", aliases: ["slider", "volume", "range slider"], props: "min={0} max={100}" },
-  { static: "Color", value: "hex string", zod: "z.string()", aliases: ["color", "colour", "swatch"] },
-  { static: "Signature", value: "PNG data-URL string", zod: "z.string()", aliases: ["signature", "sign"] },
-  { static: "TreeSelect", value: "node id (string)", zod: "z.string()", aliases: ["tree select", "tree-select", "hierarchy", "nested category"], props: "nodes={TREE} getNodeId={(n) => n.id} getNodeLabel={(n) => n.name}" },
-  { static: "Image", value: "File | File[]", zod: "z.any().optional()", aliases: ["image", "photo", "avatar", "picture", "logo"], props: 'accept="image/*"' },
-  { static: "File", value: "File | File[]", zod: "z.any().optional()", aliases: ["file", "upload", "attachment", "document"] },
-  { static: "FieldArray", value: "object[]", zod: "z.array(z.object({}))", aliases: ["field array", "field-array", "repeater", "line items", "items", "list of"], note: "Render fn: `{(rowName) => <FormBuilder.Text name={`${rowName}.x`} />}`" },
-  { static: "Custom", value: "anything", zod: "z.any()", aliases: ["custom"], props: "render={({ field }) => <YourControl {...field} />}" },
-  { static: "Text", value: "string", zod: "z.string().min(1, 'Required')", aliases: ["text", "string", "name", "title", "label"] },
+  {
+    static: "Email",
+    value: "string",
+    zod: "z.string().email('Enter a valid email')",
+    aliases: ["email", "e-mail"],
+  },
+  {
+    static: "Password",
+    value: "string",
+    zod: "z.string().min(8, 'At least 8 characters')",
+    aliases: ["password", "pass"],
+    props: "strengthMeter",
+    note: "`strengthMeter` shows a PasswordLevel meter.",
+  },
+  {
+    static: "Currency",
+    value: "number",
+    zod: "z.number().positive('Must be positive').optional()",
+    aliases: ["currency", "price", "amount", "cost", "money", "total", "salary", "fee"],
+    props: 'currencySymbol="$"',
+  },
+  {
+    static: "Number",
+    value: "number",
+    zod: "z.number().optional()",
+    aliases: ["number", "numeric", "qty", "quantity", "count", "age", "rate", "percent"],
+  },
+  {
+    static: "Textarea",
+    value: "string",
+    zod: "z.string()",
+    aliases: ["textarea", "description", "notes", "bio", "comment", "message", "long text"],
+    props: "fullWidth",
+  },
+  {
+    static: "RichText",
+    value: "OutputData",
+    zod: "z.any().optional()",
+    aliases: ["richtext", "rich text", "editor", "wysiwyg", "content", "body"],
+    props: "fullWidth",
+  },
+  {
+    static: "SearchableSelect",
+    value: "string",
+    zod: "z.string().min(1, 'Required')",
+    aliases: ["searchable select", "searchable-select", "combobox", "autocomplete", "async select"],
+    options: true,
+  },
+  {
+    static: "MultiSelect",
+    value: "string[]",
+    zod: "z.array(z.string())",
+    aliases: ["multiselect", "multi-select", "multi select", "tags", "labels", "categories"],
+    options: true,
+    note: "Also available as `FormBuilder.Tags` (same value).",
+  },
+  {
+    static: "RadioCards",
+    value: "string",
+    zod: "z.string()",
+    aliases: ["radio cards", "radio-cards", "cards", "plan picker"],
+    options: true,
+    note: "Options may carry a `description`.",
+  },
+  {
+    static: "RadioList",
+    value: "string",
+    zod: "z.string().min(1, 'Required')",
+    aliases: [
+      "radio list",
+      "radio-list",
+      "radio",
+      "radio group",
+      "choice",
+      "single choice",
+      "segmented",
+      "segment",
+    ],
+    options: true,
+    note: "Boxed single-select list; each option may carry a `description`.",
+  },
+  {
+    static: "CheckboxGroup",
+    value: "string[]",
+    zod: "z.array(z.string())",
+    aliases: [
+      "checkbox group",
+      "checkbox-group",
+      "checklist",
+      "permissions",
+      "multi checkbox",
+      "button group",
+    ],
+    options: true,
+  },
+  {
+    static: "Select",
+    value: "string",
+    zod: "z.string().min(1, 'Required')",
+    aliases: ["select", "dropdown", "drop-down", "picker", "role", "category", "status", "type"],
+    options: true,
+  },
+  {
+    static: "Checkbox",
+    value: "boolean",
+    zod: "z.boolean()",
+    aliases: ["checkbox", "check", "agree", "accept", "terms", "consent"],
+  },
+  {
+    static: "SwitchBox",
+    value: "boolean",
+    zod: "z.boolean()",
+    aliases: [
+      "switch box",
+      "switchbox",
+      "switch",
+      "toggle",
+      "toggle button",
+      "active",
+      "enabled",
+      "dark mode",
+    ],
+    note: "A `Switch` inside a field box; takes an optional inline `subLabel`.",
+  },
+  {
+    static: "DateRange",
+    value: "{ from, to }",
+    zod: "z.object({ from: z.date(), to: z.date() }).optional()",
+    aliases: ["date range", "date-range", "range of dates", "period"],
+  },
+  {
+    static: "DateMultiple",
+    value: "Date[]",
+    zod: "z.array(z.date()).optional()",
+    aliases: ["multi date", "multiple dates", "multi-date"],
+  },
+  {
+    static: "DateTime",
+    value: "Date",
+    zod: "z.date().optional()",
+    aliases: ["datetime", "date & time", "date and time", "timestamp"],
+  },
+  {
+    static: "Date",
+    value: "Date",
+    zod: "z.date().optional()",
+    aliases: ["date", "due", "birthday", "dob", "deadline", "calendar"],
+  },
+  {
+    static: "Phone",
+    value: "string",
+    zod: "z.string().optional()",
+    aliases: ["phone", "tel", "mobile", "telephone"],
+    note: "Country dial-code + number; defaults to `+964` (override with `defaultCountry`).",
+  },
+  {
+    static: "Otp",
+    value: "string",
+    zod: "z.string().optional()",
+    aliases: ["otp", "pin", "code", "verification"],
+    props: "length={6}",
+  },
+  {
+    static: "Slider",
+    value: "number",
+    zod: "z.number()",
+    aliases: ["slider", "volume", "range slider"],
+    props: "min={0} max={100}",
+    note: 'Add `range` for a `[min,max]` value, `suffix` for a unit label (e.g. `suffix="%"`).',
+  },
+  {
+    static: "Color",
+    value: "hex string",
+    zod: "z.string()",
+    aliases: ["color", "colour", "swatch"],
+  },
+  {
+    static: "Signature",
+    value: "PNG data-URL string",
+    zod: "z.string()",
+    aliases: ["signature", "sign"],
+  },
+  {
+    static: "TreeSelect",
+    value: "node id (string)",
+    zod: "z.string()",
+    aliases: ["tree select", "tree-select", "hierarchy", "nested category"],
+    props: "nodes={TREE} getNodeId={(n) => n.id} getNodeLabel={(n) => n.name}",
+  },
+  {
+    static: "Image",
+    value: "File | File[]",
+    zod: "z.any().optional()",
+    aliases: ["image", "photo", "avatar", "picture", "logo"],
+    props: 'accept="image/*"',
+  },
+  {
+    static: "File",
+    value: "File | File[]",
+    zod: "z.any().optional()",
+    aliases: ["file", "upload", "attachment", "document"],
+  },
+  {
+    static: "FieldArray",
+    value: "object[]",
+    zod: "z.array(z.object({}))",
+    aliases: ["field array", "field-array", "repeater", "line items", "items", "list of"],
+    note: "Render fn: `{(rowName) => <FormBuilder.Text name={`${rowName}.x`} />}`",
+  },
+  {
+    static: "Custom",
+    value: "anything",
+    zod: "z.any()",
+    aliases: ["custom"],
+    props: "render={({ field }) => <YourControl {...field} />}",
+  },
+  {
+    static: "Text",
+    value: "string",
+    zod: "z.string().min(1, 'Required')",
+    aliases: ["text", "string", "name", "title", "label"],
+  },
 ];
 
 export interface ParsedField {
@@ -76,11 +271,17 @@ export interface ParsedField {
 }
 
 function toCamel(s: string): string {
-  const parts = s.trim().split(/[\s_-]+/).filter(Boolean);
+  const parts = s
+    .trim()
+    .split(/[\s_-]+/)
+    .filter(Boolean);
   if (parts.length === 0) return "field";
   return (
     parts[0].toLowerCase() +
-    parts.slice(1).map((p) => p[0].toUpperCase() + p.slice(1).toLowerCase()).join("")
+    parts
+      .slice(1)
+      .map((p) => p[0].toUpperCase() + p.slice(1).toLowerCase())
+      .join("")
   );
 }
 
@@ -176,16 +377,23 @@ export interface FormOptions {
 }
 
 /**
- * A complete, compiling starting point wired to the requested shape. Everything a
- * model would otherwise have to reconstruct from prose — the hoisted `useForm` when a
- * summary is present, the `id`/`form={id}` handshake for a drawer's header Save, the
- * `childrenOutside` slot — is already correct here.
+ * A complete, compiling starting point wired to the requested shape, built the way the real
+ * example pages are (`apps/app/form-builder/**`): `FormRenderer` owns the page-vs-drawer
+ * display, the title header, and Submit placement; a `FormSummary` panel is passed via the
+ * `summary` prop and reads the same hoisted `useForm`. Everything a model tends to get wrong
+ * by hand — the hoisted form shared with the summary, the drawer's `open`/`onOpenChange`,
+ * the stepper wrapper — is already correct here.
  */
 export function skeleton(fields: ParsedField[], opts: FormOptions): string {
   const { layout, display, summary } = opts;
+  const drawer = display === "drawer";
+
   const optionConsts = fields
     .filter((f) => f.spec.options)
-    .map((f) => `const ${f.name.toUpperCase()}_OPTIONS = [\n  { label: 'Option A', value: 'a' },\n  { label: 'Option B', value: 'b' },\n]`)
+    .map(
+      (f) =>
+        `const ${f.name.toUpperCase()}_OPTIONS = [\n  { label: 'Option A', value: 'a' },\n  { label: 'Option B', value: 'b' },\n]`,
+    )
     .join("\n");
 
   const imports = [
@@ -195,9 +403,8 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
     `import { zodResolver } from '@hookform/resolvers/zod'`,
     summary ? `import { useForm } from 'react-hook-form'` : ``,
     `import { FormBuilder } from '@/components/FormBuilder'`,
-    display === "drawer" ? `import { FormDrawer } from '@/components/FormRenderer'` : ``,
+    `import { FormRenderer } from '@/components/FormRenderer'`,
     summary ? `import { FormSummary } from '@/components/FormSummary'` : ``,
-    display === "drawer" ? `import { Button } from '@/components/Button'` : ``,
   ]
     .filter(Boolean)
     .join("\n");
@@ -213,114 +420,84 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
     `}`,
   ].join("\n");
 
-  const fieldJsxLines = fields.map((f) => `        ${fieldJsx(f)}`).join("\n");
+  // The fields, grouped in a Section — wrapped in a single Step when it's a stepper.
+  const section = [
+    `      <FormBuilder.Section title="Details" color="Blue">`,
+    fields.map((f) => `        ${fieldJsx(f)}`).join("\n"),
+    `      </FormBuilder.Section>`,
+  ].join("\n");
 
   const body =
     layout === "stepper"
       ? [
           `      <FormBuilder.Stepper>`,
           `        <FormBuilder.Step title="Step 1">`,
-          `          <FormBuilder.Section title="Details" color="Blue">`,
-          fields.map((f) => `            ${fieldJsx(f)}`).join("\n"),
-          `          </FormBuilder.Section>`,
+          indent(section, 4),
           `        </FormBuilder.Step>`,
           `        {/* Add more <FormBuilder.Step title="…"> — Submit shows on the last one. */}`,
           `      </FormBuilder.Stepper>`,
         ].join("\n")
-      : [
-          `      <FormBuilder.Section title="Details" color="Blue">`,
-          fieldJsxLines,
-          `      </FormBuilder.Section>`,
-          layout === "single" && display !== "drawer"
-            ? `\n      <FormBuilder.Submit loadingText="Saving…">Save</FormBuilder.Submit>`
-            : ``,
-        ]
-          .filter(Boolean)
-          .join("\n");
+      : section;
 
-  // The form must be hoisted when a summary reads the same values from outside it.
-  const formProp = summary ? `form={form}` : ``;
-  const rhfProps = summary
-    ? `${formProp} onSubmit={onSubmit} loading={saving}`
-    : `onSubmit={onSubmit} loading={saving} resolver={zodResolver(schema)} defaultValues={DEFAULTS}`;
+  const summaryPanel = [
+    `<FormSummary form={form} title="Summary" subtitle="Total">`,
+    `  <FormSummary.Group title="Total">`,
+    `    {/* compute(values) runs against the LIVE form values */}`,
+    `    <FormSummary.Row label="Subtotal" compute={(v) => subTotal(v)} />`,
+    `    <FormSummary.Row label="Overall Total" emphasized compute={(v) => overallTotal(v)} />`,
+    `  </FormSummary.Group>`,
+    `</FormSummary>`,
+  ].join("\n");
 
-  const summaryPanel = summary
-    ? [
-        `<FormSummary form={form} title="Summary" subtitle="Total">`,
-        `  <FormSummary.Group title="Total">`,
-        `    {/* compute(values) runs against the LIVE form values */}`,
-        `    <FormSummary.Row label="Subtotal" compute={(v) => subTotal(v)} />`,
-        `    <FormSummary.Row label="Overall Total" emphasized compute={(v) => overallTotal(v)} />`,
-        `  </FormSummary.Group>`,
-        `</FormSummary>`,
-      ].join("\n")
-    : "";
+  // FormRenderer props, one per line. With a summary the form is hoisted and shared;
+  // otherwise FormRenderer owns resolver/defaultValues itself.
+  const rendererProps = [
+    summary ? `form={form}` : null,
+    `onSubmit={onSubmit}`,
+    `loading={saving}`,
+    summary ? null : `resolver={zodResolver(schema)}`,
+    summary ? null : `defaultValues={DEFAULTS}`,
+    drawer ? `display="drawer"` : null,
+    drawer ? `open={open}` : null,
+    drawer ? `onOpenChange={setOpen}` : null,
+    `header={{ title: 'New record', variant: 'new' }}`,
+  ]
+    .filter(Boolean)
+    .map((p) => `      ${p}`);
 
-  const hoisted = summary
-    ? [
-        ``,
-        `  // Hoisted so the FormSummary beside the form can read the same live values.`,
-        `  const form = useForm<Values>({ resolver: zodResolver(schema), defaultValues: DEFAULTS })`,
-      ].join("\n")
-    : "";
-
-  if (display === "drawer") {
-    return [
-      imports,
-      ``,
-      schema,
-      optionConsts ? `\n${optionConsts}` : ``,
-      ``,
-      `const FORM_ID = 'my-form'`,
-      ``,
-      `export function MyFormDrawer({ open, setOpen, onSubmit, saving }: Props) {${hoisted}`,
-      ``,
-      `  return (`,
-      `    <FormDrawer`,
-      `      open={open}`,
-      `      onOpenChange={setOpen}`,
-      `      title="New record"`,
-      `      badge="New"`,
-      `      // The header sits OUTSIDE the <form>, so Save submits it via form={FORM_ID}.`,
-      `      actions={<Button type="submit" form={FORM_ID} variant="PrimeStyle" is_loading={saving}>Save</Button>}`,
-      summary
-        ? `      // Renders OUTSIDE the drawer panel, beside it.\n      childrenOutside={\n${indent(summaryPanel, 8)}\n      }`
-        : ``,
-      `    >`,
-      `      <FormBuilder id={FORM_ID} ${rhfProps} fieldDirection="vertical">`,
-      indent(body, 0),
-      `      </FormBuilder>`,
-      `    </FormDrawer>`,
-      `  )`,
-      `}`,
-    ]
-      .filter((l) => l !== ``)
-      .join("\n");
+  if (summary) {
+    rendererProps.push(`      summary={`, indent(summaryPanel, 8), `      }`);
   }
 
-  return [
-    imports,
-    ``,
-    schema,
-    optionConsts ? `\n${optionConsts}` : ``,
-    ``,
-    `export function MyForm({ onSubmit, saving }: Props) {${hoisted}`,
-    ``,
-    `  return (`,
-    summary ? `    <div className="flex items-start gap-4">` : ``,
-    `    <FormBuilder ${rhfProps}${summary ? ` className="min-w-0 flex-1"` : ``}>`,
-    `      <FormBuilder.Header title="New record" variant="new">`,
-    `        <FormBuilder.Submit loadingText="Saving…">Save</FormBuilder.Submit>`,
-    `      </FormBuilder.Header>`,
-    ``,
+  const renderer = [
+    `    <FormRenderer<Values>`,
+    ...rendererProps,
+    `    >`,
     body,
-    `    </FormBuilder>`,
-    summary ? `\n${indent(summaryPanel, 4)}\n    </div>` : ``,
+    `    </FormRenderer>`,
+  ].join("\n");
+
+  // Hoist useForm only when a summary beside the form must read the same live values.
+  const hoisted = summary
+    ? `\n  // Hoisted so the FormSummary beside the form reads the same live values.\n  const form = useForm<Values>({ resolver: zodResolver(schema), defaultValues: DEFAULTS })\n`
+    : ``;
+
+  const compName = drawer ? "MyFormDrawer" : "MyForm";
+  const compArgs = drawer
+    ? `{ open, setOpen, onSubmit, saving }: Props`
+    : `{ onSubmit, saving }: Props`;
+
+  const out = [imports, ``, schema];
+  if (optionConsts) out.push(``, optionConsts);
+  out.push(
+    ``,
+    `export function ${compName}(${compArgs}) {${hoisted}`,
+    `  return (`,
+    renderer,
     `  )`,
     `}`,
-  ]
-    .filter((l) => l !== ``)
-    .join("\n");
+  );
+  return out.join("\n");
 }
 
 function indent(block: string, n: number): string {
@@ -336,8 +513,8 @@ function defaultFor(f: ParsedField): string {
   if (v === "boolean") return "false";
   if (v === "number") return "undefined";
   if (v.endsWith("[]")) return "[]";
-  if (v === "Date" || v.startsWith("File") || v === "OutputData" || v.startsWith("{")) return "undefined";
+  if (v === "Date" || v.startsWith("File") || v === "OutputData" || v.startsWith("{"))
+    return "undefined";
   if (f.spec.static === "FieldArray") return "[]";
   return "''";
 }
-

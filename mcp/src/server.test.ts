@@ -39,7 +39,10 @@ test("list-by-category returns components (regression: filter was always empty)"
   const buttons = registry.listByCategory("buttons");
   assert.ok(buttons.length > 0, "buttons category should not be empty");
   assert.deepEqual(
-    registry.listByCategory("Buttons & Actions").map((e) => e.name).sort(),
+    registry
+      .listByCategory("Buttons & Actions")
+      .map((e) => e.name)
+      .sort(),
     buttons.map((e) => e.name).sort(),
   );
 });
@@ -128,11 +131,12 @@ test("addCommand + importPath + real exports are correct", async () => {
   assert.equal(rl.importPath(button), "@/components/Button");
   assert.ok((await rl.getExports(button)).values.includes("Button"));
 
-  // Regression: the registry name is the FILE name, not always an export.
-  const mdp = rl.getItemByName("markdownParser")!;
-  const { values } = await rl.getExports(mdp);
-  assert.ok(values.includes("isMarkdown"), "should list real exports");
-  assert.ok(!values.includes("markdownParser"), "file name is not an export");
+  // Regression: the registry name is the FILE name, not always an export. The `color`
+  // util is named for its file (color.ts) but exports helpers like `parseHex`/`rgbToHsv`.
+  const color = rl.getItemByName("color")!;
+  const { values } = await rl.getExports(color);
+  assert.ok(values.includes("parseHex"), "should list real exports");
+  assert.ok(!values.includes("color"), "file name is not an export");
 });
 
 test("getSource returns the real component file", async () => {
@@ -182,9 +186,10 @@ test("the FormBuilder forms guide is served and covers all three form components
   for (const name of ["FormBuilder", "FormRenderer", "FormSummary"]) {
     assert.ok(guide.includes(name), `forms guide should cover ${name}`);
   }
-  // The composition that only works via the hoisted form + the drawer's outside slot.
+  // The composition that only works via the hoisted form shared with the summary panel,
+  // and the drawer laid out through FormRenderer.
   assert.match(guide, /useForm/, "forms guide should show hoisting useForm");
-  assert.match(guide, /childrenOutside/, "forms guide should show the drawer's childrenOutside slot");
+  assert.match(guide, /display="drawer"/, "forms guide should show the drawer via FormRenderer");
 });
 
 test("form component docs are loaded (get-component-docs can serve them)", async () => {
@@ -217,12 +222,14 @@ test("every field in the create-form map is a real FormBuilder static (no drift)
 });
 
 test("create-form maps field hints to the right component", () => {
-  const parsed = parseFields("name, email, price (currency), role (select), agree (checkbox), signature");
+  const parsed = parseFields(
+    "name, email, price (currency), role (select), agree (checkbox), signature",
+  );
   const got = Object.fromEntries(parsed.map((f) => [f.name, f.spec.static]));
 
   assert.equal(got.name, "Text");
-  assert.equal(got.email, "Email");         // inferred from the field name
-  assert.equal(got.price, "Currency");      // explicit hint wins over "Text"
+  assert.equal(got.email, "Email"); // inferred from the field name
+  assert.equal(got.price, "Currency"); // explicit hint wins over "Text"
   assert.equal(got.role, "Select");
   assert.equal(got.agree, "Checkbox");
   assert.equal(got.signature, "Signature");
@@ -232,6 +239,14 @@ test("create-form maps field hints to the right component", () => {
   assert.equal(multi.spec.static, "MultiSelect");
   const [range] = parseFields("period (date range)");
   assert.equal(range.spec.static, "DateRange");
+
+  // The re-homed statics: options-driven single/multi lists and the boxed switch.
+  const [radioList] = parseFields("plan (radio list)");
+  assert.equal(radioList.spec.static, "RadioList");
+  const [checkGroup] = parseFields("perms (checkbox group)");
+  assert.equal(checkGroup.spec.static, "CheckboxGroup");
+  const [switchBox] = parseFields("darkMode (switch)");
+  assert.equal(switchBox.spec.static, "SwitchBox");
 });
 
 test("field matching is word-boundary, not substring (regression)", () => {
@@ -254,11 +269,13 @@ test("create-form skeleton wires the drawer + summary composition correctly", ()
   const parsed = parseFields("name, price (currency)");
   const code = skeleton(parsed, { layout: "single", display: "drawer", summary: true });
 
-  // The three things a model reliably gets wrong when writing this by hand.
+  // The FormRenderer-based composition a model reliably gets wrong when writing it by hand.
   assert.match(code, /const form = useForm<Values>/, "summary requires a hoisted useForm");
-  assert.match(code, /<FormBuilder id=\{FORM_ID\} form=\{form\}/, "form must be shared with the summary");
-  assert.match(code, /form=\{FORM_ID\}/, "drawer header Save submits across the boundary via form={id}");
-  assert.match(code, /childrenOutside=\{/, "summary goes outside the drawer panel");
+  assert.match(code, /<FormRenderer<Values>/, "renders through FormRenderer");
+  assert.match(code, /display="drawer"/, "drawer display is set");
+  assert.match(code, /form=\{form\}/, "the hoisted form is shared with FormRenderer + summary");
+  assert.match(code, /summary=\{/, "summary panel passed via the summary prop");
+  assert.match(code, /<FormSummary form=\{form\}/, "summary bound to the hoisted form");
   assert.match(code, /<FormBuilder\.Currency name="price"/, "currency field mapped");
 });
 

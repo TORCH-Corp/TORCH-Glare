@@ -18,9 +18,9 @@ import { parseFields, mappingTable, skeleton } from "./form-fields.js";
 
 // Read the server version from package.json so the MCP handshake version never
 // drifts from the published package version. dist/index.js → ../package.json.
-const { version: SERVER_VERSION } = createRequire(import.meta.url)(
-  "../package.json",
-) as { version: string };
+const { version: SERVER_VERSION } = createRequire(import.meta.url)("../package.json") as {
+  version: string;
+};
 
 /**
  * Absolute project rules. Sent ONCE via the server's `instructions` at
@@ -84,20 +84,35 @@ async function main() {
   server.tool(
     "list-components",
     `List all TORCH Glare components and installable items (hooks, utils, layouts, providers), optionally filtered by category. Categories: ${categoryList}`,
-    { category: z.string().optional().describe("Filter by category (e.g., 'buttons', 'forms', 'overlays', 'hooks')") },
+    {
+      category: z
+        .string()
+        .optional()
+        .describe("Filter by category (e.g., 'buttons', 'forms', 'overlays', 'hooks')"),
+    },
     async ({ category }) => {
       const entries = registry.listByCategory(category);
       if (entries.length === 0) {
         const cats = registry.getCategories().join(", ");
         return {
-          content: [{ type: "text", text: `No components found for category "${category}". Available categories: ${cats}` }],
+          content: [
+            {
+              type: "text",
+              text: `No components found for category "${category}". Available categories: ${cats}`,
+            },
+          ],
         };
       }
       const formatted = registry.formatComponentList(entries);
       return {
-        content: [{ type: "text", text: `# TORCH Glare Components${category ? ` (${category})` : ""}${libTag}\n\nFound ${entries.length} components.\n${formatted}` }],
+        content: [
+          {
+            type: "text",
+            text: `# TORCH Glare Components${category ? ` (${category})` : ""}${libTag}\n\nFound ${entries.length} components.\n${formatted}`,
+          },
+        ],
       };
-    }
+    },
   );
 
   // Tool 2: Search components
@@ -109,14 +124,24 @@ async function main() {
       const results = registry.search(query);
       if (results.length === 0) {
         return {
-          content: [{ type: "text", text: `No components found matching "${query}". Try broader terms or use list-components to see all.` }],
+          content: [
+            {
+              type: "text",
+              text: `No components found matching "${query}". Try broader terms or use list-components to see all.`,
+            },
+          ],
         };
       }
       const lines = results.map((r) => `- **${r.name}** [${r.category}]: ${r.description}`);
       return {
-        content: [{ type: "text", text: `# Search Results for "${query}"\n\nFound ${results.length} matches:\n\n${lines.join("\n")}` }],
+        content: [
+          {
+            type: "text",
+            text: `# Search Results for "${query}"\n\nFound ${results.length} matches:\n\n${lines.join("\n")}`,
+          },
+        ],
       };
-    }
+    },
   );
 
   // Tool 3: Get component documentation (a section, or a table of contents)
@@ -124,18 +149,30 @@ async function main() {
     "get-component-docs",
     "Get documentation for a TORCH Glare component. Component docs are large, so by default this returns a compact overview + a table of contents; pass `section` to fetch one part, or 'full' for the entire document.",
     {
-      component: z.string().describe("Component name (e.g., 'Button', 'InputField', 'AlertDialog')"),
+      component: z
+        .string()
+        .describe("Component name (e.g., 'Button', 'InputField', 'AlertDialog')"),
       section: z
         .string()
         .optional()
-        .describe("Which part to return: a heading keyword (e.g. 'examples', 'accessibility', 'testing', 'styling', 'patterns'), or 'full' for everything. Omit for a compact overview + table of contents."),
+        .describe(
+          "Which part to return: a heading keyword (e.g. 'examples', 'accessibility', 'testing', 'styling', 'patterns'), or 'full' for everything. Omit for a compact overview + table of contents.",
+        ),
     },
     async ({ component, section }) => {
       const doc = loader.getComponent(component);
       if (!doc) {
-        const all = loader.getAllComponents().map((d) => d.name).join(", ");
+        const all = loader
+          .getAllComponents()
+          .map((d) => d.name)
+          .join(", ");
         return {
-          content: [{ type: "text", text: `Component "${component}" not found. Available components: ${all}` }],
+          content: [
+            {
+              type: "text",
+              text: `Component "${component}" not found. Available components: ${all}`,
+            },
+          ],
         };
       }
 
@@ -153,7 +190,12 @@ async function main() {
           return { content: [{ type: "text", text: `# ${doc.name} — ${section}\n\n${found}` }] };
         }
         return {
-          content: [{ type: "text", text: `No "${section}" section in ${doc.name}. Available sections: ${toc.join(", ")}. Use section:"full" for the whole doc.` }],
+          content: [
+            {
+              type: "text",
+              text: `No "${section}" section in ${doc.name}. Available sections: ${toc.join(", ")}. Use section:"full" for the whole doc.`,
+            },
+          ],
         };
       }
 
@@ -171,7 +213,7 @@ async function main() {
         `Call \`get-component-docs\` again with \`section\` (e.g. \`"examples"\`, \`"accessibility"\`) or \`section:"full"\`. For just props use \`get-component-api\`; for code use \`get-usage-examples\`; to install use \`get-install-info\`.`,
       ].join("\n");
       return { content: [{ type: "text", text: overview }] };
-    }
+    },
   );
 
   // Tool 4: Get component API/props only
@@ -183,7 +225,12 @@ async function main() {
       const doc = loader.getComponent(component);
       if (!doc) {
         return {
-          content: [{ type: "text", text: `Component "${component}" not found. Use search-components or list-components to find the right name.` }],
+          content: [
+            {
+              type: "text",
+              text: `Component "${component}" not found. Use search-components or list-components to find the right name.`,
+            },
+          ],
         };
       }
 
@@ -202,11 +249,12 @@ async function main() {
       }
 
       if (!apiSection && !tsSection) {
-        result += "No dedicated API section found. Use get-component-docs for the full documentation.";
+        result +=
+          "No dedicated API section found. Use get-component-docs for the full documentation.";
       }
 
       return { content: [{ type: "text", text: result }] };
-    }
+    },
   );
 
   // Tool 5: Get usage examples
@@ -215,13 +263,21 @@ async function main() {
     "Get code examples for a TORCH Glare component, optionally filtered by pattern keyword",
     {
       component: z.string().describe("Component name"),
-      pattern: z.string().optional().describe("Filter examples by keyword (e.g., 'form', 'loading', 'theme', 'icon')"),
+      pattern: z
+        .string()
+        .optional()
+        .describe("Filter examples by keyword (e.g., 'form', 'loading', 'theme', 'icon')"),
     },
     async ({ component, pattern }) => {
       const doc = loader.getComponent(component);
       if (!doc) {
         return {
-          content: [{ type: "text", text: `Component "${component}" not found. Use search-components or list-components to find the right name.` }],
+          content: [
+            {
+              type: "text",
+              text: `Component "${component}" not found. Use search-components or list-components to find the right name.`,
+            },
+          ],
         };
       }
 
@@ -240,13 +296,18 @@ async function main() {
       if (pattern) {
         const p = pattern.toLowerCase();
         examples = examples.filter(
-          (e) => e.heading.toLowerCase().includes(p) || e.code.toLowerCase().includes(p)
+          (e) => e.heading.toLowerCase().includes(p) || e.code.toLowerCase().includes(p),
         );
       }
 
       if (examples.length === 0) {
         return {
-          content: [{ type: "text", text: `No code examples found for "${component}"${pattern ? ` matching "${pattern}"` : ""}.` }],
+          content: [
+            {
+              type: "text",
+              text: `No code examples found for "${component}"${pattern ? ` matching "${pattern}"` : ""}.`,
+            },
+          ],
         };
       }
 
@@ -255,9 +316,16 @@ async function main() {
         .join("\n\n");
 
       return {
-        content: [{ type: "text", text: RULES_HINT + `# ${doc.name} Code Examples${pattern ? ` (filtered: "${pattern}")` : ""}\n\n${formatted}` }],
+        content: [
+          {
+            type: "text",
+            text:
+              RULES_HINT +
+              `# ${doc.name} Code Examples${pattern ? ` (filtered: "${pattern}")` : ""}\n\n${formatted}`,
+          },
+        ],
       };
-    }
+    },
   );
 
   // Tool 6: Get design system info
@@ -266,7 +334,17 @@ async function main() {
     "Get TORCH Glare design system information about theming, typography, colors, plugins, hooks, providers, utilities, or installation",
     {
       topic: z
-        .enum(["theming", "typography", "colors", "plugins", "hooks", "providers", "utilities", "installation", "all"])
+        .enum([
+          "theming",
+          "typography",
+          "colors",
+          "plugins",
+          "hooks",
+          "providers",
+          "utilities",
+          "installation",
+          "all",
+        ])
         .describe("Topic to retrieve information about"),
     },
     async ({ topic }) => {
@@ -324,19 +402,30 @@ async function main() {
       return {
         content: [{ type: "text", text: sections.join("\n\n---\n\n") }],
       };
-    }
+    },
   );
 
   // Tool 7: Get install info (CLI command + dependency graph)
   server.tool(
     "get-install-info",
     "Get how to install a TORCH Glare item into a project: the `torch-glare` CLI command, the import statement, its npm dependencies, and the full transitive set of internal (registry) dependencies the CLI copies. TORCH Glare is copy-in — components are copied into your project, not imported from an npm package.",
-    { item: z.string().describe("Item name — a component, hook, util, layout, or provider (e.g., 'Button', 'AlertDialog', 'useIsMobile', 'cn')") },
+    {
+      item: z
+        .string()
+        .describe(
+          "Item name — a component, hook, util, layout, or provider (e.g., 'Button', 'AlertDialog', 'useIsMobile', 'cn')",
+        ),
+    },
     async ({ item: itemName }) => {
       const item = registryLoader.getItemByName(itemName);
       if (!item) {
         return {
-          content: [{ type: "text", text: `"${itemName}" not found in the registry. Use list-components or search-components to find the right name.` }],
+          content: [
+            {
+              type: "text",
+              text: `"${itemName}" not found in the registry. Use list-components or search-components to find the right name.`,
+            },
+          ],
         };
       }
 
@@ -374,23 +463,33 @@ async function main() {
         "```",
         "",
         `## npm dependencies (${plan.npmDependencies.length})`,
-        plan.npmDependencies.length ? plan.npmDependencies.map((d) => `- \`${d}\``).join("\n") : "_None._",
+        plan.npmDependencies.length
+          ? plan.npmDependencies.map((d) => `- \`${d}\``).join("\n")
+          : "_None._",
         "",
         `## Internal dependencies copied alongside (${internalDeps.length})`,
-        internalDeps.length ? internalDeps.map((d) => `- ${d}`).join("\n") : "_None — this item is standalone._",
+        internalDeps.length
+          ? internalDeps.map((d) => `- ${d}`).join("\n")
+          : "_None — this item is standalone._",
         "",
         "> `torch-glare add` resolves and copies these internal dependencies for you; you do not add them one by one.",
       ];
 
       return { content: [{ type: "text", text: RULES_HINT + lines.join("\n") }] };
-    }
+    },
   );
 
   // Tool 8: Get component source (the exact code the CLI copies)
   server.tool(
     "get-component-source",
     "Get the actual TypeScript/TSX source code of a TORCH Glare item — the exact file the CLI copies into a project. Use this when you need the implementation, not just the docs.",
-    { item: z.string().describe("Item name — a component, hook, util, layout, or provider (e.g., 'Button', 'useIsMobile')") },
+    {
+      item: z
+        .string()
+        .describe(
+          "Item name — a component, hook, util, layout, or provider (e.g., 'Button', 'useIsMobile')",
+        ),
+    },
     async ({ item: itemName }) => {
       const source = await registryLoader.getSource(itemName);
       if (!source) {
@@ -402,31 +501,54 @@ async function main() {
       }
       const lang = source.path.endsWith(".tsx") ? "tsx" : "typescript";
       return {
-        content: [{ type: "text", text: `${RULES_HINT}# ${itemName} — source (\`apps/lib/${source.path}\`)\n\n\`\`\`${lang}\n${source.code}\n\`\`\`` }],
+        content: [
+          {
+            type: "text",
+            text: `${RULES_HINT}# ${itemName} — source (\`apps/lib/${source.path}\`)\n\n\`\`\`${lang}\n${source.code}\n\`\`\``,
+          },
+        ],
       };
-    }
+    },
   );
 
   // Tool 9: Get a guide (tutorial or how-to)
   server.tool(
     "get-guide",
     "Get a TORCH Glare tutorial or how-to guide by name — step-by-step recipes for building things (forms, composition, theming, data views). Call with no name to list available guides.",
-    { name: z.string().optional().describe("Guide name (e.g., 'building-first-form', 'component-composition', 'theming-basics'). Omit to list all.") },
+    {
+      name: z
+        .string()
+        .optional()
+        .describe(
+          "Guide name (e.g., 'building-first-form', 'component-composition', 'theming-basics'). Omit to list all.",
+        ),
+    },
     async ({ name }) => {
       const available = loader.getAllGuideNames();
       if (!name) {
         return {
-          content: [{ type: "text", text: `# TORCH Glare Guides\n\n${available.map((g) => `- ${g}`).join("\n")}\n\nCall get-guide with a name to read one.` }],
+          content: [
+            {
+              type: "text",
+              text: `# TORCH Glare Guides\n\n${available.map((g) => `- ${g}`).join("\n")}\n\nCall get-guide with a name to read one.`,
+            },
+          ],
         };
       }
-      const guide = loader.getGuide(name) || loader.getGuide(name.replace(/\s+/g, "-").toLowerCase());
+      const guide =
+        loader.getGuide(name) || loader.getGuide(name.replace(/\s+/g, "-").toLowerCase());
       if (!guide) {
         return {
-          content: [{ type: "text", text: `Guide "${name}" not found. Available guides: ${available.join(", ")}.` }],
+          content: [
+            {
+              type: "text",
+              text: `Guide "${name}" not found. Available guides: ${available.join(", ")}.`,
+            },
+          ],
         };
       }
       return { content: [{ type: "text", text: guide }] };
-    }
+    },
   );
 
   // Tool: create-form — the autonomous entry point for "build me a form".
@@ -443,25 +565,40 @@ async function main() {
       fields: z
         .string()
         .describe(
-          "Comma-separated fields, with an optional type hint in parentheses. e.g. \"name, email, price (currency), role (select), agree (checkbox)\". The hint wins; otherwise the type is inferred from the field name.",
+          'Comma-separated fields, with an optional type hint in parentheses. e.g. "name, email, price (currency), role (select), agree (checkbox)". The hint wins; otherwise the type is inferred from the field name.',
         ),
-      layout: z.enum(["single", "stepper"]).optional().describe("'single' (default) or 'stepper' for a multi-step wizard."),
-      display: z.enum(["page", "drawer"]).optional().describe("'page' (default) or 'drawer' to host the form in a side drawer."),
-      summary: z.boolean().optional().describe("Add a FormSummary conclusion panel beside the form with live computed totals (invoices, orders)."),
+      layout: z
+        .enum(["single", "stepper"])
+        .optional()
+        .describe("'single' (default) or 'stepper' for a multi-step wizard."),
+      display: z
+        .enum(["page", "drawer"])
+        .optional()
+        .describe("'page' (default) or 'drawer' to host the form in a side drawer."),
+      summary: z
+        .boolean()
+        .optional()
+        .describe(
+          "Add a FormSummary conclusion panel beside the form with live computed totals (invoices, orders).",
+        ),
     },
     async ({ fields, layout = "single", display = "page", summary = false }) => {
       const parsed = parseFields(fields);
       if (parsed.length === 0) {
-        return { content: [{ type: "text", text: "No fields parsed. Pass e.g. `name, email, price (currency)`." }] };
+        return {
+          content: [
+            { type: "text", text: "No fields parsed. Pass e.g. `name, email, price (currency)`." },
+          ],
+        };
       }
 
-      const items = ["FormBuilder", ...(display === "drawer" ? ["FormRenderer"] : []), ...(summary ? ["FormSummary"] : [])];
+      const items = ["FormBuilder", "FormRenderer", ...(summary ? ["FormSummary"] : [])];
       const installs = items.map((i) => `npx torch-glare add ${i}`).join("\n");
       const guessed = parsed.filter((f) => f.guessed);
 
-      const notes = [
-        ...new Set(parsed.map((f) => f.spec.note).filter(Boolean) as string[]),
-      ].map((n) => `- ${n}`);
+      const notes = [...new Set(parsed.map((f) => f.spec.note).filter(Boolean) as string[])].map(
+        (n) => `- ${n}`,
+      );
 
       const text = [
         RULES_HINT.trim(),
@@ -501,7 +638,7 @@ async function main() {
             ? `- The form is **hoisted** (\`useForm\` in the component), so a remount \`key\` no longer resets it — call \`form.reset(DEFAULTS)\` instead.`
             : ``,
           display === "drawer"
-            ? `- The drawer header is outside the \`<form>\`; Save submits it via \`form={FORM_ID}\`. Don't move the button inside.`
+            ? `- \`FormRenderer\` (with \`display="drawer"\`) places the Save action in the drawer header and lays any \`summary\` in the tray — just drive it with \`open\` / \`onOpenChange\`.`
             : ``,
           `- Use \`required\` on fields — never type a literal "*".`,
           `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
@@ -520,16 +657,27 @@ async function main() {
   server.tool(
     "get-related-components",
     "Show how a TORCH Glare item relates to others: what it copies in (its dependencies) and what other items use it (reverse dependencies). Useful for discovering the set of pieces a feature needs.",
-    { item: z.string().describe("Component/hook/util/layout/provider name (e.g., 'Form', 'Button')") },
+    {
+      item: z
+        .string()
+        .describe("Component/hook/util/layout/provider name (e.g., 'Form', 'Button')"),
+    },
     async ({ item }) => {
       const entry = registryLoader.getItemByName(item);
       if (!entry) {
         return {
-          content: [{ type: "text", text: `"${item}" not found in the registry. Use search-components to find the right name.` }],
+          content: [
+            {
+              type: "text",
+              text: `"${item}" not found in the registry. Use search-components to find the right name.`,
+            },
+          ],
         };
       }
       const plan = registryLoader.resolveInstallPlan(entry.type, entry.name)!;
-      const pullsIn = plan.items.filter((i) => i.name !== entry.name).map((i) => `${i.name} (${i.type})`);
+      const pullsIn = plan.items
+        .filter((i) => i.name !== entry.name)
+        .map((i) => `${i.name} (${i.type})`);
       const usedBy = registryLoader.getDependents(entry).map((i) => `${i.name} (${i.type})`);
 
       const lines = [
@@ -539,10 +687,12 @@ async function main() {
         pullsIn.length ? pullsIn.map((d) => `- ${d}`).join("\n") : "_Nothing — standalone._",
         "",
         `## Used by (${usedBy.length})`,
-        usedBy.length ? usedBy.map((d) => `- ${d}`).join("\n") : "_Nothing else composes it directly._",
+        usedBy.length
+          ? usedBy.map((d) => `- ${d}`).join("\n")
+          : "_Nothing else composes it directly._",
       ];
       return { content: [{ type: "text", text: lines.join("\n") }] };
-    }
+    },
   );
 
   // ─── RESOURCES ───────────────────────────────────────────────────────
@@ -567,7 +717,7 @@ async function main() {
           },
         ],
       };
-    }
+    },
   );
 
   // Resource 2: Getting started guide
@@ -580,11 +730,12 @@ async function main() {
       mimeType: "text/markdown",
     },
     async () => {
-      const tutorial = loader.getTutorial("getting-started") || "Getting started guide not available.";
+      const tutorial =
+        loader.getTutorial("getting-started") || "Getting started guide not available.";
       return {
         contents: [{ uri: "torch-glare://getting-started", text: tutorial }],
       };
-    }
+    },
   );
 
   // Resource 3: Design system overview
@@ -609,11 +760,14 @@ async function main() {
         contents: [
           {
             uri: "torch-glare://design-system",
-            text: sections.length > 0 ? sections.join("\n\n---\n\n") : "Design system docs not available.",
+            text:
+              sections.length > 0
+                ? sections.join("\n\n---\n\n")
+                : "Design system docs not available.",
           },
         ],
       };
-    }
+    },
   );
 
   // Resource 4: Dynamic component docs (template)
@@ -647,7 +801,7 @@ async function main() {
       return {
         contents: [{ uri: uri.href, text: doc.rawContent }],
       };
-    }
+    },
   );
 
   // ─── PROMPTS ─────────────────────────────────────────────────────────
@@ -659,7 +813,9 @@ async function main() {
     {
       fields: z
         .string()
-        .describe("The fields you want, e.g. 'name, email, role (select), price (currency), agree (checkbox)'"),
+        .describe(
+          "The fields you want, e.g. 'name, email, role (select), price (currency), agree (checkbox)'",
+        ),
       layout: z
         .string()
         .optional()
@@ -684,13 +840,13 @@ async function main() {
 
       const extras = [
         wantsStepper
-          ? "- Layout: a STEPPER. Wrap the sections in `FormBuilder.Stepper` with a `FormBuilder.Step title=\"…\"` per step. Every step stays mounted; navigation is the step buttons; Submit shows on the last step."
+          ? '- Layout: a STEPPER. Wrap the sections in `FormBuilder.Stepper` with a `FormBuilder.Step title="…"` per step. Every step stays mounted; navigation is the step buttons; Submit shows on the last step.'
           : "- Layout: a single page form.",
         wantsDrawer
-          ? "- Display: in a DRAWER. Use `FormDrawer` from `@/components/FormRenderer`. Give `FormBuilder` an `id` and wire the drawer header's Save with `form={id}` (the header sits outside the `<form>`). Pass `fieldDirection=\"vertical\"`."
-          : "- Display: a normal page. Use `FormBuilder.Header` for the title pill + action bar.",
+          ? '- Display: in a DRAWER. Use `FormRenderer` with `display="drawer"` and drive it with `open` / `onOpenChange` — it places the Save action in the drawer header for you (no manual `form={id}` wiring).'
+          : "- Display: a normal page. Wrap in `FormRenderer` and give it a `header={{ title, variant }}` — it renders the title pill + action bar and places Submit.",
         wantsSummary
-          ? "- Totals: add a `FormSummary` conclusion panel BESIDE the form. Hoist `useForm` and pass the SAME instance to both `<FormBuilder form={form}>` and `<FormSummary form={form}>`. Each `FormSummary.Row` takes a `compute(values)` that runs against the live values. In a drawer, pass the panel via the drawer's `childrenOutside` prop."
+          ? '- Totals: add a `FormSummary` conclusion panel BESIDE the form via `FormRenderer`\'s `summary` prop. Hoist `useForm` and pass the SAME instance to both `<FormRenderer form={form}>` and `<FormSummary form={form}>`. Each `FormSummary.Row` takes a `compute(values)` that runs against the live values. With `display="drawer"` the panel moves into the drawer tray automatically.'
           : "",
       ]
         .filter(Boolean)
@@ -712,7 +868,7 @@ async function main() {
                 `2. Call get-guide "forms-with-form-builder" for the full reference (single, stepper, drawer, totals, gotchas).\n` +
                 `3. Run the \`npx torch-glare add\` commands it gives you.\n` +
                 `4. Fill in the zod schema and any \`options\` arrays. Validation is resolver-agnostic; the library never depends on zod.\n` +
-                `5. Use \`required\` on fields (never a literal "*"), group with \`FormBuilder.Section\`, and end with \`FormBuilder.Submit\`.\n\n` +
+                `5. Use \`required\` on fields (never a literal "*") and group them with \`FormBuilder.Section\`. \`FormRenderer\` places the Submit button — don't add your own.\n\n` +
                 `Follow the server's absolute rules (never SystemStyle / *-system-* tokens).`,
             },
           },

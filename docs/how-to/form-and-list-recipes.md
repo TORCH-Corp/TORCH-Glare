@@ -10,6 +10,13 @@ Battle-tested layouts and component combinations from production frontend work.
 Use these as the starting point for create dialogs, list/filter pages,
 line-item grids, and login flows.
 
+> **For actual forms, reach for [`FormBuilder`](../components/form-builder.md) first.** The
+> multi-column form rows below are a layout escape hatch for the rare case that needs bespoke
+> positioning — they are **not** the default way to build a form. A normal create/edit form is
+> `FormBuilder` fields as JSX children with a resolver; see the
+> [Forms with FormBuilder](./forms-with-form-builder.md) guide. Don't hand-wire `FormField` /
+> `InputField` rows or hold field state in `useState` when `FormBuilder` would do it.
+
 > All examples use the `presentation` color tokens. Never substitute
 > `*-system-*` tokens or `variant="SystemStyle"` — see the rules banner at
 > the top of every doc response.
@@ -76,7 +83,9 @@ the same filter bar — a search input + one or more select filters above a
 data table.
 
 ```tsx
-{/* Filter bar */}
+{
+  /* Filter bar */
+}
 <div className="flex items-center gap-3">
   <div className="flex-1 max-w-sm">
     <InputField
@@ -99,9 +108,11 @@ data table.
     ]}
     placeholder="All Statuses"
   />
-</div>
+</div>;
 
-{/* Data table */}
+{
+  /* Data table */
+}
 <Card className="p-0 overflow-hidden">
   <CardContent className="p-0 overflow-x-auto">
     <Table className="w-full">
@@ -122,9 +133,7 @@ data table.
             >
               <i className="ri-inbox-line text-4xl opacity-60" />
               <p className="typography-body-medium-regular">No vouchers</p>
-              <p className="typography-body-small-regular opacity-80">
-                Try adjusting your filters
-              </p>
+              <p className="typography-body-small-regular opacity-80">Try adjusting your filters</p>
             </TableCell>
           </TableRow>
         ) : (
@@ -144,7 +153,7 @@ data table.
       </TableBody>
     </Table>
   </CardContent>
-</Card>
+</Card>;
 ```
 
 Key rules:
@@ -263,15 +272,15 @@ hierarchy. Adding a relevant icon makes dialogs instantly recognizable.
 
 Pick an icon that matches the entity:
 
-| Entity | Icon |
-|---|---|
-| Account | `ri-bank-line` |
-| Fiscal period / year | `ri-calendar-line` |
-| Voucher / journal | `ri-receipt-line` |
-| Number series | `ri-hashtag` |
-| Posting rule | `ri-settings-3-line` |
-| Exchange rate | `ri-exchange-line` |
-| Bank / cash account | `ri-bank-card-line` |
+| Entity               | Icon                 |
+| -------------------- | -------------------- |
+| Account              | `ri-bank-line`       |
+| Fiscal period / year | `ri-calendar-line`   |
+| Voucher / journal    | `ri-receipt-line`    |
+| Number series        | `ri-hashtag`         |
+| Posting rule         | `ri-settings-3-line` |
+| Exchange rate        | `ri-exchange-line`   |
+| Bank / cash account  | `ri-bank-card-line`  |
 
 ---
 
@@ -297,9 +306,7 @@ export function LoginPage() {
           "to-background-presentation-state-information/10",
         ].join(" ")}
       >
-        <h1 className="typography-headers-large-medium">
-          Welcome to Torch Finance
-        </h1>
+        <h1 className="typography-headers-large-medium">Welcome to Torch Finance</h1>
         <ul className="flex flex-col gap-3">
           {features.map((f) => (
             <li key={f.title} className="flex items-start gap-3">

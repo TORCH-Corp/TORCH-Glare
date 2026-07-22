@@ -107,7 +107,7 @@ export function FormDrawer({
             </FormHeaderBar>
 
             {/* pt-[72px] clears the 44px header pill (inset 4px) — same as the page shell. */}
-            <div className="h-full overflow-y-auto px-3 pb-3 pt-[72px]">{children}</div>
+            <div className="h-full overflow-y-auto px-3 pb-[20px] pt-[72px]">{children}</div>
           </div>
         </DrawerPanel>
 
