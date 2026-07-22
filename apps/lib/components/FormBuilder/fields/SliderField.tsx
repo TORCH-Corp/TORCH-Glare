@@ -2,28 +2,37 @@
 
 import * as Slider from "@radix-ui/react-slider";
 
-import { GroupStyles } from "../../Input";
 import { cn } from "../../../utils/cn";
 import { useLoading } from "../context";
 import type { SliderFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
+// The white knob + soft shadow, matching the design (same knob token + shadow as `Switch`).
+const THUMB = cn(
+  "block size-[12px] rounded-full bg-background-presentation-switcher-knob",
+  "shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_3px_8px_0px_rgba(0,0,0,0.15),0px_3px_1px_0px_rgba(0,0,0,0.06)]",
+  "outline-none transition-transform hover:scale-110",
+  "focus-visible:ring-2 focus-visible:ring-background-presentation-body-scroller-hover",
+);
+
 /**
  * `FormBuilder.Slider` — numeric slider (single value or a `[min,max]` range).
- * Wraps `@radix-ui/react-slider`, styled with Glare tokens and hosted in the
- * standard bordered field shell (`GroupStyles`) so it lines up with the other inputs.
+ * A `@radix-ui/react-slider` styled to the Figma range field: a `#f9f9f9` box holding a
+ * 6px track, a blue fill, a white knob, and the live value readout on the right.
  */
 export function SliderField(props: SliderFieldProps) {
   const loading = useLoading();
   const min = props.min ?? 0;
   const max = props.max ?? 100;
   const step = props.step ?? 1;
+  const suffix = props.suffix ?? "";
+  const fmt = (n: number) => `${n}${suffix}`;
 
   return (
     <FieldShell
       {...props}
       view={(v) => ({
-        value: Array.isArray(v) ? `${v[0]} – ${v[1]}` : v == null ? "" : String(v),
+        value: Array.isArray(v) ? `${fmt(v[0])} – ${fmt(v[1])}` : v == null ? "" : fmt(v as number),
       })}
     >
       {(field) => {
@@ -35,9 +44,9 @@ export function SliderField(props: SliderFieldProps) {
           : [typeof raw === "number" ? raw : min];
         const disabled = props.disabled || loading;
         return (
-          <div className={cn(GroupStyles({ size: "M", variant: "PresentationStyle" }), "gap-3 px-3")}>
+          <div className="flex w-full items-center gap-[10px] rounded-[8px] bg-background-presentation-form-field-primary px-[10px] py-[6px]">
             <Slider.Root
-              className="relative flex h-full w-full grow touch-none select-none items-center"
+              className="relative flex h-[12px] w-full grow touch-none select-none items-center"
               min={min}
               max={max}
               step={step}
@@ -45,18 +54,15 @@ export function SliderField(props: SliderFieldProps) {
               onValueChange={(v) => field.onChange(props.range ? v : v[0])}
               disabled={disabled}
             >
-              <Slider.Track className="relative h-1.5 grow rounded-full bg-border-presentation-action-primary">
-                <Slider.Range className="absolute h-full rounded-full bg-content-presentation-action-primary" />
+              <Slider.Track className="relative h-[6px] grow rounded-[10px] bg-background-presentation-body-scroller-default">
+                <Slider.Range className="absolute h-full rounded-[10px] bg-background-presentation-body-scroller-hover" />
               </Slider.Track>
               {values.map((_, i) => (
-                <Slider.Thumb
-                  key={i}
-                  className="block h-[18px] w-[18px] rounded-full border-2 border-white bg-content-presentation-action-primary shadow-[0_1px_4px_0_rgba(0,0,0,0.35)] transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-content-presentation-action-primary"
-                />
+                <Slider.Thumb key={i} className={THUMB} />
               ))}
             </Slider.Root>
-            <span className="min-w-[48px] shrink-0 text-right typography-body-small-medium text-content-presentation-action-light-primary">
-              {props.range ? `${values[0]}–${values[1]}` : values[0]}
+            <span className="min-w-[40px] shrink-0 whitespace-nowrap text-right tabular-nums typography-body-medium-regular text-content-presentation-global-primary">
+              {props.range ? `${values[0]}–${fmt(values[1])}` : fmt(values[0])}
             </span>
           </div>
         );

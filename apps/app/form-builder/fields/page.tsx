@@ -228,8 +228,16 @@ export default function FieldTypesExample() {
         </FormBuilder.Section>
 
         <FormBuilder.Section title="Advanced inputs" color="Blue">
-          <FormBuilder.Slider name="volume" label="Slider" required min={0} max={100} />
-          <FormBuilder.Slider name="rangeVals" label="Range" required min={0} max={100} range />
+          <FormBuilder.Slider name="volume" label="Slider" required min={0} max={100} suffix="%" />
+          <FormBuilder.Slider
+            name="rangeVals"
+            label="Range"
+            required
+            min={0}
+            max={100}
+            range
+            suffix="%"
+          />
           <FormBuilder.Color
             name="colorHex"
             label="Color"

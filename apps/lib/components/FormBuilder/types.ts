@@ -141,6 +141,8 @@ export interface SliderFieldProps extends BaseFieldProps {
   step?: number;
   /** Two thumbs — value becomes `[number, number]`. */
   range?: boolean;
+  /** Appended to the value readout, e.g. `"%"` → `50%`. */
+  suffix?: string;
 }
 
 /** `FormBuilder.Color` — color picker; value hex `string`. */
