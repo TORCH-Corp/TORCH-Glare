@@ -225,6 +225,7 @@ const SelectContentStyles = cva(
     "data-[state=open]:animate-in",
     "data-[state=open]:fade-in-0",
     "z-[1000]",
+    "max-h-[368px]"
   ],
   {
     variants: {

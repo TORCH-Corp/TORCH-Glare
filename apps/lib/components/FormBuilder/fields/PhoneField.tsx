@@ -1,59 +1,62 @@
 "use client";
 
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../Select";
+import { Select, SelectTrigger, SelectContent, SelectItem } from "../../Select";
 import { InputField } from "../../InputField";
 import { useLoading } from "../context";
 import { formatFieldView } from "../viewFormat";
 import type { PhoneFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
+import { COUNTRIES, countryByCode, countryByDial, flagEmoji } from "./countries";
 
-const COUNTRIES = [
-  { value: "+1", label: "🇺🇸 +1" },
-  { value: "+44", label: "🇬🇧 +44" },
-  { value: "+964", label: "🇮🇶 +964" },
-  { value: "+971", label: "🇦🇪 +971" },
-  { value: "+966", label: "🇸🇦 +966" },
-  { value: "+20", label: "🇪🇬 +20" },
-  { value: "+90", label: "🇹🇷 +90" },
-  { value: "+49", label: "🇩🇪 +49" },
-  { value: "+33", label: "🇫🇷 +33" },
-  { value: "+91", label: "🇮🇳 +91" },
-];
+// Dial codes longest-first, so "+1" doesn't shadow "+1…"-style codes when prefix-matching.
+const DIALS = [...new Set(COUNTRIES.map((c) => c.dial))].sort((a, b) => b.length - a.length);
 
 function splitPhone(value: unknown, defaultDial: string): { dial: string; number: string } {
   const s = typeof value === "string" ? value.trim() : "";
   if (!s) return { dial: defaultDial, number: "" };
   const idx = s.indexOf(" ");
-  if (s.startsWith("+") && idx > 0) return { dial: s.slice(0, idx), number: s.slice(idx + 1) };
-  const match = s.startsWith("+") ? COUNTRIES.find((c) => s.startsWith(c.value)) : undefined;
-  if (match) return { dial: match.value, number: s.slice(match.value.length).trim() };
+  if (s.startsWith("+") && idx > 0) {
+    return { dial: s.slice(0, idx), number: s.slice(idx + 1).trim() };
+  }
+  if (s.startsWith("+")) {
+    const dial = DIALS.find((d) => s.startsWith(d));
+    if (dial) return { dial, number: s.slice(dial.length).trim() };
+  }
   return { dial: defaultDial, number: s };
 }
 
-/** `FormBuilder.Phone` — country dial-code + number (Glare `SearchableSelect` + `InputField`). */
+/**
+ * `FormBuilder.Phone` — country dial-code (every country) + number. The picker is keyed by the
+ * unique ISO code (dial codes repeat); the value is stored as a `"+<dial> <number>"` string.
+ */
 export function PhoneField(props: PhoneFieldProps) {
   const loading = useLoading();
-  const defaultDial = props.defaultCountry ?? "+1";
+  const defaultDial = props.defaultCountry ?? "+964"; // Iraq
 
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
       {(field) => {
         const { dial, number } = splitPhone(field.value, defaultDial);
+        const country = countryByDial(dial);
+        const disabled = props.disabled || loading;
         const commit = (d: string, n: string) => field.onChange(n ? `${d} ${n}` : d);
         return (
           <div className="flex w-full min-w-0 items-center gap-2">
             <Select
-              value={dial}
-              onValueChange={(v) => commit(v, number)}
-              disabled={props.disabled || loading}
+              value={country?.code ?? ""}
+              onValueChange={(code) => commit(countryByCode(code)?.dial ?? dial, number)}
+              disabled={disabled}
             >
+              {/* Compact trigger — flag + dial. The dropdown rows carry the full country name. */}
               <SelectTrigger size="XL" className="shrink-0">
-                <SelectValue placeholder="+1" />
+                <span className="whitespace-nowrap">
+                  {country ? `${flagEmoji(country.code)} ${country.dial}` : dial}
+                </span>
               </SelectTrigger>
               <SelectContent>
                 {COUNTRIES.map((c) => (
-                  <SelectItem key={c.value} value={c.value}>
-                    {c.label}
+                  <SelectItem key={c.code} value={c.code}>
+                    {`${flagEmoji(c.code)} ${c.name} ${c.dial}`}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -65,7 +68,7 @@ export function PhoneField(props: PhoneFieldProps) {
                 value={number}
                 onChange={(e) => commit(dial, e.target.value.replace(/[^\d\s-]/g, ""))}
                 placeholder={props.placeholder ?? "Phone number"}
-                disabled={props.disabled || loading}
+                disabled={disabled}
                 className="w-full"
               />
             </div>
