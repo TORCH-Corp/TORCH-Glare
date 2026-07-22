@@ -17,11 +17,11 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-  VariantProps<typeof PopoverTriggerStyles> & {
-    errors?: string;
-    icon?: string;
-    theme?: Themes;
-  }
+    VariantProps<typeof PopoverTriggerStyles> & {
+      errors?: string;
+      icon?: string;
+      theme?: Themes;
+    }
 >(
   (
     {
@@ -123,9 +123,9 @@ SelectScrollDownButton.displayName = "SelectScrollDownButton";
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-  VariantProps<typeof SelectContentStyles> & {
-    theme?: Themes;
-  }
+    VariantProps<typeof SelectContentStyles> & {
+      theme?: Themes;
+    }
 >(
   (
     { className, children, variant = "PresentationStyle", position = "popper", theme, ...props },
@@ -216,6 +216,9 @@ const SelectContentStyles = cva(
   [
     "p-1",
     "rounded-[14px]",
+    // Match the dropdown to the trigger's width (Radix popper exposes it as a CSS var),
+    // but never narrower than 240px.
+    "w-[var(--radix-select-trigger-width)]",
     "min-w-[240px]",
     "border-0",
     "outline-none",
@@ -225,7 +228,7 @@ const SelectContentStyles = cva(
     "data-[state=open]:animate-in",
     "data-[state=open]:fade-in-0",
     "z-[1000]",
-    "max-h-[368px]"
+    "max-h-[368px]",
   ],
   {
     variants: {
