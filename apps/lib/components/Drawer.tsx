@@ -5,6 +5,7 @@ import { Drawer as DrawerPrimitive } from "vaul";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../utils/cn";
+import { Button } from "./Button";
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -132,8 +133,8 @@ const DrawerContent = React.forwardRef<
             <div className={notchSide === "right" ? "self-end" : "self-start"}>
               {React.isValidElement(notch)
                 ? React.cloneElement(notch as React.ReactElement<{ side?: "left" | "right" }>, {
-                  side: notchSide,
-                })
+                    side: notchSide,
+                  })
                 : notch}
             </div>
           )}
@@ -210,7 +211,7 @@ const drawerBadge = cva(
 );
 
 interface DrawerBadgeProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> { }
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">, VariantProps<typeof drawerBadge> {}
 
 const DrawerBadge = React.forwardRef<HTMLSpanElement, DrawerBadgeProps>(
   ({ className, color, ...props }, ref) => (
@@ -268,18 +269,23 @@ const DrawerNotchClose = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, children, ...props }, ref) => (
-  <button
+  <Button
     ref={ref}
     type="button"
     aria-label="Close"
+    buttonType="icon"
+    size="S"
+    variant="PrimeContStyle"
     className={cn(
-      "inline-flex h-[22px] w-[22px] items-center justify-center rounded-[13px] bg-white/15 text-content-presentation-global-primary transition-colors hover:bg-white/25",
+      // Glare Button (icon, S = 22×22) with the notch's own circular radius + translucent look
+      // (S is otherwise rounded-[4px]).
+      "!rounded-[13px] bg-white/15 text-white hover:bg-white/25 hover:text-white",
       className,
     )}
     {...props}
   >
-    {children ?? <i className="ri-close-fill text-[14px]" />}
-  </button>
+    {children ?? <i className="ri-close-fill !text-[14px]" />}
+  </Button>
 ));
 DrawerNotchClose.displayName = "DrawerNotchClose";
 
@@ -299,8 +305,8 @@ const drawerNotchPill = cva(
 
 interface DrawerNotchPillProps
   extends
-  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
-  VariantProps<typeof drawerNotchPill> { }
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
+    VariantProps<typeof drawerNotchPill> {}
 
 const DrawerNotchPill = React.forwardRef<HTMLButtonElement, DrawerNotchPillProps>(
   ({ className, color, children, ...props }, ref) => (
