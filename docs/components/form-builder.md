@@ -3,7 +3,19 @@ title: FormBuilder
 description: A compound, composition-based form. Author forms as JSX children (FormBuilder.Text, FormBuilder.Select, …) with steps-as-components, a drawer wrapper, edit + read-only view modes, and any react-hook-form resolver.
 component: true
 group: Forms
-keywords: [form-builder, form, compound, composition, react-hook-form, resolver, stepper, drawer, fields, view-mode]
+keywords:
+  [
+    form-builder,
+    form,
+    compound,
+    composition,
+    react-hook-form,
+    resolver,
+    stepper,
+    drawer,
+    fields,
+    view-mode,
+  ]
 ---
 
 # FormBuilder
@@ -23,7 +35,7 @@ editable or read-only.
 </FormBuilder>
 ```
 
-> Need the same form to render as a page *or* a drawer, with a title header and
+> Need the same form to render as a page _or_ a drawer, with a title header and
 > automatic Submit placement? Wrap these same children in
 > [FormRenderer](./form-renderer.md).
 
@@ -39,24 +51,26 @@ npx torch-glare@latest add FormBuilder
 ## Imports
 
 ```tsx
-import { FormBuilder } from '@/components/FormBuilder'
+import { FormBuilder } from "@/components/FormBuilder";
 ```
 
 ## Root props
 
-| Prop | Type | Notes |
-|---|---|---|
-| `onSubmit` | `(values) => void \| Promise<void>` | Called on a valid submit. |
-| `onInvalid` | `(errors) => void` | Called when validation fails. |
-| `resolver` | `Resolver` | Any react-hook-form resolver, e.g. `zodResolver(schema)`. |
-| `defaultValues` | `DefaultValues` | Initial values (create). |
-| `values` | `T` | Controlled values (edit) — the form re-syncs when this changes. |
-| `mode` | `'edit' \| 'view'` | `'view'` renders every field read-only. |
-| `loading` | `boolean` | Submit shows a spinner; inputs disable. |
-| `fieldDirection` | `'horizontal' \| 'vertical'` | Row layout (auto-vertical inside a drawer). |
-| `resetOnSuccess` | `boolean` | Reset to defaults after a successful submit. |
-| `form` | `UseFormReturn` | A hoisted `useForm` to bind to — pass when a `conclusion` panel must read the same values. |
-| `conclusion` | `ReactNode` | A live panel (e.g. `FormSummary`) rendered **outside** the `<form>` as the grid's right column. |
+| Prop             | Type                                | Notes                                                                                                                      |
+| ---------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `onSubmit`       | `(values) => void \| Promise<void>` | Called on a valid submit.                                                                                                  |
+| `onInvalid`      | `(errors) => void`                  | Called when validation fails.                                                                                              |
+| `resolver`       | `Resolver`                          | Any react-hook-form resolver, e.g. `zodResolver(schema)`.                                                                  |
+| `defaultValues`  | `DefaultValues`                     | Initial values (create).                                                                                                   |
+| `values`         | `T`                                 | Controlled values (edit) — the form re-syncs when this changes.                                                            |
+| `mode`           | `'edit' \| 'view'`                  | `'view'` renders every field read-only.                                                                                    |
+| `loading`        | `boolean`                           | Submit shows a spinner; inputs disable.                                                                                    |
+| `fieldDirection` | `'horizontal' \| 'vertical'`        | Row layout (auto-vertical inside a drawer).                                                                                |
+| `resetOnSuccess` | `boolean`                           | Reset to defaults after a successful submit.                                                                               |
+| `form`           | `UseFormReturn`                     | A hoisted `useForm` to bind to — pass when a `conclusion` panel must read the same values.                                 |
+| `conclusion`     | `ReactNode`                         | A live panel (e.g. `FormSummary`) rendered **outside** the `<form>` as the grid's right column.                            |
+| `id`             | `string`                            | Sets the underlying `<form id>`, so a button outside the form can submit it via `form={id}` (e.g. a drawer header's Save). |
+| `className`      | `string`                            | Lands on the form's outermost element — e.g. `"min-w-0 flex-1"` to fill the space beside a `conclusion` panel.             |
 
 **Adaptive layout.** FormBuilder lays out responsively: a `FormBuilder.Stepper` puts its nav rail in
 a **left** column beside the fields (both inside the form surface, under the title header), and a
@@ -71,33 +85,33 @@ caps at 1100px and centers. The conclusion is outside the `<form>` and reads val
 Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 `description`, `required`, `disabled`, `hidden`, `fullWidth`.
 
-| Component | Input | Value |
-|---|---|---|
-| `FormBuilder.Text` / `.Email` / `.Password` | `InputField` | `string` |
-| `FormBuilder.Number` | numeric `InputField` | `number` |
-| `FormBuilder.Currency` (`currencySymbol`) | `InputField` + symbol | `number` |
-| `FormBuilder.Textarea` | `Textarea` | `string` |
-| `FormBuilder.Slider` (`min,max,step,range`) | `@radix-ui/react-slider` | `number` / `[number,number]` |
-| `FormBuilder.Color` (`presets`, `alpha`) | `ColorPicker` (full palette: SV area, hue, opacity, eyedropper, HEX/RGB/HSL, presets) | hex `string` (`#rrggbb`, or `#rrggbbaa` when opacity < 100%) |
-| `FormBuilder.Phone` (`defaultCountry`) | `SearchableSelect` + `InputField` | `string` |
-| `FormBuilder.Select` / `.SearchableSelect` (`options`, async props) | `SearchableSelect` | `string` |
-| `FormBuilder.MultiSelect` / `.Tags` (`options`) | `BadgeField` | `string[]` |
-| `FormBuilder.RadioList` (`options`, each with optional `description`) | boxed radio list | `string` |
-| `FormBuilder.CheckboxGroup` (`options`, each with optional `description`) | boxed checkbox list | `string[]` |
-| `FormBuilder.RadioCards` (`options` with `description`) | `RadioCard` | `string` |
-| `FormBuilder.Checkbox` (`subLabel`) | `Checkbox` + inline label | `boolean` |
-| `FormBuilder.SwitchBox` (`subLabel`) | `Switch` in a `#f9f9f9` box | `boolean` |
-| `FormBuilder.Otp` (`length`) | `InputOTP` | `string` |
-| `FormBuilder.Date` | `DatePicker` | `Date` |
-| `FormBuilder.DateRange` | `DatePicker` (range) | `{from,to}` |
-| `FormBuilder.DateMultiple` | `DatePicker` (multiple) | `Date[]` |
-| `FormBuilder.DateTime` | `DatePicker` (timePicker) | `Date` |
-| `FormBuilder.TreeSelect` (`nodes`, `getNodeId`, `getNodeLabel`, …) | `SearchableTree` | node id (`string`) |
-| `FormBuilder.File` / `.Image` (`accept`, `multiple`) | `ImageAttachment` | `File \| File[]` |
-| `FormBuilder.RichText` | `TextEditor` (EditorJS) | `OutputData` |
-| `FormBuilder.Signature` (`penColor`) | canvas pad | PNG data-URL `string` |
-| `FormBuilder.FieldArray` (`children` render fn, `defaultItem`) | RHF `useFieldArray` | `object[]` |
-| `FormBuilder.Custom` (`render`, `formatView`) | your control | anything |
+| Component                                                                 | Input                                                                                 | Value                                                        |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `FormBuilder.Text` / `.Email` / `.Password`                               | `InputField`                                                                          | `string`                                                     |
+| `FormBuilder.Number`                                                      | numeric `InputField`                                                                  | `number`                                                     |
+| `FormBuilder.Currency` (`currencySymbol`)                                 | `InputField` + symbol                                                                 | `number`                                                     |
+| `FormBuilder.Textarea`                                                    | `Textarea`                                                                            | `string`                                                     |
+| `FormBuilder.Slider` (`min,max,step,range`)                               | `@radix-ui/react-slider`                                                              | `number` / `[number,number]`                                 |
+| `FormBuilder.Color` (`presets`, `alpha`)                                  | `ColorPicker` (full palette: SV area, hue, opacity, eyedropper, HEX/RGB/HSL, presets) | hex `string` (`#rrggbb`, or `#rrggbbaa` when opacity < 100%) |
+| `FormBuilder.Phone` (`defaultCountry`)                                    | `SearchableSelect` + `InputField`                                                     | `string`                                                     |
+| `FormBuilder.Select` / `.SearchableSelect` (`options`, async props)       | `SearchableSelect`                                                                    | `string`                                                     |
+| `FormBuilder.MultiSelect` / `.Tags` (`options`)                           | `BadgeField`                                                                          | `string[]`                                                   |
+| `FormBuilder.RadioList` (`options`, each with optional `description`)     | boxed radio list                                                                      | `string`                                                     |
+| `FormBuilder.CheckboxGroup` (`options`, each with optional `description`) | boxed checkbox list                                                                   | `string[]`                                                   |
+| `FormBuilder.RadioCards` (`options` with `description`)                   | `RadioCard`                                                                           | `string`                                                     |
+| `FormBuilder.Checkbox` (`subLabel`)                                       | `Checkbox` + inline label                                                             | `boolean`                                                    |
+| `FormBuilder.SwitchBox` (`subLabel`)                                      | `Switch` in a `#f9f9f9` box                                                           | `boolean`                                                    |
+| `FormBuilder.Otp` (`length`)                                              | `InputOTP`                                                                            | `string`                                                     |
+| `FormBuilder.Date`                                                        | `DatePicker`                                                                          | `Date`                                                       |
+| `FormBuilder.DateRange`                                                   | `DatePicker` (range)                                                                  | `{from,to}`                                                  |
+| `FormBuilder.DateMultiple`                                                | `DatePicker` (multiple)                                                               | `Date[]`                                                     |
+| `FormBuilder.DateTime`                                                    | `DatePicker` (timePicker)                                                             | `Date`                                                       |
+| `FormBuilder.TreeSelect` (`nodes`, `getNodeId`, `getNodeLabel`, …)        | `SearchableTree`                                                                      | node id (`string`)                                           |
+| `FormBuilder.File` / `.Image` (`accept`, `multiple`)                      | `ImageAttachment`                                                                     | `File \| File[]`                                             |
+| `FormBuilder.RichText`                                                    | `TextEditor` (EditorJS)                                                               | `OutputData`                                                 |
+| `FormBuilder.Signature` (`penColor`)                                      | canvas pad                                                                            | PNG data-URL `string`                                        |
+| `FormBuilder.FieldArray` (`children` render fn, `defaultItem`)            | RHF `useFieldArray`                                                                   | `object[]`                                                   |
+| `FormBuilder.Custom` (`render`, `formatView`)                             | your control                                                                          | anything                                                     |
 
 `FormBuilder.Password` accepts `strengthMeter` (shows a `PasswordLevel` meter). `FormBuilder.FieldArray`
 renders a repeating list — its `children` is a render fn `(rowName, index, remove) => …` and sub-fields
@@ -144,7 +158,7 @@ child of `<FormBuilder>`; the root then switches to the scroll-shell layout.
 
 Wrap steps in `FormBuilder.Stepper`; each `FormBuilder.Step` holds a step's fields.
 **Every step's fields are always mounted and registered** — the whole form is live
-regardless of which step is showing; the stepper only toggles *visibility*.
+regardless of which step is showing; the stepper only toggles _visibility_.
 **Navigation is the step buttons themselves**: click a step to go there. Backward is
 free; clicking forward validates the steps in between and stops at the first one with
 errors (shown with a red indicator). The **Submit** button appears on the last step.
