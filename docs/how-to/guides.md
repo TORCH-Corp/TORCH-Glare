@@ -13,6 +13,12 @@ related:
 
 Practical, step-by-step guides for accomplishing common tasks with TORCH Glare.
 
+> **Building a form? Use [`FormBuilder`](../components/form-builder.md).** The Form Validation
+> section below shows the low-level, hand-wired resolver plumbing for understanding — but in an
+> app you author fields as `FormBuilder` JSX children and pass a react-hook-form resolver, rather
+> than tracking field state yourself. See the [Forms with FormBuilder](./forms-with-form-builder.md)
+> guide.
+
 ## Table of Contents
 
 1. [Custom Themes](#custom-themes)
@@ -37,18 +43,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        'brand-primary': '#4200FF',
-        'brand-secondary': '#5215CC',
-        'brand-accent': '#CFBEFF',
-        'brand-dark': '#0D0F4E',
-        'brand-light': '#F9F9F9',
+        "brand-primary": "#4200FF",
+        "brand-secondary": "#5215CC",
+        "brand-accent": "#CFBEFF",
+        "brand-dark": "#0D0F4E",
+        "brand-light": "#F9F9F9",
       },
     },
   },
   plugins: [
-    require('mapping-color-system'),
-    require('glare-torch-mode'),
-    require('glare-typography'),
+    require("mapping-color-system"),
+    require("glare-torch-mode"),
+    require("glare-typography"),
   ],
 } satisfies Config;
 ```
@@ -63,15 +69,15 @@ export default {
 
 @layer base {
   [data-theme="light"] {
-    --background-presentation-action-primary: #4200FF;
-    --content-presentation-action-light-primary: #FFFFFF;
-    --border-presentation-action-primary: #5215CC;
+    --background-presentation-action-primary: #4200ff;
+    --content-presentation-action-light-primary: #ffffff;
+    --border-presentation-action-primary: #5215cc;
   }
 
   [data-theme="dark"] {
-    --background-presentation-action-primary: #5215CC;
-    --content-presentation-action-light-primary: #F9F9F9;
-    --border-presentation-action-primary: #CFBEFF;
+    --background-presentation-action-primary: #5215cc;
+    --content-presentation-action-light-primary: #f9f9f9;
+    --border-presentation-action-primary: #cfbeff;
   }
 }
 ```
@@ -88,9 +94,9 @@ export function BrandButton({ children, ...props }: any) {
     <Button
       {...props}
       className={cn(
-        'bg-brand-primary hover:bg-brand-secondary',
-        'text-white border-brand-accent',
-        props.className
+        "bg-brand-primary hover:bg-brand-secondary",
+        "text-white border-brand-accent",
+        props.className,
       )}
     >
       {children}
@@ -104,21 +110,21 @@ export function BrandButton({ children, ...props }: any) {
 ```tsx
 // hooks/useCustomTheme.ts
 import { useTheme } from "@/providers/ThemeProvider";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 export function useCustomTheme() {
   const { theme, updateTheme } = useTheme();
 
   useEffect(() => {
     // Apply custom theme classes
-    if (theme === 'light') {
-      document.documentElement.classList.add('brand-light-theme');
+    if (theme === "light") {
+      document.documentElement.classList.add("brand-light-theme");
     } else {
-      document.documentElement.classList.add('brand-dark-theme');
+      document.documentElement.classList.add("brand-dark-theme");
     }
 
     return () => {
-      document.documentElement.classList.remove('brand-light-theme', 'brand-dark-theme');
+      document.documentElement.classList.remove("brand-light-theme", "brand-dark-theme");
     };
   }, [theme]);
 
@@ -135,9 +141,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 export function BrandThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider defaultTheme="light" defaultThemeMode="TORCH">
-      <div className="brand-theme-wrapper">
-        {children}
-      </div>
+      <div className="brand-theme-wrapper">{children}</div>
     </ThemeProvider>
   );
 }
@@ -147,20 +151,20 @@ export function BrandThemeProvider({ children }: { children: React.ReactNode }) 
 
 ```tsx
 // __tests__/BrandButton.test.tsx
-import { render } from '@testing-library/react';
+import { render } from "@testing-library/react";
 import { ThemeProvider } from "@/providers/ThemeProvider";
-import { BrandButton } from '../components/BrandButton';
+import { BrandButton } from "../components/BrandButton";
 
-describe('BrandButton', () => {
-  it('applies custom brand colors', () => {
+describe("BrandButton", () => {
+  it("applies custom brand colors", () => {
     const { container } = render(
       <ThemeProvider defaultTheme="light">
         <BrandButton>Click me</BrandButton>
-      </ThemeProvider>
+      </ThemeProvider>,
     );
 
-    const button = container.querySelector('button');
-    expect(button).toHaveClass('bg-brand-primary');
+    const button = container.querySelector("button");
+    expect(button).toHaveClass("bg-brand-primary");
   });
 });
 ```
@@ -175,7 +179,7 @@ Implement comprehensive form validation with error handling.
 
 ```tsx
 // hooks/useFormValidation.ts
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 type ValidationRules<T> = {
   [K in keyof T]?: Array<(value: T[K]) => string | undefined>;
@@ -183,7 +187,7 @@ type ValidationRules<T> = {
 
 export function useFormValidation<T extends Record<string, any>>(
   initialValues: T,
-  rules: ValidationRules<T>
+  rules: ValidationRules<T>,
 ) {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
@@ -200,7 +204,7 @@ export function useFormValidation<T extends Record<string, any>>(
       }
       return undefined;
     },
-    [rules]
+    [rules],
   );
 
   const handleChange = useCallback(
@@ -213,7 +217,7 @@ export function useFormValidation<T extends Record<string, any>>(
         setErrors((prev) => ({ ...prev, [field]: error }));
       }
     },
-    [touched, validateField]
+    [touched, validateField],
   );
 
   const handleBlur = useCallback(
@@ -222,7 +226,7 @@ export function useFormValidation<T extends Record<string, any>>(
       const error = validateField(field, values[field]);
       setErrors((prev) => ({ ...prev, [field]: error }));
     },
-    [values, validateField]
+    [values, validateField],
   );
 
   const validateForm = useCallback((): boolean => {
@@ -238,9 +242,7 @@ export function useFormValidation<T extends Record<string, any>>(
     });
 
     setErrors(newErrors);
-    setTouched(
-      Object.keys(rules).reduce((acc, field) => ({ ...acc, [field]: true }), {})
-    );
+    setTouched(Object.keys(rules).reduce((acc, field) => ({ ...acc, [field]: true }), {}));
 
     return isValid;
   }, [rules, values, validateField]);
@@ -267,16 +269,16 @@ export function useFormValidation<T extends Record<string, any>>(
 
 ```tsx
 // utils/validationRules.ts
-export const required = (message = 'This field is required') => {
+export const required = (message = "This field is required") => {
   return (value: any) => {
-    if (!value || (typeof value === 'string' && !value.trim())) {
+    if (!value || (typeof value === "string" && !value.trim())) {
       return message;
     }
     return undefined;
   };
 };
 
-export const email = (message = 'Invalid email address') => {
+export const email = (message = "Invalid email address") => {
   return (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (value && !emailRegex.test(value)) {
@@ -327,54 +329,47 @@ export const matchField = (otherField: string, message?: string) => {
 
 ```tsx
 // components/RegistrationForm.tsx
-'use client';
+"use client";
 
-import { useFormValidation } from '../hooks/useFormValidation';
-import { required, email, minLength } from '../utils/validationRules';
+import { useFormValidation } from "../hooks/useFormValidation";
+import { required, email, minLength } from "../utils/validationRules";
 import { Button } from "@/components/Button";
 import { LabelField } from "@/components/LabelField";
 import { toast } from "@/components/Toast";
 
 export default function RegistrationForm() {
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    validateForm,
-    reset,
-  } = useFormValidation(
-    {
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
-    {
-      email: [required(), email()],
-      password: [required(), minLength(8, 'Password must be at least 8 characters')],
-      confirmPassword: [
-        required(),
-        (value) => {
-          if (value !== values.password) {
-            return 'Passwords must match';
-          }
-          return undefined;
-        },
-      ],
-    }
-  );
+  const { values, errors, touched, handleChange, handleBlur, validateForm, reset } =
+    useFormValidation(
+      {
+        email: "",
+        password: "",
+        confirmPassword: "",
+      },
+      {
+        email: [required(), email()],
+        password: [required(), minLength(8, "Password must be at least 8 characters")],
+        confirmPassword: [
+          required(),
+          (value) => {
+            if (value !== values.password) {
+              return "Passwords must match";
+            }
+            return undefined;
+          },
+        ],
+      },
+    );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Please fix validation errors');
+      toast.error("Please fix validation errors");
       return;
     }
 
     // Submit form
-    toast.success('Registration successful!');
+    toast.success("Registration successful!");
     reset();
   };
 
@@ -386,8 +381,8 @@ export default function RegistrationForm() {
         requiredLabel="*"
         type="email"
         value={values.email}
-        onChange={handleChange('email')}
-        onBlur={handleBlur('email')}
+        onChange={handleChange("email")}
+        onBlur={handleBlur("email")}
         errorMessage={touched.email ? errors.email : undefined}
       />
 
@@ -397,8 +392,8 @@ export default function RegistrationForm() {
         requiredLabel="*"
         type="password"
         value={values.password}
-        onChange={handleChange('password')}
-        onBlur={handleBlur('password')}
+        onChange={handleChange("password")}
+        onBlur={handleBlur("password")}
         errorMessage={touched.password ? errors.password : undefined}
       />
 
@@ -408,8 +403,8 @@ export default function RegistrationForm() {
         requiredLabel="*"
         type="password"
         value={values.confirmPassword}
-        onChange={handleChange('confirmPassword')}
-        onBlur={handleBlur('confirmPassword')}
+        onChange={handleChange("confirmPassword")}
+        onBlur={handleBlur("confirmPassword")}
         errorMessage={touched.confirmPassword ? errors.confirmPassword : undefined}
       />
 
@@ -425,7 +420,7 @@ export default function RegistrationForm() {
 
 ```tsx
 // Example: Check if email is available
-export const emailAvailable = (message = 'Email already taken') => {
+export const emailAvailable = (message = "Email already taken") => {
   return async (value: string) => {
     if (!value) return undefined;
 
@@ -437,7 +432,7 @@ export const emailAvailable = (message = 'Email already taken') => {
         return message;
       }
     } catch (error) {
-      console.error('Email validation error:', error);
+      console.error("Email validation error:", error);
     }
 
     return undefined;
@@ -455,11 +450,11 @@ Implement comprehensive dark mode support.
 
 ```tsx
 // components/DarkModeToggle.tsx
-'use client';
+"use client";
 
 import { Button } from "@/components/Button";
 import { useTheme } from "@/providers/ThemeProvider";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export default function DarkModeToggle() {
   const { theme, updateTheme } = useTheme();
@@ -483,10 +478,10 @@ export default function DarkModeToggle() {
       theme={theme as any}
       variant="PrimeContStyle"
       buttonType="icon"
-      onClick={() => updateTheme(theme === 'light' ? 'dark' : 'light')}
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      onClick={() => updateTheme(theme === "light" ? "dark" : "light")}
+      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
-      {theme === 'light' ? (
+      {theme === "light" ? (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
           <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
         </svg>
@@ -508,7 +503,7 @@ export default function DarkModeToggle() {
 
 ```tsx
 // hooks/useSystemTheme.ts
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export function useSystemTheme() {
@@ -516,21 +511,21 @@ export function useSystemTheme() {
 
   useEffect(() => {
     // Only sync with system if theme is 'default'
-    if (theme !== 'default') return;
+    if (theme !== "default") return;
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleChange = (e: MediaQueryListEvent) => {
-      updateTheme(e.matches ? 'dark' : 'light');
+      updateTheme(e.matches ? "dark" : "light");
     };
 
     // Set initial value
-    updateTheme(mediaQuery.matches ? 'dark' : 'light');
+    updateTheme(mediaQuery.matches ? "dark" : "light");
 
     // Listen for changes
-    mediaQuery.addEventListener('change', handleChange);
+    mediaQuery.addEventListener("change", handleChange);
 
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [theme, updateTheme]);
 }
 ```
@@ -540,7 +535,7 @@ export function useSystemTheme() {
 ```tsx
 // components/ThemedImage.tsx
 import { useTheme } from "@/providers/ThemeProvider";
-import Image from 'next/image';
+import Image from "next/image";
 
 interface ThemedImageProps {
   lightSrc: string;
@@ -561,7 +556,7 @@ export function ThemedImage({
 
   return (
     <Image
-      src={theme === 'dark' ? darkSrc : lightSrc}
+      src={theme === "dark" ? darkSrc : lightSrc}
       alt={alt}
       width={width}
       height={height}
@@ -575,33 +570,33 @@ export function ThemedImage({
 
 ```tsx
 // __tests__/DarkMode.test.tsx
-import { render } from '@testing-library/react';
+import { render } from "@testing-library/react";
 import { ThemeProvider } from "@/providers/ThemeProvider";
-import userEvent from '@testing-library/user-event';
-import DarkModeToggle from '../components/DarkModeToggle';
+import userEvent from "@testing-library/user-event";
+import DarkModeToggle from "../components/DarkModeToggle";
 
-describe('Dark Mode', () => {
-  it('switches between light and dark themes', async () => {
+describe("Dark Mode", () => {
+  it("switches between light and dark themes", async () => {
     const user = userEvent.setup();
 
     const { getByRole } = render(
       <ThemeProvider defaultTheme="light">
         <DarkModeToggle />
-      </ThemeProvider>
+      </ThemeProvider>,
     );
 
-    const toggle = getByRole('button');
+    const toggle = getByRole("button");
 
     // Initial theme is light
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
 
     // Click to switch to dark
     await user.click(toggle);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
 
     // Click to switch back to light
     await user.click(toggle);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
   });
 });
 ```
@@ -616,9 +611,9 @@ Ensure your application is accessible to all users.
 
 ```tsx
 // components/AccessibleMenu.tsx
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/Button";
 
 export default function AccessibleMenu() {
@@ -626,7 +621,7 @@ export default function AccessibleMenu() {
   const [focusedIndex, setFocusedIndex] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const menuItems = ['Profile', 'Settings', 'Logout'];
+  const menuItems = ["Profile", "Settings", "Logout"];
 
   useEffect(() => {
     if (isOpen) {
@@ -637,22 +632,22 @@ export default function AccessibleMenu() {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     switch (e.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
         setFocusedIndex((prev) => (prev + 1) % menuItems.length);
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
         setFocusedIndex((prev) => (prev - 1 + menuItems.length) % menuItems.length);
         break;
-      case 'Escape':
+      case "Escape":
         setIsOpen(false);
         break;
-      case 'Home':
+      case "Home":
         e.preventDefault();
         setFocusedIndex(0);
         break;
-      case 'End':
+      case "End":
         e.preventDefault();
         setFocusedIndex(menuItems.length - 1);
         break;
@@ -717,17 +712,14 @@ export default function AccessibleMenu() {
 // components/AccessibleForm.tsx
 import { Button } from "@/components/Button";
 import { LabelField } from "@/components/LabelField";
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function AccessibleForm() {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
 
   return (
-    <form
-      aria-label="Contact form"
-      onSubmit={(e) => e.preventDefault()}
-    >
+    <form aria-label="Contact form" onSubmit={(e) => e.preventDefault()}>
       <LabelField
         theme="light"
         label="Email"
@@ -736,7 +728,7 @@ export default function AccessibleForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         aria-invalid={!!error}
-        aria-describedby={error ? 'email-error' : undefined}
+        aria-describedby={error ? "email-error" : undefined}
       />
 
       {error && (
@@ -749,12 +741,7 @@ export default function AccessibleForm() {
         </p>
       )}
 
-      <Button
-        theme="light"
-        variant="PrimeStyle"
-        type="submit"
-        aria-label="Submit contact form"
-      >
+      <Button theme="light" variant="PrimeStyle" type="submit" aria-label="Submit contact form">
         Submit
       </Button>
     </form>
@@ -766,7 +753,7 @@ export default function AccessibleForm() {
 
 ```tsx
 // hooks/useFocusTrap.ts
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export function useFocusTrap<T extends HTMLElement>(isActive: boolean) {
   const ref = useRef<T>(null);
@@ -778,14 +765,14 @@ export function useFocusTrap<T extends HTMLElement>(isActive: boolean) {
     if (!element) return;
 
     const focusableElements = element.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
 
     const firstElement = focusableElements[0] as HTMLElement;
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       if (e.shiftKey && document.activeElement === firstElement) {
         e.preventDefault();
@@ -796,11 +783,11 @@ export function useFocusTrap<T extends HTMLElement>(isActive: boolean) {
       }
     };
 
-    element.addEventListener('keydown', handleTabKey);
+    element.addEventListener("keydown", handleTabKey);
     firstElement?.focus();
 
     return () => {
-      element.removeEventListener('keydown', handleTabKey);
+      element.removeEventListener("keydown", handleTabKey);
     };
   }, [isActive]);
 
@@ -820,11 +807,7 @@ interface AccessibleButtonProps {
   children: React.ReactNode;
 }
 
-export function AccessibleButton({
-  onClick,
-  isLoading,
-  children,
-}: AccessibleButtonProps) {
+export function AccessibleButton({ onClick, isLoading, children }: AccessibleButtonProps) {
   return (
     <Button
       theme="light"
@@ -832,7 +815,7 @@ export function AccessibleButton({
       onClick={onClick}
       disabled={isLoading}
       aria-busy={isLoading}
-      aria-label={isLoading ? 'Loading...' : undefined}
+      aria-label={isLoading ? "Loading..." : undefined}
     >
       {isLoading ? (
         <>
@@ -869,34 +852,34 @@ export type FormTouched<T> = Partial<Record<keyof T, boolean>>;
 
 ```tsx
 // components/TypeSafeForm.tsx
-import { useState } from 'react';
+import { useState } from "react";
 import { Button } from "@/components/Button";
 import { LabelField } from "@/components/LabelField";
 import { toast } from "@/components/Toast";
-import type { ContactForm, FormErrors, FormTouched } from '../types/forms';
+import type { ContactForm, FormErrors, FormTouched } from "../types/forms";
 
 export default function TypeSafeForm() {
   const [formData, setFormData] = useState<ContactForm>({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
   });
 
   const [errors, setErrors] = useState<FormErrors<ContactForm>>({});
   const [touched, setTouched] = useState<FormTouched<ContactForm>>({});
 
-  const handleChange = <K extends keyof ContactForm>(field: K) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: e.target.value,
-    }));
-  };
+  const handleChange =
+    <K extends keyof ContactForm>(field: K) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+    };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Form submitted!');
+    toast.success("Form submitted!");
   };
 
   return (
@@ -905,7 +888,7 @@ export default function TypeSafeForm() {
         theme="light"
         label="Name"
         value={formData.name}
-        onChange={handleChange('name')}
+        onChange={handleChange("name")}
         errorMessage={touched.name ? errors.name : undefined}
       />
 
@@ -929,17 +912,11 @@ interface ListProps<T> {
   keyExtractor: (item: T) => string;
 }
 
-export function TypedList<T>({
-  items,
-  renderItem,
-  keyExtractor,
-}: ListProps<T>) {
+export function TypedList<T>({ items, renderItem, keyExtractor }: ListProps<T>) {
   return (
     <div className="space-y-2">
       {items.map((item) => (
-        <div key={keyExtractor(item)}>
-          {renderItem(item)}
-        </div>
+        <div key={keyExtractor(item)}>{renderItem(item)}</div>
       ))}
     </div>
   );
@@ -950,14 +927,11 @@ export function TypedList<T>({
 
 ```tsx
 // hooks/useTypedLocalStorage.ts
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-export function useTypedLocalStorage<T>(
-  key: string,
-  initialValue: T
-): [T, (value: T) => void] {
+export function useTypedLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === 'undefined') return initialValue;
+    if (typeof window === "undefined") return initialValue;
 
     try {
       const item = window.localStorage.getItem(key);
@@ -971,7 +945,7 @@ export function useTypedLocalStorage<T>(
   const setValue = (value: T) => {
     try {
       setStoredValue(value);
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(value));
       }
     } catch (error) {
@@ -998,11 +972,11 @@ export interface ExtendedButtonProps extends ButtonProps {
 ```tsx
 // components/ExtendedButton.tsx
 import { Button } from "@/components/Button";
-import type { ExtendedButtonProps } from '../types/components';
+import type { ExtendedButtonProps } from "../types/components";
 
 export function ExtendedButton({
   isLoading,
-  loadingText = 'Loading...',
+  loadingText = "Loading...",
   children,
   ...props
 }: ExtendedButtonProps) {
@@ -1018,19 +992,19 @@ export function ExtendedButton({
 
 ```tsx
 // utils/typeGuards.ts
-import type { User } from '../types';
+import type { User } from "../types";
 
 export function isValidEmail(value: unknown): value is string {
-  return typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  return typeof value === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 export function isUser(value: unknown): value is User {
   return (
-    typeof value === 'object' &&
+    typeof value === "object" &&
     value !== null &&
-    'id' in value &&
-    'email' in value &&
-    'name' in value
+    "id" in value &&
+    "email" in value &&
+    "name" in value
   );
 }
 ```

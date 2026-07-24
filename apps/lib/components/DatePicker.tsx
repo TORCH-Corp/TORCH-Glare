@@ -35,6 +35,8 @@ interface DatePickerProps extends HTMLAttributes<HTMLInputElement> {
   calendarProps?: CalendarProps;
   timePicker?: boolean;
   value?: Date | Date[] | DateRange;
+  /** Transparent border/background so the picker blends into a table cell. */
+  onTable?: boolean;
 }
 
 export const DatePicker = forwardRef(

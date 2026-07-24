@@ -16,9 +16,19 @@ related:
 
 Learn how to build complete, production-ready forms with TORCH Glare. This tutorial covers everything from basic inputs to validation and error handling.
 
+> **Build real forms with `FormBuilder`.** In an actual app, do **not** hand-wire fields with
+> `useState` + `LabelField`/`InputField` rows as this tutorial does — that boilerplate is exactly
+> what [`FormBuilder`](../components/form-builder.md) removes. With `FormBuilder` each field is one
+> JSX child (`<FormBuilder.Text name="…" label="…" required />`) and validation comes from a
+> react-hook-form resolver. Add [`FormRenderer`](../components/form-renderer.md) for page/drawer
+> chrome + an `actions` slot for the Save, and [`FormSummary`](../components/form-summary.md) for live totals.
+> See the **[Forms with FormBuilder](../how-to/forms-with-form-builder.md)** guide. The manual
+> approach below is kept only to show what `FormBuilder` does under the hood.
+
 ## What You'll Build
 
 A user registration form with:
+
 - Multiple input types (text, email, password)
 - Form validation
 - Error handling and display
@@ -40,29 +50,27 @@ Let's start with a basic form structure:
 
 ```tsx
 // components/RegistrationForm.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import { Button } from "@/components/Button";
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    console.log("Form submitted:", formData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6">
-      <h2 className="typography-display-medium-bold mb-6">
-        Create Account
-      </h2>
+      <h2 className="typography-display-medium-bold mb-6">Create Account</h2>
 
       {/* We'll add fields here */}
 
@@ -83,37 +91,35 @@ export default function RegistrationForm() {
 `LabelField` combines a label and input field with built-in styling:
 
 ```tsx
-import { useState } from 'react';
+import { useState } from "react";
 import { Button } from "@/components/Button";
 import { LabelField } from "@/components/LabelField";
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: e.target.value
+      [field]: e.target.value,
     }));
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 space-y-4">
-      <h2 className="typography-display-medium-bold mb-6">
-        Create Account
-      </h2>
+      <h2 className="typography-display-medium-bold mb-6">Create Account</h2>
 
       <LabelField
         theme="light"
         label="Full Name"
         requiredLabel="*"
         value={formData.fullName}
-        onChange={handleChange('fullName')}
+        onChange={handleChange("fullName")}
         placeholder="John Doe"
       />
 
@@ -123,7 +129,7 @@ export default function RegistrationForm() {
         requiredLabel="*"
         type="email"
         value={formData.email}
-        onChange={handleChange('email')}
+        onChange={handleChange("email")}
         placeholder="you@example.com"
       />
 
@@ -133,7 +139,7 @@ export default function RegistrationForm() {
         requiredLabel="*"
         type="password"
         value={formData.password}
-        onChange={handleChange('password')}
+        onChange={handleChange("password")}
         placeholder="••••••••"
       />
 
@@ -143,7 +149,7 @@ export default function RegistrationForm() {
         requiredLabel="*"
         type="password"
         value={formData.confirmPassword}
-        onChange={handleChange('confirmPassword')}
+        onChange={handleChange("confirmPassword")}
         placeholder="••••••••"
       />
 
@@ -162,9 +168,9 @@ export default function RegistrationForm() {
 Let's add comprehensive validation:
 
 ```tsx
-'use client';
+"use client";
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent } from "react";
 import { Button } from "@/components/Button";
 import { FieldHint } from "@/components/FieldHint";
 import { LabelField } from "@/components/LabelField";
@@ -178,10 +184,10 @@ interface FormErrors {
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -189,49 +195,48 @@ export default function RegistrationForm() {
 
   // Validation functions
   const validateFullName = (name: string): string | undefined => {
-    if (!name.trim()) return 'Full name is required';
-    if (name.trim().length < 2) return 'Name must be at least 2 characters';
+    if (!name.trim()) return "Full name is required";
+    if (name.trim().length < 2) return "Name must be at least 2 characters";
     return undefined;
   };
 
   const validateEmail = (email: string): string | undefined => {
-    if (!email) return 'Email is required';
+    if (!email) return "Email is required";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return 'Please enter a valid email';
+    if (!emailRegex.test(email)) return "Please enter a valid email";
     return undefined;
   };
 
   const validatePassword = (password: string): string | undefined => {
-    if (!password) return 'Password is required';
-    if (password.length < 8) return 'Password must be at least 8 characters';
-    if (!/[A-Z]/.test(password)) return 'Password must contain an uppercase letter';
-    if (!/[a-z]/.test(password)) return 'Password must contain a lowercase letter';
-    if (!/[0-9]/.test(password)) return 'Password must contain a number';
+    if (!password) return "Password is required";
+    if (password.length < 8) return "Password must be at least 8 characters";
+    if (!/[A-Z]/.test(password)) return "Password must contain an uppercase letter";
+    if (!/[a-z]/.test(password)) return "Password must contain a lowercase letter";
+    if (!/[0-9]/.test(password)) return "Password must contain a number";
     return undefined;
   };
 
   const validateConfirmPassword = (confirmPassword: string): string | undefined => {
-    if (!confirmPassword) return 'Please confirm your password';
-    if (confirmPassword !== formData.password) return 'Passwords do not match';
+    if (!confirmPassword) return "Please confirm your password";
+    if (confirmPassword !== formData.password) return "Passwords do not match";
     return undefined;
   };
 
   // Handle field changes
-  const handleChange = (field: keyof typeof formData) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleChange =
+    (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Validate on change if field has been touched
-    if (touched[field]) {
-      validateField(field, value);
-    }
-  };
+      // Validate on change if field has been touched
+      if (touched[field]) {
+        validateField(field, value);
+      }
+    };
 
   // Handle blur events
   const handleBlur = (field: keyof typeof formData) => () => {
-    setTouched(prev => ({ ...prev, [field]: true }));
+    setTouched((prev) => ({ ...prev, [field]: true }));
     validateField(field, formData[field]);
   };
 
@@ -240,21 +245,21 @@ export default function RegistrationForm() {
     let error: string | undefined;
 
     switch (field) {
-      case 'fullName':
+      case "fullName":
         error = validateFullName(value);
         break;
-      case 'email':
+      case "email":
         error = validateEmail(value);
         break;
-      case 'password':
+      case "password":
         error = validatePassword(value);
         break;
-      case 'confirmPassword':
+      case "confirmPassword":
         error = validateConfirmPassword(value);
         break;
     }
 
-    setErrors(prev => ({ ...prev, [field]: error }));
+    setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
   // Validate all fields
@@ -274,7 +279,7 @@ export default function RegistrationForm() {
       confirmPassword: true,
     });
 
-    return !Object.values(newErrors).some(error => error !== undefined);
+    return !Object.values(newErrors).some((error) => error !== undefined);
   };
 
   // Handle form submission
@@ -282,16 +287,14 @@ export default function RegistrationForm() {
     e.preventDefault();
 
     if (validateForm()) {
-      console.log('Form is valid:', formData);
+      console.log("Form is valid:", formData);
       // Submit form data
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 space-y-4">
-      <h2 className="typography-display-medium-bold mb-6">
-        Create Account
-      </h2>
+      <h2 className="typography-display-medium-bold mb-6">Create Account</h2>
 
       <div>
         <LabelField
@@ -299,8 +302,8 @@ export default function RegistrationForm() {
           label="Full Name"
           requiredLabel="*"
           value={formData.fullName}
-          onChange={handleChange('fullName')}
-          onBlur={handleBlur('fullName')}
+          onChange={handleChange("fullName")}
+          onBlur={handleBlur("fullName")}
           placeholder="John Doe"
           errorMessage={touched.fullName ? errors.fullName : undefined}
         />
@@ -313,8 +316,8 @@ export default function RegistrationForm() {
           requiredLabel="*"
           type="email"
           value={formData.email}
-          onChange={handleChange('email')}
-          onBlur={handleBlur('email')}
+          onChange={handleChange("email")}
+          onBlur={handleBlur("email")}
           placeholder="you@example.com"
           errorMessage={touched.email ? errors.email : undefined}
         />
@@ -327,8 +330,8 @@ export default function RegistrationForm() {
           requiredLabel="*"
           type="password"
           value={formData.password}
-          onChange={handleChange('password')}
-          onBlur={handleBlur('password')}
+          onChange={handleChange("password")}
+          onBlur={handleBlur("password")}
           placeholder="••••••••"
           errorMessage={touched.password ? errors.password : undefined}
         />
@@ -341,8 +344,8 @@ export default function RegistrationForm() {
           requiredLabel="*"
           type="password"
           value={formData.confirmPassword}
-          onChange={handleChange('confirmPassword')}
-          onBlur={handleBlur('confirmPassword')}
+          onChange={handleChange("confirmPassword")}
+          onBlur={handleBlur("confirmPassword")}
           placeholder="••••••••"
           errorMessage={touched.confirmPassword ? errors.confirmPassword : undefined}
         />
@@ -376,8 +379,8 @@ import { PasswordLevel } from "@/components/PasswordLevel";
     requiredLabel="*"
     type="password"
     value={formData.password}
-    onChange={handleChange('password')}
-    onBlur={handleBlur('password')}
+    onChange={handleChange("password")}
+    onBlur={handleBlur("password")}
     placeholder="••••••••"
     errorMessage={touched.password ? errors.password : undefined}
   />
@@ -388,7 +391,7 @@ import { PasswordLevel } from "@/components/PasswordLevel";
       <PasswordLevel theme="light" value={formData.password} />
     </div>
   )}
-</div>
+</div>;
 ```
 
 ---
@@ -409,8 +412,8 @@ import { LabelField } from "@/components/LabelField";
     requiredLabel="*"
     type="email"
     value={formData.email}
-    onChange={handleChange('email')}
-    onBlur={handleBlur('email')}
+    onChange={handleChange("email")}
+    onBlur={handleBlur("email")}
     placeholder="you@example.com"
     errorMessage={touched.email ? errors.email : undefined}
   />
@@ -423,7 +426,7 @@ import { LabelField } from "@/components/LabelField";
       className="mt-2"
     />
   )}
-</div>
+</div>;
 ```
 
 ---
@@ -444,12 +447,12 @@ const handleSubmit = async (e: FormEvent) => {
 
   try {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log('Registration successful:', formData);
+    console.log("Registration successful:", formData);
     // Handle success (e.g., redirect, show success message)
   } catch (error) {
-    console.error('Registration failed:', error);
+    console.error("Registration failed:", error);
     // Handle error
   } finally {
     setIsSubmitting(false);
@@ -457,15 +460,9 @@ const handleSubmit = async (e: FormEvent) => {
 };
 
 // Update button
-<Button
-  theme="light"
-  variant="PrimeStyle"
-  type="submit"
-  className="w-full"
-  disabled={isSubmitting}
->
-  {isSubmitting ? 'Registering...' : 'Register'}
-</Button>
+<Button theme="light" variant="PrimeStyle" type="submit" className="w-full" disabled={isSubmitting}>
+  {isSubmitting ? "Registering..." : "Register"}
+</Button>;
 ```
 
 ---
@@ -483,7 +480,7 @@ const handleSubmit = async (e: FormEvent) => {
   e.preventDefault();
 
   if (!validateForm()) {
-    toast.error('Please fix the errors in the form');
+    toast.error("Please fix the errors in the form");
     return;
   }
 
@@ -491,21 +488,21 @@ const handleSubmit = async (e: FormEvent) => {
 
   try {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    toast.success('Account created successfully!');
+    toast.success("Account created successfully!");
 
     // Reset form
     setFormData({
-      fullName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     });
     setErrors({});
     setTouched({});
   } catch (error) {
-    toast.error('Registration failed. Please try again.');
+    toast.error("Registration failed. Please try again.");
   } finally {
     setIsSubmitting(false);
   }
@@ -519,9 +516,9 @@ const handleSubmit = async (e: FormEvent) => {
 Here's the complete, production-ready form:
 
 ```tsx
-'use client';
+"use client";
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent } from "react";
 import { Button } from "@/components/Button";
 import { FieldHint } from "@/components/FieldHint";
 import { LabelField } from "@/components/LabelField";
@@ -537,10 +534,10 @@ interface FormErrors {
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -549,46 +546,45 @@ export default function RegistrationForm() {
 
   // Validation functions
   const validateFullName = (name: string): string | undefined => {
-    if (!name.trim()) return 'Full name is required';
-    if (name.trim().length < 2) return 'Name must be at least 2 characters';
+    if (!name.trim()) return "Full name is required";
+    if (name.trim().length < 2) return "Name must be at least 2 characters";
     return undefined;
   };
 
   const validateEmail = (email: string): string | undefined => {
-    if (!email) return 'Email is required';
+    if (!email) return "Email is required";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return 'Please enter a valid email';
+    if (!emailRegex.test(email)) return "Please enter a valid email";
     return undefined;
   };
 
   const validatePassword = (password: string): string | undefined => {
-    if (!password) return 'Password is required';
-    if (password.length < 8) return 'Password must be at least 8 characters';
-    if (!/[A-Z]/.test(password)) return 'Password must contain an uppercase letter';
-    if (!/[a-z]/.test(password)) return 'Password must contain a lowercase letter';
-    if (!/[0-9]/.test(password)) return 'Password must contain a number';
+    if (!password) return "Password is required";
+    if (password.length < 8) return "Password must be at least 8 characters";
+    if (!/[A-Z]/.test(password)) return "Password must contain an uppercase letter";
+    if (!/[a-z]/.test(password)) return "Password must contain a lowercase letter";
+    if (!/[0-9]/.test(password)) return "Password must contain a number";
     return undefined;
   };
 
   const validateConfirmPassword = (confirmPassword: string): string | undefined => {
-    if (!confirmPassword) return 'Please confirm your password';
-    if (confirmPassword !== formData.password) return 'Passwords do not match';
+    if (!confirmPassword) return "Please confirm your password";
+    if (confirmPassword !== formData.password) return "Passwords do not match";
     return undefined;
   };
 
-  const handleChange = (field: keyof typeof formData) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleChange =
+    (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setFormData((prev) => ({ ...prev, [field]: value }));
 
-    if (touched[field]) {
-      validateField(field, value);
-    }
-  };
+      if (touched[field]) {
+        validateField(field, value);
+      }
+    };
 
   const handleBlur = (field: keyof typeof formData) => () => {
-    setTouched(prev => ({ ...prev, [field]: true }));
+    setTouched((prev) => ({ ...prev, [field]: true }));
     validateField(field, formData[field]);
   };
 
@@ -596,21 +592,21 @@ export default function RegistrationForm() {
     let error: string | undefined;
 
     switch (field) {
-      case 'fullName':
+      case "fullName":
         error = validateFullName(value);
         break;
-      case 'email':
+      case "email":
         error = validateEmail(value);
         break;
-      case 'password':
+      case "password":
         error = validatePassword(value);
         break;
-      case 'confirmPassword':
+      case "confirmPassword":
         error = validateConfirmPassword(value);
         break;
     }
 
-    setErrors(prev => ({ ...prev, [field]: error }));
+    setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
   const validateForm = (): boolean => {
@@ -629,14 +625,14 @@ export default function RegistrationForm() {
       confirmPassword: true,
     });
 
-    return !Object.values(newErrors).some(error => error !== undefined);
+    return !Object.values(newErrors).some((error) => error !== undefined);
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Please fix the errors in the form');
+      toast.error("Please fix the errors in the form");
       return;
     }
 
@@ -644,21 +640,21 @@ export default function RegistrationForm() {
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      toast.success('Account created successfully!');
+      toast.success("Account created successfully!");
 
       // Reset form
       setFormData({
-        fullName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+        fullName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
       });
       setErrors({});
       setTouched({});
     } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      toast.error("Registration failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -676,9 +672,7 @@ export default function RegistrationForm() {
         "
       >
         <div className="mb-6">
-          <h2 className="typography-display-medium-bold mb-2">
-            Create Account
-          </h2>
+          <h2 className="typography-display-medium-bold mb-2">Create Account</h2>
           <p className="typography-body-medium-regular text-content-presentation-global-secondary">
             Join us and get started today
           </p>
@@ -690,8 +684,8 @@ export default function RegistrationForm() {
             label="Full Name"
             requiredLabel="*"
             value={formData.fullName}
-            onChange={handleChange('fullName')}
-            onBlur={handleBlur('fullName')}
+            onChange={handleChange("fullName")}
+            onBlur={handleBlur("fullName")}
             placeholder="John Doe"
             errorMessage={touched.fullName ? errors.fullName : undefined}
           />
@@ -704,8 +698,8 @@ export default function RegistrationForm() {
             requiredLabel="*"
             type="email"
             value={formData.email}
-            onChange={handleChange('email')}
-            onBlur={handleBlur('email')}
+            onChange={handleChange("email")}
+            onBlur={handleBlur("email")}
             placeholder="you@example.com"
             errorMessage={touched.email ? errors.email : undefined}
           />
@@ -726,8 +720,8 @@ export default function RegistrationForm() {
             requiredLabel="*"
             type="password"
             value={formData.password}
-            onChange={handleChange('password')}
-            onBlur={handleBlur('password')}
+            onChange={handleChange("password")}
+            onBlur={handleBlur("password")}
             placeholder="••••••••"
             errorMessage={touched.password ? errors.password : undefined}
           />
@@ -745,8 +739,8 @@ export default function RegistrationForm() {
             requiredLabel="*"
             type="password"
             value={formData.confirmPassword}
-            onChange={handleChange('confirmPassword')}
-            onBlur={handleBlur('confirmPassword')}
+            onChange={handleChange("confirmPassword")}
+            onBlur={handleBlur("confirmPassword")}
             placeholder="••••••••"
             errorMessage={touched.confirmPassword ? errors.confirmPassword : undefined}
           />
@@ -759,11 +753,11 @@ export default function RegistrationForm() {
           className="w-full"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Registering...' : 'Register'}
+          {isSubmitting ? "Registering..." : "Register"}
         </Button>
 
         <p className="typography-body-small-regular text-content-presentation-global-secondary text-center">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <a href="/login" className="text-content-presentation-action-light-primary">
             Sign in
           </a>
@@ -806,11 +800,8 @@ errorMessage={touched.email ? errors.email : undefined}
 ### 3. Disable Submit During Submission
 
 ```tsx
-<Button
-  type="submit"
-  disabled={isSubmitting || Object.keys(errors).length > 0}
->
-  {isSubmitting ? 'Submitting...' : 'Submit'}
+<Button type="submit" disabled={isSubmitting || Object.keys(errors).length > 0}>
+  {isSubmitting ? "Submitting..." : "Submit"}
 </Button>
 ```
 
@@ -818,10 +809,10 @@ errorMessage={touched.email ? errors.email : undefined}
 
 ```tsx
 // ✓ Good - Specific and actionable
-'Password must contain at least one uppercase letter'
+"Password must contain at least one uppercase letter";
 
 // ✗ Bad - Vague
-'Invalid password'
+"Invalid password";
 ```
 
 ### 5. Reset Form After Success
@@ -831,7 +822,7 @@ const handleSuccess = () => {
   setFormData(initialState);
   setErrors({});
   setTouched({});
-  toast.success('Success!');
+  toast.success("Success!");
 };
 ```
 

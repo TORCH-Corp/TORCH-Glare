@@ -1,3 +1,74 @@
+## Unreleased
+
+### Added
+- **Rich text editor toolbar** — `TextEditor` now shows a fixed, sticky formatting toolbar by
+  default (new `toolbar?: boolean` prop; auto-hidden for `readOnly`/`disabled`): undo/redo,
+  block-type (Normal / Heading 1–3), alignment, text color, bold/italic/underline/strikethrough/
+  clear, bullet & ordered lists, and insert-image. Adds `editorjs-undo` plus small custom
+  Editor.js tools — a `StrikethroughInlineTool`, `ColorInlineTool`, and `AlignmentTune`
+  (`lib/components/editor-tools/`) — whose sanitize/tune plumbing makes the formatting persist
+  through `save()`. Also made the `/text-editor` demo SSR-safe (lazy-loads the editor).
+- **`FormBuilder.RadioList`** and **`FormBuilder.CheckboxGroup`** — option-group fields that
+  render as a boxed, divided list (light `#f9f9f9` container, full-width row dividers, control
+  on the left, primary + optional secondary label). `RadioList` is single-select (`string`);
+  `CheckboxGroup` is multi-select (`string[]`). `OptionItem` gained an optional `description`
+  for the per-row secondary label.
+- **`FormBuilder.SwitchBox`** — a switch wrapped in a `#f9f9f9` field box (value `boolean`).
+  Renders like any other field (label in the normal label column); the box holds an optional
+  inline `subLabel`, a vertical divider, and the switch.
+
+### Changed
+- `FormBuilder.Checkbox` gained an optional `subLabel` — text rendered inline beside the
+  checkbox (via the clickable `LabeledCheckBox`), in addition to the field `label`.
+- Restyled `ImageAttachment` to match the *Attachment-Field-1.0 / Pic-Container-1.0* design: a
+  `#f9f9f9` field box around a transparent dashed drop zone, a fixed 65×65 square thumbnail, an
+  ocean/blue-purple "ratio" placeholder (gray on hover), and a `black/50` + fullscreen-icon
+  expand overlay. Fixes the placeholder, which previously referenced a non-existent
+  `badge-blue-purple` token (its colors were silently no-ops). `ExpandableImage` no longer
+  aspect-ratio-fits (now a fixed square); `FileField` / `FormBuilder.File`/`.Image` behavior is
+  unchanged.
+
+### Removed
+- **BREAKING:** removed the non-boxed `FormBuilder.Radio` and `FormBuilder.Switch` fields —
+  their boxed versions are the only style now. Migrate `.Radio` → `.RadioList` and
+  `.Switch` → `.SwitchBox` (same value contracts). The single boolean `FormBuilder.Checkbox`
+  is unchanged and still available.
+
+### Changed
+- **BREAKING:** `DrawerContent` no longer paints the light content surface. That surface is now
+  a separate exported **`DrawerPanel`** — wrap your drawer body in it. This is what lets a
+  drawer hold a form panel and a second panel (e.g. a `FormSummary`) side by side, each with
+  its own background; the tray now only frames and positions.
+  - `className` on `DrawerContent` now targets the **tray**. Its old inner-surface meaning
+    moves to `DrawerPanel`. `trayClassName` is kept as a deprecated alias.
+  - `showHandle` moves from `DrawerContent` to `DrawerPanel`, where it defaults to `false`
+    (it was `true`, auto-hidden when a `notch` was present).
+  - Migration: `<DrawerContent className="x">…</DrawerContent>` →
+    `<DrawerContent><DrawerPanel className="x">…</DrawerPanel></DrawerContent>`.
+- `DrawerContent` dropped its `childrenOutside` prop and the `gap-[6px]` in its tray base —
+  the primitive no longer encodes the form + summary pairing. `FormDrawer` owns that
+  arrangement now, and callers with two tray children supply their own `gap-*`.
+- `FormDrawer`'s `childrenOutside` prop is renamed **`summary`** (the old name still works,
+  deprecated).
+- **BREAKING:** `FormDrawer` now renders the **same floating header as the page form** — a
+  `HeaderBar` title pill plus a dark action pill — instead of its own small
+  `DrawerHeaderTitle` treatment, so a form's title is identical in either display. The shared
+  markup lives in a new exported `FormHeaderBar` (`FormBuilder/header.tsx`), which
+  `FormBuilder.Header` now wraps.
+  - `FormDrawer`'s `title` / `badge` narrow from `ReactNode` to `string` (they render through
+    `HeaderBar`'s uppercase text); same for `FormRenderer`'s `title` / `badge`.
+  - `FormDrawer` gains `variant` (`new` / `edit` / `detail`), and `FormRenderer` now forwards
+    `header.variant` to the drawer — previously the drawer dropped it.
+  - The visible title is now the `HeaderBar`; a screen-reader-only `DrawerTitle` is kept so
+    Vaul still has an accessible name.
+
+### Fixed
+- Form header action pill was **2px shorter than the title pill** (44px vs 46px) — its
+  `p-[7px]` is now `p-2`, matching the design's 8px inset / 28px content. Affects both the
+  page form and the drawer.
+- `ConclusionHeader` now declares its `Badge` dependency in the registry — `add
+  ConclusionHeader` previously copied a file that imported an uncopied component.
+
 ## 2.4.0
 
 ### Added

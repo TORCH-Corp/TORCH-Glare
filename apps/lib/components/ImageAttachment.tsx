@@ -1,11 +1,4 @@
-import {
-  forwardRef,
-  HTMLAttributes,
-  InputHTMLAttributes,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { forwardRef, HTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
 import { Button } from "./Button";
 import { cva } from "class-variance-authority";
 import { cn } from "../utils/cn";
@@ -19,14 +12,16 @@ import {
 
 const dropZoneStyles = cva(
   [
-    "w-full min-w-[200px] h-[65px] flex flex-col rounded-lg border-dashed !border-2 transition-all duration-300 ease-in-out ",
-    "!border-border-presentation-action-borderstyle bg-background-presentation-badge-gray",
-    "hover:border-border-presentation-action-borderstyle  hover:bg-background-presentation-badge-gray",
+    // Dashed drop zone that fills the field box (design: Attachment-Field-1.0 "Upload-Button").
+    // Transparent fill so the surrounding #f9f9f9 box shows through the dashed border.
+    "flex-1 h-[65px] flex flex-col rounded-[8px] border-dashed !border-2 transition-all duration-300 ease-in-out",
+    "!border-border-presentation-action-borderstyle bg-transparent",
+    "hover:bg-background-presentation-badge-gray-subtle",
   ],
   {
     variants: {
       active: {
-        true: "bg-background-presentation-action-hovercontstyle border-border-presentation-badge-gray",
+        true: "!bg-background-presentation-badge-gray-subtle !border-border-presentation-badge-gray",
       },
     },
   },
@@ -37,7 +32,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement | HTMLDivElement> {
   mainLabel: string;
   secondaryLabel: string;
   theme?: Themes;
-  expandLabel: ReactNode;
+  expandLabel?: ReactNode;
   children?: ReactNode;
   getRootProps?: () => Record<string, unknown>;
 }
@@ -52,12 +47,21 @@ const ImageAttachment = forwardRef<HTMLInputElement, Props>(
       className,
       getRootProps,
       children,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} so it isn't leaked onto the <input>
+      expandLabel,
       ...props
     }: Props,
     ref,
   ) => {
     return (
-      <section className={cn("flex items-center justify-center gap-1 w-full", className)}>
+      // The #f9f9f9 field box (design: Attachment-Field-1.0). Holds an optional preview
+      // (children) on the leading side and the dashed drop zone filling the rest.
+      <section
+        className={cn(
+          "flex w-full items-center gap-[10px] rounded-[8px] bg-background-presentation-form-field-primary",
+          className,
+        )}
+      >
         {children}
         <Button
           {...getRootProps?.()}
@@ -100,52 +104,25 @@ const ExpandableImage = ({
   className,
   ...props
 }: ExpandableImageProps) => {
-  // Calculate the aspect ratio of the image
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
-  useEffect(() => {
-    if (!previewSrc) return;
-    const img = new Image();
-    img.onload = () => {
-      const width = img.naturalWidth;
-      const height = img.naturalHeight;
-      const ratio = width / height;
-      setAspectRatio(ratio);
-    };
-    img.src = previewSrc;
-  }, [previewSrc]);
-
   return (
+    // Pic-Container-1.0: a 65×65 square thumbnail (or the placeholder), with an Expand
+    // overlay revealed on hover.
     <section
       style={props.style}
       data-theme={theme}
       className={cn(
-        "flex items-center justify-center rounded-md relative overflow-hidden border-none group h-[65px]  max-w-[180px]",
+        "group relative flex size-[65px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] border-none",
         className,
       )}
     >
-      {previewSrc ? (
-        <SelectedImg aspectRatio={aspectRatio} src={previewSrc} />
-      ) : (
-        <PlaceHolder label={placeholderLabel} />
-      )}
+      {previewSrc ? <SelectedImg src={previewSrc} /> : <PlaceHolder label={placeholderLabel} />}
 
       {previewSrc && (
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <button className="flex w-full h-full justify-center items-center flex-col absolute z-10 opacity-0 bg-black/50 transition-all duration-250 ease-in-out hover:opacity-100">
-              <svg
-                width="25"
-                height="25"
-                viewBox="0 0 25 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M15.5 3.5L17.8 5.8L14.91 8.67L16.33 10.09L19.2 7.2L21.5 9.5V3.5H15.5ZM3.5 9.5L5.8 7.2L8.67 10.09L10.09 8.67L7.2 5.8L9.5 3.5H3.5V9.5ZM9.5 21.5L7.2 19.2L10.09 16.33L8.67 14.91L5.8 17.8L3.5 15.5V21.5H9.5ZM21.5 15.5L19.2 17.8L16.33 14.91L14.91 16.33L17.8 19.2L15.5 21.5H21.5V15.5Z"
-                  fill="#F9F9F9"
-                />
-              </svg>
-              <p className="text-content-presentation-global-primary-inverse typography-labels-small-regular max-w-[50px] break-words m-0">
+            <button className="absolute z-10 flex h-full w-full flex-col items-center justify-center gap-[2px] bg-black/50 opacity-0 transition-all duration-200 ease-in-out hover:opacity-100">
+              <i className="ri-fullscreen-line text-content-presentation-global-hover text-[24px] leading-none" />
+              <p className="text-content-presentation-global-hover typography-labels-small-regular m-0 max-w-[50px] break-words text-center">
                 {expandLabel}
               </p>
             </button>
@@ -161,31 +138,29 @@ const ExpandableImage = ({
 
 function PlaceHolder({ label }: { label: string }) {
   return (
+    // Pic-Container-1.0 default: ocean fill + dashed blue-purple border; on hover it goes gray.
+    // (Was styled with a `badge-blue-purple` token that does not exist — a no-op until now.)
     <section
       className={cn([
-        "w-[65px] h-full gap-[2px] flex flex-col justify-center items-center px-1 ",
-        " rounded-lg border-2 border-dashed",
-        " border-border-presentation-badge-blue-purple",
-        " bg-background-presentation-badge-blue-purple",
+        "size-[65px] gap-[2px] flex flex-col justify-center items-center px-1",
+        " rounded-[8px] border-2 border-dashed",
+        " border-blue-purple-300 bg-background-presentation-badge-ocean-subtle",
         " transition-all duration-300 ease-in-out",
-        " hover:bg-background-presentation-badge-gray hover:border-border-presentation-badge-gray",
+        " group-hover:bg-background-presentation-badge-gray-subtle group-hover:border-border-presentation-badge-gray",
       ])}
     >
-      <i className="ri-attachment-line text-content-presentation-badge-blue-purple group-hover:text-[#797C7F] text-[24px] h-[24px]"></i>
-      <p className="text-content-presentation-badge-blue-purple typography-labels-small-regular group-hover:text-[#797C7F] px-1 py-[2px] text-center">
+      <i className="ri-attachment-line text-blue-purple-800 group-hover:text-content-presentation-badge-gray text-[24px] h-[24px]"></i>
+      <p className="text-blue-purple-800 typography-labels-small-regular group-hover:text-content-presentation-badge-gray px-1 py-[2px] text-center">
         {label}
       </p>
     </section>
   );
 }
 
-function SelectedImg({ src, aspectRatio }: { src: string; aspectRatio: number | null }) {
+function SelectedImg({ src }: { src: string }) {
   return (
-    <section
-      style={{ aspectRatio: aspectRatio ?? undefined }}
-      className="bg-white w-full h-full rounded-md border border-border-presentation-global-primary shrink-0"
-    >
-      <img src={src} className="object-center object-cover h-full w-full" />
+    <section className="size-full shrink-0 overflow-hidden rounded-[8px] border border-border-presentation-global-primary bg-white">
+      <img alt="" src={src} className="h-full w-full object-cover object-center" />
     </section>
   );
 }

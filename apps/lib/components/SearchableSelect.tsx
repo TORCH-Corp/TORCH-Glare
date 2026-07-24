@@ -38,6 +38,8 @@ interface Props {
   theme?: Themes;
   dir?: string;
   className?: string;
+  /** Transparent border/background so the trigger blends into a table cell. */
+  onTable?: boolean;
 
   // --- Async / backend pagination (all optional; static `options` still works) ---
   /**
@@ -105,6 +107,7 @@ export function SearchableSelect({
   theme,
   dir,
   className,
+  onTable,
   filterClientSide = true,
   onSearchChange,
   searchDebounceMs = 300,
@@ -175,11 +178,13 @@ export function SearchableSelect({
           data-theme={theme}
           variant={variant}
           size={size === "XS" ? "S" : size}
+          onTable={onTable}
           ref={groupRef as never}
           onFocus={(e: React.FocusEvent<HTMLDivElement>) =>
             setDropdownWidth(e.currentTarget.offsetWidth)
           }
-          className={cn("flex w-full items-center gap-1 p-1", className)}
+          // Trigger styling mirrors the `Select` component's trigger so the two read identically.
+          className={cn("flex w-full items-center gap-1 rounded-[6px] p-[4px]", className)}
         >
           {icon && <Icon>{icon}</Icon>}
           <Input
@@ -218,13 +223,14 @@ export function SearchableSelect({
               }
             }}
             className={cn(
-              "shrink-0 h-[32px] w-[32px] rounded-[4px]",
+              // Same box + open-state fill as the Select trigger's chevron.
+              "h-[32px] w-[32px] shrink-0",
               open && "bg-background-presentation-action-hover text-white",
             )}
           >
             <i
               className={cn(
-                "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
+                "ri-arrow-down-s-line !text-[26px] transition-all duration-100 ease-in-out",
                 open && "rotate-180",
               )}
             />

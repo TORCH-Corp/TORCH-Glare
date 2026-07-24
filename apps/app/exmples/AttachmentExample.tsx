@@ -1,68 +1,55 @@
-import { AlertDialogAction } from "@/components/AlertDialog";
-import { Button } from "@/components/Button";
-import { AttachmentImagePreview, ExpandableImage, ImageAttachment } from "@/components/ImageAttachment";
-import { cn } from "@/utils/cn";
+"use client";
+
 import { useRef, useState } from "react";
 
+import { AlertDialogAction } from "@/components/AlertDialog";
+import { Button } from "@/components/Button";
+import {
+  AttachmentImagePreview,
+  ExpandableImage,
+  ImageAttachment,
+} from "@/components/ImageAttachment";
+import { cn } from "@/utils/cn";
 
 export default function AttachmentExample() {
-  const [preview, setPreview] = useState<string | null>(null);
+  // Empty string (not null) — `previewSrc` / `src` are `string`, and a falsy value
+  // renders the placeholder.
+  const [preview, setPreview] = useState<string>("");
 
-  // Add a ref to access the file input
+  // Ref to the hidden file input (ImageAttachment forwards its ref there), so Reset can
+  // clear the input value as well as the preview.
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setPreview(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
-
-
-  // Create a reset handler that clears both preview and file input
   const handleReset = () => {
-    setPreview('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    setPreview("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
     <>
-      <h1
-        className={cn(
-          "text-xl font-bold mb-8",
-          "text-content-system-global-primary"
-        )}
-      >
+      <h1 className={cn("text-xl font-bold mb-8", "text-content-system-global-primary")}>
         Attachment Preview
       </h1>
-      <div className="flex flex-col gap-2 w-full">
-
+      <div className="flex w-full flex-col gap-2">
         <ImageAttachment
-          id={'upload-simple-example'}
-          onChange={handleFileChange}
-          mainLabel={"Click To Upload"}
-          secondaryLabel={"Upload an image"}
-          expandLabel={"Expand Pic"}
           ref={fileInputRef}
-          style={{
-            aspectRatio: 1 / 1
-          }}
+          id="upload-simple-example"
+          mainLabel="Click To Upload"
+          secondaryLabel="Upload an image"
+          accept="image/*"
+          onChange={handleFileChange}
         >
-          <ExpandableImage
-            previewSrc={preview}
-            expandLabel={"Expand Pic"}
-          >
-            <AttachmentImagePreview
-              src={preview}
-            >
+          {/* The preview thumbnail; clicking it (when set) opens the expand dialog. */}
+          <ExpandableImage previewSrc={preview} expandLabel="Expand Pic">
+            <AttachmentImagePreview src={preview} header="Preview">
               <AlertDialogAction asChild>
                 <Button onClick={handleReset}>Reset</Button>
               </AlertDialogAction>

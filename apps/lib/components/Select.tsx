@@ -5,6 +5,7 @@ import { cn } from "../utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
 import { Button } from "./Button";
 import { Tooltip } from "./Tooltip";
+import { MenuItemStyles } from "./DropdownMenu";
 import { Themes } from "../utils/types";
 
 const Select = SelectPrimitive.Root;
@@ -31,6 +32,7 @@ const SelectTrigger = React.forwardRef<
       errors,
       theme,
       icon,
+      onTable,
       ...props
     },
     ref,
@@ -45,6 +47,7 @@ const SelectTrigger = React.forwardRef<
               size,
               variant,
               error: errors !== undefined,
+              onTable,
             }),
             className,
           )}
@@ -61,6 +64,7 @@ const SelectTrigger = React.forwardRef<
           <Button
             as={"span"}
             buttonType="icon"
+            size={"L"}
             className={cn([
               "group-aria-expanded:bg-background-presentation-action-hover",
               "group-aria-expanded:text-white",
@@ -137,7 +141,10 @@ const SelectContent = React.forwardRef<
         position={position}
         {...props}
       >
-        <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+        {/* Dedicated scroll viewport + boxed group, matching SearchableSelect's menu surface. */}
+        <SelectPrimitive.Viewport className="overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide">
+          <div className="flex flex-col gap-[1px] overflow-hidden rounded-[10px]">{children}</div>
+        </SelectPrimitive.Viewport>
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   ),
@@ -158,22 +165,21 @@ SelectLabel.displayName = "SelectLabel";
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> &
-    VariantProps<typeof SelectItemStyles>
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & VariantProps<typeof MenuItemStyles>
 >(({ className, children, size = "M", variant = "Default", active, ...props }, ref) => (
+  // Same structure as DropdownMenuItem / SearchableSelect: MenuItemStyles on the element
+  // + a single inner <div> the styles target via [&>div], and a check on the selected row.
   <SelectPrimitive.Item
     ref={ref}
-    className={cn(
-      SelectItemStyles({
-        variant,
-        active,
-        size,
-      }),
-      className,
-    )}
+    className={cn(MenuItemStyles({ variant, active, size }), "shrink-0", className)}
     {...props}
   >
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    <div>
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemIndicator className="ml-auto flex shrink-0">
+        <i className="ri-check-line text-[16px]" />
+      </SelectPrimitive.ItemIndicator>
+    </div>
   </SelectPrimitive.Item>
 ));
 
@@ -206,34 +212,36 @@ export {
 
 // NOTE: radix select as DropDownButton
 
+// Panel surface mirrors SearchableSelect's `menuContentStyles` (translucent, backdrop-blurred,
+// borderless, rounded-14). `min-w`/`z-index` are kept for the Radix Select portal.
 const SelectContentStyles = cva(
   [
     "p-1",
-    "rounded-[8px]",
+    "rounded-[14px]",
+    // Match the dropdown to the trigger's width (Radix popper exposes it as a CSS var),
+    // but never narrower than 240px.
+    "w-[var(--radix-select-trigger-width)]",
     "min-w-[240px]",
-    "border",
+    "border-0",
     "outline-none",
-    "overflow-scroll",
+    "overflow-hidden",
+    "backdrop-blur-[21px]",
+    "flex flex-col gap-1",
     "data-[state=open]:animate-in",
-    "data-[state=closed]:animate-out",
-    "data-[state=closed]:fade-out-0",
     "data-[state=open]:fade-in-0",
-    "overflow-x-hidden",
-    "scrollbar-hide",
     "z-[1000]",
+    "max-h-[368px]",
   ],
   {
     variants: {
       variant: {
         SystemStyle: [
-          "border-border-system-global-secondary",
           "bg-background-system-body-primary",
           "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
         ],
         PresentationStyle: [
-          "border-border-presentation-global-primary",
-          "bg-background-presentation-form-base",
-          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+          "bg-[rgba(61,64,69,0.72)]",
+          "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
         ],
       },
       defaultVariants: {
@@ -243,102 +251,9 @@ const SelectContentStyles = cva(
   },
 );
 
-const SelectItemStyles = cva(
-  [
-    "text-content-presentation-action-light-primary",
-    "outline-none",
-    "border",
-    "border-transparent",
-    "flex",
-    "gap-[8px]",
-    "items-center",
-    "justify-start",
-    "text-overflow",
-    "overflow-hidden",
-    "px-[12px]",
-    "rounded-[4px]",
-    "transition-all",
-    "ease-in-out",
-    "duration-300",
-  ],
-  {
-    variants: {
-      variant: {
-        Default: [
-          "text-content-presentation-action-light-primary",
-          "bg-background-presentation-action-dropdown-primary",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-global-primary-inverse",
-          "focus:bg-background-presentation-action-hover",
-          "focus:text-content-presentation-global-primary-inverse",
-          "disabled:text-content-presentation-state-disabled",
-          "disabled:bg-white-00",
-        ],
-        Warning: [
-          "text-content-presentation-state-information",
-          "hover:bg-background-presentation-state-information-primary",
-          "focus:bg-background-presentation-state-information-primary",
-          "focus:text-content-presentation-global-primary-inverse",
-          "hover:text-content-presentation-global-primary-inverse",
-        ],
-        Negative: [
-          "text-content-presentation-state-negative",
-          "hover:bg-background-presentation-state-negative-primary",
-          "hover:text-content-presentation-global-primary-inverse",
-          "focus:bg-background-presentation-state-negative-primary",
-          "focus:text-content-presentation-global-primary-inverse",
-          "active:text-content-presentation-state-negative",
-        ],
-        SystemStyle: [
-          "bg-background-system-body-primary",
-          "text-content-system-global-primary",
-          "hover:bg-background-system-action-secondary-hover",
-          "hover:text-content-system-action-primary-hover",
-          "hover:border-border-system-action-primary-hover",
-          "focus:bg-background-system-action-secondary-hover",
-          "focus:text-content-system-action-primary-hover",
-          "focus:border-border-system-action-primary-hover",
-          "disabled:bg-background-system-body-secondary",
-          "disabled:text-content-system-global-disabled",
-        ],
-      },
-      size: {
-        S: ["typography-body-small-regular", "h-[24px]"],
-        M: ["typography-body-medium-regular", "h-[32px]"],
-      },
-
-      disabled: {
-        true: ["text-content-presentation-state-disabled", "bg-white-00"],
-      },
-
-      active: {
-        true: [
-          "bg-background-presentation-action-selected",
-          "text-content-presentation-action-light-primary",
-        ],
-      },
-
-      defaultVariants: {
-        variant: "Default",
-        size: "M",
-        active: false,
-        disabled: false,
-      },
-    },
-    compoundVariants: [
-      {
-        active: true,
-        variant: "Warning",
-        className: ["text-content-presentation-state-negative"],
-      },
-    ],
-  },
-);
-
 const PopoverTriggerStyles = cva(
   [
-    "flex flex-row rounded-[4px] justify-between items-center outline-none",
-    "rounded-[4px]",
+    "flex flex-row rounded-[8px] justify-between items-center outline-none",
     "[&_span]:text-content-presentation-action-light-primary",
     "typography-body-small-regular",
     "[&_p]:px-[10px] [&_p]:whitespace-nowrap",
@@ -354,9 +269,11 @@ const PopoverTriggerStyles = cva(
       variant: {
         PresentationStyle: [
           "bg-background-presentation-form-field-primary",
+          "border-border-presentation-action-primary",
           "hover:bg-background-presentation-form-field-hover",
+          "hover:border-border-presentation-action-hover",
           "focus:bg-background-presentation-form-field-hover",
-          "border-none",
+          "focus:border-border-presentation-state-focus",
         ],
         SystemStyle: [
           "bg-black-alpha-20",
@@ -376,12 +293,16 @@ const PopoverTriggerStyles = cva(
           "hover:caret-border-presentation-state-negative",
         ],
       },
+      // Transparent border/background so the trigger blends into a table cell.
+      onTable: {
+        true: ["border-transparent", "bg-transparent"],
+      },
       size: {
-        S: ["[&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium"],
+        S: ["rounded-[6px] [&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium"],
         M: ["[&_span]:h-[26px] [&_span]:w-[26px] [&_p]:typography-body-medium-medium"],
         L: ["[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium"],
         XL: [
-          "h-[40px] p-[4px] rounded-[6px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-large-regular [&_p]:px-[4px]",
+          "h-[40px] p-[4px] rounded-[8px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-large-regular [&_p]:px-[4px]",
         ],
       },
     },

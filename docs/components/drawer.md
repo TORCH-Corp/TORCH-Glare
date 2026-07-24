@@ -10,7 +10,22 @@ keywords: [drawer, sheet, side-panel, bottom-sheet, slide, vaul, form, create, e
 > A gesture-based sliding panel built on [Vaul](https://vaul.emilkowal.ski/). It can slide up from the **bottom**, in from the **right**, or in from the **left**. It supports drag-to-dismiss, nested/stacked drawers with an iOS-style scale-back effect, an optional "notch" tab on the top edge, and a dark framed "tray" look. It is the recommended surface for create / edit forms, filter panels, side navigation, action sheets, and full-screen editors.
 
 > [!IMPORTANT]
-> The Drawer is **composed**, not configured. There is no single `direction` style switch on `DrawerContent`. You pick the anchor on the root `<Drawer direction="...">` and then pass layout classes (`wrapperClassName`, `className`, `trayClassName`) plus a few flags (`framed`, `showHandle`, `notch`, `notchSide`) to get the bottom / right / left look. The recipes below give you exact, copy-paste class strings for each direction.
+> The Drawer is **composed**, not configured. There is no single `direction` style switch on `DrawerContent`. You pick the anchor on the root `<Drawer direction="...">` and then pass layout classes (`wrapperClassName`, `className`) plus a few flags (`framed`, `notch`, `notchSide`) to get the bottom / right / left look. The recipes below give you exact, copy-paste class strings for each direction.
+
+> [!WARNING]
+> **Changed in 3.0.** `DrawerContent` no longer paints the light content surface — wrap your
+> content in a [`DrawerPanel`](#drawerpanel). This is what lets a drawer hold a form panel and
+> a dark summary panel side by side, each with its own background. Two knock-on changes:
+> `className` now targets the **tray** (the old inner-surface meaning moves to `DrawerPanel`),
+> and `showHandle` moves to `DrawerPanel` where it defaults to `false`. `trayClassName` still
+> works as a deprecated alias for `className`.
+>
+> ```diff
+> - <DrawerContent className="rounded-[10px]">…</DrawerContent>
+> + <DrawerContent>
+> +   <DrawerPanel className="rounded-[10px]">…</DrawerPanel>
+> + </DrawerContent>
+> ```
 
 ## Installation
 
@@ -37,20 +52,25 @@ import { Drawer } from "@/components/Drawer";
 ```tsx
 <Drawer>                      {/* root — owns open state + direction */}
   <DrawerTrigger />           {/* what opens the drawer (use asChild) */}
-  <DrawerContent>            {/* the panel; controls tray/frame/handle/notch */}
-    <DrawerHeader>
-      <DrawerHeaderTitle>    {/* dark pill holding the title + a badge */}
-        <DrawerBadge />
-        <DrawerTitle />
-      </DrawerHeaderTitle>
-      <DrawerHeaderActions /> {/* dark pill holding header buttons */}
-    </DrawerHeader>
+  <DrawerContent>             {/* the dark tray; frame / positioning / notch */}
+    <DrawerPanel>             {/* the light content surface */}
+      <DrawerHeader>
+        <DrawerHeaderTitle>   {/* dark pill holding the title + a badge */}
+          <DrawerBadge />
+          <DrawerTitle />
+        </DrawerHeaderTitle>
+        <DrawerHeaderActions /> {/* dark pill holding header buttons */}
+      </DrawerHeader>
 
-    {/* ...your body content... */}
+      {/* ...your body content... */}
 
-    <DrawerFooter>
-      <DrawerClose />          {/* anything that should close the drawer */}
-    </DrawerFooter>
+      <DrawerFooter>
+        <DrawerClose />         {/* anything that should close the drawer */}
+      </DrawerFooter>
+    </DrawerPanel>
+
+    {/* Anything else here sits BESIDE the panel, with its own background —
+        e.g. a <FormSummary />. Give the tray a `gap-*` to space them. */}
   </DrawerContent>
 </Drawer>
 ```
@@ -67,27 +87,29 @@ The default. Slides up from the bottom with a drag handle. Use `framed={false}` 
     <Button variant="PrimeStyle">Open drawer</Button>
   </DrawerTrigger>
   <DrawerContent framed={false}>
-    <DrawerHeader>
-      <DrawerTitle>Basic drawer</DrawerTitle>
-      <DrawerDescription>
-        Drag the handle down or press Escape to close.
-      </DrawerDescription>
-    </DrawerHeader>
+    <DrawerPanel framed={false} showHandle>
+      <DrawerHeader>
+        <DrawerTitle>Basic drawer</DrawerTitle>
+        <DrawerDescription>
+          Drag the handle down or press Escape to close.
+        </DrawerDescription>
+      </DrawerHeader>
 
-    <div className="px-4 pb-4">
-      <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
-        Put any content here — forms, lists, settings.
-      </p>
-    </div>
+      <div className="px-4 pb-4">
+        <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
+          Put any content here — forms, lists, settings.
+        </p>
+      </div>
 
-    <DrawerFooter>
-      <DrawerClose asChild>
-        <Button variant="PrimeStyle">Done</Button>
-      </DrawerClose>
-      <DrawerClose asChild>
-        <Button variant="BorderStyle">Cancel</Button>
-      </DrawerClose>
-    </DrawerFooter>
+      <DrawerFooter>
+        <DrawerClose asChild>
+          <Button variant="PrimeStyle">Done</Button>
+        </DrawerClose>
+        <DrawerClose asChild>
+          <Button variant="BorderStyle">Cancel</Button>
+        </DrawerClose>
+      </DrawerFooter>
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>
 ```
@@ -127,7 +149,6 @@ function ContactDrawer({ mode = "create", contact }) {
       </DrawerTrigger>
 
       <DrawerContent
-        showHandle={false}
         /* The top-edge notch: close button + "Open in new tab" pill. */
         notch={
           <DrawerNotch>
@@ -141,9 +162,9 @@ function ContactDrawer({ mode = "create", contact }) {
           </DrawerNotch>
         }
         wrapperClassName="top-2 right-2 bottom-2 left-auto mt-0 h-auto w-[1046px] max-w-[calc(100vw-16px)]"
-        /* With a notch, round all corners EXCEPT the top one the notch sits on. */
-        className="rounded-tr-[16px] rounded-b-[16px]"
       >
+        {/* With a notch, round all corners EXCEPT the top one the notch sits on. */}
+        <DrawerPanel className="rounded-tr-[16px] rounded-b-[16px]">
         {/* Header: badge flips New / Edit, actions live in their own dark pill */}
         <DrawerHeader>
           <DrawerHeaderTitle>
@@ -234,6 +255,7 @@ function ContactDrawer({ mode = "create", contact }) {
             />
           </SectionBlock>
         </div>
+        </DrawerPanel>
       </DrawerContent>
     </Drawer>
   );
@@ -279,38 +301,40 @@ function RowDivider() {
     <Button variant="PrimeStyle">Checkout</Button>
   </DrawerTrigger>
   <DrawerContent framed={false}>
-    <DrawerHeader>
-      <DrawerTitle>Your cart</DrawerTitle>
-      <DrawerDescription>1 item — $129.00</DrawerDescription>
-    </DrawerHeader>
+    <DrawerPanel framed={false} showHandle>
+      <DrawerHeader>
+        <DrawerTitle>Your cart</DrawerTitle>
+        <DrawerDescription>1 item — $129.00</DrawerDescription>
+      </DrawerHeader>
 
-    <DrawerFooter>
-      <DrawerNested>
-        <DrawerTrigger asChild>
-          <Button variant="PrimeStyle">Continue to shipping</Button>
-        </DrawerTrigger>
-        <DrawerContent framed={false}>
-          <DrawerHeader>
-            <DrawerTitle>Shipping</DrawerTitle>
-          </DrawerHeader>
-          {/* ...another DrawerNested inside here for payment... */}
-        </DrawerContent>
-      </DrawerNested>
-    </DrawerFooter>
+      <DrawerFooter>
+        <DrawerNested>
+          <DrawerTrigger asChild>
+            <Button variant="PrimeStyle">Continue to shipping</Button>
+          </DrawerTrigger>
+          <DrawerContent framed={false}>
+            <DrawerPanel framed={false} showHandle>
+              <DrawerHeader>
+                <DrawerTitle>Shipping</DrawerTitle>
+              </DrawerHeader>
+              {/* ...another DrawerNested inside here for payment... */}
+            </DrawerPanel>
+          </DrawerContent>
+        </DrawerNested>
+      </DrawerFooter>
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>
 ```
 
 ### Notch (top-edge tab)
 
-The notch is an optional tab that sticks out of the top edge of the drawer — used for a close button plus an "Open in new tab" / "Open in the app" affordance. Pass it to `DrawerContent` via the `notch` prop. When a notch is present, hide the drag handle (`showHandle={false}`) and use the asymmetric corner rounding (`className="rounded-tr-[16px] rounded-b-[16px]"` for a right drawer) so the panel tucks under the notch.
+The notch is an optional tab that sticks out of the top edge of the drawer — used for a close button plus an "Open in new tab" / "Open in the app" affordance. Pass it to `DrawerContent` via the `notch` prop. When a notch is present, leave the drag handle off (`DrawerPanel`'s `showHandle` defaults to `false`) and use the asymmetric corner rounding on the panel (`className="rounded-tr-[16px] rounded-b-[16px]"` for a right drawer) so it tucks under the notch.
 
 **Simple notch** — close button + "Open in new tab" pill. This is the most common form, used on the create/edit drawer above:
 
 ```tsx
 <DrawerContent
-  showHandle={false}
-  className="rounded-tr-[16px] rounded-b-[16px]"
   notch={
     <DrawerNotch>
       <DrawerClose asChild>
@@ -323,7 +347,9 @@ The notch is an optional tab that sticks out of the top edge of the drawer — u
     </DrawerNotch>
   }
 >
-  {/* ... */}
+  <DrawerPanel className="rounded-tr-[16px] rounded-b-[16px]">
+    {/* ... */}
+  </DrawerPanel>
 </DrawerContent>
 ```
 
@@ -331,8 +357,6 @@ The notch is an optional tab that sticks out of the top edge of the drawer — u
 
 ```tsx
 <DrawerContent
-  showHandle={false}
-  className="rounded-tr-[16px] rounded-b-[16px]"
   notch={
     <DrawerNotch>
       <DrawerClose asChild>
@@ -350,7 +374,9 @@ The notch is an optional tab that sticks out of the top edge of the drawer — u
     </DrawerNotch>
   }
 >
-  {/* ... */}
+  <DrawerPanel className="rounded-tr-[16px] rounded-b-[16px]">
+    {/* ... */}
+  </DrawerPanel>
 </DrawerContent>
 ```
 
@@ -404,7 +430,7 @@ There is **no automatic per-direction styling**. The anchor is set on the root w
 |---|---|---|---|
 | Root prop | _(none)_ | `direction="right"` | `direction="left"` |
 | Sits at | full width, pinned to bottom | floating panel on the right | floating panel on the left |
-| Drag handle | **shown** (`showHandle` default `true`) | hidden (`showHandle={false}`) | hidden (`showHandle={false}`) |
+| Drag handle | on — `<DrawerPanel showHandle>` | off (the default) | off (the default) |
 | Frame / tray | usually off (`framed={false}`) for clean sheet | on (default) for the dark tray | on (default) |
 | Rounded corners | top corners only | all/left corners | top-left + bottom corners |
 | Notch side | top-left (`notchSide="left"`) | top-left | mirror to `notchSide="right"` |
@@ -420,11 +446,12 @@ No `direction` prop. Keep the drag handle; drop the frame for a clean sheet.
     <Button variant="PrimeStyle">Open bottom sheet</Button>
   </DrawerTrigger>
   <DrawerContent framed={false}>
-    {/* drag handle appears automatically */}
-    <DrawerHeader>
-      <DrawerTitle>Comments</DrawerTitle>
-    </DrawerHeader>
-    {/* ... */}
+    <DrawerPanel framed={false} showHandle>
+      <DrawerHeader>
+        <DrawerTitle>Comments</DrawerTitle>
+      </DrawerHeader>
+      {/* ... */}
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>
 ```
@@ -437,7 +464,9 @@ No `direction` prop. Keep the drag handle; drop the frame for a clean sheet.
     <Button variant="PrimeStyle">Open half-screen</Button>
   </DrawerTrigger>
   <DrawerContent framed={false} wrapperClassName="h-full max-h-[97vh]">
-    {/* ... */}
+    <DrawerPanel framed={false} showHandle>
+      {/* ... */}
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>
 ```
@@ -452,26 +481,26 @@ A floating panel anchored to the right edge — the canonical home for create/ed
     <Button variant="PrimeStyle">Open right drawer</Button>
   </DrawerTrigger>
   <DrawerContent
-    showHandle={false}
     wrapperClassName="top-2 right-2 bottom-2 left-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
-    trayClassName="rounded-[16px]"
-    className="rounded-[10px]"
+    className="rounded-[16px]"
   >
-    <DrawerHeader>
-      <DrawerTitle>Filters</DrawerTitle>
-      <DrawerDescription>Status, owner, tags, priority…</DrawerDescription>
-    </DrawerHeader>
-    <div className="px-4 pb-4 space-y-3 flex-1 overflow-y-auto">
-      {/* ...filter rows... */}
-    </div>
-    <DrawerFooter>
-      <DrawerClose asChild>
-        <Button variant="PrimeStyle">Apply</Button>
-      </DrawerClose>
-      <DrawerClose asChild>
-        <Button variant="BorderStyle">Reset</Button>
-      </DrawerClose>
-    </DrawerFooter>
+    <DrawerPanel className="rounded-[10px]">
+      <DrawerHeader>
+        <DrawerTitle>Filters</DrawerTitle>
+        <DrawerDescription>Status, owner, tags, priority…</DrawerDescription>
+      </DrawerHeader>
+      <div className="px-4 pb-4 space-y-3 flex-1 overflow-y-auto">
+        {/* ...filter rows... */}
+      </div>
+      <DrawerFooter>
+        <DrawerClose asChild>
+          <Button variant="PrimeStyle">Apply</Button>
+        </DrawerClose>
+        <DrawerClose asChild>
+          <Button variant="BorderStyle">Reset</Button>
+        </DrawerClose>
+      </DrawerFooter>
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>
 ```
@@ -488,10 +517,8 @@ Mirror of the right recipe: `direction="left"`, anchor to the left edge, and if 
     <Button variant="PrimeStyle">Open left drawer</Button>
   </DrawerTrigger>
   <DrawerContent
-    showHandle={false}
     notchSide="right"
     wrapperClassName="top-2 left-2 bottom-2 right-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
-    className="rounded-tl-[16px] rounded-b-[16px]"
     notch={
       <DrawerNotch>
         <DrawerClose asChild>
@@ -504,13 +531,15 @@ Mirror of the right recipe: `direction="left"`, anchor to the left edge, and if 
       </DrawerNotch>
     }
   >
-    <DrawerHeader>
-      <DrawerHeaderTitle>
-        <DrawerBadge color="Purple">Menu</DrawerBadge>
-        <DrawerTitle>Navigation</DrawerTitle>
-      </DrawerHeaderTitle>
-    </DrawerHeader>
-    {/* ...nav items... */}
+    <DrawerPanel className="rounded-tl-[16px] rounded-b-[16px]">
+      <DrawerHeader>
+        <DrawerHeaderTitle>
+          <DrawerBadge color="Purple">Menu</DrawerBadge>
+          <DrawerTitle>Navigation</DrawerTitle>
+        </DrawerHeaderTitle>
+      </DrawerHeader>
+      {/* ...nav items... */}
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>
 ```
@@ -528,7 +557,9 @@ Anchor a bottom drawer to every edge via `wrapperClassName`.
     framed={false}
     wrapperClassName="inset-x-0 top-0 bottom-0 m-0 h-screen w-screen max-w-none"
   >
-    {/* immersive editor / media viewer */}
+    <DrawerPanel framed={false} showHandle>
+      {/* immersive editor / media viewer */}
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>
 ```
@@ -551,18 +582,37 @@ Wraps Vaul's `Drawer.Root` and defaults `shouldScaleBackground` to `true`. Accep
 
 ### `DrawerContent`
 
-The panel. This is where direction-specific styling is applied.
+The dark tray. It frames and positions, but paints nothing over its children — each child
+brings its own background. This is where direction-specific styling is applied.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `framed` | `boolean` | `true` | Show the dark "tray" frame (border + inset shadow) around the panel. Set `false` for clean bottom sheets. |
-| `showHandle` | `boolean` | `true` | Show the centered drag handle. Auto-hidden when a `notch` is present. Set `false` for side drawers. |
 | `notch` | `ReactNode` | — | A `DrawerNotch` tab rendered on the top edge. |
 | `notchSide` | `"left" \| "right"` | `"left"` | Which side the notch attaches to (and which corner stays square). Use `"right"` for left-anchored drawers. |
 | `wrapperClassName` | `string` | — | Classes on the outer positioned element — this is how you anchor/size the panel per direction. |
-| `trayClassName` | `string` | — | Classes on the dark tray frame (e.g. corner rounding). |
-| `className` | `string` | — | Classes on the inner light content surface. |
+| `className` | `string` | — | Classes on the **dark tray**. Add a `gap-*` here when the tray holds more than one child. |
+| `trayClassName` | `string` | — | **Deprecated** — an alias for `className` (merged last, so it still wins). |
 | `...props` | Vaul `Content` props | — | Forwarded to `Drawer.Content`. |
+
+### `DrawerPanel`
+
+The light `#F0F0F0` content surface. The tray paints nothing over its children, so a drawer
+can hold a panel **plus something else beside it** — a [FormSummary](./form-summary.md), say —
+with each bringing its own background.
+
+```tsx
+<DrawerContent className="gap-[6px]">
+  <DrawerPanel>…form…</DrawerPanel>
+  <FormSummary … />          {/* dark, sits beside the panel */}
+</DrawerContent>
+```
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `framed` | `boolean` | `true` | Panel border + inset shadow that pairs with the tray's frame. Match the tray's `framed`. |
+| `showHandle` | `boolean` | `false` | Show the centered drag handle. Turn on for bottom sheets; leave off when there's a `notch`. |
+| `className` | `string` | — | Classes on the surface (e.g. corner rounding). |
 
 ### Sub-components
 
@@ -570,6 +620,7 @@ The panel. This is where direction-specific styling is applied.
 |---|---|
 | `DrawerTrigger` | Opens the drawer. Use `asChild` to wrap your own button. |
 | `DrawerClose` | Closes the drawer. Use `asChild` to wrap any element. |
+| `DrawerPanel` | The light content surface. Wrap your body in it — see above. |
 | `DrawerNested` | A nested/stacked drawer. Must be rendered inside an open `DrawerContent`. |
 | `DrawerHeader` | Header row (space-between layout) holding title + actions. |
 | `DrawerHeaderTitle` | Dark rounded pill that groups a `DrawerBadge` + `DrawerTitle`. |

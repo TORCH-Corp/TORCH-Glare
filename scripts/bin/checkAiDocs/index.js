@@ -103,6 +103,11 @@ const COVERAGE_ALLOWLIST = {
         "kanban-view",
         "table-view",
         "tree-view",
+        // FormBuilder + FormRenderer ship as folder components (components/FormBuilder/,
+        // components/FormRenderer/), which the flat registry omits by design — installed
+        // via the CLI's recursive folder copy, exactly like DataViews/TreeFolder.
+        "form-builder",
+        "form-renderer",
     ]),
 };
 

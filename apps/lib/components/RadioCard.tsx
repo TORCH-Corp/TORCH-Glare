@@ -20,6 +20,8 @@ export const RadioCard = forwardRef<HTMLInputElement, Props>(
         data-theme={theme}
         htmlFor={id}
         as="label"
+        // The whole card is the radio's label — an interactive target, so it keeps the hover.
+        variant="clickable"
         className={cn(
           "relative [&>button]:data-[state=checked]:!border-none",
           '[&:has(button[data-state="checked"])]:border-border-presentation-state-focus',

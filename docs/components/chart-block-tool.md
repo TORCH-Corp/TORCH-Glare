@@ -20,15 +20,16 @@ TORCH Glare is a copy-in library: the CLI copies this module's source into your 
 
 ```bash
 npx torch-glare@latest init
-npx torch-glare@latest add ChartBlockTool
+npx torch-glare@latest add TextEditor
 ```
 
+`ChartBlockTool` ships as part of the `TextEditor` folder, so `add TextEditor` copies it in.
 It depends on the `chart.js` npm package (installed automatically by the CLI).
 
 ## Import
 
 ```typescript
-import ChartBlockTool, { ChartBlockData } from "@/components/ChartBlockTool";
+import { ChartBlockTool, type ChartBlockData } from "@/components/TextEditor";
 ```
 
 ## Quick Examples
@@ -37,7 +38,7 @@ import ChartBlockTool, { ChartBlockData } from "@/components/ChartBlockTool";
 
 ```typescript
 import EditorJS from "@editorjs/editorjs";
-import ChartBlockTool from "@/components/ChartBlockTool";
+import { ChartBlockTool } from "@/components/TextEditor";
 
 const editor = new EditorJS({
   holder: "editor",
@@ -56,7 +57,7 @@ editors. The block persists as `ChartBlockData` in the editor's saved output.
 ### The saved data shape
 
 ```typescript
-import { ChartBlockData } from "@/components/ChartBlockTool";
+import type { ChartBlockData } from "@/components/TextEditor";
 
 const block: ChartBlockData = {
   chartType: "bar",

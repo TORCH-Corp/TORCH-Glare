@@ -875,10 +875,16 @@ describe('AttachmentImagePreview', () => {
 
 ### Default Styling
 
-- Drop Zone: 200px min-width, 65px height, dashed border
-- Preview: 180px max-width, 65px height, rounded corners
-- Active State: Background and border color change
-- Hover: Expand button overlay with icon
+Matches the *Attachment-Field-1.0 / Pic-Container-1.0* design:
+
+- **Field box** (`ImageAttachment`): a `#f9f9f9` (`background-presentation-form-field-primary`)
+  rounded container holding an optional preview and the drop zone, `gap-[10px]`.
+- **Drop zone**: fills the box (`flex-1`), 65px tall, transparent with a dashed
+  `border-presentation-action-borderstyle` border; drag-active tints it gray.
+- **Preview thumbnail** (`ExpandableImage`): a fixed **65×65** square, `object-cover`, rounded.
+- **Placeholder** (no image): ocean fill (`badge-ocean-subtle`) + dashed `blue-purple-300`
+  border + paperclip icon; on hover it goes gray (`badge-gray-subtle` / `badge-gray`).
+- **Hover (has image)**: a `black/50` overlay with a fullscreen icon + the `expandLabel`.
 
 ## Best Practices
 

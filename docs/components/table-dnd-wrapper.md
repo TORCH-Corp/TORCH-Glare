@@ -27,13 +27,15 @@ TORCH Glare is a copy-in library: the CLI copies this module's source into your 
 
 ```bash
 npx torch-glare@latest init
-npx torch-glare@latest add TableDnDWrapper
+npx torch-glare@latest add TextEditor
 ```
+
+`createTableDnDClass` ships as part of the `TextEditor` folder, so `add TextEditor` copies it in.
 
 ## Import
 
 ```typescript
-import createTableDnDClass from "@/components/TableDnDWrapper";
+import { createTableDnDClass } from "@/components/TextEditor";
 ```
 
 ## Quick Examples
@@ -43,7 +45,7 @@ import createTableDnDClass from "@/components/TableDnDWrapper";
 ```typescript
 import EditorJS from "@editorjs/editorjs";
 import Table from "@editorjs/table";
-import createTableDnDClass from "@/components/TableDnDWrapper";
+import { createTableDnDClass } from "@/components/TextEditor";
 
 // Wrap the original table tool to add row/column drag-and-drop.
 const TableWithDnD = createTableDnDClass(Table);

@@ -5,6 +5,7 @@ import { Drawer as DrawerPrimitive } from "vaul";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../utils/cn";
+import { Button } from "./Button";
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -47,8 +48,57 @@ interface DrawerContentProps extends React.ComponentPropsWithoutRef<
    */
   framed?: boolean;
   wrapperClassName?: string;
+  /**
+   * @deprecated Use `className` — it now targets the tray directly. Kept as an
+   * alias (merged last, so it still wins) for the pre-`DrawerPanel` API.
+   */
   trayClassName?: string;
 }
+
+interface DrawerPanelProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Panel border + inset shadow that pairs with the tray's frame. Default `true`. */
+  framed?: boolean;
+  /** Show the drag handle (bottom sheets). Default `false`. */
+  showHandle?: boolean;
+}
+
+/**
+ * The light `#F0F0F0` content surface inside a `DrawerContent`.
+ *
+ * It is an ordinary child, not something the tray paints — so a drawer can hold a panel
+ * and something else beside it (e.g. a `FormSummary`), each bringing its own background.
+ * Give the tray a `gap-*` to space them.
+ *
+ * ```tsx
+ * <DrawerContent className="gap-[6px]">
+ *   <DrawerPanel>…form…</DrawerPanel>
+ *   <FormSummary … />
+ * </DrawerContent>
+ * ```
+ */
+const DrawerPanel = React.forwardRef<HTMLDivElement, DrawerPanelProps>(
+  ({ className, framed = true, showHandle = false, children, ...props }, ref) => (
+    <div
+      ref={ref}
+      // The content surface is always light (#F0F0F0) regardless of the page
+      // theme, so pin a light theme here. This makes theme-aware content tokens
+      // (DrawerTitle/Description and any consumer content) resolve to their
+      // dark-on-light values instead of following a dark page theme (which
+      // would render white-on-light = invisible).
+      data-theme="light"
+      className={cn(
+        "flex flex-1 gap-2 rounded-t-[16px] p-1 bg-[#F0F0F0] min-h-0",
+        framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
+        className,
+      )}
+      {...props}
+    >
+      {showHandle && <div className="mx-auto h-2 w-[100px] rounded-full bg-[#D4D4D4]" />}
+      {children}
+    </div>
+  ),
+);
+DrawerPanel.displayName = "DrawerPanel";
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
@@ -58,7 +108,6 @@ const DrawerContent = React.forwardRef<
     {
       className,
       children,
-      showHandle = true,
       notch,
       notchSide = "left",
       framed: framedProp,
@@ -89,9 +138,12 @@ const DrawerContent = React.forwardRef<
                 : notch}
             </div>
           )}
+          {/* The tray. It frames and positions, but paints nothing over its children —
+              each child brings its own background (see `DrawerPanel`). Supply a `gap-*`
+              via `className` when the tray holds more than one. */}
           <div
             className={cn(
-              "flex flex-1 flex-col min-h-0",
+              "flex flex-1 min-h-0",
               framed
                 ? "p-1.5 bg-black-400 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]"
                 : "p-0",
@@ -102,27 +154,11 @@ const DrawerContent = React.forwardRef<
                 : framed
                   ? "rounded-t-[22px]"
                   : "",
+              className,
               trayClassName,
             )}
           >
-            <div
-              // The content surface is always light (#F0F0F0) regardless of the
-              // page theme, so pin a light theme here. This makes theme-aware
-              // content tokens (DrawerTitle/Description and any consumer content)
-              // resolve to their dark-on-light values instead of following a dark
-              // page theme (which would render white-on-light = invisible).
-              data-theme="light"
-              className={cn(
-                "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1.5 bg-[#F0F0F0] min-h-0",
-                framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
-                className,
-              )}
-            >
-              {showHandle && !notch && (
-                <div className="mx-auto h-2 w-[100px] rounded-full bg-[#D4D4D4]" />
-              )}
-              {children}
-            </div>
+            {children}
           </div>
         </DrawerPrimitive.Content>
       </DrawerPortal>
@@ -233,18 +269,23 @@ const DrawerNotchClose = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, children, ...props }, ref) => (
-  <button
+  <Button
     ref={ref}
     type="button"
     aria-label="Close"
+    buttonType="icon"
+    size="S"
+    variant="PrimeContStyle"
     className={cn(
-      "inline-flex h-[22px] w-[22px] items-center justify-center rounded-[13px] bg-white/15 text-content-presentation-global-primary transition-colors hover:bg-white/25",
+      // Glare Button (icon, S = 22×22) with the notch's own circular radius + translucent look
+      // (S is otherwise rounded-[4px]).
+      "!rounded-[13px] bg-white/15 text-white hover:bg-white/25 hover:text-white",
       className,
     )}
     {...props}
   >
-    {children ?? <i className="ri-close-fill text-[14px]" />}
-  </button>
+    {children ?? <i className="ri-close-fill !text-[14px]" />}
+  </Button>
 ));
 DrawerNotchClose.displayName = "DrawerNotchClose";
 
@@ -346,6 +387,7 @@ export {
   DrawerTrigger,
   DrawerClose,
   DrawerContent,
+  DrawerPanel,
   DrawerHeader,
   DrawerHeaderTitle,
   DrawerHeaderActions,

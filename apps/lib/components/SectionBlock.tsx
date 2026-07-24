@@ -27,6 +27,8 @@ export interface SectionBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   color?: SectionColor;
   title?: ReactNode;
   icon?: ReactNode;
+  /** Right-aligned content on the title row — e.g. action buttons. */
+  action?: ReactNode;
   containerClassName?: string;
   headerClassName?: string;
   bodyClassName?: string;
@@ -38,6 +40,7 @@ export const SectionBlock = forwardRef<HTMLDivElement, SectionBlockProps>(
       children,
       color,
       title,
+      action,
       className,
       containerClassName,
       headerClassName,
@@ -57,14 +60,19 @@ export const SectionBlock = forwardRef<HTMLDivElement, SectionBlockProps>(
         )}
         {...props}
       >
-        {title && (
-          <div className={cn("flex px-[6px] flex-col gap-[10px]", headerClassName)}>
-            <div className={cn(titleBadge({ color }))}>
-              <span className="flex items-center gap-1.5">
-                {icon}
-                {title}
-              </span>
-            </div>
+        {(title || action) && (
+          <div className={cn("flex px-[6px] items-center justify-between gap-3", headerClassName)}>
+            {title ? (
+              <div className={cn(titleBadge({ color }))}>
+                <span className="flex items-center gap-1.5">
+                  {icon}
+                  {title}
+                </span>
+              </div>
+            ) : (
+              <span />
+            )}
+            {action && <div className="flex shrink-0 items-center gap-2">{action}</div>}
           </div>
         )}
         <div className={cn("flex px-[42px] flex-col gap-[2px] px-[42px]", bodyClassName)}>

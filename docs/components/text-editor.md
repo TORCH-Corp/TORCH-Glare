@@ -260,7 +260,25 @@ function MarkdownEditor() {
 | `tools` | `Record<string, any>` | Default 18+ tools | Override the Editor.js tools configuration |
 | `minHeight` | `number` | - | Custom min-height in pixels (overrides size) |
 | `disabled` | `boolean` | `false` | Disables interaction with reduced opacity |
+| `toolbar` | `boolean` | `true` | Show the fixed formatting toolbar. Auto-hidden when `readOnly`/`disabled`. |
 | `className` | `string` | - | Additional CSS classes |
+
+### Formatting toolbar
+
+A fixed, sticky toolbar sits at the top of the editor (shown by default; pass `toolbar={false}`
+to hide it, and it is automatically hidden in `readOnly`/`disabled` editors). It drives the
+underlying Editor.js instance and offers:
+
+- **History** — undo / redo (via `editorjs-undo`; also bound to `Ctrl/⌘+Z` / `Ctrl/⌘+Y`).
+- **Block type** — a dropdown to switch between Normal text and Heading 1–3 (`blocks.convert`).
+- **Alignment** — left / center / right (a block tune persisted on each block).
+- **Text color** — a swatch palette.
+- **Inline** — bold, italic, underline, strikethrough, clear formatting.
+- **Lists** — bullet and ordered.
+- **Insert image** — from a local file (inserted as an `image` block).
+
+Strikethrough and color are backed by small custom inline tools whose `sanitize` allowlists let
+that markup survive `save()`; alignment persists as a block tune.
 
 ### Ref Methods (TextEditorRef)
 

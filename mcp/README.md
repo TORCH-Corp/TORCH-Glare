@@ -4,7 +4,7 @@ An [MCP](https://modelcontextprotocol.io) server that gives AI assistants full a
 **TORCH Glare** component library — component docs, API references, code examples, design-system
 info, **install commands + dependency graphs**, and the **actual source** the CLI copies.
 
-TORCH Glare is a *copy-in* library (like shadcn/ui): the `torch-glare` CLI copies component source
+TORCH Glare is a _copy-in_ library (like shadcn/ui): the `torch-glare` CLI copies component source
 directly into your project. This server lets an assistant go from "which component?" all the way to
 "here's how to install it and here's the code."
 
@@ -27,18 +27,19 @@ Or add it manually:
 
 ## Tools
 
-| Tool | Purpose |
-|---|---|
-| `list-components` | List all components, optionally filtered by category (`buttons`, `forms`, `layout`, `dataDisplay`, `overlays`, `dateTime`, `feedback`, `labels`, `navigation`, `advanced`). |
-| `search-components` | Scored search by name, description, or tags. |
-| `get-component-docs` | Full markdown docs for one component. |
-| `get-component-api` | Just the props table + TypeScript types. |
-| `get-usage-examples` | Code examples, optionally filtered by keyword. |
-| `get-design-system-info` | Theming, typography, colors, plugins, hooks, providers, utilities, installation. |
-| `get-install-info` | The `torch-glare` install command, import statement (from the file's real exports), npm deps, and the full transitive set of internal deps the CLI copies. |
-| `get-component-source` | The exact `.tsx`/`.ts` source the CLI copies into a project. |
-| `get-guide` | A tutorial or how-to guide by name (call with no name to list them). |
-| `get-related-components` | What an item copies in and what other items compose it. |
+| Tool                     | Purpose                                                                                                                                                                                                               |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `list-components`        | List all components, optionally filtered by category (`buttons`, `forms`, `layout`, `dataDisplay`, `overlays`, `dateTime`, `feedback`, `labels`, `navigation`, `advanced`).                                           |
+| `search-components`      | Scored search by name, description, or tags.                                                                                                                                                                          |
+| `get-component-docs`     | Full markdown docs for one component.                                                                                                                                                                                 |
+| `get-component-api`      | Just the props table + TypeScript types.                                                                                                                                                                              |
+| `get-usage-examples`     | Code examples, optionally filtered by keyword.                                                                                                                                                                        |
+| `get-design-system-info` | Theming, typography, colors, plugins, hooks, providers, utilities, installation.                                                                                                                                      |
+| `get-install-info`       | The `torch-glare` install command, import statement (from the file's real exports), npm deps, and the full transitive set of internal deps the CLI copies.                                                            |
+| `get-component-source`   | The exact `.tsx`/`.ts` source the CLI copies into a project.                                                                                                                                                          |
+| `get-guide`              | A tutorial or how-to guide by name (call with no name to list them).                                                                                                                                                  |
+| `create-form`            | Turn a list of fields into a form: the right `FormBuilder.*` per field, install commands, and a complete `FormRenderer`-based starting point (optionally a stepper, a drawer, and a live `FormSummary` totals panel). |
+| `get-related-components` | What an item copies in and what other items compose it.                                                                                                                                                               |
 
 `list-components` / `search-components` also cover installable hooks, utils, layouts, and providers.
 `get-component-docs` returns a compact overview + table of contents by default — pass `section`

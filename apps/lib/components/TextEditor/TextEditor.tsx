@@ -10,10 +10,10 @@ import React, {
   useState,
 } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../utils/cn";
-import { Themes } from "../utils/types";
+import { cn } from "../../utils/cn";
+import { Themes } from "../../utils/types";
 import EditorJS, { type OutputData } from "@editorjs/editorjs";
-import { isMarkdown, parseMarkdownToBlocks } from "../utils/markdownParser";
+import { isMarkdown, parseMarkdownToBlocks } from "./markdownParser";
 
 // ─── Tool Imports ────────────────────────────────────────────────────────────
 import Header from "@editorjs/header";
@@ -34,7 +34,14 @@ import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
 import Underline from "@editorjs/underline";
 import TextVariantTune from "@editorjs/text-variant-tune";
+// `editorjs-undo` touches DOM globals at module-eval, so it is imported dynamically
+// (browser-only) in `onReady`; keep only the type here.
+import type Undo from "editorjs-undo";
 import ChartBlockTool from "./ChartBlockTool";
+import StrikethroughInlineTool from "./editor-tools/StrikethroughInlineTool";
+import ColorInlineTool from "./editor-tools/ColorInlineTool";
+import AlignmentTune from "./editor-tools/AlignmentTune";
+import { TextEditorToolbar } from "./TextEditorToolbar";
 
 // ─── RTL Detection ───────────────────────────────────────────────────────────
 const RTL_REGEX = /[\u0591-\u07FF\u200F\u202B\u202E\uFB1D-\uFDFD\uFE70-\uFEFC]/;
@@ -172,11 +179,21 @@ const getDefaultTools = (): Record<string, any> => ({
   marker: { class: Marker, shortcut: "CMD+SHIFT+M" },
   inlineCode: { class: InlineCode, shortcut: "CMD+SHIFT+I" },
   underline: { class: Underline },
+  // Registered so their `sanitize` unions into every block's save config (strike/color
+  // markup persists) and they appear in the inline toolbar; the fixed toolbar drives them too.
+  strikethrough: { class: StrikethroughInlineTool, shortcut: "CMD+SHIFT+X" },
+  color: { class: ColorInlineTool },
   textVariant: { class: TextVariantTune },
+  // Per-block text alignment; wired into `tunes` below so every block gets it.
+  align: { class: AlignmentTune },
 });
 
 // ─── Auto-direction CSS ──────────────────────────────────────────────────────
 const AUTO_DIR_STYLES = `
+  /* Block alignment (AlignmentTune sets data-align on the block content wrapper). */
+  .torch-text-editor .cdx-align-wrap[data-align="center"] { text-align: center; }
+  .torch-text-editor .cdx-align-wrap[data-align="right"] { text-align: right; }
+  .torch-text-editor .cdx-align-wrap[data-align="left"] { text-align: left; }
   .torch-text-editor [contenteditable="true"][dir="rtl"] {
     unicode-bidi: plaintext;
   }
@@ -691,7 +708,8 @@ const textEditorStyles = cva(
     "relative w-full rounded-[6px]",
     "border-0 transition-all duration-200 ease-in-out",
     "[&_.codex-editor]:min-h-[inherit]",
-    "[&_.codex-editor__redactor]:min-h-[inherit] [&_.codex-editor__redactor]:pb-[100px]",
+    // Content padding lives on the redactor (not the container) so the toolbar stays full-bleed.
+    "[&_.codex-editor__redactor]:min-h-[inherit] [&_.codex-editor__redactor]:px-[16px] [&_.codex-editor__redactor]:pt-[12px] [&_.codex-editor__redactor]:pb-[100px]",
     "[&_.ce-paragraph]:typography-body-medium-regular",
   ],
   {
@@ -727,11 +745,13 @@ const textEditorStyles = cva(
           "[&_.ce-delimiter]:border-border-presentation-action-primary",
         ],
       },
+      // No padding on the container — the fixed toolbar must go edge-to-edge. Content
+      // padding is applied to the EditorJS redactor below instead.
       size: {
-        S: "min-h-[200px] p-2",
-        M: "min-h-[300px] p-3",
-        L: "min-h-[400px] p-4",
-        XL: "min-h-[500px] p-5",
+        S: "min-h-[200px]",
+        M: "min-h-[300px]",
+        L: "min-h-[400px]",
+        XL: "min-h-[500px]",
       },
       disabled: {
         true: "cursor-not-allowed opacity-60 pointer-events-none",
@@ -764,6 +784,8 @@ interface TextEditorProps
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tools?: Record<string, any>;
   minHeight?: number;
+  /** Show the fixed formatting toolbar (default `true`; hidden when `readOnly`/`disabled`). */
+  toolbar?: boolean;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -783,11 +805,14 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       autofocus = false,
       tools,
       minHeight,
+      toolbar = true,
       ...props
     },
     ref,
   ) => {
     const editorRef = useRef<EditorJS | null>(null);
+    const undoRef = useRef<Undo | null>(null);
+    const [toolbarReady, setToolbarReady] = useState(false);
     const holderRef = useRef<HTMLDivElement>(null);
     const observerRef = useRef<MutationObserver | null>(null);
     const [holderId] = useState(() => `torch-editor-${Math.random().toString(36).substring(2, 9)}`);
@@ -981,10 +1006,13 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       if (isInitializing.current || editorRef.current) return;
       isInitializing.current = true;
 
+      // Only enable the `align` tune when using the default tools (a caller-supplied `tools`
+      // map may not register it).
+      const usingDefaultTools = !toolsRef.current;
       const editor = new EditorJS({
         holder: holderId,
         tools: toolsRef.current ?? getDefaultTools(),
-        tunes: ["textVariant"],
+        tunes: usingDefaultTools ? ["textVariant", "align"] : ["textVariant"],
         data: initialDataRef.current || undefined,
         readOnly: readOnlyRef.current,
         placeholder: placeholderRef.current,
@@ -998,6 +1026,21 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
             setupAutoDirection(holderEl);
             setupMarkdownPaste(holderEl);
           }
+
+          // History (undo/redo) for the fixed toolbar + Ctrl+Z/Y. Not for readOnly.
+          // Dynamically imported because the package evaluates DOM globals at module load.
+          if (!readOnlyRef.current) {
+            import("editorjs-undo")
+              .then(({ default: UndoCls }) => {
+                if (!editorRef.current) return;
+                undoRef.current = new UndoCls({ editor: editorRef.current });
+                if (initialDataRef.current) undoRef.current.initialize(initialDataRef.current);
+              })
+              .catch(() => {
+                undoRef.current = null;
+              });
+          }
+          setToolbarReady(true);
 
           onReadyRef.current?.();
         },
@@ -1048,6 +1091,8 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
           editorRef.current.destroy();
           editorRef.current = null;
         }
+        undoRef.current = null;
+        setToolbarReady(false);
         isInitializing.current = false;
       };
     }, [initEditor]);
@@ -1098,6 +1143,15 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
           style={minHeight ? { minHeight: `${minHeight}px` } : undefined}
           {...props}
         >
+          {toolbar && !readOnly && !disabled && (
+            <TextEditorToolbar
+              editorRef={editorRef}
+              undoRef={undoRef}
+              holderRef={holderRef}
+              ready={toolbarReady}
+              theme={theme}
+            />
+          )}
           <div id={holderId} />
         </div>
       </>

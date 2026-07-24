@@ -6,6 +6,7 @@ import {
   DrawerNested,
   DrawerTrigger,
   DrawerContent,
+  DrawerPanel,
   DrawerHeader,
   DrawerHeaderTitle,
   DrawerHeaderActions,
@@ -40,8 +41,8 @@ export default function DrawerPage() {
             Drawer
           </h1>
           <p className="typography-body-medium-regular text-content-presentation-action-light-secondary">
-            Bottom-sheet drawer built on Vaul. Supports drag-to-dismiss and
-            nested drawers that stack with an iOS-style scale-back effect.
+            Bottom-sheet drawer built on Vaul. Supports drag-to-dismiss and nested drawers that
+            stack with an iOS-style scale-back effect.
           </p>
         </header>
 
@@ -100,9 +101,7 @@ export default function DrawerPage() {
                     </DrawerClose>
                     <DrawerNotchDivider />
                     <DrawerNotchApp
-                      icon={
-                        <i className="ri-customer-service-2-fill text-white text-[14px]" />
-                      }
+                      icon={<i className="ri-customer-service-2-fill text-white text-[14px]" />}
                       name="Sales & Services App"
                     />
                     <DrawerNotchPill color="Blue">
@@ -132,26 +131,27 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Open drawer</Button>
             </DrawerTrigger>
             <DrawerContent framed={false}>
-              <DrawerHeader>
-                <DrawerTitle>Basic drawer</DrawerTitle>
-                <DrawerDescription>
-                  This is a single-level drawer. Drag the handle down or press
-                  Escape to close.
-                </DrawerDescription>
-              </DrawerHeader>
-              <div className="px-4 pb-4">
-                <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
-                  Put any content here — forms, lists, settings.
-                </p>
-              </div>
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="PrimeStyle">Done</Button>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Button variant="BorderStyle">Cancel</Button>
-                </DrawerClose>
-              </DrawerFooter>
+              <DrawerPanel framed={false} showHandle>
+                <DrawerHeader>
+                  <DrawerTitle>Basic drawer</DrawerTitle>
+                  <DrawerDescription>
+                    This is a single-level drawer. Drag the handle down or press Escape to close.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="px-4 pb-4">
+                  <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
+                    Put any content here — forms, lists, settings.
+                  </p>
+                </div>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="PrimeStyle">Done</Button>
+                  </DrawerClose>
+                  <DrawerClose asChild>
+                    <Button variant="BorderStyle">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerPanel>
             </DrawerContent>
           </Drawer>
         </section>
@@ -168,8 +168,8 @@ export default function DrawerPage() {
             <code className="px-1 rounded bg-background-presentation-action-disabled text-content-presentation-global-primary">
               DrawerNested
             </code>{" "}
-            inside an open drawer. The parent scales down and slides back, the
-            child slides up on top.
+            inside an open drawer. The parent scales down and slides back, the child slides up on
+            top.
           </p>
 
           <Drawer>
@@ -177,91 +177,88 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Open settings</Button>
             </DrawerTrigger>
             <DrawerContent framed={false}>
-              <DrawerHeader>
-                <DrawerTitle>Settings</DrawerTitle>
-                <DrawerDescription>
-                  Pick a sub-section to dive into.
-                </DrawerDescription>
-              </DrawerHeader>
+              <DrawerPanel framed={false} showHandle>
+                <DrawerHeader>
+                  <DrawerTitle>Settings</DrawerTitle>
+                  <DrawerDescription>Pick a sub-section to dive into.</DrawerDescription>
+                </DrawerHeader>
 
-              <div className="px-4 pb-4 space-y-2">
-                <DrawerNested>
-                  <DrawerTrigger asChild>
-                    <Button variant="BorderStyle" className="w-full justify-between">
-                      Account
-                      <i className="ri-arrow-right-s-line" />
-                    </Button>
-                  </DrawerTrigger>
-                  <DrawerContent framed={false}>
-                    <DrawerHeader>
-                      <DrawerTitle>Account</DrawerTitle>
-                      <DrawerDescription>
-                        Update your profile details. Drag down to go back to
-                        Settings.
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <div className="px-4 pb-4 space-y-3">
-                      <InputField defaultValue="Ali Nameer" placeholder="Display name" />
-                      <InputField
-                        defaultValue="accounts@torchcorp.com"
-                        placeholder="Email"
-                        type="email"
-                      />
-                    </div>
-                    <DrawerFooter>
-                      <DrawerClose asChild>
-                        <Button variant="PrimeStyle">Save</Button>
-                      </DrawerClose>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </DrawerNested>
-
-                <DrawerNested>
-                  <DrawerTrigger asChild>
-                    <Button variant="BorderStyle" className="w-full justify-between">
-                      Notifications
-                      <i className="ri-arrow-right-s-line" />
-                    </Button>
-                  </DrawerTrigger>
-                  <DrawerContent framed={false}>
-                    <DrawerHeader>
-                      <DrawerTitle>Notifications</DrawerTitle>
-                      <DrawerDescription>
-                        Choose what you want to hear about.
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <div className="px-4 pb-4 space-y-2">
-                      {[
-                        { id: "mentions", label: "Mentions" },
-                        { id: "dms", label: "Direct messages" },
-                        { id: "digest", label: "Weekly digest" },
-                      ].map((opt) => (
-                        <div
-                          key={opt.id}
-                          className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
-                        >
-                          <LabeledCheckBox
-                            id={opt.id}
-                            label={opt.label}
-                            defaultChecked
+                <div className="px-4 pb-4 space-y-2">
+                  <DrawerNested>
+                    <DrawerTrigger asChild>
+                      <Button variant="BorderStyle" className="w-full justify-between">
+                        Account
+                        <i className="ri-arrow-right-s-line" />
+                      </Button>
+                    </DrawerTrigger>
+                    <DrawerContent framed={false}>
+                      <DrawerPanel framed={false} showHandle>
+                        <DrawerHeader>
+                          <DrawerTitle>Account</DrawerTitle>
+                          <DrawerDescription>
+                            Update your profile details. Drag down to go back to Settings.
+                          </DrawerDescription>
+                        </DrawerHeader>
+                        <div className="px-4 pb-4 space-y-3">
+                          <InputField defaultValue="Ali Nameer" placeholder="Display name" />
+                          <InputField
+                            defaultValue="accounts@torchcorp.com"
+                            placeholder="Email"
+                            type="email"
                           />
                         </div>
-                      ))}
-                    </div>
-                    <DrawerFooter>
-                      <DrawerClose asChild>
-                        <Button variant="PrimeStyle">Done</Button>
-                      </DrawerClose>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </DrawerNested>
-              </div>
+                        <DrawerFooter>
+                          <DrawerClose asChild>
+                            <Button variant="PrimeStyle">Save</Button>
+                          </DrawerClose>
+                        </DrawerFooter>
+                      </DrawerPanel>
+                    </DrawerContent>
+                  </DrawerNested>
 
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="BorderStyle">Close settings</Button>
-                </DrawerClose>
-              </DrawerFooter>
+                  <DrawerNested>
+                    <DrawerTrigger asChild>
+                      <Button variant="BorderStyle" className="w-full justify-between">
+                        Notifications
+                        <i className="ri-arrow-right-s-line" />
+                      </Button>
+                    </DrawerTrigger>
+                    <DrawerContent framed={false}>
+                      <DrawerPanel framed={false} showHandle>
+                        <DrawerHeader>
+                          <DrawerTitle>Notifications</DrawerTitle>
+                          <DrawerDescription>Choose what you want to hear about.</DrawerDescription>
+                        </DrawerHeader>
+                        <div className="px-4 pb-4 space-y-2">
+                          {[
+                            { id: "mentions", label: "Mentions" },
+                            { id: "dms", label: "Direct messages" },
+                            { id: "digest", label: "Weekly digest" },
+                          ].map((opt) => (
+                            <div
+                              key={opt.id}
+                              className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
+                            >
+                              <LabeledCheckBox id={opt.id} label={opt.label} defaultChecked />
+                            </div>
+                          ))}
+                        </div>
+                        <DrawerFooter>
+                          <DrawerClose asChild>
+                            <Button variant="PrimeStyle">Done</Button>
+                          </DrawerClose>
+                        </DrawerFooter>
+                      </DrawerPanel>
+                    </DrawerContent>
+                  </DrawerNested>
+                </div>
+
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="BorderStyle">Close settings</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerPanel>
             </DrawerContent>
           </Drawer>
         </section>
@@ -274,8 +271,8 @@ export default function DrawerPage() {
             Nested — Three Levels (Checkout)
           </h2>
           <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
-            A real-world flow: cart → shipping → payment. Each step pushes a
-            new drawer onto the stack and sends the previous one back.
+            A real-world flow: cart → shipping → payment. Each step pushes a new drawer onto the
+            stack and sends the previous one back.
           </p>
 
           <Drawer>
@@ -283,118 +280,114 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Checkout</Button>
             </DrawerTrigger>
             <DrawerContent framed={false}>
-              <DrawerHeader>
-                <DrawerTitle>Your cart</DrawerTitle>
-                <DrawerDescription>1 item — $129.00</DrawerDescription>
-              </DrawerHeader>
+              <DrawerPanel framed={false} showHandle>
+                <DrawerHeader>
+                  <DrawerTitle>Your cart</DrawerTitle>
+                  <DrawerDescription>1 item — $129.00</DrawerDescription>
+                </DrawerHeader>
 
-              <div className="px-4 pb-4">
-                <div className="flex items-center justify-between p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base">
-                  <div>
-                    <p className="typography-body-medium-medium text-content-presentation-global-primary">
-                      TORCH Glare Pro
-                    </p>
-                    <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
-                      Annual license
-                    </p>
-                  </div>
-                  <span className="typography-body-medium-medium text-content-presentation-global-primary">
-                    $129.00
-                  </span>
-                </div>
-              </div>
-
-              <DrawerFooter>
-                <DrawerNested>
-                  <DrawerTrigger asChild>
-                    <Button variant="PrimeStyle">Continue to shipping</Button>
-                  </DrawerTrigger>
-                  <DrawerContent framed={false}>
-                    <DrawerHeader>
-                      <DrawerTitle>Shipping</DrawerTitle>
-                      <DrawerDescription>
-                        Currently selected: <strong>{shippingMethod}</strong>
-                      </DrawerDescription>
-                    </DrawerHeader>
-
-                    <div className="px-4 pb-4">
-                      <RadioGroup
-                        value={shippingMethod}
-                        onValueChange={setShippingMethod}
-                      >
-                        {[
-                          { id: "standard", label: "Standard — 5-7 days", price: "Free" },
-                          { id: "express", label: "Express — 2 days", price: "$12" },
-                          { id: "overnight", label: "Overnight", price: "$28" },
-                        ].map((opt) => (
-                          <div
-                            key={opt.id}
-                            className="flex items-center justify-between p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
-                          >
-                            <LabeledRadio
-                              id={opt.id}
-                              value={opt.id}
-                              label={opt.label}
-                            />
-                            <span className="typography-body-small-medium text-content-presentation-action-light-secondary">
-                              {opt.price}
-                            </span>
-                          </div>
-                        ))}
-                      </RadioGroup>
+                <div className="px-4 pb-4">
+                  <div className="flex items-center justify-between p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base">
+                    <div>
+                      <p className="typography-body-medium-medium text-content-presentation-global-primary">
+                        TORCH Glare Pro
+                      </p>
+                      <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
+                        Annual license
+                      </p>
                     </div>
+                    <span className="typography-body-medium-medium text-content-presentation-global-primary">
+                      $129.00
+                    </span>
+                  </div>
+                </div>
 
-                    <DrawerFooter>
-                      <DrawerNested>
-                        <DrawerTrigger asChild>
-                          <Button variant="PrimeStyle">Continue to payment</Button>
-                        </DrawerTrigger>
-                        <DrawerContent framed={false}>
-                          <DrawerHeader>
-                            <DrawerTitle>Payment</DrawerTitle>
-                            <DrawerDescription>
-                              Final step. Currently selected:{" "}
-                              <strong>{paymentMethod}</strong>
-                            </DrawerDescription>
-                          </DrawerHeader>
+                <DrawerFooter>
+                  <DrawerNested>
+                    <DrawerTrigger asChild>
+                      <Button variant="PrimeStyle">Continue to shipping</Button>
+                    </DrawerTrigger>
+                    <DrawerContent framed={false}>
+                      <DrawerPanel framed={false} showHandle>
+                        <DrawerHeader>
+                          <DrawerTitle>Shipping</DrawerTitle>
+                          <DrawerDescription>
+                            Currently selected: <strong>{shippingMethod}</strong>
+                          </DrawerDescription>
+                        </DrawerHeader>
 
-                          <div className="px-4 pb-4">
-                            <RadioGroup
-                              value={paymentMethod}
-                              onValueChange={setPaymentMethod}
-                            >
-                              {[
-                                { id: "card", label: "Credit card" },
-                                { id: "paypal", label: "PayPal" },
-                                { id: "apple", label: "Apple Pay" },
-                              ].map((opt) => (
-                                <div
-                                  key={opt.id}
-                                  className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
-                                >
-                                  <LabeledRadio
-                                    id={opt.id}
-                                    value={opt.id}
-                                    label={opt.label}
-                                  />
+                        <div className="px-4 pb-4">
+                          <RadioGroup value={shippingMethod} onValueChange={setShippingMethod}>
+                            {[
+                              { id: "standard", label: "Standard — 5-7 days", price: "Free" },
+                              { id: "express", label: "Express — 2 days", price: "$12" },
+                              { id: "overnight", label: "Overnight", price: "$28" },
+                            ].map((opt) => (
+                              <div
+                                key={opt.id}
+                                className="flex items-center justify-between p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
+                              >
+                                <LabeledRadio id={opt.id} value={opt.id} label={opt.label} />
+                                <span className="typography-body-small-medium text-content-presentation-action-light-secondary">
+                                  {opt.price}
+                                </span>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </div>
+
+                        <DrawerFooter>
+                          <DrawerNested>
+                            <DrawerTrigger asChild>
+                              <Button variant="PrimeStyle">Continue to payment</Button>
+                            </DrawerTrigger>
+                            <DrawerContent framed={false}>
+                              <DrawerPanel framed={false} showHandle>
+                                <DrawerHeader>
+                                  <DrawerTitle>Payment</DrawerTitle>
+                                  <DrawerDescription>
+                                    Final step. Currently selected: <strong>{paymentMethod}</strong>
+                                  </DrawerDescription>
+                                </DrawerHeader>
+
+                                <div className="px-4 pb-4">
+                                  <RadioGroup
+                                    value={paymentMethod}
+                                    onValueChange={setPaymentMethod}
+                                  >
+                                    {[
+                                      { id: "card", label: "Credit card" },
+                                      { id: "paypal", label: "PayPal" },
+                                      { id: "apple", label: "Apple Pay" },
+                                    ].map((opt) => (
+                                      <div
+                                        key={opt.id}
+                                        className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
+                                      >
+                                        <LabeledRadio
+                                          id={opt.id}
+                                          value={opt.id}
+                                          label={opt.label}
+                                        />
+                                      </div>
+                                    ))}
+                                  </RadioGroup>
                                 </div>
-                              ))}
-                            </RadioGroup>
-                          </div>
 
-                          <DrawerFooter>
-                            <DrawerClose asChild>
-                              <Button variant="PrimeStyle">
-                                Place order — $129.00
-                              </Button>
-                            </DrawerClose>
-                          </DrawerFooter>
-                        </DrawerContent>
-                      </DrawerNested>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </DrawerNested>
-              </DrawerFooter>
+                                <DrawerFooter>
+                                  <DrawerClose asChild>
+                                    <Button variant="PrimeStyle">Place order — $129.00</Button>
+                                  </DrawerClose>
+                                </DrawerFooter>
+                              </DrawerPanel>
+                            </DrawerContent>
+                          </DrawerNested>
+                        </DrawerFooter>
+                      </DrawerPanel>
+                    </DrawerContent>
+                  </DrawerNested>
+                </DrawerFooter>
+              </DrawerPanel>
             </DrawerContent>
           </Drawer>
         </section>
@@ -427,49 +420,43 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Open right drawer</Button>
             </DrawerTrigger>
             <DrawerContent
-              showHandle={false}
               wrapperClassName="top-2 right-2 bottom-2 left-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
-              trayClassName="rounded-[16px]"
-              className="rounded-[10px]"
+              className="rounded-[16px]"
             >
-              <DrawerHeader>
-                <DrawerTitle>Filters</DrawerTitle>
-                <DrawerDescription>
-                  A right-anchored drawer is great for filters, details panels,
-                  and side-by-side workflows.
-                </DrawerDescription>
-              </DrawerHeader>
+              <DrawerPanel className="rounded-[10px]">
+                <DrawerHeader>
+                  <DrawerTitle>Filters</DrawerTitle>
+                  <DrawerDescription>
+                    A right-anchored drawer is great for filters, details panels, and side-by-side
+                    workflows.
+                  </DrawerDescription>
+                </DrawerHeader>
 
-              <div className="px-4 pb-4 space-y-3 flex-1 overflow-y-auto">
-                {[
-                  "Status",
-                  "Owner",
-                  "Created date",
-                  "Tags",
-                  "Priority",
-                ].map((label) => (
-                  <div
-                    key={label}
-                    className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
-                  >
-                    <p className="typography-body-medium-medium text-content-presentation-global-primary">
-                      {label}
-                    </p>
-                    <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
-                      Any
-                    </p>
-                  </div>
-                ))}
-              </div>
+                <div className="px-4 pb-4 space-y-3 flex-1 overflow-y-auto">
+                  {["Status", "Owner", "Created date", "Tags", "Priority"].map((label) => (
+                    <div
+                      key={label}
+                      className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
+                    >
+                      <p className="typography-body-medium-medium text-content-presentation-global-primary">
+                        {label}
+                      </p>
+                      <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
+                        Any
+                      </p>
+                    </div>
+                  ))}
+                </div>
 
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="PrimeStyle">Apply</Button>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Button variant="BorderStyle">Reset</Button>
-                </DrawerClose>
-              </DrawerFooter>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="PrimeStyle">Apply</Button>
+                  </DrawerClose>
+                  <DrawerClose asChild>
+                    <Button variant="BorderStyle">Reset</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerPanel>
             </DrawerContent>
           </Drawer>
         </section>
@@ -490,9 +477,8 @@ export default function DrawerPage() {
             <code className="px-1 rounded bg-background-presentation-action-disabled text-content-presentation-global-primary">
               Drawer
             </code>
-            . Useful for RTL layouts, navigation menus, or mirrored side
-            panels. The example uses an app-style notch on the top-right
-            (mirrored from the right-side variant).
+            . Useful for RTL layouts, navigation menus, or mirrored side panels. The example uses an
+            app-style notch on the top-right (mirrored from the right-side variant).
           </p>
 
           <Drawer direction="left">
@@ -500,10 +486,8 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Open left drawer</Button>
             </DrawerTrigger>
             <DrawerContent
-              showHandle={false}
               notchSide="right"
               wrapperClassName="top-2 left-2 bottom-2 right-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
-              className="rounded-tl-[16px] rounded-b-[16px]"
               notch={
                 <DrawerNotch>
                   <DrawerClose asChild>
@@ -516,41 +500,41 @@ export default function DrawerPage() {
                 </DrawerNotch>
               }
             >
-              <DrawerHeader>
-                <DrawerHeaderTitle>
-                  <DrawerBadge color="Purple">Menu</DrawerBadge>
-                  <DrawerTitle>Navigation</DrawerTitle>
-                </DrawerHeaderTitle>
-              </DrawerHeader>
+              <DrawerPanel className="rounded-tl-[16px] rounded-b-[16px]">
+                <DrawerHeader>
+                  <DrawerHeaderTitle>
+                    <DrawerBadge color="Purple">Menu</DrawerBadge>
+                    <DrawerTitle>Navigation</DrawerTitle>
+                  </DrawerHeaderTitle>
+                </DrawerHeader>
 
-              <div className="px-4 pb-4 space-y-2 flex-1 overflow-y-auto">
-                {[
-                  { icon: "ri-dashboard-line", label: "Dashboard" },
-                  { icon: "ri-team-line", label: "Customers" },
-                  { icon: "ri-shopping-bag-line", label: "Orders" },
-                  { icon: "ri-bar-chart-line", label: "Analytics" },
-                  { icon: "ri-settings-line", label: "Settings" },
-                ].map((item) => (
-                  <button
-                    key={item.label}
-                    type="button"
-                    className="flex w-full items-center gap-3 p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base hover:bg-background-presentation-action-hover transition-colors"
-                  >
-                    <i
-                      className={`${item.icon} text-content-presentation-global-primary`}
-                    />
-                    <span className="typography-body-medium-regular text-content-presentation-global-primary">
-                      {item.label}
-                    </span>
-                  </button>
-                ))}
-              </div>
+                <div className="px-4 pb-4 space-y-2 flex-1 overflow-y-auto">
+                  {[
+                    { icon: "ri-dashboard-line", label: "Dashboard" },
+                    { icon: "ri-team-line", label: "Customers" },
+                    { icon: "ri-shopping-bag-line", label: "Orders" },
+                    { icon: "ri-bar-chart-line", label: "Analytics" },
+                    { icon: "ri-settings-line", label: "Settings" },
+                  ].map((item) => (
+                    <button
+                      key={item.label}
+                      type="button"
+                      className="flex w-full items-center gap-3 p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base hover:bg-background-presentation-action-hover transition-colors"
+                    >
+                      <i className={`${item.icon} text-content-presentation-global-primary`} />
+                      <span className="typography-body-medium-regular text-content-presentation-global-primary">
+                        {item.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
 
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="BorderStyle">Close</Button>
-                </DrawerClose>
-              </DrawerFooter>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="BorderStyle">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerPanel>
             </DrawerContent>
           </Drawer>
         </section>
@@ -563,8 +547,8 @@ export default function DrawerPage() {
             Full-screen
           </h2>
           <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
-            Covers the entire viewport. Useful for immersive editors, media
-            viewers, or onboarding flows.
+            Covers the entire viewport. Useful for immersive editors, media viewers, or onboarding
+            flows.
           </p>
 
           <Drawer>
@@ -575,37 +559,39 @@ export default function DrawerPage() {
               framed={false}
               wrapperClassName="inset-x-0 top-0 bottom-0 m-0 h-screen w-screen max-w-none"
             >
-              <DrawerHeader className="flex flex-row items-center justify-between border-b border-border-presentation-action-disabled">
-                <div>
-                  <DrawerTitle>Editor</DrawerTitle>
-                  <DrawerDescription>
-                    Full-screen mode — drag the handle down to dismiss.
-                  </DrawerDescription>
-                </div>
-                <DrawerClose asChild>
-                  <Button variant="BorderStyle" buttonType="icon">
-                    <i className="ri-close-line" />
-                  </Button>
-                </DrawerClose>
-              </DrawerHeader>
+              <DrawerPanel framed={false} showHandle>
+                <DrawerHeader className="flex flex-row items-center justify-between border-b border-border-presentation-action-disabled">
+                  <div>
+                    <DrawerTitle>Editor</DrawerTitle>
+                    <DrawerDescription>
+                      Full-screen mode — drag the handle down to dismiss.
+                    </DrawerDescription>
+                  </div>
+                  <DrawerClose asChild>
+                    <Button variant="BorderStyle" buttonType="icon">
+                      <i className="ri-close-line" />
+                    </Button>
+                  </DrawerClose>
+                </DrawerHeader>
 
-              <div className="flex-1 overflow-y-auto p-8">
-                <div className="max-w-2xl mx-auto space-y-4">
-                  <h3 className="typography-headers-medium-medium text-content-presentation-global-primary">
-                    Document title
-                  </h3>
-                  <Textarea
-                    rows={20}
-                    defaultValue={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.`}
-                  />
+                <div className="flex-1 overflow-y-auto p-8">
+                  <div className="max-w-2xl mx-auto space-y-4">
+                    <h3 className="typography-headers-medium-medium text-content-presentation-global-primary">
+                      Document title
+                    </h3>
+                    <Textarea
+                      rows={20}
+                      defaultValue={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.`}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <DrawerFooter className="border-t border-border-presentation-action-disabled">
-                <DrawerClose asChild>
-                  <Button variant="PrimeStyle">Save and close</Button>
-                </DrawerClose>
-              </DrawerFooter>
+                <DrawerFooter className="border-t border-border-presentation-action-disabled">
+                  <DrawerClose asChild>
+                    <Button variant="PrimeStyle">Save and close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerPanel>
             </DrawerContent>
           </Drawer>
         </section>
@@ -618,8 +604,7 @@ export default function DrawerPage() {
             Half-screen (bottom)
           </h2>
           <p className="typography-body-small-regular text-content-presentation-action-light-secondary">
-            Opens to roughly half the viewport, then snaps to full when
-            dragged up. Driven by Vaul's{" "}
+            Opens to roughly half the viewport, then snaps to full when dragged up. Driven by Vaul's{" "}
             <code className="px-1 rounded bg-background-presentation-action-disabled text-content-presentation-global-primary">
               snapPoints
             </code>
@@ -631,39 +616,41 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Open half-screen</Button>
             </DrawerTrigger>
             <DrawerContent framed={false} wrapperClassName="h-full max-h-[97vh]">
-              <DrawerHeader>
-                <DrawerTitle>Comments</DrawerTitle>
-                <DrawerDescription>
-                  Drag up to expand to full height, drag down to dismiss.
-                </DrawerDescription>
-              </DrawerHeader>
+              <DrawerPanel framed={false} showHandle>
+                <DrawerHeader>
+                  <DrawerTitle>Comments</DrawerTitle>
+                  <DrawerDescription>
+                    Drag up to expand to full height, drag down to dismiss.
+                  </DrawerDescription>
+                </DrawerHeader>
 
-              <div className="px-4 pb-4 space-y-3 flex-1 overflow-y-auto">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="typography-body-medium-medium text-content-presentation-global-primary">
-                        User {i + 1}
+                <div className="px-4 pb-4 space-y-3 flex-1 overflow-y-auto">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="p-3 rounded-[6px] border border-border-presentation-action-primary bg-background-presentation-form-base"
+                    >
+                      <div className="flex items-center justify-between">
+                        <p className="typography-body-medium-medium text-content-presentation-global-primary">
+                          User {i + 1}
+                        </p>
+                        <span className="typography-body-small-regular text-content-presentation-action-light-secondary">
+                          2h ago
+                        </span>
+                      </div>
+                      <p className="typography-body-small-regular text-content-presentation-action-light-secondary mt-1">
+                        Looks great — shipping this today.
                       </p>
-                      <span className="typography-body-small-regular text-content-presentation-action-light-secondary">
-                        2h ago
-                      </span>
                     </div>
-                    <p className="typography-body-small-regular text-content-presentation-action-light-secondary mt-1">
-                      Looks great — shipping this today.
-                    </p>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="BorderStyle">Close</Button>
-                </DrawerClose>
-              </DrawerFooter>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="BorderStyle">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerPanel>
             </DrawerContent>
           </Drawer>
         </section>
@@ -676,16 +663,23 @@ export default function DrawerPage() {
             Usage
           </h2>
           <pre className="p-4 rounded-[6px] bg-background-presentation-action-disabled text-content-presentation-global-primary typography-body-small-regular overflow-x-auto">
-{`<Drawer>
+            {`<Drawer>
   <DrawerTrigger>Open</DrawerTrigger>
   <DrawerContent>
-    ...
+    {/* DrawerPanel is the light content surface. The tray paints
+        nothing, so a drawer can hold a panel plus something else
+        beside it — each bringing its own background. */}
+    <DrawerPanel>
+      ...
 
-    {/* Nested drawer — must live inside an open Drawer */}
-    <DrawerNested>
-      <DrawerTrigger>Go deeper</DrawerTrigger>
-      <DrawerContent>...</DrawerContent>
-    </DrawerNested>
+      {/* Nested drawer — must live inside an open Drawer */}
+      <DrawerNested>
+        <DrawerTrigger>Go deeper</DrawerTrigger>
+        <DrawerContent>
+          <DrawerPanel>...</DrawerPanel>
+        </DrawerContent>
+      </DrawerNested>
+    </DrawerPanel>
   </DrawerContent>
 </Drawer>`}
           </pre>
@@ -698,92 +692,84 @@ export default function DrawerPage() {
 function FormDrawerContent({ notch }: { notch?: ReactNode }) {
   return (
     <DrawerContent
-      showHandle={false}
       notch={notch}
       wrapperClassName="top-2 right-2 bottom-2 left-auto mt-0 h-auto w-[1046px] max-w-[calc(100vw-16px)]"
-      trayClassName={notch ? undefined : "rounded-[22px]"}
-      className={
-        notch ? "rounded-tr-[16px] rounded-b-[16px]" : "rounded-[16px]"
-      }
+      className={notch ? undefined : "rounded-[22px]"}
     >
-      <DrawerHeader>
-        <DrawerHeaderTitle>
-          <DrawerBadge color="Blue">New</DrawerBadge>
-          <DrawerTitle>Individual Contact</DrawerTitle>
-        </DrawerHeaderTitle>
-        <DrawerHeaderActions>
-          <Button variant="PrimeStyle" size="L">
-            Save Draft
-          </Button>
-        </DrawerHeaderActions>
-      </DrawerHeader>
+      <DrawerPanel className={notch ? "rounded-tr-[16px] rounded-b-[16px]" : "rounded-[16px]"}>
+        <DrawerHeader>
+          <DrawerHeaderTitle>
+            <DrawerBadge color="Blue">New</DrawerBadge>
+            <DrawerTitle>Individual Contact</DrawerTitle>
+          </DrawerHeaderTitle>
+          <DrawerHeaderActions>
+            <Button variant="PrimeStyle" size="L">
+              Save Draft
+            </Button>
+          </DrawerHeaderActions>
+        </DrawerHeader>
 
-      <div className="flex-1 overflow-y-auto px-12 py-6 space-y-3">
-        <SectionBlock
-          color="Blue"
-          title={
-            <span className="flex items-center gap-[6px]">
-              <i className="ri-draft-fill" />
-              Identity
-            </span>
-          }
-          containerClassName="w-full"
-        >
-          <FieldRow
-            label="Name"
-            required
-            right={
-              <div className="flex flex-1 items-center gap-3">
-                <InputField placeholder="First Name*" className="flex-1" />
-                <InputField placeholder="Last Name*" className="flex-1" />
-              </div>
+        <div className="flex-1 overflow-y-auto px-12 py-6 space-y-3">
+          <SectionBlock
+            color="Blue"
+            title={
+              <span className="flex items-center gap-[6px]">
+                <i className="ri-draft-fill" />
+                Identity
+              </span>
             }
-          />
-          <RowDivider />
-          <FieldRow
-            label="Email"
-            required
-            right={
-              <InputField
-                placeholder="name@example.com"
-                type="email"
-                className="flex-1"
-              />
-            }
-          />
-          <RowDivider />
-          <FieldRow
-            label="Phone"
-            right={<InputField placeholder="+1 555 0000" className="flex-1" />}
-          />
-        </SectionBlock>
+            containerClassName="w-full"
+          >
+            <FieldRow
+              label="Name"
+              required
+              right={
+                <div className="flex flex-1 items-center gap-3">
+                  <InputField placeholder="First Name*" className="flex-1" />
+                  <InputField placeholder="Last Name*" className="flex-1" />
+                </div>
+              }
+            />
+            <RowDivider />
+            <FieldRow
+              label="Email"
+              required
+              right={<InputField placeholder="name@example.com" type="email" className="flex-1" />}
+            />
+            <RowDivider />
+            <FieldRow
+              label="Phone"
+              right={<InputField placeholder="+1 555 0000" className="flex-1" />}
+            />
+          </SectionBlock>
 
-        <SectionBlock
-          color="Purple"
-          title={
-            <span className="flex items-center gap-[6px]">
-              <i className="ri-map-pin-line" />
-              Address
-            </span>
-          }
-          containerClassName="w-full"
-        >
-          <FieldRow
-            label="Street"
-            right={<InputField placeholder="123 Main St" className="flex-1" />}
-          />
-          <RowDivider />
-          <FieldRow
-            label="City"
-            right={<InputField placeholder="San Francisco" className="flex-1" />}
-          />
-          <RowDivider />
-          <FieldRow
-            label="Postal code"
-            right={<InputField placeholder="94103" className="flex-1" />}
-          />
-        </SectionBlock>
-      </div>
+          <SectionBlock
+            color="Purple"
+            title={
+              <span className="flex items-center gap-[6px]">
+                <i className="ri-map-pin-line" />
+                Address
+              </span>
+            }
+            containerClassName="w-full"
+          >
+            <FieldRow
+              label="Street"
+              right={<InputField placeholder="123 Main St" className="flex-1" />}
+            />
+            <RowDivider />
+            <FieldRow
+              label="City"
+              right={<InputField placeholder="San Francisco" className="flex-1" />}
+            />
+            <RowDivider />
+            <FieldRow
+              label="Postal code"
+              right={<InputField placeholder="94103" className="flex-1" />}
+            />
+          </SectionBlock>
+        </div>
+      </DrawerPanel>
     </DrawerContent>
   );
 }

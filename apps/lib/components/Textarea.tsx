@@ -7,7 +7,7 @@ import { cva, VariantProps } from "class-variance-authority";
 const textareaStyles = cva(
   [
     "border",
-    "rounded-[4px]",
+    "rounded-[8px]",
     "px-[8px]",
     "py-[12px]",
     "outline-none",
