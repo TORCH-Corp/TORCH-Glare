@@ -1,6 +1,6 @@
 ---
 title: FormRenderer
-description: A thin wrapper around FormBuilder. Author fields as JSX children; FormRenderer owns page-vs-drawer display, the absolute title header, drawer field layout, and Submit placement.
+description: A thin wrapper around FormBuilder. Author fields as JSX children; FormRenderer owns page-vs-drawer display, the absolute title header, and drawer field layout. You compose the Save and pass it via the actions prop.
 component: true
 group: Forms
 keywords: [form-renderer, form, drawer, header, display, view-mode, react-hook-form]
@@ -14,12 +14,14 @@ takes care of the surrounding concerns:
 
 - **page vs drawer** display (`display="drawer"` hosts the form in a `FormDrawer`),
 - the **absolute title header** + action bar (page display),
-- **vertical field layout** inside a drawer,
-- **Submit placement** — in the header, in the drawer header (via `form={id}`), or a
-  bottom row — including deferring to `FormBuilder.Stepper`, which renders its own.
+- **vertical field layout** inside a drawer.
+
+FormRenderer never manufactures a Submit — **you compose the Save and hand it to `actions`**.
+It renders in the form's header action pill (page) or the drawer header (drawer), and a bare
+`<FormBuilder.Submit>` auto-targets this form (even though the header sits outside the `<form>`).
 
 Reach for `FormBuilder` directly when you just want the form. Reach for
-`FormRenderer` when you want the same form to render as a page *or* a drawer with
+`FormRenderer` when you want the same form to render as a page _or_ a drawer with
 the standard chrome.
 
 ```tsx
@@ -27,7 +29,8 @@ the standard chrome.
   onSubmit={save}
   resolver={zodResolver(schema)}
   defaultValues={d}
-  header={{ title: 'Item', variant: 'new' }}
+  header={{ title: "Item", variant: "new" }}
+  actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
   <FormBuilder.Section title="Identity" color="Blue">
     <FormBuilder.Text name="name" label="Name" required />
@@ -48,40 +51,42 @@ npx torch-glare@latest add FormRenderer
 ## Imports
 
 ```tsx
-import { FormRenderer, FormDrawer } from '@/components/FormRenderer'
-import { FormBuilder } from '@/components/FormBuilder'
+import { FormRenderer, FormDrawer } from "@/components/FormRenderer";
+import { FormBuilder } from "@/components/FormBuilder";
 ```
 
 ## Props
 
-| Prop | Type | Notes |
-|---|---|---|
-| `children` | `ReactNode` | The form body — `FormBuilder.Section` / field / `FormBuilder.Stepper` JSX. |
-| `onSubmit` / `onInvalid` | fns | Submit / validation-fail callbacks. |
-| `resolver` | `Resolver` | Any react-hook-form resolver, e.g. `zodResolver(schema)`. |
-| `defaultValues` / `values` | `DefaultValues` / `T` | Initial values; `values` re-syncs on change (edit). |
-| `mode` | `'edit' \| 'view'` | `'view'` renders read-only, no Submit. |
-| `loading` / `resetOnSuccess` | `boolean` | Forwarded to `FormBuilder`. |
-| `fieldDirection` | `'horizontal' \| 'vertical'` | Defaults to vertical inside a drawer. |
-| `form` | `UseFormReturn<T>` | A hoisted `useForm` to bind to — pass when a sibling (e.g. a `summary` `FormSummary`) must read the same live values; the caller owns `resolver`/`defaultValues` on it. Omit to let FormRenderer create its own. |
-| `display` | `'page' \| 'drawer'` | `'drawer'` wraps the form in `FormDrawer`. |
-| `header` | `{ title; label?; variant? }` | Absolute title header + action bar (page display); Submit moves into it. |
-| `summary` | `ReactNode` | A live panel (typically `FormSummary`) rendered beside the form (page) or in the drawer tray (drawer). Give the same hoisted `form` so it reads live values. On a page, a `summary` **plus** a `FormBuilder.Stepper` lays out as three columns — stepper nav · fields · summary. |
-| `submitLabel` | `ReactNode` | Default `"Save"`. |
-| `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | — | Drawer control (when `display="drawer"`). `title` / `badge` are strings that override `header.title` / `header.label`. |
+| Prop                                                           | Type                          | Notes                                                                                                                                                                                                                                                                            |
+| -------------------------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`                                                     | `ReactNode`                   | The form body — `FormBuilder.Section` / field / `FormBuilder.Stepper` JSX.                                                                                                                                                                                                       |
+| `onSubmit` / `onInvalid`                                       | fns                           | Submit / validation-fail callbacks.                                                                                                                                                                                                                                              |
+| `resolver`                                                     | `Resolver`                    | Any react-hook-form resolver, e.g. `zodResolver(schema)`.                                                                                                                                                                                                                        |
+| `defaultValues` / `values`                                     | `DefaultValues` / `T`         | Initial values; `values` re-syncs on change (edit).                                                                                                                                                                                                                              |
+| `mode`                                                         | `'edit' \| 'view'`            | `'view'` renders read-only, no Submit.                                                                                                                                                                                                                                           |
+| `loading` / `resetOnSuccess`                                   | `boolean`                     | Forwarded to `FormBuilder`.                                                                                                                                                                                                                                                      |
+| `fieldDirection`                                               | `'horizontal' \| 'vertical'`  | Defaults to vertical inside a drawer.                                                                                                                                                                                                                                            |
+| `form`                                                         | `UseFormReturn<T>`            | A hoisted `useForm` to bind to — pass when a sibling (e.g. a `summary` `FormSummary`) must read the same live values; the caller owns `resolver`/`defaultValues` on it. Omit to let FormRenderer create its own.                                                                 |
+| `display`                                                      | `'page' \| 'drawer'`          | `'drawer'` wraps the form in `FormDrawer`.                                                                                                                                                                                                                                       |
+| `header`                                                       | `{ title; label?; variant? }` | Absolute title header + action bar (page display); `actions` render in it.                                                                                                                                                                                                       |
+| `summary`                                                      | `ReactNode`                   | A live panel (typically `FormSummary`) rendered beside the form (page) or in the drawer tray (drawer). Give the same hoisted `form` so it reads live values. On a page, a `summary` **plus** a `FormBuilder.Stepper` lays out as three columns — stepper nav · fields · summary. |
+| `actions`                                                      | `ReactNode`                   | The form's action bar — rendered in the header action pill (page) or drawer header (drawer). Put the Save here: `actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}`. A bare `FormBuilder.Submit` auto-targets this form.                                                   |
+| `id`                                                           | `string`                      | `id` on the underlying `<form>`. Optional — FormRenderer generates and wires one otherwise.                                                                                                                                                                                      |
+| `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | —                             | Drawer control (when `display="drawer"`). `title` / `badge` are strings that override `header.title` / `header.label`.                                                                                                                                                           |
 
 ## Drawer & view
 
 ```tsx
-// drawer — the Save action lands in the drawer header automatically
+// drawer — pass the Save via `actions`; it renders in the drawer header
 <FormRenderer
   display="drawer" open={open} onOpenChange={setOpen} title="New item" badge="New"
   onSubmit={save} resolver={r} defaultValues={d}
+  actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
   {fields}
 </FormRenderer>
 
-// read-only view — same children
+// read-only view — same children, omit `actions` (a view has no Save)
 <FormRenderer mode="view" values={entity} onSubmit={() => {}}>
   {fields}
 </FormRenderer>
@@ -89,11 +94,17 @@ import { FormBuilder } from '@/components/FormBuilder'
 
 ## Stepper
 
-Drop a `FormBuilder.Stepper` in as the child — `FormRenderer` detects it and skips
-its own Submit (the stepper shows Submit on the last step).
+Drop a `FormBuilder.Stepper` in as the child. The Save lives in the header `actions` and
+submits every step's registered fields at once (steps stay mounted, so the whole form is live).
 
 ```tsx
-<FormRenderer onSubmit={save} resolver={r} defaultValues={d}>
+<FormRenderer
+  onSubmit={save}
+  resolver={r}
+  defaultValues={d}
+  header={{ title: "New item", variant: "new" }}
+  actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
+>
   <FormBuilder.Stepper>
     <FormBuilder.Step title="Basics">
       <FormBuilder.Text name="name" label="Name" required />
@@ -115,7 +126,7 @@ const form = useForm<Invoice>({ resolver, defaultValues })
   form={form}
   onSubmit={save}
   header={{ title: 'Invoice', variant: 'new' }}
-  submitLabel="Save invoice"
+  actions={<FormBuilder.Submit>Save invoice</FormBuilder.Submit>}
   summary={
     <FormSummary form={form} title="Invoice" subtitle="Summary">
       <FormSummary.Group title="Total">
@@ -138,10 +149,23 @@ outside the `<form>`, wire the Save button to the form via `id` / `form={id}`:
 
 ```tsx
 <FormDrawer
-  open={open} onOpenChange={setOpen} title="New item" badge="New"
-  actions={<Button type="submit" form="item-form" is_loading={saving}>Save</Button>}
+  open={open}
+  onOpenChange={setOpen}
+  title="New item"
+  badge="New"
+  actions={
+    <Button type="submit" form="item-form" is_loading={saving}>
+      Save
+    </Button>
+  }
 >
-  <FormBuilder id="item-form" onSubmit={save} resolver={r} defaultValues={d} fieldDirection="vertical">
+  <FormBuilder
+    id="item-form"
+    onSubmit={save}
+    resolver={r}
+    defaultValues={d}
+    fieldDirection="vertical"
+  >
     …fields…
   </FormBuilder>
 </FormDrawer>
@@ -174,7 +198,7 @@ change) because they render through `HeaderBar`'s uppercase text treatment.
 
 ### A summary beside the form
 
-`summary` renders a conclusion panel — typically a [FormSummary](./form-summary.md) — *beside*
+`summary` renders a conclusion panel — typically a [FormSummary](./form-summary.md) — _beside_
 the form rather than inside its scrollable body. `FormDrawer` puts the form in a
 [`DrawerPanel`](./drawer.md#drawerpanel) (the light surface) and the summary next to it with a
 6px gutter; the tray paints nothing, so the summary keeps its own dark background and full

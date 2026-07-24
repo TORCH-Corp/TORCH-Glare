@@ -2,7 +2,7 @@
 
 import { Select, SelectTrigger, SelectContent, SelectItem } from "../../Select";
 import { InputField } from "../../InputField";
-import { useLoading } from "../context";
+import { useLoading, useCell } from "../context";
 import { formatFieldView } from "../viewFormat";
 import type { PhoneFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
@@ -31,6 +31,7 @@ function splitPhone(value: unknown, defaultDial: string): { dial: string; number
  */
 export function PhoneField(props: PhoneFieldProps) {
   const loading = useLoading();
+  const cell = useCell();
   const defaultDial = props.defaultCountry ?? "+964"; // Iraq
 
   return (
@@ -48,7 +49,7 @@ export function PhoneField(props: PhoneFieldProps) {
               disabled={disabled}
             >
               {/* Compact trigger — flag + dial. The dropdown rows carry the full country name. */}
-              <SelectTrigger size="XL" className="shrink-0">
+              <SelectTrigger size="XL" onTable={cell} className="shrink-0">
                 <span className="whitespace-nowrap">
                   {country ? `${flagEmoji(country.code)} ${country.dial}` : dial}
                 </span>
@@ -69,6 +70,7 @@ export function PhoneField(props: PhoneFieldProps) {
                 onChange={(e) => commit(dial, e.target.value.replace(/[^\d\s-]/g, ""))}
                 placeholder={props.placeholder ?? "Phone number"}
                 disabled={disabled}
+                onTable={cell}
                 className="w-full"
               />
             </div>

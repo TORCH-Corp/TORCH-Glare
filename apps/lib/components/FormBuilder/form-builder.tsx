@@ -7,7 +7,13 @@ import { useForm, type FieldValues } from "react-hook-form";
 import { cn } from "../../utils/cn";
 import { Form } from "../Form";
 import { SectionBlock, type SectionColor } from "../SectionBlock";
-import { LoadingContext, ModeContext, DirectionContext, StepperContext } from "./context";
+import {
+  LoadingContext,
+  ModeContext,
+  DirectionContext,
+  StepperContext,
+  FormIdContext,
+} from "./context";
 import { Header } from "./header";
 import type { FormBuilderRootProps } from "./types";
 import {
@@ -33,6 +39,7 @@ import {
   SignatureField,
   PhoneField,
   FieldArray,
+  TableField,
   FileField,
   RichTextField,
   CustomField,
@@ -44,7 +51,6 @@ import {
   Next,
   StepperNav,
   StepSlot,
-  StepFooter,
   useStepperState,
   isStepElement,
   isStepperElement,
@@ -127,7 +133,8 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   // The stepper nav is its own column beside the fields, inside the form surface.
   const nav = isStepper ? <StepperNav /> : null;
 
-  // The fields the `<form>` wraps: the stepper's steps (+ footer), or the plain children.
+  // The fields the `<form>` wraps: the stepper's steps (+ any custom footer extras like
+  // Back/Next), or the plain children. The Submit itself lives outside the form (see FormRenderer).
   const fields = isStepper ? (
     <>
       {steps.map((step, i) => (
@@ -135,7 +142,7 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
           {step.props.children}
         </StepSlot>
       ))}
-      {stepExtras.length > 0 ? stepExtras : <StepFooter />}
+      {stepExtras}
     </>
   ) : (
     rest
@@ -205,17 +212,19 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   );
 
   return (
-    <LoadingContext.Provider value={loading}>
-      <ModeContext.Provider value={mode}>
-        <DirectionContext.Provider value={direction}>
-          {isStepper ? (
-            <StepperContext.Provider value={stepper}>{tree}</StepperContext.Provider>
-          ) : (
-            tree
-          )}
-        </DirectionContext.Provider>
-      </ModeContext.Provider>
-    </LoadingContext.Provider>
+    <FormIdContext.Provider value={id}>
+      <LoadingContext.Provider value={loading}>
+        <ModeContext.Provider value={mode}>
+          <DirectionContext.Provider value={direction}>
+            {isStepper ? (
+              <StepperContext.Provider value={stepper}>{tree}</StepperContext.Provider>
+            ) : (
+              tree
+            )}
+          </DirectionContext.Provider>
+        </ModeContext.Provider>
+      </LoadingContext.Provider>
+    </FormIdContext.Provider>
   );
 }
 
@@ -260,6 +269,7 @@ export const FormBuilder = Object.assign(FormBuilderRoot, {
   Signature: SignatureField,
   Phone: PhoneField,
   FieldArray: FieldArray,
+  Table: TableField,
   Date: DateField,
   DateRange: (props: Parameters<typeof DateField>[0]) => <DateField {...props} mode="range" />,
   DateMultiple: (props: Parameters<typeof DateField>[0]) => (

@@ -7,7 +7,6 @@ import { cn } from "../../utils/cn";
 import { Button } from "../Button";
 import { FormStepper, FormStep, FormStepIndicator, FormStepLabel } from "../FormStepper";
 import { StepContext, useStepper, type StepperContextValue, type StepRegistry } from "./context";
-import { SubmitButton } from "./submit";
 
 // ─── Step (declaration only — the Stepper reads its props) ───────────────────
 
@@ -127,18 +126,6 @@ export function Next({ children }: { children?: React.ReactNode }) {
   );
 }
 
-function StepFooter() {
-  const { isLastStep } = useStepper();
-  // Navigation is via the step buttons — the footer only holds the final Submit,
-  // shown once you've reached (and validated your way to) the last step.
-  if (!isLastStep) return null;
-  return (
-    <div className="flex justify-end">
-      <SubmitButton>Submit</SubmitButton>
-    </div>
-  );
-}
-
 // ─── Stepper root (marker) + state hook ──────────────────────────────────────
 
 export interface StepperProps {
@@ -227,4 +214,4 @@ export function useStepperState(
   };
 }
 
-export { StepperNav, StepSlot, StepFooter };
+export { StepperNav, StepSlot };

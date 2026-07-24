@@ -11,7 +11,8 @@ import type {
  * FormRenderer — a thin wrapper around the compound `FormBuilder`. You author the
  * fields as **JSX children** (`FormBuilder.Section`, `FormBuilder.Text`, …); the
  * renderer owns the surrounding concerns: page-vs-drawer display, the absolute
- * title header, vertical field layout inside a drawer, and Submit placement.
+ * title header, vertical field layout inside a drawer, and an `actions` slot (the
+ * form's header / drawer action bar) where you place the Save.
  */
 
 export type FormRendererMode = "edit" | "view";
@@ -57,7 +58,15 @@ export interface FormRendererProps<T extends FieldValues = FieldValues> {
    * drawer render the same `HeaderBar` title pill, so a form looks identical in either.
    */
   header?: { title: string; label?: string; variant?: "new" | "edit" | "detail" };
-  submitLabel?: ReactNode;
+  /**
+   * The form's action bar — rendered in the header's right-hand action pill (page) or the drawer
+   * header (drawer). Put the Save here: `actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}`.
+   * A bare `FormBuilder.Submit` auto-targets this form (see `FormBuilder`'s form-id context), so it
+   * submits even though the header sits outside the `<form>`.
+   */
+  actions?: ReactNode;
+  /** `id` on the underlying `<form>`. Optional — FormRenderer generates and wires one otherwise. */
+  id?: string;
 
   /** Drawer control (when `display === "drawer"`). */
   open?: boolean;

@@ -25,8 +25,8 @@ export default function StepperExample() {
         blurb="Steps are components; every step's fields stay registered — the nav only toggles visibility."
       />
 
-      {/* The step rail sits beside the active step's fields. FormRenderer detects the Stepper
-          child and lets it own its own Submit (shown on the last step). */}
+      {/* The step rail sits beside the active step's fields. The Save action lives in the form
+          header and submits every step's registered fields at once. */}
       <FormRenderer<Values>
         onSubmit={onSubmit}
         loading={submitting}
@@ -34,6 +34,7 @@ export default function StepperExample() {
         defaultValues={DEFAULTS}
         className="min-h-0 flex-1"
         header={{ title: "New item", variant: "new" }}
+        actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
       >
         <FormBuilder.Stepper>
           <FormBuilder.Step title="Identity">

@@ -244,6 +244,13 @@ export const FIELD_TYPES: FieldSpec[] = [
     note: "Render fn: `{(rowName) => <FormBuilder.Text name={`${rowName}.x`} />}`",
   },
   {
+    static: "Table",
+    value: "object[]",
+    zod: "z.array(z.object({})).min(1, 'Add at least one row')",
+    aliases: ["table", "grid", "data grid", "data-grid", "editable table", "spreadsheet"],
+    note: "Editable grid: each column's `cell` renders any FormBuilder.* field; supports `selectable` / `reorderable`. Renders its own SectionBlock — place it as a top-level child, NOT inside a FormBuilder.Section.",
+  },
+  {
     static: "Custom",
     value: "anything",
     zod: "z.any()",
@@ -347,10 +354,32 @@ export function parseFields(input: string): ParsedField[] {
 
 /** `<FormBuilder.Currency name="price" label="Price" currencySymbol="$" />` */
 export function fieldJsx(f: ParsedField): string {
+  // A Table is a grid, not a one-line field — emit a compiling `columns` skeleton.
+  if (f.spec.static === "Table") return tableJsx(f);
   const parts = [`name="${f.name}"`, `label="${f.label}"`];
   if (f.spec.options) parts.push(`options={${f.name.toUpperCase()}_OPTIONS}`);
   if (f.spec.props) parts.push(f.spec.props);
   return `<FormBuilder.${f.spec.static} ${parts.join(" ")} />`;
+}
+
+/**
+ * `FormBuilder.Table` — a compiling starting point. Each column's `cell` renders any
+ * `FormBuilder.*` field for a row (name it `${rowName}.<key>`); add/remove columns to taste.
+ * The Table renders its own `SectionBlock`, so `skeleton()` places it OUTSIDE the fields Section.
+ */
+function tableJsx(f: ParsedField): string {
+  return [
+    `<FormBuilder.Table`,
+    `  name="${f.name}"`,
+    `  title="${f.label}"`,
+    `  addLabel="Add row"`,
+    `  defaultItem={{ label: '', qty: 1 }}`,
+    `  columns={[`,
+    "    { header: 'Label', cell: (row) => <FormBuilder.Text name={`${row}.label`} required /> },",
+    "    { header: 'Qty', width: 120, cell: (row) => <FormBuilder.Number name={`${row}.qty`} required /> },",
+    `  ]}`,
+    `/>`,
+  ].join("\n");
 }
 
 /** `name: z.string().min(1, 'Required'),` */
@@ -379,10 +408,11 @@ export interface FormOptions {
 /**
  * A complete, compiling starting point wired to the requested shape, built the way the real
  * example pages are (`apps/app/form-builder/**`): `FormRenderer` owns the page-vs-drawer
- * display, the title header, and Submit placement; a `FormSummary` panel is passed via the
- * `summary` prop and reads the same hoisted `useForm`. Everything a model tends to get wrong
- * by hand — the hoisted form shared with the summary, the drawer's `open`/`onOpenChange`,
- * the stepper wrapper — is already correct here.
+ * display and the title header, and the Save is composed and passed via its `actions` prop; a
+ * `FormSummary` panel is passed via the `summary` prop and reads the same hoisted `useForm`.
+ * Everything a model tends to get wrong by hand — the hoisted form shared with the summary, the
+ * drawer's `open`/`onOpenChange`, the stepper wrapper, a `Table` placed outside the Section — is
+ * already correct here.
  */
 export function skeleton(fields: ParsedField[], opts: FormOptions): string {
   const { layout, display, summary } = opts;
@@ -420,12 +450,20 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
     `}`,
   ].join("\n");
 
-  // The fields, grouped in a Section — wrapped in a single Step when it's a stepper.
-  const section = [
-    `      <FormBuilder.Section title="Details" color="Blue">`,
-    fields.map((f) => `        ${fieldJsx(f)}`).join("\n"),
-    `      </FormBuilder.Section>`,
-  ].join("\n");
+  // Plain fields group in a Section; a Table renders its own SectionBlock, so it sits OUTSIDE
+  // the Section as a top-level sibling (still inside the Step, for a stepper).
+  const tableFields = fields.filter((f) => f.spec.static === "Table");
+  const plainFields = fields.filter((f) => f.spec.static !== "Table");
+
+  const sectionBlock = plainFields.length
+    ? [
+        `      <FormBuilder.Section title="Details" color="Blue">`,
+        plainFields.map((f) => `        ${fieldJsx(f)}`).join("\n"),
+        `      </FormBuilder.Section>`,
+      ].join("\n")
+    : "";
+  const tableBlocks = tableFields.map((f) => indent(fieldJsx(f), 6)).join("\n");
+  const section = [sectionBlock, tableBlocks].filter(Boolean).join("\n");
 
   const body =
     layout === "stepper"
@@ -434,7 +472,7 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
           `        <FormBuilder.Step title="Step 1">`,
           indent(section, 4),
           `        </FormBuilder.Step>`,
-          `        {/* Add more <FormBuilder.Step title="…"> — Submit shows on the last one. */}`,
+          `        {/* Add more <FormBuilder.Step title="…"> */}`,
           `      </FormBuilder.Stepper>`,
         ].join("\n")
       : section;
@@ -461,6 +499,7 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
     drawer ? `open={open}` : null,
     drawer ? `onOpenChange={setOpen}` : null,
     `header={{ title: 'New record', variant: 'new' }}`,
+    `actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}`,
   ]
     .filter(Boolean)
     .map((p) => `      ${p}`);

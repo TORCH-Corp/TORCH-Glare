@@ -1,19 +1,12 @@
 "use client";
 
-import {
-  ReactNode,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-} from "react";
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState, type ChangeEvent } from "react";
 import type { ControllerRenderProps, FieldValues } from "react-hook-form";
 
 import { InputField } from "../../InputField";
 import { Textarea } from "../../Textarea";
 import { PasswordLevel } from "../../PasswordLevel";
-import { useLoading } from "../context";
+import { useLoading, useCell } from "../context";
 import { formatFieldView } from "../viewFormat";
 import { formatNumber } from "../numberFormat";
 import type { BaseFieldProps, CurrencyFieldProps, PasswordFieldProps } from "../types";
@@ -32,11 +25,13 @@ function NumberInput({
   icon,
   placeholder,
   disabled,
+  onTable,
 }: {
   field: ControllerRenderProps<FieldValues, string>;
   icon?: ReactNode;
   placeholder?: string;
   disabled?: boolean;
+  onTable?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const caretRef = useRef<number | null>(null);
@@ -103,6 +98,7 @@ function NumberInput({
       value={text}
       placeholder={placeholder}
       disabled={disabled}
+      onTable={onTable}
       className="w-full"
       onChange={handleChange}
       onBlur={() => field.onBlur()}
@@ -112,6 +108,7 @@ function NumberInput({
 
 function TextLike({ props, type }: { props: BaseFieldProps; type: "text" | "email" | "password" }) {
   const loading = useLoading();
+  const cell = useCell();
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
       {(field) => (
@@ -121,6 +118,7 @@ function TextLike({ props, type }: { props: BaseFieldProps; type: "text" | "emai
           value={field.value ?? ""}
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
+          onTable={cell}
           className="w-full"
         />
       )}
@@ -136,8 +134,12 @@ export function EmailField(props: BaseFieldProps) {
 }
 export function PasswordField(props: PasswordFieldProps) {
   const loading = useLoading();
+  const cell = useCell();
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v ? "••••••••" : "" })}>
+    <FieldShell
+      {...props}
+      view={(v) => formatFieldView({ kind: "text", value: v ? "••••••••" : "" })}
+    >
       {(field) => (
         <div className="flex w-full flex-col gap-2">
           <InputField
@@ -146,6 +148,7 @@ export function PasswordField(props: PasswordFieldProps) {
             value={field.value ?? ""}
             placeholder={props.placeholder}
             disabled={props.disabled || loading}
+            onTable={cell}
             className="w-full"
           />
           {props.strengthMeter && <PasswordLevel value={field.value ?? ""} />}
@@ -157,6 +160,7 @@ export function PasswordField(props: PasswordFieldProps) {
 
 export function NumberField(props: BaseFieldProps) {
   const loading = useLoading();
+  const cell = useCell();
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind: "number", value: v })}>
       {(field) => (
@@ -164,6 +168,7 @@ export function NumberField(props: BaseFieldProps) {
           field={field}
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
+          onTable={cell}
         />
       )}
     </FieldShell>
@@ -172,10 +177,13 @@ export function NumberField(props: BaseFieldProps) {
 
 export function CurrencyField(props: CurrencyFieldProps) {
   const loading = useLoading();
+  const cell = useCell();
   return (
     <FieldShell
       {...props}
-      view={(v) => formatFieldView({ kind: "currency", value: v, currencySymbol: props.currencySymbol })}
+      view={(v) =>
+        formatFieldView({ kind: "currency", value: v, currencySymbol: props.currencySymbol })
+      }
     >
       {(field) => (
         <NumberInput
@@ -187,6 +195,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
           }
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
+          onTable={cell}
         />
       )}
     </FieldShell>

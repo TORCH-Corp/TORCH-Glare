@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { FormBuilder } from "@/components/FormBuilder";
 import { FormRenderer } from "@/components/FormRenderer";
 import { Button } from "@/components/Button";
 import {
@@ -26,6 +27,8 @@ export default function FormRendererExample() {
 
   // Same field JSX drives both displays — the single source of truth is `CoreFields`.
   const fields = <CoreFields />;
+  // The Save action — placed in the form header (page) or the drawer header (drawer).
+  const save = <FormBuilder.Submit>Save</FormBuilder.Submit>;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-6">
@@ -58,6 +61,7 @@ export default function FormRendererExample() {
           defaultValues={DEFAULTS}
           loading={submitting}
           header={{ title: "Item", variant: "new" }}
+          actions={save}
         >
           {fields}
         </FormRenderer>
@@ -76,6 +80,7 @@ export default function FormRendererExample() {
             resolver={resolver}
             defaultValues={DEFAULTS}
             loading={submitting}
+            actions={save}
           >
             {fields}
           </FormRenderer>

@@ -21,7 +21,7 @@ Learn how to build complete, production-ready forms with TORCH Glare. This tutor
 > what [`FormBuilder`](../components/form-builder.md) removes. With `FormBuilder` each field is one
 > JSX child (`<FormBuilder.Text name="…" label="…" required />`) and validation comes from a
 > react-hook-form resolver. Add [`FormRenderer`](../components/form-renderer.md) for page/drawer
-> chrome and Submit placement, and [`FormSummary`](../components/form-summary.md) for live totals.
+> chrome + an `actions` slot for the Save, and [`FormSummary`](../components/form-summary.md) for live totals.
 > See the **[Forms with FormBuilder](../how-to/forms-with-form-builder.md)** guide. The manual
 > approach below is kept only to show what `FormBuilder` does under the hood.
 

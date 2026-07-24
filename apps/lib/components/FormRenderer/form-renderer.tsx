@@ -1,27 +1,25 @@
 "use client";
 
-import { Children, isValidElement, useId } from "react";
+import { useId } from "react";
 import { FieldValues } from "react-hook-form";
 
 import { FormBuilder } from "../FormBuilder";
-import { Button } from "../Button";
+import { FormIdContext, LoadingContext, ModeContext } from "../FormBuilder/context";
 import { FormDrawer } from "./FormDrawer";
 import type { FormRendererProps } from "./types";
-
-/** True when a `FormBuilder.Stepper` is a direct child (it renders its own Submit). */
-function hasStepper(children: React.ReactNode): boolean {
-  return Children.toArray(children).some(
-    (child) => isValidElement(child) && child.type === FormBuilder.Stepper,
-  );
-}
 
 /**
  * FormRenderer — a thin wrapper around the compound `FormBuilder`. Author the
  * fields as JSX children; FormRenderer owns page-vs-drawer display, the absolute
- * title header, drawer field direction, and Submit placement.
+ * title header, and drawer field direction.
+ *
+ * FormRenderer never manufactures a Submit — you compose it and hand it to `actions`
+ * (`actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}`). It renders in the form's
+ * header action pill (page) or the drawer header (drawer), and auto-targets this form.
  */
 export function FormRenderer<T extends FieldValues = FieldValues>({
   children,
+  id,
   onSubmit,
   onInvalid,
   resolver,
@@ -36,25 +34,23 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
   header,
   summary,
   className,
-  submitLabel = "Save",
+  actions,
   open = false,
   onOpenChange,
   title,
   badge,
   onOpenInNewTab,
 }: FormRendererProps<T>) {
-  const isView = mode === "view";
   const isDrawer = display === "drawer";
-  const isStepper = hasStepper(children) && !isView;
 
   // FormRenderer owns the display decision: a drawer form lays out vertically.
   const effectiveDirection = fieldDirection ?? (isDrawer ? "vertical" : undefined);
   // The absolute title header is a page concern — the drawer has its own header.
   const useHeader = !!header && !isDrawer;
-  // In a drawer, the Save action sits in the drawer header (outside the form),
-  // submitting via the `form={formId}` association.
-  const formId = useId();
-  const drawerSubmitInHeader = isDrawer && !isStepper && !isView;
+  // A stable `id` lets a button OUTSIDE the form submit it via `form={id}` (the header action
+  // pill / drawer header). Falls back to a generated id, provided to the Submit via context.
+  const autoId = useId();
+  const formId = id ?? autoId;
 
   const inner = (
     <FormBuilder
@@ -77,19 +73,11 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
     >
       {useHeader && (
         <FormBuilder.Header title={header!.title} label={header!.label} variant={header!.variant}>
-          {!isStepper && !isView && <FormBuilder.Submit>{submitLabel}</FormBuilder.Submit>}
+          {actions}
         </FormBuilder.Header>
       )}
 
       {children}
-
-      {/* The stepper renders its own Submit on the last step; the drawer puts it in
-          the drawer header; a page with a header puts it in the action bar. */}
-      {!isStepper && !isView && !useHeader && !isDrawer && (
-        <div className="flex justify-end">
-          <FormBuilder.Submit>{submitLabel}</FormBuilder.Submit>
-        </div>
-      )}
     </FormBuilder>
   );
 
@@ -102,11 +90,15 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
         badge={badge ?? header?.label}
         variant={header?.variant}
         summary={summary}
+        // The drawer header sits outside the `<form>`, so re-supply the form/loading/mode context
+        // a bare `FormBuilder.Submit` reads (on the page it gets these from the FormBuilder tree).
         actions={
-          drawerSubmitInHeader ? (
-            <Button type="submit" form={formId} variant="PrimeStyle" is_loading={loading}>
-              {submitLabel}
-            </Button>
+          actions ? (
+            <ModeContext.Provider value={mode}>
+              <LoadingContext.Provider value={!!loading}>
+                <FormIdContext.Provider value={formId}>{actions}</FormIdContext.Provider>
+              </LoadingContext.Provider>
+            </ModeContext.Provider>
           ) : undefined
         }
         onOpenInNewTab={onOpenInNewTab}

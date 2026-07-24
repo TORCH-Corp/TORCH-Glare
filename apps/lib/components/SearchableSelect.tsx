@@ -38,6 +38,8 @@ interface Props {
   theme?: Themes;
   dir?: string;
   className?: string;
+  /** Transparent border/background so the trigger blends into a table cell. */
+  onTable?: boolean;
 
   // --- Async / backend pagination (all optional; static `options` still works) ---
   /**
@@ -105,6 +107,7 @@ export function SearchableSelect({
   theme,
   dir,
   className,
+  onTable,
   filterClientSide = true,
   onSearchChange,
   searchDebounceMs = 300,
@@ -175,6 +178,7 @@ export function SearchableSelect({
           data-theme={theme}
           variant={variant}
           size={size === "XS" ? "S" : size}
+          onTable={onTable}
           ref={groupRef as never}
           onFocus={(e: React.FocusEvent<HTMLDivElement>) =>
             setDropdownWidth(e.currentTarget.offsetWidth)

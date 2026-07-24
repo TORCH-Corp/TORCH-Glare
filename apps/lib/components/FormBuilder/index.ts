@@ -31,5 +31,7 @@ export type {
   SignatureFieldProps,
   PhoneFieldProps,
   FieldArrayProps,
+  TableColumn,
+  TableFieldProps,
   FormBuilderRootProps,
 } from "./types";

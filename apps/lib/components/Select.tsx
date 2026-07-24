@@ -32,6 +32,7 @@ const SelectTrigger = React.forwardRef<
       errors,
       theme,
       icon,
+      onTable,
       ...props
     },
     ref,
@@ -46,6 +47,7 @@ const SelectTrigger = React.forwardRef<
               size,
               variant,
               error: errors !== undefined,
+              onTable,
             }),
             className,
           )}
@@ -290,6 +292,10 @@ const PopoverTriggerStyles = cva(
           "hover:border-border-presentation-state-negative",
           "hover:caret-border-presentation-state-negative",
         ],
+      },
+      // Transparent border/background so the trigger blends into a table cell.
+      onTable: {
+        true: ["border-transparent", "bg-transparent"],
       },
       size: {
         S: ["rounded-[6px] [&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium"],

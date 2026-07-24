@@ -31,11 +31,11 @@ with `useState` — that boilerplate is exactly what `FormBuilder` exists to rem
 
 Three components, layered:
 
-| Component          | Use it for                                                                                                                         | When                                            |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| **`FormBuilder`**  | The form itself — fields authored as JSX children. Owns react-hook-form, validation, edit/view, sections, steppers.                | Always. This is the base.                       |
-| **`FormRenderer`** | Wraps `FormBuilder` to add **chrome**: page-vs-drawer display, the title header, automatic Submit placement, and a `summary` slot. | Real forms — prefer it over raw `FormBuilder`.  |
-| **`FormSummary`**  | A read-only **calculation panel beside the form** — totals that recompute live as the user types.                                  | Invoices, orders, anything with a "conclusion". |
+| Component          | Use it for                                                                                                                             | When                                            |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| **`FormBuilder`**  | The form itself — fields authored as JSX children. Owns react-hook-form, validation, edit/view, sections, steppers.                    | Always. This is the base.                       |
+| **`FormRenderer`** | Wraps `FormBuilder` to add **chrome**: page-vs-drawer display, the title header, an `actions` slot for the Save, and a `summary` slot. | Real forms — prefer it over raw `FormBuilder`.  |
+| **`FormSummary`**  | A read-only **calculation panel beside the form** — totals that recompute live as the user types.                                      | Invoices, orders, anything with a "conclusion". |
 
 Validation is **resolver-agnostic**: pass any react-hook-form resolver
 (`zodResolver(schema)` is typical). The library never depends on zod.
@@ -45,8 +45,8 @@ Validation is **resolver-agnostic**: pass any react-hook-form resolver
 ## 1. A single-page form
 
 Each `FormBuilder.*` field is one JSX child taking at least a `name`, plus `label`,
-`placeholder`, `required`, `disabled`, `hidden`, `fullWidth`. Wrap them in `FormRenderer`
-and give it a `header` — it renders the title bar and places the Submit button for you.
+`placeholder`, `required`, `disabled`, `hidden`, `fullWidth`. Wrap them in `FormRenderer`,
+give it a `header` for the title bar, and pass the Save via `actions`.
 
 ```tsx
 "use client";
@@ -94,6 +94,7 @@ export function ItemForm({
       resolver={zodResolver(schema)}
       defaultValues={DEFAULTS}
       header={{ title: "New item", variant: "new" }}
+      actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
     >
       <FormBuilder.Section title="Identity" color="Blue">
         <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
@@ -115,41 +116,43 @@ export function ItemForm({
 ```
 
 `FormBuilder.Section` groups fields in a `SectionBlock` (`color` is one of `Blue`, `Yellow`,
-`Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`). You don't add a Submit button yourself —
-`FormRenderer` places one from the `header`. (If you use raw `FormBuilder`, add
-`FormBuilder.Submit`, which is loading-aware and auto-hides in view mode.)
+`Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`). Pass the Save via `actions` — a
+`FormBuilder.Submit`, which is loading-aware and auto-hides in view mode; it renders in the
+header action pill. (With raw `FormBuilder`, put the same `FormBuilder.Submit` in a
+`FormBuilder.Header`.)
 
 ### Field types
 
 Every field, its underlying control, and the value your `onSubmit` receives:
 
-| Component                                                   | Value                                         |
-| ----------------------------------------------------------- | --------------------------------------------- |
-| `.Text` / `.Email` / `.Password` (`strengthMeter`)          | `string`                                      |
-| `.Number`                                                   | `number`                                      |
-| `.Currency` (`currencySymbol`)                              | `number`                                      |
-| `.Textarea`                                                 | `string`                                      |
-| `.Select` / `.SearchableSelect` (`options`)                 | `string`                                      |
-| `.MultiSelect` / `.Tags` (`options`)                        | `string[]`                                    |
-| `.RadioList` (`options`, optional per-option `description`) | `string`                                      |
-| `.CheckboxGroup` (`options`)                                | `string[]`                                    |
-| `.RadioCards` (`options` with `description`)                | `string`                                      |
-| `.Checkbox` (`subLabel`)                                    | `boolean`                                     |
-| `.SwitchBox` (`subLabel`)                                   | `boolean`                                     |
-| `.Otp` (`length`)                                           | `string`                                      |
-| `.Slider` (`min`, `max`, `step`, `range`, `suffix`)         | `number` (or `[number, number]` with `range`) |
-| `.Color` (`presets`, `alpha`)                               | hex `string`                                  |
-| `.Phone` (`defaultCountry`, defaults to `+964`)             | `string` (`"+<dial> <number>"`)               |
-| `.Date`                                                     | `Date`                                        |
-| `.DateRange`                                                | `{ from, to }`                                |
-| `.DateMultiple`                                             | `Date[]`                                      |
-| `.DateTime`                                                 | `Date`                                        |
-| `.TreeSelect` (`nodes`, `getNodeId`, `getNodeLabel`)        | node id (`string`)                            |
-| `.File` / `.Image` (`accept`, `multiple`)                   | `File \| File[]`                              |
-| `.RichText`                                                 | EditorJS `OutputData`                         |
-| `.Signature` (`penColor`)                                   | PNG data-URL `string`                         |
-| `.FieldArray` (`children` render fn, `defaultItem`)         | `object[]`                                    |
-| `.Custom` (`render`, `formatView`)                          | anything                                      |
+| Component                                                        | Value                                                          |
+| ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| `.Text` / `.Email` / `.Password` (`strengthMeter`)               | `string`                                                       |
+| `.Number`                                                        | `number`                                                       |
+| `.Currency` (`currencySymbol`)                                   | `number`                                                       |
+| `.Textarea`                                                      | `string`                                                       |
+| `.Select` / `.SearchableSelect` (`options`)                      | `string`                                                       |
+| `.MultiSelect` / `.Tags` (`options`)                             | `string[]`                                                     |
+| `.RadioList` (`options`, optional per-option `description`)      | `string`                                                       |
+| `.CheckboxGroup` (`options`)                                     | `string[]`                                                     |
+| `.RadioCards` (`options` with `description`)                     | `string`                                                       |
+| `.Checkbox` (`subLabel`)                                         | `boolean`                                                      |
+| `.SwitchBox` (`subLabel`)                                        | `boolean`                                                      |
+| `.Otp` (`length`)                                                | `string`                                                       |
+| `.Slider` (`min`, `max`, `step`, `range`, `suffix`)              | `number` (or `[number, number]` with `range`)                  |
+| `.Color` (`presets`, `alpha`)                                    | hex `string`                                                   |
+| `.Phone` (`defaultCountry`, defaults to `+964`)                  | `string` (`"+<dial> <number>"`)                                |
+| `.Date`                                                          | `Date`                                                         |
+| `.DateRange`                                                     | `{ from, to }`                                                 |
+| `.DateMultiple`                                                  | `Date[]`                                                       |
+| `.DateTime`                                                      | `Date`                                                         |
+| `.TreeSelect` (`nodes`, `getNodeId`, `getNodeLabel`)             | node id (`string`)                                             |
+| `.File` / `.Image` (`accept`, `multiple`)                        | `File \| File[]`                                               |
+| `.RichText`                                                      | EditorJS `OutputData`                                          |
+| `.Signature` (`penColor`)                                        | PNG data-URL `string`                                          |
+| `.FieldArray` (`children` render fn, `defaultItem`)              | `object[]`                                                     |
+| `.Table` (`columns`, `selectable`, `reorderable`, `defaultItem`) | `object[]` — editable grid; top-level child (not in a Section) |
+| `.Custom` (`render`, `formatView`)                               | anything                                                       |
 
 See the [FormBuilder](../components/form-builder.md) doc for the full prop tables.
 
@@ -157,12 +160,15 @@ See the [FormBuilder](../components/form-builder.md) doc for the full prop table
 
 ## 2. Title header + action bar
 
-`FormRenderer`'s `header` prop renders a title pill on the left and the Submit action on the
-right: `header={{ title: 'Acme Widget Pro', variant: 'edit' }}` (variants: `new`, `edit`,
-`detail`). Set `submitLabel` to relabel Save.
+`FormRenderer`'s `header` prop renders a title pill on the left: `header={{ title: 'Acme Widget
+Pro', variant: 'edit' }}` (variants: `new`, `edit`, `detail`). The **action pill** on the right is
+whatever you pass to `actions` — put the Save there:
+`actions={<FormBuilder.Submit>Save invoice</FormBuilder.Submit>}`. A bare `FormBuilder.Submit`
+auto-targets the form (via a form-id context), so it submits even though the header renders
+_outside_ the `<form>`.
 
 If you use raw `FormBuilder`, the same bar is `FormBuilder.Header` with a `FormBuilder.Submit`
-child — it works there because the header sits inside the `<form>`.
+child.
 
 ---
 
@@ -171,7 +177,8 @@ child — it works there because the header sits inside the `<form>`.
 Every step's fields stay **mounted and registered** — the whole form is live regardless of
 which step shows; the stepper only toggles visibility. **Navigation is the step buttons
 themselves**: backward is free, clicking forward validates the steps in between and stops at
-the first one with errors. Submit appears on the last step.
+the first one with errors. The Save is the header `actions` — it submits every step's fields at
+once, from any step.
 
 ```tsx
 <FormRenderer<Values>
@@ -179,6 +186,7 @@ the first one with errors. Submit appears on the last step.
   resolver={zodResolver(schema)}
   defaultValues={DEFAULTS}
   header={{ title: "New item", variant: "new" }}
+  actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
   <FormBuilder.Stepper>
     <FormBuilder.Step title="Identity">
@@ -222,8 +230,8 @@ the first one with errors. Submit appears on the last step.
 
 ## 5. A form in a drawer
 
-Set `display="drawer"` and drive it with `open` / `onOpenChange`. `FormRenderer` moves the
-Save action into the drawer header for you — no manual `id` / `form={id}` wiring:
+Set `display="drawer"` and drive it with `open` / `onOpenChange`. Pass the Save via `actions` —
+it renders in the drawer header, with no manual `id` / `form={id}` wiring:
 
 ```tsx
 <FormRenderer<Values>
@@ -234,6 +242,7 @@ Save action into the drawer header for you — no manual `id` / `form={id}` wiri
   onSubmit={save}
   resolver={zodResolver(schema)}
   defaultValues={DEFAULTS}
+  actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
   <FormBuilder.Section title="Identity" color="Blue">
     …
@@ -280,7 +289,7 @@ export function InvoiceForm({ save }: { save: (v: Invoice) => Promise<void> }) {
       onSubmit={save}
       fieldDirection="vertical"
       header={{ title: "Invoice", variant: "new" }}
-      submitLabel="Save invoice"
+      actions={<FormBuilder.Submit>Save invoice</FormBuilder.Submit>}
       summary={
         <FormSummary form={form} title="Invoice" subtitle="Summary">
           <FormSummary.Group title="Total">
@@ -395,5 +404,5 @@ drawer's tray, beside the form:
 ## Related
 
 - [FormBuilder](../components/form-builder.md) — every field type and its value shape
-- [FormRenderer](../components/form-renderer.md) — display, header, Submit placement, `summary`
+- [FormRenderer](../components/form-renderer.md) — display, header, `actions`, `summary`
 - [FormSummary](../components/form-summary.md) — the calculation panel

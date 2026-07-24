@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { FormBuilder } from "@/components/FormBuilder";
 import { FormRenderer } from "@/components/FormRenderer";
 import { Button } from "@/components/Button";
 import {
@@ -58,8 +59,8 @@ export default function SingleFormExample() {
         )}
       </div>
 
-      {/* FormRenderer owns the title header + Submit; we just hand it the fields. The
-          remount `key` re-seeds defaults when a record loads (see FormBuilder `values`). */}
+      {/* FormRenderer owns the title header + its Save action (edit mode only). The remount
+          `key` re-seeds defaults when a record loads (see FormBuilder `values`). */}
       <FormRenderer<Values>
         key={loaded ? "loaded" : "empty"}
         onSubmit={onSubmit}
@@ -69,6 +70,7 @@ export default function SingleFormExample() {
         values={loaded}
         className="min-h-0 flex-1"
         mode={mode}
+        actions={mode === "edit" ? <FormBuilder.Submit>Save</FormBuilder.Submit> : undefined}
         header={{
           title: loaded ? "Acme Widget Pro" : "Item",
           variant: mode === "view" ? "detail" : loaded ? "edit" : "new",

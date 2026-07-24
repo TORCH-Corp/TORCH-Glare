@@ -140,6 +140,7 @@ export default function FieldTypesExample() {
         defaultValues={DEFAULTS}
         className="min-h-0 flex-1"
         header={{ title: "Field types", variant: "new" }}
+        actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
       >
         <FormBuilder.Section title="Text inputs" color="Blue">
           <FormBuilder.Text name="title" label="Title" required placeholder="Text" />

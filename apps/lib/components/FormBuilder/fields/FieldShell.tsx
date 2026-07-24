@@ -14,8 +14,9 @@ import {
 import { FieldSection } from "../../../layouts/FieldSection";
 import { FormField, FormItem, FormControl } from "../../Form";
 import { FieldHint } from "../../FieldHint";
+import { Tooltip } from "../../Tooltip";
 import { DisplayField } from "../DisplayField";
-import { useMode, useDirection, useStepRegistry } from "../context";
+import { useMode, useDirection, useStepRegistry, useCell } from "../context";
 import type { FieldView } from "../viewFormat";
 
 export interface FieldShellProps {
@@ -55,6 +56,7 @@ export function FieldShell({
 }: FieldShellProps) {
   const form = useFormContext();
   const mode = useMode();
+  const cell = useCell();
   const ctxDirection = useDirection();
   // A field may pin its own direction (e.g. RichText forces vertical), else the form's. When
   // neither is set this stays `undefined` — FieldSection then falls back to its responsive
@@ -77,6 +79,37 @@ export function FieldShell({
   }, [step, name]);
 
   if (hidden) return null;
+
+  // Cell mode (inside FormBuilder.Table): render just the control — no FieldSection label/row.
+  // Errors surface as a tooltip on the control rather than a stacked FieldHint, so a row stays
+  // one line tall. Step registration + view formatting above still apply.
+  if (cell) {
+    if (mode === "view") {
+      const value = form.getValues(name);
+      const v = view ? view(value) : { value: value == null ? "" : String(value) };
+      return <DisplayField value={v.value} valueNode={v.valueNode} />;
+    }
+    return (
+      <FormField
+        control={form.control}
+        name={name as FieldPath<FieldValues>}
+        render={({ field, fieldState }) => (
+          <FormItem className="w-full">
+            <FormControl>
+              <Tooltip
+                open={Boolean(fieldError)}
+                text={fieldError ?? ""}
+                toolTipSide="top"
+                variant="highlight"
+              >
+                <div className="w-full">{children(field, fieldState)}</div>
+              </Tooltip>
+            </FormControl>
+          </FormItem>
+        )}
+      />
+    );
+  }
 
   if (mode === "view") {
     const value = form.getValues(name);

@@ -23,4 +23,9 @@ export const EXAMPLES = [
     title: "Create form (MCP)",
     blurb: "The shape the MCP create-form action generates.",
   },
+  {
+    href: "/form-builder/table",
+    title: "Table field",
+    blurb: "An editable grid: any field per cell, checkbox + drag-drop rows.",
+  },
 ];

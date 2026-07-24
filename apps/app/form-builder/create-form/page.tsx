@@ -72,6 +72,7 @@ export default function CreateFormExample() {
         defaultValues={DEFAULTS}
         className="min-h-0 flex-1"
         header={{ title: "New record", variant: "new" }}
+        actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
       >
         <FormBuilder.Section title="Details" color="Blue">
           <FormBuilder.Text name="name" label="Name" required placeholder="Acme Corp." />

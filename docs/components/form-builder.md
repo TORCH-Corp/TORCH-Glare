@@ -35,8 +35,8 @@ editable or read-only.
 </FormBuilder>
 ```
 
-> Need the same form to render as a page _or_ a drawer, with a title header and
-> automatic Submit placement? Wrap these same children in
+> Need the same form to render as a page _or_ a drawer, with a title header and an
+> `actions` slot for the Save? Wrap these same children in
 > [FormRenderer](./form-renderer.md).
 
 ## Installation
@@ -85,37 +85,82 @@ caps at 1100px and centers. The conclusion is outside the `<form>` and reads val
 Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 `description`, `required`, `disabled`, `hidden`, `fullWidth`.
 
-| Component                                                                 | Input                                                                                 | Value                                                        |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `FormBuilder.Text` / `.Email` / `.Password`                               | `InputField`                                                                          | `string`                                                     |
-| `FormBuilder.Number`                                                      | numeric `InputField`                                                                  | `number`                                                     |
-| `FormBuilder.Currency` (`currencySymbol`)                                 | `InputField` + symbol                                                                 | `number`                                                     |
-| `FormBuilder.Textarea`                                                    | `Textarea`                                                                            | `string`                                                     |
-| `FormBuilder.Slider` (`min,max,step,range`)                               | `@radix-ui/react-slider`                                                              | `number` / `[number,number]`                                 |
-| `FormBuilder.Color` (`presets`, `alpha`)                                  | `ColorPicker` (full palette: SV area, hue, opacity, eyedropper, HEX/RGB/HSL, presets) | hex `string` (`#rrggbb`, or `#rrggbbaa` when opacity < 100%) |
-| `FormBuilder.Phone` (`defaultCountry`)                                    | `SearchableSelect` + `InputField`                                                     | `string`                                                     |
-| `FormBuilder.Select` / `.SearchableSelect` (`options`, async props)       | `SearchableSelect`                                                                    | `string`                                                     |
-| `FormBuilder.MultiSelect` / `.Tags` (`options`)                           | `BadgeField`                                                                          | `string[]`                                                   |
-| `FormBuilder.RadioList` (`options`, each with optional `description`)     | boxed radio list                                                                      | `string`                                                     |
-| `FormBuilder.CheckboxGroup` (`options`, each with optional `description`) | boxed checkbox list                                                                   | `string[]`                                                   |
-| `FormBuilder.RadioCards` (`options` with `description`)                   | `RadioCard`                                                                           | `string`                                                     |
-| `FormBuilder.Checkbox` (`subLabel`)                                       | `Checkbox` + inline label                                                             | `boolean`                                                    |
-| `FormBuilder.SwitchBox` (`subLabel`)                                      | `Switch` in a `#f9f9f9` box                                                           | `boolean`                                                    |
-| `FormBuilder.Otp` (`length`)                                              | `InputOTP`                                                                            | `string`                                                     |
-| `FormBuilder.Date`                                                        | `DatePicker`                                                                          | `Date`                                                       |
-| `FormBuilder.DateRange`                                                   | `DatePicker` (range)                                                                  | `{from,to}`                                                  |
-| `FormBuilder.DateMultiple`                                                | `DatePicker` (multiple)                                                               | `Date[]`                                                     |
-| `FormBuilder.DateTime`                                                    | `DatePicker` (timePicker)                                                             | `Date`                                                       |
-| `FormBuilder.TreeSelect` (`nodes`, `getNodeId`, `getNodeLabel`, …)        | `SearchableTree`                                                                      | node id (`string`)                                           |
-| `FormBuilder.File` / `.Image` (`accept`, `multiple`)                      | `ImageAttachment`                                                                     | `File \| File[]`                                             |
-| `FormBuilder.RichText`                                                    | `TextEditor` (EditorJS)                                                               | `OutputData`                                                 |
-| `FormBuilder.Signature` (`penColor`)                                      | canvas pad                                                                            | PNG data-URL `string`                                        |
-| `FormBuilder.FieldArray` (`children` render fn, `defaultItem`)            | RHF `useFieldArray`                                                                   | `object[]`                                                   |
-| `FormBuilder.Custom` (`render`, `formatView`)                             | your control                                                                          | anything                                                     |
+| Component                                                                   | Input                                                                                 | Value                                                        |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `FormBuilder.Text` / `.Email` / `.Password`                                 | `InputField`                                                                          | `string`                                                     |
+| `FormBuilder.Number`                                                        | numeric `InputField`                                                                  | `number`                                                     |
+| `FormBuilder.Currency` (`currencySymbol`)                                   | `InputField` + symbol                                                                 | `number`                                                     |
+| `FormBuilder.Textarea`                                                      | `Textarea`                                                                            | `string`                                                     |
+| `FormBuilder.Slider` (`min,max,step,range`)                                 | `@radix-ui/react-slider`                                                              | `number` / `[number,number]`                                 |
+| `FormBuilder.Color` (`presets`, `alpha`)                                    | `ColorPicker` (full palette: SV area, hue, opacity, eyedropper, HEX/RGB/HSL, presets) | hex `string` (`#rrggbb`, or `#rrggbbaa` when opacity < 100%) |
+| `FormBuilder.Phone` (`defaultCountry`)                                      | `SearchableSelect` + `InputField`                                                     | `string`                                                     |
+| `FormBuilder.Select` / `.SearchableSelect` (`options`, async props)         | `SearchableSelect`                                                                    | `string`                                                     |
+| `FormBuilder.MultiSelect` / `.Tags` (`options`)                             | `BadgeField`                                                                          | `string[]`                                                   |
+| `FormBuilder.RadioList` (`options`, each with optional `description`)       | boxed radio list                                                                      | `string`                                                     |
+| `FormBuilder.CheckboxGroup` (`options`, each with optional `description`)   | boxed checkbox list                                                                   | `string[]`                                                   |
+| `FormBuilder.RadioCards` (`options` with `description`)                     | `RadioCard`                                                                           | `string`                                                     |
+| `FormBuilder.Checkbox` (`subLabel`)                                         | `Checkbox` + inline label                                                             | `boolean`                                                    |
+| `FormBuilder.SwitchBox` (`subLabel`)                                        | `Switch` in a `#f9f9f9` box                                                           | `boolean`                                                    |
+| `FormBuilder.Otp` (`length`)                                                | `InputOTP`                                                                            | `string`                                                     |
+| `FormBuilder.Date`                                                          | `DatePicker`                                                                          | `Date`                                                       |
+| `FormBuilder.DateRange`                                                     | `DatePicker` (range)                                                                  | `{from,to}`                                                  |
+| `FormBuilder.DateMultiple`                                                  | `DatePicker` (multiple)                                                               | `Date[]`                                                     |
+| `FormBuilder.DateTime`                                                      | `DatePicker` (timePicker)                                                             | `Date`                                                       |
+| `FormBuilder.TreeSelect` (`nodes`, `getNodeId`, `getNodeLabel`, …)          | `SearchableTree`                                                                      | node id (`string`)                                           |
+| `FormBuilder.File` / `.Image` (`accept`, `multiple`)                        | `ImageAttachment`                                                                     | `File \| File[]`                                             |
+| `FormBuilder.RichText`                                                      | `TextEditor` (EditorJS)                                                               | `OutputData`                                                 |
+| `FormBuilder.Signature` (`penColor`)                                        | canvas pad                                                                            | PNG data-URL `string`                                        |
+| `FormBuilder.FieldArray` (`children` render fn, `defaultItem`)              | RHF `useFieldArray`                                                                   | `object[]`                                                   |
+| `FormBuilder.Table` (`columns`, `selectable`, `reorderable`, `defaultItem`) | editable grid in a `SectionBlock`                                                     | `object[]`                                                   |
+| `FormBuilder.Custom` (`render`, `formatView`)                               | your control                                                                          | anything                                                     |
 
 `FormBuilder.Password` accepts `strengthMeter` (shows a `PasswordLevel` meter). `FormBuilder.FieldArray`
 renders a repeating list — its `children` is a render fn `(rowName, index, remove) => …` and sub-fields
 are named `${rowName}.field`.
+
+`FormBuilder.Table` is the **table-shaped** counterpart of `FieldArray` (value `object[]`): an editable
+grid where each row is a record and each column cell is any `FormBuilder.*` field. It renders **inside a
+`SectionBlock`**, so place it as a **top-level child** of the form (not inside a `FormBuilder.Section`).
+Each column pairs a `header` with a `cell(rowName, index)` renderer — name the cell's field
+`${rowName}.<key>`. The section header carries the actions: a **Add New** button (also repeated as the
+bottom footer) and a **Delete Row** button that's disabled until rows are checkbox-selected. Rows support
+**checkbox selection** (+ select-all), **drag-drop reordering**, and — per column, via `sortKey` — a
+sort toggle in the header. Everything hides in `mode="view"`, where cells render read-only. Cells render
+"bare" (control only) with validation errors shown as a tooltip on the control, so a row stays one line
+tall, and each field passes `onTable` so it's borderless and blends into the grid. Practical cell fields
+are the compact ones — `Text`, `Number`, `Currency`, `Select`, `SearchableSelect`, `Date`, `Phone`,
+`Checkbox`, `SwitchBox`; wide fields (`RichText`, `Signature`, `File`) work but aren't suited to a cell.
+
+```tsx
+<FormBuilder.Table
+  name="items"
+  title="Items"
+  color="Green"
+  addLabel="Add item"
+  defaultItem={{ item: "", category: "hardware", qty: 1, price: 0 }}
+  columns={[
+    {
+      header: "Item",
+      width: 200,
+      cell: (row) => <FormBuilder.Text name={`${row}.item`} required />,
+    },
+    {
+      header: "Category",
+      cell: (row) => <FormBuilder.Select name={`${row}.category`} options={CATEGORY} required />,
+    },
+    {
+      header: "Qty",
+      width: 110,
+      cell: (row) => <FormBuilder.Number name={`${row}.qty`} required />,
+    },
+    {
+      header: "Price",
+      width: 140,
+      cell: (row) => <FormBuilder.Currency name={`${row}.price`} currencySymbol="$" required />,
+    },
+  ]}
+/>
+```
 
 `FormBuilder.RadioList` (single-select, `string`) and `FormBuilder.CheckboxGroup` (multi-select,
 `string[]`) render their `options` as a boxed, divided list — control on the left, primary
@@ -127,7 +172,9 @@ renders like any other field — the `label` sits in the normal label column —
 an optional inline `subLabel`, a vertical divider, and the switch.
 
 `FormBuilder.Section` (props `title`, `color`, `icon`) groups fields in a Glare
-`SectionBlock`. `FormBuilder.Submit` is a loading-aware submit button (hidden in view mode).
+`SectionBlock`. `FormBuilder.Submit` is a loading-aware submit button (hidden in view mode). It
+**auto-associates with the enclosing form** (via context), so it submits even when placed in a
+header / action bar that renders _outside_ the `<form>` — no manual `form={id}` wiring.
 
 ## Title header + action bar
 
@@ -151,8 +198,9 @@ child of `<FormBuilder>`; the root then switches to the scroll-shell layout.
 
 - `title` — plain text (uppercased). `label` — badge text (defaults from `variant`).
 - `variant` — `"new" | "edit" | "detail"` (badge color); defaults from `mode`
-  (view → `detail`). `children` are the action buttons; `FormBuilder.Submit` fires
-  the form (it sits inside `<form>`), and auto-hides in view mode.
+  (view → `detail`). `children` are the action buttons; `FormBuilder.Submit` submits
+  the form (it auto-associates with it, even though the header sits outside `<form>`)
+  and auto-hides in view mode.
 
 ## Stepper (steps are components)
 
@@ -161,10 +209,15 @@ Wrap steps in `FormBuilder.Stepper`; each `FormBuilder.Step` holds a step's fiel
 regardless of which step is showing; the stepper only toggles _visibility_.
 **Navigation is the step buttons themselves**: click a step to go there. Backward is
 free; clicking forward validates the steps in between and stops at the first one with
-errors (shown with a red indicator). The **Submit** button appears on the last step.
+errors (shown with a red indicator). Put the **Submit** in the `FormBuilder.Header` (or the
+`FormRenderer` `actions`) — it submits every step's fields at once, from any step.
 
 ```tsx
 <FormBuilder onSubmit={save} resolver={r} defaultValues={d}>
+  <FormBuilder.Header title="Item" variant="new">
+    <FormBuilder.Submit>Save</FormBuilder.Submit>
+  </FormBuilder.Header>
+
   <FormBuilder.Stepper>
     <FormBuilder.Step title="Basics">
       <FormBuilder.Text name="name" label="Name" required />

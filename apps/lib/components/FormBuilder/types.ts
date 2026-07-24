@@ -9,6 +9,7 @@ import type {
   UseFormReturn,
 } from "react-hook-form";
 import type { FieldDirection, FormBuilderMode } from "./context";
+import type { SectionColor } from "../SectionBlock";
 
 /** Props shared by every `FormBuilder.*` field. `name` is the RHF path. */
 export interface BaseFieldProps {
@@ -174,6 +175,50 @@ export interface FieldArrayProps {
   defaultItem?: Record<string, unknown>;
   /** Render a row's sub-fields; use names like `${rowName}.field`. */
   children: (rowName: string, index: number, remove: () => void) => ReactNode;
+}
+
+/** One column of `FormBuilder.Table`. `cell` renders any `FormBuilder.*` field for a row. */
+export interface TableColumn {
+  header: ReactNode;
+  /** Fixed column width in px (otherwise the column sizes to content). */
+  width?: number;
+  align?: "start" | "center" | "end";
+  /**
+   * The row-object key this column edits. Set it to make the column header **sortable** — a
+   * sort toggle appears and clicking it reorders the rows by this key (asc/desc). Omit for
+   * non-sortable columns.
+   */
+  sortKey?: string;
+  /**
+   * Render the cell's field. `rowName` is the array path for this row (e.g. `lines.0`), so name
+   * sub-fields `${rowName}.<key>`. The field renders "bare" (control only, error as a tooltip).
+   */
+  cell: (rowName: string, index: number) => ReactNode;
+}
+
+/**
+ * `FormBuilder.Table` — an editable table field (built on RHF `useFieldArray`). Each row is a
+ * record; each column cell is any `FormBuilder.*` field. Supports per-row checkbox selection
+ * (+ select-all + bulk delete), drag-drop reordering, and add/remove rows. Renders inside a
+ * `SectionBlock`, so place it as a top-level child (not inside a `FormBuilder.Section`).
+ */
+export interface TableFieldProps {
+  name: string;
+  /** SectionBlock title. */
+  title?: ReactNode;
+  /** SectionBlock color badge (default `"Blue"`). */
+  color?: SectionColor;
+  icon?: ReactNode;
+  description?: ReactNode;
+  hidden?: boolean;
+  columns: TableColumn[];
+  /** Value for a newly-added row. */
+  defaultItem?: Record<string, unknown>;
+  addLabel?: ReactNode;
+  /** Per-row checkboxes + select-all + bulk delete (default `true`). */
+  selectable?: boolean;
+  /** Drag-drop row reordering (default `true`). */
+  reorderable?: boolean;
 }
 
 /** Root `<FormBuilder>` props. */

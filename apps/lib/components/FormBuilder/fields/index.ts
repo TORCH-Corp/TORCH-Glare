@@ -18,6 +18,7 @@ export { ColorField } from "./ColorField";
 export { SignatureField } from "./SignatureField";
 export { PhoneField } from "./PhoneField";
 export { FieldArray } from "./FieldArray";
+export { TableField } from "./TableField";
 export { FileField } from "./FileField";
 export { RichTextField } from "./RichTextEditorField";
 export { CustomField } from "./CustomField";

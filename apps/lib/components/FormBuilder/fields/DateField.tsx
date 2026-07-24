@@ -1,6 +1,7 @@
 "use client";
 
 import { DatePicker } from "../../DatePicker";
+import { useCell } from "../context";
 import { formatFieldView } from "../viewFormat";
 import type { DateFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
@@ -12,6 +13,7 @@ import { FieldShell } from "./FieldShell";
  */
 export function DateField(props: DateFieldProps) {
   const kind = props.mode === "range" ? "daterange" : props.mode === "multiple" ? "dates" : "date";
+  const cell = useCell();
 
   return (
     <FieldShell {...props} view={(v) => formatFieldView({ kind, value: v })}>
@@ -21,6 +23,7 @@ export function DateField(props: DateFieldProps) {
           timePicker={props.timePicker}
           dateFormat={props.dateFormat}
           value={field.value}
+          onTable={cell}
           onChange={(e) =>
             field.onChange((e as unknown as { target: { value: unknown } }).target.value)
           }

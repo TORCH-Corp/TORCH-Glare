@@ -70,7 +70,7 @@ export default function SummaryExample() {
         fieldDirection="vertical"
         className="min-h-0 flex-1"
         header={{ title: "Invoice", variant: "new" }}
-        submitLabel="Save invoice"
+        actions={<FormBuilder.Submit>Save invoice</FormBuilder.Submit>}
         summary={
           <FormSummary form={form} title="Invoice" subtitle="Summary">
             <FormSummary.Group title="Customer">

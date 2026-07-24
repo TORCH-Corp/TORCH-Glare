@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { FormBuilder } from "@/components/FormBuilder";
 import { FormRenderer } from "@/components/FormRenderer";
 import { FormSummary } from "@/components/FormSummary";
 import { Button } from "@/components/Button";
@@ -56,8 +57,8 @@ export default function DrawerExample() {
         </Button>
       </div>
 
-      {/* FormRenderer owns the drawer, its header Save action, and lays the summary in the
-          tray — it just needs the same hoisted `form` the summary reads from. */}
+      {/* FormRenderer owns the drawer and lays the summary in the tray — it takes the same
+          hoisted `form` the summary reads from, and its Save action for the drawer header. */}
       <FormRenderer<Values>
         display="drawer"
         open={open}
@@ -65,6 +66,7 @@ export default function DrawerExample() {
         header={{ title: "New item", label: "New", variant: "new" }}
         form={form}
         onSubmit={handleSubmit}
+        actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
         loading={submitting}
         summary={
           <FormSummary form={form} title="Item" subtitle="Summary">

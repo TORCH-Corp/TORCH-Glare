@@ -277,6 +277,31 @@ test("create-form skeleton wires the drawer + summary composition correctly", ()
   assert.match(code, /summary=\{/, "summary panel passed via the summary prop");
   assert.match(code, /<FormSummary form=\{form\}/, "summary bound to the hoisted form");
   assert.match(code, /<FormBuilder\.Currency name="price"/, "currency field mapped");
+  assert.match(
+    code,
+    /actions=\{<FormBuilder\.Submit>Save<\/FormBuilder\.Submit>\}/,
+    "the Save is composed and passed via FormRenderer's actions",
+  );
+});
+
+test("create-form maps a table/grid request to FormBuilder.Table, placed outside the Section", () => {
+  assert.equal(parseFields("catalog (table)")[0].spec.static, "Table", "explicit (table) hint");
+  assert.equal(parseFields("an editable grid")[0].spec.static, "Table", "inferred from 'grid'");
+
+  // A mixed shape: a plain field (→ Section) plus a table (→ its own SectionBlock).
+  const code = skeleton(parseFields("name, catalog (table)"), {
+    layout: "single",
+    display: "page",
+    summary: false,
+  });
+  assert.match(code, /<FormBuilder\.Table/, "emits a FormBuilder.Table");
+  assert.match(code, /columns=\{\[/, "with a columns array");
+  // The Table renders its own SectionBlock, so it lands AFTER the fields Section closes.
+  assert.match(
+    code,
+    /<\/FormBuilder\.Section>[\s\S]*<FormBuilder\.Table/,
+    "Table sits outside (after) the fields Section",
+  );
 });
 
 test("the form docs the server hands out point at FormBuilder, not hand-rolled forms", async () => {
