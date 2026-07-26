@@ -599,7 +599,16 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      containers: {
+        xs: "320px",
+        sm: "600px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
+      },
+    },
   },
   plugins: [
     // Color system (required first)
@@ -612,6 +621,7 @@ export default {
     require('glare-typography'),
 
     // Additional Tailwind plugins
+    require('@tailwindcss/container-queries'),
     require('tailwindcss-animate'),
     require('tailwind-scrollbar-hide'),
   ],

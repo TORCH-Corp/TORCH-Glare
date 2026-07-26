@@ -11,6 +11,9 @@ export function tailwindInit(): void {
     LessThanV4 ? "mapping-color-system" : "mapping-color-system-v4",
     "glare-torch-mode",
   ];
+  if (LessThanV4) {
+    dependencies.push("@tailwindcss/container-queries");
+  }
   installDependencies(dependencies);
 }
 

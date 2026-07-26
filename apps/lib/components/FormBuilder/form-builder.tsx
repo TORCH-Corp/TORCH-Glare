@@ -143,7 +143,7 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   // The fields column caps at 1200px and centers — as the middle column of the grid, and
   // standalone.
   const fieldsInner = (
-    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-4">{fields}</div>
+    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-4 px-[48px]">{fields}</div>
   );
 
   const formEl = (
@@ -193,7 +193,7 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
 
   // `className` lands on the OUTERMOST element — the one a parent lays out (e.g. `flex-1 min-h-0`
   // to fill a flex column). `h-full` fills a parent that has a definite height.
-  const outerClassName = cn("h-full w-full", className);
+  const outerClassName = cn("h-full w-full @container", className);
 
   const tree = (
     <Form {...form}>
