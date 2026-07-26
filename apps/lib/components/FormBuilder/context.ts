@@ -57,6 +57,8 @@ export interface StepperContextValue {
   goToStep: (index: number) => void;
   /** Field names registered per step, for per-step validation. */
   stepFields: Record<number, Set<string>>;
+  /** Steps that have passed validation — stay checked even after navigating back. */
+  completedSteps: Set<number>;
 }
 export const StepperContext = createContext<StepperContextValue | null>(null);
 export const useStepper = () => {

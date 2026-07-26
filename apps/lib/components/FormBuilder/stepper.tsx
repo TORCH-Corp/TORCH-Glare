@@ -72,7 +72,7 @@ function StepSlot({
  * to bottom, joined by a short vertical connector between consecutive steps.
  */
 function StepperNav() {
-  const { titles, currentStep, goToStep, stepFields } = useStepper();
+  const { titles, currentStep, goToStep, stepFields, completedSteps } = useStepper();
   const { errors } = useFormState();
 
   const stepHasError = (index: number) =>
@@ -83,8 +83,13 @@ function StepperNav() {
       {titles.map((title, index) => {
         // The step buttons ARE the navigation: click to move. Backward is free;
         // clicking forward validates the steps in between (goToStep) and stops at
-        // the first one with errors. Errored steps show a red indicator.
-        const type = stepHasError(index) ? "negative" : index < currentStep ? "success" : "default";
+        // the first one with errors. A live error shows red; a step that has passed
+        // validation stays checked (success) even after navigating back to it.
+        const type = stepHasError(index)
+          ? "negative"
+          : completedSteps.has(index)
+            ? "success"
+            : "default";
         return (
           <React.Fragment key={title}>
             <FormStep index={index} type={type} onClick={() => void goToStep(index)}>
@@ -170,13 +175,27 @@ export function useStepperState(
   trigger: TriggerFn,
 ): StepperContextValue {
   const [currentStep, setCurrentStep] = React.useState(0);
+  // Steps that have passed their last validation — kept so their checkmark persists when the
+  // user navigates back to an earlier step.
+  const [completedSteps, setCompletedSteps] = React.useState<Set<number>>(new Set());
   const stepFieldsRef = React.useRef<Record<number, Set<string>>>({});
   const titles = steps.map((s) => s.props.title);
   const lastIndex = steps.length - 1;
 
+  const markStep = (step: number, passed: boolean) =>
+    setCompletedSteps((prev) => {
+      if (passed === prev.has(step)) return prev; // no change
+      const next = new Set(prev);
+      if (passed) next.add(step);
+      else next.delete(step);
+      return next;
+    });
+
   const validateStep = async (step: number) => {
     const names = [...(stepFieldsRef.current[step] ?? [])] as FieldPath<FieldValues>[];
-    return names.length === 0 ? true : trigger(names);
+    const passed = names.length === 0 ? true : await trigger(names);
+    markStep(step, passed);
+    return passed;
   };
 
   // Navigation runs through the step buttons. Backward is free; going forward
@@ -211,6 +230,7 @@ export function useStepperState(
     goToPrevious: () => setCurrentStep((s) => Math.max(s - 1, 0)),
     goToStep,
     stepFields: stepFieldsRef.current,
+    completedSteps,
   };
 }
 
