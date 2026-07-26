@@ -24,7 +24,7 @@ import { SectionBlock } from "../../SectionBlock";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../Table";
 import { Checkbox } from "../../Checkbox";
 import { Button } from "../../Button";
-import { CellContext, useLoading, useMode } from "../context";
+import { CellContext, useLoading } from "../context";
 import type { TableColumn, TableFieldProps } from "../types";
 
 const ALIGN: Record<NonNullable<TableColumn["align"]>, string> = {
@@ -41,9 +41,7 @@ const ALIGN: Record<NonNullable<TableColumn["align"]>, string> = {
 export function TableField(props: TableFieldProps) {
   const { name, columns, selectable = true, reorderable = true } = props;
   const form = useFormContext<FieldValues>();
-  const mode = useMode();
   const loading = useLoading();
-  const isView = mode === "view";
 
   const { fields, append, remove, move, replace } = useFieldArray({
     control: form.control,
@@ -60,8 +58,8 @@ export function TableField(props: TableFieldProps) {
 
   if (props.hidden) return null;
 
-  const showHandle = reorderable && !isView;
-  const showSelect = selectable && !isView;
+  const showHandle = reorderable;
+  const showSelect = selectable;
 
   const toggleRow = (id: string) =>
     setSelected((prev) => {
@@ -193,31 +191,29 @@ export function TableField(props: TableFieldProps) {
           </TableRow>
         )}
 
-        {!isView && (
-          <TableRow className="h-[40px]">
-            <TableCell
-              colSpan={totalCols}
-              className="border-t-2 border-transparent hover:border-border-presentation-table-action-hover hover:bg-background-presentation-table-acton-hover"
+        <TableRow className="h-[40px]">
+          <TableCell
+            colSpan={totalCols}
+            className="border-t-2 border-transparent hover:border-border-presentation-table-action-hover hover:bg-background-presentation-table-acton-hover"
+          >
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => append((props.defaultItem ?? {}) as never)}
+              className="flex w-full items-center justify-start gap-2 typography-body-medium-semibold text-content-presentation-action-light-primary [&_i]:text-[20px]"
             >
-              <button
-                type="button"
-                disabled={loading}
-                onClick={() => append((props.defaultItem ?? {}) as never)}
-                className="flex w-full items-center justify-start gap-2 typography-body-medium-semibold text-content-presentation-action-light-primary [&_i]:text-[20px]"
-              >
-                <i className="ri-add-line" />
-                {props.addLabel ?? "Add New"}
-              </button>
-            </TableCell>
-          </TableRow>
-        )}
+              <i className="ri-add-line" />
+              {props.addLabel ?? "Add New"}
+            </button>
+          </TableCell>
+        </TableRow>
       </TableBody>
     </Table>
   );
 
-  // Header actions on the right of the SectionBlock title row (edit mode only): a "Delete Row"
-  // that's disabled until rows are selected, and a primary "Add New".
-  const headerActions = !isView ? (
+  // Header actions on the right of the SectionBlock title row: a "Delete Row" that's disabled
+  // until rows are selected, and a primary "Add New".
+  const headerActions = (
     <>
       {selectable && (
         <Button
@@ -242,7 +238,7 @@ export function TableField(props: TableFieldProps) {
         {props.addLabel ?? "Add New"}
       </Button>
     </>
-  ) : undefined;
+  );
 
   return (
     <SectionBlock

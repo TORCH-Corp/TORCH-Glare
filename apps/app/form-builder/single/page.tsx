@@ -17,7 +17,6 @@ import {
 } from "../_shared";
 
 export default function SingleFormExample() {
-  const [mode, setMode] = useState<"edit" | "view">("edit");
   const [loaded, setLoaded] = useState<Values | undefined>(undefined);
   const { submitting, result, onSubmit } = useDemoSubmit<Values>("single");
 
@@ -25,26 +24,10 @@ export default function SingleFormExample() {
     <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="Single form"
-        blurb="Compound fields. Toggle edit / view, and load a record to edit."
+        blurb="Compound fields wrapped in FormRenderer. Load a record to edit it."
       />
 
       <div className="flex flex-wrap items-center gap-4">
-        <div className="flex gap-1 rounded-[8px] bg-black-alpha-10 p-1">
-          <Button
-            size="S"
-            variant={mode === "edit" ? "PrimeStyle" : "BorderStyle"}
-            onClick={() => setMode("edit")}
-          >
-            Edit
-          </Button>
-          <Button
-            size="S"
-            variant={mode === "view" ? "PrimeStyle" : "BorderStyle"}
-            onClick={() => setMode("view")}
-          >
-            View
-          </Button>
-        </div>
         <Button
           size="S"
           variant="BluSecStyle"
@@ -59,8 +42,8 @@ export default function SingleFormExample() {
         )}
       </div>
 
-      {/* FormRenderer owns the title header + its Save action (edit mode only). The remount
-          `key` re-seeds defaults when a record loads (see FormBuilder `values`). */}
+      {/* FormRenderer owns the title header + its Save action. The remount `key` re-seeds
+          defaults when a record loads (see FormBuilder `values`). */}
       <FormRenderer<Values>
         key={loaded ? "loaded" : "empty"}
         onSubmit={onSubmit}
@@ -69,11 +52,10 @@ export default function SingleFormExample() {
         defaultValues={DEFAULTS}
         values={loaded}
         className="min-h-0 flex-1"
-        mode={mode}
-        actions={mode === "edit" ? <FormBuilder.Submit>Save</FormBuilder.Submit> : undefined}
+        actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
         header={{
           title: loaded ? "Acme Widget Pro" : "Item",
-          variant: mode === "view" ? "detail" : loaded ? "edit" : "new",
+          variant: loaded ? "edit" : "new",
         }}
       >
         <CoreFields />

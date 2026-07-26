@@ -3,7 +3,6 @@
 import { Select, SelectTrigger, SelectContent, SelectItem } from "../../Select";
 import { InputField } from "../../InputField";
 import { useLoading, useCell } from "../context";
-import { formatFieldView } from "../viewFormat";
 import type { PhoneFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 import { COUNTRIES, countryByCode, countryByDial, flagEmoji } from "./countries";
@@ -35,7 +34,7 @@ export function PhoneField(props: PhoneFieldProps) {
   const defaultDial = props.defaultCountry ?? "+964"; // Iraq
 
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
+    <FieldShell {...props}>
       {(field) => {
         const { dial, number } = splitPhone(field.value, defaultDial);
         const country = countryByDial(dial);

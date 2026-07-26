@@ -6,7 +6,6 @@ import type { OutputData } from "@editorjs/editorjs";
 // statically re-exports `TextEditor` (which loads EditorJS at module init) and would drag
 // it into the SSR bundle, crashing server rendering. This path stays SSR-safe (lazy inside).
 import { RichTextField as RichTextEditor } from "../../TextEditor/RichTextField";
-import { formatFieldView } from "../viewFormat";
 import type { BaseFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
@@ -18,12 +17,7 @@ import { FieldShell } from "./FieldShell";
  */
 export function RichTextField(props: BaseFieldProps) {
   return (
-    <FieldShell
-      {...props}
-      direction="vertical"
-      fullWidth
-      view={(v) => formatFieldView({ kind: "richtext", value: v })}
-    >
+    <FieldShell {...props} direction="vertical" fullWidth>
       {(field) => (
         <RichTextEditor
           data={field.value as OutputData | undefined}

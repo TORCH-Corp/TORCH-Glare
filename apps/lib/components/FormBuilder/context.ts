@@ -2,16 +2,11 @@
 
 import { createContext, useContext } from "react";
 
-export type FormBuilderMode = "edit" | "view";
 export type FieldDirection = "horizontal" | "vertical";
 
 /** Loading flag — drives the Submit spinner and disables inputs. */
 export const LoadingContext = createContext<boolean>(false);
 export const useLoading = () => useContext(LoadingContext);
-
-/** Edit vs read-only. Fields render `DisplayField` in `"view"`. */
-export const ModeContext = createContext<FormBuilderMode>("edit");
-export const useMode = () => useContext(ModeContext);
 
 /**
  * The `<form>`'s `id`. Provided by the FormBuilder root so a `FormBuilder.Submit` rendered

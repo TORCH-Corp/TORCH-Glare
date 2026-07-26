@@ -106,8 +106,15 @@ export function FormDrawer({
               {actions}
             </FormHeaderBar>
 
-            {/* pt-[72px] clears the 44px header pill (inset 4px) — same as the page shell. */}
-            <div className="h-full overflow-y-auto px-3 pb-[20px] pt-[72px]">{children}</div>
+            {/* pt-[72px] clears the 44px header pill (inset 4px) — same as the page shell. The
+                48px bottom breathing-room goes on an inner wrapper, not the scroll container:
+                FormBuilder's outer element is `h-full`, which would pin it to the content box and
+                swallow the container's own `pb`. On a plain wrapper that `h-full` resolves to the
+                content height, so the padding actually lengthens the scroll. The conclusion panel
+                is a separate sibling, so it keeps its own spacing. */}
+            <div className="h-full overflow-y-auto px-3 pt-[72px]">
+              <div className="pb-[48px]">{children}</div>
+            </div>
           </div>
         </DrawerPanel>
 

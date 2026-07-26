@@ -644,7 +644,7 @@ async function main() {
           `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
         ].filter(Boolean),
         ``,
-        `Full reference: call \`get-guide "forms-with-form-builder"\` (steppers, drawers, edit/view, totals, gotchas) or \`get-component-docs "form-builder"\` for every field type.`,
+        `Full reference: call \`get-guide "forms-with-form-builder"\` (steppers, drawers, editing records, totals, gotchas) or \`get-component-docs "form-builder"\` for every field type.`,
       ]
         .filter((l) => l !== ``)
         .join("\n");

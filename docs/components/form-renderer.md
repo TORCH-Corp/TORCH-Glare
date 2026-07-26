@@ -3,7 +3,7 @@ title: FormRenderer
 description: A thin wrapper around FormBuilder. Author fields as JSX children; FormRenderer owns page-vs-drawer display, the absolute title header, and drawer field layout. You compose the Save and pass it via the actions prop.
 component: true
 group: Forms
-keywords: [form-renderer, form, drawer, header, display, view-mode, react-hook-form]
+keywords: [form-renderer, form, drawer, header, display, actions, react-hook-form]
 ---
 
 # FormRenderer
@@ -63,7 +63,6 @@ import { FormBuilder } from "@/components/FormBuilder";
 | `onSubmit` / `onInvalid`                                       | fns                           | Submit / validation-fail callbacks.                                                                                                                                                                                                                                              |
 | `resolver`                                                     | `Resolver`                    | Any react-hook-form resolver, e.g. `zodResolver(schema)`.                                                                                                                                                                                                                        |
 | `defaultValues` / `values`                                     | `DefaultValues` / `T`         | Initial values; `values` re-syncs on change (edit).                                                                                                                                                                                                                              |
-| `mode`                                                         | `'edit' \| 'view'`            | `'view'` renders read-only, no Submit.                                                                                                                                                                                                                                           |
 | `loading` / `resetOnSuccess`                                   | `boolean`                     | Forwarded to `FormBuilder`.                                                                                                                                                                                                                                                      |
 | `fieldDirection`                                               | `'horizontal' \| 'vertical'`  | Defaults to vertical inside a drawer.                                                                                                                                                                                                                                            |
 | `form`                                                         | `UseFormReturn<T>`            | A hoisted `useForm` to bind to — pass when a sibling (e.g. a `summary` `FormSummary`) must read the same live values; the caller owns `resolver`/`defaultValues` on it. Omit to let FormRenderer create its own.                                                                 |
@@ -74,20 +73,21 @@ import { FormBuilder } from "@/components/FormBuilder";
 | `id`                                                           | `string`                      | `id` on the underlying `<form>`. Optional — FormRenderer generates and wires one otherwise.                                                                                                                                                                                      |
 | `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | —                             | Drawer control (when `display="drawer"`). `title` / `badge` are strings that override `header.title` / `header.label`.                                                                                                                                                           |
 
-## Drawer & view
+## Drawer
 
 ```tsx
 // drawer — pass the Save via `actions`; it renders in the drawer header
 <FormRenderer
-  display="drawer" open={open} onOpenChange={setOpen} title="New item" badge="New"
-  onSubmit={save} resolver={r} defaultValues={d}
+  display="drawer"
+  open={open}
+  onOpenChange={setOpen}
+  title="New item"
+  badge="New"
+  onSubmit={save}
+  resolver={r}
+  defaultValues={d}
   actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
-  {fields}
-</FormRenderer>
-
-// read-only view — same children, omit `actions` (a view has no Save)
-<FormRenderer mode="view" values={entity} onSubmit={() => {}}>
   {fields}
 </FormRenderer>
 ```

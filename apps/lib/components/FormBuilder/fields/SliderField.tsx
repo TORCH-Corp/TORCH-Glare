@@ -29,12 +29,7 @@ export function SliderField(props: SliderFieldProps) {
   const fmt = (n: number) => `${n}${suffix}`;
 
   return (
-    <FieldShell
-      {...props}
-      view={(v) => ({
-        value: Array.isArray(v) ? `${fmt(v[0])} – ${fmt(v[1])}` : v == null ? "" : fmt(v as number),
-      })}
-    >
+    <FieldShell {...props}>
       {(field) => {
         const raw = field.value;
         const values: number[] = props.range

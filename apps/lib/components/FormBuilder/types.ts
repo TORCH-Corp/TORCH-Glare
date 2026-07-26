@@ -8,7 +8,7 @@ import type {
   Resolver,
   UseFormReturn,
 } from "react-hook-form";
-import type { FieldDirection, FormBuilderMode } from "./context";
+import type { FieldDirection } from "./context";
 import type { SectionColor } from "../SectionBlock";
 
 /** Props shared by every `FormBuilder.*` field. `name` is the RHF path. */
@@ -69,13 +69,12 @@ export interface FileFieldProps extends BaseFieldProps {
   multiple?: boolean;
 }
 
-/** `FormBuilder.Custom` — bring your own control + optional read-only render. */
+/** `FormBuilder.Custom` — bring your own control, keeping the FieldSection + validation wiring. */
 export interface CustomFieldProps extends BaseFieldProps {
   render: (args: {
     field: ControllerRenderProps<FieldValues, string>;
     fieldState: ControllerFieldState;
   }) => ReactNode;
-  formatView?: (value: unknown) => ReactNode;
 }
 
 /** `FormBuilder.Date` / `.DateRange` / `.DateMultiple` / `.DateTime`. */
@@ -248,8 +247,6 @@ export interface FormBuilderRootProps<T extends FieldValues = FieldValues> {
   values?: T;
   /** Loading flag — Submit shows a spinner and inputs disable. */
   loading?: boolean;
-  /** `"edit"` (default) or read-only `"view"`. */
-  mode?: FormBuilderMode;
   /** Field row direction. Defaults to horizontal (vertical inside a drawer). */
   fieldDirection?: FieldDirection;
   /** Reset to defaults after a successful submit. */

@@ -7,7 +7,6 @@ import { InputField } from "../../InputField";
 import { Textarea } from "../../Textarea";
 import { PasswordLevel } from "../../PasswordLevel";
 import { useLoading, useCell } from "../context";
-import { formatFieldView } from "../viewFormat";
 import { formatNumber } from "../numberFormat";
 import type { BaseFieldProps, CurrencyFieldProps, PasswordFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
@@ -110,7 +109,7 @@ function TextLike({ props, type }: { props: BaseFieldProps; type: "text" | "emai
   const loading = useLoading();
   const cell = useCell();
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
+    <FieldShell {...props}>
       {(field) => (
         <InputField
           {...field}
@@ -136,10 +135,7 @@ export function PasswordField(props: PasswordFieldProps) {
   const loading = useLoading();
   const cell = useCell();
   return (
-    <FieldShell
-      {...props}
-      view={(v) => formatFieldView({ kind: "text", value: v ? "••••••••" : "" })}
-    >
+    <FieldShell {...props}>
       {(field) => (
         <div className="flex w-full flex-col gap-2">
           <InputField
@@ -162,7 +158,7 @@ export function NumberField(props: BaseFieldProps) {
   const loading = useLoading();
   const cell = useCell();
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "number", value: v })}>
+    <FieldShell {...props}>
       {(field) => (
         <NumberInput
           field={field}
@@ -179,12 +175,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
   const loading = useLoading();
   const cell = useCell();
   return (
-    <FieldShell
-      {...props}
-      view={(v) =>
-        formatFieldView({ kind: "currency", value: v, currencySymbol: props.currencySymbol })
-      }
-    >
+    <FieldShell {...props}>
       {(field) => (
         <NumberInput
           field={field}
@@ -205,7 +196,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
 export function TextareaField(props: BaseFieldProps & { rows?: number }) {
   const loading = useLoading();
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
+    <FieldShell {...props}>
       {(field, fieldState) => (
         <Textarea
           {...field}

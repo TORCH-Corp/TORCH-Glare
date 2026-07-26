@@ -25,13 +25,7 @@ export function TreeSelectField<T>(props: TreeSelectFieldProps<T>) {
   };
 
   return (
-    <FieldShell
-      {...props}
-      view={(v) => {
-        const node = findById(v);
-        return { value: node ? String(props.getNodeLabel(node)) : "" };
-      }}
-    >
+    <FieldShell {...props}>
       {(field) => (
         <SearchableTree
           nodes={props.nodes}

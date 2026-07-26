@@ -1,5 +1,5 @@
 {
-  "version": "2.4.1",
+  "version": "3.0.0",
   "generatedBy": "scripts/bin/generateRegistry",
   "items": [
     {
@@ -139,7 +139,8 @@
       "type": "components",
       "path": "components/Card.tsx",
       "npmDependencies": [
-        "@radix-ui/react-slot"
+        "@radix-ui/react-slot",
+        "class-variance-authority"
       ],
       "registryDependencies": [
         "utils/cn"
@@ -268,6 +269,7 @@
         "vaul"
       ],
       "registryDependencies": [
+        "components/Button",
         "utils/cn"
       ]
     },

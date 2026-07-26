@@ -5,7 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { BadgeField } from "../../BadgeField";
 import type { Tag } from "../../../hooks/useTagSelection";
 import { useLoading, useCell } from "../context";
-import { formatFieldView } from "../viewFormat";
 import type { SelectFieldProps, SearchableSelectFieldProps, OptionsFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
@@ -15,10 +14,7 @@ export function SelectField(props: SelectFieldProps) {
   const cell = useCell();
 
   return (
-    <FieldShell
-      {...props}
-      view={(v) => formatFieldView({ kind: "option", value: v, options: props.options })}
-    >
+    <FieldShell {...props}>
       {(field) => (
         <Select
           value={typeof field.value === "string" ? field.value : ""}
@@ -48,10 +44,7 @@ export function SelectField(props: SelectFieldProps) {
 export function SearchableSelectField(props: SearchableSelectFieldProps) {
   const cell = useCell();
   return (
-    <FieldShell
-      {...props}
-      view={(v) => formatFieldView({ kind: "option", value: v, options: props.options })}
-    >
+    <FieldShell {...props}>
       {(field) => (
         <SearchableSelect
           options={props.options}
@@ -75,10 +68,7 @@ export function SearchableSelectField(props: SearchableSelectFieldProps) {
 export function MultiSelectField(props: OptionsFieldProps) {
   const cell = useCell();
   return (
-    <FieldShell
-      {...props}
-      view={(v) => formatFieldView({ kind: "multi", value: v, options: props.options })}
-    >
+    <FieldShell {...props}>
       {(field) => {
         const selected = new Set<string>(Array.isArray(field.value) ? field.value : []);
         const tags: Tag[] = props.options.map((opt) => ({
