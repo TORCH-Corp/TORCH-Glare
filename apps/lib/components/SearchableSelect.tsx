@@ -24,6 +24,9 @@ export interface SearchableSelectOption {
   value: string;
   label: string;
   icon?: ReactNode;
+  /** Text used for client-side filtering. Defaults to `label` — set it to match on a subset
+   *  (e.g. a country name only, when the label also shows a dial code). */
+  searchText?: string;
 }
 
 interface Props {
@@ -38,6 +41,7 @@ interface Props {
   theme?: Themes;
   dir?: string;
   className?: string;
+  inputClassName?: string;
   /** Transparent border/background so the trigger blends into a table cell. */
   onTable?: boolean;
 
@@ -107,6 +111,7 @@ export function SearchableSelect({
   theme,
   dir,
   className,
+  inputClassName,
   onTable,
   filterClientSide = true,
   onSearchChange,
@@ -155,7 +160,7 @@ export function SearchableSelect({
     if (!filterClientSide) return options;
     const q = search.trim().toLowerCase();
     if (!q) return options;
-    return options.filter((o) => o.label.toLowerCase().includes(q));
+    return options.filter((o) => (o.searchText ?? o.label).toLowerCase().includes(q));
   }, [options, search, filterClientSide]);
 
   const selectedOption = options.find((o) => o.value === value) ?? null;
@@ -201,7 +206,7 @@ export function SearchableSelect({
               setOpen(true);
             }}
             onBlur={() => setSearching(false)}
-            className={cn("min-w-[100px] flex-1", {
+            className={cn("min-w-[100px] flex-1", inputClassName, {
               "!h-[18px]": size === "XS",
               "!h-[22px]": size === "S",
               "!h-[24px]": size === "M",

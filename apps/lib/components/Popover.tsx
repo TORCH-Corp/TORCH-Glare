@@ -239,10 +239,14 @@ const popoverStyles = cva(
           "bg-background-system-body-primary",
           "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
         ],
+        // Adopts the DropdownMenu surface (`menuContentStyles`): backdrop-blurred, borderless
+        // rounded-14 panel with a soft ambient shadow — keeping the original background color.
         PresentationStyle: [
-          "border-border-presentation-global-primary",
+          "border-transparent",
+          "rounded-[14px]",
+          "backdrop-blur-[21px]",
           "bg-background-presentation-form-base",
-          "shadow-[0px_0px_10px_0px_rgba(0,0,0,0.4),0px_4px_4px_0px_rgba(0,0,0,0.2)]",
+          "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
         ],
       },
       overlayBlur: {
