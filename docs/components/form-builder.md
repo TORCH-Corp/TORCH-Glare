@@ -1,29 +1,17 @@
 ---
 title: FormBuilder
-description: A compound, composition-based form. Author forms as JSX children (FormBuilder.Text, FormBuilder.Select, …) with steps-as-components, a drawer wrapper, edit + read-only view modes, and any react-hook-form resolver.
+description: A compound, composition-based form. Author forms as JSX children (FormBuilder.Text, FormBuilder.Select, …) with steps-as-components, a drawer wrapper, and any react-hook-form resolver.
 component: true
 group: Forms
 keywords:
-  [
-    form-builder,
-    form,
-    compound,
-    composition,
-    react-hook-form,
-    resolver,
-    stepper,
-    drawer,
-    fields,
-    view-mode,
-  ]
+  [form-builder, form, compound, composition, react-hook-form, resolver, stepper, drawer, fields]
 ---
 
 # FormBuilder
 
 A **compound, composition-based** form. You author a form as JSX children — each
 field is a `FormBuilder.*` component wired to [react-hook-form](https://react-hook-form.com/)
-for you. Steps are components, the drawer is a wrapper, and the same markup renders
-editable or read-only.
+for you. Steps are components and the drawer is a wrapper.
 
 ```tsx
 <FormBuilder onSubmit={save} resolver={zodResolver(schema)} defaultValues={d}>
@@ -63,7 +51,6 @@ import { FormBuilder } from "@/components/FormBuilder";
 | `resolver`       | `Resolver`                          | Any react-hook-form resolver, e.g. `zodResolver(schema)`.                                                                  |
 | `defaultValues`  | `DefaultValues`                     | Initial values (create).                                                                                                   |
 | `values`         | `T`                                 | Controlled values (edit) — the form re-syncs when this changes.                                                            |
-| `mode`           | `'edit' \| 'view'`                  | `'view'` renders every field read-only.                                                                                    |
 | `loading`        | `boolean`                           | Submit shows a spinner; inputs disable.                                                                                    |
 | `fieldDirection` | `'horizontal' \| 'vertical'`        | Row layout (auto-vertical inside a drawer).                                                                                |
 | `resetOnSuccess` | `boolean`                           | Reset to defaults after a successful submit.                                                                               |
@@ -125,7 +112,7 @@ Each column pairs a `header` with a `cell(rowName, index)` renderer — name the
 `${rowName}.<key>`. The section header carries the actions: a **Add New** button (also repeated as the
 bottom footer) and a **Delete Row** button that's disabled until rows are checkbox-selected. Rows support
 **checkbox selection** (+ select-all), **drag-drop reordering**, and — per column, via `sortKey` — a
-sort toggle in the header. Everything hides in `mode="view"`, where cells render read-only. Cells render
+sort toggle in the header. Cells render
 "bare" (control only) with validation errors shown as a tooltip on the control, so a row stays one line
 tall, and each field passes `onTable` so it's borderless and blends into the grid. Practical cell fields
 are the compact ones — `Text`, `Number`, `Currency`, `Select`, `SearchableSelect`, `Date`, `Phone`,
@@ -172,7 +159,7 @@ renders like any other field — the `label` sits in the normal label column —
 an optional inline `subLabel`, a vertical divider, and the switch.
 
 `FormBuilder.Section` (props `title`, `color`, `icon`) groups fields in a Glare
-`SectionBlock`. `FormBuilder.Submit` is a loading-aware submit button (hidden in view mode). It
+`SectionBlock`. `FormBuilder.Submit` is a loading-aware submit button. It
 **auto-associates with the enclosing form** (via context), so it submits even when placed in a
 header / action bar that renders _outside_ the `<form>` — no manual `form={id}` wiring.
 
@@ -197,10 +184,9 @@ child of `<FormBuilder>`; the root then switches to the scroll-shell layout.
 ```
 
 - `title` — plain text (uppercased). `label` — badge text (defaults from `variant`).
-- `variant` — `"new" | "edit" | "detail"` (badge color); defaults from `mode`
-  (view → `detail`). `children` are the action buttons; `FormBuilder.Submit` submits
-  the form (it auto-associates with it, even though the header sits outside `<form>`)
-  and auto-hides in view mode.
+- `variant` — `"new" | "edit" | "detail"` (badge color; default `"new"`). `children` are
+  the action buttons; `FormBuilder.Submit` submits the form (it auto-associates with it, even
+  though the header sits outside `<form>`).
 
 ## Stepper (steps are components)
 
@@ -209,8 +195,14 @@ Wrap steps in `FormBuilder.Stepper`; each `FormBuilder.Step` holds a step's fiel
 regardless of which step is showing; the stepper only toggles _visibility_.
 **Navigation is the step buttons themselves**: click a step to go there. Backward is
 free; clicking forward validates the steps in between and stops at the first one with
-errors (shown with a red indicator). Put the **Submit** in the `FormBuilder.Header` (or the
+errors (shown with a red indicator). A step that **passes validation stays checked** even
+after you navigate back to it. Put the **Submit** in the `FormBuilder.Header` (or the
 `FormRenderer` `actions`) — it submits every step's fields at once, from any step.
+
+`FormBuilder.Back` / `FormBuilder.Next` are **chevron step-nav buttons** (previous / next,
+disabled at the ends; `Next` validates the current step first). Place them in a
+`FormBuilder.Header`, or use `FormRenderer` — it prepends them before your Submit for a stepper
+automatically.
 
 ```tsx
 <FormBuilder onSubmit={save} resolver={r} defaultValues={d}>
@@ -251,15 +243,13 @@ const form = useForm({ resolver: r, defaultValues: d })
 `form` makes FormBuilder use an existing react-hook-form instance instead of creating its
 own — that's what lets something outside the form read the same live values.
 
-## Edit & view modes
+## Editing a record
 
-- **Edit**: pass `values` (not just `defaultValues`); the form repopulates when the
-  data loads. Use a remount `key` so initial-only inputs (date, rich text) re-seed.
-- **View**: `mode="view"` renders the same children read-only (label + formatted value)
-  with no submit — one markup drives both edit and detail views.
+Pass `values` (not just `defaultValues`); the form repopulates when the data loads. Use a
+remount `key` so initial-only inputs (date, rich text) re-seed.
 
 ```tsx
-<FormBuilder mode="view" values={entity} onSubmit={() => {}} defaultValues={d}>
+<FormBuilder key={entity.id} values={entity} onSubmit={save} resolver={r} defaultValues={d}>
   …the same fields…
 </FormBuilder>
 ```

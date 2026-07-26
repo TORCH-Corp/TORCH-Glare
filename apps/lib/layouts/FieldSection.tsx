@@ -31,32 +31,35 @@ export function FieldSection({
     <section
       {...props}
       data-theme={theme}
-      className={cn(
-        "grid py-[16px] px-[12px] w-full max-w-[1200px] min-w-[0px] ",
-        direction === "vertical" && "grid-rows-[auto_1fr] gap-[12px]",
-        direction === "horizontal" && "grid-cols-[350px_1fr] gap-[24px]",
-        direction === "flexible" &&
-          "grid-rows-[auto_1fr] gap-[12px] lg:grid-cols-[350px_1fr] lg:grid-rows-[1fr] lg:gap-[24px]",
-        className,
-      )}
+      className={cn("w-full max-w-[1200px] min-w-[0px] @container", className)}
     >
-      {/* Fixed width section for labels */}
-      <div className="flex flex-col gap-[12px]">
-        {label && (
-          <Label
-            size={size}
-            label={label}
-            requiredLabel={requiredLabel}
-            labelDirections={"horizontal"}
-          />
+      <div
+        className={cn(
+          "grid py-[16px] px-[12px] w-full min-w-[0px]",
+          direction === "vertical" && "grid-rows-[auto_1fr] gap-[12px]",
+          direction === "horizontal" && "grid-cols-[350px_1fr] gap-[24px]",
+          direction === "flexible" &&
+          "grid-rows-[auto_1fr] gap-[12px] @md:grid-cols-[350px_1fr] @md:grid-rows-[1fr] @md:gap-[24px]",
         )}
+      >
+        {/* Fixed width section for labels */}
+        <div className="flex flex-col gap-[12px]">
+          {label && (
+            <Label
+              size={size}
+              label={label}
+              requiredLabel={requiredLabel}
+              labelDirections={"horizontal"}
+            />
+          )}
 
-        {secondaryLabel && <Label size={size} secondaryLabel={secondaryLabel} />}
-        {childrenUnderLabel}
+          {secondaryLabel && <Label size={size} secondaryLabel={secondaryLabel} />}
+          {childrenUnderLabel}
+        </div>
+
+        {/* Flexible section that takes up the remaining space */}
+        <div className="grid grid-cols-1 place-items-end gap-[12px]">{children}</div>
       </div>
-
-      {/* Flexible section that takes up the remaining space */}
-      <div className="grid grid-cols-1 place-items-end gap-[12px]">{children}</div>
     </section>
   );
 }

@@ -2,16 +2,11 @@
 
 import { createContext, useContext } from "react";
 
-export type FormBuilderMode = "edit" | "view";
 export type FieldDirection = "horizontal" | "vertical";
 
 /** Loading flag — drives the Submit spinner and disables inputs. */
 export const LoadingContext = createContext<boolean>(false);
 export const useLoading = () => useContext(LoadingContext);
-
-/** Edit vs read-only. Fields render `DisplayField` in `"view"`. */
-export const ModeContext = createContext<FormBuilderMode>("edit");
-export const useMode = () => useContext(ModeContext);
 
 /**
  * The `<form>`'s `id`. Provided by the FormBuilder root so a `FormBuilder.Submit` rendered
@@ -62,6 +57,8 @@ export interface StepperContextValue {
   goToStep: (index: number) => void;
   /** Field names registered per step, for per-step validation. */
   stepFields: Record<number, Set<string>>;
+  /** Steps that have passed validation — stay checked even after navigating back. */
+  completedSteps: Set<number>;
 }
 export const StepperContext = createContext<StepperContextValue | null>(null);
 export const useStepper = () => {

@@ -7,13 +7,7 @@ import { useForm, type FieldValues } from "react-hook-form";
 import { cn } from "../../utils/cn";
 import { Form } from "../Form";
 import { SectionBlock, type SectionColor } from "../SectionBlock";
-import {
-  LoadingContext,
-  ModeContext,
-  DirectionContext,
-  StepperContext,
-  FormIdContext,
-} from "./context";
+import { LoadingContext, DirectionContext, StepperContext, FormIdContext } from "./context";
 import { Header } from "./header";
 import type { FormBuilderRootProps } from "./types";
 import {
@@ -94,7 +88,6 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   defaultValues,
   values,
   loading = false,
-  mode = "edit",
   fieldDirection,
   resetOnSuccess,
   conclusion,
@@ -119,12 +112,11 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   const header = childArray.find(isHeaderElement);
   const rest = childArray.filter((n) => !isHeaderElement(n));
 
-  const isView = mode === "view";
   const stepperEl = rest.find(isStepperElement);
   const stepChildren = stepperEl ? React.Children.toArray(stepperEl.props.children) : [];
   const steps = stepChildren.filter(isStepElement);
   const stepExtras = stepChildren.filter((n) => !isStepElement(n));
-  const isStepper = !!stepperEl && !isView;
+  const isStepper = !!stepperEl;
 
   // Stepper state is lifted HERE so the nav can live in its own grid column, outside the
   // `<form>`. Called unconditionally (inert when there are no steps) to keep hooks order stable.
@@ -151,12 +143,10 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   // The fields column caps at 1200px and centers — as the middle column of the grid, and
   // standalone.
   const fieldsInner = (
-    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-4">{fields}</div>
+    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-4 px-[48px]">{fields}</div>
   );
 
-  const formEl = isView ? (
-    <div className="w-full min-w-0">{fieldsInner}</div>
-  ) : (
+  const formEl = (
     <form id={id} className="w-full min-w-0" onSubmit={form.handleSubmit(handleValid, onInvalid)}>
       {fieldsInner}
     </form>
@@ -203,7 +193,7 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
 
   // `className` lands on the OUTERMOST element — the one a parent lays out (e.g. `flex-1 min-h-0`
   // to fill a flex column). `h-full` fills a parent that has a definite height.
-  const outerClassName = cn("h-full w-full", className);
+  const outerClassName = cn("h-full w-full @container", className);
 
   const tree = (
     <Form {...form}>
@@ -214,15 +204,13 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   return (
     <FormIdContext.Provider value={id}>
       <LoadingContext.Provider value={loading}>
-        <ModeContext.Provider value={mode}>
-          <DirectionContext.Provider value={direction}>
-            {isStepper ? (
-              <StepperContext.Provider value={stepper}>{tree}</StepperContext.Provider>
-            ) : (
-              tree
-            )}
-          </DirectionContext.Provider>
-        </ModeContext.Provider>
+        <DirectionContext.Provider value={direction}>
+          {isStepper ? (
+            <StepperContext.Provider value={stepper}>{tree}</StepperContext.Provider>
+          ) : (
+            tree
+          )}
+        </DirectionContext.Provider>
       </LoadingContext.Provider>
     </FormIdContext.Provider>
   );
@@ -240,10 +228,9 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
  * </FormBuilder>
  * ```
  *
- * Steps are components (`FormBuilder.Stepper` + `FormBuilder.Step`) and
- * `mode="view"` renders read-only. FormBuilder is drawer-unaware — to show a form
- * in a drawer, wrap it in `FormRenderer`'s `FormDrawer` (or use `FormRenderer`
- * with `display: "drawer"`).
+ * Steps are components (`FormBuilder.Stepper` + `FormBuilder.Step`). FormBuilder is
+ * drawer-unaware — to show a form in a drawer, wrap it in `FormRenderer`'s `FormDrawer`
+ * (or use `FormRenderer` with `display: "drawer"`).
  */
 export const FormBuilder = Object.assign(FormBuilderRoot, {
   // fields

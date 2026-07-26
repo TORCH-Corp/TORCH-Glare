@@ -22,25 +22,7 @@ export function SignatureField(props: SignatureFieldProps) {
   const penColor = props.penColor ?? "#111827";
 
   return (
-    <FieldShell
-      {...props}
-      direction="vertical"
-      fullWidth
-      view={(v) =>
-        typeof v === "string" && v
-          ? {
-              valueNode: (
-                // eslint-disable-next-line @next/next/no-img-element -- data-URL preview, no optimization applies
-                <img
-                  src={v}
-                  alt="Signature"
-                  className="max-h-[120px] rounded-[8px] border border-border-presentation-action-primary bg-white"
-                />
-              ),
-            }
-          : { value: "" }
-      }
-    >
+    <FieldShell {...props} direction="vertical" fullWidth>
       {(field) => (
         <SignaturePad
           value={typeof field.value === "string" ? field.value : ""}

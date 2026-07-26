@@ -2,7 +2,6 @@
 
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../../InputOTP";
 import { useLoading } from "../context";
-import { formatFieldView } from "../viewFormat";
 import type { OtpFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
@@ -12,7 +11,7 @@ export function OtpField(props: OtpFieldProps) {
   const length = props.length ?? 6;
 
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "text", value: v })}>
+    <FieldShell {...props}>
       {(field) => (
         <InputOTP
           maxLength={length}

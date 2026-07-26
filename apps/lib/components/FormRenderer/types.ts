@@ -15,7 +15,6 @@ import type {
  * form's header / drawer action bar) where you place the Save.
  */
 
-export type FormRendererMode = "edit" | "view";
 export type FormRendererDisplay = "page" | "drawer";
 export type FieldDirection = "horizontal" | "vertical";
 
@@ -29,7 +28,6 @@ export interface FormRendererProps<T extends FieldValues = FieldValues> {
   resolver?: Resolver<T>;
   defaultValues?: DefaultValues<T>;
   values?: T;
-  mode?: FormRendererMode;
   loading?: boolean;
   resetOnSuccess?: boolean;
   /** Row layout; defaults to vertical inside a drawer. */

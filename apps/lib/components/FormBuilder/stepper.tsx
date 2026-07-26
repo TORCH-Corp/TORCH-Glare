@@ -6,7 +6,13 @@ import { useFormState, type FieldPath, type FieldValues } from "react-hook-form"
 import { cn } from "../../utils/cn";
 import { Button } from "../Button";
 import { FormStepper, FormStep, FormStepIndicator, FormStepLabel } from "../FormStepper";
-import { StepContext, useStepper, type StepperContextValue, type StepRegistry } from "./context";
+import {
+  StepContext,
+  StepperContext,
+  useStepper,
+  type StepperContextValue,
+  type StepRegistry,
+} from "./context";
 
 // ─── Step (declaration only — the Stepper reads its props) ───────────────────
 
@@ -72,7 +78,7 @@ function StepSlot({
  * to bottom, joined by a short vertical connector between consecutive steps.
  */
 function StepperNav() {
-  const { titles, currentStep, goToStep, stepFields } = useStepper();
+  const { titles, currentStep, goToStep, stepFields, completedSteps } = useStepper();
   const { errors } = useFormState();
 
   const stepHasError = (index: number) =>
@@ -83,8 +89,13 @@ function StepperNav() {
       {titles.map((title, index) => {
         // The step buttons ARE the navigation: click to move. Backward is free;
         // clicking forward validates the steps in between (goToStep) and stops at
-        // the first one with errors. Errored steps show a red indicator.
-        const type = stepHasError(index) ? "negative" : index < currentStep ? "success" : "default";
+        // the first one with errors. A live error shows red; a step that has passed
+        // validation stays checked (success) even after navigating back to it.
+        const type = stepHasError(index)
+          ? "negative"
+          : completedSteps.has(index)
+            ? "success"
+            : "default";
         return (
           <React.Fragment key={title}>
             <FormStep index={index} type={type} onClick={() => void goToStep(index)}>
@@ -105,24 +116,71 @@ function StepperNav() {
   );
 }
 
-// ─── Back / Next / default footer ────────────────────────────────────────────
+// ─── Back / Next chevron nav (the Figma header action bar) ───────────────────
 
-export function Back({ children }: { children?: React.ReactNode }) {
-  const { goToPrevious, isFirstStep } = useStepper();
+/**
+ * Shared chevron nav button, matching the Figma header action bar (Body-HeaderBar-1.0) — the
+ * Glare `Button` icon variant, the same control Select/SearchableSelect use for their chevrons.
+ */
+function StepNavButton({
+  dir,
+  onClick,
+  disabled,
+}: {
+  dir: "left" | "right";
+  onClick: () => void;
+  disabled: boolean;
+}) {
   return (
-    <Button type="button" variant="BorderStyle" disabled={isFirstStep} onClick={goToPrevious}>
-      {children ?? "Back"}
+    <Button
+      type="button"
+      buttonType="icon"
+      size="M"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={dir === "left" ? "Previous step" : "Next step"}
+    >
+      <i
+        className={cn(
+          "text-[18px]",
+          dir === "left" ? "ri-arrow-left-s-line" : "ri-arrow-right-s-line",
+        )}
+      />
     </Button>
   );
 }
 
-export function Next({ children }: { children?: React.ReactNode }) {
+/** `FormBuilder.Back` — chevron to the previous step; disabled on the first. */
+export function Back() {
+  const { goToPrevious, isFirstStep } = useStepper();
+  return <StepNavButton dir="left" onClick={goToPrevious} disabled={isFirstStep} />;
+}
+
+/** `FormBuilder.Next` — chevron to the next step (validates first); disabled on the last. */
+export function Next() {
   const { goToNext, isLastStep } = useStepper();
-  if (isLastStep) return null;
+  return <StepNavButton dir="right" onClick={() => void goToNext()} disabled={isLastStep} />;
+}
+
+// ─── Stepper action bar (Back/Next + divider, then the Submit) ────────────────
+
+/**
+ * `FormRenderer` wraps its `actions` in this. When the form is a stepper it prepends the
+ * chevron `Back`/`Next` controls + a divider before the (user-provided) Submit — the Figma
+ * `Body-HeaderBar-1.0` layout. Outside a stepper there's no `StepperContext`, so it renders
+ * the actions untouched.
+ */
+export function StepperActions({ children }: { children?: React.ReactNode }) {
+  const stepper = React.useContext(StepperContext);
+  if (!stepper) return <>{children}</>;
   return (
-    <Button type="button" variant="PrimeStyle" onClick={() => void goToNext()}>
-      {children ?? "Next"}
-    </Button>
+    <div className="flex items-center gap-2">
+      <Back />
+      <Next />
+      {/* Divider — white-alpha hairline between the nav and the Submit. */}
+      <span aria-hidden className="mx-1 h-5 w-px rounded-[2px] bg-white-alpha-20" />
+      {children}
+    </div>
   );
 }
 
@@ -170,13 +228,27 @@ export function useStepperState(
   trigger: TriggerFn,
 ): StepperContextValue {
   const [currentStep, setCurrentStep] = React.useState(0);
+  // Steps that have passed their last validation — kept so their checkmark persists when the
+  // user navigates back to an earlier step.
+  const [completedSteps, setCompletedSteps] = React.useState<Set<number>>(new Set());
   const stepFieldsRef = React.useRef<Record<number, Set<string>>>({});
   const titles = steps.map((s) => s.props.title);
   const lastIndex = steps.length - 1;
 
+  const markStep = (step: number, passed: boolean) =>
+    setCompletedSteps((prev) => {
+      if (passed === prev.has(step)) return prev; // no change
+      const next = new Set(prev);
+      if (passed) next.add(step);
+      else next.delete(step);
+      return next;
+    });
+
   const validateStep = async (step: number) => {
     const names = [...(stepFieldsRef.current[step] ?? [])] as FieldPath<FieldValues>[];
-    return names.length === 0 ? true : trigger(names);
+    const passed = names.length === 0 ? true : await trigger(names);
+    markStep(step, passed);
+    return passed;
   };
 
   // Navigation runs through the step buttons. Backward is free; going forward
@@ -211,6 +283,7 @@ export function useStepperState(
     goToPrevious: () => setCurrentStep((s) => Math.max(s - 1, 0)),
     goToStep,
     stepFields: stepFieldsRef.current,
+    completedSteps,
   };
 }
 

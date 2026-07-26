@@ -15,9 +15,7 @@ import { FieldSection } from "../../../layouts/FieldSection";
 import { FormField, FormItem, FormControl } from "../../Form";
 import { FieldHint } from "../../FieldHint";
 import { Tooltip } from "../../Tooltip";
-import { DisplayField } from "../DisplayField";
-import { useMode, useDirection, useStepRegistry, useCell } from "../context";
-import type { FieldView } from "../viewFormat";
+import { useDirection, useStepRegistry, useCell } from "../context";
 
 export interface FieldShellProps {
   name: string;
@@ -28,20 +26,18 @@ export interface FieldShellProps {
   hidden?: boolean;
   /** Force the field's layout direction, overriding the form's `useDirection()` context. */
   direction?: "horizontal" | "vertical" | "flexible";
-  /** Edit-mode input, wired to the react-hook-form field. */
+  /** The input, wired to the react-hook-form field. */
   children: (
     field: ControllerRenderProps<FieldValues, string>,
     fieldState: ControllerFieldState,
   ) => ReactNode;
-  /** Read-only rendering (view mode) computed from the current value. */
-  view?: (value: unknown) => FieldView;
 }
 
 /**
  * Shared wrapper for every `FormBuilder.*` field: the FieldSection row + the RHF
- * `FormField`/`FormItem`/`FormControl`/`FormMessage` scaffolding in edit mode, or
- * `DisplayField` in view mode. Also registers the field name into the enclosing
- * `FormBuilder.Step` (if any) so the stepper can validate per step.
+ * `FormField`/`FormItem`/`FormControl`/`FormMessage` scaffolding. Also registers the
+ * field name into the enclosing `FormBuilder.Step` (if any) so the stepper can
+ * validate per step.
  */
 export function FieldShell({
   name,
@@ -52,10 +48,8 @@ export function FieldShell({
   hidden,
   direction: directionProp,
   children,
-  view,
 }: FieldShellProps) {
   const form = useFormContext();
-  const mode = useMode();
   const cell = useCell();
   const ctxDirection = useDirection();
   // A field may pin its own direction (e.g. RichText forces vertical), else the form's. When
@@ -82,13 +76,8 @@ export function FieldShell({
 
   // Cell mode (inside FormBuilder.Table): render just the control — no FieldSection label/row.
   // Errors surface as a tooltip on the control rather than a stacked FieldHint, so a row stays
-  // one line tall. Step registration + view formatting above still apply.
+  // one line tall. Step registration above still applies.
   if (cell) {
-    if (mode === "view") {
-      const value = form.getValues(name);
-      const v = view ? view(value) : { value: value == null ? "" : String(value) };
-      return <DisplayField value={v.value} valueNode={v.valueNode} />;
-    }
     return (
       <FormField
         control={form.control}
@@ -108,21 +97,6 @@ export function FieldShell({
           </FormItem>
         )}
       />
-    );
-  }
-
-  if (mode === "view") {
-    const value = form.getValues(name);
-    const v = view ? view(value) : { value: value == null ? "" : String(value) };
-    return (
-      <FieldSection
-        label={label}
-        secondaryLabel={description}
-        direction={direction}
-        className={fullWidth ? "max-w-full" : undefined}
-      >
-        <DisplayField value={v.value} valueNode={v.valueNode} />
-      </FieldSection>
     );
   }
 

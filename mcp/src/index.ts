@@ -644,7 +644,7 @@ async function main() {
           `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
         ].filter(Boolean),
         ``,
-        `Full reference: call \`get-guide "forms-with-form-builder"\` (steppers, drawers, edit/view, totals, gotchas) or \`get-component-docs "form-builder"\` for every field type.`,
+        `Full reference: call \`get-guide "forms-with-form-builder"\` (steppers, drawers, editing records, totals, gotchas) or \`get-component-docs "form-builder"\` for every field type.`,
       ]
         .filter((l) => l !== ``)
         .join("\n");
@@ -840,7 +840,7 @@ async function main() {
 
       const extras = [
         wantsStepper
-          ? '- Layout: a STEPPER. Wrap the sections in `FormBuilder.Stepper` with a `FormBuilder.Step title="…"` per step. Every step stays mounted; navigation is the step buttons; the Save is the `FormRenderer` `actions` and submits every step at once.'
+          ? '- Layout: a STEPPER. Wrap the sections in `FormBuilder.Stepper` with a `FormBuilder.Step title="…"` per step. Every step stays mounted; navigation is the step buttons (a step that passes validation stays checked). Pass just the Submit as the `FormRenderer` `actions` — it auto-prepends the chevron Back/Next nav, and Save submits every step at once.'
           : "- Layout: a single page form.",
         wantsDrawer
           ? '- Display: in a DRAWER. Use `FormRenderer` with `display="drawer"` and drive it with `open` / `onOpenChange`. Pass the Save via `actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}` — it renders in the drawer header (no manual `form={id}` wiring).'

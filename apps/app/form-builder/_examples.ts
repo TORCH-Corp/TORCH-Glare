@@ -3,7 +3,7 @@ export const EXAMPLES = [
   {
     href: "/form-builder/single",
     title: "Single form",
-    blurb: "Compound fields, edit + view modes.",
+    blurb: "Compound fields, load a record to edit.",
   },
   {
     href: "/form-builder/stepper",

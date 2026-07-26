@@ -2,7 +2,6 @@
 
 import { DatePicker } from "../../DatePicker";
 import { useCell } from "../context";
-import { formatFieldView } from "../viewFormat";
 import type { DateFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
@@ -12,11 +11,10 @@ import { FieldShell } from "./FieldShell";
  * `.DateTime` (date + time). All back onto the one Glare `DatePicker`.
  */
 export function DateField(props: DateFieldProps) {
-  const kind = props.mode === "range" ? "daterange" : props.mode === "multiple" ? "dates" : "date";
   const cell = useCell();
 
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind, value: v })}>
+    <FieldShell {...props}>
       {(field) => (
         <DatePicker
           mode={props.mode ?? "single"}

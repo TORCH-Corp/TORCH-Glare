@@ -15,24 +15,7 @@ export function ColorField(props: ColorFieldProps) {
   const loading = useLoading();
 
   return (
-    <FieldShell
-      {...props}
-      view={(v) =>
-        v
-          ? {
-              valueNode: (
-                <span className="inline-flex items-center gap-2">
-                  <span
-                    className="h-4 w-4 rounded-[4px] border border-border-presentation-action-primary"
-                    style={{ background: String(v) }}
-                  />
-                  {String(v)}
-                </span>
-              ),
-            }
-          : { value: "" }
-      }
-    >
+    <FieldShell {...props}>
       {(field) => {
         const value = typeof field.value === "string" ? field.value : "";
         const disabled = props.disabled || loading;

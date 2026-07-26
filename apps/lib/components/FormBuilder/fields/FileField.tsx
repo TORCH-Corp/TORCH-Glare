@@ -2,7 +2,6 @@
 
 import { ImageAttachment } from "../../ImageAttachment";
 import { useLoading } from "../context";
-import { formatFieldView } from "../viewFormat";
 import type { FileFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
@@ -10,7 +9,7 @@ import { FieldShell } from "./FieldShell";
 export function FileField(props: FileFieldProps & { image?: boolean }) {
   const loading = useLoading();
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "file", value: v })}>
+    <FieldShell {...props}>
       {(field) => {
         const current: unknown = field.value;
         const fileName = Array.isArray(current)

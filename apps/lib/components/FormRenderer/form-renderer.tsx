@@ -4,7 +4,8 @@ import { useId } from "react";
 import { FieldValues } from "react-hook-form";
 
 import { FormBuilder } from "../FormBuilder";
-import { FormIdContext, LoadingContext, ModeContext } from "../FormBuilder/context";
+import { FormIdContext, LoadingContext } from "../FormBuilder/context";
+import { StepperActions } from "../FormBuilder/stepper";
 import { FormDrawer } from "./FormDrawer";
 import type { FormRendererProps } from "./types";
 
@@ -25,7 +26,6 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
   resolver,
   defaultValues,
   values,
-  mode = "edit",
   loading,
   resetOnSuccess,
   fieldDirection,
@@ -61,7 +61,6 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
       resolver={resolver}
       defaultValues={defaultValues}
       values={values}
-      mode={mode}
       loading={loading}
       fieldDirection={effectiveDirection}
       resetOnSuccess={resetOnSuccess}
@@ -73,7 +72,8 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
     >
       {useHeader && (
         <FormBuilder.Header title={header!.title} label={header!.label} variant={header!.variant}>
-          {actions}
+          {/* A stepper form prepends chevron Back/Next + a divider before the Submit. */}
+          {actions && <StepperActions>{actions}</StepperActions>}
         </FormBuilder.Header>
       )}
 
@@ -90,15 +90,13 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
         badge={badge ?? header?.label}
         variant={header?.variant}
         summary={summary}
-        // The drawer header sits outside the `<form>`, so re-supply the form/loading/mode context
-        // a bare `FormBuilder.Submit` reads (on the page it gets these from the FormBuilder tree).
+        // The drawer header sits outside the `<form>`, so re-supply the form-id and loading
+        // context a bare `FormBuilder.Submit` reads (on the page it gets these from the tree).
         actions={
           actions ? (
-            <ModeContext.Provider value={mode}>
-              <LoadingContext.Provider value={!!loading}>
-                <FormIdContext.Provider value={formId}>{actions}</FormIdContext.Provider>
-              </LoadingContext.Provider>
-            </ModeContext.Provider>
+            <LoadingContext.Provider value={!!loading}>
+              <FormIdContext.Provider value={formId}>{actions}</FormIdContext.Provider>
+            </LoadingContext.Provider>
           ) : undefined
         }
         onOpenInNewTab={onOpenInNewTab}

@@ -7,7 +7,6 @@ import { Label } from "../../Label";
 import { RadioGroup, Radio } from "../../Radio";
 import { Checkbox } from "../../Checkbox";
 import { useLoading } from "../context";
-import { formatFieldView } from "../viewFormat";
 import type { OptionItem, OptionsFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
@@ -66,10 +65,7 @@ function OptionRow({
 export function RadioListField(props: OptionsFieldProps) {
   const loading = useLoading();
   return (
-    <FieldShell
-      {...props}
-      view={(v) => formatFieldView({ kind: "option", value: v, options: props.options })}
-    >
+    <FieldShell {...props}>
       {(field) => (
         <RadioGroup value={field.value ?? ""} onValueChange={field.onChange} className="w-full">
           <OptionBox>
@@ -102,10 +98,7 @@ export function RadioListField(props: OptionsFieldProps) {
 export function CheckboxGroupField(props: OptionsFieldProps) {
   const loading = useLoading();
   return (
-    <FieldShell
-      {...props}
-      view={(v) => formatFieldView({ kind: "multi", value: v, options: props.options })}
-    >
+    <FieldShell {...props}>
       {(field) => {
         const selected: string[] = Array.isArray(field.value) ? field.value : [];
         const toggle = (value: string, checked: boolean) => {

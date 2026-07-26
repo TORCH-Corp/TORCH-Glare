@@ -1,6 +1,6 @@
 ---
 title: Forms with FormBuilder, FormRenderer & FormSummary
-description: The canonical way to build forms in TORCH Glare. Author fields as JSX with FormBuilder, add page/drawer chrome with FormRenderer, and show live computed totals with FormSummary. Covers single, stepper, drawer, edit/view, and a full invoice example combining all three.
+description: The canonical way to build forms in TORCH Glare. Author fields as JSX with FormBuilder, add page/drawer chrome with FormRenderer, and show live computed totals with FormSummary. Covers single, stepper, drawer, editing a record, and a full invoice example combining all three.
 keywords:
   [
     form,
@@ -33,7 +33,7 @@ Three components, layered:
 
 | Component          | Use it for                                                                                                                             | When                                            |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| **`FormBuilder`**  | The form itself — fields authored as JSX children. Owns react-hook-form, validation, edit/view, sections, steppers.                    | Always. This is the base.                       |
+| **`FormBuilder`**  | The form itself — fields authored as JSX children. Owns react-hook-form, validation, sections, steppers.                               | Always. This is the base.                       |
 | **`FormRenderer`** | Wraps `FormBuilder` to add **chrome**: page-vs-drawer display, the title header, an `actions` slot for the Save, and a `summary` slot. | Real forms — prefer it over raw `FormBuilder`.  |
 | **`FormSummary`**  | A read-only **calculation panel beside the form** — totals that recompute live as the user types.                                      | Invoices, orders, anything with a "conclusion". |
 
@@ -117,9 +117,8 @@ export function ItemForm({
 
 `FormBuilder.Section` groups fields in a `SectionBlock` (`color` is one of `Blue`, `Yellow`,
 `Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`). Pass the Save via `actions` — a
-`FormBuilder.Submit`, which is loading-aware and auto-hides in view mode; it renders in the
-header action pill. (With raw `FormBuilder`, put the same `FormBuilder.Submit` in a
-`FormBuilder.Header`.)
+`FormBuilder.Submit`, which is loading-aware; it renders in the header action pill. (With raw
+`FormBuilder`, put the same `FormBuilder.Submit` in a `FormBuilder.Header`.)
 
 ### Field types
 
@@ -180,6 +179,11 @@ themselves**: backward is free, clicking forward validates the steps in between 
 the first one with errors. The Save is the header `actions` — it submits every step's fields at
 once, from any step.
 
+You pass just the Submit as `actions`; for a stepper, FormRenderer **auto-prepends chevron
+Back/Next controls + a divider** before it (`[◀] [▶] │ Save`). Back is disabled on the first
+step; Next validates then advances (disabled on the last). A step that **passes validation stays
+checked** in the rail even after you navigate back — a live error still shows it red.
+
 ```tsx
 <FormRenderer<Values>
   onSubmit={save}
@@ -206,21 +210,20 @@ once, from any step.
 
 ---
 
-## 4. Edit and read-only view — one markup, both modes
+## 4. Editing a record
 
-- **Edit**: pass `values` (not just `defaultValues`) — the form repopulates when the data
-  loads. Add a remount `key` so initial-only inputs (date, rich text) re-seed.
-- **View**: `mode="view"` renders the same children read-only, with no Submit.
+Pass `values` (not just `defaultValues`) — the form repopulates when the data loads. Add a
+remount `key` so initial-only inputs (date, rich text) re-seed.
 
 ```tsx
 <FormRenderer<Values>
   key={record?.id ?? "new"}
-  mode={mode} // 'edit' | 'view'
   values={record} // arrives async
   onSubmit={save}
   resolver={zodResolver(schema)}
   defaultValues={DEFAULTS}
-  header={{ title: record?.name ?? "New", variant: mode === "view" ? "detail" : "edit" }}
+  header={{ title: record?.name ?? "New", variant: record ? "edit" : "new" }}
+  actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
   …the same fields…
 </FormRenderer>

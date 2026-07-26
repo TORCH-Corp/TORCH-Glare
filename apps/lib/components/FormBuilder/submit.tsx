@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 
 import { Button } from "../Button";
-import { useFormId, useLoading, useMode } from "./context";
+import { useFormId, useLoading } from "./context";
 
 export interface SubmitButtonProps {
   children?: ReactNode;
@@ -21,9 +21,6 @@ export interface SubmitButtonProps {
 export function SubmitButton({ children, className, loadingText, form }: SubmitButtonProps) {
   const loading = useLoading();
   const ctxFormId = useFormId();
-  const mode = useMode();
-
-  if (mode === "view") return null;
 
   return (
     <Button

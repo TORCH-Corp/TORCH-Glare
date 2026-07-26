@@ -4,7 +4,6 @@ import { ReactNode } from "react";
 
 import { cn } from "../../utils/cn";
 import { HeaderBar } from "../HeaderBar";
-import { useMode } from "./context";
 
 export type HeaderVariant = "new" | "edit" | "detail";
 
@@ -90,12 +89,9 @@ export interface HeaderProps {
  * Place it as a direct child of `<FormBuilder>`; the root then switches to the
  * scroll-shell layout that reserves space beneath the floating header.
  */
-export function Header({ title, label, variant, children }: HeaderProps) {
-  const mode = useMode();
-  const v: HeaderVariant = variant ?? (mode === "view" ? "detail" : "new");
-
+export function Header({ title, label, variant = "new", children }: HeaderProps) {
   return (
-    <FormHeaderBar title={title} label={label} variant={v}>
+    <FormHeaderBar title={title} label={label} variant={variant}>
       {children}
     </FormHeaderBar>
   );

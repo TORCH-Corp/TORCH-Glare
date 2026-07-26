@@ -2,7 +2,6 @@
 
 import { Switch } from "../../Switch";
 import { useLoading } from "../context";
-import { formatFieldView } from "../viewFormat";
 import type { SwitchBoxFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
@@ -18,7 +17,7 @@ export function SwitchBoxField({ subLabel, ...props }: SwitchBoxFieldProps) {
   const loading = useLoading();
   const hasSubLabel = subLabel != null && subLabel !== "";
   return (
-    <FieldShell {...props} view={(v) => formatFieldView({ kind: "boolean", value: v })}>
+    <FieldShell {...props}>
       {(field) => (
         <div className="flex w-full items-center justify-end gap-[10px] rounded-[8px] bg-background-presentation-form-field-primary px-[10px] py-[6px]">
           {hasSubLabel && (
