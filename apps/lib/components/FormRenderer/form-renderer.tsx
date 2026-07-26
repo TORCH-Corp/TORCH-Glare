@@ -5,6 +5,7 @@ import { FieldValues } from "react-hook-form";
 
 import { FormBuilder } from "../FormBuilder";
 import { FormIdContext, LoadingContext } from "../FormBuilder/context";
+import { StepperActions } from "../FormBuilder/stepper";
 import { FormDrawer } from "./FormDrawer";
 import type { FormRendererProps } from "./types";
 
@@ -71,7 +72,8 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
     >
       {useHeader && (
         <FormBuilder.Header title={header!.title} label={header!.label} variant={header!.variant}>
-          {actions}
+          {/* A stepper form prepends chevron Back/Next + a divider before the Submit. */}
+          {actions && <StepperActions>{actions}</StepperActions>}
         </FormBuilder.Header>
       )}
 

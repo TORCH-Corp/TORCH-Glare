@@ -6,7 +6,13 @@ import { useFormState, type FieldPath, type FieldValues } from "react-hook-form"
 import { cn } from "../../utils/cn";
 import { Button } from "../Button";
 import { FormStepper, FormStep, FormStepIndicator, FormStepLabel } from "../FormStepper";
-import { StepContext, useStepper, type StepperContextValue, type StepRegistry } from "./context";
+import {
+  StepContext,
+  StepperContext,
+  useStepper,
+  type StepperContextValue,
+  type StepRegistry,
+} from "./context";
 
 // ─── Step (declaration only — the Stepper reads its props) ───────────────────
 
@@ -110,24 +116,71 @@ function StepperNav() {
   );
 }
 
-// ─── Back / Next / default footer ────────────────────────────────────────────
+// ─── Back / Next chevron nav (the Figma header action bar) ───────────────────
 
-export function Back({ children }: { children?: React.ReactNode }) {
-  const { goToPrevious, isFirstStep } = useStepper();
+/**
+ * Shared chevron nav button, matching the Figma header action bar (Body-HeaderBar-1.0) — the
+ * Glare `Button` icon variant, the same control Select/SearchableSelect use for their chevrons.
+ */
+function StepNavButton({
+  dir,
+  onClick,
+  disabled,
+}: {
+  dir: "left" | "right";
+  onClick: () => void;
+  disabled: boolean;
+}) {
   return (
-    <Button type="button" variant="BorderStyle" disabled={isFirstStep} onClick={goToPrevious}>
-      {children ?? "Back"}
+    <Button
+      type="button"
+      buttonType="icon"
+      size="M"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={dir === "left" ? "Previous step" : "Next step"}
+    >
+      <i
+        className={cn(
+          "text-[18px]",
+          dir === "left" ? "ri-arrow-left-s-line" : "ri-arrow-right-s-line",
+        )}
+      />
     </Button>
   );
 }
 
-export function Next({ children }: { children?: React.ReactNode }) {
+/** `FormBuilder.Back` — chevron to the previous step; disabled on the first. */
+export function Back() {
+  const { goToPrevious, isFirstStep } = useStepper();
+  return <StepNavButton dir="left" onClick={goToPrevious} disabled={isFirstStep} />;
+}
+
+/** `FormBuilder.Next` — chevron to the next step (validates first); disabled on the last. */
+export function Next() {
   const { goToNext, isLastStep } = useStepper();
-  if (isLastStep) return null;
+  return <StepNavButton dir="right" onClick={() => void goToNext()} disabled={isLastStep} />;
+}
+
+// ─── Stepper action bar (Back/Next + divider, then the Submit) ────────────────
+
+/**
+ * `FormRenderer` wraps its `actions` in this. When the form is a stepper it prepends the
+ * chevron `Back`/`Next` controls + a divider before the (user-provided) Submit — the Figma
+ * `Body-HeaderBar-1.0` layout. Outside a stepper there's no `StepperContext`, so it renders
+ * the actions untouched.
+ */
+export function StepperActions({ children }: { children?: React.ReactNode }) {
+  const stepper = React.useContext(StepperContext);
+  if (!stepper) return <>{children}</>;
   return (
-    <Button type="button" variant="PrimeStyle" onClick={() => void goToNext()}>
-      {children ?? "Next"}
-    </Button>
+    <div className="flex items-center gap-2">
+      <Back />
+      <Next />
+      {/* Divider — white-alpha hairline between the nav and the Submit. */}
+      <span aria-hidden className="mx-1 h-5 w-px rounded-[2px] bg-white-alpha-20" />
+      {children}
+    </div>
   );
 }
 
