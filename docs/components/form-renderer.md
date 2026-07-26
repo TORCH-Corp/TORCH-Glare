@@ -97,6 +97,12 @@ import { FormBuilder } from "@/components/FormBuilder";
 Drop a `FormBuilder.Stepper` in as the child. The Save lives in the header `actions` and
 submits every step's registered fields at once (steps stay mounted, so the whole form is live).
 
+For a stepper, FormRenderer **automatically prepends chevron Back/Next nav + a divider** before
+your Submit, so the action bar reads `[◀] [▶] │ Save`. Back is disabled on the first step; Next
+validates the current step, then advances (disabled on the last step). A step that passes
+validation **stays checked** in the rail — even after you navigate back — while a live validation
+error overrides it to red. You still pass just the Submit; the nav is wired for you:
+
 ```tsx
 <FormRenderer
   onSubmit={save}

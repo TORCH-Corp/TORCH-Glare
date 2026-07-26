@@ -195,8 +195,14 @@ Wrap steps in `FormBuilder.Stepper`; each `FormBuilder.Step` holds a step's fiel
 regardless of which step is showing; the stepper only toggles _visibility_.
 **Navigation is the step buttons themselves**: click a step to go there. Backward is
 free; clicking forward validates the steps in between and stops at the first one with
-errors (shown with a red indicator). Put the **Submit** in the `FormBuilder.Header` (or the
+errors (shown with a red indicator). A step that **passes validation stays checked** even
+after you navigate back to it. Put the **Submit** in the `FormBuilder.Header` (or the
 `FormRenderer` `actions`) — it submits every step's fields at once, from any step.
+
+`FormBuilder.Back` / `FormBuilder.Next` are **chevron step-nav buttons** (previous / next,
+disabled at the ends; `Next` validates the current step first). Place them in a
+`FormBuilder.Header`, or use `FormRenderer` — it prepends them before your Submit for a stepper
+automatically.
 
 ```tsx
 <FormBuilder onSubmit={save} resolver={r} defaultValues={d}>

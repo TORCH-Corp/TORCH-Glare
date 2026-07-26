@@ -168,70 +168,73 @@ function ArabicPicker({ options, value, onValueChange }) {
 
 ### SearchableSelect
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `options` | `SearchableSelectOption[]` | Required | The list of selectable options. In server mode (`filterClientSide={false}`) these are rendered as-is. |
-| `value` | `string \| null` | - | Controlled selected value. The matching option's label is shown as solid text in the input. |
-| `onValueChange` | `(value: string, option: SearchableSelectOption) => void` | - | Called when an option is selected. Receives the value and the full option object. |
-| `placeholder` | `string` | `'Search…'` | Placeholder text for the search input. |
-| `size` | `'XS' \| 'S' \| 'M'` | `'M'` | Field size. |
-| `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style variant for the field and dropdown surface. |
-| `icon` | `ReactNode` | - | Optional leading icon rendered inside the field. |
-| `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant, applied via `data-theme`. |
-| `dir` | `string` | - | Text direction (e.g. `'rtl'`) for the field and dropdown. |
-| `className` | `string` | - | Additional CSS classes for the field group. |
-| `filterClientSide` | `boolean` | `true` | When `true`, filters `options` locally by label. Set `false` for server-side search — `options` are rendered as-is and refetched via `onSearchChange`. |
-| `onSearchChange` | `(query: string) => void` | - | Called (debounced) with the trimmed query as the user types. Refetch your data here for server-side search. |
-| `searchDebounceMs` | `number` | `300` | Debounce delay (ms) before `onSearchChange` fires. |
-| `hasMore` | `boolean` | `false` | Whether more pages are available; gates the infinite-scroll loader. |
-| `loading` | `boolean` | `false` | Whether a fetch is in flight; shows a loading row and blocks `onLoadMore`. |
-| `onLoadMore` | `() => void` | - | Called when the scroll viewport nears the bottom and `hasMore && !loading`. |
-| `maxVisibleItems` | `number` | `5` | Maximum rows visible before the list scrolls internally. |
+| Prop               | Type                                                      | Default               | Description                                                                                                                                            |
+| ------------------ | --------------------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `options`          | `SearchableSelectOption[]`                                | Required              | The list of selectable options. In server mode (`filterClientSide={false}`) these are rendered as-is.                                                  |
+| `value`            | `string \| null`                                          | -                     | Controlled selected value. The matching option's label is shown as solid text in the input.                                                            |
+| `onValueChange`    | `(value: string, option: SearchableSelectOption) => void` | -                     | Called when an option is selected. Receives the value and the full option object.                                                                      |
+| `placeholder`      | `string`                                                  | `'Search…'`           | Placeholder text for the search input.                                                                                                                 |
+| `size`             | `'XS' \| 'S' \| 'M'`                                      | `'M'`                 | Field size.                                                                                                                                            |
+| `variant`          | `'PresentationStyle'`                                     | `'PresentationStyle'` | Visual style variant for the field and dropdown surface.                                                                                               |
+| `icon`             | `ReactNode`                                               | -                     | Optional leading icon rendered inside the field.                                                                                                       |
+| `theme`            | `'dark' \| 'light' \| 'default'`                          | -                     | Theme variant, applied via `data-theme`.                                                                                                               |
+| `dir`              | `string`                                                  | -                     | Text direction (e.g. `'rtl'`) for the field and dropdown.                                                                                              |
+| `className`        | `string`                                                  | -                     | Additional CSS classes for the field group.                                                                                                            |
+| `filterClientSide` | `boolean`                                                 | `true`                | When `true`, filters `options` locally by label. Set `false` for server-side search — `options` are rendered as-is and refetched via `onSearchChange`. |
+| `onSearchChange`   | `(query: string) => void`                                 | -                     | Called (debounced) with the trimmed query as the user types. Refetch your data here for server-side search.                                            |
+| `searchDebounceMs` | `number`                                                  | `300`                 | Debounce delay (ms) before `onSearchChange` fires.                                                                                                     |
+| `hasMore`          | `boolean`                                                 | `false`               | Whether more pages are available; gates the infinite-scroll loader.                                                                                    |
+| `loading`          | `boolean`                                                 | `false`               | Whether a fetch is in flight; shows a loading row and blocks `onLoadMore`.                                                                             |
+| `onLoadMore`       | `() => void`                                              | -                     | Called when the scroll viewport nears the bottom and `hasMore && !loading`.                                                                            |
+| `maxVisibleItems`  | `number`                                                  | `5`                   | Maximum rows visible before the list scrolls internally.                                                                                               |
 
 ### SearchableSelectOption
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | Required | Unique value for the option; matched against the `value` prop. |
-| `label` | `string` | Required | Display text; also used for client-side label filtering. |
-| `icon` | `ReactNode` | - | Optional leading icon rendered in the row. |
+| Prop         | Type        | Default  | Description                                                                                                                                                                      |
+| ------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`      | `string`    | Required | Unique value for the option; matched against the `value` prop.                                                                                                                   |
+| `label`      | `string`    | Required | Display text; also the default target for client-side filtering.                                                                                                                 |
+| `icon`       | `ReactNode` | -        | Optional leading icon rendered in the row.                                                                                                                                       |
+| `searchText` | `string`    | `label`  | Text used for client-side filtering. Set it to match on a **subset** of the label — e.g. a country name when the label also shows a dial code, so typing the dial doesn't match. |
 
 ## TypeScript
 
 ### Type Definitions
 
 ```typescript
-import { ReactNode } from 'react'
+import { ReactNode } from "react";
 
 export interface SearchableSelectOption {
-  value: string
-  label: string
-  icon?: ReactNode
+  value: string;
+  label: string;
+  icon?: ReactNode;
+  /** Text used for client-side filtering. Defaults to `label`. */
+  searchText?: string;
 }
 
 interface SearchableSelectProps {
-  options: SearchableSelectOption[]
-  value?: string | null
-  onValueChange?: (value: string, option: SearchableSelectOption) => void
-  placeholder?: string
-  size?: 'XS' | 'S' | 'M'
-  variant?: 'PresentationStyle'
-  icon?: ReactNode
-  theme?: 'dark' | 'light' | 'default'
-  dir?: string
-  className?: string
+  options: SearchableSelectOption[];
+  value?: string | null;
+  onValueChange?: (value: string, option: SearchableSelectOption) => void;
+  placeholder?: string;
+  size?: "XS" | "S" | "M";
+  variant?: "PresentationStyle";
+  icon?: ReactNode;
+  theme?: "dark" | "light" | "default";
+  dir?: string;
+  className?: string;
 
   // Async / backend pagination (all optional; static `options` still work)
-  filterClientSide?: boolean
-  onSearchChange?: (query: string) => void
-  searchDebounceMs?: number
-  hasMore?: boolean
-  loading?: boolean
-  onLoadMore?: () => void
-  maxVisibleItems?: number
+  filterClientSide?: boolean;
+  onSearchChange?: (query: string) => void;
+  searchDebounceMs?: number;
+  hasMore?: boolean;
+  loading?: boolean;
+  onLoadMore?: () => void;
+  maxVisibleItems?: number;
 }
 
-export function SearchableSelect(props: SearchableSelectProps): JSX.Element
+export function SearchableSelect(props: SearchableSelectProps): JSX.Element;
 ```
 
 ## Common Patterns
@@ -340,6 +343,7 @@ function UserPicker() {
 ## Best Practices
 
 1. **Always control `value`** — pass `value` and `onValueChange` so the input can display the selected label.
+
    ```typescript
    <SearchableSelect value={value} onValueChange={setValue} options={options} />
    ```

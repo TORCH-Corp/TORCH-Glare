@@ -179,6 +179,11 @@ themselves**: backward is free, clicking forward validates the steps in between 
 the first one with errors. The Save is the header `actions` — it submits every step's fields at
 once, from any step.
 
+You pass just the Submit as `actions`; for a stepper, FormRenderer **auto-prepends chevron
+Back/Next controls + a divider** before it (`[◀] [▶] │ Save`). Back is disabled on the first
+step; Next validates then advances (disabled on the last). A step that **passes validation stays
+checked** in the rail even after you navigate back — a live error still shows it red.
+
 ```tsx
 <FormRenderer<Values>
   onSubmit={save}
