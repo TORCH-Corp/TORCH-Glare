@@ -226,6 +226,9 @@ automatically.
 > [FormRenderer](./form-renderer.md) (pass `fieldDirection="vertical"` to the
 > form), or use `FormRenderer` with `display="drawer"`.
 
+> Building a **detail page** with a sidebar of tabs (not a form)? That lives on `FormRenderer`
+> (`FormRenderer.Sidebar` / `.Tab`) — see the FormRenderer docs. `FormBuilder` itself stays form-only.
+
 ## Calculation panel
 
 To show computed totals **beside** the form, render a [FormSummary](./form-summary.md)

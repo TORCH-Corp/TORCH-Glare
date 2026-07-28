@@ -1,11 +1,20 @@
 "use client";
 
-import { useId } from "react";
+import { Children, useId } from "react";
 import { FieldValues } from "react-hook-form";
 
 import { FormBuilder } from "../FormBuilder";
 import { FormIdContext, LoadingContext } from "../FormBuilder/context";
 import { StepperActions } from "../FormBuilder/stepper";
+import {
+  DetailSidebar,
+  DetailTab,
+  DetailGrid,
+  DetailRow,
+  DetailTabsView,
+  isDetailSidebarElement,
+  isDetailTabElement,
+} from "./detail";
 import { FormDrawer } from "./FormDrawer";
 import type { FormRendererProps } from "./types";
 
@@ -17,8 +26,12 @@ import type { FormRendererProps } from "./types";
  * FormRenderer never manufactures a Submit — you compose it and hand it to `actions`
  * (`actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}`). It renders in the form's
  * header action pill (page) or the drawer header (drawer), and auto-targets this form.
+ *
+ * Give it `FormRenderer.Sidebar` + `FormRenderer.Tab` children instead of fields and it switches to
+ * a **detail-tabs** view: a display-only page (no `<form>`) whose sidebar swaps `FormBuilder.Section`
+ * panels — the sidebar sits where a stepper's rail would.
  */
-export function FormRenderer<T extends FieldValues = FieldValues>({
+function FormRendererRoot<T extends FieldValues = FieldValues>({
   children,
   id,
   onSubmit,
@@ -52,11 +65,29 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
   const autoId = useId();
   const formId = id ?? autoId;
 
+  // Detail-tabs mode: a `FormRenderer.Sidebar` + `FormRenderer.Tab` children mean a display-only
+  // detail page (no `<form>`) — the sidebar swaps Section panels via Radix Tabs. Detected here so
+  // the form props below are simply unused.
+  const childArray = Children.toArray(children);
+  const detailSidebar = childArray.find(isDetailSidebarElement);
+  const detailTabs = childArray.filter(isDetailTabElement);
+  if (detailSidebar && detailTabs.length > 0) {
+    return (
+      <DetailTabsView
+        header={header}
+        actions={actions}
+        sidebar={detailSidebar}
+        tabs={detailTabs}
+        className={className}
+      />
+    );
+  }
+
   const inner = (
     <FormBuilder
       id={formId}
       form={form}
-      onSubmit={onSubmit}
+      onSubmit={onSubmit ?? (() => {})}
       onInvalid={onInvalid}
       resolver={resolver}
       defaultValues={defaultValues}
@@ -109,3 +140,15 @@ export function FormRenderer<T extends FieldValues = FieldValues>({
   // Page display: FormBuilder already placed `summary` as the grid's conclusion column.
   return inner;
 }
+
+/**
+ * FormRenderer — see {@link FormRendererRoot}. The compound statics drive the display-only
+ * **detail-tabs** view: `FormRenderer.Sidebar` (the rail) + `FormRenderer.Sidebar.Item` (a tab) +
+ * `FormRenderer.Tab` (a `FormBuilder.Section` panel).
+ */
+export const FormRenderer = Object.assign(FormRendererRoot, {
+  Sidebar: DetailSidebar,
+  Tab: DetailTab,
+  Grid: DetailGrid,
+  Row: DetailRow,
+});

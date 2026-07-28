@@ -11,7 +11,13 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { DocsLoader, normalizeCategory } from "./docs-loader.js";
-import { FIELD_TYPES, parseFields, skeleton } from "./form-fields.js";
+import {
+  FIELD_TYPES,
+  parseFields,
+  skeleton,
+  detailSkeleton,
+  buildCreateForm,
+} from "./form-fields.js";
 import { ComponentRegistry } from "./component-registry.js";
 import { RegistryLoader } from "./registry-loader.js";
 
@@ -146,6 +152,55 @@ test("getSource returns the real component file", async () => {
   assert.ok(source, "Button source should be readable");
   assert.match(source!.path, /components\/Button\.tsx$/);
   assert.ok(source!.code.includes("Button"), "source should mention Button");
+});
+
+test("folder components (FormBuilder/FormRenderer) resolve for install + source", async () => {
+  const rl = new RegistryLoader();
+  await rl.load();
+
+  // These ship as folders the flat registry omits; the MCP must still resolve them (the docs tell
+  // users to `npx torch-glare add FormBuilder`). Regression: they used to be "not found".
+  for (const name of ["FormBuilder", "FormRenderer"]) {
+    const item = rl.getItemByName(name);
+    assert.ok(item, `${name} should resolve`);
+    assert.equal(item!.isFolder, true, `${name} is a folder component`);
+    assert.ok((item!.files?.length ?? 0) > 1, `${name} lists its folder files`);
+    assert.equal(rl.addCommand(item!), `npx torch-glare add ${name}`);
+    assert.equal(rl.importPath(item!), `@/components/${name}`);
+  }
+
+  // Deps are scanned from the folder's imports, so an install reports what it really pulls in.
+  const fr = rl.getItemByName("FormRenderer")!;
+  assert.ok(fr.npmDependencies.includes("react-hook-form"), "FormRenderer needs react-hook-form");
+  assert.ok(
+    fr.npmDependencies.includes("@radix-ui/react-tabs"),
+    "detail-tabs pulls @radix-ui/react-tabs",
+  );
+  const plan = rl.resolveInstallPlan("components", "FormRenderer")!;
+  assert.ok(plan, "FormRenderer has an install plan");
+  assert.ok(
+    plan.items.some((i) => i.name === "FormBuilder"),
+    "FormRenderer transitively pulls in FormBuilder",
+  );
+
+  // getExports reads the barrel's re-exports.
+  const { values } = await rl.getExports(fr);
+  assert.ok(values.includes("FormRenderer"), "barrel export surfaced");
+
+  // Whole-folder source returns the barrel + a file manifest; a sub-path returns one file.
+  const folderSrc = await rl.getSource("FormRenderer");
+  assert.ok(folderSrc, "folder source resolves");
+  assert.match(folderSrc!.code, /folder component/i, "manifest note included");
+  assert.match(folderSrc!.code, /components\/FormRenderer\/detail\.tsx/, "lists its files");
+
+  const fileSrc = await rl.getSource("FormRenderer/detail");
+  assert.ok(fileSrc, "sub-path source resolves");
+  assert.match(fileSrc!.path, /components\/FormRenderer\/detail\.tsx$/);
+  assert.match(
+    fileSrc!.code,
+    /DetailTabsView|FormRenderer\.Sidebar|Tabs/,
+    "returns detail.tsx code",
+  );
 });
 
 test("getVersion exposes the served library version from registry.json", async () => {
@@ -301,6 +356,92 @@ test("create-form maps a table/grid request to FormBuilder.Table, placed outside
     code,
     /<\/FormBuilder\.Section>[\s\S]*<FormBuilder\.Table/,
     "Table sits outside (after) the fields Section",
+  );
+});
+
+test("create-form detail layout builds a display detail page, not a form", () => {
+  const code = detailSkeleton(parseFields("po number, status, total (currency)"));
+
+  // A detail page is display-only: no resolver / onSubmit / useState boilerplate.
+  assert.doesNotMatch(
+    code,
+    /onSubmit|zodResolver|useForm|useState/,
+    "no form wiring on a detail page",
+  );
+  // It renders through FormRenderer's detail-tabs API.
+  assert.match(code, /<FormRenderer\.Sidebar>/, "has the sidebar rail");
+  assert.match(
+    code,
+    /<FormRenderer\.Sidebar\.Item value="overview"/,
+    "sidebar item carries a tab value",
+  );
+  assert.match(code, /<FormRenderer\.Tab value="overview">/, "a Tab pairs with the sidebar value");
+  // Content MUST sit inside a FormBuilder.Section — the required wrapper.
+  assert.match(
+    code,
+    /<FormRenderer\.Tab value="overview">[\s\S]*<FormBuilder\.Section[\s\S]*<\/FormBuilder\.Section>[\s\S]*<\/FormRenderer\.Tab>/,
+    "tab content is wrapped in a FormBuilder.Section",
+  );
+  // Default display cells (Grid/Row) are offered, and the fields become Rows.
+  assert.match(code, /<FormRenderer\.Grid columns=\{2\}>/, "uses the default display Grid");
+  assert.match(
+    code,
+    /<FormRenderer\.Row label="Po number" value=\{record\.poNumber\}/,
+    "field → display Row",
+  );
+  // The second tab shows the "bring your own component inside a Section" path.
+  assert.match(
+    code,
+    /<FormBuilder\.Section title="Activity log"[\s\S]*<YourTimeline/,
+    "a custom component renders inside a Section",
+  );
+});
+
+test("create-form layout=detail routes the whole response to a display detail page", () => {
+  // Tool-level: the create-form response builder, not just the skeleton fragment.
+  const out = buildCreateForm({
+    fields: "po number, status, total (currency)",
+    layout: "detail",
+    rulesHint: "RULES",
+  });
+
+  // Routed to the detail branch: a display page, no form WIRING / field-mapping table. (The prose
+  // may mention "no onSubmit", so match actual wiring — `onSubmit={`, `zodResolver(`, a schema.)
+  assert.doesNotMatch(
+    out,
+    /onSubmit=\{|zodResolver\(|const schema = z\.object/,
+    "no form wiring emitted",
+  );
+  assert.doesNotMatch(out, /## 1\. Field mapping/, "no field-mapping table (that's the form path)");
+  assert.match(out, /Detail page: 3 field\(s\)/, "detail heading with the field count");
+  assert.match(out, /npx torch-glare add FormRenderer/, "install command present");
+  // The wiring itself + the required Section wrapper + default-or-custom guidance.
+  assert.match(
+    out,
+    /<FormRenderer\.Sidebar\.Item value="overview"/,
+    "sidebar item carries a tab value",
+  );
+  assert.match(
+    out,
+    /<FormRenderer\.Tab value="overview">[\s\S]*<FormBuilder\.Section/,
+    "tab content wrapped in a Section",
+  );
+  assert.match(out, /FormRenderer\.Grid/, "default display Grid offered");
+  assert.match(out, /your own component/i, "custom-component path documented");
+});
+
+test("create-form non-detail layouts still build a form (regression)", () => {
+  const form = buildCreateForm({ fields: "name, price (currency)", layout: "single" });
+  assert.match(form, /## 1\. Field mapping/, "form path keeps the mapping table");
+  assert.match(form, /<FormBuilder\.Currency name="price"/, "currency field mapped");
+  assert.match(
+    form,
+    /actions=\{<FormBuilder\.Submit>Save<\/FormBuilder\.Submit>\}/,
+    "form has a Submit",
+  );
+  assert.equal(
+    buildCreateForm({ fields: "" }),
+    "No fields parsed. Pass e.g. `name, email, price (currency)`.",
   );
 });
 

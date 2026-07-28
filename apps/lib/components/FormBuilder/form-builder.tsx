@@ -122,11 +122,11 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   // `<form>`. Called unconditionally (inert when there are no steps) to keep hooks order stable.
   const stepper = useStepperState(steps, form.trigger as Parameters<typeof useStepperState>[1]);
 
-  // The stepper nav is its own column beside the fields, inside the form surface.
+  // The stepper nav is its own grid column beside the fields, inside the scrolling body.
   const nav = isStepper ? <StepperNav /> : null;
 
-  // The fields the `<form>` wraps: the stepper's steps (+ any custom footer extras like
-  // Back/Next), or the plain children. The Submit itself lives outside the form (see FormRenderer).
+  // The fields the `<form>` wraps: the stepper's steps (+ any custom footer extras like Back/Next),
+  // or the plain children. The Submit itself lives outside the form (see FormRenderer).
   const fields = isStepper ? (
     <>
       {steps.map((step, i) => (
@@ -179,13 +179,12 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
     bodyInner
   );
 
-  // The conclusion lives OUTSIDE the form surface — its own panel beside it, exactly like the
-  // drawer's tray (`FormDrawer` puts the conclusion next to the form panel with a 6px gutter).
-  // It never wraps below the form: the two stay side-by-side at every screen size.
+  // The conclusion (right) lives OUTSIDE the scroll surface — its own panel beside it (mirroring the
+  // drawer's tray, a 6px gutter). Only the surface's body scrolls; the conclusion stays put.
   const body = conclusion ? (
-    <div className="flex h-full flex-row items-stretch gap-[6px]">
+    <div className="flex h-full flex-row items-stretch">
       <div className="min-h-0 min-w-0 flex-1">{surface}</div>
-      <div className="flex min-h-0">{conclusion}</div>
+      <div className="ml-[6px] flex min-h-0">{conclusion}</div>
     </div>
   ) : (
     surface

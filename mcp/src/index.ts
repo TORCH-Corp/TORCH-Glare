@@ -14,7 +14,7 @@ import { DocsLoader } from "./docs-loader.js";
 import { ComponentRegistry } from "./component-registry.js";
 import { RegistryLoader } from "./registry-loader.js";
 import { extractSection, extractCodeExamples, listSectionHeadings } from "./markdown-utils.js";
-import { parseFields, mappingTable, skeleton } from "./form-fields.js";
+import { buildCreateForm } from "./form-fields.js";
 
 // Read the server version from package.json so the MCP handshake version never
 // drifts from the published package version. dist/index.js → ../package.json.
@@ -451,7 +451,9 @@ async function main() {
         `# Installing ${item.name}`,
         "",
         "TORCH Glare is a **copy-in** library: the CLI copies source into your project.",
-        "",
+        item.isFolder
+          ? `\n> **Folder component** — \`add\` copies the whole \`apps/lib/${item.path}/\` directory (${item.files?.length ?? 0} files). It's a **compound** API (\`${item.name}.…\`, e.g. \`FormBuilder.Text\`, \`FormRenderer.Sidebar\`); read a part with \`get-component-source "${item.name}/<file>"\`.`
+          : "",
         "## Command",
         "```bash",
         registryLoader.addCommand(item),
@@ -560,17 +562,19 @@ async function main() {
   // becomes `FormBuilder.Currency` instead of a `FormBuilder.Text` holding a string.
   server.tool(
     "create-form",
-    "Create a form with TORCH Glare. Call this WHENEVER the user asks for a form, create/edit dialog, wizard, or invoice — before writing any form code. Give it the fields and it returns the exact FormBuilder.* component for each, the install commands, and a complete wired starting point (optionally a stepper, a drawer, and a FormSummary panel with live computed totals).",
+    'Create a form with TORCH Glare. Call this WHENEVER the user asks for a form, create/edit dialog, wizard, invoice, or a read-only DETAIL / record / view page (layout="detail") — before writing any form or detail-page code. Give it the fields and it returns the exact FormBuilder.* component for each, the install commands, and a complete wired starting point (optionally a stepper, a drawer, a FormSummary panel with live computed totals, or a display-only detail page with sidebar tabs).',
     {
       fields: z
         .string()
         .describe(
-          'Comma-separated fields, with an optional type hint in parentheses. e.g. "name, email, price (currency), role (select), agree (checkbox)". The hint wins; otherwise the type is inferred from the field name.',
+          'Comma-separated fields, with an optional type hint in parentheses. e.g. "name, email, price (currency), role (select), agree (checkbox)". The hint wins; otherwise the type is inferred from the field name. For layout="detail" the fields become the label/value display rows of the first tab.',
         ),
       layout: z
-        .enum(["single", "stepper"])
+        .enum(["single", "stepper", "detail"])
         .optional()
-        .describe("'single' (default) or 'stepper' for a multi-step wizard."),
+        .describe(
+          "'single' (default) form, 'stepper' for a multi-step wizard, or 'detail' for a display-only detail/record page — a sidebar of tabs swapping FormBuilder.Section panels (no form/submit).",
+        ),
       display: z
         .enum(["page", "drawer"])
         .optional()
@@ -583,72 +587,8 @@ async function main() {
         ),
     },
     async ({ fields, layout = "single", display = "page", summary = false }) => {
-      const parsed = parseFields(fields);
-      if (parsed.length === 0) {
-        return {
-          content: [
-            { type: "text", text: "No fields parsed. Pass e.g. `name, email, price (currency)`." },
-          ],
-        };
-      }
-
-      const items = ["FormBuilder", "FormRenderer", ...(summary ? ["FormSummary"] : [])];
-      const installs = items.map((i) => `npx torch-glare add ${i}`).join("\n");
-      const guessed = parsed.filter((f) => f.guessed);
-
-      const notes = [...new Set(parsed.map((f) => f.spec.note).filter(Boolean) as string[])].map(
-        (n) => `- ${n}`,
-      );
-
-      const text = [
-        RULES_HINT.trim(),
-        ``,
-        `# Form: ${parsed.length} field(s) — ${layout} / ${display}${summary ? " / with summary panel" : ""}`,
-        ``,
-        `## 1. Field mapping`,
-        ``,
-        mappingTable(parsed),
-        ``,
-        guessed.length
-          ? `> ⚠️ No type hint matched for ${guessed.map((f) => `\`${f.name}\``).join(", ")} — defaulted to \`FormBuilder.Text\`. Re-call with an explicit hint, e.g. \`${guessed[0].name} (select)\`, if that's wrong.`
-          : ``,
-        notes.length ? `\n${notes.join("\n")}` : ``,
-        ``,
-        `## 2. Install`,
-        ``,
-        "```bash",
-        installs,
-        `npm install zod @hookform/resolvers   # validation is resolver-agnostic; bring your own`,
-        "```",
-        ``,
-        `## 3. Starting point`,
-        ``,
-        "```tsx",
-        skeleton(parsed, { layout, display, summary }),
-        "```",
-        ``,
-        `## 4. Fill in the gaps`,
-        ``,
-        ...[
-          `- Replace the placeholder \`*_OPTIONS\` arrays and tighten the zod schema (messages, required/optional).`,
-          summary
-            ? `- Write the \`compute(values)\` functions as plain functions of the form values (\`subTotal\`, \`overallTotal\`, …). They run against the **live** values, so totals update as the user types.`
-            : ``,
-          summary
-            ? `- The form is **hoisted** (\`useForm\` in the component), so a remount \`key\` no longer resets it — call \`form.reset(DEFAULTS)\` instead.`
-            : ``,
-          display === "drawer"
-            ? `- \`FormRenderer\` (with \`display="drawer"\`) places the Save action in the drawer header and lays any \`summary\` in the tray — just drive it with \`open\` / \`onOpenChange\`.`
-            : ``,
-          `- Use \`required\` on fields — never type a literal "*".`,
-          `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
-        ].filter(Boolean),
-        ``,
-        `Full reference: call \`get-guide "forms-with-form-builder"\` (steppers, drawers, editing records, totals, gotchas) or \`get-component-docs "form-builder"\` for every field type.`,
-      ]
-        .filter((l) => l !== ``)
-        .join("\n");
-
+      // The response body is a pure function (form-fields.ts) so it's unit-testable without a server.
+      const text = buildCreateForm({ fields, layout, display, summary, rulesHint: RULES_HINT });
       return { content: [{ type: "text", text }] };
     },
   );
@@ -819,7 +759,9 @@ async function main() {
       layout: z
         .string()
         .optional()
-        .describe("'single' (default) or 'stepper' for a multi-step wizard"),
+        .describe(
+          "'single' (default), 'stepper' for a multi-step wizard, or 'detail' for a display-only detail/record page (sidebar tabs, no form)",
+        ),
       display: z
         .string()
         .optional()
@@ -830,6 +772,34 @@ async function main() {
         .describe("'true' to add a FormSummary conclusion panel with live computed totals"),
     },
     ({ fields, layout, display, summary }) => {
+      // A detail/record page is a display view, not a form — a different composition entirely.
+      if (layout === "detail") {
+        return {
+          messages: [
+            {
+              role: "user",
+              content: {
+                type: "text",
+                text:
+                  `Build a display-only **detail page** with TORCH Glare for: ${fields}.\n\n` +
+                  `This is NOT a form — it's \`FormRenderer\` in detail-tabs mode: a left **sidebar** ` +
+                  `swaps \`FormRenderer.Tab\` panels, and **every tab's content is \`FormBuilder.Section\` ` +
+                  `blocks**. Inside a Section use the default \`FormRenderer.Grid\` + \`FormRenderer.Row\` ` +
+                  `display cells, or your OWN component. No \`onSubmit\`, no resolver, no \`useState\`.\n\n` +
+                  `Steps:\n` +
+                  `1. Call the **create-form** tool with fields="${fields}", layout="detail" — it returns ` +
+                  `the exact wiring with your fields pre-filled as display rows, and the install commands.\n` +
+                  `2. Call get-component-docs "form-renderer" (the "Detail tabs" section) for the full API.\n` +
+                  `3. Run the \`npx torch-glare add\` commands it gives you.\n` +
+                  `4. Pair each \`FormRenderer.Sidebar.Item value\` with a \`FormRenderer.Tab value\`; put ` +
+                  `page actions (Print / Approve) in \`actions\` and use \`header={{ variant: 'detail' }}\`.\n\n` +
+                  `Follow the server's absolute rules (never SystemStyle / *-system-* tokens).`,
+              },
+            },
+          ],
+        };
+      }
+
       const wantsStepper = layout === "stepper";
       const wantsDrawer = display === "drawer";
       const wantsSummary = summary === "true" || summary === "yes";

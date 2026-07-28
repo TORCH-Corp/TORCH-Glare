@@ -23,7 +23,8 @@ export interface FormRendererProps<T extends FieldValues = FieldValues> {
   children: ReactNode;
 
   // --- react-hook-form root (forwarded to FormBuilder) ---
-  onSubmit: (values: T) => void | Promise<void>;
+  /** Submit handler. Optional — a display-only detail-tabs view (`FormRenderer.Sidebar`) has no form. */
+  onSubmit?: (values: T) => void | Promise<void>;
   onInvalid?: (errors: FieldErrors<T>) => void;
   resolver?: Resolver<T>;
   defaultValues?: DefaultValues<T>;

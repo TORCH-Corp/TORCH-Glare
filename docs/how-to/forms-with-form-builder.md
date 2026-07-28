@@ -391,6 +391,60 @@ drawer's tray, beside the form:
 
 ---
 
+## 8. A detail (view) page — sidebar tabs, not a form
+
+Sometimes you want to **display** a record, not edit it. Give `FormRenderer` `FormRenderer.Sidebar`
+
+- `FormRenderer.Tab` children (instead of fields) and it switches to a display-only detail page: a
+  left **sidebar** where each item swaps in its matching tab panel — no `<form>`, no submit. The
+  sidebar sits where a stepper's rail would; only the active panel shows.
+
+**Every tab's content is `FormBuilder.Section` blocks.** Inside a Section, use the default
+`FormRenderer.Grid` + `FormRenderer.Row` display cells (the read-only counterpart of form fields), or
+render **your own component** — anything goes inside a Section.
+
+```tsx
+<FormRenderer
+  header={{ title: "Order DE-344", variant: "detail" }} // "View" badge
+  actions={<Button variant="BorderStyle">Print</Button>}
+>
+  {/* Rail — each Item's `value` ties to a Tab. */}
+  <FormRenderer.Sidebar>
+    <FormRenderer.Sidebar.Item value="overview" icon={<i className="ri-layout-grid-line" />}>
+      Overview
+    </FormRenderer.Sidebar.Item>
+    <FormRenderer.Sidebar.Item value="activity" icon={<i className="ri-pulse-line" />}>
+      Activity log
+    </FormRenderer.Sidebar.Item>
+  </FormRenderer.Sidebar>
+
+  {/* Default display cells */}
+  <FormRenderer.Tab value="overview">
+    <FormBuilder.Section title="Main Information" color="Blue">
+      <FormRenderer.Grid columns={2}>
+        <FormRenderer.Row label="PO Number" value={record.poNumber} />
+        <FormRenderer.Row label="Status" value={<Badge label="Submitted" color="yellow" />} />
+      </FormRenderer.Grid>
+    </FormBuilder.Section>
+  </FormRenderer.Tab>
+
+  {/* Or bring your own component — still inside a Section */}
+  <FormRenderer.Tab value="activity">
+    <FormBuilder.Section title="Activity log" color="Green">
+      <YourTimeline items={record.activity} />
+    </FormBuilder.Section>
+  </FormRenderer.Tab>
+</FormRenderer>
+```
+
+`FormRenderer.Grid` takes `columns` (1–3, default 2) and spans the full section width; `FormRenderer.Row`
+takes `label` + `value` (any node). The first `Tab` is active by default.
+
+> Generating one? Call the `create-form` tool with `layout="detail"` — it returns this exact wiring
+> with your fields pre-filled as display rows.
+
+---
+
 ## Gotchas
 
 - **Hoisting `useForm` disables the remount-`key` reset.** Once the form instance lives in

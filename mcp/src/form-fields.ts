@@ -539,6 +539,204 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
   return out.join("\n");
 }
 
+/**
+ * A display-only **detail page** starting point — `FormRenderer` in detail-tabs mode (NOT a form).
+ * A left sidebar swaps `FormRenderer.Tab` panels; **every tab's content is `FormBuilder.Section`
+ * blocks**. Inside a Section you use either the default `FormRenderer.Grid` + `FormRenderer.Row`
+ * display cells, or your OWN component — anything renders inside a Section. No resolver, no submit.
+ *
+ * The parsed `fields` become the label/value `Row`s of the first ("Overview") tab; a second tab is
+ * scaffolded with a custom component to show both paths.
+ */
+export function detailSkeleton(fields: ParsedField[]): string {
+  const rows =
+    fields
+      .map((f) => `            <FormRenderer.Row label="${f.label}" value={record.${f.name}} />`)
+      .join("\n") || `            <FormRenderer.Row label="Field" value={record.value} />`;
+
+  const imports = [
+    `'use client'`,
+    ``,
+    `import { FormBuilder } from '@/components/FormBuilder'`,
+    `import { FormRenderer } from '@/components/FormRenderer'`,
+    `import { Button } from '@/components/Button'`,
+  ].join("\n");
+
+  const body = [
+    `export function RecordDetail({ record }: { record: any }) {`,
+    `  return (`,
+    `    <FormRenderer`,
+    `      className="min-h-0 flex-1"`,
+    `      header={{ title: 'Record DE-344', variant: 'detail' }}`,
+    `      actions={`,
+    `        <>`,
+    `          <Button variant="BorderStyle">Print</Button>`,
+    `          <Button>Approve</Button>`,
+    `        </>`,
+    `      }`,
+    `    >`,
+    `      {/* The sidebar rail — one Item per tab, tied to a Tab by \`value\`. */}`,
+    `      <FormRenderer.Sidebar>`,
+    `        <FormRenderer.Sidebar.Item value="overview" icon={<i className="ri-layout-grid-line" />}>`,
+    `          Overview`,
+    `        </FormRenderer.Sidebar.Item>`,
+    `        <FormRenderer.Sidebar.Item value="activity" icon={<i className="ri-pulse-line" />}>`,
+    `          Activity log`,
+    `        </FormRenderer.Sidebar.Item>`,
+    `      </FormRenderer.Sidebar>`,
+    ``,
+    `      {/* Every tab's content MUST be wrapped in FormBuilder.Section blocks. */}`,
+    `      <FormRenderer.Tab value="overview">`,
+    `        <FormBuilder.Section title="Details" color="Blue">`,
+    `          {/* Default display cells — or drop your OWN component in place of Row. */}`,
+    `          <FormRenderer.Grid columns={2}>`,
+    rows,
+    `          </FormRenderer.Grid>`,
+    `        </FormBuilder.Section>`,
+    `      </FormRenderer.Tab>`,
+    ``,
+    `      <FormRenderer.Tab value="activity">`,
+    `        <FormBuilder.Section title="Activity log" color="Green">`,
+    `          {/* Bring your own component — anything renders inside a Section. */}`,
+    `          <YourTimeline items={record.activity} />`,
+    `        </FormBuilder.Section>`,
+    `      </FormRenderer.Tab>`,
+    `    </FormRenderer>`,
+    `  )`,
+    `}`,
+  ].join("\n");
+
+  return [imports, ``, body].join("\n");
+}
+
+export interface CreateFormArgs {
+  fields: string;
+  layout?: "single" | "stepper" | "detail";
+  display?: "page" | "drawer";
+  summary?: boolean;
+  /** The RULES banner the server prepends to code-emitting output. */
+  rulesHint?: string;
+}
+
+/**
+ * Build the full `create-form` tool response (markdown). Pure — factored out of the server handler so
+ * it's unit-testable. Routes `layout:"detail"` to a display-only detail page (no form), otherwise emits
+ * the field-mapping + wired FormBuilder/FormRenderer starting point.
+ */
+export function buildCreateForm({
+  fields,
+  layout = "single",
+  display = "page",
+  summary = false,
+  rulesHint = "",
+}: CreateFormArgs): string {
+  const parsed = parseFields(fields);
+  if (parsed.length === 0) {
+    return "No fields parsed. Pass e.g. `name, email, price (currency)`.";
+  }
+
+  // A detail page is a display view, not a form — no field mapping / zod / submit. It renders
+  // FormRenderer in detail-tabs mode: a sidebar swapping FormBuilder.Section panels.
+  if (layout === "detail") {
+    const installs = ["FormBuilder", "FormRenderer", "Button"]
+      .map((i) => `npx torch-glare add ${i}`)
+      .join("\n");
+
+    return [
+      rulesHint.trim(),
+      ``,
+      `# Detail page: ${parsed.length} field(s) — display-only (sidebar tabs)`,
+      ``,
+      `A **detail page** is a display view, not a form. It's \`FormRenderer\` in detail-tabs mode: a` +
+        ` left **sidebar** swaps \`FormRenderer.Tab\` panels, and **every tab's content is wrapped in** ` +
+        `\`FormBuilder.Section\` **blocks**. Inside a Section, use the default \`FormRenderer.Grid\` +` +
+        ` \`FormRenderer.Row\` display cells, or drop in **your own component** — anything renders inside` +
+        ` a Section. No \`onSubmit\`, no resolver, no \`useState\`.`,
+      ``,
+      `## 1. Install`,
+      ``,
+      "```bash",
+      installs,
+      "```",
+      ``,
+      `## 2. Starting point`,
+      ``,
+      "```tsx",
+      detailSkeleton(parsed),
+      "```",
+      ``,
+      `## 3. Fill in the gaps`,
+      ``,
+      `- Each \`FormRenderer.Sidebar.Item value\` must match a \`FormRenderer.Tab value\` — that pairing is the tab switch. The first tab is active by default.`,
+      `- **Content must live in \`FormBuilder.Section\` blocks.** Inside one: use \`FormRenderer.Grid\` + \`FormRenderer.Row\` for label/value cells, OR render your own component (a table, timeline, chart …).`,
+      `- \`FormRenderer.Grid\` takes \`columns\` (1–3, default 2) and spans full width; \`FormRenderer.Row\` takes \`label\` + \`value\` (any node — text, a \`Badge\`, etc.).`,
+      `- Add more \`Sidebar.Item\` + \`Tab\` pairs for Items / Matching / Documents / … . \`variant="detail"\` gives the header a "View" badge; put page actions (Print / Approve) in \`actions\`.`,
+      `- Need an **editable** form instead? Re-call \`create-form\` without \`layout="detail"\`.`,
+      ``,
+      `Full reference: \`get-component-docs "form-renderer"\` — the "Detail tabs" section.`,
+    ]
+      .filter((l) => l !== ``)
+      .join("\n");
+  }
+
+  const items = ["FormBuilder", "FormRenderer", ...(summary ? ["FormSummary"] : [])];
+  const installs = items.map((i) => `npx torch-glare add ${i}`).join("\n");
+  const guessed = parsed.filter((f) => f.guessed);
+
+  const notes = [...new Set(parsed.map((f) => f.spec.note).filter(Boolean) as string[])].map(
+    (n) => `- ${n}`,
+  );
+
+  return [
+    rulesHint.trim(),
+    ``,
+    `# Form: ${parsed.length} field(s) — ${layout} / ${display}${summary ? " / with summary panel" : ""}`,
+    ``,
+    `## 1. Field mapping`,
+    ``,
+    mappingTable(parsed),
+    ``,
+    guessed.length
+      ? `> ⚠️ No type hint matched for ${guessed.map((f) => `\`${f.name}\``).join(", ")} — defaulted to \`FormBuilder.Text\`. Re-call with an explicit hint, e.g. \`${guessed[0].name} (select)\`, if that's wrong.`
+      : ``,
+    notes.length ? `\n${notes.join("\n")}` : ``,
+    ``,
+    `## 2. Install`,
+    ``,
+    "```bash",
+    installs,
+    `npm install zod @hookform/resolvers   # validation is resolver-agnostic; bring your own`,
+    "```",
+    ``,
+    `## 3. Starting point`,
+    ``,
+    "```tsx",
+    skeleton(parsed, { layout, display, summary }),
+    "```",
+    ``,
+    `## 4. Fill in the gaps`,
+    ``,
+    ...[
+      `- Replace the placeholder \`*_OPTIONS\` arrays and tighten the zod schema (messages, required/optional).`,
+      summary
+        ? `- Write the \`compute(values)\` functions as plain functions of the form values (\`subTotal\`, \`overallTotal\`, …). They run against the **live** values, so totals update as the user types.`
+        : ``,
+      summary
+        ? `- The form is **hoisted** (\`useForm\` in the component), so a remount \`key\` no longer resets it — call \`form.reset(DEFAULTS)\` instead.`
+        : ``,
+      display === "drawer"
+        ? `- \`FormRenderer\` (with \`display="drawer"\`) places the Save action in the drawer header and lays any \`summary\` in the tray — just drive it with \`open\` / \`onOpenChange\`.`
+        : ``,
+      `- Use \`required\` on fields — never type a literal "*".`,
+      `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
+    ].filter(Boolean),
+    ``,
+    `Full reference: call \`get-guide "forms-with-form-builder"\` (steppers, drawers, editing records, totals, gotchas) or \`get-component-docs "form-builder"\` for every field type.`,
+  ]
+    .filter((l) => l !== ``)
+    .join("\n");
+}
+
 function indent(block: string, n: number): string {
   const pad = " ".repeat(n);
   return block
