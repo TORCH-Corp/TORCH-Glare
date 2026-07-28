@@ -26,12 +26,39 @@ export interface RegistryItem {
   name: string;
   /** Folder name, which doubles as the CLI install sub-folder. */
   type: "components" | "hooks" | "utils" | "layouts" | "providers";
-  /** Source path relative to apps/lib, e.g. "components/Select.tsx". */
+  /** Source path relative to apps/lib, e.g. "components/Select.tsx" (a folder for folder components). */
   path: string;
   /** External npm packages this item imports (normalized install names). */
   npmDependencies: string[];
   /** Internal deps as `type/name` refs, e.g. "utils/cn". */
   registryDependencies: string[];
+  /**
+   * `true` for a **folder component** (e.g. `components/FormBuilder/`) — a multi-file compound the
+   * flat registry omits by design (the CLI copies the whole directory). Synthesized at load time by
+   * scanning the source tree so the MCP can still install/read/relate these (FormBuilder, FormRenderer, …).
+   */
+  isFolder?: boolean;
+  /** For a folder component: its source files, relative to apps/lib (e.g. "components/FormRenderer/detail.tsx"). */
+  files?: string[];
+}
+
+// Mirrors scripts/bin/generateRegistry so a folder component's reported deps match a real install.
+const TYPE_DIRS = ["components", "hooks", "utils", "layouts", "providers"];
+const IGNORED_NPM = new Set(["react", "react-dom", "react/jsx-runtime"]);
+const IMPORT_RE = /import\s+(?:[^'"]*?\s+from\s+)?['"]([^'"]+)['"]/g;
+
+/** Normalize an import specifier to its installable npm package name. */
+function toPackageName(spec: string): string {
+  if (spec.startsWith("@")) {
+    const [scope, name] = spec.split("/");
+    return `${scope}/${name}`;
+  }
+  return spec.split("/")[0];
+}
+
+/** True for a bare (non-relative) module specifier. */
+function isExternal(spec: string): boolean {
+  return !spec.startsWith(".") && !spec.startsWith("/");
 }
 
 interface Registry {
@@ -90,10 +117,7 @@ export class RegistryLoader {
     // Component source is resolved from a bundled copy (mcp/apps/lib) or the
     // monorepo source tree, mirroring the docs-dir fallback.
     this.sourceRoot = await firstExisting(
-      [
-        path.resolve(PACKAGE_ROOT, "apps", "lib"),
-        path.resolve(MONOREPO_ROOT, "apps", "lib"),
-      ],
+      [path.resolve(PACKAGE_ROOT, "apps", "lib"), path.resolve(MONOREPO_ROOT, "apps", "lib")],
       path.resolve(MONOREPO_ROOT, "apps", "lib"),
     );
 
@@ -102,15 +126,146 @@ export class RegistryLoader {
       const registry: Registry = JSON.parse(raw);
       this.version = registry.version;
       this.items = registry.items;
-      for (const item of this.items) {
-        this.byRef.set(`${item.type}/${item.name}`, item);
-        const list = this.byName.get(item.name.toLowerCase()) ?? [];
-        list.push(item);
-        this.byName.set(item.name.toLowerCase(), list);
-      }
+      for (const item of this.items) this.index(item);
     } catch {
       // Registry unavailable — install tools degrade gracefully to "not found".
     }
+
+    // Fold in folder components (FormBuilder, FormRenderer, DataViews, …) the flat registry omits.
+    await this.loadFolderComponents();
+  }
+
+  /** Add an item to the `byRef` + `byName` lookup maps. */
+  private index(item: RegistryItem): void {
+    this.byRef.set(`${item.type}/${item.name}`, item);
+    const list = this.byName.get(item.name.toLowerCase()) ?? [];
+    list.push(item);
+    this.byName.set(item.name.toLowerCase(), list);
+  }
+
+  /**
+   * Discover **folder components** — `components/<Name>/` directories with an `index.ts(x)` barrel that
+   * aren't already flat registry items — and synthesize a `RegistryItem` for each (deps scanned from
+   * their files, mirroring generateRegistry). Without this the MCP returns "not found" for the compound
+   * components the docs tell users to install (FormBuilder, FormRenderer, …).
+   */
+  private async loadFolderComponents(): Promise<void> {
+    const componentsDir = path.resolve(this.sourceRoot, "components");
+    let entries: import("node:fs").Dirent[];
+    try {
+      entries = await fs.readdir(componentsDir, { withFileTypes: true });
+    } catch {
+      return; // no source tree available (shouldn't happen; degrade quietly)
+    }
+
+    const folderItems: RegistryItem[] = [];
+    for (const entry of entries) {
+      if (!entry.isDirectory()) continue;
+      const name = entry.name;
+      // Must have a barrel, and not collide with a flat item of the same name.
+      const dirAbs = path.join(componentsDir, name);
+      const hasBarrel =
+        (await this.exists(path.join(dirAbs, "index.ts"))) ||
+        (await this.exists(path.join(dirAbs, "index.tsx")));
+      if (!hasBarrel) continue;
+      if (this.byRef.has(`components/${name}`)) continue;
+
+      const files = await this.listFolderFiles(dirAbs);
+      const { npm, registry } = await this.scanFolderDeps(dirAbs, files, name);
+
+      folderItems.push({
+        name,
+        type: "components",
+        path: `components/${name}`,
+        npmDependencies: [...npm].sort(),
+        registryDependencies: [...registry].sort(),
+        isFolder: true,
+        files: files.map((f) => path.posix.join("components", name, f)),
+      });
+    }
+
+    // Register first so folder→folder refs (FormRenderer → FormBuilder) resolve, then prune any dep
+    // that names no known item (nested/self refs) — matching generateRegistry's final filter.
+    for (const item of folderItems) {
+      this.items.push(item);
+      this.index(item);
+    }
+    const known = new Set(this.items.map((i) => `${i.type}/${i.name}`));
+    for (const item of folderItems) {
+      item.registryDependencies = item.registryDependencies.filter((ref) => known.has(ref));
+    }
+  }
+
+  private async exists(p: string): Promise<boolean> {
+    try {
+      await fs.access(p);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** Recursively list a folder's `.ts/.tsx` source files, as paths relative to the folder. */
+  private async listFolderFiles(dirAbs: string, prefix = ""): Promise<string[]> {
+    const out: string[] = [];
+    const entries = await fs.readdir(dirAbs, { withFileTypes: true });
+    for (const e of entries) {
+      const rel = prefix ? path.posix.join(prefix, e.name) : e.name;
+      if (e.isDirectory()) {
+        out.push(...(await this.listFolderFiles(path.join(dirAbs, e.name), rel)));
+      } else if (
+        /\.(ts|tsx)$/.test(e.name) &&
+        !/-dev\.(ts|tsx)$/.test(e.name) &&
+        !e.name.endsWith(".d.ts")
+      ) {
+        out.push(rel);
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Scan a folder's files for imports → npm deps + internal registry refs. A relative import is
+   * resolved against the source tree and collapsed to its top-level `type/name` item (so a nested
+   * `../FormBuilder/header` becomes `components/FormBuilder`); imports within this folder are dropped.
+   */
+  private async scanFolderDeps(
+    dirAbs: string,
+    files: string[],
+    selfName: string,
+  ): Promise<{ npm: Set<string>; registry: Set<string> }> {
+    const npm = new Set<string>();
+    const registry = new Set<string>();
+    const selfRef = `components/${selfName}`;
+
+    for (const file of files) {
+      const fileAbs = path.join(dirAbs, file);
+      let content: string;
+      try {
+        content = await fs.readFile(fileAbs, "utf-8");
+      } catch {
+        continue;
+      }
+      IMPORT_RE.lastIndex = 0;
+      let m: RegExpExecArray | null;
+      while ((m = IMPORT_RE.exec(content)) !== null) {
+        const spec = m[1];
+        if (isExternal(spec)) {
+          const pkg = toPackageName(spec);
+          if (!IGNORED_NPM.has(pkg)) npm.add(pkg);
+          continue;
+        }
+        // Relative → resolve to apps/lib-relative, collapse to the top-level `type/name` item.
+        const abs = path.resolve(path.dirname(fileAbs), spec);
+        const rel = path.relative(this.sourceRoot, abs).split(path.sep).join("/");
+        const [type, first] = rel.split("/");
+        if (!TYPE_DIRS.includes(type) || !first) continue;
+        const ref = `${type}/${first}`;
+        if (ref === selfRef) continue; // intra-folder import
+        registry.add(ref);
+      }
+    }
+    return { npm, registry };
   }
 
   getVersion(): string {
@@ -201,7 +356,9 @@ export class RegistryLoader {
     const values = new Set<string>();
     const types = new Set<string>();
     // `export const/function/class/enum Foo`, `export default function Foo`
-    for (const m of source.matchAll(/export\s+(?:default\s+)?(?:async\s+)?(?:const|function|class|enum)\s+([A-Za-z_$][\w$]*)/g)) {
+    for (const m of source.matchAll(
+      /export\s+(?:default\s+)?(?:async\s+)?(?:const|function|class|enum)\s+([A-Za-z_$][\w$]*)/g,
+    )) {
       values.add(m[1]);
     }
     // `export type/interface Foo`
@@ -220,20 +377,73 @@ export class RegistryLoader {
     return { values: [...values], types: [...types] };
   }
 
-  /** Read an item's source file (shared by getSource/getExports). */
+  /** For a folder component, the source-relative path of its `index.ts(x)` barrel (or null). */
+  private async folderBarrel(item: RegistryItem): Promise<string | null> {
+    for (const ext of ["index.ts", "index.tsx"]) {
+      const rel = path.posix.join(item.path, ext);
+      if (await this.exists(path.resolve(this.sourceRoot, rel))) return rel;
+    }
+    return null;
+  }
+
+  /** Read an item's source (shared by getSource/getExports). A folder component reads its barrel. */
   private async readSource(item: RegistryItem): Promise<string | null> {
+    const rel = item.isFolder ? await this.folderBarrel(item) : item.path;
+    if (!rel) return null;
     try {
-      return await fs.readFile(path.resolve(this.sourceRoot, item.path), "utf-8");
+      return await fs.readFile(path.resolve(this.sourceRoot, rel), "utf-8");
     } catch {
       return null;
     }
   }
 
-  /** Read the actual source file the CLI copies into a consumer's project. */
+  /**
+   * Read the actual source the CLI copies into a consumer's project. A flat item returns its file; a
+   * folder component returns its barrel prefixed with a file manifest. `getSource("Folder/file")`
+   * (e.g. `"FormRenderer/detail"`) fetches a single file inside a folder component.
+   */
   async getSource(name: string): Promise<{ path: string; code: string } | null> {
+    // Folder sub-path form: "FormRenderer/detail" → components/FormRenderer/detail.tsx
+    if (name.includes("/")) {
+      const slash = name.indexOf("/");
+      const folder = name.slice(0, slash);
+      const sub = name.slice(slash + 1);
+      const item = this.getItemByName(folder);
+      if (item?.isFolder && sub) {
+        for (const cand of [sub, `${sub}.tsx`, `${sub}.ts`]) {
+          const rel = path.posix.join(item.path, cand);
+          try {
+            const code = await fs.readFile(path.resolve(this.sourceRoot, rel), "utf-8");
+            return { path: rel, code };
+          } catch {
+            // try next extension
+          }
+        }
+      }
+      return null;
+    }
+
     const item = this.getItemByName(name);
     if (!item) return null;
     const code = await this.readSource(item);
-    return code === null ? null : { path: item.path, code };
+    if (code === null) return null;
+
+    if (item.isFolder) {
+      const barrel = await this.folderBarrel(item);
+      const files = item.files ?? [];
+      const example = files.find((f) => !/(^|\/)index\.tsx?$/.test(f));
+      const exampleSub = example
+        ? `${item.name}/${example.slice(`components/${item.name}/`.length).replace(/\.tsx?$/, "")}`
+        : undefined;
+      const manifest =
+        `// "${item.name}" is a folder component (${files.length} files) — its public barrel is shown below.\n` +
+        (exampleSub
+          ? `// Fetch one file with get-component-source "${exampleSub}" (any file listed).\n`
+          : "") +
+        files.map((f) => `//   - ${f}`).join("\n") +
+        `\n\n`;
+      return { path: barrel ?? item.path, code: manifest + code };
+    }
+    return { path: item.path, code };
   }
 }

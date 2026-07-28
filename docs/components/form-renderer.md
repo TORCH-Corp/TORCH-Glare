@@ -16,6 +16,10 @@ takes care of the surrounding concerns:
 - the **absolute title header** + action bar (page display),
 - **vertical field layout** inside a drawer.
 
+FormRenderer has **two modes**: a **form** (author fields as children, as below), or a display-only
+**detail page** — give it `FormRenderer.Sidebar` + `FormRenderer.Tab` children instead of fields and the
+sidebar swaps `FormBuilder.Section` panels (no `<form>`, no submit — see [Detail tabs](#detail-tabs-sidebar)).
+
 FormRenderer never manufactures a Submit — **you compose the Save and hand it to `actions`**.
 It renders in the form's header action pill (page) or the drawer header (drawer), and a bare
 `<FormBuilder.Submit>` auto-targets this form (even though the header sits outside the `<form>`).
@@ -60,7 +64,7 @@ import { FormBuilder } from "@/components/FormBuilder";
 | Prop                                                           | Type                          | Notes                                                                                                                                                                                                                                                                            |
 | -------------------------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `children`                                                     | `ReactNode`                   | The form body — `FormBuilder.Section` / field / `FormBuilder.Stepper` JSX.                                                                                                                                                                                                       |
-| `onSubmit` / `onInvalid`                                       | fns                           | Submit / validation-fail callbacks.                                                                                                                                                                                                                                              |
+| `onSubmit?` / `onInvalid?`                                     | fns                           | Submit / validation-fail callbacks. Optional — a detail-tabs view has no form, so omit them there.                                                                                                                                                                               |
 | `resolver`                                                     | `Resolver`                    | Any react-hook-form resolver, e.g. `zodResolver(schema)`.                                                                                                                                                                                                                        |
 | `defaultValues` / `values`                                     | `DefaultValues` / `T`         | Initial values; `values` re-syncs on change (edit).                                                                                                                                                                                                                              |
 | `loading` / `resetOnSuccess`                                   | `boolean`                     | Forwarded to `FormBuilder`.                                                                                                                                                                                                                                                      |
@@ -118,6 +122,57 @@ error overrides it to red. You still pass just the Submit; the nav is wired for 
   </FormBuilder.Stepper>
 </FormRenderer>
 ```
+
+## Detail tabs (sidebar)
+
+Give FormRenderer `FormRenderer.Sidebar` + `FormRenderer.Tab` children (instead of fields) and it
+switches to a **display-only detail page**: a left **sidebar** where each item swaps in its matching
+tab panel — no `<form>`, no submit. The sidebar sits **where a stepper's rail would**, and only the
+active panel shows (built on the same Radix Tabs primitive shadcn uses, so it's keyboard-accessible).
+Pair it with `header` (`variant="detail"` → a "View" badge) + `actions` (Print / Approve / …).
+
+Each `Tab` holds read-only `FormBuilder.Section` blocks; `FormRenderer.Grid` + `FormRenderer.Row` lay
+out the label/value display cells (the display counterpart of form fields).
+
+```tsx
+<FormRenderer
+  header={{ title: "Order DE-344", variant: "detail" }}
+  actions={<Button variant="BorderStyle">Print</Button>}
+>
+  {/* The rail — one Item per tab, tied to a Tab by `value`. */}
+  <FormRenderer.Sidebar>
+    <FormRenderer.Sidebar.Item value="overview" icon={<i className="ri-layout-grid-line" />}>
+      Overview
+    </FormRenderer.Sidebar.Item>
+    <FormRenderer.Sidebar.Item value="items" icon={<i className="ri-table-line" />}>
+      Items Table
+    </FormRenderer.Sidebar.Item>
+  </FormRenderer.Sidebar>
+
+  {/* One panel per tab — read-only Section blocks. */}
+  <FormRenderer.Tab value="overview">
+    <FormBuilder.Section title="Main Information" color="Blue">
+      <FormRenderer.Grid>
+        <FormRenderer.Row label="PO Number" value="PO-000123" />
+        <FormRenderer.Row label="Status" value={<Badge label="Submitted" color="yellow" />} />
+      </FormRenderer.Grid>
+    </FormBuilder.Section>
+  </FormRenderer.Tab>
+
+  <FormRenderer.Tab value="items">…</FormRenderer.Tab>
+</FormRenderer>
+```
+
+| Component      | Props                      | Renders                                                            |
+| -------------- | -------------------------- | ------------------------------------------------------------------ |
+| `Sidebar`      | `children`                 | The tab rail (a Radix `Tabs.List`), fixed at the stepper's place.  |
+| `Sidebar.Item` | `value`, `icon?`, children | A rail nav row (a `Tabs.Trigger`); the active one is a black pill. |
+| `Tab`          | `value`, children          | A content panel (a `Tabs.Content`) shown when its tab is active.   |
+| `Grid`         | `columns?` (1–3), children | A padded grid of display `Row`s (default 2 columns).               |
+| `Row`          | `label`, `value`           | A read-only label/value display cell.                              |
+
+The first `Tab` is active by default. Only the active panel is visible; the rail stays fixed while the
+content column scrolls.
 
 ## Summary panel
 

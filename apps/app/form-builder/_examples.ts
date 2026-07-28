@@ -28,4 +28,9 @@ export const EXAMPLES = [
     title: "Table field",
     blurb: "An editable grid: any field per cell, checkbox + drag-drop rows.",
   },
+  {
+    href: "/form-builder/sidebar",
+    title: "Detail tabs",
+    blurb: "A display-only detail page — a sidebar of tabs swapping Section panels.",
+  },
 ];
