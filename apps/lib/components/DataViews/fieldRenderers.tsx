@@ -259,7 +259,7 @@ function renderLink({ value, field }: RenderArgs): ReactNode {
       href={href}
       target={field.linkType === "url" ? "_blank" : undefined}
       rel={field.linkType === "url" ? "noopener noreferrer" : undefined}
-      className="text-blue-600 hover:underline"
+      className="text-content-presentation-action-light-primary hover:underline"
       onClick={(e) => e.stopPropagation()}
     >
       {v}

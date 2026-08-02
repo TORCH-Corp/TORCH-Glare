@@ -1,135 +1,72 @@
 ---
-title: KanbanView
-description: Standalone kanban board view for DataViews — groups records into columns by a field and renders each as a card. Use inside DataViewsLayout (tab mode) or directly in Composable Mode.
+title: DataViews.Kanban
+description: The board view of DataViews — groups records into columns by a field and renders each as a draggable card. Registers itself as the "kanban" tab.
 group: Data Display
-keywords: [data-views, kanban-view, kanban, board, columns, group-by, cards, composable, dynamic-data, fields]
+keywords: [data-views, kanban-view, kanban, board, columns, group-by, cards, drag-and-drop, compound, dynamic-data]
 ---
 
-# KanbanView
+# DataViews.Kanban
 
-> The board renderer behind `DataViewsLayout`'s "Board" tab. It groups records into columns by `groupByField` and renders each record as a card. In tab mode the layout renders it for you; render it directly only in **Composable Mode**.
+> Drag-and-drop board. Groups records into columns by one field's value; dropping a card onto
+> another column writes the new value back through the Root.
 
-## Installation
-
-TORCH Glare is a copy-in library: the CLI copies this component's source into your project
-(you do **not** install it from the npm package). Run `init` once, then `add`:
-
-```bash
-npx torch-glare@latest init
-npx torch-glare@latest add KanbanView
-```
-
-`add` also copies any components, hooks, and utilities that `KanbanView` depends on.
-
-## Import
-
-Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+## Usage
 
 ```tsx
-import { KanbanView } from "@/components/KanbanView";
+<DataViews.Root data={orders} fields={fields}>
+  <DataViews.Header title="Orders">
+    <DataViews.ViewSwitch />
+  </DataViews.Header>
+
+  <DataViews.Kanban groupBy="status" titleField="customer" />
+</DataViews.Root>
 ```
 
-## When to use it directly
+## Props
 
-| Situation | Use |
-|---|---|
-| You want the standard tabbed multi-view UI | `DataViewsLayout` with `views={{ kanban: true }}` — it mounts `KanbanView` for you. |
-| You want a custom layout (e.g. kanban beside a table) | Render `KanbanView` directly with state from `useDataViewsState`. |
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `groupBy` | `string` | `config.kanbanGroupBy` → `"status"` | Field path whose value defines the columns |
+| `titleField` | `string` | first visible non-group-by field | Field rendered as the card title |
+| `onColumnAction` | `(columnId: string) => void` | — | Column-header overflow button. Omitted ⇒ button hidden |
+| `label` | `string` | `"Board"` | Tab label in the view switcher |
+| `className` | `string` | — | Applied to the view surface |
 
-## Composable Mode example
+## Columns
 
-`KanbanView` groups by the `groupByField` path — every distinct value becomes a
-column. Column colors are assigned deterministically, or per-value via the
-field's `kanbanVariants`.
+Column order and colour come from the group-by field's config:
 
 ```tsx
-import { KanbanView } from "@/components/KanbanView";
-import { useDataViewsState } from "@/hooks/useDataViewsState";
-import type { FieldConfig } from "@/components/FieldConfig";
-
-const tasks = [
-  { id: 1, title: "Spec API", status: "Todo", assignee: "Ada" },
-  { id: 2, title: "Build UI", status: "In Progress", assignee: "Linus" },
-  { id: 3, title: "Ship", status: "Done", assignee: "Grace" },
-]
-
-const fields: FieldConfig[] = [
-  { path: "title", type: "text" },
-  {
-    path: "status",
-    type: "enum-badge",
-    kanbanVariants: {
-      Todo: { label: "To Do", color: "gray" },
-      "In Progress": { label: "In Progress", color: "blue" },
-      Done: { label: "Done", color: "green" },
-    },
+{
+  path: "status",
+  type: "enum-badge",
+  variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" },
+  kanbanVariants: {
+    Pending:   { label: "To pack",   color: "gray" },
+    Shipped:   { label: "In transit", color: "blue" },
+    Delivered: { label: "Done",      color: "green" },
   },
-  { path: "assignee", type: "text" },
-]
-
-function TaskBoard() {
-  const state = useDataViewsState({ data: tasks, fields })
-  return (
-    <KanbanView
-      data={state.flatItems}
-      fields={state.resolvedFields}
-      config={state.config}
-      groupByField="status"
-      titleField="title"
-    />
-  )
 }
 ```
 
-### Column header actions
+- `variants` keys seed the columns, so empty statuses still render a column.
+- `kanbanVariants[value].label` sets the column title; `.color` picks the header pill from
+  `gray | purple | orange | blue | green | red`.
+- Any value found in the data but absent from `variants` gets its own column with a colour
+  picked deterministically from the value's hash — stable across renders.
+- Records whose group-by value is null land in an `"Uncategorized"` column.
 
-Pass `onColumnAction` to show an overflow (⋯) button on each column header. When
-omitted the button is hidden.
+## Drag and drop
 
-```tsx
-<KanbanView
-  data={state.flatItems}
-  fields={state.resolvedFields}
-  config={state.config}
-  groupByField="status"
-  onColumnAction={(columnId) => openColumnMenu(columnId)}
-/>
-```
+Dragging a card to another column calls `setByPath(record, groupBy, targetColumnId)` and hands
+the updated array to the Root's `onDataUpdate`, which re-renders every view from the new data.
+Drag is disabled below 768px, where columns stack vertically instead.
 
-## API Reference
+## Cards
 
-### `KanbanViewProps`
-
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `data` | `DynamicRecord[]` | — (required) | Records to group into columns. Pass `state.flatItems` in composable mode. |
-| `fields` | `FieldConfig[]` | — (required) | Field map controlling card content. Pass `state.resolvedFields`. |
-| `config` | `ViewConfig` | — (required) | View config from `useDataViewsState`. |
-| `groupByField` | `string` | `"status"` | Dot-path to the field whose distinct values become columns. |
-| `titleField` | `string` | first visible non-group field | Dot-path of the field rendered as the card title. |
-| `columns` | `DynamicColumnConfig[]` | `undefined` | Explicit column overrides. Usually derived from `fields`. |
-| `onDataUpdate` | `(data: DynamicRecord[]) => void` | `undefined` | Called when a card moves between columns (updates the group-by value). |
-| `onColumnAction` | `(columnId: string) => void` | `undefined` | Click handler for the column header overflow button. When omitted, the button is hidden. |
-
-Per-column colors come from each field's `kanbanVariants` map
-(`{ [value]: { label?, color? } }`). Available `color` keys: `gray`, `purple`,
-`orange`, `blue`, `green`, `red`. See
-[`DataViewsLayout`](./data-views-layout.md#fieldconfig) for the full
-`FieldConfig` shape.
-
-## Accessibility
-
-- Cards are keyboard-focusable; the column overflow button is a real `<button>`.
-- Card titles use semantic heading markup within each [`DataViewCard`](./card.md).
-
-## Theming
-
-Uses `*-presentation-*` tokens plus a small set of deeply-saturated column-header
-fills matched to `glare-torch-mode` raw tokens. Control the scheme via the
-parent `DataViewsLayout`'s `theme`.
+Body fields are paired two per row. If only one of a pair has a value it spans the full width;
+fully empty pairs are dropped rather than rendering an empty row with hairlines.
 
 ## Related
 
-- [`DataViewsLayout`](./data-views-layout.md) — the tabbed container that renders this for you
-- [`TableView`](./table-view.md) · [`InboxView`](./inbox-view.md) · [`TreeView`](./tree-view.md) — sibling views
-- [How-to: Render a backend response with DataViews](../how-to/data-views-from-backend-response.md)
+- [`data-views`](./data-views.md) — the root and the full parts list

@@ -62,7 +62,7 @@ export function describeFilterValue(v: FilterValue): string {
 export type NumericExtremes = { min: number; max: number };
 
 export function computeNumericExtremes(
-  data: DynamicRecord[],
+  data: readonly DynamicRecord[],
   path: string,
 ): NumericExtremes | null {
   let min = Number.POSITIVE_INFINITY;
@@ -103,7 +103,10 @@ export function inferStep(field: FieldConfig, extremes: NumericExtremes): number
 
 export type DateExtremes = { from: string; to: string };
 
-export function computeDateExtremes(data: DynamicRecord[], path: string): DateExtremes | null {
+export function computeDateExtremes(
+  data: readonly DynamicRecord[],
+  path: string,
+): DateExtremes | null {
   let minMs = Number.POSITIVE_INFINITY;
   let maxMs = Number.NEGATIVE_INFINITY;
   let found = false;

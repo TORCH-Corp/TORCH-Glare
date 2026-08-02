@@ -1,170 +1,86 @@
 ---
-title: InboxView
-description: Standalone inbox/list view for DataViews — a master list with read/starred/priority states and an optional detail pane. Use inside DataViewsLayout (tab mode) or directly in Composable Mode.
+title: DataViews.Inbox
+description: The mail-style view of DataViews — a quick-filter rail, a master list, and a detail pane. Registers itself as the "inbox" tab.
 group: Data Display
-keywords: [data-views, inbox-view, inbox, list, master-detail, read, starred, priority, attachment, composable, dynamic-data]
+keywords: [data-views, inbox-view, inbox, list, master-detail, read, starred, priority, attachment, compound, dynamic-data]
 ---
 
-# InboxView
+# DataViews.Inbox
 
-> The inbox renderer behind `DataViewsLayout`'s "Inbox" tab. It renders records as a scannable list with read / starred / priority / attachment affordances, plus an optional detail pane. In tab mode the layout renders it for you; render it directly only in **Composable Mode**.
+> Three panes: All / Starred / Priority quick filters on the left, the record list in the middle,
+> the selected record's detail on the right.
 
-## Installation
-
-TORCH Glare is a copy-in library: the CLI copies this component's source into your project
-(you do **not** install it from the npm package). Run `init` once, then `add`:
-
-```bash
-npx torch-glare@latest init
-npx torch-glare@latest add InboxView
-```
-
-`add` also copies any components, hooks, and utilities that `InboxView` depends on.
-
-## Import
-
-Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+## Usage
 
 ```tsx
-import { InboxView } from "@/components/InboxView";
+<DataViews.Root data={messages} fields={fields}>
+  <DataViews.Header title="Inbox">
+    <DataViews.ViewSwitch />
+  </DataViews.Header>
+
+  <DataViews.Inbox
+    config={{ starredField: "isStarred", priorityField: "priority" }}
+    itemHref={(item, id) => `/inbox/${id}`}
+    linkComponent={Link}
+    selectedId={routeId}
+  />
+</DataViews.Root>
 ```
 
-## When to use it directly
+## Props
 
-| Situation | Use |
-|---|---|
-| You want the standard tabbed multi-view UI | `DataViewsLayout` with `views={{ inbox: true }}` — it mounts `InboxView` for you. |
-| You want a custom master-detail layout | Render `InboxView` directly with state from `useDataViewsState`, and supply `renderDetail`. |
+| Prop | Type | Notes |
+| --- | --- | --- |
+| `config` | `InboxConfig` | Which fields carry the starred / read / attachment / priority flags. Auto-detected when omitted |
+| `itemHref` | `(item, id) => string` | Makes each row a link |
+| `linkComponent` | `ElementType` | Component used for those links. Defaults to `<a>` — pass your router's `Link` for client-side navigation |
+| `selectedId` | `unknown` | Controlled selection, e.g. from a route param |
+| `renderDetail` | `(item \| null) => ReactNode` | Replaces the built-in detail pane |
+| `label` | `string` | Tab label. Default `"Inbox"` |
+| `className` | `string` | Applied to the view surface |
 
-## Field auto-detection
-
-InboxView auto-detects these record fields and maps them to UI affordances.
-Override any of them with `inboxConfig`.
-
-| Detected field | Affordance |
-|---|---|
-| `isRead` | Read/unread weight |
-| `isStarred` | Star toggle |
-| `hasAttachment` | Paperclip icon |
-| `priority` | Priority flag |
-
-## Composable Mode example
-
-```tsx
-import { InboxView } from "@/components/InboxView";
-import { useDataViewsState } from "@/hooks/useDataViewsState";
-import type { FieldConfig } from "@/components/FieldConfig";
-import type { InboxConfig } from "@/components/InboxConfig";
-
-const messages = [
-  { id: 1, subject: "Welcome", from: { name: "Ada" }, isRead: false, isStarred: true, sentAt: "2024-06-01" },
-  { id: 2, subject: "Invoice", from: { name: "Billing" }, isRead: true, hasAttachment: true, sentAt: "2024-06-02" },
-]
-
-const fields: FieldConfig[] = [
-  { path: "subject", type: "text" },
-  { path: "from.name", label: "From", type: "text" },
-  { path: "sentAt", type: "date-format", dateFormat: "YYYY-MM-DD" },
-]
-
-const inboxConfig: InboxConfig = {
-  titlePath: "subject",
-  previewPath: "from.name",
-  dateField: "sentAt",
-}
-
-function Mailbox() {
-  const state = useDataViewsState({ data: messages, fields })
-  const [selectedId, setSelectedId] = useState<number | null>(null)
-  return (
-    <InboxView
-      data={state.flatItems}
-      fields={state.resolvedFields}
-      config={state.config}
-      inboxConfig={inboxConfig}
-      selectedItemId={selectedId}
-      renderDetail={(item) =>
-        item ? <MessageDetail message={item} /> : <Empty />
-      }
-    />
-  )
-}
-```
-
-### Link rows to routes (framework-agnostic)
-
-`itemHref` turns each row into a link. By default the card renders a plain `<a>`
-(full-page navigation), so it works in any framework. For client-side routing,
-pass your router's link via `linkComponent` — this is what makes navigation
-behave consistently across environments. Without it you get a normal `<a>`.
-
-```tsx
-// Next.js
-import Link from "next/link"
-
-<InboxView
-  data={state.flatItems}
-  fields={state.resolvedFields}
-  config={state.config}
-  itemHref={(item, id) => `/messages/${id}`}
-  linkComponent={Link}        // React Router users pass their <Link> the same way
-/>
-```
-
-> Via `DataViewsLayout` (tab mode) the same prop is named `inboxLinkComponent`.
-
-## API Reference
-
-### `InboxViewProps`
-
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `data` | `DynamicRecord[]` | — (required) | Records to render as list items. Pass `state.flatItems`. |
-| `fields` | `FieldConfig[]` | — (required) | Field map controlling list-item content. Pass `state.resolvedFields`. |
-| `config` | `ViewConfig` | — (required) | View config from `useDataViewsState`. |
-| `inboxConfig` | `InboxConfig` | auto-detected | Overrides for which record paths map to title/preview/avatar/date/read/starred/attachment/priority. |
-| `columns` | `DynamicColumnConfig[]` | `undefined` | Explicit column overrides. Usually derived from `fields`. |
-| `onDataUpdate` | `(data: DynamicRecord[]) => void` | `undefined` | Called when item data changes (e.g. toggling read/starred). |
-| `filters` | `DynamicFilterConfig[]` | `undefined` | Explicit filter definitions. Usually inferred from `filterable` fields. |
-| `filterState` | `FilterState` | uncontrolled | Controlled filter state. Pair with `onFilterChange`. |
-| `onFilterChange` | `(filters: FilterState) => void` | `undefined` | Fires when a filter changes. |
-| `showFilters` | `boolean` | `true` | Show the integrated filter panel. |
-| `itemHref` | `(item: DynamicRecord, id: any) => string` | `undefined` | When set, each row becomes a link to the returned href. |
-| `linkComponent` | `ElementType` | `"a"` | Component used to render each item's link when `itemHref` is set. Pass your router's link (Next.js `Link`, React Router `Link`) for client-side navigation. Defaults to a plain `<a>` (full-page nav). |
-| `selectedItemId` | `any` | `undefined` | Id of the currently selected row (drives the detail pane + highlight). |
-| `renderDetail` | `(item: DynamicRecord \| null) => ReactNode` | `undefined` | Renders the right-hand detail pane for the selected item. |
-
-### `InboxConfig`
+## `InboxConfig` and auto-detection
 
 ```ts
 type InboxConfig = {
-  starredField?: string
-  readField?: string
-  attachmentField?: string
-  priorityField?: string
-  titlePath?: string
-  previewPath?: string
-  avatarPath?: string
-  dateField?: string
-}
+  starredField?: string | null;
+  readField?: string | null;
+  attachmentField?: string | null;
+  priorityField?: string | null;
+  titlePath?: string;
+  previewPath?: string;
+};
 ```
 
-See [`DataViewsLayout`](./data-views-layout.md#fieldconfig) for `FieldConfig`,
-`FilterState`, and related shapes.
+When a field is omitted, the first record is inspected for a conventional key —
+`isStarred | starred | favorite | isFavorite | pinned` for starred,
+`priority | urgency | level | importance` for priority, and so on. Pass `null` explicitly to
+turn a feature off rather than let detection find it.
 
-## Accessibility
+The quick-filter rail only shows **Starred** / **Priority** when the corresponding field
+resolves, so a dataset with neither gets just **All Items**.
 
-- The all/starred/priority switcher uses [`TabFormItem`](./tab-form-item.md) (full keyboard support).
-- Star/archive/delete actions are real `<button>`s with accessible labels.
-- Avatars fall back to initials via [`Avatar`](./avatar.md).
+## Routing
 
-## Theming
+`itemHref` + `linkComponent` + `selectedId` is the pattern for putting the detail pane on its own
+URL while the list persists:
 
-Uses only `*-presentation-*` design tokens. Control the scheme via the parent
-`DataViewsLayout`'s `theme`.
+```tsx
+// app/orders/layout.tsx — the shell lives in the layout so it survives navigation
+<DataViews.Inbox
+  itemHref={(_item, id) => `/orders/${id}`}
+  linkComponent={Link}
+  selectedId={params.id}
+  renderDetail={params.id ? () => children : undefined}
+/>
+```
+
+## Detail pane
+
+Without `renderDetail`, the built-in pane renders an avatar, the title and preview fields, the
+remaining visible fields as badges, and then a key/value grid plus nested-object sections via
+`renderDetailView`. `config.showPreviewPane` (config rail → Inbox Layout) hides it.
 
 ## Related
 
-- [`DataViewsLayout`](./data-views-layout.md) — the tabbed container that renders this for you
-- [`TableView`](./table-view.md) · [`KanbanView`](./kanban-view.md) · [`TreeView`](./tree-view.md) — sibling views
-- [How-to: Render a backend response with DataViews](../how-to/data-views-from-backend-response.md)
+- [`data-views`](./data-views.md) — the root and the full parts list

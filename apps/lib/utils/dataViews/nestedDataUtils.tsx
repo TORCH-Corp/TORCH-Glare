@@ -2,7 +2,8 @@ import type { ReactElement } from "react";
 import { Badge } from "../../components/Badge";
 import { Divider } from "../../components/Divider";
 import { cn } from "../cn";
-import type { DynamicRecord, DynamicColumnConfig } from "../../components/DataViews/types";
+import { getByPath } from "./pathUtils";
+import type { DynamicRecord, FieldConfig } from "../../components/DataViews/types";
 
 export type NestedFieldMetadata = {
   key: string;
@@ -265,31 +266,30 @@ export function renderNestedObject(
 
 export function renderDetailView(
   selectedItem: DynamicRecord,
-  visibleColumns: DynamicColumnConfig[],
-  renderCellValue: (
-    value: unknown,
-    column: DynamicColumnConfig,
-    row: DynamicRecord,
-  ) => React.ReactNode,
+  detailFields: FieldConfig[],
+  renderCellValue: (value: unknown, field: FieldConfig, row: DynamicRecord) => React.ReactNode,
 ): ReactElement {
-  const visibleColumnIds = new Set(visibleColumns.map((col) => col.id));
-  const nestedFields = analyzeNestedFields(selectedItem, visibleColumnIds);
+  // The first two fields are already shown in the detail pane's header (title +
+  // preview), so the key/value grid starts at the third.
+  const gridFields = detailFields.slice(2);
+  const shownPaths = new Set(detailFields.map((f) => f.path));
+  const nestedFields = analyzeNestedFields(selectedItem, shownPaths);
 
   return (
     <div className="space-y-6">
-      {visibleColumns.slice(2).length > 0 && (
+      {gridFields.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {visibleColumns.slice(2).map((col) => {
-            const value = selectedItem[col.id];
+          {gridFields.map((field) => {
+            const value = getByPath(selectedItem, field.path);
             // Skip empty cells (null/undefined); 0 and false are rendered.
             if (value === null || value === undefined) return null;
             return (
-              <div key={col.id} className="space-y-1">
+              <div key={field.path} className="space-y-1">
                 <dt className="text-xs font-medium text-content-presentation-global-tertiary uppercase tracking-wide">
-                  {col.label}
+                  {field.label ?? field.path}
                 </dt>
                 <dd className="text-sm text-content-presentation-global-primary">
-                  {renderCellValue(value, col, selectedItem)}
+                  {renderCellValue(value, field, selectedItem)}
                 </dd>
               </div>
             );

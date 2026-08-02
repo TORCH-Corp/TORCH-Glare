@@ -1,147 +1,75 @@
 ---
-title: TreeView
-description: Standalone hierarchical tree view for DataViews — a sidebar tree of nodes with a right pane (table or card) for the selected node. Use inside DataViewsLayout (tab mode) or directly in Composable Mode.
+title: DataViews.Tree
+description: The hierarchy view of DataViews — a sidebar tree plus a right pane (table or cards) for the selected node. Auto-hides when the data is flat.
 group: Data Display
-keywords: [data-views, tree-view, tree, hierarchy, nested, sidebar, parent-child, children, composable, dynamic-data]
+keywords: [data-views, tree-view, tree, hierarchy, nested, sidebar, parent-child, children, compound, dynamic-data]
 ---
 
-# TreeView
+# DataViews.Tree
 
-> The tree renderer behind `DataViewsLayout`'s "Tree" tab. It builds a hierarchy from your records (via a `children[]` array or a `parentId` reference) and shows a sidebar tree with a right pane for the selected node. In tab mode the layout renders it for you — and auto-hides the Tree tab when no hierarchy is detected. Render it directly only in **Composable Mode**.
+> Two panes: the hierarchy on the left, the selected node's subtree on the right as either a
+> table or a card grid.
 
-## Installation
-
-TORCH Glare is a copy-in library: the CLI copies this component's source into your project
-(you do **not** install it from the npm package). Run `init` once, then `add`:
-
-```bash
-npx torch-glare@latest init
-npx torch-glare@latest add TreeView
-```
-
-`add` also copies any components, hooks, and utilities that `TreeView` depends on.
-
-## Import
-
-Import from your project's local path — the alias configured in `glare.json` (e.g. `@/*`):
+## Usage
 
 ```tsx
-import { TreeView } from "@/components/TreeView";
+<DataViews.Root data={categories} fields={fields}>
+  <DataViews.Header title="Catalogue">
+    <DataViews.ViewSwitch />
+  </DataViews.Header>
+
+  <DataViews.Tree childrenField="children" defaultExpanded="roots" />
+</DataViews.Root>
 ```
 
-## When to use it directly
+## Props
 
-| Situation | Use |
-|---|---|
-| You want the standard tabbed multi-view UI | `DataViewsLayout` — the Tree tab appears automatically when hierarchy is detected. |
-| You want a custom layout with an always-on tree | Render `TreeView` directly with state from `useDataViewsState`. |
-| You want a file/folder tree without the data-grid pane | Use [`TreeFolder`](./tree-drop-down.md) or [`TreeSubLayout`](./tree-sub-layout.md) instead. |
+`DataViews.Tree` spreads `TreeConfig`, so every hierarchy option is a top-level prop.
 
-## Hierarchy detection
+| Prop | Type | Notes |
+| --- | --- | --- |
+| `childrenField` | `string` | Nested shape: the key holding child records |
+| `parentField` | `string` | Flat shape: the key pointing at the parent's id |
+| `idField` | `string` | Node identity. Defaults to `id` |
+| `orderField` | `string` | Sorts siblings |
+| `nodeLabel` | `string` | Field path rendered as the node label. Defaults to the first visible field |
+| `defaultExpanded` | `"all" \| "roots" \| "none"` | Initial expansion |
+| `defaultRightPane` | `"table" \| "card"` | Right-pane mode. `"details"` is a deprecated alias of `"card"` |
+| `dndEnabled` | `boolean` | Drag-to-reparent. Default `true` |
+| `label` | `string` | Tab label. Default `"Tree"` |
+| `className` | `string` | Applied to the view surface |
 
-`TreeView` auto-detects shape from your data. Override with `treeConfig`:
+## Auto-detection and the auto-hiding tab
 
-- **Nested** — each record carries a `children: []` array.
-- **Flat / adjacency list** — each record carries a `parentId` (or similar) pointing at its parent's id.
+If neither `childrenField` nor `parentField` is given, the first record is inspected for:
 
-```tsx
-// nested
-const departments = [
-  { id: 1, name: "Engineering", children: [
-    { id: 2, name: "Platform" },
-    { id: 3, name: "Product" },
-  ]},
-]
+- **nested** — `children`, `items`, `kids`, `subItems`, `nodes`
+- **flat** — `parentId`, `parent_id`, `parent`, `managerId`, `manager`
 
-// flat
-const rows = [
-  { id: 1, name: "Engineering", parentId: null },
-  { id: 2, name: "Platform", parentId: 1 },
-]
-```
+If nothing matches, `DataViews.Tree` **renders nothing and registers no tab** — flat data simply
+doesn't get a Tree option. Declaring `childrenField` or `parentField` explicitly always forces
+the tab on.
 
-## Composable Mode example
+## Filtering
 
-```tsx
-import { TreeView } from "@/components/TreeView";
-import { useDataViewsState } from "@/hooks/useDataViewsState";
-import type { FieldConfig } from "@/components/FieldConfig";
-import type { TreeConfig } from "@/components/TreeConfig";
+The tree filters its own forest with `pruneTree` rather than the flat filter every other view
+uses: a flat filter would drop a matching node's ancestors and orphan it. A node survives if it
+matches, or if any descendant does.
 
-const fields: FieldConfig[] = [
-  { path: "name", type: "text" },
-  { path: "headcount", type: "number" },
-]
+## Right pane
 
-const treeConfig: TreeConfig = {
-  childrenField: "children",
-  nodeLabel: "name",
-  defaultExpanded: "roots",      // "all" | "roots" | "none"
-  defaultRightPane: "table",     // "table" | "card"
-}
+The toolbar switches between:
 
-function OrgTree() {
-  const state = useDataViewsState({ data: departments, fields, treeConfig })
-  return (
-    <TreeView
-      data={state.items}
-      fields={state.resolvedFields}
-      config={state.config}
-      treeConfig={treeConfig}
-    />
-  )
-}
-```
+- **List** — a `TableGrid` over the selected node and all its descendants, with its own sort and
+  selection state (independent of the standalone table view's).
+- **Cards** — one `Card` per record; the label field is the header, remaining visible fields are
+  key/value rows.
 
-## API Reference
+## Mobile
 
-### `TreeViewProps`
-
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `data` | `DynamicRecord[]` | — (required) | Records to build the hierarchy from. Pass `state.items` (nested) in composable mode. |
-| `fields` | `FieldConfig[]` | — (required) | Field map for the right-pane table/card. Pass `state.resolvedFields`. |
-| `config` | `ViewConfig` | — (required) | View config from `useDataViewsState`. |
-| `treeConfig` | `TreeConfig` | auto-detected | Hierarchy + expansion + right-pane config (see below). |
-| `columns` | `DynamicColumnConfig[]` | `undefined` | Explicit column overrides for the right-pane table. |
-| `onDataUpdate` | `(data: DynamicRecord[]) => void` | `undefined` | Called when nodes move (drag-and-drop reparent), if `dndEnabled`. |
-| `filters` | `DynamicFilterConfig[]` | `undefined` | Explicit filter definitions. Usually inferred from `filterable` fields. |
-| `filterState` | `FilterState` | uncontrolled | Controlled filter state. Pair with `onFilterChange`. |
-| `onFilterChange` | `(filters: FilterState) => void` | `undefined` | Fires when a filter changes. |
-| `showFilters` | `boolean` | `true` | Show the integrated filter panel. |
-
-### `TreeConfig`
-
-```ts
-type TreeConfig = {
-  childrenField?: string      // nested mode: array property holding children
-  parentField?: string        // flat mode: property pointing at the parent id
-  idField?: string            // id property (default "id")
-  orderField?: string         // optional ordering within siblings
-  nodeLabel?: string          // which field labels each tree node
-  defaultExpanded?: "all" | "roots" | "none"
-  defaultRightPane?: "table" | "card"   // "details" accepted as a deprecated alias of "card"
-  dndEnabled?: boolean        // enable drag-and-drop reparenting
-}
-```
-
-See [`DataViewsLayout`](./data-views-layout.md#fieldconfig) for `FieldConfig`,
-`FilterState`, and related shapes.
-
-## Accessibility
-
-- Tree rows expose `role="treeitem"` with `aria-expanded` and `aria-selected`.
-- On mobile the sidebar collapses into a drawer with a labelled trigger.
-- The right-pane table inherits [`TableView`](./table-view.md)'s accessibility.
-
-## Theming
-
-Uses only `*-presentation-*` design tokens. Control the scheme via the parent
-`DataViewsLayout`'s `theme`.
+Below 768px the sidebar collapses into a left-edge drawer (`vaul`) behind a hamburger in the
+right pane's toolbar.
 
 ## Related
 
-- [`DataViewsLayout`](./data-views-layout.md) — the tabbed container that renders this for you
-- [`TableView`](./table-view.md) · [`KanbanView`](./kanban-view.md) · [`InboxView`](./inbox-view.md) — sibling views
-- [`TreeFolder`](./tree-drop-down.md) / [`TreeSubLayout`](./tree-sub-layout.md) — non-grid tree navigation
-- [How-to: Render a backend response with DataViews](../how-to/data-views-from-backend-response.md)
+- [`data-views`](./data-views.md) — the root and the full parts list

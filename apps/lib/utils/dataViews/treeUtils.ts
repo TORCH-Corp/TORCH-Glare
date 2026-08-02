@@ -22,7 +22,10 @@ const CHILDREN_PATTERNS = ["children", "items", "kids", "subItems", "nodes"];
 const PARENT_PATTERNS = ["parentId", "parent_id", "parent", "managerId", "manager"];
 const ID_PATTERNS = ["id", "_id", "uuid", "key"];
 
-export function autoDetectTreeShape(data: DynamicRecord[], config: TreeConfig): ResolvedTreeConfig {
+export function autoDetectTreeShape(
+  data: readonly DynamicRecord[],
+  config: TreeConfig,
+): ResolvedTreeConfig {
   const sample = data.find((r) => r != null && typeof r === "object") ?? {};
 
   const idField = config.idField ?? pickKey(sample, ID_PATTERNS) ?? "id";
@@ -59,14 +62,14 @@ function pickArrayKey(record: DynamicRecord, candidates: string[]): string | und
   return undefined;
 }
 
-export function buildTree(data: DynamicRecord[], config: ResolvedTreeConfig): TreeNode[] {
+export function buildTree(data: readonly DynamicRecord[], config: ResolvedTreeConfig): TreeNode[] {
   if (!data || data.length === 0) return [];
   if (config.childrenField) return buildFromNested(data, config);
   if (config.parentField) return buildFromFlat(data, config);
   return data.map((record, idx) => makeNode(record, config, idx, null, 0));
 }
 
-function buildFromNested(data: DynamicRecord[], config: ResolvedTreeConfig): TreeNode[] {
+function buildFromNested(data: readonly DynamicRecord[], config: ResolvedTreeConfig): TreeNode[] {
   const seen = new Set<string>();
 
   const visit = (
@@ -91,7 +94,7 @@ function buildFromNested(data: DynamicRecord[], config: ResolvedTreeConfig): Tre
   return data.map((record, idx) => visit(record, 0, null, idx));
 }
 
-function buildFromFlat(data: DynamicRecord[], config: ResolvedTreeConfig): TreeNode[] {
+function buildFromFlat(data: readonly DynamicRecord[], config: ResolvedTreeConfig): TreeNode[] {
   const byId = new Map<string, TreeNode>();
   for (let i = 0; i < data.length; i++) {
     const record = data[i];
@@ -182,7 +185,7 @@ export function initialExpansion(roots: TreeNode[], mode: "all" | "roots" | "non
   return allIds(roots);
 }
 
-export function flattenAll(data: DynamicRecord[], childrenField: string): DynamicRecord[] {
+export function flattenAll(data: readonly DynamicRecord[], childrenField: string): DynamicRecord[] {
   const out: DynamicRecord[] = [];
   const dfs = (record: DynamicRecord) => {
     if (record == null || typeof record !== "object") return;
@@ -201,13 +204,16 @@ export type MoveArgs = {
 };
 
 export function applyMove(
-  data: DynamicRecord[],
+  data: readonly DynamicRecord[],
   config: ResolvedTreeConfig,
   args: MoveArgs,
 ): DynamicRecord[] {
-  if (config.childrenField) return applyMoveNested(data, config, args);
-  if (config.parentField) return applyMoveFlat(data, config, args);
-  return applyMoveTopLevel(data, config, args);
+  // One defensive copy at the boundary keeps the move implementations free to
+  // work with mutable locals without leaking that back to the caller's state.
+  const mutable = [...data];
+  if (config.childrenField) return applyMoveNested(mutable, config, args);
+  if (config.parentField) return applyMoveFlat(mutable, config, args);
+  return applyMoveTopLevel(mutable, config, args);
 }
 
 function recordId(record: DynamicRecord, idField: string, fallbackIdx: number): string {
@@ -364,6 +370,84 @@ function applyMoveNested(
   }
 
   return insert(pruned);
+}
+
+/**
+ * Apply `updater` to the one record matching `id`, returning a new array.
+ *
+ * Recurses through `childrenField` so a nested record is updated **in place**
+ * in the hierarchy. This is what lets a view edit a record without knowing
+ * whether it is looking at a filtered or flattened projection of the data:
+ * the write always targets the original, complete dataset.
+ *
+ * Identity matching follows the same `recordId` convention as `applyMove`, so
+ * an id that drag-and-drop can target is an id this can update.
+ */
+export function updateRecordById(
+  data: readonly DynamicRecord[],
+  id: unknown,
+  idField: string,
+  childrenField: string | undefined,
+  updater: (record: DynamicRecord) => DynamicRecord,
+): DynamicRecord[] {
+  const target = String(id);
+  let hit = false;
+
+  const visit = (records: readonly DynamicRecord[]): DynamicRecord[] =>
+    records.map((record, idx) => {
+      if (!hit && recordId(record, idField, idx) === target) {
+        hit = true;
+        return updater(record);
+      }
+      if (childrenField) {
+        const children = getByPath(record, childrenField);
+        if (Array.isArray(children) && children.length > 0) {
+          const nextChildren = visit(children as DynamicRecord[]);
+          if (nextChildren !== children) return setByPath(record, childrenField, nextChildren);
+        }
+      }
+      return record;
+    });
+
+  const next = visit(data);
+
+  // On a miss, hand back the caller's own array: passing the identical
+  // reference to `setState` is what lets React bail out of the re-render.
+  // The cast is sound because nothing here mutates `data`.
+  return hit ? next : (data as DynamicRecord[]);
+}
+
+/**
+ * Merge a freshly-computed expansion set into the user's current one.
+ *
+ * Called when the forest changes (data loaded, record edited, node moved).
+ * Recomputing from `initialExpansion` outright would throw away everything the
+ * user had opened — which is exactly the bug this replaces. Instead: keep every
+ * currently-expanded id that still exists, and open any node that has appeared
+ * since, per `mode`.
+ */
+export function reconcileExpansion(
+  previous: Set<string>,
+  roots: TreeNode[],
+  mode: "all" | "roots" | "none",
+  known: Set<string>,
+): Set<string> {
+  const present = allIds(roots);
+  const next = new Set<string>();
+
+  for (const id of previous) {
+    if (present.has(id)) next.add(id);
+  }
+
+  // Nodes we have never seen before get the default treatment.
+  if (mode !== "none") {
+    const fresh = mode === "all" ? present : new Set(roots.map((r) => r.id));
+    for (const id of fresh) {
+      if (!known.has(id)) next.add(id);
+    }
+  }
+
+  return next;
 }
 
 export function pruneTree(

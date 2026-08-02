@@ -225,6 +225,48 @@
       ]
     },
     {
+      "name": "DataViews",
+      "type": "components",
+      "path": "components/DataViews",
+      "npmDependencies": [
+        "class-variance-authority",
+        "lucide-react",
+        "@radix-ui/react-radio-group",
+        "@radix-ui/react-slider",
+        "@radix-ui/react-checkbox",
+        "react-day-picker",
+        "vaul"
+      ],
+      "registryDependencies": [
+        "components/Avatar",
+        "components/Badge",
+        "components/Button",
+        "components/Card",
+        "components/Checkbox",
+        "components/DatePicker",
+        "components/Divider",
+        "components/Label",
+        "components/Radio",
+        "components/SearchableSelect",
+        "components/Switch",
+        "components/TabFormItem",
+        "components/TabSwitch",
+        "components/Table",
+        "components/TreeFolder",
+        "hooks/useDataViewsState",
+        "hooks/useIsMobile",
+        "hooks/useViewData",
+        "layouts/DataViewCard",
+        "utils/cn",
+        "utils/dataViews/fieldUtils",
+        "utils/dataViews/nestedDataUtils",
+        "utils/dataViews/pathUtils",
+        "utils/dataViews/rangeUtils",
+        "utils/dataViews/treeUtils",
+        "utils/types"
+      ]
+    },
+    {
       "name": "DatePicker",
       "type": "components",
       "path": "components/DatePicker.tsx",
@@ -852,6 +894,18 @@
       ]
     },
     {
+      "name": "TreeFolder",
+      "type": "components",
+      "path": "components/TreeFolder",
+      "npmDependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
       "name": "useActiveTreeItem",
       "type": "hooks",
       "path": "hooks/useActiveTreeItem.ts",
@@ -894,6 +948,19 @@
       "path": "hooks/useTagSelection.ts",
       "npmDependencies": [],
       "registryDependencies": []
+    },
+    {
+      "name": "useViewData",
+      "type": "hooks",
+      "path": "hooks/useViewData.ts",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/dataViews/fieldUtils",
+        "utils/dataViews/nestedDataUtils",
+        "utils/dataViews/pathUtils",
+        "utils/dataViews/rangeUtils",
+        "utils/dataViews/treeUtils"
+      ]
     },
     {
       "name": "CNLayout",
@@ -968,6 +1035,52 @@
       "path": "utils/color.ts",
       "npmDependencies": [],
       "registryDependencies": []
+    },
+    {
+      "name": "dataViews/fieldUtils",
+      "type": "utils",
+      "path": "utils/dataViews/fieldUtils.ts",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/dataViews/pathUtils",
+        "utils/dataViews/nestedDataUtils"
+      ]
+    },
+    {
+      "name": "dataViews/nestedDataUtils",
+      "type": "utils",
+      "path": "utils/dataViews/nestedDataUtils.tsx",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/cn",
+        "components/Badge",
+        "components/Divider"
+      ]
+    },
+    {
+      "name": "dataViews/pathUtils",
+      "type": "utils",
+      "path": "utils/dataViews/pathUtils.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "dataViews/rangeUtils",
+      "type": "utils",
+      "path": "utils/dataViews/rangeUtils.ts",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/dataViews/pathUtils"
+      ]
+    },
+    {
+      "name": "dataViews/treeUtils",
+      "type": "utils",
+      "path": "utils/dataViews/treeUtils.ts",
+      "npmDependencies": [],
+      "registryDependencies": [
+        "utils/dataViews/pathUtils"
+      ]
     },
     {
       "name": "dateFormat",

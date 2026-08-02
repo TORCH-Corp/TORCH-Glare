@@ -108,7 +108,7 @@ export function DateRangePopover({ value, onChange, presets }: Props) {
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="text-xs px-3 py-1 rounded-md bg-content-presentation-action-primary text-white hover:opacity-90"
+              className="text-xs px-3 py-1 rounded-md bg-content-presentation-action-primary text-content-presentation-global-primary hover:opacity-90"
             >
               Done
             </button>

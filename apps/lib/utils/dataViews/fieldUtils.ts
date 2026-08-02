@@ -2,10 +2,9 @@ import type {
   DynamicRecord,
   FieldConfig,
   FieldType,
-  DynamicColumnConfig,
   InboxConfig,
 } from "../../components/DataViews/types";
-import { findFirstDefined, formatPathLabel, getByPath } from "./pathUtils";
+import { findFirstDefined, formatPathLabel } from "./pathUtils";
 import { isPlainObject, isCurrencyField, isRatingField } from "./nestedDataUtils";
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}/;
@@ -41,7 +40,7 @@ export function inferFieldType(path: string, value: unknown): FieldType {
   return "text";
 }
 
-export function detectFields(data: DynamicRecord[]): FieldConfig[] {
+export function detectFields(data: readonly DynamicRecord[]): FieldConfig[] {
   if (!data || data.length === 0) return [];
 
   const allKeys = new Set<string>();
@@ -79,8 +78,29 @@ export function detectFields(data: DynamicRecord[]): FieldConfig[] {
     .map((f, i) => ({ ...f, order: i }));
 }
 
-export function mergeFields(detected: FieldConfig[], custom?: FieldConfig[]): FieldConfig[] {
-  if (!custom || custom.length === 0) return detected;
+/**
+ * Merge one field override over its base, later keys winning.
+ *
+ * The categorical-filter props are handled as a **pair** rather than key-wise:
+ * a plain spread of `{ filterVariant: "checkbox", filterMode: "multi" }` and
+ * `{ filterVariant: "searchable-select" }` would leave a stale
+ * `filterMode: "multi"` attached to a variant that is inherently single-select
+ * — the exact combination `CategoricalFilterStyle` exists to forbid.
+ */
+function mergeOne(base: FieldConfig, override: FieldConfig): FieldConfig {
+  const merged = { ...base, ...override } as FieldConfig & {
+    filterVariant?: string;
+    filterMode?: string;
+  };
+  if (override.filterVariant === "searchable-select") delete merged.filterMode;
+  return merged as FieldConfig;
+}
+
+export function mergeFields(
+  detected: readonly FieldConfig[],
+  custom?: readonly FieldConfig[],
+): FieldConfig[] {
+  if (!custom || custom.length === 0) return [...detected];
 
   const out = [...detected];
   const byPath = new Map(out.map((f, i) => [f.path, i]));
@@ -89,7 +109,7 @@ export function mergeFields(detected: FieldConfig[], custom?: FieldConfig[]): Fi
     if (!c.path) continue;
     const existing = byPath.get(c.path);
     if (existing != null) {
-      out[existing] = { ...out[existing], ...c };
+      out[existing] = mergeOne(out[existing], c);
     } else {
       out.push({
         ...c,
@@ -107,51 +127,8 @@ export function mergeFields(detected: FieldConfig[], custom?: FieldConfig[]): Fi
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 }
 
-export function visibleFields(fields: FieldConfig[]): FieldConfig[] {
+export function visibleFields(fields: readonly FieldConfig[]): FieldConfig[] {
   return fields.filter((f) => f.type !== "hidden" && f.visible !== false);
-}
-
-export function fieldToColumn(
-  field: FieldConfig,
-  idx = 0,
-): DynamicColumnConfig & {
-  __field: FieldConfig;
-} {
-  const legacyType = mapFieldTypeToColumnType(field.type);
-  return {
-    id: field.path,
-    label: field.label ?? formatPathLabel(field.path),
-    visible: field.visible !== false && field.type !== "hidden",
-    order: field.order ?? idx,
-    type: legacyType,
-    render: field.render,
-    __field: field,
-  };
-}
-
-function mapFieldTypeToColumnType(t?: FieldType): DynamicColumnConfig["type"] {
-  switch (t) {
-    case "number":
-    case "currency":
-    case "number-format":
-    case "progress-bar":
-    case "star-rating":
-      return "number";
-    case "date":
-    case "date-format":
-      return "date";
-    case "enum-badge":
-    case "icon-text":
-    case "two-line":
-    case "link":
-      return "badge";
-    case "badge-array":
-      return "array";
-    case "boolean":
-      return "boolean";
-    default:
-      return "text";
-  }
 }
 
 const STARRED_PATTERNS = ["isStarred", "starred", "favorite", "isFavorite", "pinned"];
@@ -167,7 +144,7 @@ function pickField(sample: DynamicRecord, patterns: string[]): string | null {
 }
 
 export function resolveInboxConfig(
-  data: DynamicRecord[],
+  data: readonly DynamicRecord[],
   user?: InboxConfig,
 ): Required<Omit<InboxConfig, "titlePath" | "previewPath">> &
   Pick<InboxConfig, "titlePath" | "previewPath"> {
@@ -189,9 +166,4 @@ export function resolveInboxConfig(
     titlePath: user?.titlePath,
     previewPath: user?.previewPath,
   };
-}
-
-export function readInboxField(item: DynamicRecord, field: string | null | undefined): unknown {
-  if (!field) return undefined;
-  return getByPath(item, field);
 }

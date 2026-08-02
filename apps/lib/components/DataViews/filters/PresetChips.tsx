@@ -32,7 +32,7 @@ export function PresetChips({ presets, current, onSelect }: PresetChipsProps) {
             className={cn(
               "text-xs px-2 py-1 rounded-md border transition-colors whitespace-nowrap",
               active
-                ? "bg-content-presentation-action-primary text-white border-content-presentation-action-primary"
+                ? "bg-content-presentation-action-primary text-content-presentation-global-primary border-content-presentation-action-primary"
                 : "bg-background-presentation-form-field-primary border-border-presentation-global-primary text-content-presentation-global-secondary hover:text-content-presentation-global-primary",
             )}
           >

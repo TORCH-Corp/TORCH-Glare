@@ -1,28 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   DynamicRecord,
-  DynamicColumnConfig,
   FieldConfig,
   FilterState,
   TreeConfig,
   ViewConfig,
-  ViewType,
-  ViewVisibility,
+  ViewId,
 } from "../components/DataViews/types";
 import { defaultConfig } from "../components/DataViews/types";
-import { detectColumns, mergeColumns } from "../utils/dataViews/columnUtils";
 import { detectFields, mergeFields } from "../utils/dataViews/fieldUtils";
-import { autoDetectTreeShape, flattenAll } from "../utils/dataViews/treeUtils";
+import { autoDetectTreeShape, flattenAll, updateRecordById } from "../utils/dataViews/treeUtils";
 
 export type UseDataViewsStateOptions = {
   data?: DynamicRecord[];
   fields?: FieldConfig[];
-  columns?: Partial<DynamicColumnConfig>[];
   config?: Partial<ViewConfig>;
   treeConfig?: TreeConfig;
-  views?: ViewVisibility;
   filterState?: FilterState;
   onFilterChange?: (filters: FilterState) => void;
 };
@@ -30,14 +25,12 @@ export type UseDataViewsStateOptions = {
 export function useDataViewsState({
   data,
   fields,
-  columns,
   config: initialConfig,
   treeConfig,
-  views,
   filterState: externalFilterState,
   onFilterChange,
 }: UseDataViewsStateOptions) {
-  const [currentView, setCurrentView] = useState<ViewType>(
+  const [currentView, setCurrentView] = useState<ViewId>(
     initialConfig?.defaultView || defaultConfig.defaultView,
   );
   const [config, setConfig] = useState<ViewConfig>({ ...defaultConfig, ...initialConfig });
@@ -48,38 +41,75 @@ export function useDataViewsState({
     setItems(data || []);
   }, [data]);
 
+  /**
+   * Keep the `config` prop live after mount.
+   *
+   * `useState` initialisers run once, so a changing `config` — e.g.
+   * `config={routeId ? { defaultView: "inbox" } : undefined}` — would otherwise
+   * never apply. We diff against the previously-*supplied* config rather than
+   * against current state, so edits the user made through the config rail are
+   * not clobbered on every unrelated re-render: only keys the consumer actually
+   * changed are written through.
+   */
+  const lastSuppliedConfig = useRef<Partial<ViewConfig> | undefined>(initialConfig);
+  useEffect(() => {
+    const prev = lastSuppliedConfig.current;
+    lastSuppliedConfig.current = initialConfig;
+    if (!initialConfig || initialConfig === prev) return;
+
+    const changed: Partial<ViewConfig> = {};
+    for (const key of Object.keys(initialConfig) as Array<keyof ViewConfig>) {
+      if (!prev || !Object.is(prev[key], initialConfig[key])) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- key-wise copy across a union of value types
+        (changed as any)[key] = initialConfig[key];
+      }
+    }
+    if (Object.keys(changed).length === 0) return;
+
+    setConfig((cur) => ({ ...cur, ...changed }));
+    if (changed.defaultView) setCurrentView(changed.defaultView);
+  }, [initialConfig]);
+
   const activeFilterState = externalFilterState ?? internalFilterState;
 
+  // Memoized on the individual config fields rather than the `treeConfig`
+  // object: consumers routinely pass an inline literal, whose identity changes
+  // every render. `treeShape` lands in the context value, so churn here would
+  // re-render every view on every Root render.
+  const {
+    childrenField: cfgChildrenField,
+    parentField: cfgParentField,
+    idField: cfgIdField,
+    orderField: cfgOrderField,
+    nodeLabel: cfgNodeLabel,
+    defaultExpanded: cfgDefaultExpanded,
+  } = treeConfig ?? {};
+
   const treeShape = useMemo(
-    () => autoDetectTreeShape(items, treeConfig ?? {}),
-    [items, treeConfig],
+    () =>
+      autoDetectTreeShape(items, {
+        childrenField: cfgChildrenField,
+        parentField: cfgParentField,
+        idField: cfgIdField,
+        orderField: cfgOrderField,
+        nodeLabel: cfgNodeLabel,
+        defaultExpanded: cfgDefaultExpanded,
+      }),
+    [
+      items,
+      cfgChildrenField,
+      cfgParentField,
+      cfgIdField,
+      cfgOrderField,
+      cfgNodeLabel,
+      cfgDefaultExpanded,
+    ],
   );
-  const treeAutoAvailable = !!treeConfig || !!treeShape.childrenField || !!treeShape.parentField;
-
-  const enabledViews = useMemo<Record<ViewType, boolean>>(() => {
-    const v = views ?? {};
-    return {
-      table: v.table ?? true,
-      kanban: v.kanban ?? true,
-      inbox: v.inbox ?? true,
-      tree: v.tree ?? treeAutoAvailable,
-    };
-  }, [views, treeAutoAvailable]);
-
-  useEffect(() => {
-    if (!enabledViews[currentView]) {
-      const fallback = (Object.entries(enabledViews) as Array<[ViewType, boolean]>).find(
-        ([, on]) => on,
-      )?.[0];
-      if (fallback) setCurrentView(fallback);
-    }
-  }, [enabledViews, currentView]);
-
   const flatItems = useMemo<DynamicRecord[]>(() => {
-    const cf = treeConfig?.childrenField ?? treeShape.childrenField;
+    const cf = cfgChildrenField ?? treeShape.childrenField;
     if (!cf) return items;
     return flattenAll(items, cf);
-  }, [items, treeConfig?.childrenField, treeShape.childrenField]);
+  }, [items, cfgChildrenField, treeShape.childrenField]);
 
   const detectedFields = useMemo<FieldConfig[]>(() => {
     if (!flatItems || flatItems.length === 0) return [];
@@ -98,12 +128,6 @@ export function useDataViewsState({
       })
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
   }, [detectedFields, config.tableColumns]);
-
-  const detectedColumns = useMemo<DynamicColumnConfig[]>(() => {
-    if (!flatItems || flatItems.length === 0) return [];
-    const detected = detectColumns(flatItems);
-    return mergeColumns(detected, columns);
-  }, [flatItems, columns]);
 
   useEffect(() => {
     if (detectedFields.length === 0) return;
@@ -144,24 +168,42 @@ export function useDataViewsState({
     });
   }, [detectedFields]);
 
-  const handleConfigChange = (newConfig: Partial<ViewConfig>) => {
+  // These three are stable across renders on purpose: they end up in the
+  // DataViews context value, and a new identity on every render would defeat
+  // every `useMemo` in every view downstream.
+  const handleConfigChange = useCallback((newConfig: Partial<ViewConfig>) => {
     setConfig((prev) => ({ ...prev, ...newConfig }));
-  };
+  }, []);
 
-  const handleDataUpdate = (updatedData: DynamicRecord[]) => {
+  const handleDataUpdate = useCallback((updatedData: DynamicRecord[]) => {
     setItems(updatedData);
-  };
+  }, []);
 
-  const handleFilterChange = (newFilters: FilterState) => {
-    if (onFilterChange) onFilterChange(newFilters);
-    else setInternalFilterState(newFilters);
-  };
+  // The safe single-record write. Targets `items` — the complete, still-nested
+  // dataset — so a view holding a filtered or flattened projection can edit one
+  // record without deleting the ones it was hiding.
+  const idField = treeShape.idField;
+  const childrenField = treeShape.childrenField;
+
+  const updateRecord = useCallback(
+    (id: unknown, updater: (record: DynamicRecord) => DynamicRecord) => {
+      setItems((prev) => updateRecordById(prev, id, idField, childrenField, updater));
+    },
+    [idField, childrenField],
+  );
+
+  const handleFilterChange = useCallback(
+    (newFilters: FilterState) => {
+      if (onFilterChange) onFilterChange(newFilters);
+      else setInternalFilterState(newFilters);
+    },
+    [onFilterChange],
+  );
 
   return {
     items,
     flatItems,
     resolvedFields,
-    detectedColumns,
     config,
     setConfig: handleConfigChange,
     currentView,
@@ -169,7 +211,7 @@ export function useDataViewsState({
     filterState: activeFilterState,
     setFilterState: handleFilterChange,
     onDataUpdate: handleDataUpdate,
+    updateRecord,
     treeShape,
-    enabledViews,
   };
 }

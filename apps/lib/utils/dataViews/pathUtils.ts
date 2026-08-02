@@ -76,7 +76,41 @@ export function formatPathLabel(path: Path): string {
     .trim();
 }
 
-export function findFirstDefined(data: unknown[], path: Path): unknown {
+/**
+ * Stable identity for a record.
+ *
+ * Prefers a literal `id`, then the value at `fallbackPath` (usually the first
+ * visible field), and finally a namespaced index. Views use this for React
+ * keys, selection matching, and drag-and-drop targeting, so it must agree
+ * across every view rendering the same data — hence one implementation, not
+ * one per view.
+ *
+ * The index fallback is `__row<n>` rather than the bare number because callers
+ * compare identities as strings: a record whose id is the string `"2"` and the
+ * record sitting at index `2` would otherwise collide, and selecting one would
+ * check both. The prefix matches the convention already used by
+ * `treeUtils.recordId`, so tree drag-and-drop and view selection agree.
+ */
+export function getRecordId(item: unknown, fallbackPath: Path | undefined, index: number): unknown {
+  const id = (item as Record<string, unknown> | null)?.id;
+  if (id != null) return id;
+  if (fallbackPath) {
+    const v = getByPath(item, fallbackPath);
+    if (v != null) return v;
+  }
+  return `__row${index}`;
+}
+
+/**
+ * `getRecordId` coerced to a string — the form used for React keys, DOM ids,
+ * and selection sets. Prefer this over `String(getRecordId(...))` at call
+ * sites so the coercion rule lives in one place.
+ */
+export function recordKey(item: unknown, fallbackPath: Path | undefined, index: number): string {
+  return String(getRecordId(item, fallbackPath, index));
+}
+
+export function findFirstDefined(data: readonly unknown[], path: Path): unknown {
   for (const item of data) {
     const v = getByPath(item, path);
     if (v != null) return v;

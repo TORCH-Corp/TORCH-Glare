@@ -30,11 +30,11 @@ export function DataViewRadio({ value, label, children, className }: DataViewRad
           // always-dark panel chrome convention). Unselected ring = the spec
           // CheckBox-Primary border (#626467) + BorderStyle fill
           // (rgba(255,255,255,0.05)); same tokens the shared Checkbox uses.
-          "border border-[#626467] bg-white/5 transition-colors",
+          "border border-background-presentation-badge-gray-solid bg-white/5 transition-colors",
           "group-data-[state=checked]:border-transparent",
           // #0075FF = the previous selected-fill value (border-presentation-state-focus),
           // now literal so the blue is theme-independent and visually unchanged.
-          "group-data-[state=checked]:bg-[#0075FF]",
+          "group-data-[state=checked]:bg-border-presentation-state-focus",
         )}
       >
         <RadioGroupPrimitive.Indicator className="flex items-center justify-center">

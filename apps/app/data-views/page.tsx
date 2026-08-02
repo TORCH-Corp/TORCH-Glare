@@ -1,128 +1,47 @@
-"use client";
+import Link from "next/link";
 
-import {
-  DataViewsLayout,
-  type FieldConfig,
-  type ViewVisibility,
-} from "@/components/DataViews";
+import { GROUPS } from "./_examples";
 
-const orders = [
-  {
-    id: 1,
-    customer: "Acme Inc.",
-    status: "Pending",
-    priority: "High",
-    total: 1240,
-    createdAt: "2025-09-10",
-  },
-  {
-    id: 2,
-    customer: "Globex Corp.",
-    status: "Shipped",
-    priority: "Medium",
-    total: 480,
-    createdAt: "2025-09-12",
-  },
-  {
-    id: 3,
-    customer: "Initech",
-    status: "Delivered",
-    priority: "Low",
-    total: 99,
-    createdAt: "2025-09-15",
-  },
-  {
-    id: 4,
-    customer: "Umbrella",
-    status: "Pending",
-    priority: "High",
-    total: 2890,
-    createdAt: "2025-09-18",
-  },
-  {
-    id: 5,
-    customer: "Hooli",
-    status: "Shipped",
-    priority: "Medium",
-    total: 740,
-    createdAt: "2025-09-20",
-  },
-  {
-    id: 6,
-    customer: "Stark Industries",
-    status: "Pending",
-    priority: "High",
-    total: 12400,
-    createdAt: "2025-09-22",
-  },
-  {
-    id: 7,
-    customer: "Wayne Enterprises",
-    status: "Delivered",
-    priority: "Medium",
-    total: 5300,
-    createdAt: "2025-09-25",
-  },
-  {
-    id: 8,
-    customer: "Cyberdyne",
-    status: "Shipped",
-    priority: "Low",
-    total: 220,
-    createdAt: "2025-09-28",
-  },
-];
-
-const orderFields: FieldConfig[] = [
-  { path: "id", label: "Order #", type: "number" },
-  { path: "customer", label: "Customer", type: "text" },
-  {
-    path: "status",
-    label: "Status",
-    type: "enum-badge",
-    variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" },
-    kanbanVariants: {
-      Pending: { label: "Pending", color: "gray" },
-      Shipped: { label: "Shipped", color: "blue" },
-      Delivered: { label: "Delivered", color: "green" },
-    },
-    filterable: true,
-  },
-  {
-    path: "priority",
-    label: "Priority",
-    type: "enum-badge",
-    variants: { High: "redOrange", Medium: "purple", Low: "gray" },
-    filterable: true,
-  },
-  {
-    path: "total",
-    label: "Total",
-    type: "currency",
-    currency: "USD",
-    filterable: true,
-  },
-  {
-    path: "createdAt",
-    label: "Created",
-    type: "date-format",
-    dateFormat: "YYYY-MM-DD",
-  },
-];
-
-const ALL_VIEWS: ViewVisibility = {
-  table: true,
-  kanban: true,
-  inbox: true,
-  tree: true,
-};
-
-export default function DataViewsDemo() {
+export default function DataViewsIndexPage() {
   return (
-    <div className="flex h-full items-center justify-center bg-background-presentation-body-primary">
-      <p className="text-content-presentation-global-tertiary">
-        Select an item to view details
-      </p>
+    <div className="h-full overflow-auto p-8">
+      <div className="mx-auto flex max-w-5xl flex-col gap-8">
+        <header className="flex flex-col gap-2">
+          <h1 className="typography-headers-large-medium text-content-presentation-global-primary">
+            DataViews examples
+          </h1>
+          <p className="max-w-2xl typography-body-medium-regular text-content-presentation-global-secondary">
+            One record set, rendered as a table, board, inbox, or tree. Call{" "}
+            <code>&lt;DataViews /&gt;</code> for the standard screen, or compose{" "}
+            <code>DataViews.Root</code> with the parts you want. Every page below is a runnable
+            example.
+          </p>
+        </header>
+
+        {GROUPS.map((group) => (
+          <section key={group.title} className="flex flex-col gap-3">
+            <h2 className="typography-body-large-medium text-content-presentation-global-primary">
+              {group.title}
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {group.items.map((e) => (
+                <Link
+                  key={e.href}
+                  href={e.href}
+                  className="flex flex-col gap-1 rounded-[12px] border border-border-presentation-action-primary bg-background-presentation-form-base p-4 transition-colors hover:bg-background-presentation-action-hover"
+                >
+                  <span className="typography-body-large-medium text-content-presentation-global-primary">
+                    {e.title}
+                  </span>
+                  <span className="typography-body-small-regular text-content-presentation-global-secondary">
+                    {e.blurb}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
     </div>
   );
 }

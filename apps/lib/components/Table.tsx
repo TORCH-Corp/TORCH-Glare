@@ -95,6 +95,22 @@ const TableRow = React.forwardRef<
 ));
 TableRow.displayName = "TableRow";
 
+/**
+ * Split `aria-*` / `role` / `tabIndex` out of a props bag.
+ *
+ * `TableHead` renders a `<th>` wrapping a layout `<div>`; without this the
+ * caller's accessibility attributes end up on the div, where they mean nothing.
+ */
+function splitAriaProps<T extends Record<string, unknown>>(props: T) {
+  const ariaProps: Record<string, unknown> = {};
+  const rest: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(props)) {
+    if (key.startsWith("aria-") || key === "role" || key === "tabIndex") ariaProps[key] = value;
+    else rest[key] = value;
+  }
+  return { ariaProps, rest: rest as T };
+}
+
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
@@ -102,57 +118,73 @@ const TableHead = React.forwardRef<
     React.ButtonHTMLAttributes<HTMLButtonElement> & {
       sortType?: "asc" | "desc" | undefined;
       onSort?: () => void;
+      /** Column name for the sort button's accessible label. */
+      sortLabel?: string;
       isDummy?: boolean;
     }
->(({ className, size = "M", disabled, sortType, onSort, isDummy, ...props }, forwardedRef) => {
-  const headRef = useRef<HTMLTableCellElement>(null);
-  const { width, handleStartResize } = useResize(headRef as React.RefObject<HTMLElement>);
+>(
+  (
+    { className, size = "M", disabled, sortType, onSort, sortLabel, isDummy, ...props },
+    forwardedRef,
+  ) => {
+    const headRef = useRef<HTMLTableCellElement>(null);
+    const { width, handleStartResize } = useResize(headRef as React.RefObject<HTMLElement>);
 
-  // Combine refs using useEffect
-  React.useEffect(() => {
-    if (!forwardedRef) return;
-    if (typeof forwardedRef === "function") forwardedRef(headRef.current);
-    else forwardedRef.current = headRef.current;
-  }, [forwardedRef]);
+    // Combine refs using useEffect
+    React.useEffect(() => {
+      if (!forwardedRef) return;
+      if (typeof forwardedRef === "function") forwardedRef(headRef.current);
+      else forwardedRef.current = headRef.current;
+    }, [forwardedRef]);
 
-  return (
-    <th
-      ref={headRef}
-      className={cn(
-        "relative py-[6px] px-[4px] border-b-[2px]  border-border-presentation-table-header",
-      )}
-    >
-      <div
-        {...props}
+    // Accessibility attributes belong on the `<th>` — that is the element with
+    // the `columnheader` role, and `aria-sort` on any other node is invisible to
+    // assistive technology. Everything else still spreads onto the inner layout
+    // div, as before.
+    const { ariaProps, rest } = splitAriaProps(props);
+
+    return (
+      <th
+        ref={headRef}
+        {...ariaProps}
         className={cn(
-          tableHeadVariants({ size, disabled, isDummy }),
-          { "min-w-[100px]": !isDummy },
-          className,
+          "relative py-[6px] px-[4px] border-b-[2px]  border-border-presentation-table-header",
         )}
       >
         <div
-          style={{ width: `${width}px` }}
-          className={cn("flex items-center justify-between flex-1", {
-            "justify-center": isDummy,
-          })}
+          {...rest}
+          className={cn(
+            tableHeadVariants({ size, disabled, isDummy }),
+            { "min-w-[100px]": !isDummy },
+            className,
+          )}
         >
-          {props.children}
-          {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
+          <div
+            style={{ width: `${width}px` }}
+            className={cn("flex items-center justify-between flex-1", {
+              "justify-center": isDummy,
+            })}
+          >
+            {rest.children}
+            {isDummy || !onSort ? null : (
+              <SortButton onSort={onSort} sortType={sortType} label={sortLabel} />
+            )}
+          </div>
         </div>
-      </div>
-      <button
-        disabled={isDummy}
-        className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary"
-      >
-        <ResizeIcon
-          className={cn({ "!opacity-0 cursor-default": isDummy })}
-          onMouseDown={handleStartResize}
-          onTouchStart={handleStartResize}
-        />
-      </button>
-    </th>
-  );
-});
+        <button
+          disabled={isDummy}
+          className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary"
+        >
+          <ResizeIcon
+            className={cn({ "!opacity-0 cursor-default": isDummy })}
+            onMouseDown={handleStartResize}
+            onTouchStart={handleStartResize}
+          />
+        </button>
+      </th>
+    );
+  },
+);
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
@@ -329,12 +361,23 @@ const ResizeIcon = (props: ResizeIconProps) => {
 const SortButton = ({
   onSort,
   sortType,
+  label,
 }: {
   onSort?: () => void;
   sortType?: "asc" | "desc" | undefined;
+  /** What this button sorts — without it the control is an unnamed icon. */
+  label?: string;
 }) => {
+  const next = sortType === "asc" ? "descending" : "ascending";
   return (
-    <button className={cn("cursor-pointer text-[16px] z-10")} onPointerDown={onSort}>
+    <button
+      type="button"
+      // `onClick`, not `onPointerDown`: a button activated from the keyboard
+      // fires `click` only, so pointer-down made this mouse-only.
+      onClick={onSort}
+      aria-label={label ? `Sort by ${label} ${next}` : `Sort ${next}`}
+      className={cn("cursor-pointer text-[16px] z-10")}
+    >
       {sortType === "asc" ? (
         <i className="ri-arrow-up-line text-border-presentation-state-focus" />
       ) : sortType === "desc" ? (
