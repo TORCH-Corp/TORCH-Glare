@@ -32,7 +32,14 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn("shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]", className)}
+    // The header band is one continuous bar, not a per-cell background — a background on each
+    // `<th>` would paint over the half of the previous column's resize handle that overhangs
+    // the boundary.
+    className={cn(
+      "bg-background-presentation-form-header backdrop-blur-[8px]",
+      "shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
+      className,
+    )}
     {...props}
   />
 ));
@@ -95,6 +102,25 @@ const TableRow = React.forwardRef<
 ));
 TableRow.displayName = "TableRow";
 
+/** Floor for a drag-resized column, so dragging past the column's own left edge can't invert it. */
+const MIN_COLUMN_WIDTH = 40;
+
+/**
+ * Split `aria-*` / `role` / `tabIndex` out of a props bag.
+ *
+ * `TableHead` renders a `<th>` wrapping a layout `<div>`; without this the
+ * caller's accessibility attributes end up on the div, where they mean nothing.
+ */
+function splitAriaProps<T extends Record<string, unknown>>(props: T) {
+  const ariaProps: Record<string, unknown> = {};
+  const rest: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(props)) {
+    if (key.startsWith("aria-") || key === "role" || key === "tabIndex") ariaProps[key] = value;
+    else rest[key] = value;
+  }
+  return { ariaProps, rest: rest as T };
+}
+
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
@@ -102,57 +128,122 @@ const TableHead = React.forwardRef<
     React.ButtonHTMLAttributes<HTMLButtonElement> & {
       sortType?: "asc" | "desc" | undefined;
       onSort?: () => void;
+      /** Column name for the sort button's accessible label. */
+      sortLabel?: string;
+      /**
+       * Called with the new width (px) while the column is being drag-resized. Pass it to take
+       * **control** of the width — the header then renders `style.width` and expects you to
+       * feed the new value back. Required whenever the table needs a definite width
+       * (`table-layout: fixed`), because only the owner of every column width can total them.
+       * Omit for uncontrolled resizing, where the header keeps the width itself.
+       */
+      onResize?: (width: number) => void;
       isDummy?: boolean;
     }
->(({ className, size = "M", disabled, sortType, onSort, isDummy, ...props }, forwardedRef) => {
-  const headRef = useRef<HTMLTableCellElement>(null);
-  const { width, handleStartResize } = useResize(headRef as React.RefObject<HTMLElement>);
+>(
+  (
+    {
+      className,
+      style,
+      size = "M",
+      disabled,
+      sortType,
+      onSort,
+      sortLabel,
+      onResize,
+      isDummy,
+      ...props
+    },
+    forwardedRef,
+  ) => {
+    const headRef = useRef<HTMLTableCellElement>(null);
+    const { width, handleStartResize } = useResize(headRef as React.RefObject<HTMLElement>);
 
-  // Combine refs using useEffect
-  React.useEffect(() => {
-    if (!forwardedRef) return;
-    if (typeof forwardedRef === "function") forwardedRef(headRef.current);
-    else forwardedRef.current = headRef.current;
-  }, [forwardedRef]);
+    const clampedWidth = width === undefined ? undefined : Math.max(width, MIN_COLUMN_WIDTH);
 
-  return (
-    <th
-      ref={headRef}
-      className={cn(
-        "relative py-[6px] px-[4px] border-b-[2px]  border-border-presentation-table-header",
-      )}
-    >
-      <div
-        {...props}
+    React.useEffect(() => {
+      if (clampedWidth !== undefined) onResize?.(clampedWidth);
+      // `onResize` is intentionally not a dep — callers pass an inline closure, and re-firing
+      // on every render would loop.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clampedWidth]);
+
+    // Combine refs using useEffect
+    React.useEffect(() => {
+      if (!forwardedRef) return;
+      if (typeof forwardedRef === "function") forwardedRef(headRef.current);
+      else forwardedRef.current = headRef.current;
+    }, [forwardedRef]);
+
+    // Accessibility attributes belong on the `<th>` — that is the element with the
+    // `columnheader` role, and `aria-sort` on any other node is invisible to assistive
+    // technology. Everything else still spreads onto the inner layout div, as before.
+    const { ariaProps, rest } = splitAriaProps(props);
+
+    // The width has to land on the `<th>` — that is the element the browser sizes the column
+    // from. Written to an inner div (as it once was) it did nothing at all. When `onResize` is
+    // given the caller owns the value and feeds it back via `style.width`; otherwise the drag
+    // result is applied here directly.
+    const resolvedWidth = onResize ? style?.width : (clampedWidth ?? style?.width);
+
+    return (
+      <th
+        ref={headRef}
+        {...ariaProps}
+        // `className`/`style` land on the <th> so column sizing from the caller actually
+        // reaches the column, not just the inner layout box.
+        style={{ ...style, width: resolvedWidth }}
         className={cn(
-          tableHeadVariants({ size, disabled, isDummy }),
-          { "min-w-[100px]": !isDummy },
+          "relative h-[44px] py-[6px] px-[4px] border-b-[2px] border-border-presentation-table-header",
           className,
         )}
       >
         <div
-          style={{ width: `${width}px` }}
-          className={cn("flex items-center justify-between flex-1", {
-            "justify-center": isDummy,
+          {...rest}
+          className={cn(tableHeadVariants({ size, disabled, isDummy }), {
+            // Only when nothing has sized the column — otherwise this floor would overflow a
+            // column narrower than 100px.
+            "min-w-[100px]": !isDummy && resolvedWidth === undefined,
           })}
         >
-          {props.children}
-          {isDummy || !onSort ? null : <SortButton onSort={onSort} sortType={sortType} />}
+          <div
+            className={cn("flex min-w-0 items-center justify-between flex-1", {
+              "justify-center": isDummy,
+            })}
+          >
+            {rest.children}
+            {isDummy || !onSort ? null : (
+              <SortButton onSort={onSort} sortType={sortType} label={sortLabel} />
+            )}
+          </div>
         </div>
-      </div>
-      <button
-        disabled={isDummy}
-        className="absolute top-[50%] translate-y-[-50%] right-[-1px] rtl:left-[-1px] rtl:right-[unset] h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary"
-      >
-        <ResizeIcon
-          className={cn({ "!opacity-0 cursor-default": isDummy })}
+        {/* The grab target, straddling the column boundary. `z-10` keeps it above the next
+            column's content — it deliberately overhangs by half its width. The drag handlers
+            live here, not on the icon: the icon is `opacity-0` until hover, which made the
+            8px-wide SVG a near-impossible thing to grab. */}
+        <button
+          type="button"
+          disabled={isDummy}
+          aria-label="Resize column"
           onMouseDown={handleStartResize}
           onTouchStart={handleStartResize}
-        />
-      </button>
-    </th>
-  );
-});
+          className={cn(
+            "group/resize absolute top-[50%] translate-y-[-50%] z-10",
+            "right-[-4px] rtl:left-[-4px] rtl:right-[unset]",
+            // `absolute` already makes this the containing block for the grip icon.
+            "flex h-[24px] w-[8px] items-center justify-center cursor-col-resize",
+            "disabled:cursor-default",
+          )}
+        >
+          <span className="h-[20px] w-[2px] rounded-full bg-border-presentation-action-primary" />
+          <ResizeIcon
+            className={cn("group-hover/resize:opacity-100", { "!opacity-0": isDummy })}
+          />
+        </button>
+      </th>
+    );
+  },
+);
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
@@ -161,15 +252,29 @@ const TableCell = React.forwardRef<
     isDummy?: boolean;
     childrenClassName?: string;
     className?: string;
+    /**
+     * Minimum width of the cell's content box, in px. Defaults to 200 — pass `0` when the
+     * column width is driven by the caller (e.g. `FormBuilder.Table`'s `column.width`),
+     * otherwise this floor silently overrides any narrower column.
+     */
+    minWidth?: number;
+    /**
+     * Fade the last 25% of the cell's content, to signal text clipped by the column width.
+     * Defaults to `true`. Set `false` for cells holding a **control** rather than text — the
+     * fade washes out whatever sits at the right edge (a Select's chevron, a date button).
+     * The built-in `:has(input)` escape hatch can't catch those, since a Radix trigger is a
+     * `<button>`, not an `<input>`.
+     */
+    fade?: boolean;
   }
->(({ className, childrenClassName, isDummy, ...props }, ref) => (
+>(({ className, childrenClassName, isDummy, minWidth = 200, fade = true, ...props }, ref) => (
   <td
     ref={ref}
     className={cn(
       [
-        "h-[40px] text-content-presentation-action-light-primary",
+        "h-[50px] text-content-presentation-action-light-primary",
         "typography-body-small-regular relative",
-        "border-r  border-b border-border-presentation-table-header px-1 rtl:border-l rtl:border-r-0",
+        "border-r  border-b border-border-presentation-table-header px-[8px] rtl:border-l rtl:border-r-0",
         "break-all",
       ],
       className,
@@ -177,11 +282,17 @@ const TableCell = React.forwardRef<
     {...props}
   >
     <div
+      style={isDummy ? undefined : { minWidth }}
       className={cn(
-        "flex justify-start items-center gap-1  min-w-[200px] overflow-hidden has-input:bg-blue-200",
-        "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
-        "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
-        "[&:has(input)]:[mask-image:none]",
+        "flex justify-start items-center gap-1 overflow-hidden",
+        // Never fade a dummy cell — its content is a centred checkbox or drag handle, not
+        // clippable text.
+        fade &&
+          !isDummy && [
+            "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
+            "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
+            "[&:has(input)]:[mask-image:none]",
+          ],
         { "min-w-fit justify-center": isDummy },
         childrenClassName,
       )}
@@ -206,6 +317,65 @@ const TableCheckbox = React.forwardRef<
   );
 });
 TableCheckbox.displayName = "TableCheckbox";
+
+/**
+ * The full-width action bar that sits **below** a table — e.g. "＋ Add New".
+ *
+ * Deliberately not a `<tr>`: it renders as a sibling of the table's horizontal scroll
+ * container, so it stays put while the columns scroll sideways under it. Use
+ * `TableFooterButton` instead when the action must scroll with the grid.
+ */
+const TableEndAction = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, children, ...props }, ref) => (
+  <button
+    ref={ref}
+    type="button"
+    className={cn(
+      "flex h-[40px] w-full items-center justify-start gap-[8px] px-[8px]",
+      "border-y border-border-presentation-global-primary",
+      "typography-body-medium-semibold text-content-presentation-action-light-primary",
+      "transition-colors hover:bg-background-presentation-table-acton-hover",
+      "disabled:cursor-not-allowed disabled:opacity-50",
+      "[&_i]:text-[20px]",
+      className,
+    )}
+    {...props}
+  >
+    {children}
+  </button>
+));
+TableEndAction.displayName = "TableEndAction";
+
+/**
+ * Horizontal scroll container for a table — the 14px scroller row from the design,
+ * with the thin track that thickens and turns blue on hover.
+ */
+const TableScroller = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, children, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "w-full overflow-x-auto overflow-y-hidden",
+        "[&::-webkit-scrollbar]:h-[14px]",
+        "[&::-webkit-scrollbar-track]:bg-transparent",
+        "[&::-webkit-scrollbar-thumb]:rounded-[7px]",
+        "[&::-webkit-scrollbar-thumb]:border-[5px] [&::-webkit-scrollbar-thumb]:border-solid",
+        "[&::-webkit-scrollbar-thumb]:border-transparent",
+        "[&::-webkit-scrollbar-thumb]:bg-clip-content",
+        "[&::-webkit-scrollbar-thumb]:bg-background-presentation-body-scroller-default",
+        "[&::-webkit-scrollbar-thumb:hover]:border-[3px]",
+        "[&::-webkit-scrollbar-thumb:hover]:bg-background-presentation-body-scroller-hover",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  ),
+);
+TableScroller.displayName = "TableScroller";
 
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
@@ -291,37 +461,41 @@ export {
   TableCheckbox,
   SubTableButton,
   TableFooterButton,
+  TableEndAction,
+  TableScroller,
 };
 
 interface ResizeIconProps {
   className?: string;
-  onMouseDown?: React.MouseEventHandler<SVGElement>;
-  onTouchStart?: React.TouchEventHandler<SVGElement>;
 }
 
-const ResizeIcon = (props: ResizeIconProps) => {
+/**
+ * The grip that appears on hover. Sized to its parent button (8px wide), so it can't spill
+ * past the grab target; the button is what deliberately straddles the column boundary.
+ */
+const ResizeIcon = ({ className }: ResizeIconProps) => {
   return (
     <svg
-      {...props}
       className={cn(
-        "z-50 cursor-col-resize absolute top-[50%] right-[50%] translate-x-[50%] translate-y-[-50%] opacity-0 hover:opacity-100 transition-opacity duration-200",
-        props.className,
+        "pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
+        "opacity-0 transition-opacity duration-200",
+        className,
       )}
       width="8"
-      height="32"
-      viewBox="0 0 8 40"
+      height="30"
+      viewBox="0 1 8 38"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect {...props} y="5" width="8" height="30" rx="3" fill="#3391FF" />
-      <circle {...props} cx="2.75" cy="15.5" r="0.75" fill="#F9F9F9" />
-      <circle {...props} cx="5.25" cy="15.5" r="0.75" fill="#F9F9F9" />
-      <circle {...props} cx="2.75" cy="18.5" r="0.75" fill="#F9F9F9" />
-      <circle {...props} cx="5.25" cy="18.5" r="0.75" fill="#F9F9F9" />
-      <circle {...props} cx="2.75" cy="21.5" r="0.75" fill="#F9F9F9" />
-      <circle {...props} cx="5.25" cy="21.5" r="0.75" fill="#F9F9F9" />
-      <circle {...props} cx="2.75" cy="24.5" r="0.75" fill="#F9F9F9" />
-      <circle {...props} cx="5.25" cy="24.5" r="0.75" fill="#F9F9F9" />
+      <rect y="5" width="8" height="30" rx="3" fill="#3391FF" />
+      <circle cx="2.75" cy="15.5" r="0.75" fill="#F9F9F9" />
+      <circle cx="5.25" cy="15.5" r="0.75" fill="#F9F9F9" />
+      <circle cx="2.75" cy="18.5" r="0.75" fill="#F9F9F9" />
+      <circle cx="5.25" cy="18.5" r="0.75" fill="#F9F9F9" />
+      <circle cx="2.75" cy="21.5" r="0.75" fill="#F9F9F9" />
+      <circle cx="5.25" cy="21.5" r="0.75" fill="#F9F9F9" />
+      <circle cx="2.75" cy="24.5" r="0.75" fill="#F9F9F9" />
+      <circle cx="5.25" cy="24.5" r="0.75" fill="#F9F9F9" />
     </svg>
   );
 };
@@ -329,12 +503,25 @@ const ResizeIcon = (props: ResizeIconProps) => {
 const SortButton = ({
   onSort,
   sortType,
+  label,
 }: {
   onSort?: () => void;
   sortType?: "asc" | "desc" | undefined;
+  /** What this button sorts — without it the control is an unnamed icon. */
+  label?: string;
 }) => {
+  const next = sortType === "asc" ? "descending" : "ascending";
   return (
-    <button className={cn("cursor-pointer text-[16px] z-10")} onPointerDown={onSort}>
+    // `type="button"` matters: this table renders inside a <form> (FormBuilder.Table),
+    // where an untyped button defaults to submit.
+    <button
+      type="button"
+      // `onClick`, not `onPointerDown`: a button activated from the keyboard fires
+      // `click` only, so pointer-down made this mouse-only.
+      onClick={onSort}
+      aria-label={label ? `Sort by ${label} ${next}` : `Sort ${next}`}
+      className={cn("cursor-pointer text-[16px] z-10")}
+    >
       {sortType === "asc" ? (
         <i className="ri-arrow-up-line text-border-presentation-state-focus" />
       ) : sortType === "desc" ? (
@@ -379,9 +566,9 @@ const tableHeadVariants = cva(
       isDummy: {
         true: ["hover:bg-transparent", "hover:text-content-presentation-global-primary"],
       },
-      defaultVariants: {
-        size: "M",
-      },
+    },
+    defaultVariants: {
+      size: "M",
     },
   },
 );

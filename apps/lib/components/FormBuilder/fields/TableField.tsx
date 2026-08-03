@@ -21,7 +21,16 @@ import {
 
 import { cn } from "../../../utils/cn";
 import { SectionBlock } from "../../SectionBlock";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEndAction,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableScroller,
+} from "../../Table";
 import { Checkbox } from "../../Checkbox";
 import { Button } from "../../Button";
 import { CellContext, useLoading } from "../context";
@@ -50,6 +59,8 @@ export function TableField(props: TableFieldProps) {
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<{ key: string; dir: "asc" | "desc" } | null>(null);
+  // Drag-resized column widths, keyed by column index; falls back to `column.width`.
+  const [resized, setResized] = useState<Record<number, number>>({});
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -112,6 +123,25 @@ export function TableField(props: TableFieldProps) {
 
   const totalCols = columns.length + (showHandle ? 1 : 0) + (showSelect ? 1 : 0);
 
+  // Under the browser's default `table-layout: auto`, a column's `width` is only a hint —
+  // content (an input's intrinsic size, a currency prefix) silently widens it, which is why
+  // a `width: 110` column used to render at 200-odd px. When every column declares a width
+  // we can switch to fixed layout and have them honoured exactly. Mixed/absent widths keep
+  // auto layout, since under fixed layout an unsized column would collapse to nothing.
+  //
+  // Fixed layout also needs a *definite* table width — with `width: auto` the browser sizes
+  // the table from content and then redistributes, throwing the declared widths (and any
+  // drag-resize) away. So the widths are owned here and totalled onto the table, which is
+  // what lets a drag grow the table instead of stealing space from the next column.
+  const DUMMY_COL_WIDTH = 40; // the design's onset / selector columns
+  const colWidth = (col: TableColumn, ci: number) => resized[ci] ?? col.width;
+  const fixedLayout = columns.length > 0 && columns.every((col, ci) => !!colWidth(col, ci));
+  const tableWidth = fixedLayout
+    ? columns.reduce((sum, col, ci) => sum + (colWidth(col, ci) ?? 0), 0) +
+      (showHandle ? DUMMY_COL_WIDTH : 0) +
+      (showSelect ? DUMMY_COL_WIDTH : 0)
+    : undefined;
+
   const rowCells = (rowName: string, index: number) => (
     <>
       {showSelect && (
@@ -126,11 +156,14 @@ export function TableField(props: TableFieldProps) {
       {columns.map((col, ci) => (
         <TableCell
           key={ci}
-          style={col.width ? { width: col.width } : undefined}
-          childrenClassName={cn(
-            "min-w-0 w-full [&:has(input)]:bg-transparent",
-            col.align && ALIGN[col.align],
-          )}
+          style={colWidth(col, ci) ? { width: colWidth(col, ci) } : undefined}
+          // Column widths come from `col.width`, so opt out of TableCell's 200px floor —
+          // otherwise a narrow column (e.g. `width: 110`) silently renders at 200px.
+          minWidth={0}
+          // Every cell here holds a form control, and the right-edge fade washes out whatever
+          // sits at its end — a Select's chevron, a date picker's button.
+          fade={false}
+          childrenClassName={cn("min-w-0 w-full", col.align && ALIGN[col.align])}
         >
           <CellContext.Provider value={true}>{col.cell(rowName, index)}</CellContext.Provider>
         </TableCell>
@@ -139,12 +172,19 @@ export function TableField(props: TableFieldProps) {
   );
 
   const table = (
-    <Table>
+    // `min-w-full` so the grid still spans the card when the columns are narrower than it,
+    // while staying free to overflow (and scroll) when they aren't.
+    <Table
+      className={cn("min-w-full", fixedLayout && "[table-layout:fixed]")}
+      style={tableWidth ? { width: tableWidth } : undefined}
+    >
       <TableHeader>
         <TableRow>
-          {showHandle && <TableHead isDummy />}
+          {/* Fixed 40px, per the design — and so these unsized columns can't absorb the
+              table's slack width and push the data columns off-screen. */}
+          {showHandle && <TableHead isDummy style={{ width: DUMMY_COL_WIDTH }} />}
           {showSelect && (
-            <TableHead isDummy>
+            <TableHead isDummy style={{ width: DUMMY_COL_WIDTH }}>
               <Checkbox
                 size="S"
                 checked={allSelected ? true : someSelected ? "indeterminate" : false}
@@ -155,7 +195,11 @@ export function TableField(props: TableFieldProps) {
           {columns.map((col, ci) => (
             <TableHead
               key={ci}
+              // Width goes on the <th> too, so header and body columns agree.
+              style={colWidth(col, ci) ? { width: colWidth(col, ci) } : undefined}
+              onResize={(w) => setResized((prev) => ({ ...prev, [ci]: w }))}
               sortType={col.sortKey && sort?.key === col.sortKey ? sort.dir : undefined}
+              sortLabel={typeof col.header === "string" ? col.header : undefined}
               onSort={col.sortKey ? () => applySort(col.sortKey as string) : undefined}
             >
               {col.header}
@@ -183,58 +227,40 @@ export function TableField(props: TableFieldProps) {
 
         {fields.length === 0 && (
           <TableRow>
-            <TableCell colSpan={totalCols}>
+            <TableCell colSpan={totalCols} minWidth={0}>
               <span className="typography-body-small-regular text-content-presentation-global-secondary">
                 No rows yet.
               </span>
             </TableCell>
           </TableRow>
         )}
-
-        <TableRow className="h-[40px]">
-          <TableCell
-            colSpan={totalCols}
-            className="border-t-2 border-transparent hover:border-border-presentation-table-action-hover hover:bg-background-presentation-table-acton-hover"
-          >
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => append((props.defaultItem ?? {}) as never)}
-              className="flex w-full items-center justify-start gap-2 typography-body-medium-semibold text-content-presentation-action-light-primary [&_i]:text-[20px]"
-            >
-              <i className="ri-add-line" />
-              {props.addLabel ?? "Add New"}
-            </button>
-          </TableCell>
-        </TableRow>
       </TableBody>
     </Table>
   );
 
   // Header actions on the right of the SectionBlock title row: a "Delete Row" that's disabled
-  // until rows are selected, and a primary "Add New".
+  // until rows are selected, and a primary "Add New". They live outside the scroll container,
+  // so they stay put while the grid scrolls sideways.
   const headerActions = (
     <>
       {selectable && (
         <Button
           type="button"
-          size="S"
+          size="M"
           variant="BorderStyle"
           disabled={loading || selected.size === 0}
           onClick={deleteSelected}
         >
-          <i className="ri-delete-bin-line" />
           Delete Row
         </Button>
       )}
       <Button
         type="button"
-        size="S"
+        size="M"
         variant="BluColStyle"
         disabled={loading}
         onClick={() => append((props.defaultItem ?? {}) as never)}
       >
-        <i className="ri-add-line" />
         {props.addLabel ?? "Add New"}
       </Button>
     </>
@@ -242,32 +268,34 @@ export function TableField(props: TableFieldProps) {
 
   return (
     <SectionBlock
+      variant="Table"
       title={props.title}
       color={props.color}
       icon={props.icon}
       action={headerActions}
-      bodyClassName="px-[16px]"
-      // The bottom "Add New" footer is the last element, so drop SectionBlock's default
-      // bottom padding to keep the table flush with the card edge (matches the Figma).
-      containerClassName="pb-0"
     >
-      <div className="flex w-full flex-col gap-2">
-        {props.description && (
-          <p className="typography-body-small-regular text-content-presentation-global-secondary">
-            {props.description}
-          </p>
-        )}
+      {props.description && (
+        <p className="px-[16px] pt-[12px] typography-body-small-regular text-content-presentation-global-secondary">
+          {props.description}
+        </p>
+      )}
 
-        <div className="w-full overflow-x-auto">
-          {showHandle ? (
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-              {table}
-            </DndContext>
-          ) : (
-            table
-          )}
-        </div>
-      </div>
+      {/* The table is the only horizontally scrolling element … */}
+      <TableScroller>
+        {showHandle ? (
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+            {table}
+          </DndContext>
+        ) : (
+          table
+        )}
+      </TableScroller>
+
+      {/* … so this stays visible no matter how far right the columns are scrolled. */}
+      <TableEndAction disabled={loading} onClick={() => append((props.defaultItem ?? {}) as never)}>
+        <i className="ri-add-line" />
+        {props.addLabel ?? "Add New"}
+      </TableEndAction>
     </SectionBlock>
   );
 }

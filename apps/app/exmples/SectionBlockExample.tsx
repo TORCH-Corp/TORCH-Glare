@@ -2,6 +2,17 @@ import { type ReactNode } from "react";
 import { SectionBlock, type SectionColor } from "@/components/SectionBlock";
 import { InputField } from "@/components/InputField";
 import { ActionButton } from "@/components/ActionButton";
+import { Button } from "@/components/Button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEndAction,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableScroller,
+} from "@/components/Table";
 import { cn } from "@/utils/cn";
 
 const COLORS: SectionColor[] = [
@@ -62,6 +73,55 @@ export default function SectionBlockExample() {
           The `title` prop accepts any ReactNode — pass JSX for icons, links,
           counts, etc.
         </p>
+      </SectionBlock>
+
+      {/* Table variant — full-bleed body, rule under the header, actions on the title row.
+          `FormBuilder.Table` renders exactly this shell; compose it by hand only when you
+          need a table that isn't a form field. */}
+      <SectionBlock
+        variant="Table"
+        color="Purple"
+        title="Items Table"
+        icon={<i className="ri-box-3-line text-[18px]" />}
+        action={
+          <>
+            <Button type="button" size="M" variant="BorderStyle" disabled>
+              Delete Row
+            </Button>
+            <Button type="button" size="M" variant="BluColStyle">
+              Add New
+            </Button>
+          </>
+        }
+      >
+        <TableScroller>
+          <Table className="min-w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead isDummy style={{ width: 40 }} />
+                {["Items", "Label", "Label", "Label", "Label"].map((label, i) => (
+                  <TableHead key={i} style={{ width: 200 }} sortLabel={label} onSort={() => {}}>
+                    {label}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell isDummy />
+                <TableCell minWidth={0}>Product name</TableCell>
+                <TableCell minWidth={0}>Label</TableCell>
+                <TableCell minWidth={0}>Label</TableCell>
+                <TableCell minWidth={0}>Label</TableCell>
+                <TableCell minWidth={0}>Label</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableScroller>
+        <TableEndAction>
+          <i className="ri-add-line" />
+          Add New
+        </TableEndAction>
       </SectionBlock>
 
       {/* Custom fields form (matches reference screenshot) */}

@@ -133,8 +133,10 @@ export default function TableFieldExample() {
               cell: (row) => <FormBuilder.Date name={`${row}.due`} required />,
             },
             {
+              // In a cell `FormBuilder.Phone` collapses to a plain number input — no country
+              // picker. Add a separate column if a table needs the dial code.
               header: "Phone",
-              width: 220,
+              width: 180,
               cell: (row) => <FormBuilder.Phone name={`${row}.phone`} />,
             },
             {

@@ -6,7 +6,7 @@ import { useForm, type FieldValues } from "react-hook-form";
 
 import { cn } from "../../utils/cn";
 import { Form } from "../Form";
-import { SectionBlock, type SectionColor } from "../SectionBlock";
+import { SectionBlock, type SectionColor, type SectionVariant } from "../SectionBlock";
 import { LoadingContext, DirectionContext, StepperContext, FormIdContext } from "./context";
 import { Header } from "./header";
 import type { FormBuilderRootProps } from "./types";
@@ -57,13 +57,21 @@ export interface SectionProps {
   title?: ReactNode;
   color?: SectionColor;
   icon?: ReactNode;
+  /**
+   * `"Table"` switches to the full-bleed table shell — no body padding, a rule under
+   * the header, and the card clipped to its radius. `FormBuilder.Table` uses it; pass
+   * it here only when hand-composing a table inside a section.
+   */
+  variant?: SectionVariant;
+  /** Right-aligned content on the title row — e.g. action buttons. */
+  action?: ReactNode;
   children: ReactNode;
 }
 
 /** `FormBuilder.Section` — a titled Glare SectionBlock grouping fields. */
-function Section({ title, color, icon, children }: SectionProps) {
+function Section({ title, color, icon, variant, action, children }: SectionProps) {
   return (
-    <SectionBlock title={title} color={color} icon={icon}>
+    <SectionBlock title={title} color={color} icon={icon} variant={variant} action={action}>
       {children}
     </SectionBlock>
   );

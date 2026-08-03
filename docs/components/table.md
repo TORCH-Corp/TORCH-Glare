@@ -386,17 +386,36 @@ function ResizableTable() {
 | `disabled` | `boolean` | `false` | Disables interactions |
 | `sortType` | `'asc' \| 'desc' \| undefined` | - | Sort indicator |
 | `onSort` | `() => void` | - | Sort handler |
+| `sortLabel` | `string` | - | Column name for the sort button's accessible label |
+| `onResize` | `(width: number) => void` | - | Fires while the column is drag-resized. Passing it makes the width **controlled** — you own the value and feed it back via `style.width`. Required whenever the table needs a definite width (`table-layout: fixed`), since only the owner of every column width can total them. Omit for uncontrolled resizing. |
 | `isDummy` | `boolean` | `false` | Non-interactive header |
-| `className` | `string` | - | Additional CSS classes |
+| `className` / `style` | `string` / `CSSProperties` | - | Applied to the `<th>` — this is how you size a column (`style={{ width: 200 }}`) |
+
+`aria-*`, `role`, and `tabIndex` are routed to the `<th>` (the `columnheader`); every other
+prop spreads onto the inner layout `<div>`.
 
 ### TableCell Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `isDummy` | `boolean` | `false` | Non-interactive cell |
+| `minWidth` | `number` | `200` | Minimum width of the content box, in px. Pass `0` when the column width is driven by the caller — otherwise this floor silently overrides any narrower column. |
+| `fade` | `boolean` | `true` | Fades the last 25% of the content, signalling text clipped by the column width. Set `false` for cells holding a **control** — the fade washes out whatever sits at the right edge (a Select's chevron, a date button). The built-in `:has(input)` escape hatch can't catch those, since a Radix trigger is a `<button>`, not an `<input>`. `isDummy` cells never fade. |
 | `childrenClassName` | `string` | - | Classes for content wrapper |
 | `className` | `string` | - | Additional CSS classes |
 | `children` | `React.ReactNode` | - | Cell content |
+
+### TableScroller Props
+
+Horizontal scroll container for a table, with the thin design-system scrollbar (4px track
+that thickens and turns blue on hover). Accepts any `div` props. Keep header actions and
+`TableEndAction` **outside** it so they don't scroll away on a wide table.
+
+### TableEndAction Props
+
+The full-width action bar that sits **below** a table — e.g. `＋ Add New`. A `<button>`, not
+a `<tr>`, so it is a sibling of `TableScroller` and stays put while the columns scroll. Accepts
+any `button` props. Use `TableFooterButton` instead when the action should scroll with the grid.
 
 ### TableCheckbox Props
 
@@ -434,14 +453,22 @@ interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
   disabled?: boolean
   sortType?: 'asc' | 'desc' | undefined
   onSort?: () => void
+  sortLabel?: string
+  onResize?: (width: number) => void
   isDummy?: boolean
 }
 
 // TableCell types
 interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isDummy?: boolean
+  minWidth?: number
+  fade?: boolean
   childrenClassName?: string
 }
+
+// TableScroller / TableEndAction types
+type TableScrollerProps = HTMLAttributes<HTMLDivElement>
+type TableEndActionProps = ButtonHTMLAttributes<HTMLButtonElement>
 
 // TableCheckbox types
 interface TableCheckboxProps extends ButtonHTMLAttributes<HTMLButtonElement> {

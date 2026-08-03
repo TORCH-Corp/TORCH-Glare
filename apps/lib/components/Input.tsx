@@ -199,7 +199,16 @@ export const GroupStyles = cva(
         ],
       },
       onTable: {
-        true: ["border-transparent", "bg-transparent"],
+        true: [
+          "border-transparent",
+          "bg-transparent",
+          // No drop shadow in a cell. The 30%-black 6px glow is meant to lift a standalone
+          // field off the page; behind a control that only shows a 1px rounded border on
+          // hover it reads as a square grey box sitting under the field, because a 6px blur
+          // washes out the 8px corner radius it is supposed to follow.
+          "hover:shadow-none",
+          "focus-within:shadow-none",
+        ],
       },
     },
   },
