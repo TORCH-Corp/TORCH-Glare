@@ -59,6 +59,9 @@ export function Example() {
 |------|------|---------|-------------|
 | `color` | `SectionColor` | `"Blue"` | Color of the title badge. One of `Blue`, `Yellow`, `Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`. |
 | `title` | `ReactNode` | — | Title rendered inside the colored badge. Optional — when omitted, the header is hidden entirely. Accepts any ReactNode (string, JSX with icons, links, etc.). |
+| `icon` | `ReactNode` | — | Rendered inside the badge, to the left of `title`. |
+| `action` | `ReactNode` | — | Right-aligned content on the title row — typically action buttons. |
+| `variant` | `SectionVariant` | `"Default"` | `"Default"` is the padded form card. `"Table"` is the full-bleed table shell: no body padding, a rule under the header, no bottom padding, and the card clipped to its radius. See [Table Variant](#table-variant). |
 | `containerClassName` | `string` | — | Class name applied to the outer container (alongside `className`). |
 | `headerClassName` | `string` | — | Class name applied to the header wrapper around the title badge. |
 | `bodyClassName` | `string` | — | Class name applied to the body wrapper holding `children`. |
@@ -79,10 +82,15 @@ export type SectionColor =
   | "Pink"
   | "Gray";
 
+export type SectionVariant = "Default" | "Table";
+
 export interface SectionBlockProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   color?: SectionColor;
+  variant?: SectionVariant;
   title?: ReactNode;
+  icon?: ReactNode;
+  action?: ReactNode;
   containerClassName?: string;
   headerClassName?: string;
   bodyClassName?: string;
@@ -362,6 +370,74 @@ function RowDivider() {
 }
 ```
 
+### Table Variant
+
+`variant="Table"` swaps the padded form body for the full-bleed table shell: the body loses
+its `px-[42px]` gutter, gains a rule under the header, and the card is clipped to its 16px
+radius with no bottom padding — so an end-action row meets the card edge.
+
+The layout has three stacked parts, and the order matters. Only the **scroller** scrolls
+horizontally; the header actions above it and the end-action below it stay put, which is
+what keeps `Add New` reachable on a wide table.
+
+```tsx
+import { SectionBlock } from "@/components/SectionBlock";
+import { Button } from "@/components/Button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEndAction,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableScroller,
+} from "@/components/Table";
+
+<SectionBlock
+  variant="Table"
+  color="Purple"
+  title="Items Table"
+  icon={<i className="ri-box-3-line text-[18px]" />}
+  action={
+    <>
+      <Button type="button" size="M" variant="BorderStyle" disabled>
+        Delete Row
+      </Button>
+      <Button type="button" size="M" variant="BluColStyle">
+        Add New
+      </Button>
+    </>
+  }
+>
+  <TableScroller>
+    <Table className="min-w-full">
+      <TableHeader>
+        <TableRow>
+          <TableHead style={{ width: 200 }}>Items</TableHead>
+          <TableHead style={{ width: 200 }}>Label</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell minWidth={0}>Product name</TableCell>
+          <TableCell minWidth={0}>Label</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </TableScroller>
+
+  <TableEndAction>
+    <i className="ri-add-line" />
+    Add New
+  </TableEndAction>
+</SectionBlock>
+```
+
+For a table that edits form values, don't hand-compose this — use
+[`FormBuilder.Table`](./form-builder.md#formbuildertable), which renders exactly this shell
+and wires rows to `react-hook-form`.
+
 ### Custom Layout (override defaults)
 
 Use `containerClassName`, `headerClassName`, and `bodyClassName` to override the built-in spacing and width without losing the title/body structure.
@@ -384,7 +460,7 @@ Use `containerClassName`, `headerClassName`, and `bodyClassName` to override the
 - **Color coding**: Use distinct colors to help users scan a page of multiple sections (e.g., Blue for primary forms, Yellow for warnings, Red for destructive zones).
 - **No-title sections**: Drop the `title` prop entirely when the section's purpose is obvious from context — keeps the body padding without the visual weight of a header.
 - **Composing with form fields**: `SectionBlock` does not impose any inner layout — pair it with helpers like the `FieldRow` pattern above, or with `InputField`, `Form`, or `FieldSection` for more structured forms.
-- **Default width**: The component ships with `w-[1100px]`. Override via `containerClassName="w-full"` (or any specific width) for narrower containers.
+- **Width**: The component is `w-full` — it fills its parent. Constrain it from the outside, or with `containerClassName="max-w-[1100px]"`.
 
 ## Accessibility
 
@@ -395,7 +471,7 @@ Use `containerClassName`, `headerClassName`, and `bodyClassName` to override the
 
 | Issue | Fix |
 |-------|-----|
-| Card overflows on small screens | Default width is `w-[1100px]`. Override with `containerClassName="w-full"` or a smaller fixed width. |
+| Card overflows on small screens | The card is `w-full`; the overflow is coming from its content. Give the content `min-w-0`, or cap the card with `containerClassName="max-w-[…]"`. |
 | Title not showing | The `title` prop is optional — omitting it hides the entire header. Pass any non-null `ReactNode` to render it. |
 | Badge color looks wrong | `color` only accepts the predefined `SectionColor` values. For custom badge colors, override via `headerClassName` and a custom child node. |
 | Need a different background | The body uses `bg-background-presentation-form-base`. Override via `containerClassName` (your class wins via `cn()` merging). |

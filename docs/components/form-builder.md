@@ -106,17 +106,26 @@ renders a repeating list — its `children` is a render fn `(rowName, index, rem
 are named `${rowName}.field`.
 
 `FormBuilder.Table` is the **table-shaped** counterpart of `FieldArray` (value `object[]`): an editable
-grid where each row is a record and each column cell is any `FormBuilder.*` field. It renders **inside a
-`SectionBlock`**, so place it as a **top-level child** of the form (not inside a `FormBuilder.Section`).
+grid where each row is a record and each column cell is any `FormBuilder.*` field. It renders its own
+`SectionBlock` (`variant="Table"` — the full-bleed table shell), so place it as a **top-level child** of
+the form, **not** inside a `FormBuilder.Section` — nesting produces a card inside a card. When you need a
+table that isn't a form field, compose the shell yourself with `SectionBlock variant="Table"` (see
+[SectionBlock → Table Variant](./section-block.md#table-variant)).
+
 Each column pairs a `header` with a `cell(rowName, index)` renderer — name the cell's field
-`${rowName}.<key>`. The section header carries the actions: a **Add New** button (also repeated as the
-bottom footer) and a **Delete Row** button that's disabled until rows are checkbox-selected. Rows support
+`${rowName}.<key>`. Set `width` to size a column; it is applied to both the header and the body cells.
+The section header carries the actions: an **Add New** button and a **Delete Row** button that's disabled
+until rows are checkbox-selected. A second **＋ Add New** sits below the grid. Both live *outside* the
+horizontal scroll container, so they stay put when a wide table is scrolled sideways. Rows support
 **checkbox selection** (+ select-all), **drag-drop reordering**, and — per column, via `sortKey` — a
 sort toggle in the header. Cells render
 "bare" (control only) with validation errors shown as a tooltip on the control, so a row stays one line
 tall, and each field passes `onTable` so it's borderless and blends into the grid. Practical cell fields
 are the compact ones — `Text`, `Number`, `Currency`, `Select`, `SearchableSelect`, `Date`, `Phone`,
 `Checkbox`, `SwitchBox`; wide fields (`RichText`, `Signature`, `File`) work but aren't suited to a cell.
+`FormBuilder.Phone` collapses to a **plain number input** in a cell — two controls in one cell is not a
+table column, so add a separate column (e.g. a `FormBuilder.Select` of dial codes) if you need the
+country code.
 
 ```tsx
 <FormBuilder.Table
@@ -158,8 +167,9 @@ clickable. Multi-select is also available as `.MultiSelect` / `.Tags` (a tag-chi
 renders like any other field — the `label` sits in the normal label column — and the box holds
 an optional inline `subLabel`, a vertical divider, and the switch.
 
-`FormBuilder.Section` (props `title`, `color`, `icon`) groups fields in a Glare
-`SectionBlock`. `FormBuilder.Submit` is a loading-aware submit button. It
+`FormBuilder.Section` (props `title`, `color`, `icon`, `action`, `variant`) groups fields in a Glare
+`SectionBlock`. `action` puts buttons on the title row; `variant="Table"` switches to the
+full-bleed table shell (what `FormBuilder.Table` uses internally). `FormBuilder.Submit` is a loading-aware submit button. It
 **auto-associates with the enclosing form** (via context), so it submits even when placed in a
 header / action bar that renders _outside_ the `<form>` — no manual `form={id}` wiring.
 

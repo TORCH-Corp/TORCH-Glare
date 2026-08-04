@@ -386,17 +386,40 @@ function ResizableTable() {
 | `disabled` | `boolean` | `false` | Disables interactions |
 | `sortType` | `'asc' \| 'desc' \| undefined` | - | Sort indicator |
 | `onSort` | `() => void` | - | Sort handler |
+| `sortLabel` | `string` | - | Column name for the sort button's accessible label |
+| `onResize` | `(width: number) => void` | - | Fires while the column is drag-resized. Passing it makes the width **controlled** — you own the value and feed it back via `style.width`. Required whenever the table needs a definite width (`table-layout: fixed`), since only the owner of every column width can total them. Omit for uncontrolled resizing. |
 | `isDummy` | `boolean` | `false` | Non-interactive header |
-| `className` | `string` | - | Additional CSS classes |
+| `className` / `style` | `string` / `CSSProperties` | - | Applied to the `<th>` — this is how you size a column (`style={{ width: 200 }}`) |
+| `contentClassName` | `string` | - | Classes for the inner layout box (the flex row holding the label and sort toggle). Use it for typography or colour; `className` styles the `<th>` itself. |
+
+**Every** prop you pass — `className`, `style`, `aria-*`, `role`, `tabIndex` and event
+handlers alike — lands on the `<th>`. They deliberately share one element: libraries like
+dnd-kit hand back accessibility attributes and event listeners as a matched pair, and
+splitting them across two nodes leaves the focusable element without its handlers. Reach the
+inner layout box with `contentClassName`.
 
 ### TableCell Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `isDummy` | `boolean` | `false` | Non-interactive cell |
+| `minWidth` | `number` | `200` | Minimum width of the content box, in px. Pass `0` when the column width is driven by the caller — otherwise this floor silently overrides any narrower column. |
+| `fade` | `boolean` | `true` | Whether the cell **crops** its content and fades the last 25% of it, signalling text clipped by the column width. Set `false` for cells holding a **control**: the fade washes out whatever sits at the right edge (a Select's chevron, a date button), and the crop — the content box hugs the control exactly — would clip every side of the control's hover/focus drop shadow. `isDummy` cells never fade. |
 | `childrenClassName` | `string` | - | Classes for content wrapper |
 | `className` | `string` | - | Additional CSS classes |
 | `children` | `React.ReactNode` | - | Cell content |
+
+### TableScroller Props
+
+Horizontal scroll container for a table, with the thin design-system scrollbar (4px track
+that thickens and turns blue on hover). Accepts any `div` props. Keep header actions and
+`TableEndAction` **outside** it so they don't scroll away on a wide table.
+
+### TableEndAction Props
+
+The full-width action bar that sits **below** a table — e.g. `＋ Add New`. A `<button>`, not
+a `<tr>`, so it is a sibling of `TableScroller` and stays put while the columns scroll. Accepts
+any `button` props. Use `TableFooterButton` instead when the action should scroll with the grid.
 
 ### TableCheckbox Props
 
@@ -434,14 +457,23 @@ interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
   disabled?: boolean
   sortType?: 'asc' | 'desc' | undefined
   onSort?: () => void
+  sortLabel?: string
+  onResize?: (width: number) => void
+  contentClassName?: string
   isDummy?: boolean
 }
 
 // TableCell types
 interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isDummy?: boolean
+  minWidth?: number
+  fade?: boolean
   childrenClassName?: string
 }
+
+// TableScroller / TableEndAction types
+type TableScrollerProps = HTMLAttributes<HTMLDivElement>
+type TableEndActionProps = ButtonHTMLAttributes<HTMLButtonElement>
 
 // TableCheckbox types
 interface TableCheckboxProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -795,7 +827,7 @@ Dates and amounts wrap awkwardly when the column is narrow. Add `whitespace-nowr
 
 ### `TableCell` force-wraps children — use `childrenClassName` to override
 
-`TableCell` unconditionally wraps children in an inner `<div>` with `flex justify-start items-center gap-1 min-w-[200px] overflow-hidden` plus a fade-out gradient mask. Three common breakages:
+`TableCell` unconditionally wraps children in an inner `<div>` with `flex justify-start items-center gap-1`, a `min-width` of 200px, `overflow-hidden`, and a fade-out gradient mask. Three common breakages:
 
 1. **Empty-state rows don't center.** A `flex flex-col items-center` empty state ends up flush left because the outer wrapper's `justify-start` already decided alignment.
 2. **Multi-line content is clipped** by `overflow-hidden` + the gradient mask.
@@ -807,7 +839,9 @@ Dates and amounts wrap awkwardly when the column is narrow. Add `whitespace-nowr
 <TableRow>
   <TableCell
     colSpan={7}
-    childrenClassName="flex flex-col items-center justify-center gap-3 py-12 w-full min-w-0 text-content-presentation-global-secondary"
+    minWidth={0}
+    fade={false}
+    childrenClassName="flex flex-col items-center justify-center gap-3 py-12 w-full text-content-presentation-global-secondary"
   >
     <i className="ri-inbox-line text-4xl opacity-60" />
     <p className="typography-body-medium-regular">No data</p>
@@ -816,11 +850,14 @@ Dates and amounts wrap awkwardly when the column is narrow. Add `whitespace-nowr
 </TableRow>
 ```
 
-Key overrides on `childrenClassName`:
+Key overrides:
 
-- `flex flex-col` overrides the default `flex-row`
-- `items-center justify-center` overrides `justify-start`
-- `w-full min-w-0` overrides the hardcoded `min-w-[200px]`
+- `flex flex-col` on `childrenClassName` overrides the default `flex-row`
+- `items-center justify-center` on `childrenClassName` overrides `justify-start`
+- **`minWidth={0}`** clears the 200px floor. It is an inline style, so a class such as
+  `min-w-0` on `childrenClassName` cannot beat it — use the prop.
+- **`fade={false}`** drops both the gradient mask and the `overflow-hidden` that clips
+  multi-line content.
 
 ## Accessibility
 

@@ -293,7 +293,9 @@ const PopoverTriggerStyles = cva(
           "hover:caret-border-presentation-state-negative",
         ],
       },
-      // Transparent border/background so the trigger blends into a table cell.
+      // Transparent border/background so the trigger blends into a table cell. The hover and
+      // focus shadows are deliberately left alone — a cell control lifts exactly like any
+      // other field.
       onTable: {
         true: ["border-transparent", "bg-transparent"],
       },

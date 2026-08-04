@@ -187,7 +187,7 @@ export const FIELD_TYPES: FieldSpec[] = [
     value: "string",
     zod: "z.string().optional()",
     aliases: ["phone", "tel", "mobile", "telephone"],
-    note: "Country dial-code + number; defaults to `+964` (override with `defaultCountry`).",
+    note: "Country dial-code + number; defaults to `+964` (override with `defaultCountry`). Inside a `FormBuilder.Table` cell it collapses to a plain number input — no dial-code picker, and `defaultCountry` does not apply; add a separate column if the table needs the code.",
   },
   {
     static: "Otp",
@@ -248,7 +248,7 @@ export const FIELD_TYPES: FieldSpec[] = [
     value: "object[]",
     zod: "z.array(z.object({})).min(1, 'Add at least one row')",
     aliases: ["table", "grid", "data grid", "data-grid", "editable table", "spreadsheet"],
-    note: "Editable grid: each column's `cell` renders any FormBuilder.* field; supports `selectable` / `reorderable`. Renders its own SectionBlock — place it as a top-level child, NOT inside a FormBuilder.Section.",
+    note: "Editable grid: each column's `cell` renders any FormBuilder.* field; supports `selectable` / `reorderable`. Renders its own `SectionBlock variant='Table'` (the full-bleed table shell) — place it as a top-level child, NOT inside a FormBuilder.Section. Give EVERY column a `width` so the table uses fixed layout and honours them.",
   },
   {
     static: "Custom",
@@ -375,7 +375,10 @@ function tableJsx(f: ParsedField): string {
     `  addLabel="Add row"`,
     `  defaultItem={{ label: '', qty: 1 }}`,
     `  columns={[`,
-    "    { header: 'Label', cell: (row) => <FormBuilder.Text name={`${row}.label`} required /> },",
+    // Every column carries a `width`: FormBuilder.Table only switches to `table-layout: fixed`
+    // when all of them do, and without that the browser treats each width as a hint and lets
+    // cell content widen the column instead.
+    "    { header: 'Label', width: 240, cell: (row) => <FormBuilder.Text name={`${row}.label`} required /> },",
     "    { header: 'Qty', width: 120, cell: (row) => <FormBuilder.Number name={`${row}.qty`} required /> },",
     `  ]}`,
     `/>`,
@@ -727,6 +730,7 @@ export function buildCreateForm({
       display === "drawer"
         ? `- \`FormRenderer\` (with \`display="drawer"\`) places the Save action in the drawer header and lays any \`summary\` in the tray — just drive it with \`open\` / \`onOpenChange\`.`
         : ``,
+      `- \`FormBuilder.Section\` also takes \`icon\`, \`action\` (right-aligned buttons on the title row) and \`variant\` — \`variant="Table"\` is the full-bleed table shell.`,
       `- Use \`required\` on fields — never type a literal "*".`,
       `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
     ].filter(Boolean),

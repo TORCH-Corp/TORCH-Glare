@@ -116,7 +116,9 @@ export function ItemForm({
 ```
 
 `FormBuilder.Section` groups fields in a `SectionBlock` (`color` is one of `Blue`, `Yellow`,
-`Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`). Pass the Save via `actions` — a
+`Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`). It also takes `icon`, `action`
+(right-aligned buttons on the title row) and `variant` — `variant="Table"` switches to the
+full-bleed table shell that `FormBuilder.Table` uses internally. Pass the Save via `actions` — a
 `FormBuilder.Submit`, which is loading-aware; it renders in the header action pill. (With raw
 `FormBuilder`, put the same `FormBuilder.Submit` in a `FormBuilder.Header`.)
 
@@ -140,7 +142,7 @@ Every field, its underlying control, and the value your `onSubmit` receives:
 | `.Otp` (`length`)                                                | `string`                                                       |
 | `.Slider` (`min`, `max`, `step`, `range`, `suffix`)              | `number` (or `[number, number]` with `range`)                  |
 | `.Color` (`presets`, `alpha`)                                    | hex `string`                                                   |
-| `.Phone` (`defaultCountry`, defaults to `+964`)                  | `string` (`"+<dial> <number>"`)                                |
+| `.Phone` (`defaultCountry`, defaults to `+964`)                  | `string` (`"+<dial> <number>"`) — collapses to a plain number input inside a `.Table` cell, where `defaultCountry` does not apply |
 | `.Date`                                                          | `Date`                                                         |
 | `.DateRange`                                                     | `{ from, to }`                                                 |
 | `.DateMultiple`                                                  | `Date[]`                                                       |

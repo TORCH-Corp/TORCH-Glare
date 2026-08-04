@@ -37,11 +37,36 @@ function splitPhone(value: unknown, defaultDial: string): { dial: string; number
  * `FormBuilder.Phone` — country dial-code (every country) + number. The picker is a
  * `SearchableSelect` keyed by the unique ISO code (dial codes repeat) — type to filter by
  * country name or dial. The value is stored as a `"+<dial> <number>"` string.
+ *
+ * **Inside a `FormBuilder.Table` cell** this collapses to a single plain number input: the
+ * fixed-width picker imposed a ~155px floor on the column and left the number truncated,
+ * and two controls in one cell is not a table column. Add a separate column (e.g. a
+ * `FormBuilder.Select` of dial codes) when a table needs the country code.
  */
 export function PhoneField(props: PhoneFieldProps) {
   const loading = useLoading();
   const cell = useCell();
   const defaultDial = props.defaultCountry ?? "+964"; // Iraq
+
+  if (cell) {
+    return (
+      <FieldShell {...props}>
+        {(field) => (
+          <InputField
+            type="tel"
+            inputMode="tel"
+            value={typeof field.value === "string" ? field.value : ""}
+            onChange={(e) => field.onChange(e.target.value.replace(/[^\d\s+-]/g, ""))}
+            onBlur={field.onBlur}
+            placeholder={props.placeholder ?? "Phone number"}
+            disabled={props.disabled || loading}
+            onTable
+            className="w-full"
+          />
+        )}
+      </FieldShell>
+    );
+  }
 
   return (
     <FieldShell {...props}>
