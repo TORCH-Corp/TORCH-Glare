@@ -400,7 +400,7 @@ prop spreads onto the inner layout `<div>`.
 |------|------|---------|-------------|
 | `isDummy` | `boolean` | `false` | Non-interactive cell |
 | `minWidth` | `number` | `200` | Minimum width of the content box, in px. Pass `0` when the column width is driven by the caller — otherwise this floor silently overrides any narrower column. |
-| `fade` | `boolean` | `true` | Fades the last 25% of the content, signalling text clipped by the column width. Set `false` for cells holding a **control** — the fade washes out whatever sits at the right edge (a Select's chevron, a date button). The built-in `:has(input)` escape hatch can't catch those, since a Radix trigger is a `<button>`, not an `<input>`. `isDummy` cells never fade. |
+| `fade` | `boolean` | `true` | Whether the cell **crops** its content and fades the last 25% of it, signalling text clipped by the column width. Set `false` for cells holding a **control**: the fade washes out whatever sits at the right edge (a Select's chevron, a date button), and the crop — the content box hugs the control exactly — would clip every side of the control's hover/focus drop shadow. `isDummy` cells never fade. |
 | `childrenClassName` | `string` | - | Classes for content wrapper |
 | `className` | `string` | - | Additional CSS classes |
 | `children` | `React.ReactNode` | - | Cell content |

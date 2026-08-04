@@ -284,7 +284,11 @@ const TableCell = React.forwardRef<
     <div
       style={isDummy ? undefined : { minWidth }}
       className={cn(
-        "flex justify-start items-center gap-1 overflow-hidden",
+        "flex justify-start items-center gap-1",
+        // This div hugs the control exactly — same height, and the control is `w-full` — so
+        // `overflow-hidden` clips every side of a drop shadow drawn on it. Text cells still
+        // need the crop to feed the fade gradient; control cells need the shadow to escape.
+        fade ? "overflow-hidden" : "overflow-visible",
         // Never fade a dummy cell — its content is a centred checkbox or drag handle, not
         // clippable text.
         fade &&
@@ -334,9 +338,19 @@ const TableEndAction = React.forwardRef<
     type="button"
     className={cn(
       "flex h-[40px] w-full items-center justify-start gap-[8px] px-[8px]",
-      "border-y border-border-presentation-global-primary",
+      // No border. Figma's Table-End-Action-1.0 has none — it rounds its own bottom corners
+      // so it can sit flush on the card edge. A rule here is invisible against the card until
+      // the hover fill lands behind it, at which point it reads as a hard line cutting across
+      // the bar.
+      "rounded-bl-[16px] rounded-br-[16px]",
       "typography-body-medium-semibold text-content-presentation-action-light-primary",
-      "transition-colors hover:bg-background-presentation-table-acton-hover",
+      // NB: the "acton" spelling is the token that actually exists; the correctly-spelled
+      // `…table-action-hover` is defined nowhere and would be a dead class.
+      "transition-[background-color,box-shadow] hover:bg-background-presentation-table-acton-hover",
+      // Hover draws a ring rather than a border: it renders inset, so it costs no layout and
+      // can't push the bar's 40px box around the way a border would.
+      "hover:ring-2 hover:ring-inset hover:ring-border-presentation-table-action-hover",
+      "outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-presentation-state-focus",
       "disabled:cursor-not-allowed disabled:opacity-50",
       "[&_i]:text-[20px]",
       className,

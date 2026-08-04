@@ -293,11 +293,11 @@ const PopoverTriggerStyles = cva(
           "hover:caret-border-presentation-state-negative",
         ],
       },
-      // Transparent border/background so the trigger blends into a table cell — and no drop
-      // shadow, whose 6px blur washes out the corner radius and reads as a square grey box
-      // sitting under the control. See the matching note in `Input.tsx`.
+      // Transparent border/background so the trigger blends into a table cell. The hover and
+      // focus shadows are deliberately left alone — a cell control lifts exactly like any
+      // other field.
       onTable: {
-        true: ["border-transparent", "bg-transparent", "hover:shadow-none", "focus:shadow-none"],
+        true: ["border-transparent", "bg-transparent"],
       },
       size: {
         S: ["rounded-[6px] [&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium"],
