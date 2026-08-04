@@ -24,6 +24,7 @@ import {
 import {
   SortableContext,
   horizontalListSortingStrategy,
+  sortableKeyboardCoordinates,
   useSortable,
   arrayMove,
 } from "@dnd-kit/sortable";
@@ -86,7 +87,10 @@ export default function TableExample() {
 
   const sensors = useSensors(
     useSensor(PointerSensor),
-    useSensor(KeyboardSensor)
+    // Without `coordinateGetter` the KeyboardSensor nudges a fixed 25px per arrow press, so a
+    // column never reaches its neighbour's centre and the drop is always a no-op. This snaps
+    // to the next sortable item instead.
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   const handleDragEnd = (event: DragEndEvent) => {

@@ -390,9 +390,13 @@ function ResizableTable() {
 | `onResize` | `(width: number) => void` | - | Fires while the column is drag-resized. Passing it makes the width **controlled** — you own the value and feed it back via `style.width`. Required whenever the table needs a definite width (`table-layout: fixed`), since only the owner of every column width can total them. Omit for uncontrolled resizing. |
 | `isDummy` | `boolean` | `false` | Non-interactive header |
 | `className` / `style` | `string` / `CSSProperties` | - | Applied to the `<th>` — this is how you size a column (`style={{ width: 200 }}`) |
+| `contentClassName` | `string` | - | Classes for the inner layout box (the flex row holding the label and sort toggle). Use it for typography or colour; `className` styles the `<th>` itself. |
 
-`aria-*`, `role`, and `tabIndex` are routed to the `<th>` (the `columnheader`); every other
-prop spreads onto the inner layout `<div>`.
+**Every** prop you pass — `className`, `style`, `aria-*`, `role`, `tabIndex` and event
+handlers alike — lands on the `<th>`. They deliberately share one element: libraries like
+dnd-kit hand back accessibility attributes and event listeners as a matched pair, and
+splitting them across two nodes leaves the focusable element without its handlers. Reach the
+inner layout box with `contentClassName`.
 
 ### TableCell Props
 
@@ -455,6 +459,7 @@ interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
   onSort?: () => void
   sortLabel?: string
   onResize?: (width: number) => void
+  contentClassName?: string
   isDummy?: boolean
 }
 
@@ -822,7 +827,7 @@ Dates and amounts wrap awkwardly when the column is narrow. Add `whitespace-nowr
 
 ### `TableCell` force-wraps children — use `childrenClassName` to override
 
-`TableCell` unconditionally wraps children in an inner `<div>` with `flex justify-start items-center gap-1 min-w-[200px] overflow-hidden` plus a fade-out gradient mask. Three common breakages:
+`TableCell` unconditionally wraps children in an inner `<div>` with `flex justify-start items-center gap-1`, a `min-width` of 200px, `overflow-hidden`, and a fade-out gradient mask. Three common breakages:
 
 1. **Empty-state rows don't center.** A `flex flex-col items-center` empty state ends up flush left because the outer wrapper's `justify-start` already decided alignment.
 2. **Multi-line content is clipped** by `overflow-hidden` + the gradient mask.
@@ -834,7 +839,9 @@ Dates and amounts wrap awkwardly when the column is narrow. Add `whitespace-nowr
 <TableRow>
   <TableCell
     colSpan={7}
-    childrenClassName="flex flex-col items-center justify-center gap-3 py-12 w-full min-w-0 text-content-presentation-global-secondary"
+    minWidth={0}
+    fade={false}
+    childrenClassName="flex flex-col items-center justify-center gap-3 py-12 w-full text-content-presentation-global-secondary"
   >
     <i className="ri-inbox-line text-4xl opacity-60" />
     <p className="typography-body-medium-regular">No data</p>
@@ -843,11 +850,14 @@ Dates and amounts wrap awkwardly when the column is narrow. Add `whitespace-nowr
 </TableRow>
 ```
 
-Key overrides on `childrenClassName`:
+Key overrides:
 
-- `flex flex-col` overrides the default `flex-row`
-- `items-center justify-center` overrides `justify-start`
-- `w-full min-w-0` overrides the hardcoded `min-w-[200px]`
+- `flex flex-col` on `childrenClassName` overrides the default `flex-row`
+- `items-center justify-center` on `childrenClassName` overrides `justify-start`
+- **`minWidth={0}`** clears the 200px floor. It is an inline style, so a class such as
+  `min-w-0` on `childrenClassName` cannot beat it — use the prop.
+- **`fade={false}`** drops both the gradient mask and the `overflow-hidden` that clips
+  multi-line content.
 
 ## Accessibility
 

@@ -224,12 +224,13 @@ export function SearchableTable<T extends Record<string, unknown>>({
                   data-theme="dark"
                   className="w-full rounded-[10px] overflow-hidden"
                 >
-                  <TableHeader className="bg-black-alpha-20 shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]">
-                    <TableRow className="h-[44px] [&_button]:bg-white-alpha-40 [&>th]:border-white-alpha-20">
+                  <TableHeader className="backdrop-blur-none bg-black-alpha-20 shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]">
+                    <TableRow className="h-[44px] [&_button:not([data-slot=resize-handle])]:bg-white-alpha-40 [&>th]:border-white-alpha-20">
                       {columns.map((col) => (
                         <TableHead
                           key={col.key}
-                          className="cursor-default typography-body-medium-medium text-white"
+                          className="cursor-default"
+                          contentClassName="typography-body-medium-medium text-white"
                         >
                           {col.header}
                         </TableHead>
@@ -252,7 +253,7 @@ export function SearchableTable<T extends Record<string, unknown>>({
                           {columns.map((col) => (
                             <TableCell
                               key={col.key}
-                              className="border-b border-white-alpha-20 text-white px-[8px] !whitespace-nowrap !break-normal"
+                              className="h-[40px] border-b border-white-alpha-20 text-white px-[8px] !whitespace-nowrap !break-normal"
                             >
                               {col.render ? col.render(row) : String(row[col.key] ?? "")}
                             </TableCell>

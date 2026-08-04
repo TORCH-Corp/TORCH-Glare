@@ -105,22 +105,6 @@ TableRow.displayName = "TableRow";
 /** Floor for a drag-resized column, so dragging past the column's own left edge can't invert it. */
 const MIN_COLUMN_WIDTH = 40;
 
-/**
- * Split `aria-*` / `role` / `tabIndex` out of a props bag.
- *
- * `TableHead` renders a `<th>` wrapping a layout `<div>`; without this the
- * caller's accessibility attributes end up on the div, where they mean nothing.
- */
-function splitAriaProps<T extends Record<string, unknown>>(props: T) {
-  const ariaProps: Record<string, unknown> = {};
-  const rest: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(props)) {
-    if (key.startsWith("aria-") || key === "role" || key === "tabIndex") ariaProps[key] = value;
-    else rest[key] = value;
-  }
-  return { ariaProps, rest: rest as T };
-}
-
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
@@ -138,12 +122,20 @@ const TableHead = React.forwardRef<
        * Omit for uncontrolled resizing, where the header keeps the width itself.
        */
       onResize?: (width: number) => void;
+      /**
+       * Classes for the inner layout box (the flex row holding the label and sort toggle).
+       * `className` and every other prop go to the `<th>` — reach for this only when you need
+       * to restyle the content box itself, e.g. its typography or colour.
+       */
+      contentClassName?: string;
       isDummy?: boolean;
     }
 >(
   (
     {
       className,
+      contentClassName,
+      children,
       style,
       size = "M",
       disabled,
@@ -175,11 +167,6 @@ const TableHead = React.forwardRef<
       else forwardedRef.current = headRef.current;
     }, [forwardedRef]);
 
-    // Accessibility attributes belong on the `<th>` — that is the element with the
-    // `columnheader` role, and `aria-sort` on any other node is invisible to assistive
-    // technology. Everything else still spreads onto the inner layout div, as before.
-    const { ariaProps, rest } = splitAriaProps(props);
-
     // The width has to land on the `<th>` — that is the element the browser sizes the column
     // from. Written to an inner div (as it once was) it did nothing at all. When `onResize` is
     // given the caller owns the value and feeds it back via `style.width`; otherwise the drag
@@ -189,9 +176,12 @@ const TableHead = React.forwardRef<
     return (
       <th
         ref={headRef}
-        {...ariaProps}
-        // `className`/`style` land on the <th> so column sizing from the caller actually
-        // reaches the column, not just the inner layout box.
+        // EVERY caller prop lands here: `className`, `style`, `aria-*` and event handlers
+        // alike. They have to share one element — dnd-kit's `useSortable` returns `attributes`
+        // (role/tabIndex/aria-*) and `listeners` (onKeyDown/onPointerDown) as a matched pair,
+        // and splitting them across the <th> and the inner div left the focusable node with no
+        // key handler. Use `contentClassName` to reach the inner box.
+        {...props}
         style={{ ...style, width: resolvedWidth }}
         className={cn(
           "relative h-[44px] py-[6px] px-[4px] border-b-[2px] border-border-presentation-table-header",
@@ -199,19 +189,22 @@ const TableHead = React.forwardRef<
         )}
       >
         <div
-          {...rest}
-          className={cn(tableHeadVariants({ size, disabled, isDummy }), {
-            // Only when nothing has sized the column — otherwise this floor would overflow a
-            // column narrower than 100px.
-            "min-w-[100px]": !isDummy && resolvedWidth === undefined,
-          })}
+          className={cn(
+            tableHeadVariants({ size, disabled, isDummy }),
+            {
+              // Only when nothing has sized the column — otherwise this floor would overflow a
+              // column narrower than 100px.
+              "min-w-[100px]": !isDummy && resolvedWidth === undefined,
+            },
+            contentClassName,
+          )}
         >
           <div
             className={cn("flex min-w-0 items-center justify-between flex-1", {
               "justify-center": isDummy,
             })}
           >
-            {rest.children}
+            {children}
             {isDummy || !onSort ? null : (
               <SortButton onSort={onSort} sortType={sortType} label={sortLabel} />
             )}
@@ -225,6 +218,8 @@ const TableHead = React.forwardRef<
           type="button"
           disabled={isDummy}
           aria-label="Resize column"
+          // Lets consumers exclude the grip from blanket `[&_button]` rules on a header row.
+          data-slot="resize-handle"
           onMouseDown={handleStartResize}
           onTouchStart={handleStartResize}
           className={cn(
@@ -409,7 +404,9 @@ const TableFooterButton = React.forwardRef<
     <TableRow className={cn("h-[40px] overflow-hidden", className)}>
       <TableCell
         className={
-          "border-t-2 border-b-2 border-transparent hover:border-border-presentation-table-action-hover  hover:bg-background-presentation-table-acton-hover"
+          // `h-[40px]` because the row asks for 40 and body cells default to 50 — the two sit
+          // on different elements, so CSS would otherwise take the larger and grow the footer.
+          "h-[40px] border-t-2 border-b-2 border-transparent hover:border-border-presentation-table-action-hover  hover:bg-background-presentation-table-acton-hover"
         }
         colSpan={100}
       >

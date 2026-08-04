@@ -357,6 +357,16 @@ test("create-form maps a table/grid request to FormBuilder.Table, placed outside
     /<\/FormBuilder\.Section>[\s\S]*<FormBuilder\.Table/,
     "Table sits outside (after) the fields Section",
   );
+
+  // Every generated column must carry a `width`. FormBuilder.Table only switches to
+  // `table-layout: fixed` when all of them do; with a mixed set the browser treats each width
+  // as a hint and lets cell content widen the column, so a scaffold with one unsized column
+  // would silently demonstrate the wrong behaviour.
+  const columns = code.match(/\{ header: '[^']*'[^}]*\}/g) ?? [];
+  assert.ok(columns.length > 0, "found the generated column literals");
+  for (const col of columns) {
+    assert.match(col, /width: \d+/, `column declares a width: ${col}`);
+  }
 });
 
 test("create-form detail layout builds a display detail page, not a form", () => {
