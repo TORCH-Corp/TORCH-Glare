@@ -286,4 +286,5 @@ const form = useForm({ resolver, defaultValues })
 
 > `childrenOutside` is the deprecated former name for `summary`. It still works.
 
-`FormRenderer` does **not** forward `summary` — use `FormDrawer` directly when you need one.
+`FormRenderer` forwards `summary` straight into the drawer tray, so you rarely need
+`FormDrawer` directly — reach for it only when you want the drawer without a form.

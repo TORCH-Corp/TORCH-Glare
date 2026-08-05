@@ -153,7 +153,7 @@ Every field, its underlying control, and the value your `onSubmit` receives:
 | `.Signature` (`penColor`)                                        | PNG data-URL `string`                                          |
 | `.FieldArray` (`children` render fn, `defaultItem`)              | `object[]`                                                     |
 | `.Table` (`columns`, `selectable`, `reorderable`, `defaultItem`) | `object[]` — editable grid; top-level child (not in a Section) |
-| `.Custom` (`render`, `formatView`)                               | anything                                                       |
+| `.Custom` (`render`)                                             | anything                                                       |
 
 See the [FormBuilder](../components/form-builder.md) doc for the full prop tables.
 
@@ -375,7 +375,7 @@ drawer's tray, beside the form:
   onOpenChange={setOpen}
   form={form}
   onSubmit={save}
-  header={{ title: "New item", badge: "New", variant: "new" }}
+  header={{ title: "New item", label: "New", variant: "new" }}
   summary={
     <FormSummary form={form} title="Item" subtitle="Summary">
       <FormSummary.Group title="Pricing">

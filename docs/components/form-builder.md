@@ -81,7 +81,8 @@ Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 | `FormBuilder.Slider` (`min,max,step,range`)                                 | `@radix-ui/react-slider`                                                              | `number` / `[number,number]`                                 |
 | `FormBuilder.Color` (`presets`, `alpha`)                                    | `ColorPicker` (full palette: SV area, hue, opacity, eyedropper, HEX/RGB/HSL, presets) | hex `string` (`#rrggbb`, or `#rrggbbaa` when opacity < 100%) |
 | `FormBuilder.Phone` (`defaultCountry`)                                      | `SearchableSelect` + `InputField`                                                     | `string`                                                     |
-| `FormBuilder.Select` / `.SearchableSelect` (`options`, async props)         | `SearchableSelect`                                                                    | `string`                                                     |
+| `FormBuilder.Select` (`options`)                                            | `Select`                                                                              | `string`                                                     |
+| `FormBuilder.SearchableSelect` (`options`, async: `onSearchChange`/`onLoadMore`/`hasMore`) | `SearchableSelect`                                                      | `string`                                                     |
 | `FormBuilder.MultiSelect` / `.Tags` (`options`)                             | `BadgeField`                                                                          | `string[]`                                                   |
 | `FormBuilder.RadioList` (`options`, each with optional `description`)       | boxed radio list                                                                      | `string`                                                     |
 | `FormBuilder.CheckboxGroup` (`options`, each with optional `description`)   | boxed checkbox list                                                                   | `string[]`                                                   |
@@ -99,7 +100,7 @@ Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
 | `FormBuilder.Signature` (`penColor`)                                        | canvas pad                                                                            | PNG data-URL `string`                                        |
 | `FormBuilder.FieldArray` (`children` render fn, `defaultItem`)              | RHF `useFieldArray`                                                                   | `object[]`                                                   |
 | `FormBuilder.Table` (`columns`, `selectable`, `reorderable`, `defaultItem`) | editable grid in a `SectionBlock`                                                     | `object[]`                                                   |
-| `FormBuilder.Custom` (`render`, `formatView`)                               | your control                                                                          | anything                                                     |
+| `FormBuilder.Custom` (`render`)                                             | your control                                                                          | anything                                                     |
 
 `FormBuilder.Password` accepts `strengthMeter` (shows a `PasswordLevel` meter). `FormBuilder.FieldArray`
 renders a repeating list — its `children` is a render fn `(rowName, index, remove) => …` and sub-fields
