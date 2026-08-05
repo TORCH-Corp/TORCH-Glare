@@ -1,6 +1,6 @@
 ---
 name: ToggleButton
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/buttons
 tags: [toggle, button, pressed, radix-ui, accessible, variants]

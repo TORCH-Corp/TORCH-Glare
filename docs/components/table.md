@@ -1,6 +1,6 @@
 ---
 name: Table
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/data-display
 tags: [table, data, grid, sortable, resizable, accessible, compound]

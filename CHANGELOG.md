@@ -1,4 +1,7 @@
-## Unreleased
+## 2.4.5
+
+_These entries accumulated across the 2.4.1–2.4.5 patches, which shipped without individual
+changelog sections._
 
 ### Added
 - **Rich text editor toolbar** — `TextEditor` now shows a fixed, sticky formatting toolbar by

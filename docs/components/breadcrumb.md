@@ -1,6 +1,6 @@
 ---
 name: Breadcrumb
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/navigation
 tags: [navigation, breadcrumb, wayfinding, compound, accessible, rtl]

@@ -1,6 +1,6 @@
 ---
 name: Radio
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/forms
 tags: [form, radio, selection, radix-ui, accessible, group, controlled]

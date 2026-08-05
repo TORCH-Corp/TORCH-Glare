@@ -1,6 +1,6 @@
 ---
 name: TextEditor
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/editors
 tags: [editor, rich-text, block-editor, editorjs, markdown, rtl, accessible]

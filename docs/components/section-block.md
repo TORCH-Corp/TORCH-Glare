@@ -6,7 +6,7 @@ category: layout
 group: Layout & Containers
 tags: [layout, card, section, container, form, group]
 status: stable
-version: 2.4.0
+version: 2.4.5
 dependencies:
   - "class-variance-authority": "^0.7.0"
 ---

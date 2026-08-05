@@ -1,6 +1,6 @@
 ---
 name: Checkbox
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/forms
 tags: [form, checkbox, selection, radix-ui, accessible, controlled]

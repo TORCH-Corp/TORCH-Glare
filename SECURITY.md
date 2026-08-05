@@ -41,7 +41,7 @@ We release patches for security vulnerabilities for the following versions:
 
 ## Best Practices for Using Glare Securely
 
-1. **Keep Updated**: Always use the latest version of Glare (currently 1.6.4)
+1. **Keep Updated**: Always use the latest version of Glare (currently 2.4.5)
 2. **CSS Isolation**: Ensure component styles are properly scoped to avoid leaking styles
 3. **Accessibility**: Follow our guidelines to ensure components remain accessible when implemented
 4. **Avoid Inline Styles from Untrusted Sources**: If allowing dynamic styling, validate the styling props

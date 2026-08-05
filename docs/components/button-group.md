@@ -1,6 +1,6 @@
 ---
 name: ButtonGroup
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/buttons
 tags: [toggle-group, button-group, selection, radix-ui, accessible, compound]

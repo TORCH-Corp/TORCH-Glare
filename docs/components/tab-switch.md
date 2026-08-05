@@ -1,6 +1,6 @@
 ---
 name: TabSwitch
-version: 2.4.0
+version: 2.4.5
 status: stable
 category: components/navigation
 tags: [tab-switch, segmented-control, view-switcher, toggle, list-cards, pills]
