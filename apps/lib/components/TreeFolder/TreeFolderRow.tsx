@@ -1,19 +1,10 @@
 "use client";
 
 import { ChevronRight, ChevronDown, GripVertical } from "lucide-react";
-import type { DragEvent } from "react";
+import { useDragItem } from "../../hooks/useDragDrop";
 import { cn } from "../../utils/cn";
 import { resolveIcon } from "./icons";
 import type { TreeFolderIconResolver, TreeFolderNode, TreeFolderVisibleRow } from "./types";
-
-export type TreeFolderRowDragHandlers = {
-  draggable: boolean;
-  onDragStart: (e: DragEvent<HTMLElement>) => void;
-  onDragEnd: (e: DragEvent<HTMLElement>) => void;
-  onDragOver: (e: DragEvent<HTMLElement>) => void;
-  onDragLeave: (e: DragEvent<HTMLElement>) => void;
-  onDrop: (e: DragEvent<HTMLElement>) => void;
-};
 
 export type TreeFolderRowProps = {
   row: TreeFolderVisibleRow;
@@ -37,7 +28,6 @@ export type TreeFolderRowProps = {
   dndEnabled: boolean;
   onSelect: (id: string | null) => void;
   onToggle: (id: string) => void;
-  dragHandlers: TreeFolderRowDragHandlers;
 };
 
 export function TreeFolderRow({
@@ -57,9 +47,14 @@ export function TreeFolderRow({
   dndEnabled,
   onSelect,
   onToggle,
-  dragHandlers,
 }: TreeFolderRowProps) {
   const { node, level, isOpen, isInternal, ancestorHasMoreSiblings } = row;
+
+  const {
+    ref: dragRef,
+    handleProps: dragProps,
+    style: dragStyle,
+  } = useDragItem(node.id, !dndEnabled || Boolean(node.disabled), { follow: false });
   const data = node;
   const hasChildren = isInternal;
 
@@ -134,10 +129,13 @@ export function TreeFolderRow({
 
   return (
     <div
+      ref={dragRef}
       data-row-id={node.id}
       className={cn("select-none group/row", outerClassName)}
-      style={{ height: rowHeight }}
-      {...dragHandlers}
+      // The row is the drag surface, not just the grip: that is how this tree has always behaved,
+      // and the 8px threshold is what keeps a click on it still a click.
+      style={{ ...dragStyle, height: rowHeight }}
+      {...dragProps}
     >
       <span aria-hidden className={bandClassName} />
 
@@ -233,6 +231,10 @@ export function TreeFolderRow({
         <span className="whitespace-nowrap pr-2" title={data.name}>
           {data.name}
         </span>
+
+        {/* `meta` has always been part of `TreeFolderNode` but was never painted. It sits after
+            the name, before the collapsed-child count, and only appears when a node supplies it. */}
+        {data.meta != null && <span className="shrink-0 pr-2">{data.meta}</span>}
 
         {hasChildren && !isOpen && (
           <span

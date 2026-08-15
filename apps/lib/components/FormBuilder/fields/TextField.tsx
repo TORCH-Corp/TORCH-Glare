@@ -6,7 +6,7 @@ import type { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { InputField } from "../../InputField";
 import { Textarea } from "../../Textarea";
 import { PasswordLevel } from "../../PasswordLevel";
-import { useLoading, useCell } from "../context";
+import { useLoading, useOnTable } from "../context";
 import { formatNumber } from "../numberFormat";
 import type { BaseFieldProps, CurrencyFieldProps, PasswordFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
@@ -107,7 +107,7 @@ function NumberInput({
 
 function TextLike({ props, type }: { props: BaseFieldProps; type: "text" | "email" | "password" }) {
   const loading = useLoading();
-  const cell = useCell();
+  const onTable = useOnTable();
   return (
     <FieldShell {...props}>
       {(field) => (
@@ -117,7 +117,7 @@ function TextLike({ props, type }: { props: BaseFieldProps; type: "text" | "emai
           value={field.value ?? ""}
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
-          onTable={cell}
+          onTable={onTable}
           className="w-full"
         />
       )}
@@ -133,7 +133,7 @@ export function EmailField(props: BaseFieldProps) {
 }
 export function PasswordField(props: PasswordFieldProps) {
   const loading = useLoading();
-  const cell = useCell();
+  const onTable = useOnTable();
   return (
     <FieldShell {...props}>
       {(field) => (
@@ -144,7 +144,7 @@ export function PasswordField(props: PasswordFieldProps) {
             value={field.value ?? ""}
             placeholder={props.placeholder}
             disabled={props.disabled || loading}
-            onTable={cell}
+            onTable={onTable}
             className="w-full"
           />
           {props.strengthMeter && <PasswordLevel value={field.value ?? ""} />}
@@ -156,7 +156,7 @@ export function PasswordField(props: PasswordFieldProps) {
 
 export function NumberField(props: BaseFieldProps) {
   const loading = useLoading();
-  const cell = useCell();
+  const onTable = useOnTable();
   return (
     <FieldShell {...props}>
       {(field) => (
@@ -164,7 +164,7 @@ export function NumberField(props: BaseFieldProps) {
           field={field}
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
-          onTable={cell}
+          onTable={onTable}
         />
       )}
     </FieldShell>
@@ -173,7 +173,7 @@ export function NumberField(props: BaseFieldProps) {
 
 export function CurrencyField(props: CurrencyFieldProps) {
   const loading = useLoading();
-  const cell = useCell();
+  const onTable = useOnTable();
   return (
     <FieldShell {...props}>
       {(field) => (
@@ -186,7 +186,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
           }
           placeholder={props.placeholder}
           disabled={props.disabled || loading}
-          onTable={cell}
+          onTable={onTable}
         />
       )}
     </FieldShell>

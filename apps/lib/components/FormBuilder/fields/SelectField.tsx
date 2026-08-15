@@ -4,14 +4,14 @@ import { SearchableSelect } from "../../SearchableSelect";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Select";
 import { BadgeField } from "../../BadgeField";
 import type { Tag } from "../../../hooks/useTagSelection";
-import { useLoading, useCell } from "../context";
+import { useLoading, useOnTable } from "../context";
 import type { SelectFieldProps, SearchableSelectFieldProps, OptionsFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 
 /** `FormBuilder.Select` — the plain `Select` dropdown. */
 export function SelectField(props: SelectFieldProps) {
   const loading = useLoading();
-  const cell = useCell();
+  const onTable = useOnTable();
 
   return (
     <FieldShell {...props}>
@@ -21,7 +21,7 @@ export function SelectField(props: SelectFieldProps) {
           onValueChange={field.onChange}
           disabled={props.disabled || loading}
         >
-          <SelectTrigger size="XL" onTable={cell} className="w-full">
+          <SelectTrigger size="XL" onTable={onTable} className="w-full">
             <SelectValue placeholder={props.placeholder ?? "Select…"} />
           </SelectTrigger>
           <SelectContent>
@@ -42,7 +42,7 @@ export function SelectField(props: SelectFieldProps) {
  * client-side filtering, or server-side search + infinite scroll via the async props.
  */
 export function SearchableSelectField(props: SearchableSelectFieldProps) {
-  const cell = useCell();
+  const onTable = useOnTable();
   return (
     <FieldShell {...props}>
       {(field) => (
@@ -56,7 +56,7 @@ export function SearchableSelectField(props: SearchableSelectFieldProps) {
           onLoadMore={props.onLoadMore}
           hasMore={props.hasMore}
           loading={props.loading}
-          onTable={cell}
+          onTable={onTable}
           className="w-full"
         />
       )}
@@ -66,7 +66,7 @@ export function SearchableSelectField(props: SearchableSelectFieldProps) {
 
 /** `FormBuilder.MultiSelect` / `.Tags` — BadgeField, value is `string[]`. */
 export function MultiSelectField(props: OptionsFieldProps) {
-  const cell = useCell();
+  const onTable = useOnTable();
   return (
     <FieldShell {...props}>
       {(field) => {
@@ -81,7 +81,7 @@ export function MultiSelectField(props: OptionsFieldProps) {
           <BadgeField
             tags={tags}
             onValueChange={(picked) => field.onChange(picked.map((t) => t.value ?? t.id))}
-            onTable={cell}
+            onTable={onTable}
             className="w-full"
           />
         );

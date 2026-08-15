@@ -69,7 +69,19 @@ test("registry items (hooks/utils/layouts/providers) are discoverable", async ()
   );
 
   // Category filtering by registry type works.
-  assert.equal(registry.listByCategory("hooks").length, 6, "expected 6 hooks");
+  const hooks = registry.listByCategory("hooks").map((e) => e.name);
+  // Not a count — that rots the moment a hook is added. What matters is that every hook the
+  // registry knows about is listed under the category.
+  assert.deepEqual(
+    [...hooks].sort(),
+    rl
+      .getAllItems()
+      .filter((i) => i.type === "hooks")
+      .map((i) => i.name)
+      .sort(),
+    "every registry hook should list under the hooks category",
+  );
+  assert.ok(hooks.includes("useDragDrop") && hooks.includes("useInfiniteScroll"));
   assert.ok(
     registry.listByCategory("providers").some((e) => e.name === "ThemeProvider"),
     "ThemeProvider should list under the providers category",
@@ -158,9 +170,10 @@ test("folder components (FormBuilder/FormRenderer) resolve for install + source"
   const rl = new RegistryLoader();
   await rl.load();
 
-  // These ship as folders the flat registry omits; the MCP must still resolve them (the docs tell
-  // users to `npx torch-glare add FormBuilder`). Regression: they used to be "not found".
-  for (const name of ["FormBuilder", "FormRenderer"]) {
+  // These ship as folders. The flat registry lists them now, but the MCP still has to recognise
+  // the *shape* — `getSource` reads a barrel for a folder and a file for everything else, so an
+  // entry without `isFolder` returns nothing at all.
+  for (const name of ["FormBuilder", "FormRenderer", "DataViews", "TreeFolder"]) {
     const item = rl.getItemByName(name);
     assert.ok(item, `${name} should resolve`);
     assert.equal(item!.isFolder, true, `${name} is a folder component`);

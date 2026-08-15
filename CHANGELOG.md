@@ -1,3 +1,53 @@
+## 2.5.0
+
+### Added
+- **`DataViews`** — one dataset shown as a table, kanban board, inbox or tree, behind a shared
+  header, filter set and settings rail. Replaces the `DataViewsLayout` family (see
+  `docs/migration/data-views.md`). A part exists because you rendered it: render
+  `<DataViews.Board/>` and a Board tab appears. Documented at `docs/components/data-views.md`.
+- **Scroll loading** — rows load as you reach the end of a list rather than through a pager. Pass
+  `onLoadMore` and append each page to `rows`; `hasMore` is derived from `rows.length < total`, so
+  there is no prop to keep in sync. New `useInfiniteScroll` hook (an `IntersectionObserver` on a
+  sentinel, latched so one arrival at the end costs exactly one page).
+- **Table virtualization** — `DataViews.Table` renders a window of rows past 300, so the DOM stays
+  small however many are loaded. Below that threshold it renders every row exactly as before, which
+  is what keeps row drag, column resize and small tables untouched. Adds `@tanstack/react-virtual`.
+- **`useDragDrop`** — one touch- and keyboard-capable drag hook behind every draggable surface:
+  board cards, table rows, the config rail's column list and tree nodes. Touch drags activate on a
+  200ms hold so a swipe still scrolls; keyboard is Space, arrows, Space.
+- **`DataViews.Table` `onRowMove`** (row reordering, with a grip column) and **`onAddRow`** (the
+  `+ Add New` end-action row).
+- **`FormBuilder` `layout="bare"`** — drops the page form's centring and 48px gutters so an embedded
+  form fills its container. `DataViews.Filters` uses it; in a 260px rail the gutters left the
+  controls narrower than their own minimum.
+- **`TreeFolder`** documentation at `docs/components/tree-folder.md`.
+
+### Changed
+- **Drag and drop now works on touch and with the keyboard.** Every surface previously used the
+  HTML5 drag-and-drop API, which mobile browsers never fire from a finger — on a phone none of it
+  worked at all. All four now go through `@dnd-kit` via `useDragDrop`.
+- **`DataViews` matches its Figma source** — 40px header bar (down from 52), 40px table rows (down
+  from 50), the divider at `#2c2d2e` with a 4px radius, and the Master Container now carries the
+  surface (form base + 1px border + 16px radius) instead of each view bringing its own.
+- **Empty and loading are no longer parts you render.** Nothing to show is shown as nothing: the
+  table keeps its header band and has no rows. While `loading` is set each view paints a skeleton in
+  its own shape, built from that view's real markup so nothing shifts when the data lands. A custom
+  view gets the same via `useDataViewsData().loading` plus the exported `SkeletonBar` /
+  `skeletonKeys`.
+- **`TabSwitch`** no longer shifts its tabs when one is selected. The divider between options was
+  conditionally mounted, so selecting an end tab versus a middle tab changed the track width by
+  7px; the slot is now always present and only its colour changes.
+- **`generateRegistry` registers folder components.** `DataViews`, `FormBuilder`, `FormRenderer`,
+  `TextEditor`, `TreeFolder` and the `dataViews` utilities were absent from `registry.json`, so
+  `add` copied them but installed none of their dependencies.
+
+### Removed
+- **`DataViewsLayout`, `DataViewsConfigPanel`, `TableView`, `KanbanView`, `InboxView`, `TreeView`**
+  and their docs. These were folder components the registry never listed, so the CLI could never
+  install them; `DataViews` replaces all six. Mapping in `docs/migration/data-views.md`.
+- **`DataViews.Pagination`** — replaced by scroll loading.
+- **`DataViews.Empty`** and **`DataViews.Loading`** — replaced by the behaviour described above.
+
 ## 2.4.5
 
 _These entries accumulated across the 2.4.1–2.4.5 patches, which shipped without individual

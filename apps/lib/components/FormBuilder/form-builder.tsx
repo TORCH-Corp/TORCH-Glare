@@ -8,6 +8,7 @@ import { cn } from "../../utils/cn";
 import { Form } from "../Form";
 import { SectionBlock, type SectionColor, type SectionVariant } from "../SectionBlock";
 import { LoadingContext, DirectionContext, StepperContext, FormIdContext } from "./context";
+import { markFieldKind } from "./field-kind";
 import { Header } from "./header";
 import type { FormBuilderRootProps } from "./types";
 import {
@@ -97,6 +98,7 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   values,
   loading = false,
   fieldDirection,
+  layout = "page",
   resetOnSuccess,
   conclusion,
   className,
@@ -148,10 +150,18 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
     rest
   );
 
-  // The fields column caps at 1200px and centers — as the middle column of the grid, and
-  // standalone.
+  // The fields column caps at 1100px and centers — as the middle column of the grid, and
+  // standalone. `layout="bare"` drops the cap and the gutters so an embedded form fills its
+  // container instead: 48px of padding a side is most of a settings rail.
   const fieldsInner = (
-    <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-4 px-[48px]">{fields}</div>
+    <div
+      className={cn(
+        "flex w-full flex-col gap-4",
+        layout === "page" && "mx-auto max-w-[1100px] px-[48px]",
+      )}
+    >
+      {fields}
+    </div>
   );
 
   const formEl = (
@@ -284,3 +294,45 @@ export const FormBuilder = Object.assign(FormBuilderRoot, {
   Back,
   Next,
 });
+
+/**
+ * What each field produces, for consumers that read a form they did not author.
+ *
+ * Stamped here rather than on the field definitions because the aliases — `DateRange`, `Tags`,
+ * `Image` — only exist in the table above, and a reader checking "is this list complete?" should
+ * have one place to look. `Tags` and `MultiSelect` are the same component, so the repeat is
+ * harmless.
+ */
+(
+  [
+    [FormBuilder.Text, "text"],
+    [FormBuilder.Email, "text"],
+    [FormBuilder.Password, "text"],
+    [FormBuilder.Textarea, "text"],
+    [FormBuilder.Otp, "text"],
+    [FormBuilder.Color, "text"],
+    [FormBuilder.Phone, "text"],
+    [FormBuilder.Number, "number"],
+    [FormBuilder.Currency, "number"],
+    [FormBuilder.Select, "choice"],
+    [FormBuilder.SearchableSelect, "choice"],
+    [FormBuilder.RadioList, "choice"],
+    [FormBuilder.RadioCards, "choice"],
+    [FormBuilder.MultiSelect, "multiChoice"],
+    [FormBuilder.Tags, "multiChoice"],
+    [FormBuilder.CheckboxGroup, "multiChoice"],
+    [FormBuilder.TreeSelect, "multiChoice"],
+    [FormBuilder.Checkbox, "boolean"],
+    [FormBuilder.SwitchBox, "boolean"],
+    [FormBuilder.Date, "date"],
+    [FormBuilder.DateRange, "date"],
+    [FormBuilder.DateTime, "date"],
+    [FormBuilder.DateMultiple, "date"],
+    [FormBuilder.Slider, "slider"],
+    [FormBuilder.Custom, "custom"],
+    [FormBuilder.File, "custom"],
+    [FormBuilder.Image, "custom"],
+    [FormBuilder.Signature, "custom"],
+    [FormBuilder.RichText, "custom"],
+  ] as const
+).forEach(([component, kind]) => markFieldKind(component, kind));

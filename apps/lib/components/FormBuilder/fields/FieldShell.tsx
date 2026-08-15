@@ -15,7 +15,7 @@ import { FieldSection } from "../../../layouts/FieldSection";
 import { FormField, FormItem, FormControl } from "../../Form";
 import { FieldHint } from "../../FieldHint";
 import { Tooltip } from "../../Tooltip";
-import { useDirection, useStepRegistry, useCell } from "../context";
+import { useDirection, useStepRegistry, useBare } from "../context";
 
 export interface FieldShellProps {
   name: string;
@@ -50,7 +50,7 @@ export function FieldShell({
   children,
 }: FieldShellProps) {
   const form = useFormContext();
-  const cell = useCell();
+  const bare = useBare();
   const ctxDirection = useDirection();
   // A field may pin its own direction (e.g. RichText forces vertical), else the form's. When
   // neither is set this stays `undefined` — FieldSection then falls back to its responsive
@@ -74,10 +74,11 @@ export function FieldShell({
 
   if (hidden) return null;
 
-  // Cell mode (inside FormBuilder.Table): render just the control — no FieldSection label/row.
-  // Errors surface as a tooltip on the control rather than a stacked FieldHint, so a row stays
-  // one line tall. Step registration above still applies.
-  if (cell) {
+  // Chrome-less mode — a `FormBuilder.Table` cell (`"table"`) or a panel field (`"bare"`).
+  // Render just the control: no FieldSection label/row, and errors surface as a tooltip on the
+  // control rather than a stacked FieldHint, so a row stays one line tall. Step registration
+  // above still applies. The control's border treatment is the caller's call, via `useOnTable`.
+  if (bare) {
     return (
       <FormField
         control={form.control}

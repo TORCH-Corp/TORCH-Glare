@@ -57,6 +57,41 @@ function listSourceFiles(dir) {
         .filter((name) => !name.endsWith(".d.ts"));
 }
 
+/**
+ * List **folder components** — a directory under a type dir holding source files, which the CLI
+ * copies whole (`DataViews`, `FormBuilder`, `TreeFolder`, …).
+ *
+ * These were previously skipped entirely, so the biggest components in the library were absent
+ * from the manifest. `add` still copied them, because the CLI lists the templates directory rather
+ * than the registry — but `resolveInstallPlan` reads the registry, so they arrived with none of
+ * their dependencies.
+ */
+function listSourceFolders(dir) {
+    if (!fs.existsSync(dir)) return [];
+    return fs
+        .readdirSync(dir, { withFileTypes: true })
+        .filter((e) => e.isDirectory())
+        .map((e) => e.name)
+        .filter((name) => collectFolderFiles(path.join(dir, name)).length > 0);
+}
+
+/** Every shippable source file inside a folder component, recursively, as absolute paths. */
+function collectFolderFiles(folderAbs) {
+    const out = [];
+    for (const entry of fs.readdirSync(folderAbs, { withFileTypes: true })) {
+        const abs = path.join(folderAbs, entry.name);
+        if (entry.isDirectory()) {
+            out.push(...collectFolderFiles(abs));
+            continue;
+        }
+        if (!/\.(ts|tsx)$/.test(entry.name)) continue;
+        if (/-dev\.(ts|tsx)$/.test(entry.name)) continue;
+        if (entry.name.endsWith(".d.ts")) continue;
+        out.push(abs);
+    }
+    return out;
+}
+
 /** Resolve a relative import to a "type/name" registry ref, or null if outside the registry. */
 function resolveRegistryRef(fromFileAbs, spec) {
     const abs = path.resolve(path.dirname(fromFileAbs), spec);
@@ -110,6 +145,37 @@ function main() {
                 registryDependencies: [...registry].sort(),
             });
         }
+
+        // Folder components: one entry per directory, whose dependencies are the union across
+        // every file inside it. Refs that point back into the same folder are dropped — the CLI
+        // copies the whole directory, so they are already satisfied.
+        for (const folderName of listSourceFolders(dir)) {
+            const folderAbs = path.join(dir, folderName);
+            const selfRef = `${type}/${folderName}`;
+
+            const npm = new Set();
+            const registry = new Set();
+
+            for (const fileAbs of collectFolderFiles(folderAbs)) {
+                for (const spec of extractImports(fs.readFileSync(fileAbs, "utf-8"))) {
+                    if (isExternal(spec)) {
+                        const pkg = toPackageName(spec);
+                        if (!IGNORED_NPM.has(pkg)) npm.add(pkg);
+                        continue;
+                    }
+                    const ref = resolveRegistryRef(fileAbs, spec);
+                    if (ref && ref !== selfRef && !ref.startsWith(`${selfRef}/`)) registry.add(ref);
+                }
+            }
+
+            items.push({
+                name: folderName,
+                type,
+                path: path.posix.join(type, folderName),
+                npmDependencies: [...npm].sort(),
+                registryDependencies: [...registry].sort(),
+            });
+        }
     }
 
     items.sort((a, b) =>
@@ -121,9 +187,26 @@ function main() {
     // via its import-walking resolver; the flat registry only tracks top-level items for the
     // AI docs, so filtering them out (rather than erroring) keeps the manifest self-consistent.
     const known = new Set(items.map((i) => `${i.type}/${i.name}`));
+
+    // A ref into a folder component's internals — `components/DataViews/views/table-view` — is a
+    // dependency on that component. Collapse it to the folder root so it survives the filter
+    // below instead of being silently dropped.
+    const toKnownRoot = (ref) => {
+        if (known.has(ref)) return ref;
+        const parts = ref.split("/");
+        for (let i = parts.length - 1; i > 1; i--) {
+            const candidate = parts.slice(0, i).join("/");
+            if (known.has(candidate)) return candidate;
+        }
+        return ref;
+    };
+
     let dropped = 0;
     for (const item of items) {
-        const kept = item.registryDependencies.filter((ref) => known.has(ref));
+        const self = `${item.type}/${item.name}`;
+        const kept = [...new Set(item.registryDependencies.map(toKnownRoot))]
+            .filter((ref) => ref !== self)
+            .filter((ref) => known.has(ref));
         dropped += item.registryDependencies.length - kept.length;
         item.registryDependencies = kept;
     }

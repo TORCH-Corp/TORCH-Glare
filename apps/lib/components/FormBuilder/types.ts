@@ -11,6 +11,35 @@ import type {
 import type { FieldDirection } from "./context";
 import type { SectionColor } from "../SectionBlock";
 
+/**
+ * What shape of value a field produces, stamped on each `FormBuilder.*` field component.
+ *
+ * This is for consumers that have to interpret a form they did not author — `DataViews.Filters`
+ * reads it to decide whether a child's value becomes a list, a numeric range or a date range. It
+ * describes the field, not any one consumer's use of it.
+ *
+ * Read it with `fieldKindOf(element)` rather than comparing `element.type` against an imported
+ * component: identity comparison breaks across duplicated module instances and stops matching
+ * after a hot reload.
+ */
+export type FieldKind =
+  /** A string value — `Text`, `Textarea`, `Email`, `Password`, `Color`, `Phone`, `Otp`. */
+  | "text"
+  /** A number — `Number`, `Currency`. */
+  | "number"
+  /** One of a supplied list — `Select`, `SearchableSelect`, `RadioList`, `RadioCards`. */
+  | "choice"
+  /** Several of a supplied list — `MultiSelect`, `Tags`, `CheckboxGroup`, `TreeSelect`. */
+  | "multiChoice"
+  /** A boolean — `Checkbox`, `SwitchBox`. */
+  | "boolean"
+  /** A date or date range — `Date`, `DateRange`, `DateTime`, `DateMultiple`. */
+  | "date"
+  /** Two numbers when `range`, otherwise one — `Slider`. */
+  | "slider"
+  /** Whatever the caller renders — `Custom`, `File`, `Image`, `Signature`, `RichText`. */
+  | "custom";
+
 /** Props shared by every `FormBuilder.*` field. `name` is the RHF path. */
 export interface BaseFieldProps {
   name: string;
@@ -249,6 +278,17 @@ export interface FormBuilderRootProps<T extends FieldValues = FieldValues> {
   loading?: boolean;
   /** Field row direction. Defaults to horizontal (vertical inside a drawer). */
   fieldDirection?: FieldDirection;
+  /**
+   * How the fields column is framed.
+   *
+   * `"page"` (the default) is the full-page form: centred, capped at 1100px, and held off the
+   * edges by 48px gutters.
+   *
+   * `"bare"` drops all three so the fields fill whatever they are placed inside. Use it when the
+   * form is embedded in something narrow — a 260px settings rail has no room to give up 96px to
+   * gutters, and its controls would overflow the panel rather than fill it.
+   */
+  layout?: "page" | "bare";
   /** Reset to defaults after a successful submit. */
   resetOnSuccess?: boolean;
   /**

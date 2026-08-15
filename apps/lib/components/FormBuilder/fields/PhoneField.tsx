@@ -3,7 +3,7 @@
 import { SearchableSelect } from "../../SearchableSelect";
 import { InputField } from "../../InputField";
 import { cn } from "../../../utils/cn";
-import { useLoading, useCell } from "../context";
+import { useLoading, useBare, useOnTable } from "../context";
 import type { PhoneFieldProps } from "../types";
 import { FieldShell } from "./FieldShell";
 import { COUNTRIES, countryByCode, countryByDial, flagEmoji } from "./countries";
@@ -45,10 +45,13 @@ function splitPhone(value: unknown, defaultDial: string): { dial: string; number
  */
 export function PhoneField(props: PhoneFieldProps) {
   const loading = useLoading();
-  const cell = useCell();
+  // Neither a table cell nor a narrow config rail has room for the dial-code composite, so both
+  // collapse to a single tel input — but only a real table cell takes the flush border.
+  const bare = useBare();
+  const onTable = useOnTable();
   const defaultDial = props.defaultCountry ?? "+964"; // Iraq
 
-  if (cell) {
+  if (bare) {
     return (
       <FieldShell {...props}>
         {(field) => (
@@ -60,7 +63,7 @@ export function PhoneField(props: PhoneFieldProps) {
             onBlur={field.onBlur}
             placeholder={props.placeholder ?? "Phone number"}
             disabled={props.disabled || loading}
-            onTable
+            onTable={onTable}
             className="w-full"
           />
         )}
@@ -84,7 +87,6 @@ export function PhoneField(props: PhoneFieldProps) {
               onValueChange={(code) => commit(countryByCode(code)?.dial ?? dial, number)}
               placeholder="+964"
               size="M"
-              onTable={cell}
               inputClassName="w-[100px] min-w-[0px]"
               className={cn("w-[113px] shrink-0", disabled && "pointer-events-none opacity-60")}
             />
@@ -96,7 +98,6 @@ export function PhoneField(props: PhoneFieldProps) {
                 onChange={(e) => commit(dial, e.target.value.replace(/[^\d\s-]/g, ""))}
                 placeholder={props.placeholder ?? "Phone number"}
                 disabled={disabled}
-                onTable={cell}
                 className="w-full"
               />
             </div>

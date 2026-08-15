@@ -1,36 +1,50 @@
-export { DataViewsLayout } from "./DataViewsLayout";
-export type { DataViewsLayoutProps } from "./DataViewsLayout";
+// Enumerated, never `export *` — the same convention as `FormBuilder/index.ts`, so what this
+// folder offers is readable in one screen.
+//
+// Almost everything is reached through the compound root: `DataViews.Table`, `DataViews.Panel`,
+// `DataViews.Filters`, and so on. The loose exports below are the pieces you need when writing a
+// part of your own.
 
-export { TableView } from "./TableView";
-export type { TableViewProps } from "./TableView";
+export { DataViews } from "./data-views";
 
-export { KanbanView } from "./KanbanView";
-export type { KanbanViewProps } from "./KanbanView";
+// The query's wire format, both directions. A page needs the first two; a route handler that
+// serves one of these lists needs `parseQuery`.
+export { emptyQuery, parseQuery, queryToParams } from "../../utils/dataViews/query";
 
-export { InboxView } from "./InboxView";
-export type { InboxViewProps } from "./InboxView";
+// Reach into the component's state from inside a custom child — a detail pane, a bespoke filter,
+// a toolbar button that clears the selection.
+export {
+  useDataViewsData,
+  useDataViewsFilters,
+  useDataViewsPanel,
+  useDataViewsView,
+} from "./context";
+export { useActiveRow } from "./hooks";
 
-export { InboxViewCard } from "./InboxViewCard";
-export type { InboxViewCardProps } from "./InboxViewCard";
+// Paint one field the way the views paint it, in your own layout.
+export { Cell } from "./cell";
 
-export { TreeView } from "./TreeView";
-export type { TreeViewProps } from "./TreeView";
+// A view of your own gets the loading state the built-in four get: read `loading` from
+// `useDataViewsData()` and lay these out in your own shape. There is no `Empty` counterpart —
+// nothing to show is shown as nothing.
+export { SkeletonBar, skeletonKeys } from "./states";
 
-export { DataViewRadio } from "./DataViewRadio";
-export type { DataViewRadioProps } from "./DataViewRadio";
+// Wrapping a part in a component of your own — a preset panel, a project-standard header — hides
+// the marker the root recognises it by, so the wrapper has to carry the marker itself:
+//
+// ```tsx
+// const AppPanel = markPanel(function AppPanel() { return <DataViews.Panel>…</DataViews.Panel>; });
+// ```
+export { markHeader, markPanel, markView } from "./slots";
+export { resolveBadgeVariant } from "./badge";
 
-export { FilterPanel } from "./FilterPanel";
-export { SettingsPanel } from "./SettingsPanel";
-export { DataViewsHeader } from "./DataViewsHeader";
-export type { DataViewsHeaderView } from "./DataViewsHeader";
-export { DataViewsConfigPanel } from "./DataViewsConfigPanel";
-export type { DataViewsConfigPanelProps } from "./DataViewsConfigPanel";
-
-export { renderField } from "./fieldRenderers";
-export { resolveBadgeVariant } from "./badgeAdapter";
-export type { ResolvedBadgeProps } from "./badgeAdapter";
-
-export * from "./types";
-
-export { useDataViewsState } from "../../hooks/useDataViewsState";
-export type { UseDataViewsStateOptions } from "../../hooks/useDataViewsState";
+export type { ResolvedBadgeProps } from "./badge";
+export type {
+  DataContextValue,
+  FiltersContextValue,
+  PanelContextValue,
+  PanelTabsContextValue,
+  RegisteredView,
+  ViewContextValue,
+} from "./context";
+export type * from "./types";

@@ -59,9 +59,28 @@ export function resolveExample(name) {
     return file ? `apps/app/exmples/${file}` : null;
 }
 
-/** Read a registry item's source file. */
+/**
+ * Read a registry item's source.
+ *
+ * A folder component (`components/DataViews`) has no single file, so its sources are concatenated
+ * — everything downstream only scans the text for variant names and identifiers, and one blob
+ * answers that as well as a file does.
+ */
 export function readItemSource(item) {
-    return fs.readFileSync(path.join(LIB_DIR, item.path), "utf-8");
+    const abs = path.join(LIB_DIR, item.path);
+    if (!fs.existsSync(abs)) return "";
+    if (!fs.statSync(abs).isDirectory()) return fs.readFileSync(abs, "utf-8");
+
+    const read = (dir) =>
+        fs
+            .readdirSync(dir, { withFileTypes: true })
+            .flatMap((entry) => {
+                const child = path.join(dir, entry.name);
+                if (entry.isDirectory()) return read(child);
+                if (!/\.(ts|tsx)$/.test(entry.name)) return [];
+                return [fs.readFileSync(child, "utf-8")];
+            });
+    return read(abs).join("\n");
 }
 
 /**

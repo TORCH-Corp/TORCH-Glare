@@ -94,20 +94,15 @@ const COVERAGE_ALLOWLIST = {
         // Empty: every registry component now has a docs/components/<slug>.md.
     ]),
     // Component docs that resolve to no installable registry item of any type —
-    // get-install-info / get-component-source return "not found" for these. They
-    // document nested DataViews feature modules the flat registry omits by design.
+    // get-install-info / get-component-source return "not found" for these.
+    //
+    // Folder components are no longer listed here: `generateRegistry` registers them, so
+    // FormBuilder, FormRenderer, TextEditor, DataViews and TreeFolder all resolve. What remains
+    // are documented *sub-tools* of a folder component, which are not installable on their own.
     docsWithoutRegistryItem: new Set([
-        "data-views-config-panel",
-        "data-views-layout",
-        "inbox-view",
-        "kanban-view",
-        "table-view",
-        "tree-view",
-        // FormBuilder + FormRenderer ship as folder components (components/FormBuilder/,
-        // components/FormRenderer/), which the flat registry omits by design — installed
-        // via the CLI's recursive folder copy, exactly like DataViews/TreeFolder.
-        "form-builder",
-        "form-renderer",
+        // Editor.js tools that ship inside components/TextEditor/.
+        "chart-block-tool",
+        "table-dnd-wrapper",
     ]),
 };
 

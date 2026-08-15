@@ -1,7 +1,7 @@
 export { TreeFolder } from "./TreeFolder";
 export type { TreeFolderHandle, TreeFolderProps } from "./TreeFolder";
 export { TreeFolderRow } from "./TreeFolderRow";
-export type { TreeFolderRowProps, TreeFolderRowDragHandlers } from "./TreeFolderRow";
+export type { TreeFolderRowProps } from "./TreeFolderRow";
 export { TreeFolderBreadcrumb } from "./TreeFolderBreadcrumb";
 export { defaultIconRegistry, defaultIconFor } from "./icons";
 export {

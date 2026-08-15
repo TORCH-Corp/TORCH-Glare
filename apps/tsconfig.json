@@ -29,11 +29,12 @@
     }
   },
   "include": [
-    "app/next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
+    "app/next-env.d.ts",
     "tailwind.config.js",
+    ".next-claude/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
