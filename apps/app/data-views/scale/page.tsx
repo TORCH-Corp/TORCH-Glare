@@ -37,6 +37,12 @@ const WIDE_FIELDS: FieldConfig[] = Array.from({ length: 40 }, (_, i) => ({
   type: "text" as const,
 }));
 
+/** Generated data, so the option sets are the generator's own vocabulary. */
+const PRIORITY_OPTIONS = ["High", "Medium", "Low"].map((v) => ({ label: v, value: v }));
+const CUSTOMER_OPTIONS = ["Acme", "Globex", "Initech", "Umbrella", "Hooli", "Soylent", "Stark", "Wayne", "Cyberdyne"]
+  .flatMap((c) => ["Inc.", "Ltd", "SA", "GmbH", "BV"].map((sfx) => `${c} ${sfx}`))
+  .map((v) => ({ label: v, value: v }));
+
 const STATUS_OPTIONS = [
   { label: "Pending", value: "Pending" },
   { label: "Shipped", value: "Shipped" },
@@ -137,25 +143,24 @@ export default function ScaleExample() {
             <DataViews.ViewSwitch />
             <DataViews.Search />
             <DataViews.Actions>
-              <Button size="S" variant={!wideCase ? "BluSecStyle" : "BorderStyle"} onClick={() => setCase("rows")}>
+              <Button variant="BluColStyle" size="M" onClick={() => setCase("rows")}>
                 1,000 rows
               </Button>
-              <Button size="S" variant={wideCase ? "BluSecStyle" : "BorderStyle"} onClick={() => setCase("columns")}>
+              <Button variant="BluColStyle" size="M" onClick={() => setCase("columns")}>
                 40 columns
               </Button>
               {!wideCase &&
                 [100, 1000].map((n) => (
-                  <Button
+                  <Button variant="BluColStyle"
+                    size="M"
                     key={n}
-                    size="S"
-                    variant={count === n ? "BluSecStyle" : "BorderStyle"}
                     onClick={() => setCount(n)}
                   >
                     {n.toLocaleString("en-US")}
                   </Button>
                 ))}
               {wideCase && (
-                <Button size="S" variant="BorderStyle" onClick={() => setNarrow((v) => !v)}>
+                <Button variant="BluColStyle" size="M" onClick={() => setNarrow((v) => !v)}>
                   {narrow ? "Full width" : "Squeeze"}
                 </Button>
               )}
@@ -191,18 +196,13 @@ export default function ScaleExample() {
                 title={null}
                 className="border-b-0 p-0"
               >
-                {wideCase ? (
-                  <>
-                    <FormBuilder.Text name="col0" label="Column 0 contains" />
-                    <FormBuilder.Text name="col1" label="Column 1 contains" />
-                  </>
-                ) : (
-                  <>
-                    <FormBuilder.MultiSelect name="status" label="Status" options={STATUS_OPTIONS} />
-                    <FormBuilder.Slider name="total" label="Total" range min={0} max={25000} step={500} />
-                    <FormBuilder.Slider name="progress" label="Progress" range min={0} max={100} step={5} />
-                  </>
-                )}
+              {/* The same section types, over this page's own fields. There is no second dynamic
+                  categorical here, so the searchable single-select has nothing to bind to. */}
+              <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
+              <FormBuilder.RadioList name="priority" label="Priority" options={PRIORITY_OPTIONS} />
+              <FormBuilder.MultiSelect name="customer" label="Customer" options={CUSTOMER_OPTIONS} />
+              <FormBuilder.Slider name="total" label="Total" range min={0} max={25000} step={500} />
+              <FormBuilder.DateRange name="createdAt" label="Created" />
               </DataViews.Filters>
             </DataViews.Panel.Tab>
           </DataViews.Panel>

@@ -38,7 +38,13 @@ function DropLine() {
  * here also retitles the board's cards. When `columns` has never been set, the list is seeded from
  * `fields` on first edit, so you are not forced to declare a redundant array to get this working.
  */
-export function Columns({ title = "Table Columns", className }: PanelColumnsProps) {
+export function Columns({
+  title = "Table Columns",
+  // Figma writes this line under the header; it is the section's own words, so it is the default
+  // rather than something every caller has to remember to pass.
+  description = "Show or hide columns in table view",
+  className,
+}: PanelColumnsProps) {
   const { fields } = useDataViewsData();
   const { columns, setColumns } = useDataViewsView();
 
@@ -74,7 +80,7 @@ export function Columns({ title = "Table Columns", className }: PanelColumnsProp
     setColumns(current.map((c) => (c.path === path ? { ...c, visible: !c.visible } : c)));
 
   return (
-    <Section title={title} className={className}>
+    <Section title={title} description={description} className={className}>
       <DndContext {...contextProps}>
         <DragList ids={ids}>
           <div data-theme="dark" className="flex flex-col gap-2">

@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useId, useMemo, useState } from "react";
 import { cn } from "../../../utils/cn";
 import { Button } from "../../Button";
+import { ConclusionHeader } from "../../ConclusionHeader";
 import { FormBuilder } from "../../FormBuilder";
 import { CellContext } from "../../FormBuilder/context";
 import { FiltersContext, useDataViewsFilters } from "../context";
@@ -40,7 +41,15 @@ import type { FiltersProps } from "../types";
  * </DataViews.Filters>
  * ```
  */
-function FiltersRoot({ children, title = "Filters", clearLabel = "Clear", className }: FiltersProps) {
+function FiltersRoot({
+  children,
+  title = "Filters",
+  description,
+  clearLabel = "Clear",
+  collapsible = true,
+  defaultOpen = true,
+  className,
+}: FiltersProps) {
   const { filters, setFilters } = useDataViewsFilters();
 
   const fields = useMemo(() => collectFilterFields(children), [children]);
@@ -53,6 +62,11 @@ function FiltersRoot({ children, title = "Filters", clearLabel = "Clear", classN
   const values = useMemo(() => toFormValues(filters, fields), [filters, fields]);
   const active = Object.keys(filters).length > 0;
 
+  const [open, setOpen] = useState(defaultOpen);
+  const bodyId = useId();
+  const isCollapsible = collapsible && title != null;
+  const shown = !isCollapsible || open;
+
   return (
     <FiltersContext.Provider value={value}>
       <div
@@ -63,21 +77,39 @@ function FiltersRoot({ children, title = "Filters", clearLabel = "Clear", classN
         )}
       >
         {(title || active) && (
+          // `ConclusionHeader` renders a `<button>`, so Clear cannot live inside it — nesting a
+          // button in a button is invalid and swallows the inner click. They are siblings.
           <div className="flex items-center gap-2">
-            {title && (
-              // The rail's section-header treatment. Reading the colour from a token rather than
-              // a literal `text-white` is what lets the same controls sit in the dark panel and
-              // in the light content area without a second variant.
-              <h3 className="text-content-presentation-global-primary text-[18px] font-[510] leading-[1.32] tracking-[-0.01em]">
-                {title}
-              </h3>
-            )}
+            {title != null &&
+              (isCollapsible ? (
+                <ConclusionHeader
+                  label={title}
+                  open={open}
+                  onOpenChange={setOpen}
+                  aria-controls={bodyId}
+                  className="flex-1"
+                />
+              ) : (
+                // Reading the colour from a token rather than a `text-white` literal is what lets
+                // the same controls sit in the dark rail and in the light content area.
+                <h3 className="text-content-presentation-global-primary text-[18px] font-[510] leading-[1.32] tracking-[-0.01em]">
+                  {title}
+                </h3>
+              ))}
             {active && (
               <Button size="S" variant="BorderStyle" className="ms-auto" onClick={() => setFilters({})}>
                 {clearLabel}
               </Button>
             )}
           </div>
+        )}
+
+        {/* Below the header *row*, not inside it — that row is a flex line holding the header and
+            Clear as siblings, and the description belongs to the section, not beside the button. */}
+        {description != null && (
+          <p className="typography-body-small-regular text-content-presentation-global-primary">
+            {description}
+          </p>
         )}
 
         {/* `onSubmit` is required by FormBuilder but never reached — there is no submit button and
@@ -93,7 +125,22 @@ function FiltersRoot({ children, title = "Filters", clearLabel = "Clear", classN
         >
           <Sync fields={fields} />
           <CellContext.Provider value="bare">
-            <div className="flex flex-wrap items-start gap-3">{renderFields(children)}</div>
+            {/* Same fold as `Panel.Section`: a 0fr→1fr grid row, and `inert` so a collapsed
+                filter's control leaves the tab order rather than staying focusable. */}
+            <div
+              id={bodyId}
+              inert={!shown}
+              aria-hidden={!shown}
+              className={cn(
+                "grid transition-[grid-template-rows,opacity] duration-200 ease-in-out",
+                "motion-reduce:transition-none",
+                shown ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+              )}
+            >
+              <div className="overflow-hidden">
+                <div className="flex flex-wrap items-start gap-3">{renderFields(children)}</div>
+              </div>
+            </div>
           </CellContext.Provider>
         </FormBuilder>
       </div>

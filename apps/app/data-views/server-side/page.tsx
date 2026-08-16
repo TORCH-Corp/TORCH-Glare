@@ -25,10 +25,21 @@ interface Order extends Row {
 const FIELDS: FieldConfig[] = [
   { path: "id", label: "Order #", type: "number" },
   { path: "customer.name", label: "Customer", type: "text" },
+  { path: "brand.name", label: "Brand", type: "text" },
   { path: "status", label: "Status", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" } },
   { path: "total", label: "Total", type: "currency", currency: "USD" },
   { path: "createdAt", label: "Created", type: "date-format", dateFormat: "YYYY-MM-DD" },
 ];
+
+/** Dynamic sets — in a real app these come from the endpoint that also does the filtering. */
+const CUSTOMER_OPTIONS = [
+  "Acme Inc.", "Globex Corp.", "Initech", "Umbrella",
+  "Hooli", "Stark Industries", "Wayne Enterprises", "Cyberdyne",
+].map((v) => ({ label: v, value: v }));
+
+const BRAND_OPTIONS = ["Bosch", "Makita", "DeWalt", "Hilti"].map((v) => ({ label: v, value: v }));
+
+const PRIORITY_OPTIONS = ["High", "Medium", "Low"].map((v) => ({ label: v, value: v }));
 
 const STATUS_OPTIONS = [
   { label: "Pending", value: "Pending" },
@@ -110,9 +121,8 @@ export default function ServerSideExample() {
           <DataViews.ViewSwitch />
           <DataViews.Search />
           <DataViews.Actions>
-            <Button
-              size="S"
-              variant={failNext ? "RedSecStyle" : "BorderStyle"}
+            <Button variant="BluColStyle"
+              size="M"
               onClick={() => setFailNext((v) => !v)}
             >
               {failNext ? "Stop failing" : "Make it fail"}
@@ -161,8 +171,18 @@ export default function ServerSideExample() {
               title={null}
               className="border-b-0 p-0"
             >
-              <FormBuilder.MultiSelect name="status" label="Status" options={STATUS_OPTIONS} />
+              {/* One control per section type. Which one a field gets is decided by the data:
+                  can the option set grow, and can the user pick more than one. */}
+              <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
+              <FormBuilder.RadioList name="priority" label="Priority" options={PRIORITY_OPTIONS} />
+              <FormBuilder.SearchableSelect
+                name="customer.name"
+                label="Customer"
+                options={CUSTOMER_OPTIONS}
+              />
+              <FormBuilder.MultiSelect name="brand.name" label="Brand" options={BRAND_OPTIONS} />
               <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} step={100} />
+              <FormBuilder.DateRange name="createdAt" label="Created" />
             </DataViews.Filters>
           </DataViews.Panel.Tab>
         </DataViews.Panel>

@@ -183,25 +183,74 @@ fields, and what each one *means* comes from the field, never from the rows.
 Five field kinds become filters. Anything else renders but filters nothing — a checkbox is not a
 query, and a file is not a value you can filter by.
 
+**Filters are not derived from `fields`.** There is no `filterable`, `filterMode`, `filterVariant`,
+`filterOptions` or `filterLabel` — a filter exists because you wrote the control, and what it
+*means* comes from that field's `FieldKind`. Hiding a column (`visible: false`, `type: "hidden"`)
+has no effect on filters at all; they are independent surfaces.
+
+### Choosing a control
+
+Two questions pick it, and **the first is about the data, not the UI**:
+
+1. **Can the option set grow?** Not how many values it has today — whether it can scale. A set the
+   system's own model fixes (four order statuses) will never grow without a release. A set the org
+   configures, or a workflow editor can extend, is **dynamic** — and a dynamic set with four values
+   today can have sixteen next quarter.
+2. **Can the user pick more than one?**
+
+|  | **Fixed** — bounded by the model | **Dynamic** — org-configurable |
+| --- | --- | --- |
+| **Multi-pick** | `CheckboxGroup` | `MultiSelect` / `Tags` |
+| **Single-pick** | `RadioList` | `SearchableSelect` |
+
+A closed lifecycle (`Draft · Active · Discontinued`) is fixed. Brand, Owner, Vendor, Assignee, Tags
+and Category are dynamic unconditionally. A *status* can be either — if an org can extend it
+through an approval chain, treat it as dynamic, because sixteen stacked checkboxes is not a control.
+
+### The section types
+
+| Control | Use when | Renders | Lands in `FilterState` as |
+| --- | --- | --- | --- |
+| `FormBuilder.CheckboxGroup` | fixed set, multi-pick | checkbox list | `string[]` |
+| `FormBuilder.RadioList` | fixed set, single-pick | radio list | one-element `string[]` |
+| `FormBuilder.SearchableSelect` | dynamic set, single-pick | searchable combobox | one-element `string[]` |
+| `FormBuilder.MultiSelect` · `FormBuilder.Tags` | dynamic set, multi-pick | **`BadgeField`** — search + chips | `string[]` |
+| `FormBuilder.Slider range` | numeric | range slider | `{ kind: "number", min, max }` |
+| `FormBuilder.DateRange` | date | date pair | `{ kind: "date", from, to }` |
+| `FormBuilder.Text` | free text | text input | one-element `string[]` |
+| ~~toggle / switch~~ | boolean | — | **not supported** |
+
+`MultiSelect` and `Tags` are the **same field**: both render `BadgeField`, so the searchable
+multi-select case needs nothing extra.
+
+**Booleans do not filter yet.** `FormBuilder.SwitchBox` and `FormBuilder.Checkbox` are stamped
+`boolean`, but the filter map (`filters/children.tsx`) recognises only `text · choice ·
+multiChoice · date · slider`. A switch placed in `Filters` renders and writes nothing. Until that
+kind is added, express an on/off narrowing with `Filters.Custom`, which can write any shape you
+like to one path.
+
+Every control here is live on `app/data-views/filters/page.tsx`:
+
 ```tsx
 <DataViews.Filters>
-  <FormBuilder.Text name="customer.name" label="Customer contains" />
-  <FormBuilder.Select name="priority" label="Priority" options={PRIORITY} />
-  <FormBuilder.MultiSelect name="status" label="Status" options={STATUS} />
+  {/* fixed set, multi-pick — the four statuses are fixed by the model */}
+  <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
+
+  {/* fixed set, single-pick — High/Medium/Low are mutually exclusive */}
+  <FormBuilder.RadioList name="priority" label="Priority" options={PRIORITY_OPTIONS} />
+
+  {/* dynamic set, single-pick — customers are data-fed, one per record */}
+  <FormBuilder.SearchableSelect name="customer.name" label="Customer" options={CUSTOMER_OPTIONS} />
+
+  {/* dynamic set, multi-pick — renders BadgeField: search *and* several values, as chips */}
+  <FormBuilder.MultiSelect name="brand.name" label="Brand" options={BRAND_OPTIONS} />
+
   <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} step={100} />
   <FormBuilder.DateRange name="createdAt" label="Created" />
 </DataViews.Filters>
 ```
 
-| Field | Arrives as |
-| --- | --- |
-| `Text` | `string[]` of one |
-| `Select` | `string[]` of one — a single choice |
-| `MultiSelect` | `string[]` |
-| `Slider` (`range`) | `{ kind: "number", min, max }` |
-| `DateRange` | `{ kind: "date", from, to }` |
-
-**Two rules you cannot guess from the markup.** react-hook-form reads `.` as object nesting, so a
+**Two rules you cannot guess from the markup.****Two rules you cannot guess from the markup.** react-hook-form reads `.` as object nesting, so a
 filter on `customer.name` is registered as `customer__name` — you write the real path and `Filters`
 escapes it, but anything calling `setValue` yourself must use the escaped name. And a control at
 its **neutral position emits no key at all**: a slider dragged back to exactly `[min, max]` removes
@@ -239,6 +288,28 @@ rows they are looking at:
 ```tsx
 <DataViews.Filters.Summary className="px-4 py-2" />
 ```
+
+### Questions this design gets asked
+
+| Question | Answer |
+| --- | --- |
+| Is there an in-view filter panel *and* a Filters tab — which is canonical? | **One surface.** `DataViews.Filters` is a single component. Render it inside a `Panel.Tab` or as a standalone bar; author against the component, not against a tab. |
+| What orders the sections? | **The order you write the children.** There is no `order` prop for filters. |
+| Does the applied-count badge count constrained *fields* or selected *values*? | **There is no count badge.** `PanelToggle` carries none. `Filters.Summary` is the equivalent, and it renders **one chip per constrained field** — Status with three values selected is one chip. |
+| Do `BadgeField` chip colours and `FieldConfig.variants` share a token set? | **They never meet.** Chips come from the field's own `options`; `variants` (`BadgeVariant`) styles `enum-badge` **columns**. Filters and columns are independent. |
+
+And the behaviours worth stating because they are easy to assume wrongly:
+
+- **Empty is unconstrained.** A control at its neutral position emits **no key** — a slider dragged
+  back to exactly `[min, max]` removes its filter rather than sending "everything". Filters never
+  narrow to zero rows because a section was touched and cleared.
+- **Filter state is one object.** `onQueryChange` receives the whole next query, not a per-field
+  delta.
+- **Filters survive a view switch.** Table, board, inbox and tree share one query.
+- **Persistence is yours.** The component holds the query only as long as it is mounted.
+- **How constraints combine is *your* matcher's business,** not the component's — it reports what
+  the user asked for and nothing more. The reference endpoint in `app/api/_lib/query.ts` intersects
+  across fields (AND) and unions within one field (OR), which is what most callers want.
 
 ### Filters outside the settings rail
 
@@ -359,9 +430,11 @@ appears in the switcher.
 | Part | Prop | Type | Description |
 | --- | --- | --- | --- |
 | `Panel` | `defaultTab` · `title` · `className` | | The 260px rail. |
+| `Panel.Section` | `collapsible` · `defaultOpen` | `boolean` | Titled sections fold from a `ConclusionHeader`. Both default `true`, so nothing starts folded. |
+| | `description` | `ReactNode` | A small line under the title. Sits with the header, so it still reads when the group is shut. |
 | `Panel.Tab` * | `value` * · `label` * · `icon` · `children` | | One tab. |
 | `Panel.Section` | `title` · `className` | | A titled group inside a tab. |
-| `Panel.Columns` | `title` · `className` | | Show/hide and drag-reorder columns. |
+| `Panel.Columns` | `title` · `description` · `className` | | Show/hide and drag-reorder columns. Describes itself by default — "Show or hide columns in table view". |
 | `Panel.Sort` | `title` · `className` | | Default sort picker. |
 | `Panel.SavedViews` | `views` | `readonly SavedView[]` | The list you persisted. |
 | | `onValueChange` | `(id: string) => void` | A saved view was picked. |
@@ -373,6 +446,8 @@ appears in the switcher.
 | Part | Prop | Type | Description |
 | --- | --- | --- | --- |
 | `Filters` | `children` | `ReactNode` | **FormBuilder fields.** The `<FormBuilder>` is inside. |
+| | `collapsible` · `defaultOpen` | `boolean` | Fold the fields from the title. Both default `true`. |
+| | `description` | `ReactNode` | A small line under the title, above the fields. |
 | | `title` | `ReactNode` | Pass `null` to drop the header row. |
 | | `clearLabel` | `ReactNode` | Defaults to `"Clear"`. |
 | `Filters.Presets` | `for` * · `items` * | `string` · `readonly Preset[]` | Quick-set chips for one field. |
@@ -736,6 +811,13 @@ Render it like any other view — it appears in the switcher, and disappears if 
 Accept `ViewBaseProps` so the caller keeps `id`, `label`, `icon` and `className`.
 
 ### The chrome
+
+Buttons you put in `Actions` are `<Button variant="BluColStyle" size="M">` by convention — the
+solid blue Figma uses for the bar's action, with `Search` and `PanelToggle` left ghost beside them.
+
+Every titled group in the rail folds: `Panel.Columns`, `Panel.Sort` and `Panel.SavedViews` all
+render through `Panel.Section`, and `Filters` folds its fields the same way. Pass
+`collapsible={false}` to pin one open, or `defaultOpen={false}` to start it closed.
 
 The surrounding parts take content too: `Header`'s `title` and `Actions`/`PanelToggle` children,
 any markup inside a `Panel.Tab` (with `Panel.Section` to group it), `Filters.Custom` for a filter

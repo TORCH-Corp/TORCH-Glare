@@ -27,11 +27,22 @@ interface Order extends Row {
 const FIELDS: FieldConfig[] = [
   { path: "id", label: "Order #", type: "number" },
   { path: "customer.name", label: "Customer", type: "text" },
+  { path: "brand.name", label: "Brand", type: "text" },
   { path: "status", label: "Status", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" } },
   { path: "priority", label: "Priority", type: "enum-badge", variants: { High: "redOrange", Medium: "purple", Low: "gray" } },
   { path: "total", label: "Total", type: "currency", currency: "USD" },
   { path: "createdAt", label: "Created", type: "date-format", dateFormat: "YYYY-MM-DD" },
 ];
+
+/** Dynamic sets — in a real app these come from the endpoint that also does the filtering. */
+const CUSTOMER_OPTIONS = [
+  "Acme Inc.", "Globex Corp.", "Initech", "Umbrella",
+  "Hooli", "Stark Industries", "Wayne Enterprises", "Cyberdyne",
+].map((v) => ({ label: v, value: v }));
+
+const BRAND_OPTIONS = ["Bosch", "Makita", "DeWalt", "Hilti"].map((v) => ({ label: v, value: v }));
+
+const PRIORITY_OPTIONS = ["High", "Medium", "Low"].map((v) => ({ label: v, value: v }));
 
 const STATUS_OPTIONS = [
   { label: "Pending", value: "Pending" },
@@ -125,29 +136,29 @@ export default function StateExample() {
             {/* The query is controlled here, so it can be driven from outside — which is what
                 a URL-synced list does. */}
             <Button
-              size="S"
-              variant="BorderStyle"
+              variant="BluColStyle"
+              size="M"
               onClick={() => setQuery((q) => ({ ...q, sort: { path: "total", direction: "desc" } }))}
             >
               Sort by total
             </Button>
             <Button
-              size="S"
-              variant="BorderStyle"
+              variant="BluColStyle"
+              size="M"
               onClick={() => setQuery((q) => ({ ...q, filters: { status: ["Pending"] }, page: 1 }))}
             >
               Filter to pending
             </Button>
-            <Button size="S" variant="BorderStyle" onClick={() => setQuery(emptyQuery())}>
+            <Button variant="BluColStyle" size="M" onClick={() => setQuery(emptyQuery())}>
               Clear the query
             </Button>
-            <Button size="S" onClick={() => setEmpty((v) => !v)}>
+            <Button variant="BluColStyle" size="M" onClick={() => setEmpty((v) => !v)}>
               {empty ? "Restore rows" : "Empty the rows"}
             </Button>
-            <Button size="S" onClick={() => setLoading((v) => !v)}>
+            <Button variant="BluColStyle" size="M" onClick={() => setLoading((v) => !v)}>
               {loading ? "Stop loading" : "Start loading"}
             </Button>
-            <Button size="S" variant="BorderStyle" onClick={() => setWithViews((v) => !v)}>
+            <Button variant="BluColStyle" size="M" onClick={() => setWithViews((v) => !v)}>
               {withViews ? "Remove every view" : "Restore the views"}
             </Button>
           </DataViews.Actions>
@@ -200,8 +211,18 @@ export default function StateExample() {
               title={null}
               className="border-b-0 p-0"
             >
-              <FormBuilder.MultiSelect name="status" label="Status" options={STATUS_OPTIONS} />
+              {/* One control per section type. Which one a field gets is decided by the data:
+                  can the option set grow, and can the user pick more than one. */}
+              <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
+              <FormBuilder.RadioList name="priority" label="Priority" options={PRIORITY_OPTIONS} />
+              <FormBuilder.SearchableSelect
+                name="customer.name"
+                label="Customer"
+                options={CUSTOMER_OPTIONS}
+              />
+              <FormBuilder.MultiSelect name="brand.name" label="Brand" options={BRAND_OPTIONS} />
               <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} step={100} />
+              <FormBuilder.DateRange name="createdAt" label="Created" />
             </DataViews.Filters>
           </DataViews.Panel.Tab>
         </DataViews.Panel>

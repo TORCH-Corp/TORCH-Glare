@@ -66,6 +66,9 @@ const SHOWCASE_FIELDS: FieldConfig[] = [
   { path: "image", label: "image", type: "image" },
 ];
 
+const TITLE_OPTIONS = ["Acme Inc.", "Globex Corp.", "Initech", "Umbrella"].map((v) => ({ label: v, value: v }));
+const TAG_OPTIONS = ["urgent", "hardware", "emea", "q3", "approved"].map((v) => ({ label: v, value: v }));
+
 const STATUS_OPTIONS = [
   { label: "Pending", value: "Pending" },
   { label: "Shipped", value: "Shipped" },
@@ -301,10 +304,9 @@ export default function FieldsExample() {
           <DataViews.Search />
           <DataViews.Actions>
             {CASES.map((c) => (
-              <Button
+              <Button variant="BluColStyle"
+                size="M"
                 key={c.id}
-                size="S"
-                variant={kase === c.id ? "BluSecStyle" : "BorderStyle"}
                 onClick={() => {
                   // A different dataset is a different question — the old filters and sort mean
                   // nothing against it. Columns reset with the remount below.
@@ -346,38 +348,13 @@ export default function FieldsExample() {
               title={null}
               className="border-b-0 p-0"
             >
-              {kase === "types" && (
-                <>
-                  <FormBuilder.MultiSelect name="status" label="Status" options={STATUS_OPTIONS} />
-                  <FormBuilder.Slider name="price" label="Price" range min={0} max={100000} step={100} />
-                  <DataViews.Filters.Presets
-                    for="price"
-                    items={[
-                      { label: "Under 1k", max: 1000 },
-                      { label: "10k+", min: 10000 },
-                    ]}
-                  />
-                  <FormBuilder.Slider name="rating" label="Rating" range min={0} max={5} step={1} />
-                  <FormBuilder.Text name="text" label="Text contains" />
-                </>
-              )}
-              {kase === "blanks" && (
-                <FormBuilder.MultiSelect name="case" label="Blank value" options={BLANK_OPTIONS} />
-              )}
-              {kase === "custom" && (
-                <>
-                  <FormBuilder.MultiSelect name="status" label="Status" options={STATUS_OPTIONS} />
-                  <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} step={100} />
-                </>
-              )}
-              {kase === "nested" && (
-                <>
-                  {/* RHF would read this dot as object nesting — Filters escapes it to
-                      `customer__name` and keys FilterState by the path you wrote. */}
-                  <FormBuilder.MultiSelect name="customer.name" label="Customer" options={CUSTOMER_OPTIONS} />
-                  <FormBuilder.Select name="vendor.name" label="Vendor" options={VENDOR_OPTIONS} />
-                </>
-              )}
+              {/* This page's data has one enum and a tags array, so it exercises the checkbox
+                  list, the searchable single, the BadgeField multi, the range and the date. */}
+              <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
+              <FormBuilder.SearchableSelect name="title" label="Title" options={TITLE_OPTIONS} />
+              <FormBuilder.MultiSelect name="tags" label="Tags" options={TAG_OPTIONS} />
+              <FormBuilder.Slider name="price" label="Price" range min={0} max={2000} step={50} />
+              <FormBuilder.DateRange name="date" label="Date" />
             </DataViews.Filters>
           </DataViews.Panel.Tab>
         </DataViews.Panel>

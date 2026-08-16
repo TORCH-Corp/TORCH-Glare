@@ -178,7 +178,17 @@ export function Search({ placeholder = "Search...", className }: SearchProps) {
   );
 }
 
-/** A slot for your own buttons, so they line up with the rest of the header. */
+/**
+ * A slot for your own buttons, so they line up with the rest of the header.
+ *
+ * The convention is `<Button variant="BluColStyle" size="M">` — the solid `#005ecc` Figma uses
+ * for the bar's action. `Search` and `PanelToggle` beside it stay ghost on purpose: they are
+ * toggles, and three solid pills on black would stop them reading as such. A toggle of your own
+ * belongs here too, with `BluColStyle` for its on state.
+ *
+ * Not enforced. Cloning the children to force a variant would override a caller who deliberately
+ * wants a destructive button here, and would fight their `className`.
+ */
 export function Actions({ children, className }: ActionsProps) {
   return <div className={cn("flex shrink-0 items-center gap-2", className)}>{children}</div>;
 }

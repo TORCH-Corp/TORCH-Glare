@@ -132,11 +132,12 @@ export default function InboxRoutingExample() {
               title={null}
               className="border-b-0 p-0"
             >
-              <FormBuilder.MultiSelect name="from" label="From" options={FROM_OPTIONS} />
-              <FormBuilder.DateRange name="receivedAt" label="Received" />
-              {/* A Text field filters one column — distinct from DataViews.Search, which is yours to
-                  interpret across the whole record. */}
+              {/* A message carries no enum, no numeric field and one date, so only the
+                  searchable single-select, the date range and the text match have data to bind
+                  to. A checkbox list over a field that does not exist would filter to nothing. */}
               <FormBuilder.Text name="subject" label="Subject contains" />
+              <FormBuilder.SearchableSelect name="from" label="From" options={FROM_OPTIONS} />
+              <FormBuilder.DateRange name="receivedAt" label="Received" />
             </DataViews.Filters>
           </DataViews.Panel.Tab>
         </DataViews.Panel>

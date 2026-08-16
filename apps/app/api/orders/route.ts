@@ -17,6 +17,8 @@ import { latency, runQuery } from "../_lib/query";
 export interface Order extends Row {
   id: number;
   customer: { name: string };
+  /** Org-configurable master data — the annex's Type ④ example (dynamic, multi-pick). */
+  brand: { name: string };
   status: "Pending" | "Shipped" | "Delivered";
   priority: "High" | "Medium" | "Low";
   total: number;
@@ -30,14 +32,14 @@ export interface Order extends Row {
  * glance. The scale endpoint is where volume is the point.
  */
 const ORDERS: Order[] = [
-  { id: 1, customer: { name: "Acme Inc." }, status: "Pending", priority: "High", total: 1240, items: 4, createdAt: "2025-09-10" },
-  { id: 2, customer: { name: "Globex Corp." }, status: "Shipped", priority: "Medium", total: 480, items: 2, createdAt: "2025-09-12" },
-  { id: 3, customer: { name: "Initech" }, status: "Delivered", priority: "Low", total: 99, items: 1, createdAt: "2025-09-15" },
-  { id: 4, customer: { name: "Umbrella" }, status: "Pending", priority: "High", total: 2890, items: 9, createdAt: "2025-09-18" },
-  { id: 5, customer: { name: "Hooli" }, status: "Shipped", priority: "Medium", total: 740, items: 3, createdAt: "2025-09-20" },
-  { id: 6, customer: { name: "Stark Industries" }, status: "Pending", priority: "High", total: 12400, items: 21, createdAt: "2025-09-22" },
-  { id: 7, customer: { name: "Wayne Enterprises" }, status: "Delivered", priority: "Medium", total: 5300, items: 12, createdAt: "2025-09-25" },
-  { id: 8, customer: { name: "Cyberdyne" }, status: "Shipped", priority: "Low", total: 220, items: 1, createdAt: "2025-09-28" },
+  { id: 1, brand: { name: "Bosch" }, customer: { name: "Acme Inc." }, status: "Pending", priority: "High", total: 1240, items: 4, createdAt: "2025-09-10" },
+  { id: 2, brand: { name: "Makita" }, customer: { name: "Globex Corp." }, status: "Shipped", priority: "Medium", total: 480, items: 2, createdAt: "2025-09-12" },
+  { id: 3, brand: { name: "DeWalt" }, customer: { name: "Initech" }, status: "Delivered", priority: "Low", total: 99, items: 1, createdAt: "2025-09-15" },
+  { id: 4, brand: { name: "Bosch" }, customer: { name: "Umbrella" }, status: "Pending", priority: "High", total: 2890, items: 9, createdAt: "2025-09-18" },
+  { id: 5, brand: { name: "Hilti" }, customer: { name: "Hooli" }, status: "Shipped", priority: "Medium", total: 740, items: 3, createdAt: "2025-09-20" },
+  { id: 6, brand: { name: "Makita" }, customer: { name: "Stark Industries" }, status: "Pending", priority: "High", total: 12400, items: 21, createdAt: "2025-09-22" },
+  { id: 7, brand: { name: "DeWalt" }, customer: { name: "Wayne Enterprises" }, status: "Delivered", priority: "Medium", total: 5300, items: 12, createdAt: "2025-09-25" },
+  { id: 8, brand: { name: "Hilti" }, customer: { name: "Cyberdyne" }, status: "Shipped", priority: "Low", total: 220, items: 1, createdAt: "2025-09-28" },
 ];
 
 /**

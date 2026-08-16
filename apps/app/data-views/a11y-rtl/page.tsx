@@ -28,6 +28,7 @@ interface Order extends Row {
 const FIELDS: FieldConfig[] = [
   { path: "id", label: "Order #", type: "number" },
   { path: "customer.name", label: "Customer", type: "text" },
+  { path: "brand.name", label: "Brand", type: "text" },
   { path: "status", label: "Status", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" } },
   { path: "total", label: "Total", type: "currency", currency: "USD" },
   { path: "createdAt", label: "Created", type: "date-format", dateFormat: "YYYY-MM-DD" },
@@ -41,6 +42,16 @@ const ARABIC_FIELDS: FieldConfig[] = [
   { path: "total", label: "المجموع", type: "currency", currency: "USD" },
   { path: "createdAt", label: "التاريخ", type: "date-format", dateFormat: "YYYY-MM-DD" },
 ];
+
+/** Dynamic sets — in a real app these come from the endpoint that also does the filtering. */
+const CUSTOMER_OPTIONS = [
+  "Acme Inc.", "Globex Corp.", "Initech", "Umbrella",
+  "Hooli", "Stark Industries", "Wayne Enterprises", "Cyberdyne",
+].map((v) => ({ label: v, value: v }));
+
+const BRAND_OPTIONS = ["Bosch", "Makita", "DeWalt", "Hilti"].map((v) => ({ label: v, value: v }));
+
+const PRIORITY_OPTIONS = ["High", "Medium", "Low"].map((v) => ({ label: v, value: v }));
 
 const STATUS_OPTIONS = [
   { label: "Pending", value: "Pending" },
@@ -143,17 +154,16 @@ export default function AccessibilityExample() {
             </span>
             {/* Two buttons rather than one toggle: a single button labelled with the current
                 direction is ambiguous — it reads as either the state or the action. */}
-            <Button size="S" variant={!rtl ? "BluSecStyle" : "BorderStyle"} onClick={() => setRtl(false)}>
+            <Button variant="BluColStyle" size="M" onClick={() => setRtl(false)}>
               LTR
             </Button>
-            <Button size="S" variant={rtl ? "BluSecStyle" : "BorderStyle"} onClick={() => setRtl(true)}>
+            <Button variant="BluColStyle" size="M" onClick={() => setRtl(true)}>
               RTL
             </Button>
             {(["default", "dark", "light"] as const).map((t) => (
-              <Button
+              <Button variant="BluColStyle"
+                size="M"
                 key={t}
-                size="S"
-                variant={theme === t ? "BluSecStyle" : "BorderStyle"}
                 onClick={() => setTheme(t)}
               >
                 {t}
@@ -202,8 +212,18 @@ export default function AccessibilityExample() {
               title={null}
               className="border-b-0 p-0"
             >
-              <FormBuilder.MultiSelect name="status" label="Status" options={STATUS_OPTIONS} />
+              {/* One control per section type. Which one a field gets is decided by the data:
+                  can the option set grow, and can the user pick more than one. */}
+              <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
+              <FormBuilder.RadioList name="priority" label="Priority" options={PRIORITY_OPTIONS} />
+              <FormBuilder.SearchableSelect
+                name="customer.name"
+                label="Customer"
+                options={CUSTOMER_OPTIONS}
+              />
+              <FormBuilder.MultiSelect name="brand.name" label="Brand" options={BRAND_OPTIONS} />
               <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} step={100} />
+              <FormBuilder.DateRange name="createdAt" label="Created" />
             </DataViews.Filters>
           </DataViews.Panel.Tab>
         </DataViews.Panel>

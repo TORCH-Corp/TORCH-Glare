@@ -29,6 +29,7 @@ interface Order extends Row {
 const FIELDS: FieldConfig[] = [
   { path: "id", label: "Order #", type: "number" },
   { path: "customer.name", label: "Customer", type: "text" },
+  { path: "brand.name", label: "Brand", type: "text" },
   { path: "status", label: "Status", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" } },
   { path: "priority", label: "Priority", type: "enum-badge", variants: { High: "redOrange", Medium: "purple", Low: "gray" } },
   { path: "items", label: "Items", type: "number" },
@@ -40,6 +41,14 @@ const FIELDS: FieldConfig[] = [
  * The options each control offers. Supplied — DataViews never scans the dataset to find them, and
  * in a real app they come from the same endpoint that does the filtering.
  */
+/** Dynamic sets — in a real app these come from the endpoint that also does the filtering. */
+const CUSTOMER_OPTIONS = [
+  "Acme Inc.", "Globex Corp.", "Initech", "Umbrella",
+  "Hooli", "Stark Industries", "Wayne Enterprises", "Cyberdyne",
+].map((v) => ({ label: v, value: v }));
+
+const BRAND_OPTIONS = ["Bosch", "Makita", "DeWalt", "Hilti"].map((v) => ({ label: v, value: v }));
+
 const STATUS_OPTIONS = [
   { label: "Pending", value: "Pending" },
   { label: "Shipped", value: "Shipped" },
@@ -186,16 +195,15 @@ export default function FiltersExample() {
           <DataViews.ViewSwitch />
           <DataViews.Search />
           <DataViews.Actions>
-            <Button
-              size="S"
-              variant={normalise ? "BluSecStyle" : "BorderStyle"}
+            <Button variant="BluColStyle"
+              size="M"
               onClick={() => setNormalise((v) => !v)}
             >
               {normalise ? "Normalising on" : "Normalising off"}
             </Button>
             <Button
-              size="S"
-              variant="BorderStyle"
+              variant="BluColStyle"
+              size="M"
               onClick={() => setQuery({ ...emptyQuery(), filters: { items: ["10+"] } })}
             >
               Reset
@@ -235,9 +243,26 @@ export default function FiltersExample() {
               title={null}
               className="border-b-0 p-0"
             >
-              <FormBuilder.MultiSelect name="status" label="Status" options={STATUS_OPTIONS} />
-              {/* Select rather than MultiSelect — one value, so the filter is a single choice. */}
-              <FormBuilder.Select name="priority" label="Priority" options={PRIORITY_OPTIONS} />
+              {/* ① FIXED set, multi-pick → a checkbox list. The four statuses are fixed by the
+                  model; an org cannot add a fifth without a release. */}
+              <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
+
+              {/* ② FIXED set, single-pick → radios. High/Medium/Low are mutually exclusive, so
+                  picking two would be meaningless. Writes a one-element array. */}
+              <FormBuilder.RadioList name="priority" label="Priority" options={PRIORITY_OPTIONS} />
+
+              {/* ③ DYNAMIC set, single-pick → a searchable combobox. Customers are data-fed, so
+                  the list grows; one record has one customer, so one at a time is the natural pick. */}
+              <FormBuilder.SearchableSelect
+                name="customer.name"
+                label="Customer"
+                options={CUSTOMER_OPTIONS}
+              />
+
+              {/* ④ DYNAMIC set, multi-pick → BadgeField: search *and* several values, as chips.
+                  This is the control the enhancement request asked for; `MultiSelect` and `Tags`
+                  are the same field and both render it. */}
+              <FormBuilder.MultiSelect name="brand.name" label="Brand" options={BRAND_OPTIONS} />
               <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} step={100} />
               <DataViews.Filters.Presets
                 for="total"
@@ -251,9 +276,6 @@ export default function FiltersExample() {
                 for="createdAt"
                 items={[{ label: "September", from: "2025-09-01", to: "2025-09-30" }]}
               />
-              {/* A one-field text match. Its value arrives as a one-element string[], which is
-                  indistinguishable downstream from a single choice. */}
-              <FormBuilder.Text name="customer.name" label="Customer contains" />
               <DataViews.Filters.Custom
                 path="items"
                 label="Item count"

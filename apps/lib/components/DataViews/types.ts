@@ -279,12 +279,30 @@ export interface PanelTabProps {
 }
 
 export interface PanelSectionProps {
+  /**
+   * A small line under the title explaining the section — Figma's
+   * "Show or hide columns in table view". Optional; most sections have none.
+   *
+   * It sits with the header rather than inside the fold, so it still reads when the group is shut.
+   */
+  description?: ReactNode;
+  /** Collapsible via its `ConclusionHeader` title. Defaults to `true` when there is a title. */
+  collapsible?: boolean;
+  /** Initial open state when collapsible. Defaults to `true`, so nothing starts folded. */
+  defaultOpen?: boolean;
   title?: ReactNode;
   children?: ReactNode;
   className?: string;
 }
 
 export interface PanelColumnsProps {
+  /**
+   * A small line under the title explaining the section — Figma's
+   * "Show or hide columns in table view". Optional; most sections have none.
+   *
+   * It sits with the header rather than inside the fold, so it still reads when the group is shut.
+   */
+  description?: ReactNode;
   title?: ReactNode;
   /**
    * Column visibility and order — drag to reorder, toggle to hide. The component holds it: every
@@ -331,6 +349,17 @@ export interface PanelSavedViewsProps {
 // ─── Filters ──────────────────────────────────────────────────────────────────
 
 export interface FiltersProps {
+  /**
+   * A small line under the title explaining the section — Figma's
+   * "Show or hide columns in table view". Optional; most sections have none.
+   *
+   * It sits with the header rather than inside the fold, so it still reads when the group is shut.
+   */
+  description?: ReactNode;
+  /** Collapsible via its `ConclusionHeader` title. Defaults to `true` when there is a title. */
+  collapsible?: boolean;
+  /** Initial open state when collapsible. Defaults to `true`, so nothing starts folded. */
+  defaultOpen?: boolean;
   /**
    * The controls, as `FormBuilder` fields — one JSX child per filter, exactly as a form is
    * written. `Filters` reads each child's `name`, `label` and bounds to learn what it is:
