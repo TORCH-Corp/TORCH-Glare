@@ -91,6 +91,15 @@ export default function PanelExample() {
   const [query, setQuery] = useState(emptyQuery());
   const [saved, setSaved] = useState<SavedView[]>([]);
 
+  // The tree pane's shape, seeded from storage and written back on every switch. `defaultPaneMode`
+  // is read once — the view holds the mode from then on — so this reads the store lazily rather
+  // than in an effect, which would seed `"table"` for a frame and then flip.
+  const [paneMode] = useState<"table" | "cards">(() =>
+    (typeof window !== "undefined" && localStorage.getItem("panel-pane-mode")) === "cards"
+      ? "cards"
+      : "table",
+  );
+
   const { data, isPending, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["panel-orders", { ...query, page: undefined }],
     queryFn: ({ pageParam }) => fetchOrders({ ...query, page: pageParam }),
@@ -130,8 +139,14 @@ export default function PanelExample() {
 
         <DataViews.Table />
         <DataViews.Board groups={groups} titlePath="customer.name" />
-        <DataViews.Tree nodes={nodes} labelPath="customer.name">
-          <DataViews.Detail />
+        <DataViews.Tree
+          nodes={nodes}
+          labelPath="customer.name"
+          defaultPaneMode={paneMode}
+          onPaneModeChange={(mode) => localStorage.setItem("panel-pane-mode", mode)}
+        >
+          <DataViews.Tree.Table />
+          <DataViews.Tree.Cards />
         </DataViews.Tree>
 
         <DataViews.Panel>

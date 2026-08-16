@@ -1,9 +1,25 @@
+---
+title: DataViews example — Panel
+description: The settings rail: saved views, columns, sort — and the pane-mode round trip.
+group: examples
+component: DataViews
+keywords: [data-views, example, examples, panel]
+---
+
+# DataViews example — Panel
+
+The settings rail: saved views, columns, sort — and the pane-mode round trip.
+
+Complete and runnable — this is the page itself, not an excerpt. In the monorepo it lives at `apps/app/data-views/panel/page.tsx`.
+
+See the [component reference](../index.md) for what each prop does, or the [guide](../guide.md) for the same ground as scenarios.
+
+```tsx
 "use client";
 
 import { useMemo, useState } from "react";
-import { useMutation, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Filter, Settings } from "lucide-react";
-import { Button } from "@/components/Button";
 import { DataViews, emptyQuery, queryToParams, type SavedView } from "@/components/DataViews";
 import { FormBuilder } from "@/components/FormBuilder";
 import type {
@@ -14,7 +30,7 @@ import type {
   TreeNode,
 } from "@/utils/dataViews/types";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── How the rows are painted ─────────────────────────────────────────────────
 
 interface Order extends Row {
   id: number;
@@ -51,11 +67,7 @@ const STATUS_OPTIONS = [
   { label: "Delivered", value: "Delivered" },
 ];
 
-/**
- * The request this page makes. The querying itself happens in `app/api/orders/route.ts` —
- * nothing on this page filters, sorts or pages anything, which is the split DataViews is built
- * around.
- */
+/** The request this page makes. The querying happens in `app/api/orders/route.ts`. */
 async function fetchOrders(q: DataViewsQuery): Promise<{ rows: Order[]; total: number }> {
   const params = queryToParams(q);
   const res = await fetch(`/api/orders?${params}`);
@@ -63,54 +75,50 @@ async function fetchOrders(q: DataViewsQuery): Promise<{ rows: Order[]; total: n
   return res.json();
 }
 
-/** The other half of `onRowMove`: the board emits intent, this is what persists it. */
-async function moveOrder(body: { id?: number; status?: string; reset?: boolean }) {
-  const res = await fetch("/api/orders", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  return res.json();
-}
-
 const groupByStatus = (rows: readonly Order[]): RowGroup[] =>
-  (["Pending", "Shipped", "Delivered", "Cancelled"] as const).map((status) => ({
+  (["Pending", "Shipped", "Delivered"] as const).map((status) => ({
     id: status,
     label: status,
-    color: ({ Pending: "gray", Shipped: "blue", Delivered: "green", Cancelled: "red" } as const)[status],
+    color: ({ Pending: "gray", Shipped: "blue", Delivered: "green" } as const)[status],
     rows: rows.filter((row) => row.status === status),
   }));
 
-/** Every node is a real row here, so the detail pane fills whichever one you select. */
-const nodesFromRows = (rows: readonly Order[]): TreeNode[] => {
-  const [first, ...rest] = rows;
-  if (!first) return [];
-  return [
-    {
-      id: String(first.id),
-      row: first,
-      depth: 0,
-      children: rest.slice(0, 4).map((row) => ({ id: String(row.id), row, depth: 1, children: [] })),
-    },
-    ...rest.slice(4).map((row) => ({ id: String(row.id), row, depth: 0, children: [] })),
-  ];
-};
+const nodesFromRows = (rows: readonly Order[]): TreeNode[] =>
+  rows.map((row) => ({ id: String(row.id), row, depth: 0, children: [] }));
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-/** Every part at once: four views, the rail, filters, an empty state and a drag round-trip. */
-export default function OverviewExample() {
-  const queryClient = useQueryClient();
+/**
+ * The rail: columns, sort and saved views, in tabs that exist because they are rendered.
+ *
+ * **None of what the rail edits is this page's business.** Column order and visibility, which tab
+ * is open, whether the rail is open at all — those change the picture and nothing else, so the
+ * component holds them. That is why there are two `useState`s here: the query, and the saved views
+ * the app persists.
+ *
+ * Hiding `Customer` retitles the board's cards and the tree's nodes too: `columns` resolves to the
+ * ordered `visibleFields` every view paints from, so it is shared by construction.
+ *
+ * **Saved views are the exception that proves the rule.** Persisting one is the app's job — it
+ * outlives the component — so `onSave` hands over a snapshot to store. Restoring is *not*: hand the
+ * snapshot back in `views` and selecting it puts the columns, sort and filters back internally. The
+ * blob is opaque here on purpose.
+ */
+export default function PanelExample() {
   const [query, setQuery] = useState(emptyQuery());
   const [saved, setSaved] = useState<SavedView[]>([]);
 
-
+  // The tree pane's shape, seeded from storage and written back on every switch. `defaultPaneMode`
+  // is read once — the view holds the mode from then on — so this reads the store lazily rather
+  // than in an effect, which would seed `"table"` for a frame and then flip.
+  const [paneMode] = useState<"table" | "cards">(() =>
+    (typeof window !== "undefined" && localStorage.getItem("panel-pane-mode")) === "cards"
+      ? "cards"
+      : "table",
+  );
 
   const { data, isPending, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-    // The key *is* the query: touch any part of it and TanStack refetches, and a response that
-    // has been superseded is discarded rather than landing on top of a newer one.
-    queryKey: ["overview-orders", { ...query, page: undefined }],
+    queryKey: ["panel-orders", { ...query, page: undefined }],
     queryFn: ({ pageParam }) => fetchOrders({ ...query, page: pageParam }),
     initialPageParam: 1,
     // Undefined means "no more" — which is what the component's `hasMore` resolves to.
@@ -127,13 +135,6 @@ export default function OverviewExample() {
   const groups = useMemo(() => groupByStatus(rows), [rows]);
   const nodes = useMemo(() => nodesFromRows(rows), [rows]);
 
-  // Dropping a card emits intent; this is what persists it. The card settles where it landed
-  // only once the refetched rows agree.
-  const move = useMutation({
-    mutationFn: moveOrder,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["overview-orders"] }),
-  });
-
   return (
     <div className="flex h-full min-h-0 flex-col p-4">
       <DataViews
@@ -144,45 +145,29 @@ export default function OverviewExample() {
         onLoadMore={fetchNextPage}
         loadingMore={isFetchingNextPage}
         onQueryChange={setQuery}
+        defaultPanelOpen
         className="h-full"
       >
         <DataViews.Header title="Orders">
           <DataViews.ViewSwitch />
           <DataViews.Search />
-          <DataViews.Actions>
-            <Button variant="BluColStyle" size="M">New order</Button>
-            <Button variant="BluColStyle" size="M" onClick={() => move.mutate({ reset: true })}>
-              Reset
-            </Button>
-          </DataViews.Actions>
           <DataViews.PanelToggle />
         </DataViews.Header>
 
-        <DataViews.Table selectable />
-        <DataViews.Board
-          groups={groups}
-          titlePath="customer.name"
-          // A drop outside any column has nowhere to go, so there is nothing to persist.
-          onRowMove={(intent) => {
-            if (intent.to) move.mutate({ id: Number(intent.id), status: intent.to });
-          }}
-        />
-        <DataViews.Inbox
-          titlePath="customer.name"
-          datePath="createdAt"
+        <DataViews.Table />
+        <DataViews.Board groups={groups} titlePath="customer.name" />
+        <DataViews.Tree
+          nodes={nodes}
+          labelPath="customer.name"
+          defaultPaneMode={paneMode}
+          onPaneModeChange={(mode) => localStorage.setItem("panel-pane-mode", mode)}
         >
-          <DataViews.Detail />
-        </DataViews.Inbox>
-        {/* The pane's tabs are children, like every other part: pass none and there is no pane. */}
-        <DataViews.Tree nodes={nodes} labelPath="customer.name">
           <DataViews.Tree.Table />
           <DataViews.Tree.Cards />
         </DataViews.Tree>
 
         <DataViews.Panel>
           <DataViews.Panel.Tab value="config" label="Config." icon={<Settings />}>
-            {/* Saving is the app's job — a view outlives the component. Restoring is not:
-                hand the snapshot back and selecting it puts everything back internally. */}
             <DataViews.Panel.SavedViews
               views={saved}
               onSave={(snapshot) =>
@@ -197,14 +182,7 @@ export default function OverviewExample() {
           </DataViews.Panel.Tab>
 
           <DataViews.Panel.Tab value="filters" label="Filters" icon={<Filter />}>
-            {/* The controls are FormBuilder fields — the same Select and Slider any form in
-                this library uses. The <FormBuilder> itself lives inside Filters; you write only
-                its fields, and Filters reads each one's name, label and bounds to learn what
-                it is. */}
-            <DataViews.Filters
-              title={null}
-              className="border-b-0 p-0"
-            >
+            <DataViews.Filters title={null} className="border-b-0 p-0">
               {/* One control per section type. Which one a field gets is decided by the data:
                   can the option set grow, and can the user pick more than one. */}
               <FormBuilder.CheckboxGroup name="status" label="Status" options={STATUS_OPTIONS} />
@@ -219,8 +197,16 @@ export default function OverviewExample() {
               <FormBuilder.DateRange name="createdAt" label="Created" />
             </DataViews.Filters>
           </DataViews.Panel.Tab>
+
+          {/* Not inside a Tab, so it renders under whichever one is open. */}
+          <div className="border-border-presentation-global-primary mt-auto border-t pt-2">
+            <span className="typography-body-small-regular text-content-presentation-global-secondary">
+              Shown on every tab.
+            </span>
+          </div>
         </DataViews.Panel>
       </DataViews>
     </div>
   );
 }
+```

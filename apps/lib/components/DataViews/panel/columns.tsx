@@ -33,9 +33,9 @@ function DropLine() {
 /**
  * `DataViews.Panel.Columns` — show/hide and reorder the columns.
  *
- * `value`/`onValueChange` live here because this is the UI that edits them, but the root is what
- * turns `columns` into the ordered `visibleFields` every view paints from — so hiding a column
- * here also retitles the board's cards. When `columns` has never been set, the list is seeded from
+ * The column list is the root's, read and written through `useDataViewsView()` — this part takes
+ * no `value`/`onValueChange` of its own. The root is what turns `columns` into the ordered
+ * `visibleFields` every view paints from, so hiding a column here also retitles the board's cards. When `columns` has never been set, the list is seeded from
  * `fields` on first edit, so you are not forced to declare a redundant array to get this working.
  */
 export function Columns({

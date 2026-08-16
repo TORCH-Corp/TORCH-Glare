@@ -147,52 +147,83 @@ export function extractDescription(markdownContent: string): string {
 }
 
 /**
- * Extract a section by heading text (e.g., "API Reference", "Props").
- * Returns everything from that heading until the next heading of same or higher level.
+ * A heading, normalised for comparison: lowercased, stripped of markdown and punctuation, and with
+ * a trailing `s` folded off each word.
+ *
+ * The plural fold is there because the error is always in that direction — the tool suggests
+ * `section: "examples"` and the heading is `## Example pages`, so an agent following the
+ * instruction it was given got "No section". Folding both sides makes them meet.
+ */
+function headingKey(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[`*_]/g, "")
+    .replace(/[^a-z0-9. ]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ")
+    .map((word) => (word.length > 3 && word.endsWith("s") ? word.slice(0, -1) : word))
+    .join(" ");
+}
+
+/**
+ * Extract a section by heading text (e.g., "API Reference", "Props", "DataViews.Board").
+ *
+ * Returns everything from that heading until the next heading of the same or higher level.
+ *
+ * Matching is tried in three passes — **exact**, then **prefix**, then whole-word — and the H1 is
+ * never a candidate. Both rules exist because one loose substring pass answers the wrong question
+ * on a large doc: asking `data-views.md` for "views" matched the title `# DataViews` and returned
+ * the entire 45 KB file, and asking for "panel" matched the prose heading
+ * `## Header, panel and filters` rather than the `### Panel` API block further down. Ranking the
+ * passes means an exact heading wins over one that merely contains the word, and requiring a whole
+ * word in the last pass keeps "views" from landing on `### DataViews.Board`.
  */
 export function extractSection(markdown: string, ...headingNames: string[]): string | null {
   const lines = markdown.split("\n");
-  let capturing = false;
-  let captureLevel = 0;
-  const result: string[] = [];
 
-  for (const line of lines) {
-    const headingMatch = line.match(/^(#{1,6})\s+(.+)/);
-
-    if (headingMatch) {
-      const level = headingMatch[1].length;
-      const text = headingMatch[2].trim().toLowerCase();
-
-      if (!capturing) {
-        // Check if this heading matches any of the target names
-        if (headingNames.some((name) => text.includes(name.toLowerCase()))) {
-          capturing = true;
-          captureLevel = level;
-          result.push(line);
-          continue;
-        }
-      } else {
-        // Stop if we hit a heading of same or higher level
-        if (level <= captureLevel) {
-          break;
-        }
-        result.push(line);
-        continue;
-      }
-    }
-
-    if (capturing) {
-      result.push(line);
-    }
+  // Index every heading once: line number, level, and its comparison key. The H1 is skipped —
+  // it is the document's title, so it "contains" almost any word you might ask for.
+  const headings: { line: number; level: number; key: string }[] = [];
+  let inFence = false;
+  for (const [i, line] of lines.entries()) {
+    if (line.startsWith("```")) inFence = !inFence;
+    if (inFence) continue;
+    const m = line.match(/^(#{1,6})\s+(.+)/);
+    if (!m) continue;
+    const level = m[1].length;
+    if (level === 1) continue;
+    headings.push({ line: i, level, key: headingKey(m[2]) });
   }
+
+  const wanted = headingNames.map(headingKey).filter(Boolean);
+  // `.` and ` ` are the only separators a key can contain after normalising, so a whole-word match
+  // is "bounded by one of those, or by the ends".
+  const wholeWord = (key: string, want: string) =>
+    new RegExp(`(?:^|[ .])${want.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:[ .]|$)`).test(key);
+
+  const found =
+    headings.find((h) => wanted.some((w) => h.key === w)) ??
+    headings.find((h) => wanted.some((w) => h.key.startsWith(w))) ??
+    headings.find((h) => wanted.some((w) => wholeWord(h.key, w)));
+
+  if (!found) return null;
+
+  // Capture until the next heading at the same or a higher level — sub-sections come along.
+  const end = headings.find((h) => h.line > found.line && h.level <= found.level);
+  const result = lines.slice(found.line, end ? end.line : lines.length);
 
   return result.length > 0 ? result.join("\n").trim() : null;
 }
 
 /**
- * List the level-2 (`## `) section headings of a markdown doc, in order — used
- * to give an AI a table of contents so it can request one section instead of
- * pulling the whole file.
+ * List the section headings of a markdown doc, in order — used to give an AI a table of contents
+ * so it can request one section instead of pulling the whole file.
+ *
+ * Both `##` and `###` are listed, the latter indented, because on a compound component the `###`
+ * blocks are where the per-part props live: a `##`-only list of `DataViews` shows "API Reference"
+ * and hides the two dozen parts underneath it, so an agent cannot know what it is allowed to ask
+ * for. Deeper levels stay out — they are prose structure, not addressable API.
  */
 export function listSectionHeadings(markdown: string): string[] {
   const headings: string[] = [];
@@ -200,8 +231,8 @@ export function listSectionHeadings(markdown: string): string[] {
   for (const line of markdown.split("\n")) {
     if (line.startsWith("```")) inFence = !inFence;
     if (inFence) continue;
-    const m = line.match(/^##\s+(.+)/);
-    if (m) headings.push(m[1].trim());
+    const m = line.match(/^(#{2,3})\s+(.+)/);
+    if (m) headings.push(m[1].length === 2 ? m[2].trim() : `  ${m[2].trim()}`);
   }
   return headings;
 }

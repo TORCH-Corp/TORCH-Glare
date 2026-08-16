@@ -18,6 +18,7 @@ import {
   detailSkeleton,
   buildCreateForm,
 } from "./form-fields.js";
+import { extractSection, listSectionHeadings } from "./markdown-utils.js";
 import { ComponentRegistry } from "./component-registry.js";
 import { RegistryLoader } from "./registry-loader.js";
 
@@ -479,4 +480,357 @@ test("the form docs the server hands out point at FormBuilder, not hand-rolled f
     assert.ok(doc, `${name} should be readable`);
     assert.match(doc, /FormBuilder/, `${name} should steer to FormBuilder`);
   }
+});
+
+// ─── DataViews ────────────────────────────────────────────────────────────────
+// DataViews is the largest compound component in the library and was, until these, covered by a
+// single assertion (that it is a folder component). Everything below is a gap an agent hit in
+// practice: the whole API arriving as one 11 KB block with no way to ask for one view, a `section`
+// keyword that returned the entire file, and a "guide" that taught a deleted component.
+
+test("extractSection prefers an exact heading, and never matches the H1", () => {
+  const md = [
+    "# DataViews",
+    "the title, which contains the word views",
+    "",
+    "## Header, panel and filters",
+    "prose about the panel",
+    "",
+    "## API Reference",
+    "",
+    "### DataViews.Board",
+    "board props",
+    "",
+    "### Panel",
+    "panel props",
+    "",
+    "## TypeScript",
+    "types",
+  ].join("\n");
+
+  // "views" used to match `# DataViews` and swallow the document.
+  assert.equal(extractSection(md, "views"), null, "the H1 is not a section");
+
+  // An exact heading beats a heading that merely contains the word: "panel" is in
+  // "Header, panel and filters" but `### Panel` is the one being asked for.
+  const panel = extractSection(md, "Panel");
+  assert.match(panel ?? "", /^### Panel/, "exact match wins over substring");
+  assert.match(panel ?? "", /panel props/);
+  assert.doesNotMatch(panel ?? "", /prose about the panel/);
+
+  // A section captures its sub-sections and stops at the next same-or-higher heading.
+  const api = extractSection(md, "API Reference");
+  assert.match(api ?? "", /DataViews\.Board/, "the API block keeps its parts");
+  assert.doesNotMatch(api ?? "", /## TypeScript/, "and stops before the next h2");
+});
+
+test("listSectionHeadings exposes the parts of a compound component, not just its h2s", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+  const doc = loader.getComponent("DataViews");
+  assert.ok(doc, "DataViews doc should load");
+
+  const toc = listSectionHeadings(doc.rawContent);
+  assert.ok(toc.includes("API Reference"), "h2s are still listed");
+  // The per-part headings are what an agent can then ask for by name; a `##`-only table of
+  // contents hid every one of them behind "API Reference".
+  for (const part of ["DataViews.Board", "DataViews.Tree", "DataViews.Tree.Tab"]) {
+    assert.ok(
+      toc.some((h) => h.trim() === part),
+      `${part} should be addressable from the table of contents`,
+    );
+  }
+});
+
+test("the DataViews API reference covers every part, including the tree's pane", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+  const doc = loader.getComponent("DataViews");
+  assert.ok(doc);
+
+  const api = extractSection(doc.rawContent, "API Reference", "Props");
+  assert.ok(api, "DataViews should have an API Reference section");
+
+  // Every part the compound root exposes needs a heading of its own, or get-component-api
+  // cannot hand it over on its own.
+  for (const part of [
+    "DataViews.Header",
+    "DataViews.Table",
+    "DataViews.Board",
+    "DataViews.Inbox",
+    "DataViews.Tree",
+    "DataViews.Tree.Table",
+    "DataViews.Tree.Cards",
+    "DataViews.Tree.Tab",
+    "DataViews.Detail",
+    "DataViews.Panel",
+    "DataViews.Filters",
+  ]) {
+    assert.ok(api.includes(`### ${part}`), `API reference should have a heading for ${part}`);
+  }
+
+  // The pane props specifically — these shipped after the doc was first written.
+  for (const prop of ["paneMode", "defaultPaneMode", "onPaneModeChange", "paneRows", "paneActions"]) {
+    assert.ok(api.includes(prop), `API reference should document ${prop}`);
+  }
+
+  // And the props that were removed must not come back as documentation.
+  for (const gone of ["paneTable", "renderPaneCard"]) {
+    assert.ok(!doc.rawContent.includes(gone), `${gone} was removed and should not be documented`);
+  }
+});
+
+test("one part of DataViews can be fetched on its own", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+  const doc = loader.getComponent("DataViews");
+  assert.ok(doc);
+
+  const board = extractSection(doc.rawContent, "DataViews.Board");
+  assert.ok(board, "DataViews.Board should be addressable");
+  assert.match(board, /groups/, "the Board section should carry its own props");
+  assert.doesNotMatch(board, /### DataViews\.Inbox/, "and only its own");
+  assert.ok(
+    board.length < (extractSection(doc.rawContent, "API Reference") ?? "").length / 2,
+    "asking for one part should be much smaller than the whole API block",
+  );
+});
+
+test("every part the DataViews doc documents exists on the component", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+  const doc = loader.getComponent("DataViews");
+  assert.ok(doc);
+
+  // Drift guard, the same shape as the create-form field-map test: a heading that names a part
+  // the barrel does not export is documentation for something that cannot be rendered.
+  const source = await readFile(
+    new URL("../../apps/lib/components/DataViews/data-views.tsx", import.meta.url),
+    "utf-8",
+  );
+  const assign = source.slice(source.indexOf("Object.assign(DataViewsRoot"));
+
+  const documented = listSectionHeadings(doc.rawContent)
+    .map((h) => h.trim())
+    .filter((h) => /^DataViews\.[A-Z]/.test(h))
+    .map((h) => h.split(".")[1]);
+
+  for (const part of new Set(documented)) {
+    assert.ok(
+      new RegExp(`\\b${part}\\b`).test(assign),
+      `the doc documents DataViews.${part}, which the compound root does not expose`,
+    );
+  }
+});
+
+test("the DataViews guides teach the live API, not the removed DataViewsLayout", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+
+  // `get-guide "data-views"` used to resolve to the *migration* doc, because how-to did not have
+  // a file by that name — so an agent asking for the guide got upgrade notes.
+  const guide = loader.getGuide("data-views");
+  assert.ok(guide, "data-views should be readable as a guide");
+  assert.match(guide, /DataViews\.Tree\.Table/, "the guide should be the how-to, not the migration doc");
+
+  // The migration doc is excluded on purpose: showing `<DataViewsLayout>` is its entire job.
+  for (const name of ["data-views", "data-views-backend-response"]) {
+    const text = loader.getGuide(name);
+    assert.ok(text, `${name} should be readable`);
+    // A mention in a "coming from X" pointer is fine; teaching it is not.
+    assert.doesNotMatch(
+      text,
+      /<DataViewsLayout|from "@\/components\/DataViewsLayout"/,
+      `${name} should not teach the removed DataViewsLayout`,
+    );
+  }
+});
+
+
+test("a component's docs can live in one folder, and all of it is reachable", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+
+  // `docs/components/data-views/index.md` is the reference; the folder form is what keeps a
+  // component with eighteen doc files together instead of scattering it across components/,
+  // how-to/ and migration/.
+  const doc = loader.getComponent("DataViews");
+  assert.ok(doc, "a folder component doc resolves like a flat one");
+  assert.match(doc.filePath, /data-views[/\\]index\.md$/, "the folder's index.md is the reference");
+  assert.equal(doc.slug, "data-views");
+
+  // Its siblings are reachable as guides, and the bare name is the guide — not the migration doc.
+  for (const name of ["data-views", "data-views-guide", "data-views-backend-response", "data-views-migration"]) {
+    assert.ok(loader.getGuide(name), `${name} should be readable`);
+  }
+  assert.match(loader.getGuide("data-views")!, /Build a screen with DataViews/);
+  assert.match(loader.getGuide("data-views-migration")!, /Migrating to the DataViews component/);
+});
+
+test("the example pages ship as docs, and are served one at a time", async () => {
+  const loader = new DocsLoader();
+  await loader.loadAll();
+
+  const names = loader.getExampleNames("DataViews");
+  assert.ok(names.length >= 13, `expected the twelve pages plus index and the route handler, got ${names.length}`);
+  for (const expected of ["views", "tree-custom", "filters", "api-orders-route", "index"]) {
+    assert.ok(names.includes(expected), `${expected} should be an available example`);
+  }
+
+  // A whole page, not a fragment — this is the thing the docs used to link at in `apps/app/`,
+  // which ships in neither package.
+  const page = loader.getExample("DataViews", "tree-custom");
+  assert.ok(page, "tree-custom should be readable");
+  assert.match(page, /DataViews\.Tree\.Tab/, "the example should carry the real page's code");
+  assert.match(page, /export default function/, "and be the whole page");
+
+  assert.equal(loader.getExample("DataViews", "no-such-example"), undefined);
+});
+
+test("no doc the server serves links outside the bundled docs tree", async () => {
+  // The tarball contains `docs/` and nothing else documentation-wise, so a link that leaves it
+  // resolves in the monorepo and dangles for every installed user. Walk what the server actually
+  // ships — mcp/docs — rather than the repo, so a dropped sync directory fails here too.
+  const { readdir, readFile: read } = await import("node:fs/promises");
+  const { existsSync } = await import("node:fs");
+  const pathMod = await import("node:path");
+
+  const docsRoot = new URL("../docs/", import.meta.url).pathname;
+  const walk = async (dir: string): Promise<string[]> => {
+    const out: string[] = [];
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const abs = pathMod.join(dir, entry.name);
+      if (entry.isDirectory()) out.push(...(await walk(abs)));
+      else if (entry.name.endsWith(".md")) out.push(abs);
+    }
+    return out;
+  };
+
+  const files = await walk(docsRoot);
+  assert.ok(files.length > 50, "the bundled docs should be present — run the build first");
+
+  const offenders: string[] = [];
+  for (const file of files) {
+    const source = await read(file, "utf-8");
+    for (const m of source.matchAll(/\]\((\.[^)#\s]+)(?:#[^)\s]*)?\)/g)) {
+      const target = pathMod.resolve(pathMod.dirname(file), m[1]);
+      const rel = pathMod.relative(docsRoot, target);
+      if (rel.startsWith("..")) offenders.push(`${pathMod.relative(docsRoot, file)} → ${m[1]} (leaves docs/)`);
+      else if (!existsSync(target)) offenders.push(`${pathMod.relative(docsRoot, file)} → ${m[1]} (missing)`);
+    }
+  }
+  assert.deepEqual(offenders, [], "every relative link must resolve inside the shipped docs");
+});
+
+// ─── The tool layer ───────────────────────────────────────────────────────────
+// Every test above this line exercises a loader. None of them call a tool, which is how the suite
+// stayed green while `get-install-info DataViews` advised installing Editor.js for a data grid and
+// a bad `part` answered with prose headings. This one drives the real server over stdio.
+
+/** Minimal MCP stdio client: handshake, then `tools/call`. */
+async function withServer<T>(fn: (call: (name: string, args: unknown) => Promise<string>) => Promise<T>): Promise<T> {
+  const { spawn } = await import("node:child_process");
+  const serverPath = new URL("./index.js", import.meta.url).pathname;
+  const srv = spawn(process.execPath, [serverPath], { stdio: ["pipe", "pipe", "pipe"] });
+
+  let buffered = "";
+  const waiting = new Map<number, (msg: { result?: { content?: { text?: string }[] } }) => void>();
+  srv.stdout.on("data", (chunk: Buffer) => {
+    buffered += chunk.toString();
+    let nl: number;
+    while ((nl = buffered.indexOf("\n")) >= 0) {
+      const line = buffered.slice(0, nl);
+      buffered = buffered.slice(nl + 1);
+      if (!line.trim()) continue;
+      try {
+        const msg = JSON.parse(line);
+        if (msg.id && waiting.has(msg.id)) waiting.get(msg.id)!(msg);
+      } catch {
+        // notifications and log lines
+      }
+    }
+  });
+
+  let id = 0;
+  const rpc = (method: string, params: unknown) =>
+    new Promise<{ result?: { content?: { text?: string }[] } }>((resolve) => {
+      const mine = ++id;
+      waiting.set(mine, resolve);
+      srv.stdin.write(JSON.stringify({ jsonrpc: "2.0", id: mine, method, params }) + "\n");
+    });
+
+  try {
+    await rpc("initialize", {
+      protocolVersion: "2024-11-05",
+      capabilities: {},
+      clientInfo: { name: "test", version: "1" },
+    });
+    srv.stdin.write(JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized" }) + "\n");
+
+    return await fn(async (name, args) => {
+      const res = await rpc("tools/call", { name, arguments: args });
+      return res.result?.content?.[0]?.text ?? "";
+    });
+  } finally {
+    srv.kill();
+  }
+}
+
+test("the server answers every tool, and the answers are usable", { timeout: 30_000 }, async () => {
+  await withServer(async (call) => {
+    // ── install info tells the four packages apart from the forty-one inherited ──
+    // The flat total is right for "what does `add` copy" and useless as advice: an agent told to
+    // install 21 Editor.js packages for a data grid concludes something is broken.
+    const install = await call("get-install-info", { item: "DataViews" });
+    assert.match(install, /Required by DataViews itself \(4\)/, "its own four are named as its own");
+    assert.match(install, /@tanstack\/react-virtual/);
+    assert.match(install, /Inherited from what it composes/, "the rest is attributed, not merged in");
+    assert.match(install, /via \*\*TextEditor\*\*/, "and attributed to the item that needs it");
+
+    // ── a wrong `part` suggests parts, not every heading in the document ──
+    const badPart = await call("get-component-api", { component: "DataViews", part: "Nope" });
+    const parts = (badPart.match(/Parts: (.*?)\.\s*Omit/s)?.[1] ?? "").split(", ");
+    assert.ok(parts.length > 5, "it should suggest the real parts");
+    assert.ok(
+      parts.some((p) => p.includes("DataViews.Board")),
+      "including the one the caller probably wanted",
+    );
+    for (const prose of ["The tree's pane", "Choosing a control", "The section types"]) {
+      assert.ok(!parts.includes(prose), `"${prose}" is prose, not an addressable part`);
+    }
+
+    // ── the phrase someone building one would actually type ──
+    const search = await call("search-components", { query: "list screen" });
+    // Match a result *entry*, not the word anywhere — TabSwitch and TreeFolder both mention
+    // DataViews in their descriptions, so a bare /DataViews/ passes without finding it.
+    assert.match(search, /- \*\*DataViews\*\*/, "the job people describe should reach the component");
+
+    // ── every keyword the overview advertises must resolve ──
+    const overview = await call("get-component-docs", { component: "DataViews" });
+    for (const keyword of overview.match(/`"([a-z ]+)"`/g)?.map((m) => m.slice(2, -2)) ?? []) {
+      const section = await call("get-component-docs", { component: "DataViews", section: keyword });
+      assert.ok(
+        !/^No "/.test(section),
+        `the overview suggests section:"${keyword}", so it must return something`,
+      );
+    }
+
+    // ── the DataViews surface an agent works through, end to end ──
+    const part = await call("get-component-api", { component: "DataViews", part: "DataViews.Board" });
+    assert.match(part, /groups/);
+    assert.ok(part.length < 4000, "one part should stay small");
+
+    const examples = await call("get-usage-examples", { component: "DataViews" });
+    assert.match(examples, /Complete example pages/, "the shipped pages are advertised");
+
+    const page = await call("get-usage-examples", { component: "DataViews", example: "tree-custom" });
+    assert.match(page, /DataViews\.Tree\.Tab/, "and fetchable in full");
+
+    assert.match(await call("get-guide", { name: "data-views" }), /Build a screen with DataViews/);
+    assert.match(
+      await call("get-component-source", { item: "DataViews/views/pane-views" }),
+      /PaneTable/,
+      "one file of a folder component is reachable by name",
+    );
+  });
 });

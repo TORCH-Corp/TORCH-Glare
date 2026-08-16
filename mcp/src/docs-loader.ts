@@ -118,6 +118,10 @@ export class DocsLoader {
   private howToDocs: Map<string, string> = new Map();
   private explanationDocs: Map<string, string> = new Map();
   private migrationDocs: Map<string, string> = new Map();
+  /** Guides that live inside a component's folder — `data-views-guide`, and `data-views` itself. */
+  private componentGuideDocs: Map<string, string> = new Map();
+  /** Worked examples, keyed `<component-slug>/<example-slug>`. */
+  private exampleDocs: Map<string, string> = new Map();
   private docsDir = "";
 
   async loadAll(): Promise<void> {
@@ -135,14 +139,34 @@ export class DocsLoader {
   private async loadComponentDocs(): Promise<void> {
     const componentsDir = path.resolve(this.docsDir, "components");
     try {
-      const files = await fs.readdir(componentsDir);
-      const mdFiles = files.filter((f) => f.endsWith(".md"));
+      const entries = await fs.readdir(componentsDir, { withFileTypes: true });
 
-      for (const file of mdFiles) {
-        const filePath = path.resolve(componentsDir, file);
+      // A component's docs are either one file (`button.md`) or a folder whose `index.md` is the
+      // reference and whose siblings are its guide, migration notes and examples. The folder form
+      // is what keeps everything about a large component — DataViews has 18 files — in one place
+      // instead of scattered across components/, how-to/ and migration/.
+      const docs: { slug: string; filePath: string }[] = [];
+      for (const entry of entries) {
+        if (entry.isFile() && entry.name.endsWith(".md")) {
+          docs.push({
+            slug: entry.name.replace(".md", ""),
+            filePath: path.resolve(componentsDir, entry.name),
+          });
+        } else if (entry.isDirectory()) {
+          const index = path.resolve(componentsDir, entry.name, "index.md");
+          try {
+            await fs.access(index);
+            docs.push({ slug: entry.name, filePath: index });
+            await this.loadComponentFolder(entry.name, path.resolve(componentsDir, entry.name));
+          } catch {
+            // A folder with no index.md is not a component doc.
+          }
+        }
+      }
+
+      for (const { slug, filePath } of docs) {
         const rawContent = await fs.readFile(filePath, "utf-8");
         const { frontmatter, content } = parseFrontmatter(rawContent);
-        const slug = file.replace(".md", "");
 
         // Resolve name: frontmatter name/title, or derive from slug
         const name = frontmatter.name || frontmatter.title || slugToPascalCase(slug);
@@ -176,6 +200,41 @@ export class DocsLoader {
       }
     } catch {
       // docs/components/ not found
+    }
+  }
+
+  /**
+   * The rest of a component's folder: its guide, migration notes and worked examples.
+   *
+   * Guides are keyed both `<slug>-<file>` and — for `guide.md` — bare `<slug>`, so
+   * `get-guide "data-views"` answers with the guide rather than with whatever else happens to
+   * carry that name. Examples are keyed `<slug>/<file>` and served through get-usage-examples,
+   * one at a time: they are whole pages, and handing over fourteen of them at once is not an
+   * answer to any question.
+   */
+  private async loadComponentFolder(slug: string, dir: string): Promise<void> {
+    let entries: string[] = [];
+    try {
+      entries = await fs.readdir(dir);
+    } catch {
+      return;
+    }
+
+    for (const file of entries.filter((f) => f.endsWith(".md") && f !== "index.md")) {
+      const content = await fs.readFile(path.resolve(dir, file), "utf-8");
+      const name = file.replace(".md", "");
+      this.componentGuideDocs.set(`${slug}-${name}`, content);
+      if (name === "guide") this.componentGuideDocs.set(slug, content);
+    }
+
+    const examplesDir = path.resolve(dir, "examples");
+    try {
+      for (const file of (await fs.readdir(examplesDir)).filter((f) => f.endsWith(".md"))) {
+        const content = await fs.readFile(path.resolve(examplesDir, file), "utf-8");
+        this.exampleDocs.set(`${slug}/${file.replace(".md", "")}`, content);
+      }
+    } catch {
+      // no examples/ in this folder
     }
   }
 
@@ -284,9 +343,28 @@ export class DocsLoader {
     return (
       this.tutorialDocs.get(name) ??
       this.howToDocs.get(name) ??
+      // A component's own guide outranks the explanation and migration docs: someone asking for
+      // "data-views" wants how to build one, not the notes on upgrading from what it replaced.
+      this.componentGuideDocs.get(name) ??
       this.explanationDocs.get(name) ??
       this.migrationDocs.get(name)
     );
+  }
+
+  /** Every worked example for a component, by slug — `views`, `tree-custom`, … */
+  getExampleNames(component: string): string[] {
+    const slug = pascalCaseToSlug(component).toLowerCase();
+    const prefix = `${slug}/`;
+    return [...this.exampleDocs.keys()]
+      .filter((key) => key.startsWith(prefix))
+      .map((key) => key.slice(prefix.length))
+      .sort();
+  }
+
+  /** One worked example, in full. */
+  getExample(component: string, example: string): string | undefined {
+    const slug = pascalCaseToSlug(component).toLowerCase();
+    return this.exampleDocs.get(`${slug}/${example}`);
   }
 
   /** All guide names (tutorials + how-to + explanation + migration), deduped and sorted. */
@@ -296,6 +374,7 @@ export class DocsLoader {
         ...this.tutorialDocs.keys(),
         ...this.howToDocs.keys(),
         ...this.explanationDocs.keys(),
+        ...this.componentGuideDocs.keys(),
         ...this.migrationDocs.keys(),
       ]),
     ].sort();

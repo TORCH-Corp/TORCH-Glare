@@ -8,7 +8,8 @@ import type { PanelSortProps } from "../types";
 
 /**
  * `DataViews.Panel.Sort` — the same intent the table headers emit, reachable from views that have
- * no headers. Picking an option calls `onValueChange`; nothing is reordered here.
+ * no headers. Picking an option writes the sort into the root's query, which leaves through
+ * `onQueryChange`; nothing is reordered here, and this part takes no callback of its own.
  */
 export function Sort({ title = "Default Sort", className }: PanelSortProps) {
   const { fields } = useDataViewsData();

@@ -17,6 +17,54 @@
   200ms hold so a swipe still scrolls; keyboard is Space, arrows, Space.
 - **`DataViews.Table` `onRowMove`** (row reordering, with a grip column) and **`onAddRow`** (the
   `+ Add New` end-action row).
+- **The tree's pane, built in — and its tabs are children.** Pick a node and the pane lists what it
+  holds. Its tabs follow the same rule as the component's views: **a tab exists because you
+  rendered it**, and the switch shows exactly what you passed (one tab, no switch).
+  `DataViews.Tree.Table` is the real `DataViews.Table` over the node's rows, so it keeps sortable
+  headers, selection, `renderCell`, the drag grip, `+ Add New` and virtualization;
+  `DataViews.Tree.Cards` is the board's card, with `renderCard` to replace it; and
+  `DataViews.Tree.Tab` is a mode of your own, whose children are the pane while it is selected.
+  Render none and there is no pane at all — the tree is a hierarchy and takes the whole width.
+  Everything inside the pane runs in a data scope
+  whose `rows` are the pane's, so a tab of your own reads the selected node's rows from
+  `useDataViewsData()` with nothing threaded through. Rows default to the node's **descendants**
+  (`paneRows` overrides — a tree of categories whose pane lists that category's items); the header
+  takes your markup through `paneActions`; mode is the usual round-trip — seed with
+  `defaultPaneMode`, persist from `onPaneModeChange`, or take it over with `paneMode`. Any child
+  that is **not** a tab is the pane itself, header and switch included, so a tree written against
+  the old `children`-is-the-pane contract is unchanged.
+- **The MCP answers usefully when it is used imperfectly.** `get-install-info` now separates the
+  packages a component needs itself from those it inherits, attributed to the item that requires
+  them — DataViews reported 45 npm dependencies, 21 of them Editor.js pulled in through
+  FormBuilder's rich-text field, which reads as "this component is unusable" rather than "you
+  already have these if FormBuilder is installed". A wrong `part` now suggests the parts under
+  `## API Reference` instead of every heading in the document; `search-components` maps the job
+  people describe ("list screen", "crud", "record list") onto the component; and section keywords
+  the tool itself advertises now resolve, because heading matching folds plurals. A stdio smoke
+  test drives the real server through every tool — the suite previously only tested the loaders
+  underneath, which is how these shipped green.
+- **Every DataViews doc lives in one folder, and the examples ship with it.**
+  `docs/components/data-views/` holds the reference (`index.md`), the guide, the migration notes,
+  the backend-response recipes and fourteen complete example pages — generated from the app's real
+  pages by `pnpm run examples`, because the docs previously linked at `apps/app/…`, which is in
+  neither published tarball: every one of those links dangled the moment either package was
+  installed. The MCP server learned the folder form (a component doc may be a directory with an
+  `index.md`), serves the siblings as guides (`data-views`, `data-views-guide`,
+  `data-views-migration`, `data-views-backend-response`), and `get-usage-examples` now lists the
+  example pages and returns one in full on request. Two new gates make the failure impossible to
+  repeat: `checkAiDocs` rejects any relative link that leaves `docs/` or does not resolve, and
+  fails if a generated example has drifted from the page it came from. `sync-docs` also copies
+  top-level `docs/*.md`, which had left `migration/changelog.md`'s link to the 1.1.16 changelog
+  dangling in the package.
+- **The docs are rigid now, and the MCP server can address them.** `docs/components/data-views.md`
+  gives every part its own heading — `### DataViews.Board`, `### DataViews.Tree.Tab` — with one
+  column schema (`Prop · Type · Default · Required · Notes`), all seventeen `FieldType` variants and
+  the keys each reads, every hook's return shape, and the house sections the corpus expects
+  (Quick Examples, Common Patterns, Testing, Performance, Styling, Known Limitations,
+  Troubleshooting, Example pages). Two how-to guides join it: `docs/how-to/data-views.md`, ten
+  scenarios from a first table to a view of your own, and a rewritten
+  `data-views-from-backend-response.md` — which until now taught `DataViewsLayout`, deleted two
+  releases ago, and linked to six files that do not exist.
 - **`FormBuilder` `layout="bare"`** — drops the page form's centring and 48px gutters so an embedded
   form fills its container. `DataViews.Filters` uses it; in a 260px rail the gutters left the
   controls narrower than their own minimum.

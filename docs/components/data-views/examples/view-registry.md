@@ -1,3 +1,20 @@
+---
+title: DataViews example — View registry
+description: A view of your own via `markView`, beside the built-in four.
+group: examples
+component: DataViews
+keywords: [data-views, example, examples, view, registry]
+---
+
+# DataViews example — View registry
+
+A view of your own via `markView`, beside the built-in four.
+
+Complete and runnable — this is the page itself, not an excerpt. In the monorepo it lives at `apps/app/data-views/view-registry/page.tsx`.
+
+See the [component reference](../index.md) for what each prop does, or the [guide](../guide.md) for the same ground as scenarios.
+
+```tsx
 "use client";
 
 import { useMemo, useState } from "react";
@@ -293,3 +310,4 @@ export default function ViewRegistryExample() {
     </div>
   );
 }
+```

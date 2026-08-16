@@ -180,11 +180,10 @@ export default function AccessibilityExample() {
           groups={groups}
           titlePath="customer.name"
         />
-        <DataViews.Tree
-          nodes={nodes}
-          labelPath="customer.name"
-        >
-          <DataViews.Detail />
+        {/* The pane's tabs are children, like every other part: pass none and there is no pane. */}
+        <DataViews.Tree nodes={nodes} labelPath="customer.name">
+          <DataViews.Tree.Table />
+          <DataViews.Tree.Cards />
         </DataViews.Tree>
 
         <DataViews.Panel>

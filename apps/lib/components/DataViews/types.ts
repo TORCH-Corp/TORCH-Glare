@@ -228,7 +228,85 @@ export interface InboxViewProps extends ViewBaseProps {
   placeholder?: ReactNode;
 }
 
+/**
+ * Which shape the tree's pane lists the selected node's rows in.
+ *
+ * `"table"` and `"cards"` are built in; any other string is the `value` of a
+ * `DataViews.Tree.PaneTab` you rendered.
+ */
+export type TreePaneMode = "table" | "cards" | (string & NonNullable<unknown>);
+
+/**
+ * What every tab in the tree's pane can say about itself in the switch. The two built-in views
+ * fill these in — `DataViews.Tree.Table` is "List", `DataViews.Tree.Cards` is "Cards" — so you
+ * pass them only to rename a tab or to register the same view twice.
+ */
+export interface TreePaneViewBase {
+  /** What `paneMode` becomes while this tab shows. Defaults to `"table"` / `"cards"`. */
+  value?: string;
+  label?: string;
+  icon?: ReactNode;
+}
+
+/**
+ * `DataViews.Tree.Table` — the pane as a table. Everything `DataViews.Table` can do, over the
+ * selected node's rows rather than the root's.
+ */
+export interface TreePaneTableProps
+  extends TreePaneViewBase,
+    Omit<TableViewProps, keyof ViewBaseProps> {}
+
+/** `DataViews.Tree.Cards` — the pane as a grid of cards. */
+export interface TreePaneCardsProps extends TreePaneViewBase {
+  /** Replaces `DataViewCard` outright. Same signature as the board's `renderCard`. */
+  renderCard?: (args: RowRenderArgs) => ReactNode;
+  /** Replaces the grid's own classes — the responsive 1/2/3 columns and its padding. */
+  className?: string;
+}
+
+/**
+ * `DataViews.Tree.Tab` — a mode of your own, beside the built-in two. Its `children` are the pane
+ * while it is selected and nothing while it is not.
+ */
+export interface TreePaneTabProps extends TreePaneViewBase {
+  /** Required: there is no sensible default name for a view only you know about. */
+  value: string;
+  label: string;
+  children?: ReactNode;
+}
+
 export interface TreeViewProps extends ViewBaseProps {
+  /**
+   * The pane's mode. Omit to let the view hold it.
+   *
+   * Seed the starting mode with `defaultPaneMode` and persist every switch from
+   * `onPaneModeChange` — the same round-trip the query uses, so a reload can restore what the
+   * user last chose.
+   */
+  paneMode?: TreePaneMode;
+  /**
+   * Initial mode when uncontrolled. Defaults to the **first tab you rendered** — so a pane whose
+   * only tab is your own opens on it rather than on a `"table"` that matches nothing.
+   */
+  defaultPaneMode?: TreePaneMode;
+  /** Told when the user switches. The component still owns the mode. */
+  onPaneModeChange?: (mode: TreePaneMode) => void;
+  /**
+   * Which rows the pane lists for the selected node.
+   *
+   * Defaults to the node's **descendants** — a branch shows what is under it, a leaf shows
+   * itself. Override it when the tree and the pane hold different things: a tree of categories
+   * whose pane must list that category's items, for instance.
+   */
+  paneRows?: (node: TreeNode) => readonly Row[];
+  /**
+   * Your markup in the pane's header, between the record count and the mode switch — an
+   * "Add item" button, a menu, a count of your own.
+   *
+   * It is a node rather than a render prop because the header is a slot, not a template: what
+   * belongs there rarely varies per node, and what does can read `useActiveRow()`.
+   */
+  paneActions?: ReactNode;
   /** Pre-built hierarchy. You build it — the tree never derives one from the rows. */
   nodes: readonly TreeNode[];
   labelPath?: string;
@@ -257,7 +335,24 @@ export interface TreeViewProps extends ViewBaseProps {
   onExpandedChange?: (ids: readonly string[]) => void;
   /** Which node is selected is `activeId` — the tree keeps no second copy. */
   onNodeMove?: (intent: MoveIntent) => void;
-  /** The right-hand pane. Yours to fill — commonly a table of the selected node's rows. */
+  /**
+   * The pane's tabs: `DataViews.Tree.Table`, `DataViews.Tree.Cards`, and any
+   * `DataViews.Tree.Tab` of your own. A tab exists because you rendered it, and the switch shows
+   * exactly what you passed — one tab and there is no switch at all, the same rule `ViewSwitch`
+   * follows. Pass **none** and there is no pane: the tree is a hierarchy and takes the whole
+   * width, because a part exists here only if you rendered it.
+   *
+   * ```tsx
+   * <DataViews.Tree nodes={nodes} labelPath="name">
+   *   <DataViews.Tree.Table selectable renderCell={cell} />
+   *   <DataViews.Tree.Cards renderCard={card} />
+   *   <DataViews.Tree.Tab value="timeline" label="Timeline"><Timeline /></DataViews.Tree.Tab>
+   * </DataViews.Tree>
+   * ```
+   *
+   * Anything here that is **not** one of those three *is* the pane — the whole-pane override,
+   * header and switch included, which is what a tree written before these tabs existed passes.
+   */
   children?: ReactNode;
 }
 
@@ -365,7 +460,7 @@ export interface FiltersProps {
    * written. `Filters` reads each child's `name`, `label` and bounds to learn what it is:
    *
    * ```tsx
-   * <DataViews.Filters value={filters} onValueChange={setFilters}>
+   * <DataViews.Filters>
    *   <FormBuilder.MultiSelect name="status" label="Status" options={STATUS} />
    *   <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} />
    * </DataViews.Filters>

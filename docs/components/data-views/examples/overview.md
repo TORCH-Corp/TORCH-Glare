@@ -1,3 +1,20 @@
+---
+title: DataViews example — Everything at once
+description: Every part at once — the fastest way to see the whole shape.
+group: examples
+component: DataViews
+keywords: [data-views, example, examples, overview]
+---
+
+# DataViews example — Everything at once
+
+Every part at once — the fastest way to see the whole shape.
+
+Complete and runnable — this is the page itself, not an excerpt. In the monorepo it lives at `apps/app/data-views/overview/page.tsx`.
+
+See the [component reference](../index.md) for what each prop does, or the [guide](../guide.md) for the same ground as scenarios.
+
+```tsx
 "use client";
 
 import { useMemo, useState } from "react";
@@ -224,3 +241,4 @@ export default function OverviewExample() {
     </div>
   );
 }
+```

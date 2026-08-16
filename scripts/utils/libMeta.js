@@ -29,11 +29,24 @@ export function normalize(s) {
     return s.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-/** Build a normalized-key -> filename map for a directory, stripping a suffix if given. */
+/**
+ * Build a normalized-key -> filename map for a directory, stripping a suffix if given.
+ *
+ * A component's docs may be one file (`button.md`) or a folder whose `index.md` is the reference
+ * and whose siblings are its guide, migration notes and examples — the form a component with more
+ * than a page of documentation takes. Both resolve to the same key.
+ */
 function buildIndex(dir, { ext, stripSuffix } = {}) {
     const map = new Map();
     if (!fs.existsSync(dir)) return map;
-    for (const file of fs.readdirSync(dir)) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const file = entry.name;
+        if (entry.isDirectory()) {
+            if (ext === ".md" && fs.existsSync(path.join(dir, file, "index.md"))) {
+                map.set(normalize(file), path.join(file, "index.md"));
+            }
+            continue;
+        }
         if (ext && !file.endsWith(ext)) continue;
         let base = file.replace(/\.[^.]+$/, "");
         if (stripSuffix && base.toLowerCase().endsWith(stripSuffix.toLowerCase())) {

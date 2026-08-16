@@ -17,6 +17,7 @@ export {
   useDataViewsData,
   useDataViewsFilters,
   useDataViewsPanel,
+  useDataViewsPanelTabs,
   useDataViewsView,
 } from "./context";
 export { useActiveRow } from "./hooks";
@@ -43,8 +44,41 @@ export type {
   DataContextValue,
   FiltersContextValue,
   PanelContextValue,
+  PanelTab,
   PanelTabsContextValue,
   RegisteredView,
   ViewContextValue,
 } from "./context";
 export type * from "./types";
+
+// The vocabulary — the shapes **you** construct and hand in: a row, a field, the query, a tree of
+// nodes, a board's groups. They live in `utils/dataViews` because the route handler that serves
+// these lists imports them too, and are re-exported here so that one import line is enough:
+// every prop above is typed in terms of them.
+export type {
+  BadgeVariant,
+  ColumnColor,
+  ColumnState,
+  CurrencyOptions,
+  DataViewsQuery,
+  FieldConfig,
+  FieldType,
+  FilterFieldDescriptor,
+  FilterState,
+  FilterValue,
+  MoveIntent,
+  Path,
+  Preset,
+  Row,
+  RowGroup,
+  Sort,
+  TreeNode,
+} from "../../utils/dataViews/types";
+
+// Reading a value the way `Cell` reads it — dotted paths included — and the id rule the component
+// falls back to. A custom view or a `renderCell` that has to reach a second field needs these.
+export { defaultGetRowId, formatPathLabel, getByPath, getString } from "../../utils/dataViews/path";
+
+// The board's card body, so a card of your own — in the board or the tree's pane — is built from
+// the same pairs the built-in one uses.
+export { buildCardRows } from "./views/card-rows";

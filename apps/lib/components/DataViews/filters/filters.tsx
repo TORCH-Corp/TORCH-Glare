@@ -33,8 +33,11 @@ import type { FiltersProps } from "../types";
  * with a `FieldKind` — see `fieldKindOf` — so a `MultiSelect` becomes a list of values, a `Slider`
  * a numeric range, a `DateRange` a date range. Nothing is inferred from the rows.
  *
+ * There is no `value`/`onValueChange` here: the filters live in the root's query, and this reads
+ * and writes them through `useDataViewsFilters()`. What leaves the component is `onQueryChange`.
+ *
  * ```tsx
- * <DataViews.Filters value={filters} onValueChange={setFilters}>
+ * <DataViews.Filters>
  *   <FormBuilder.MultiSelect name="status" label="Status" options={STATUS} />
  *   <FormBuilder.Slider name="total" label="Total" range min={0} max={15000} step={100} />
  *   <DataViews.Filters.Presets for="total" items={[{ label: "Under $500", max: 500 }]} />

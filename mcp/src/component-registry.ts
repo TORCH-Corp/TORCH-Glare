@@ -45,6 +45,17 @@ const SYNONYMS: Record<string, string[]> = {
   chip: ["tag", "badge", "label"],
   toggle: ["switch"],
   checkbox: ["check"],
+  // What people call the *job* rather than the component. Someone building one types "list
+  // screen", not "DataViews" — and before these, that query returned three results, none of
+  // them it.
+  list: ["data", "table", "views"],
+  screen: ["views", "layout"],
+  crud: ["data", "views", "form"],
+  record: ["data", "row", "views"],
+  dashboard: ["data", "views", "chart"],
+  spreadsheet: ["table", "grid", "data"],
+  kanban: ["board", "views"],
+  board: ["kanban", "views"],
 };
 
 // Human labels for the canonical category slugs (for display headers).

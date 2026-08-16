@@ -96,8 +96,12 @@ Four seams, from narrowest to widest:
 | the board's card, the inbox row, a tree node | `renderCard` · `renderItem` · `renderNode` |
 | a whole new view | `markView(MyView, { defaultId, defaultLabel })` — it registers in the switcher |
 
-The detail pane in the inbox and tree is simply `children`; `useActiveRow()` resolves whatever is
-open, and `Cell` paints a field the way every other view paints it.
+The inbox's detail pane is simply `children`; `useActiveRow()` resolves whatever is open, and
+`Cell` paints a field the way every other view paints it.
+
+The tree's `children` are its **pane tabs** — `DataViews.Tree.Table`, `.Cards` and `.Tab` — and a
+tab exists because you rendered it: pass none and there is no pane at all. Anything in there that
+is not a tab *is* the pane, which is the whole-pane escape hatch.
 
 A view of your own gets the loading state the built-in four get — read it from the same context and
 lay out the same pieces, so it shimmers in its own shape rather than inventing a second look:
@@ -122,7 +126,7 @@ row — indent, connectors, selection band, drag grip — and takes its label as
 | `slots.ts` | the markers and guards the root recognises its children by |
 | `types.ts` | every props interface; zero runtime imports |
 | `header.tsx` | `Header` · `ViewSwitch` · `Search` · `Actions` · `PanelToggle` |
-| `views/` | `table-view` · `board-view` · `tree-view` · `inbox-view` |
+| `views/` | `table-view` · `board-view` · `tree-view` · `inbox-view` · `pane-views` (the tree pane's tabs) · `card-rows` (the card body the board and the pane share) |
 | `panel/` | the rail: `panel` · `tab` · `section` · `columns` · `sort` · `saved-views` · `controls` |
 | `filters/` | `filters` · `children` (the walk) · `sync` · `presets` · `custom` · `summary` · `labelled` · `values` |
 | `cell.tsx` | paints one field of one row — every view goes through it |

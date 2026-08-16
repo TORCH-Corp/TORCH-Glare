@@ -35,6 +35,11 @@ export const EXAMPLES: Example[] = [
     title: "Inbox → route",
     group: "Views",
   },
+  {
+    slug: "tree-custom",
+    title: "Tree → custom UI",
+    group: "Views",
+  },
 
   // ─── Fields ─────────────────────────────────────────────────────────────────
   {

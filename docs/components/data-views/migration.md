@@ -54,7 +54,7 @@ Three parts of `DataViews` itself went in the same release.
 
 **`DataViews.Pagination`** — rows now load as you scroll. Pass `onLoadMore` and append each page to
 `rows`; whether there is more is derived from `rows.length < total`, so there is no `hasMore` prop.
-See the *Large datasets* section of the [DataViews doc](../components/data-views.md).
+See the *Large datasets* section of the [DataViews doc](./index.md).
 
 **`DataViews.Empty`** — when there is nothing to show, the view shows nothing: the table keeps its
 header band and has no rows, the board keeps its columns and has no cards. A centred message in

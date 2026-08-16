@@ -45,6 +45,50 @@ FORMS — always build them with \`FormBuilder\`. Each field is one JSX child (\
 // Short reminder appended only to code-emitting tool responses.
 const RULES_HINT = `> ⚠️ **TORCH Glare rule:** never use \`SystemStyle\` / \`*-system-*\` tokens — use the \`presentation\` equivalents (full rules in the server instructions).\n\n`;
 
+/**
+ * The npm list, grouped by which item in the install plan actually requires each package.
+ *
+ * `resolveInstallPlan` returns a flat union, which is right for "what does `add` copy" and wrong
+ * as advice. `DataViews` reports 45 packages; four are its own, and 21 arrive through
+ * `FormBuilder → TextEditor` because the filter fields are FormBuilder fields and FormBuilder has
+ * a rich-text one. Attribution is a lookup, not new analysis — every item in the plan already
+ * carries its own `npmDependencies`.
+ */
+function formatNpmDependencies(
+  item: { name: string; npmDependencies: string[] },
+  plan: { items: { name: string; npmDependencies: string[] }[]; npmDependencies: string[] },
+): string {
+  if (plan.npmDependencies.length === 0) return "_None._";
+
+  const own = new Set(item.npmDependencies);
+  const list = (deps: string[]) => deps.map((d) => `\`${d}\``).join(", ");
+  const lines: string[] = [];
+
+  const direct = plan.npmDependencies.filter((d) => own.has(d));
+  lines.push(`**Required by ${item.name} itself (${direct.length})**`, "", list(direct) || "_None._");
+
+  // Attribute each remaining package to the first item that declares it, so the agent can see
+  // "I already have FormBuilder, so I already have these".
+  const byOwner = new Map<string, string[]>();
+  for (const dep of plan.npmDependencies) {
+    if (own.has(dep)) continue;
+    const owner = plan.items.find((i) => i.name !== item.name && i.npmDependencies.includes(dep));
+    const key = owner?.name ?? "other";
+    byOwner.set(key, [...(byOwner.get(key) ?? []), dep]);
+  }
+
+  const inherited = plan.npmDependencies.length - direct.length;
+  if (inherited > 0) {
+    lines.push("", `**Inherited from what it composes (${inherited})** — you already have these if`);
+    lines.push("the composing component is installed.", "");
+    for (const [owner, deps] of [...byOwner].sort((a, b) => b[1].length - a[1].length)) {
+      lines.push(`- via **${owner}** (${deps.length}): ${list(deps)}`);
+    }
+  }
+
+  return lines.join("\n");
+}
+
 async function main() {
   // 1. Load all documentation into memory
   const loader = new DocsLoader();
@@ -219,9 +263,17 @@ async function main() {
   // Tool 4: Get component API/props only
   server.tool(
     "get-component-api",
-    "Get just the API reference (props table and TypeScript types) for a TORCH Glare component",
-    { component: z.string().describe("Component name") },
-    async ({ component }) => {
+    "Get just the API reference (props table and TypeScript types) for a TORCH Glare component. For a compound component, pass `part` to get one part's props on its own — e.g. component: 'DataViews', part: 'DataViews.Board'.",
+    {
+      component: z.string().describe("Component name"),
+      part: z
+        .string()
+        .optional()
+        .describe(
+          "One part of a compound component, e.g. 'DataViews.Board' or 'Panel.Columns'. Omit for the whole API block. The available parts are the sub-headings listed by get-component-docs.",
+        ),
+    },
+    async ({ component, part }) => {
       const doc = loader.getComponent(component);
       if (!doc) {
         return {
@@ -231,6 +283,36 @@ async function main() {
               text: `Component "${component}" not found. Use search-components or list-components to find the right name.`,
             },
           ],
+        };
+      }
+
+      // One part, on its own. A compound component's API block is the sum of its parts — DataViews'
+      // is ~11 KB — so an agent that already knows it wants the Board should not have to read the
+      // table, the inbox, the tree, the rail and the filters to get there.
+      if (part) {
+        const partSection = extractSection(doc.rawContent, part);
+        if (!partSection) {
+          // Scope the suggestions to the API block. Listing every `###` in the document offers
+          // "The tree's pane" and "Choosing a control" as though they were parts — noise at
+          // exactly the moment the caller is already lost.
+          const api = extractSection(doc.rawContent, "API Reference", "Props");
+          const parts = listSectionHeadings(api ?? doc.rawContent)
+            .filter((h) => h.startsWith("  "))
+            .map((h) => h.trim());
+          return {
+            content: [
+              {
+                type: "text",
+                text:
+                  `No "${part}" section in ${doc.name}.` +
+                  (parts.length ? ` Parts: ${parts.join(", ")}.` : "") +
+                  ` Omit \`part\` for the whole API reference.`,
+              },
+            ],
+          };
+        }
+        return {
+          content: [{ type: "text", text: `# ${doc.name} — ${part}\n\n${partSection}` }],
         };
       }
 
@@ -260,15 +342,21 @@ async function main() {
   // Tool 5: Get usage examples
   server.tool(
     "get-usage-examples",
-    "Get code examples for a TORCH Glare component, optionally filtered by pattern keyword",
+    "Get code examples for a TORCH Glare component: snippets from its docs, plus an index of complete runnable example pages. Pass `example` to fetch one of those pages in full.",
     {
       component: z.string().describe("Component name"),
       pattern: z
         .string()
         .optional()
-        .describe("Filter examples by keyword (e.g., 'form', 'loading', 'theme', 'icon')"),
+        .describe("Filter snippets by keyword (e.g., 'form', 'loading', 'theme', 'icon')"),
+      example: z
+        .string()
+        .optional()
+        .describe(
+          "Name of a complete example page to return in full (e.g. 'tree-custom'). Call without it first to see which pages exist.",
+        ),
     },
-    async ({ component, pattern }) => {
+    async ({ component, pattern, example }) => {
       const doc = loader.getComponent(component);
       if (!doc) {
         return {
@@ -279,6 +367,27 @@ async function main() {
             },
           ],
         };
+      }
+
+      // A whole example page, asked for by name. These are generated from the app's real pages
+      // into the component's own docs folder, so they ship with the package — the docs used to
+      // link at `apps/app/...`, which is in neither tarball.
+      const pages = loader.getExampleNames(doc.name);
+      if (example) {
+        const page = loader.getExample(doc.name, example);
+        if (!page) {
+          return {
+            content: [
+              {
+                type: "text",
+                text:
+                  `No example "${example}" for ${doc.name}.` +
+                  (pages.length ? ` Available: ${pages.join(", ")}.` : " This component has none."),
+              },
+            ],
+          };
+        }
+        return { content: [{ type: "text", text: RULES_HINT + page }] };
       }
 
       let examples = extractCodeExamples(doc.rawContent);
@@ -305,7 +414,13 @@ async function main() {
           content: [
             {
               type: "text",
-              text: `No code examples found for "${component}"${pattern ? ` matching "${pattern}"` : ""}.`,
+              text:
+                `No code snippets in the ${doc.name} docs${pattern ? ` matching "${pattern}"` : ""}.` +
+                // Having no snippets does not mean having no examples — say so rather than
+                // leaving an agent believing the component is undocumented.
+                (pages.length
+                  ? ` There are ${pages.length} complete example page(s): ${pages.join(", ")}. Fetch one with the \`example\` argument.`
+                  : ""),
             },
           ],
         };
@@ -315,13 +430,21 @@ async function main() {
         .map((e) => `### ${e.heading}\n\n\`\`\`${e.language}\n${e.code}\n\`\`\``)
         .join("\n\n");
 
+      // The snippets above are fragments; these are whole working pages. Listing rather than
+      // inlining them keeps this response small — DataViews alone has fourteen.
+      const index = pages.length
+        ? `\n\n## Complete example pages (${pages.length})\n\n` +
+          pages.map((name) => `- \`${name}\``).join("\n") +
+          `\n\nFetch one in full with get-usage-examples { component: "${doc.name}", example: "${pages[0]}" }.`
+        : "";
+
       return {
         content: [
           {
             type: "text",
             text:
               RULES_HINT +
-              `# ${doc.name} Code Examples${pattern ? ` (filtered: "${pattern}")` : ""}\n\n${formatted}`,
+              `# ${doc.name} Code Examples${pattern ? ` (filtered: "${pattern}")` : ""}\n\n${formatted}${index}`,
           },
         ],
       };
@@ -465,9 +588,11 @@ async function main() {
         "```",
         "",
         `## npm dependencies (${plan.npmDependencies.length})`,
-        plan.npmDependencies.length
-          ? plan.npmDependencies.map((d) => `- \`${d}\``).join("\n")
-          : "_None._",
+        // Split by *why* each package is here. The flat total is correct — `add` really does copy
+        // that whole subtree — but as advice it misleads: DataViews needs four packages, and the
+        // other forty-one arrive through FormBuilder's rich-text field. An agent told to install
+        // Editor.js for a data grid reasonably concludes something is wrong.
+        formatNpmDependencies(item, plan),
         "",
         `## Internal dependencies copied alongside (${internalDeps.length})`,
         internalDeps.length
@@ -631,6 +756,14 @@ async function main() {
           ? usedBy.map((d) => `- ${d}`).join("\n")
           : "_Nothing else composes it directly._",
       ];
+
+      // The install graph answers "what gets copied in", which is not the question an agent
+      // choosing between components is asking. The doc's own table answers that one — Table vs
+      // DataTable vs DataViews — so hand both over.
+      const doc = loader.getComponent(entry.name);
+      const related = doc && extractSection(doc.rawContent, "Related Components", "Related");
+      if (related) lines.push("", `## When to reach for something else`, "", related);
+
       return { content: [{ type: "text", text: lines.join("\n") }] };
     },
   );

@@ -1,7 +1,24 @@
+---
+title: DataViews example — State
+description: Controlled versus uncontrolled query.
+group: examples
+component: DataViews
+keywords: [data-views, example, examples, state]
+---
+
+# DataViews example — State
+
+Controlled versus uncontrolled query.
+
+Complete and runnable — this is the page itself, not an excerpt. In the monorepo it lives at `apps/app/data-views/state/page.tsx`.
+
+See the [component reference](../index.md) for what each prop does, or the [guide](../guide.md) for the same ground as scenarios.
+
+```tsx
 "use client";
 
 import { useMemo, useState } from "react";
-import { useMutation, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Filter, Settings } from "lucide-react";
 import { Button } from "@/components/Button";
 import { DataViews, emptyQuery, queryToParams, type SavedView } from "@/components/DataViews";
@@ -11,7 +28,6 @@ import type {
   FieldConfig,
   Row,
   RowGroup,
-  TreeNode,
 } from "@/utils/dataViews/types";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -63,54 +79,39 @@ async function fetchOrders(q: DataViewsQuery): Promise<{ rows: Order[]; total: n
   return res.json();
 }
 
-/** The other half of `onRowMove`: the board emits intent, this is what persists it. */
-async function moveOrder(body: { id?: number; status?: string; reset?: boolean }) {
-  const res = await fetch("/api/orders", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  return res.json();
-}
-
 const groupByStatus = (rows: readonly Order[]): RowGroup[] =>
-  (["Pending", "Shipped", "Delivered", "Cancelled"] as const).map((status) => ({
+  (["Pending", "Shipped", "Delivered"] as const).map((status) => ({
     id: status,
     label: status,
-    color: ({ Pending: "gray", Shipped: "blue", Delivered: "green", Cancelled: "red" } as const)[status],
+    color: ({ Pending: "gray", Shipped: "blue", Delivered: "green" } as const)[status],
     rows: rows.filter((row) => row.status === status),
   }));
 
-/** Every node is a real row here, so the detail pane fills whichever one you select. */
-const nodesFromRows = (rows: readonly Order[]): TreeNode[] => {
-  const [first, ...rest] = rows;
-  if (!first) return [];
-  return [
-    {
-      id: String(first.id),
-      row: first,
-      depth: 0,
-      children: rest.slice(0, 4).map((row) => ({ id: String(row.id), row, depth: 1, children: [] })),
-    },
-    ...rest.slice(4).map((row) => ({ id: String(row.id), row, depth: 0, children: [] })),
-  ];
-};
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-/** Every part at once: four views, the rail, filters, an empty state and a drag round-trip. */
-export default function OverviewExample() {
-  const queryClient = useQueryClient();
+/**
+ * Every piece of interaction state owned by this page, and the two states that replace the view.
+ *
+ * Supply all nine pairs and there is no second copy to fall out of step; omit them all and the
+ * same component runs uncontrolled. The buttons drive it from the outside, which only works
+ * because the props are honoured rather than used as initial values.
+ */
+export default function StateExample() {
   const [query, setQuery] = useState(emptyQuery());
+  // The observers: told what the component decided, not driving it.
+  const [seenView, setSeenView] = useState("");
+  const [seenSelection, setSeenSelection] = useState<readonly string[]>([]);
   const [saved, setSaved] = useState<SavedView[]>([]);
 
+  const [empty, setEmpty] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [withViews, setWithViews] = useState(true);
 
 
   const { data, isPending, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     // The key *is* the query: touch any part of it and TanStack refetches, and a response that
     // has been superseded is discarded rather than landing on top of a newer one.
-    queryKey: ["overview-orders", { ...query, page: undefined }],
+    queryKey: ["state-orders", { ...query, page: undefined }],
     queryFn: ({ pageParam }) => fetchOrders({ ...query, page: pageParam }),
     initialPageParam: 1,
     // Undefined means "no more" — which is what the component's `hasMore` resolves to.
@@ -121,18 +122,14 @@ export default function OverviewExample() {
   });
 
   // Memoised because `data?.rows ?? []` is a new array on every render, which would make the
-  // `groups`/`nodes` memos below miss every time and hand the board a new array to diff.
-  const rows = useMemo(() => data?.pages.flatMap((page) => page.rows) ?? [], [data]);
+  // `groups` memo below miss every time and hand the board a new array to diff.
+  const queried = useMemo(() => data?.pages.flatMap((page) => page.rows) ?? [], [data]);
   const total = data?.pages[0]?.total ?? 0;
-  const groups = useMemo(() => groupByStatus(rows), [rows]);
-  const nodes = useMemo(() => nodesFromRows(rows), [rows]);
-
-  // Dropping a card emits intent; this is what persists it. The card settles where it landed
-  // only once the refetched rows agree.
-  const move = useMutation({
-    mutationFn: moveOrder,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["overview-orders"] }),
-  });
+  const rows = empty ? [] : queried;
+  // The board reads `groups`, never `rows`, so its columns stay full even when `rows` is emptied
+  // — and `Empty` keys off `rows`, which is why it takes over anyway. Keep `rows` populated
+  // alongside `groups`/`nodes`.
+  const groups = useMemo(() => groupByStatus(queried), [queried]);
 
   return (
     <div className="flex h-full min-h-0 flex-col p-4">
@@ -140,44 +137,70 @@ export default function OverviewExample() {
         rows={rows}
         fields={FIELDS}
         total={total}
-        loading={isPending}
+        loading={loading || isPending}
         onLoadMore={fetchNextPage}
         loadingMore={isFetchingNextPage}
+        query={query}
         onQueryChange={setQuery}
+        onViewChange={setSeenView}
+        onSelectionChange={setSeenSelection}
         className="h-full"
       >
         <DataViews.Header title="Orders">
           <DataViews.ViewSwitch />
           <DataViews.Search />
           <DataViews.Actions>
-            <Button variant="BluColStyle" size="M">New order</Button>
-            <Button variant="BluColStyle" size="M" onClick={() => move.mutate({ reset: true })}>
-              Reset
+            {/* The query is controlled here, so it can be driven from outside — which is what
+                a URL-synced list does. */}
+            <Button
+              variant="BluColStyle"
+              size="M"
+              onClick={() => setQuery((q) => ({ ...q, sort: { path: "total", direction: "desc" } }))}
+            >
+              Sort by total
+            </Button>
+            <Button
+              variant="BluColStyle"
+              size="M"
+              onClick={() => setQuery((q) => ({ ...q, filters: { status: ["Pending"] }, page: 1 }))}
+            >
+              Filter to pending
+            </Button>
+            <Button variant="BluColStyle" size="M" onClick={() => setQuery(emptyQuery())}>
+              Clear the query
+            </Button>
+            <Button variant="BluColStyle" size="M" onClick={() => setEmpty((v) => !v)}>
+              {empty ? "Restore rows" : "Empty the rows"}
+            </Button>
+            <Button variant="BluColStyle" size="M" onClick={() => setLoading((v) => !v)}>
+              {loading ? "Stop loading" : "Start loading"}
+            </Button>
+            <Button variant="BluColStyle" size="M" onClick={() => setWithViews((v) => !v)}>
+              {withViews ? "Remove every view" : "Restore the views"}
             </Button>
           </DataViews.Actions>
           <DataViews.PanelToggle />
         </DataViews.Header>
 
-        <DataViews.Table selectable />
-        <DataViews.Board
-          groups={groups}
-          titlePath="customer.name"
-          // A drop outside any column has nowhere to go, so there is nothing to persist.
-          onRowMove={(intent) => {
-            if (intent.to) move.mutate({ id: Number(intent.id), status: intent.to });
-          }}
-        />
-        <DataViews.Inbox
-          titlePath="customer.name"
-          datePath="createdAt"
+        {/* What the component reported back. Nothing here drives it. */}
+        <div
+          data-testid="observed"
+          className="typography-body-small-regular text-content-presentation-global-secondary border-border-presentation-global-primary border-b px-4 py-2"
         >
-          <DataViews.Detail />
-        </DataViews.Inbox>
-        {/* The pane's tabs are children, like every other part: pass none and there is no pane. */}
-        <DataViews.Tree nodes={nodes} labelPath="customer.name">
-          <DataViews.Tree.Table />
-          <DataViews.Tree.Cards />
-        </DataViews.Tree>
+          view: {seenView || "—"} · selected: {seenSelection.length}
+        </div>
+
+        {withViews && (
+          <DataViews.Table selectable />
+        )}
+        {withViews && (
+          <DataViews.Board
+            groups={groups}
+            titlePath="customer.name"
+          />
+        )}
+
+        {/* `loading` only swaps in a child you rendered — drop this and the prop does nothing. */}
 
         <DataViews.Panel>
           <DataViews.Panel.Tab value="config" label="Config." icon={<Settings />}>
@@ -224,3 +247,4 @@ export default function OverviewExample() {
     </div>
   );
 }
+```

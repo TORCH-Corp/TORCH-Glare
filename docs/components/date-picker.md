@@ -855,4 +855,3 @@ function DatePickerWithStore() {
 - [SlideDatePicker](./slide-date-picker.md) - Mobile-optimized slide picker
 - [InputField](./input-field.md) - Input field used as default trigger
 - [Popover](./popover.md) - Dropdown container
-- [TimePicker](./time-picker.md) - Standalone time picker

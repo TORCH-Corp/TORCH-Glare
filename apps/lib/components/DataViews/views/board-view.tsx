@@ -3,10 +3,9 @@
 import React, { useMemo } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { cn } from "../../../utils/cn";
-import { getByPath } from "../../../utils/dataViews/path";
-import type { ColumnColor, FieldConfig, Row, RowGroup } from "../../../utils/dataViews/types";
+import type { ColumnColor, RowGroup } from "../../../utils/dataViews/types";
 import { Button } from "../../Button";
-import { DataViewCard, type DataViewCardRow } from "../../../layouts/DataViewCard";
+import { DataViewCard } from "../../../layouts/DataViewCard";
 import {
   DragGhost,
   DragList,
@@ -16,6 +15,7 @@ import {
 } from "../../../hooks/useDragDrop";
 import { Cell } from "../cell";
 import { SkeletonBar, skeletonKeys } from "../states";
+import { buildCardRows } from "./card-rows";
 import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 import { useDataViewsData, useDataViewsView } from "../context";
 import { markView } from "../slots";
@@ -339,31 +339,6 @@ function BoardCard({
       {children(isDragging)}
     </div>
   );
-}
-
-/**
- * Pair the body fields two per row so the card grid keeps its rhythm even when one side is
- * missing: a lone survivor spans both columns, and fully empty pairs are dropped rather than
- * rendering a phantom row of hairlines.
- */
-function buildCardRows(fields: readonly FieldConfig[], row: Row): DataViewCardRow[] {
-  const rows: DataViewCardRow[] = [];
-  for (let i = 0; i < fields.length; i += 2) {
-    const pair = [fields[i], fields[i + 1]];
-    const cells: DataViewCardRow = [];
-    for (const [offset, field] of pair.entries()) {
-      if (!field) continue;
-      if (getByPath(row, field.path) == null) continue;
-      cells.push({
-        // Position, not path — two fields may share one.
-        key: `${field.path}-${i + offset}`,
-        label: field.label ?? field.path,
-        value: <Cell field={field} row={row} />,
-      });
-    }
-    if (cells.length > 0) rows.push(cells);
-  }
-  return rows;
 }
 
 /** The solid dark pill at the top of a column. No dot, no count — just the title and an action. */

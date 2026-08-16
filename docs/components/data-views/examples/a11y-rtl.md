@@ -1,7 +1,24 @@
+---
+title: DataViews example — Keyboard & RTL
+description: Keyboard paths and the RTL mirror.
+group: examples
+component: DataViews
+keywords: [data-views, example, examples, a11y, rtl]
+---
+
+# DataViews example — Keyboard & RTL
+
+Keyboard paths and the RTL mirror.
+
+Complete and runnable — this is the page itself, not an excerpt. In the monorepo it lives at `apps/app/data-views/a11y-rtl/page.tsx`.
+
+See the [component reference](../index.md) for what each prop does, or the [guide](../guide.md) for the same ground as scenarios.
+
+```tsx
 "use client";
 
 import { useMemo, useState } from "react";
-import { useMutation, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Filter, Settings } from "lucide-react";
 import { Button } from "@/components/Button";
 import { DataViews, emptyQuery, queryToParams, type SavedView } from "@/components/DataViews";
@@ -13,6 +30,7 @@ import type {
   RowGroup,
   TreeNode,
 } from "@/utils/dataViews/types";
+import type { Themes } from "@/utils/types";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -20,7 +38,6 @@ interface Order extends Row {
   id: number;
   customer: { name: string };
   status: "Pending" | "Shipped" | "Delivered";
-  priority: "High" | "Medium" | "Low";
   total: number;
   createdAt: string;
 }
@@ -30,9 +47,17 @@ const FIELDS: FieldConfig[] = [
   { path: "customer.name", label: "Customer", type: "text" },
   { path: "brand.name", label: "Brand", type: "text" },
   { path: "status", label: "Status", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" } },
-  { path: "priority", label: "Priority", type: "enum-badge", variants: { High: "redOrange", Medium: "purple", Low: "gray" } },
   { path: "total", label: "Total", type: "currency", currency: "USD" },
   { path: "createdAt", label: "Created", type: "date-format", dateFormat: "YYYY-MM-DD" },
+];
+
+/** Arabic labels, so a right-to-left layout is legible rather than mirrored English. */
+const ARABIC_FIELDS: FieldConfig[] = [
+  { path: "id", label: "رقم الطلب", type: "number" },
+  { path: "customer.name", label: "العميل", type: "text" },
+  { path: "status", label: "الحالة", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" } },
+  { path: "total", label: "المجموع", type: "currency", currency: "USD" },
+  { path: "createdAt", label: "التاريخ", type: "date-format", dateFormat: "YYYY-MM-DD" },
 ];
 
 /** Dynamic sets — in a real app these come from the endpoint that also does the filtering. */
@@ -63,54 +88,46 @@ async function fetchOrders(q: DataViewsQuery): Promise<{ rows: Order[]; total: n
   return res.json();
 }
 
-/** The other half of `onRowMove`: the board emits intent, this is what persists it. */
-async function moveOrder(body: { id?: number; status?: string; reset?: boolean }) {
-  const res = await fetch("/api/orders", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  return res.json();
-}
-
 const groupByStatus = (rows: readonly Order[]): RowGroup[] =>
-  (["Pending", "Shipped", "Delivered", "Cancelled"] as const).map((status) => ({
+  (["Pending", "Shipped", "Delivered"] as const).map((status) => ({
     id: status,
     label: status,
-    color: ({ Pending: "gray", Shipped: "blue", Delivered: "green", Cancelled: "red" } as const)[status],
+    color: ({ Pending: "gray", Shipped: "blue", Delivered: "green" } as const)[status],
     rows: rows.filter((row) => row.status === status),
   }));
 
-/** Every node is a real row here, so the detail pane fills whichever one you select. */
-const nodesFromRows = (rows: readonly Order[]): TreeNode[] => {
-  const [first, ...rest] = rows;
-  if (!first) return [];
-  return [
-    {
-      id: String(first.id),
-      row: first,
-      depth: 0,
-      children: rest.slice(0, 4).map((row) => ({ id: String(row.id), row, depth: 1, children: [] })),
-    },
-    ...rest.slice(4).map((row) => ({ id: String(row.id), row, depth: 0, children: [] })),
-  ];
-};
+const nodesFromRows = (rows: readonly Order[]): TreeNode[] =>
+  rows.map((row) => ({ id: String(row.id), row, depth: 0, children: [] }));
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-/** Every part at once: four views, the rail, filters, an empty state and a drag round-trip. */
-export default function OverviewExample() {
-  const queryClient = useQueryClient();
-  const [query, setQuery] = useState(emptyQuery());
-  const [saved, setSaved] = useState<SavedView[]>([]);
+/**
+ * Keyboard: tab through it with the mouse down. A row with `onRowClick` takes a `tabIndex`, a
+ * button role and Enter/Space handling — press Enter on one and it selects. Without the handler a
+ * row stays a plain row and is skipped, which is right: a row that does nothing is not a tab stop.
+ *
+ * The tree handles `←`/`→` and Enter but not yet `↑`/`↓`, `Home`/`End` or roving tabindex, so
+ * every node is its own tab stop. Drag-and-drop has no keyboard equivalent at all — if moving
+ * records matters, give people a menu action that emits the same intent.
+ *
+ * Direction comes from the DOM, not a prop: the component is built from logical properties, so
+ * `dir="rtl"` moves the rail left and aligns the table to the start edge. `theme` sets
+ * `data-theme` — but the filter dropdowns and the date calendar portal to `document.body`, so
+ * they follow the *page's* theme rather than this one.
+ */
+export default function AccessibilityExample() {
+  const [rtl, setRtl] = useState(false);
+  const [theme, setTheme] = useState<Themes>("default");
 
+  const [query, setQuery] = useState(emptyQuery());
+  const [activated, setActivated] = useState<string | null>(null);
+  const [saved, setSaved] = useState<SavedView[]>([]);
 
 
   const { data, isPending, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     // The key *is* the query: touch any part of it and TanStack refetches, and a response that
     // has been superseded is discarded rather than landing on top of a newer one.
-    queryKey: ["overview-orders", { ...query, page: undefined }],
+    queryKey: ["a11y-orders", { ...query, page: undefined }],
     queryFn: ({ pageParam }) => fetchOrders({ ...query, page: pageParam }),
     initialPageParam: 1,
     // Undefined means "no more" — which is what the component's `hasMore` resolves to.
@@ -127,18 +144,13 @@ export default function OverviewExample() {
   const groups = useMemo(() => groupByStatus(rows), [rows]);
   const nodes = useMemo(() => nodesFromRows(rows), [rows]);
 
-  // Dropping a card emits intent; this is what persists it. The card settles where it landed
-  // only once the refetched rows agree.
-  const move = useMutation({
-    mutationFn: moveOrder,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["overview-orders"] }),
-  });
-
   return (
-    <div className="flex h-full min-h-0 flex-col p-4">
+    <div dir={rtl ? "rtl" : "ltr"} className="flex h-full min-h-0 flex-col p-4">
       <DataViews
+        key={rtl ? "rtl" : "ltr"}
         rows={rows}
-        fields={FIELDS}
+        fields={rtl ? ARABIC_FIELDS : FIELDS}
+        theme={theme}
         total={total}
         loading={isPending}
         onLoadMore={fetchNextPage}
@@ -146,33 +158,45 @@ export default function OverviewExample() {
         onQueryChange={setQuery}
         className="h-full"
       >
-        <DataViews.Header title="Orders">
+        <DataViews.Header title={rtl ? "الطلبات" : "Orders"}>
           <DataViews.ViewSwitch />
           <DataViews.Search />
           <DataViews.Actions>
-            <Button variant="BluColStyle" size="M">New order</Button>
-            <Button variant="BluColStyle" size="M" onClick={() => move.mutate({ reset: true })}>
-              Reset
+            {/* Proof the keyboard path works: Enter on a focused row fires `onRowClick`. */}
+            <span
+              data-testid="activated"
+              className="typography-body-small-regular text-content-presentation-global-secondary"
+            >
+              {activated ? `row ${activated}` : "no row activated"}
+            </span>
+            {/* Two buttons rather than one toggle: a single button labelled with the current
+                direction is ambiguous — it reads as either the state or the action. */}
+            <Button variant="BluColStyle" size="M" onClick={() => setRtl(false)}>
+              LTR
             </Button>
+            <Button variant="BluColStyle" size="M" onClick={() => setRtl(true)}>
+              RTL
+            </Button>
+            {(["default", "dark", "light"] as const).map((t) => (
+              <Button variant="BluColStyle"
+                size="M"
+                key={t}
+                onClick={() => setTheme(t)}
+              >
+                {t}
+              </Button>
+            ))}
           </DataViews.Actions>
           <DataViews.PanelToggle />
         </DataViews.Header>
 
-        <DataViews.Table selectable />
+        {/* Enter on a focused row fires `onRowClick` — the visible proof the row is reachable
+            without a mouse. What to do about it is the app's call; here it is a readout. */}
+        <DataViews.Table selectable onRowClick={(_row, id) => setActivated(id)} />
         <DataViews.Board
           groups={groups}
           titlePath="customer.name"
-          // A drop outside any column has nowhere to go, so there is nothing to persist.
-          onRowMove={(intent) => {
-            if (intent.to) move.mutate({ id: Number(intent.id), status: intent.to });
-          }}
         />
-        <DataViews.Inbox
-          titlePath="customer.name"
-          datePath="createdAt"
-        >
-          <DataViews.Detail />
-        </DataViews.Inbox>
         {/* The pane's tabs are children, like every other part: pass none and there is no pane. */}
         <DataViews.Tree nodes={nodes} labelPath="customer.name">
           <DataViews.Tree.Table />
@@ -198,9 +222,8 @@ export default function OverviewExample() {
 
           <DataViews.Panel.Tab value="filters" label="Filters" icon={<Filter />}>
             {/* The controls are FormBuilder fields — the same Select and Slider any form in
-                this library uses. The <FormBuilder> itself lives inside Filters; you write only
-                its fields, and Filters reads each one's name, label and bounds to learn what
-                it is. */}
+                this library uses. Filters reads each child's name, label and bounds to learn
+                what it is; there is no second description of the form. */}
             <DataViews.Filters
               title={null}
               className="border-b-0 p-0"
@@ -224,3 +247,4 @@ export default function OverviewExample() {
     </div>
   );
 }
+```
