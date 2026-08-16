@@ -1,6 +1,6 @@
 {
   "name": "torch-glare",
-  "version": "2.4.5",
+  "version": "2.5.1",
   "type": "module",
   "license": "MIT",
   "description": "A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.",
@@ -37,6 +37,7 @@
   "scripts": {
     "build": "tsc -b",
     "registry": "node scripts/bin/generateRegistry/index.js",
+    "examples": "node scripts/bin/generateExampleDocs/index.js",
     "docs:fix": "node scripts/bin/fixDocs/index.js",
     "check:ai-docs": "node scripts/bin/checkAiDocs/index.js",
     "typecheck": "pnpm -C apps run typecheck",
@@ -46,7 +47,7 @@
     "test": "pnpm -C apps run test",
     "mcp:build": "pnpm -C mcp install && pnpm -C mcp run build",
     "prepare": "pnpm -C mcp install && pnpm -C mcp run build",
-    "deploy": "pnpm run registry && npx tsc --build --force && npm publish --access public"
+    "deploy": "pnpm run registry && pnpm run examples && pnpm run check:ai-docs && npx tsc --build --force && npm publish --access public"
   },
   "dependencies": {
     "commander": "^13.1.0",

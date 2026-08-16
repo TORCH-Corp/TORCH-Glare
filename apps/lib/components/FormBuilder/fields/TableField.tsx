@@ -165,7 +165,7 @@ export function TableField(props: TableFieldProps) {
           fade={false}
           childrenClassName={cn("min-w-0 w-full", col.align && ALIGN[col.align])}
         >
-          <CellContext.Provider value={true}>{col.cell(rowName, index)}</CellContext.Provider>
+          <CellContext.Provider value="table">{col.cell(rowName, index)}</CellContext.Provider>
         </TableCell>
       ))}
     </>

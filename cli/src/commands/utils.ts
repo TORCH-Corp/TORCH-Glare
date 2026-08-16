@@ -8,7 +8,8 @@ import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
 import { getInstallPaths } from "../shared/getInstallPaths.js";
 import inquirer from "inquirer";
 import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
-import { isFileExists } from "../shared/isFileExists.js";
+import { installFromPlan, reportInstall } from "../shared/installFromPlan.js";
+import { isInstalled, resolveEntry } from "../shared/resolveEntry.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -30,31 +31,40 @@ export async function addUtil(util?: string, replace: boolean = false): Promise<
     }
 
     // Resolve user input — accepts "cn", "cn.ts", or a folder name like "dataViews".
-    const resolved = resolveUtilEntry(util, availableUtils, utilsTemplatesDir);
+    const resolved = resolveEntry(util, availableUtils, utilsTemplatesDir);
     if (!resolved) {
         console.error(`❌ Utility file "${util}" not found.`);
         return;
     }
     util = resolved;
 
-    // get the path and create the create the target directory
+    // The registry resolves the whole graph in one pass, so `replace` reaches every item.
+    const name = resolved.replace(/\.(tsx|ts)$/, "");
+    const result = installFromPlan("utils", name, targetFile, replace);
+    if (result) {
+        reportInstall(resolved, result, targetFile.path);
+        return;
+    }
+
+    // Not in registry.json — copy it alone, and say why the dependencies were not resolved.
+    console.warn(
+        `⚠️ "${resolved}" is not in registry.json, so its dependencies cannot be resolved.\n` +
+            `   Copying the file only. Re-run \`pnpm run registry\` in the library to fix this.`,
+    );
     const { source, targetDir } = getInstallPaths(util, targetFile, utilsTemplatesDir, "utils");
-    const target: string = path.join(targetDir, util);
 
-    fs.rmSync(target, { recursive: true, force: true });
-
-    // Ensure the target directory exists
-    ensureDirectoryExists(targetDir);
-
-    // Check if utility file already exists
-    if (isFileExists(targetDir, util) && !replace) {
+    // Check *before* removing anything. This used to `rmSync` the target first, which made the
+    // check below permanently false — so every visit re-copied the file and re-printed the success
+    // line, which is why one `add` reported "cn.ts has been added" five times.
+    if (isInstalled(targetDir, util) && !replace) {
         console.log(`⚠️ Utility file "${util}" already exists.`);
         return;
     }
 
-    // Copy the utility file and install dependencies
+    const target: string = path.join(targetDir, util);
+    if (fs.existsSync(target)) fs.rmSync(target, { recursive: true, force: true });
+    ensureDirectoryExists(targetDir);
     copyComponentsRecursively(source, target);
-
     console.log(`✅ ${util} has been added to ${targetFile.path}!`);
 }
 
@@ -67,25 +77,6 @@ function getAvailableUtils(utilsTemplatesDir: string): string[] {
     return fs.readdirSync(utilsTemplatesDir).map((file) => path.basename(file));
 }
 
-/**
- * Resolve a user-provided util name to an actual entry. Tries:
- *   1. exact match (e.g. "cn.ts" or "dataViews")
- *   2. with `.ts` suffix
- *   3. with `.tsx` suffix
- */
-function resolveUtilEntry(
-    input: string,
-    available: string[],
-    dir: string,
-): string | null {
-    if (available.includes(input)) return input;
-    const candidates = [`${input}.ts`, `${input}.tsx`];
-    for (const c of candidates) {
-        if (available.includes(c)) return c;
-    }
-    if (fs.existsSync(path.join(dir, input))) return input;
-    return null;
-}
 
 /**
  * Prompt the user to select a utility file from a list.

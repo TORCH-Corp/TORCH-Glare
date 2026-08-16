@@ -48,7 +48,7 @@ const trackStyles = cva(
 // transparent and lighten on hover.
 const optionStyles = cva(
   [
-    "flex items-center justify-center gap-[6px]",
+    "flex items-center justify-center gap-[4px]",
     "rounded-[8px]",
     "font-[510] leading-none",
     "transition-all duration-200 ease-in-out",
@@ -74,8 +74,11 @@ const optionStyles = cva(
         true: [
           "bg-white",
           "text-[#1C1D1F]",
+          // The border is not in the design. It stays because its transparent twin below is what
+          // keeps both states the same width — without it, selecting a tab resizes the pill and
+          // shoves its neighbours. The design's own 4px gap absorbs the 1px.
           "border border-black/5",
-          "shadow-[0_1px_3px_0_rgba(0,0,0,0.18)]",
+          "drop-shadow-[0px_0px_5px_rgba(0,0,0,0.25)]",
         ],
         false: [
           "border border-transparent",
@@ -121,8 +124,17 @@ function TabSwitchInner<T extends string = string>(
 
         return (
           <div key={option.value} className="flex items-center">
-            {showDivider && (
-              <div className="mx-[3px] h-3 w-px bg-border-presentation-action-disabled" />
+            {idx > 0 && (
+              <div
+                aria-hidden
+                className={cn(
+                  // The slot is always here, and only its ink changes. Unmounting it instead cost
+                  // the track 7px every time the rule below hid one, so picking a tab resized the
+                  // track and shoved its neighbours sideways.
+                  "mx-[3px] h-3 w-px",
+                  showDivider ? "bg-border-presentation-action-disabled" : "bg-transparent",
+                )}
+              />
             )}
             <button
               type="button"

@@ -70,7 +70,7 @@ export function getDependenciesAndInstallNestedComponents(
         } else if (head === "hooks") {
             const hookEntry = rest[1]
             if (hookEntry) {
-                addHook(`${hookEntry}.ts`)
+                addHook(hookEntry)
             }
         } else if (head === "layouts") {
             // layouts/DataViewCard → copy from apps/lib/layouts (NOT components)

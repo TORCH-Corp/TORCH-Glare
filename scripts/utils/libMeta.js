@@ -29,11 +29,24 @@ export function normalize(s) {
     return s.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-/** Build a normalized-key -> filename map for a directory, stripping a suffix if given. */
+/**
+ * Build a normalized-key -> filename map for a directory, stripping a suffix if given.
+ *
+ * A component's docs may be one file (`button.md`) or a folder whose `index.md` is the reference
+ * and whose siblings are its guide, migration notes and examples — the form a component with more
+ * than a page of documentation takes. Both resolve to the same key.
+ */
 function buildIndex(dir, { ext, stripSuffix } = {}) {
     const map = new Map();
     if (!fs.existsSync(dir)) return map;
-    for (const file of fs.readdirSync(dir)) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const file = entry.name;
+        if (entry.isDirectory()) {
+            if (ext === ".md" && fs.existsSync(path.join(dir, file, "index.md"))) {
+                map.set(normalize(file), path.join(file, "index.md"));
+            }
+            continue;
+        }
         if (ext && !file.endsWith(ext)) continue;
         let base = file.replace(/\.[^.]+$/, "");
         if (stripSuffix && base.toLowerCase().endsWith(stripSuffix.toLowerCase())) {
@@ -59,9 +72,28 @@ export function resolveExample(name) {
     return file ? `apps/app/exmples/${file}` : null;
 }
 
-/** Read a registry item's source file. */
+/**
+ * Read a registry item's source.
+ *
+ * A folder component (`components/DataViews`) has no single file, so its sources are concatenated
+ * — everything downstream only scans the text for variant names and identifiers, and one blob
+ * answers that as well as a file does.
+ */
 export function readItemSource(item) {
-    return fs.readFileSync(path.join(LIB_DIR, item.path), "utf-8");
+    const abs = path.join(LIB_DIR, item.path);
+    if (!fs.existsSync(abs)) return "";
+    if (!fs.statSync(abs).isDirectory()) return fs.readFileSync(abs, "utf-8");
+
+    const read = (dir) =>
+        fs
+            .readdirSync(dir, { withFileTypes: true })
+            .flatMap((entry) => {
+                const child = path.join(dir, entry.name);
+                if (entry.isDirectory()) return read(child);
+                if (!/\.(ts|tsx)$/.test(entry.name)) return [];
+                return [fs.readFileSync(child, "utf-8")];
+            });
+    return read(abs).join("\n");
 }
 
 /**

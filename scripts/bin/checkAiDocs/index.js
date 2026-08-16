@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { ROOT, loadRegistry, components, extractVariants, resolveDoc, normalize } from "../../utils/libMeta.js";
+import { buildExampleDocs, staleExampleDocs } from "../generateExampleDocs/index.js";
 
 /**
  * AI-doc lint: fail if known-bad content appears in the `docs/` markdown that the
@@ -51,14 +52,57 @@ function walk(dir) {
 
 const targets = walk(path.join(ROOT, "docs")).filter((f) => fs.existsSync(f));
 
+// Every name a doc is allowed to render or import as a component. Registry items, plus the
+// compound parts and local identifiers an example legitimately defines for itself.
+const installable = new Set(components(registry).map((c) => normalize(c.name)));
+
+
 for (const file of targets) {
     const rel = path.relative(ROOT, file);
-    const lines = fs.readFileSync(file, "utf-8").split("\n");
+    // A migration guide's whole job is to name the thing that was removed — whether it lives in
+    // `docs/migration/` or as `migration.md` inside a component's own folder.
+    const parts = rel.split(path.sep);
+    const isMigration = parts.includes("migration") || parts.at(-1) === "migration.md";
+    const source = fs.readFileSync(file, "utf-8");
+    const lines = source.split("\n");
     let inFence = false;
+
+    // ── relative links: must exist, and must stay inside docs/ ───────────────
+    //
+    // Two failures, one rule. A link to a page that no longer exists sends a reader — or an agent
+    // following the trail — to nothing. A link that *escapes* `docs/` is worse: it resolves fine
+    // in the monorepo and dangles for everyone who installed the package, because `docs/` is the
+    // only documentation either tarball ships. That is exactly how 23 links into `apps/app/`
+    // shipped, pointing at example pages no user has ever had.
+    const DOCS_DIR = path.join(ROOT, "docs");
+    for (const m of source.matchAll(/\]\((\.[^)#\s]+)(?:#[^)\s]*)?\)/g)) {
+        const href = m[1];
+        const target = path.resolve(path.dirname(file), href);
+        const line = source.slice(0, m.index).split("\n").length;
+        const at = `${rel}:${line}`;
+        const inside = !path.relative(DOCS_DIR, target).startsWith("..");
+        if (!inside) {
+            violations.push(`${at}  link leaves docs/ → ${href} (nothing outside docs/ ships)`);
+        } else if (!fs.existsSync(target)) {
+            violations.push(`${at}  dead link → ${href}`);
+        }
+    }
+
     lines.forEach((line, i) => {
         const at = (msg) => `${rel}:${i + 1}  ${msg}\n      → ${line.trim()}`;
 
         for (const { re, msg } of DENY) if (re.test(line)) violations.push(at(msg));
+
+        // ── components that do not exist ─────────────────────────────────────
+        // This is the rule that would have caught `import { DataViewsLayout } from
+        // "@/components/DataViewsLayout"` sitting in a how-to for two releases after the
+        // component was deleted: docs teaching an API that cannot compile.
+        if (!isMigration) {
+            const from = line.match(/from\s+["']@\/components\/([A-Za-z0-9_]+)/);
+            if (from && !installable.has(normalize(from[1]))) {
+                violations.push(at(`imports \`${from[1]}\`, which is not in the registry`));
+            }
+        }
 
         // Invalid identifiers inside `import { ... }` (e.g. `import { date-picker }`).
         const imp = line.match(/import\s+(?:type\s+)?\{([^}]*)\}/);
@@ -94,20 +138,15 @@ const COVERAGE_ALLOWLIST = {
         // Empty: every registry component now has a docs/components/<slug>.md.
     ]),
     // Component docs that resolve to no installable registry item of any type —
-    // get-install-info / get-component-source return "not found" for these. They
-    // document nested DataViews feature modules the flat registry omits by design.
+    // get-install-info / get-component-source return "not found" for these.
+    //
+    // Folder components are no longer listed here: `generateRegistry` registers them, so
+    // FormBuilder, FormRenderer, TextEditor, DataViews and TreeFolder all resolve. What remains
+    // are documented *sub-tools* of a folder component, which are not installable on their own.
     docsWithoutRegistryItem: new Set([
-        "data-views-config-panel",
-        "data-views-layout",
-        "inbox-view",
-        "kanban-view",
-        "table-view",
-        "tree-view",
-        // FormBuilder + FormRenderer ship as folder components (components/FormBuilder/,
-        // components/FormRenderer/), which the flat registry omits by design — installed
-        // via the CLI's recursive folder copy, exactly like DataViews/TreeFolder.
-        "form-builder",
-        "form-renderer",
+        // Editor.js tools that ship inside components/TextEditor/.
+        "chart-block-tool",
+        "table-dnd-wrapper",
     ]),
 };
 
@@ -125,8 +164,20 @@ for (const c of components(registry)) {
 const registryByNorm = new Set(registry.items.map((i) => normalize(i.name)));
 const docsComponentsDir = path.join(ROOT, "docs", "components");
 if (fs.existsSync(docsComponentsDir)) {
-    for (const file of fs.readdirSync(docsComponentsDir).filter((f) => f.endsWith(".md")).sort()) {
-        const slug = file.replace(/\.md$/, "");
+    // Either `button.md` or `data-views/index.md` — both are one component's reference.
+    const docSlugs = fs
+        .readdirSync(docsComponentsDir, { withFileTypes: true })
+        .flatMap((e) =>
+            e.isDirectory()
+                ? fs.existsSync(path.join(docsComponentsDir, e.name, "index.md"))
+                    ? [[e.name, `${e.name}/index.md`]]
+                    : []
+                : e.name.endsWith(".md")
+                  ? [[e.name.replace(/\.md$/, ""), e.name]]
+                  : [],
+        )
+        .sort();
+    for (const [slug, file] of docSlugs) {
         if (!registryByNorm.has(normalize(slug)) && !COVERAGE_ALLOWLIST.docsWithoutRegistryItem.has(slug)) {
             violations.push(
                 `coverage: docs/components/${file} resolves to no registry item — ` +
@@ -134,6 +185,29 @@ if (fs.existsSync(docsComponentsDir)) {
                 `Register the component, or allowlist it (COVERAGE_ALLOWLIST.docsWithoutRegistryItem).`,
             );
         }
+    }
+}
+
+// ── generated example docs are current ──────────────────────────────────────
+//
+// The example docs are copies of real pages. A copy is the kind of documentation that rots the
+// first time someone edits the original — which is precisely how a how-to ended up teaching a
+// component that had been deleted two releases earlier. Re-running the generator in memory and
+// comparing costs nothing and makes that impossible.
+{
+    const built = buildExampleDocs();
+    const DOCS_DIR = path.join(ROOT, "docs");
+    for (const [rel, expected] of built) {
+        const abs = path.join(DOCS_DIR, rel);
+        const actual = fs.existsSync(abs) ? fs.readFileSync(abs, "utf-8") : null;
+        if (actual === null) {
+            violations.push(`generated: docs/${rel} is missing — run \`pnpm run examples\``);
+        } else if (actual !== expected) {
+            violations.push(`generated: docs/${rel} is stale — run \`pnpm run examples\``);
+        }
+    }
+    for (const rel of staleExampleDocs(built)) {
+        violations.push(`generated: docs/${rel} is no longer generated — run \`pnpm run examples\``);
     }
 }
 

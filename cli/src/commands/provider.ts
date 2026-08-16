@@ -8,7 +8,8 @@ import { ensureDirectoryExists } from "../shared/ensureDirectoryExists.js";
 import { getInstallPaths } from "../shared/getInstallPaths.js";
 import { copyComponentsRecursively } from "../shared/copyComponentsRecursively.js";
 import inquirer from "inquirer";
-import { isFileExists } from "../shared/isFileExists.js";
+import { installFromPlan, reportInstall } from "../shared/installFromPlan.js";
+import { isInstalled, resolveEntry } from "../shared/resolveEntry.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,27 +31,36 @@ export async function addProvider(provider?: string, replace: boolean = false): 
         provider = await promptProviderSelection(availableProviders);
     }
 
-    // Validate if the provider exists in the provider templates directory
-    if (!availableProviders.includes(provider)) {
+    // Resolve the name the way every other command does — a bare `provider` name, a name with
+    // its extension, or a folder all reach the same entry.
+    const resolved = resolveEntry(provider!, availableProviders, providerTemplatesDir);
+    if (!resolved) {
         console.error(`❌ Provider "${provider}" not found.`);
         return;
     }
 
-    // Get the path and create the target directory
-    const { source, targetDir } = getInstallPaths(provider, targetFile, providerTemplatesDir, "providers");
-    // Ensure the target directory exists
-    ensureDirectoryExists(targetDir);
-
-    // Check if provider already exists
-    if (isFileExists(targetDir, provider) && !replace) {
-        console.log(`⚠️ Provider "${provider}" already exists.`);
+    // The registry resolves the whole graph in one pass, so `replace` reaches every item — and a
+    // dependency is never skipped-and-forgotten the way the per-file walker used to skip it.
+    const name = resolved.replace(/\.(tsx|ts)$/, "");
+    const result = installFromPlan("providers", name, targetFile, replace);
+    if (result) {
+        reportInstall(resolved, result, targetFile.path);
         return;
     }
 
-    // Copy the provider (file or directory) and install dependencies
+    // Not in registry.json — copy it alone, and say why the dependencies were not resolved.
+    console.warn(
+        `⚠️ "${resolved}" is not in registry.json, so its dependencies cannot be resolved.\n` +
+            `   Copying the file only. Re-run \`pnpm run registry\` in the library to fix this.`,
+    );
+    const { source, targetDir } = getInstallPaths(resolved, targetFile, providerTemplatesDir, "providers");
+    if (isInstalled(targetDir, resolved) && !replace) {
+        console.log(`⚠️ Provider "${resolved}" already exists.`);
+        return;
+    }
+    ensureDirectoryExists(targetDir);
     copyComponentsRecursively(source, targetDir);
-
-    console.log(`✅ ${provider} has been added to ${targetFile.path}!`);
+    console.log(`✅ ${resolved} has been added to ${targetFile.path}!`);
 }
 
 /**

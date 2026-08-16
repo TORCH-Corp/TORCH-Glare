@@ -1,5 +1,6 @@
 import fs from "fs";
 import { tailwindInit } from "../shared/tailwindInit.js";
+import { wireStylesheet } from "../shared/wireStylesheet.js";
 
 interface GlareConfig {
     path: string;
@@ -18,6 +19,9 @@ export async function initConfig(): Promise<void> {
         console.log("⚠️ glare.json already exists, skipping creation.");
     }
 
-    // Initialize Tailwind CSS config if not exists
-    tailwindInit();
+    // Install the Tailwind packages, then actually wire them into the project's stylesheet.
+    // Installing them and stopping — which is what this did — leaves a project that builds fine
+    // and renders every design token unstyled, with no error to explain it.
+    const { isV3 } = tailwindInit();
+    wireStylesheet(isV3);
 }

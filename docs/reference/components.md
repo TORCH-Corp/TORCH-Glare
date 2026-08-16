@@ -14,7 +14,7 @@ Complete reference index of all 53 components in the TORCH Glare Components Libr
 - [Forms & Inputs (17)](#forms--inputs)
 - [Buttons & Actions (3)](#buttons--actions)
 - [Layout & Containers (7)](#layout--containers)
-- [Data Display (8)](#data-display)
+- [Data Display (9)](#data-display)
 - [Overlays & Dialogs (7)](#overlays--dialogs)
 - [Date & Time (3)](#date--time)
 - [Feedback & Status (4)](#feedback--status)
@@ -68,7 +68,7 @@ Selectable checkbox component with multiple states.
 ### LabeledCheckBox
 Checkbox with integrated label and description.
 
-- **File**: [labeled-checkbox.md](../components/labeled-checkbox.md)
+- **File**: [labeled-check-box.md](../components/labeled-check-box.md)
 - **Props**: `label`, `description`, `checked`, `onChange`
 - **Features**: Built-in label, optional description
 - **Use Cases**: Terms acceptance, preferences, options
@@ -253,6 +253,16 @@ Grouped action buttons.
 
 ## Data Display
 
+### DataViews
+One dataset shown as a table, kanban board, inbox or tree, behind a shared header, filters and settings rail.
+
+- **File**: [data-views.md](../components/data-views/index.md)
+- **Guide**: [Build a screen with DataViews](../components/data-views/guide.md)
+- **Parts**: `Header` · `ViewSwitch` · `Search` · `Actions` · `PanelToggle` · `Table` · `Board` · `Inbox` · `Tree` (+ `Tree.Table`, `Tree.Cards`, `Tree.Tab`) · `Detail` · `Panel` (+ `Tab`, `Section`, `Columns`, `Sort`, `SavedViews`) · `Filters` (+ `Presets`, `Custom`, `Summary`)
+- **Props**: `rows`, `fields`, `total`, `loading`, `onQueryChange`, `onLoadMore`, `getRowId`, `defaultView`
+- **Features**: Scroll loading, table virtualization past 300 rows, drag and drop on four surfaces (touch + keyboard), filters authored as FormBuilder fields, saved views
+- **Use Cases**: Any list screen where the server owns the query
+
 ### Badge
 Small status or label indicator.
 
@@ -305,7 +315,7 @@ Advanced table with features.
 ### TreeDropDown
 Hierarchical dropdown menu.
 
-- **File**: [tree-dropdown.md](../components/tree-dropdown.md)
+- **File**: [tree-drop-down.md](../components/tree-drop-down.md)
 - **Props**: `tree`, `value`, `onChange`
 - **Features**: Nested items, expand/collapse
 - **Use Cases**: Category selection, file trees
@@ -537,9 +547,9 @@ All components are fully typed with TypeScript. Import types from the library:
 
 ```typescript
 import type { ButtonProps } from "@/components/Button";
-import type { InputProps } from "@/components/InputProps";
-import type { ButtonProps } from "@/components/LoginButton";
-import type { SelectProps } from "@/components/SelectProps";
+import type { InputProps } from "@/components/Input";
+import type { LoginButtonProps } from "@/components/LoginButton";
+import type { SelectProps } from "@/components/Select";
 ```
 
 ---

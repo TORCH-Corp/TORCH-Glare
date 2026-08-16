@@ -1,128 +1,28 @@
-"use client";
+import Link from "next/link";
+import { byGroup, GROUPS } from "./_examples";
 
-import {
-  DataViewsLayout,
-  type FieldConfig,
-  type ViewVisibility,
-} from "@/components/DataViews";
-
-const orders = [
-  {
-    id: 1,
-    customer: "Acme Inc.",
-    status: "Pending",
-    priority: "High",
-    total: 1240,
-    createdAt: "2025-09-10",
-  },
-  {
-    id: 2,
-    customer: "Globex Corp.",
-    status: "Shipped",
-    priority: "Medium",
-    total: 480,
-    createdAt: "2025-09-12",
-  },
-  {
-    id: 3,
-    customer: "Initech",
-    status: "Delivered",
-    priority: "Low",
-    total: 99,
-    createdAt: "2025-09-15",
-  },
-  {
-    id: 4,
-    customer: "Umbrella",
-    status: "Pending",
-    priority: "High",
-    total: 2890,
-    createdAt: "2025-09-18",
-  },
-  {
-    id: 5,
-    customer: "Hooli",
-    status: "Shipped",
-    priority: "Medium",
-    total: 740,
-    createdAt: "2025-09-20",
-  },
-  {
-    id: 6,
-    customer: "Stark Industries",
-    status: "Pending",
-    priority: "High",
-    total: 12400,
-    createdAt: "2025-09-22",
-  },
-  {
-    id: 7,
-    customer: "Wayne Enterprises",
-    status: "Delivered",
-    priority: "Medium",
-    total: 5300,
-    createdAt: "2025-09-25",
-  },
-  {
-    id: 8,
-    customer: "Cyberdyne",
-    status: "Shipped",
-    priority: "Low",
-    total: 220,
-    createdAt: "2025-09-28",
-  },
-];
-
-const orderFields: FieldConfig[] = [
-  { path: "id", label: "Order #", type: "number" },
-  { path: "customer", label: "Customer", type: "text" },
-  {
-    path: "status",
-    label: "Status",
-    type: "enum-badge",
-    variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" },
-    kanbanVariants: {
-      Pending: { label: "Pending", color: "gray" },
-      Shipped: { label: "Shipped", color: "blue" },
-      Delivered: { label: "Delivered", color: "green" },
-    },
-    filterable: true,
-  },
-  {
-    path: "priority",
-    label: "Priority",
-    type: "enum-badge",
-    variants: { High: "redOrange", Medium: "purple", Low: "gray" },
-    filterable: true,
-  },
-  {
-    path: "total",
-    label: "Total",
-    type: "currency",
-    currency: "USD",
-    filterable: true,
-  },
-  {
-    path: "createdAt",
-    label: "Created",
-    type: "date-format",
-    dateFormat: "YYYY-MM-DD",
-  },
-];
-
-const ALL_VIEWS: ViewVisibility = {
-  table: true,
-  kanban: true,
-  inbox: true,
-  tree: true,
-};
-
-export default function DataViewsDemo() {
+/** The suite index — a list of the examples, and nothing else. */
+export default function DataViewsIndex() {
   return (
-    <div className="flex h-full items-center justify-center bg-background-presentation-body-primary">
-      <p className="text-content-presentation-global-tertiary">
-        Select an item to view details
-      </p>
+    <div className="flex h-full flex-col gap-6 overflow-y-auto p-8">
+      {GROUPS.map((group) => (
+        <section key={group} className="flex flex-col gap-2">
+          <h2 className="typography-body-small-medium text-content-presentation-global-secondary">
+            {group}
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {byGroup(group).map((example) => (
+              <Link
+                key={example.slug}
+                href={`/data-views/${example.slug}`}
+                className="border-border-presentation-global-primary bg-background-presentation-form-field-primary hover:border-border-presentation-action-hover typography-body-medium-regular text-content-presentation-global-primary rounded-[8px] border px-3 py-2 transition-colors"
+              >
+                {example.title}
+              </Link>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

@@ -1,11 +1,12 @@
-import { installDependencies } from "./installDependencies.js";
 import fs from "fs";
 import path from "path";
 
 /**
- * Copy a component (directory or file) and install its dependencies.
- * @param {string} source - The source path of the component.
- * @param {string} target - The target path of the component.
+ * Copy a file or folder into place. **Only** copies.
+ *
+ * It used to call `installDependencies` per copied file, which turned one `add` of a 35-file
+ * component into 35 dependency walks — the amplifier behind every duplicated line of output.
+ * Resolving what to install is now the caller's job, done once, from the registry.
  */
 export function copyComponentsRecursively(source: string, target: string): void {
     if (fs.lstatSync(source).isDirectory()) {
@@ -26,7 +27,6 @@ export function copyComponentsRecursively(source: string, target: string): void 
         }
 
         fs.copyFileSync(source, finalTarget);
-        installDependencies(source);
     }
 }
 /**
@@ -51,7 +51,6 @@ export function copyDirectorySync(
             copyDirectorySync(sourcePath, targetPath);
         } else if (isCopyableFile(item.name)) {
             fs.copyFileSync(sourcePath, targetPath);
-            installDependencies(sourcePath);
         }
     }
 }

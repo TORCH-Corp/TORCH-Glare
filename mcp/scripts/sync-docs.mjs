@@ -29,6 +29,14 @@ for (const dir of docDirs) {
   }
 }
 
+// Top-level docs/*.md too — `migration/changelog.md` links to `../CHANGELOG-1.1.16.md`, and a
+// subdirectory-only copy left that link resolving in the monorepo and dangling in the package.
+for (const file of fs.readdirSync(path.join(repoRoot, "docs"))) {
+  if (!file.endsWith(".md")) continue;
+  fs.cpSync(path.join(repoRoot, "docs", file), path.join(destDocs, file));
+  console.log(`[sync-docs] ${file} -> docs/${file}`);
+}
+
 // Bundle the copy-in registry + component source so the published server can
 // answer get-install-info and get-component-source without the monorepo present.
 const registrySrc = path.join(repoRoot, "apps", "lib", "registry.json");

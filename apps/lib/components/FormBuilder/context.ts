@@ -25,13 +25,27 @@ export const DirectionContext = createContext<FieldDirection | undefined>(undefi
 export const useDirection = () => useContext(DirectionContext);
 
 /**
- * Cell mode — set to `true` by `FormBuilder.Table` around each cell's field so `FieldShell`
- * renders just the control (no label/row chrome) and surfaces validation errors as a tooltip
- * on the control instead of a stacked hint. Off (`false`) everywhere else, so normal fields
- * keep their full `FieldSection` layout.
+ * Field chrome mode — how much layout a field draws around its control.
+ *
+ * - `false` (the default) — the full `FieldSection` row: label, required marker, stacked hint.
+ * - `"table"` — a `FormBuilder.Table` cell: no row chrome, errors as a tooltip on the control,
+ *   and the control takes the flush table border treatment via `onTable`.
+ * - `"bare"` — chrome-less anywhere else, e.g. a `DataViews` filter or config panel: no row and
+ *   no stacked hint, but the control keeps its normal standalone border.
+ *
+ * The two chrome-less modes are deliberately distinct: dropping the label row and taking the
+ * table border are different decisions, and only a real table cell wants both.
  */
-export const CellContext = createContext<boolean>(false);
-export const useCell = () => useContext(CellContext);
+export type CellMode = "table" | "bare" | false;
+
+export const CellContext = createContext<CellMode>(false);
+
+/** The raw mode. Prefer `useBare` / `useOnTable` — they express the two real questions. */
+export const useCellMode = () => useContext(CellContext);
+/** True when the field renders without `FieldSection` chrome — `"table"` **or** `"bare"`. */
+export const useBare = () => useContext(CellContext) !== false;
+/** True only inside a `FormBuilder.Table` cell — drives the control's `onTable` border style. */
+export const useOnTable = () => useContext(CellContext) === "table";
 
 /**
  * Step registry — a `FormBuilder.Step` provides this so the fields rendered

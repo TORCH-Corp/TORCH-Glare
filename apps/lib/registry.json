@@ -1,6 +1,63 @@
 {
-  "version": "2.4.5",
+  "version": "2.5.1",
   "generatedBy": "scripts/bin/generateRegistry",
+  "npmVersions": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@editorjs/checklist": "^1.6.0",
+    "@editorjs/code": "^2.9.4",
+    "@editorjs/delimiter": "^1.4.2",
+    "@editorjs/editorjs": "^2.31.1",
+    "@editorjs/embed": "^2.8.0",
+    "@editorjs/header": "^2.8.8",
+    "@editorjs/inline-code": "^1.5.2",
+    "@editorjs/link": "^2.6.2",
+    "@editorjs/list": "^2.0.9",
+    "@editorjs/marker": "^1.4.0",
+    "@editorjs/nested-list": "^1.4.3",
+    "@editorjs/quote": "^2.7.6",
+    "@editorjs/raw": "^2.5.1",
+    "@editorjs/simple-image": "^1.6.0",
+    "@editorjs/table": "^2.4.5",
+    "@editorjs/text-variant-tune": "^1.0.3",
+    "@editorjs/underline": "^1.2.1",
+    "@editorjs/warning": "^1.4.1",
+    "@radix-ui/react-alert-dialog": "^1.1.6",
+    "@radix-ui/react-avatar": "^1.1.3",
+    "@radix-ui/react-checkbox": "^1.1.4",
+    "@radix-ui/react-context-menu": "^2.3.2",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-popover": "^1.1.6",
+    "@radix-ui/react-radio-group": "^1.2.3",
+    "@radix-ui/react-scroll-area": "^1.2.3",
+    "@radix-ui/react-select": "^2.1.6",
+    "@radix-ui/react-slider": "^1.4.2",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-switch": "^1.1.3",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toggle": "^1.1.2",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "@radix-ui/react-tooltip": "^1.1.8",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.14.9",
+    "chart.js": "^4.5.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "editorjs-undo": "^2.0.28",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.507.0",
+    "next": "15.2.1",
+    "react-day-picker": "^9.6.7",
+    "react-hook-form": "^7.54.2",
+    "react-hot-toast": "^2.5.2",
+    "tailwind-merge": "^3.0.2",
+    "torch-react-mobile-picker": "^1.1.0",
+    "vaul": "^1.1.2"
+  },
   "items": [
     {
       "name": "ActionButton",
@@ -225,6 +282,37 @@
       ]
     },
     {
+      "name": "DataViews",
+      "type": "components",
+      "path": "components/DataViews",
+      "npmDependencies": [
+        "@radix-ui/react-radio-group",
+        "@tanstack/react-virtual",
+        "lucide-react",
+        "react-hook-form"
+      ],
+      "registryDependencies": [
+        "components/Avatar",
+        "components/Badge",
+        "components/Button",
+        "components/Checkbox",
+        "components/ConclusionHeader",
+        "components/Divider",
+        "components/FormBuilder",
+        "components/Skeleton",
+        "components/Switch",
+        "components/TabSwitch",
+        "components/Table",
+        "components/TreeFolder",
+        "hooks/useDragDrop",
+        "hooks/useInfiniteScroll",
+        "layouts/DataViewCard",
+        "utils/cn",
+        "utils/dataViews",
+        "utils/types"
+      ]
+    },
+    {
       "name": "DatePicker",
       "type": "components",
       "path": "components/DatePicker.tsx",
@@ -282,7 +370,6 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "components/DropdownMenu",
         "utils/cn",
         "utils/types"
       ]
@@ -312,6 +399,67 @@
         "components/Label",
         "utils/cn",
         "utils/types"
+      ]
+    },
+    {
+      "name": "FormBuilder",
+      "type": "components",
+      "path": "components/FormBuilder",
+      "npmDependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "@editorjs/editorjs",
+        "@radix-ui/react-slider",
+        "react-hook-form"
+      ],
+      "registryDependencies": [
+        "components/BadgeField",
+        "components/Button",
+        "components/Card",
+        "components/Checkbox",
+        "components/ColorPicker",
+        "components/DatePicker",
+        "components/FieldHint",
+        "components/Form",
+        "components/FormStepper",
+        "components/HeaderBar",
+        "components/ImageAttachment",
+        "components/Input",
+        "components/InputField",
+        "components/InputOTP",
+        "components/Label",
+        "components/LabeledCheckBox",
+        "components/PasswordLevel",
+        "components/Radio",
+        "components/RadioCard",
+        "components/SearchableSelect",
+        "components/SearchableTree",
+        "components/SectionBlock",
+        "components/Select",
+        "components/Switch",
+        "components/Table",
+        "components/TextEditor",
+        "components/Textarea",
+        "components/Tooltip",
+        "hooks/useTagSelection",
+        "layouts/FieldSection",
+        "utils/cn"
+      ]
+    },
+    {
+      "name": "FormRenderer",
+      "type": "components",
+      "path": "components/FormRenderer",
+      "npmDependencies": [
+        "@radix-ui/react-tabs",
+        "react-hook-form"
+      ],
+      "registryDependencies": [
+        "components/Drawer",
+        "components/FormBuilder",
+        "components/TabFormItem",
+        "utils/cn"
       ]
     },
     {
@@ -771,6 +919,39 @@
       ]
     },
     {
+      "name": "TextEditor",
+      "type": "components",
+      "path": "components/TextEditor",
+      "npmDependencies": [
+        "@editorjs/checklist",
+        "@editorjs/code",
+        "@editorjs/delimiter",
+        "@editorjs/editorjs",
+        "@editorjs/embed",
+        "@editorjs/header",
+        "@editorjs/inline-code",
+        "@editorjs/link",
+        "@editorjs/list",
+        "@editorjs/marker",
+        "@editorjs/nested-list",
+        "@editorjs/quote",
+        "@editorjs/raw",
+        "@editorjs/simple-image",
+        "@editorjs/table",
+        "@editorjs/text-variant-tune",
+        "@editorjs/underline",
+        "@editorjs/warning",
+        "chart.js",
+        "class-variance-authority",
+        "editorjs-undo"
+      ],
+      "registryDependencies": [
+        "components/DropdownMenu",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
       "name": "Timeline",
       "type": "components",
       "path": "components/Timeline.tsx",
@@ -852,6 +1033,19 @@
       ]
     },
     {
+      "name": "TreeFolder",
+      "type": "components",
+      "path": "components/TreeFolder",
+      "npmDependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "hooks/useDragDrop",
+        "utils/cn",
+        "utils/types"
+      ]
+    },
+    {
       "name": "useActiveTreeItem",
       "type": "hooks",
       "path": "hooks/useActiveTreeItem.ts",
@@ -866,9 +1060,20 @@
       "registryDependencies": []
     },
     {
-      "name": "useDataViewsState",
+      "name": "useDragDrop",
       "type": "hooks",
-      "path": "hooks/useDataViewsState.ts",
+      "path": "hooks/useDragDrop.tsx",
+      "npmDependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "useInfiniteScroll",
+      "type": "hooks",
+      "path": "hooks/useInfiniteScroll.ts",
       "npmDependencies": [],
       "registryDependencies": []
     },
@@ -966,6 +1171,13 @@
       "name": "color",
       "type": "utils",
       "path": "utils/color.ts",
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "dataViews",
+      "type": "utils",
+      "path": "utils/dataViews",
       "npmDependencies": [],
       "registryDependencies": []
     },

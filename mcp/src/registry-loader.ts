@@ -168,9 +168,21 @@ export class RegistryLoader {
         (await this.exists(path.join(dirAbs, "index.ts"))) ||
         (await this.exists(path.join(dirAbs, "index.tsx")));
       if (!hasBarrel) continue;
-      if (this.byRef.has(`components/${name}`)) continue;
-
       const files = await this.listFolderFiles(dirAbs);
+
+      // The flat registry lists folder components now (`generateRegistry` walks directories), so
+      // most of these already exist and its entry is authoritative for dependencies. What a flat
+      // manifest cannot carry is the *shape*: `readSource` and `getSource` branch on `isFolder` to
+      // read a barrel rather than a file, and without it `get-component-source DataViews` returns
+      // nothing. So stamp the shape on and keep the registry's data.
+      const existing = this.byRef.get(`components/${name}`);
+      if (existing) {
+        if (!existing.isFolder) {
+          existing.isFolder = true;
+          existing.files = files.map((f) => path.posix.join("components", name, f));
+        }
+        continue;
+      }
       const { npm, registry } = await this.scanFolderDeps(dirAbs, files, name);
 
       folderItems.push({

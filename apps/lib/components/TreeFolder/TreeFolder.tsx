@@ -22,6 +22,7 @@ import type {
   TreeFolderVisibleRow,
 } from "./types";
 import { useTreeFolderDnD } from "./useTreeFolderDnD";
+import { DndContext, DragList } from "../../hooks/useDragDrop";
 
 export type TreeFolderProps = {
   data: TreeFolderNode[];
@@ -230,10 +231,9 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
     }, []);
 
     // ---- DnD ----
-    const { dragIds, dropTarget, getRowDragHandlers } = useTreeFolderDnD({
+    const { dragIds, dropTarget, contextProps, ids } = useTreeFolderDnD({
       data,
       rowsById,
-      scrollContainerRef: scrollRef,
       enabled: dndEnabled,
       onMove: handleMoveInternal,
       canDrop: ({ parentId }) => {
@@ -310,6 +310,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
         )}
 
         <TreeFolderStyles />
+        <DndContext {...contextProps}>
         <div ref={scrollRef} role="tree" className="tf-scroll flex-1 min-h-0 overflow-auto">
           {isEmpty ? (
             (emptyState ?? (
@@ -319,6 +320,7 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
             ))
           ) : (
             <div className="min-w-max" style={stripStyle}>
+              <DragList ids={ids} makeRoom={false}>
               {visibleRows.map((row, idx) => {
                 const prevRow = visibleRows[idx - 1];
                 const nextRow = visibleRows[idx + 1];
@@ -364,13 +366,14 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
                     dndEnabled={dndEnabled}
                     onSelect={handleSelect}
                     onToggle={handleToggle}
-                    dragHandlers={getRowDragHandlers(row.node.id)}
                   />
                 );
               })}
+              </DragList>
             </div>
           )}
         </div>
+        </DndContext>
       </div>
     );
   },

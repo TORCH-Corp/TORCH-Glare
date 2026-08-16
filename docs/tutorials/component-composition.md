@@ -391,8 +391,7 @@ import { useState } from 'react';
 import { Button } from "@/components/Button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/Dialog";
 import { LabelField } from "@/components/LabelField";
-import { Select } from "@/components/Select";
-import { SimpleOption } from "@/components/SimpleOption";
+import { Select, SelectItem } from "@/components/Select";
 import { TextArea } from "@/components/TextArea";
 import { toast } from "@/components/Toast";
 
@@ -460,10 +459,10 @@ export default function CreateProjectModal() {
               value={formData.category}
               onValueChange={(value) => setFormData({...formData, category: value})}
             >
-              <SimpleOption value="web">Web Development</SimpleOption>
-              <SimpleOption value="mobile">Mobile App</SimpleOption>
-              <SimpleOption value="design">Design</SimpleOption>
-              <SimpleOption value="other">Other</SimpleOption>
+              <SelectItem value="web">Web Development</SelectItem>
+              <SelectItem value="mobile">Mobile App</SelectItem>
+              <SelectItem value="design">Design</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
             </Select>
           </div>
 
@@ -500,8 +499,7 @@ import { useState } from 'react';
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { InputField } from "@/components/InputField";
-import { Select } from "@/components/Select";
-import { SimpleOption } from "@/components/SimpleOption";
+import { Select, SelectItem } from "@/components/Select";
 import { Table } from "@/components/Table";
 
 interface TableRow {
@@ -560,10 +558,10 @@ export default function DataTableWithFilters() {
               value={statusFilter}
               onValueChange={setStatusFilter}
             >
-              <SimpleOption value="all">All Status</SimpleOption>
-              <SimpleOption value="active">Active</SimpleOption>
-              <SimpleOption value="pending">Pending</SimpleOption>
-              <SimpleOption value="inactive">Inactive</SimpleOption>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="inactive">Inactive</SelectItem>
             </Select>
           </div>
         </div>
@@ -876,7 +874,7 @@ You now understand component composition! Continue learning:
 
 1. **[Component Documentation](../components/)** - Explore all components
 2. **[Hooks Reference](../reference/hooks.md)** - Custom hooks for common patterns
-3. **[Best Practices Guide](../how-to/best-practices.md)** - Advanced patterns
+3. **[Best Practices Guide](../how-to/guides.md)** - Advanced patterns
 
 ## Additional Resources
 

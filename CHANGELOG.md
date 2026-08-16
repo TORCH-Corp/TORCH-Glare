@@ -1,3 +1,140 @@
+## 2.5.1
+
+### Fixed
+- **`add` installed an incomplete tree and reported success.** Dependencies were resolved by
+  regex-scanning imports as files were copied — once per copied file, with no visited set, no cycle
+  guard, and no way to pass `--force` down. A dependency skipped because its folder already existed
+  was never descended into, so one stale empty directory silently truncated the install:
+  `add DataViews` copied **16 of 55 items and exited 0**, leaving a project that could not compile.
+  Installs now resolve the whole graph up front from `registry.json` — the same generated manifest
+  the docs and MCP server read — copy each item once, install the npm union once, and end with a
+  summary (`✅ DataViews → ./: 56 installed (56 items).`) so truncation is visible.
+- **`--force` now applies to the whole dependency closure**, not only the component named.
+- **An empty directory no longer counts as an installation.** A folder left behind by a deleted
+  install made `add` refuse to copy while reporting "already exists".
+- **`hook`, `layout` and `provider` accept a bare name.** They compared user input against directory
+  listings that still carried file extensions, so `torch-glare hook useDragDrop` matched nothing —
+  and the "not found" error was commented out in two of them, so it exited 0 in silence. All five
+  commands now share one resolver, and all five report what they could not find.
+- **`util` re-copied on every visit.** It deleted its target *before* checking whether the file
+  existed, making the check permanently false — the source of `cn.ts has been added` five times in
+  one install.
+- **`add <hookName>` now points at the right command** instead of "Component not found".
+- **Tailwind v3 detection** read `devDependencies` only, so a project with `tailwindcss` in
+  `dependencies` was treated as v4.
+- **Dependencies are installed at the version the library builds against.** They were installed
+  unpinned, so an upstream major broke copied source the day it landed: `add DataTable` pulled
+  `@tanstack/react-table@9`, whose API renamed `getCoreRowModel`/`useReactTable`, into a component
+  written for v8 — 13 type errors on arrival, in a project that had done nothing wrong.
+  `registry.json` now records the declared range per package (`npmVersions`) and the CLI installs
+  that.
+
+### Added
+- **`init` wires your stylesheet.** It installed the Tailwind packages and stopped, leaving the
+  `@import`/`@plugin` block as a manual step — so a project would build cleanly and render every
+  design token unstyled, with no error. It now finds the entry stylesheet and writes the block,
+  idempotently. On v3 it prints the `tailwind.config` snippet rather than editing a file it does
+  not own.
+- Every command takes `-f, --force`.
+
+## 2.5.0
+
+### Added
+- **`DataViews`** — one dataset shown as a table, kanban board, inbox or tree, behind a shared
+  header, filter set and settings rail. Replaces the `DataViewsLayout` family (see
+  `docs/migration/data-views.md`). A part exists because you rendered it: render
+  `<DataViews.Board/>` and a Board tab appears. Documented at `docs/components/data-views.md`.
+- **Scroll loading** — rows load as you reach the end of a list rather than through a pager. Pass
+  `onLoadMore` and append each page to `rows`; `hasMore` is derived from `rows.length < total`, so
+  there is no prop to keep in sync. New `useInfiniteScroll` hook (an `IntersectionObserver` on a
+  sentinel, latched so one arrival at the end costs exactly one page).
+- **Table virtualization** — `DataViews.Table` renders a window of rows past 300, so the DOM stays
+  small however many are loaded. Below that threshold it renders every row exactly as before, which
+  is what keeps row drag, column resize and small tables untouched. Adds `@tanstack/react-virtual`.
+- **`useDragDrop`** — one touch- and keyboard-capable drag hook behind every draggable surface:
+  board cards, table rows, the config rail's column list and tree nodes. Touch drags activate on a
+  200ms hold so a swipe still scrolls; keyboard is Space, arrows, Space.
+- **`DataViews.Table` `onRowMove`** (row reordering, with a grip column) and **`onAddRow`** (the
+  `+ Add New` end-action row).
+- **The tree's pane, built in — and its tabs are children.** Pick a node and the pane lists what it
+  holds. Its tabs follow the same rule as the component's views: **a tab exists because you
+  rendered it**, and the switch shows exactly what you passed (one tab, no switch).
+  `DataViews.Tree.Table` is the real `DataViews.Table` over the node's rows, so it keeps sortable
+  headers, selection, `renderCell`, the drag grip, `+ Add New` and virtualization;
+  `DataViews.Tree.Cards` is the board's card, with `renderCard` to replace it; and
+  `DataViews.Tree.Tab` is a mode of your own, whose children are the pane while it is selected.
+  Render none and there is no pane at all — the tree is a hierarchy and takes the whole width.
+  Everything inside the pane runs in a data scope
+  whose `rows` are the pane's, so a tab of your own reads the selected node's rows from
+  `useDataViewsData()` with nothing threaded through. Rows default to the node's **descendants**
+  (`paneRows` overrides — a tree of categories whose pane lists that category's items); the header
+  takes your markup through `paneActions`; mode is the usual round-trip — seed with
+  `defaultPaneMode`, persist from `onPaneModeChange`, or take it over with `paneMode`. Any child
+  that is **not** a tab is the pane itself, header and switch included, so a tree written against
+  the old `children`-is-the-pane contract is unchanged.
+- **The MCP answers usefully when it is used imperfectly.** `get-install-info` now separates the
+  packages a component needs itself from those it inherits, attributed to the item that requires
+  them — DataViews reported 45 npm dependencies, 21 of them Editor.js pulled in through
+  FormBuilder's rich-text field, which reads as "this component is unusable" rather than "you
+  already have these if FormBuilder is installed". A wrong `part` now suggests the parts under
+  `## API Reference` instead of every heading in the document; `search-components` maps the job
+  people describe ("list screen", "crud", "record list") onto the component; and section keywords
+  the tool itself advertises now resolve, because heading matching folds plurals. A stdio smoke
+  test drives the real server through every tool — the suite previously only tested the loaders
+  underneath, which is how these shipped green.
+- **Every DataViews doc lives in one folder, and the examples ship with it.**
+  `docs/components/data-views/` holds the reference (`index.md`), the guide, the migration notes,
+  the backend-response recipes and fourteen complete example pages — generated from the app's real
+  pages by `pnpm run examples`, because the docs previously linked at `apps/app/…`, which is in
+  neither published tarball: every one of those links dangled the moment either package was
+  installed. The MCP server learned the folder form (a component doc may be a directory with an
+  `index.md`), serves the siblings as guides (`data-views`, `data-views-guide`,
+  `data-views-migration`, `data-views-backend-response`), and `get-usage-examples` now lists the
+  example pages and returns one in full on request. Two new gates make the failure impossible to
+  repeat: `checkAiDocs` rejects any relative link that leaves `docs/` or does not resolve, and
+  fails if a generated example has drifted from the page it came from. `sync-docs` also copies
+  top-level `docs/*.md`, which had left `migration/changelog.md`'s link to the 1.1.16 changelog
+  dangling in the package.
+- **The docs are rigid now, and the MCP server can address them.** `docs/components/data-views.md`
+  gives every part its own heading — `### DataViews.Board`, `### DataViews.Tree.Tab` — with one
+  column schema (`Prop · Type · Default · Required · Notes`), all seventeen `FieldType` variants and
+  the keys each reads, every hook's return shape, and the house sections the corpus expects
+  (Quick Examples, Common Patterns, Testing, Performance, Styling, Known Limitations,
+  Troubleshooting, Example pages). Two how-to guides join it: `docs/how-to/data-views.md`, ten
+  scenarios from a first table to a view of your own, and a rewritten
+  `data-views-from-backend-response.md` — which until now taught `DataViewsLayout`, deleted two
+  releases ago, and linked to six files that do not exist.
+- **`FormBuilder` `layout="bare"`** — drops the page form's centring and 48px gutters so an embedded
+  form fills its container. `DataViews.Filters` uses it; in a 260px rail the gutters left the
+  controls narrower than their own minimum.
+- **`TreeFolder`** documentation at `docs/components/tree-folder.md`.
+
+### Changed
+- **Drag and drop now works on touch and with the keyboard.** Every surface previously used the
+  HTML5 drag-and-drop API, which mobile browsers never fire from a finger — on a phone none of it
+  worked at all. All four now go through `@dnd-kit` via `useDragDrop`.
+- **`DataViews` matches its Figma source** — 40px header bar (down from 52), 40px table rows (down
+  from 50), the divider at `#2c2d2e` with a 4px radius, and the Master Container now carries the
+  surface (form base + 1px border + 16px radius) instead of each view bringing its own.
+- **Empty and loading are no longer parts you render.** Nothing to show is shown as nothing: the
+  table keeps its header band and has no rows. While `loading` is set each view paints a skeleton in
+  its own shape, built from that view's real markup so nothing shifts when the data lands. A custom
+  view gets the same via `useDataViewsData().loading` plus the exported `SkeletonBar` /
+  `skeletonKeys`.
+- **`TabSwitch`** no longer shifts its tabs when one is selected. The divider between options was
+  conditionally mounted, so selecting an end tab versus a middle tab changed the track width by
+  7px; the slot is now always present and only its colour changes.
+- **`generateRegistry` registers folder components.** `DataViews`, `FormBuilder`, `FormRenderer`,
+  `TextEditor`, `TreeFolder` and the `dataViews` utilities were absent from `registry.json`, so
+  `add` copied them but installed none of their dependencies.
+
+### Removed
+- **`DataViewsLayout`, `DataViewsConfigPanel`, `TableView`, `KanbanView`, `InboxView`, `TreeView`**
+  and their docs. These were folder components the registry never listed, so the CLI could never
+  install them; `DataViews` replaces all six. Mapping in `docs/migration/data-views.md`.
+- **`DataViews.Pagination`** — replaced by scroll loading.
+- **`DataViews.Empty`** and **`DataViews.Loading`** — replaced by the behaviour described above.
+
 ## 2.4.5
 
 _These entries accumulated across the 2.4.1–2.4.5 patches, which shipped without individual
