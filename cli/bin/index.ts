@@ -38,23 +38,27 @@ program
 
 program
   .command("hook [hook]")
+    .option("-f, --force", "Overwrite it if it already exists")
   .description("Add a hook interactively or install a specified one")
-  .action((hook) => addHook(hook && `${hook}`));
+  .action((hook, options) => addHook(hook, !!options.force));
 
 program
   .command("layout [layout]")
+    .option("-f, --force", "Overwrite it if it already exists")
   .description("Add a Layout interactively or install a specified one")
-  .action((layout) => addLayout(layout && `${layout}.tsx`));
+  .action((layout, options) => addLayout(layout, !!options.force));
 
 program
   .command("util [util]")
+    .option("-f, --force", "Overwrite it if it already exists")
   .description("Add a utils interactively or install a specified one")
-  .action((util) => addUtil(util));
+  .action((util, options) => addUtil(util, !!options.force));
 
 program
   .command("provider [provider]")
+    .option("-f, --force", "Overwrite it if it already exists")
   .description("Add a provider interactively or install a specified one")
-  .action((provider) => addProvider(provider && `${provider}`));
+  .action((provider, options) => addProvider(provider, !!options.force));
 
 program
   .command("update")

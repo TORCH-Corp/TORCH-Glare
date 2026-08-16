@@ -1,3 +1,42 @@
+## 2.5.1
+
+### Fixed
+- **`add` installed an incomplete tree and reported success.** Dependencies were resolved by
+  regex-scanning imports as files were copied — once per copied file, with no visited set, no cycle
+  guard, and no way to pass `--force` down. A dependency skipped because its folder already existed
+  was never descended into, so one stale empty directory silently truncated the install:
+  `add DataViews` copied **16 of 55 items and exited 0**, leaving a project that could not compile.
+  Installs now resolve the whole graph up front from `registry.json` — the same generated manifest
+  the docs and MCP server read — copy each item once, install the npm union once, and end with a
+  summary (`✅ DataViews → ./: 56 installed (56 items).`) so truncation is visible.
+- **`--force` now applies to the whole dependency closure**, not only the component named.
+- **An empty directory no longer counts as an installation.** A folder left behind by a deleted
+  install made `add` refuse to copy while reporting "already exists".
+- **`hook`, `layout` and `provider` accept a bare name.** They compared user input against directory
+  listings that still carried file extensions, so `torch-glare hook useDragDrop` matched nothing —
+  and the "not found" error was commented out in two of them, so it exited 0 in silence. All five
+  commands now share one resolver, and all five report what they could not find.
+- **`util` re-copied on every visit.** It deleted its target *before* checking whether the file
+  existed, making the check permanently false — the source of `cn.ts has been added` five times in
+  one install.
+- **`add <hookName>` now points at the right command** instead of "Component not found".
+- **Tailwind v3 detection** read `devDependencies` only, so a project with `tailwindcss` in
+  `dependencies` was treated as v4.
+- **Dependencies are installed at the version the library builds against.** They were installed
+  unpinned, so an upstream major broke copied source the day it landed: `add DataTable` pulled
+  `@tanstack/react-table@9`, whose API renamed `getCoreRowModel`/`useReactTable`, into a component
+  written for v8 — 13 type errors on arrival, in a project that had done nothing wrong.
+  `registry.json` now records the declared range per package (`npmVersions`) and the CLI installs
+  that.
+
+### Added
+- **`init` wires your stylesheet.** It installed the Tailwind packages and stopped, leaving the
+  `@import`/`@plugin` block as a manual step — so a project would build cleanly and render every
+  design token unstyled, with no error. It now finds the entry stylesheet and writes the block,
+  idempotently. On v3 it prints the `tailwind.config` snippet rather than editing a file it does
+  not own.
+- Every command takes `-f, --force`.
+
 ## 2.5.0
 
 ### Added

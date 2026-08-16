@@ -24,6 +24,12 @@ export interface RegistryItem {
 export interface Registry {
     version: string;
     generatedBy: string;
+    /**
+     * The version range the library builds each package against, e.g.
+     * `{"@tanstack/react-table": "^8.21.3"}`. Installing unpinned means an upstream major can
+     * break copied source the day it lands.
+     */
+    npmVersions?: Record<string, string>;
     items: RegistryItem[];
 }
 

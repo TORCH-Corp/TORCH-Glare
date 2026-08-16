@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import { detectPackageManager } from "./detectPackageManager.js";
 import path from "path";
 import fs from "fs";
-export function tailwindInit(): void {
+export function tailwindInit(): { isV3: boolean } {
   const LessThanV4 = IsTailwindLessThanV4()
   const dependencies = [
     "tailwindcss-animate",
@@ -15,6 +15,7 @@ export function tailwindInit(): void {
     dependencies.push("@tailwindcss/container-queries");
   }
   installDependencies(dependencies);
+  return { isV3: LessThanV4 };
 }
 
 
@@ -84,7 +85,9 @@ const IsTailwindLessThanV4 = () => {
   const packageJson = fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8');
   const parsedJson = JSON.parse(packageJson) as any;
 
-  const tailwindVersion = parsedJson.devDependencies?.['tailwindcss'];
+  // Either section — a project with tailwindcss in `dependencies` was being misread as v4.
+  const tailwindVersion =
+    parsedJson.devDependencies?.['tailwindcss'] ?? parsedJson.dependencies?.['tailwindcss'];
   if (!tailwindVersion) return false;
 
   return tailwindVersion.startsWith('^3') || tailwindVersion.startsWith('3')

@@ -32,6 +32,13 @@ Before you begin, make sure you have:
 
 ---
 
+> **If you plan to build forms**, add the validation packages the guides use — no component
+> imports them, so the CLI does not install them for you:
+>
+> ```bash
+> npm install zod @hookform/resolvers
+> ```
+
 ## Step 1: Initialize TORCH Glare
 
 Run the following command to initialize your project:

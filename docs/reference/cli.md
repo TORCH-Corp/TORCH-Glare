@@ -23,7 +23,7 @@ Run a command **without** a name to pick from an interactive list.
 
 | Command | Description |
 | --- | --- |
-| `init` | Create `glare.json` and set up Tailwind. Run once per project. |
+| `init` | Create `glare.json`, install the Tailwind packages, **and wire your stylesheet**. Run once per project. |
 | `add [Component]` | Copy a component **and its dependencies** into your project. |
 | `hook [hook]` | Copy a hook (usually pulled in automatically as a dependency). |
 | `util [util]` | Copy a utility (e.g. `cn`, usually pulled in automatically). |
@@ -32,6 +32,8 @@ Run a command **without** a name to pick from an interactive list.
 | `update` | Re-sync everything already installed with the latest templates. |
 
 Component names are **case-sensitive PascalCase** — `add DatePicker`, not `add datepicker`.
+Every command takes a **bare name** — `hook useDragDrop`, not `hook useDragDrop.tsx` — and every one
+accepts `-f, --force`.
 
 ## `init`
 
@@ -39,7 +41,23 @@ Component names are **case-sensitive PascalCase** — `add DatePicker`, not `add
 npx torch-glare@latest init
 ```
 
-Creates `glare.json` and configures Tailwind. `glare.json` controls where files are copied:
+Three things, in order:
+
+1. Creates `glare.json`.
+2. Installs the Tailwind packages the design system needs, using your detected package manager.
+3. **Wires your entry stylesheet** — `app/globals.css`, `src/app/globals.css`, `src/index.css`,
+   `styles/globals.css` — with the `@import`/`@plugin` block. Re-running is safe: if the block is
+   already there it says so and changes nothing.
+
+On Tailwind v3 the plugins belong in `tailwind.config.*` instead. `init` prints the snippet rather
+than editing that file, since its shape is yours.
+
+> Without step 3 the project builds cleanly and renders every component **unstyled** — the design
+> tokens simply resolve to nothing. If that happens, check that `@import "tailwindcss"` is the
+> first line: CSS requires imports to precede other at-rules, so an import placed after a `@plugin`
+> is silently dropped.
+
+`glare.json` controls where files are copied:
 
 ```json
 {
@@ -68,7 +86,14 @@ export function Example() {
 }
 ```
 
-Existing files are never overwritten; use `update` to re-sync.
+It ends with a summary — `✅ DataViews → ./: 56 installed (56 items).` — so a partial install is
+visible rather than something you discover at build time.
+
+Dependencies come from the generated `registry.json`, resolved in one pass, so each item is copied
+exactly once however many things import it.
+
+Existing files are never overwritten. Use `--force` to re-copy — it applies to **the whole
+dependency closure**, not just the component you named — or `update` to re-sync everything.
 
 ## `update`
 

@@ -214,9 +214,34 @@ function main() {
         console.log(`ℹ️  Dropped ${dropped} nested/folder dependency ref(s) (handled by the CLI resolver).`);
     }
 
+    // The version range the library itself builds against, per package.
+    //
+    // Without this the CLI installs every dependency unpinned, so an upstream major silently
+    // breaks the copied source: `add DataTable` was installing @tanstack/react-table@9, whose API
+    // renamed `getCoreRowModel`/`useReactTable`, against a component written for v8 — code that
+    // could not compile the moment it landed.
+    const declared = {};
+    for (const file of ["apps/package.json", "package.json"]) {
+        const abs = path.join(ROOT, file);
+        if (!fs.existsSync(abs)) continue;
+        const pkg = JSON.parse(fs.readFileSync(abs, "utf-8"));
+        for (const section of ["dependencies", "devDependencies", "peerDependencies"]) {
+            for (const [name, range] of Object.entries(pkg[section] ?? {})) {
+                if (!(name in declared)) declared[name] = range;
+            }
+        }
+    }
+
+    const used = new Set(items.flatMap((item) => item.npmDependencies));
+    const npmVersions = {};
+    for (const name of [...used].sort()) {
+        if (declared[name]) npmVersions[name] = declared[name];
+    }
+
     const registry = {
         version,
         generatedBy: "scripts/bin/generateRegistry",
+        npmVersions,
         items,
     };
 
