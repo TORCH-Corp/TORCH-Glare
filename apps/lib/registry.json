@@ -239,6 +239,7 @@
         "components/Badge",
         "components/Button",
         "components/Checkbox",
+        "components/ConclusionHeader",
         "components/Divider",
         "components/FormBuilder",
         "components/Skeleton",
