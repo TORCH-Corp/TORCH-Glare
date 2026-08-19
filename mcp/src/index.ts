@@ -40,7 +40,7 @@ Applies to new components, edits, response examples, and copy-paste suggestions.
 
 This library is copy-in: components are added with \`npx torch-glare add <Name>\` (hooks via \`hook\`, utils via \`util\`, etc.) and imported from the local \`@/\` alias — never from an npm package.
 
-FORMS — always build them with \`FormBuilder\`. Each field is one JSX child (\`<FormBuilder.Text name="…" label="…" required />\`); validation comes from a react-hook-form resolver (e.g. \`zodResolver(schema)\`). Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never track field state with \`useState\` — that is the boilerplate FormBuilder exists to remove. Add \`FormRenderer\` for page-vs-drawer display + header + an \`actions\` slot for the Save (\`actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}\`), and \`FormSummary\` for a live calculation panel (totals) beside the form. Read \`get-guide "forms-with-form-builder"\` before writing form code. Older docs that hand-roll forms (\`form-and-list-recipes\`, the validation section of \`guides\`) are the escape hatch for non-form layouts, not the default.`;
+FORMS — always build them with \`FormBuilder\` fields wrapped in \`FormRenderer\`. Each field is one JSX child (\`<FormBuilder.Text name="…" label="…" required />\`); validation comes from a react-hook-form resolver (e.g. \`zodResolver(schema)\`). Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never track field state with \`useState\` — that is the boilerplate FormBuilder exists to remove.\n\n\`FormBuilder\` is ONLY the fields — it draws no card, header or frame. All chrome is on \`FormRenderer\`: \`FormRenderer.Section\` (the titled card grouping fields), \`header={{ title, variant }}\`, the \`actions\` slot for the Save (\`actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}\`), \`display="drawer"\`, \`FormRenderer.Stepper\`/\`.Step\` for a wizard, and \`summary\` for a live \`FormSummary\` totals panel. \`FormBuilder.Section\`, \`FormBuilder.Stepper\`, \`FormBuilder.Step\` and \`FormBuilder.Header\` NO LONGER EXIST — they are \`FormRenderer.*\` (see the FormBuilder 2.5.2 migration note). Use bare \`FormBuilder\` only for fields embedded in something that already has its own chrome.\n\nRead \`get-guide "forms-with-form-builder"\` before writing form code. Older docs that hand-roll forms (\`form-and-list-recipes\`, the validation section of \`guides\`) are the escape hatch for non-form layouts, not the default.`;
 
 // Short reminder appended only to code-emitting tool responses.
 const RULES_HINT = `> ⚠️ **TORCH Glare rule:** never use \`SystemStyle\` / \`*-system-*\` tokens — use the \`presentation\` equivalents (full rules in the server instructions).\n\n`;
@@ -698,7 +698,7 @@ async function main() {
         .enum(["single", "stepper", "detail"])
         .optional()
         .describe(
-          "'single' (default) form, 'stepper' for a multi-step wizard, or 'detail' for a display-only detail/record page — a sidebar of tabs swapping FormBuilder.Section panels (no form/submit).",
+          "'single' (default) form, 'stepper' for a multi-step wizard, or 'detail' for a display-only detail/record page — a sidebar of tabs swapping FormRenderer.Section panels (no form/submit).",
         ),
       display: z
         .enum(["page", "drawer"])
@@ -708,7 +708,7 @@ async function main() {
         .boolean()
         .optional()
         .describe(
-          "Add a FormSummary conclusion panel beside the form with live computed totals (invoices, orders).",
+          "Add a FormSummary totals panel beside the form via FormRenderer's `summary` prop — live computed totals (invoices, orders).",
         ),
     },
     async ({ fields, layout = "single", display = "page", summary = false }) => {
@@ -902,7 +902,7 @@ async function main() {
       summary: z
         .string()
         .optional()
-        .describe("'true' to add a FormSummary conclusion panel with live computed totals"),
+        .describe("'true' to add a FormSummary totals panel (FormRenderer's `summary` prop) with live computed totals"),
     },
     ({ fields, layout, display, summary }) => {
       // A detail/record page is a display view, not a form — a different composition entirely.
@@ -916,7 +916,7 @@ async function main() {
                 text:
                   `Build a display-only **detail page** with TORCH Glare for: ${fields}.\n\n` +
                   `This is NOT a form — it's \`FormRenderer\` in detail-tabs mode: a left **sidebar** ` +
-                  `swaps \`FormRenderer.Tab\` panels, and **every tab's content is \`FormBuilder.Section\` ` +
+                  `swaps \`FormRenderer.Tab\` panels, and **every tab's content is \`FormRenderer.Section\` ` +
                   `blocks**. Inside a Section use the default \`FormRenderer.Grid\` + \`FormRenderer.Row\` ` +
                   `display cells, or your OWN component. No \`onSubmit\`, no resolver, no \`useState\`.\n\n` +
                   `Steps:\n` +
@@ -937,19 +937,15 @@ async function main() {
       const wantsDrawer = display === "drawer";
       const wantsSummary = summary === "true" || summary === "yes";
 
-      const add = ["FormBuilder"];
-      if (wantsDrawer) add.push("FormRenderer");
-      if (wantsSummary) add.push("FormSummary");
-
       const extras = [
         wantsStepper
-          ? '- Layout: a STEPPER. Wrap the sections in `FormBuilder.Stepper` with a `FormBuilder.Step title="…"` per step. Every step stays mounted; navigation is the step buttons (a step that passes validation stays checked). Pass just the Submit as the `FormRenderer` `actions` — it auto-prepends the chevron Back/Next nav, and Save submits every step at once.'
+          ? '- Layout: a STEPPER. Wrap the sections in `FormRenderer.Stepper` with a `FormRenderer.Step title="…"` per step. Every step stays mounted; navigation is the step buttons (a step that passes validation stays checked). Pass just the Submit as the `FormRenderer` `actions` — it auto-prepends the chevron Back/Next nav, and Save submits every step at once.'
           : "- Layout: a single page form.",
         wantsDrawer
           ? '- Display: in a DRAWER. Use `FormRenderer` with `display="drawer"` and drive it with `open` / `onOpenChange`. Pass the Save via `actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}` — it renders in the drawer header (no manual `form={id}` wiring).'
           : "- Display: a normal page. Wrap in `FormRenderer`, give it a `header={{ title, variant }}`, and pass the Save via `actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}` (renders in the header action pill).",
         wantsSummary
-          ? '- Totals: add a `FormSummary` conclusion panel BESIDE the form via `FormRenderer`\'s `summary` prop. Hoist `useForm` and pass the SAME instance to both `<FormRenderer form={form}>` and `<FormSummary form={form}>`. Each `FormSummary.Row` takes a `compute(values)` that runs against the live values. With `display="drawer"` the panel moves into the drawer tray automatically.'
+          ? '- Totals: add a `FormSummary` totals panel BESIDE the form via `FormRenderer`\'s `summary` prop. Hoist `useForm` and pass the SAME instance to both `<FormRenderer form={form}>` and `<FormSummary form={form}>`. Each `FormSummary.Row` takes a `compute(values)` that runs against the live values. With `display="drawer"` the panel moves into the drawer tray automatically.'
           : "",
       ]
         .filter(Boolean)
@@ -971,7 +967,7 @@ async function main() {
                 `2. Call get-guide "forms-with-form-builder" for the full reference (single, stepper, drawer, totals, gotchas).\n` +
                 `3. Run the \`npx torch-glare add\` commands it gives you.\n` +
                 `4. Fill in the zod schema and any \`options\` arrays. Validation is resolver-agnostic; the library never depends on zod.\n` +
-                `5. Use \`required\` on fields (never a literal "*") and group them with \`FormBuilder.Section\`. Pass the Save via \`FormRenderer\`'s \`actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}\`.\n\n` +
+                `5. Use \`required\` on fields (never a literal "*") and group them with \`FormRenderer.Section\`. Pass the Save via \`FormRenderer\`'s \`actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}\`.\n\n` +
                 `Follow the server's absolute rules (never SystemStyle / *-system-* tokens).`,
             },
           },

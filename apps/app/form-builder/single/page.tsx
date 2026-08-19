@@ -24,7 +24,7 @@ export default function SingleFormExample() {
     <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="Single form"
-        blurb="Compound fields wrapped in FormRenderer. Load a record to edit it."
+        blurb="FormBuilder fields wrapped in FormRenderer, which supplies the header, the Save and the section cards. Load a record to edit it."
       />
 
       <div className="flex flex-wrap items-center gap-4">

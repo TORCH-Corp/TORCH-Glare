@@ -8,18 +8,18 @@ import type {
 } from "react-hook-form";
 
 /**
- * FormRenderer — a thin wrapper around the compound `FormBuilder`. You author the
- * fields as **JSX children** (`FormBuilder.Section`, `FormBuilder.Text`, …); the
- * renderer owns the surrounding concerns: page-vs-drawer display, the absolute
- * title header, vertical field layout inside a drawer, and an `actions` slot (the
- * form's header / drawer action bar) where you place the Save.
+ * FormRenderer — the chrome around a `FormBuilder`. You author the fields as **JSX children**
+ * (`FormRenderer.Section`, `FormBuilder.Text`, …); the renderer owns everything drawn around
+ * them: page-vs-drawer display, the absolute title header, the `actions` bar, the titled section
+ * cards, the page gutters and scroll shell, the wizard rail, the `summary` column, and vertical
+ * field layout inside a drawer.
  */
 
 export type FormRendererDisplay = "page" | "drawer";
 export type FieldDirection = "horizontal" | "vertical";
 
 export interface FormRendererProps<T extends FieldValues = FieldValues> {
-  /** The form body — `FormBuilder.Section` / field / `FormBuilder.Stepper` JSX. */
+  /** The form body — `FormRenderer.Section` / field / `FormRenderer.Stepper` JSX. */
   children: ReactNode;
 
   // --- react-hook-form root (forwarded to FormBuilder) ---

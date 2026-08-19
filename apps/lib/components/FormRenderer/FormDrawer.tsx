@@ -12,7 +12,7 @@ import {
   DrawerNotchDivider,
   DrawerNotchPill,
 } from "../Drawer";
-import { FormHeaderBar, type HeaderVariant } from "../FormBuilder/header";
+import { FormHeaderBar, type HeaderVariant } from "./header";
 
 export interface FormDrawerProps {
   open: boolean;
@@ -108,7 +108,7 @@ export function FormDrawer({
 
             {/* pt-[72px] clears the 44px header pill (inset 4px) — same as the page shell. The
                 48px bottom breathing-room goes on an inner wrapper, not the scroll container:
-                FormBuilder's outer element is `h-full`, which would pin it to the content box and
+                FormRenderer's outer element is `h-full`, which would pin it to the content box and
                 swallow the container's own `pb`. On a plain wrapper that `h-full` resolves to the
                 content height, so the padding actually lengthens the scroll. The conclusion panel
                 is a separate sibling, so it keeps its own spacing. */}

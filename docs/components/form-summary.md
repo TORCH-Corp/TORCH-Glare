@@ -16,14 +16,19 @@ Each `FormSummary.Row` declares a **`compute(values)`** that runs against the **
 form values, so every total recalculates as the user types.
 
 The panel renders **outside** the form, beside it. Both read the same form, so
-**hoist `useForm`** and hand the instance to each:
+**hoist `useForm`** and hand the instance to each.
+
+> **Normally you do not lay this out by hand.** Pass the panel to
+> [`FormRenderer`](./form-renderer.md)'s `summary` prop and it places it for you — beside the form
+> on a page, in the tray in a drawer. The manual version below is what `summary` does, and is what
+> you want only when you are composing a bare `<FormBuilder>` yourself.
 
 ```tsx
 const form = useForm({ resolver: zodResolver(schema), defaultValues })
 
 <div className="flex gap-4">
   <FormBuilder form={form} onSubmit={save} className="min-w-0 flex-1">
-    <FormBuilder.Section title="Line items">…fields…</FormBuilder.Section>
+    <FormRenderer.Section title="Line items">…fields…</FormRenderer.Section>
   </FormBuilder>
 
   <FormSummary form={form} title="Invoice" subtitle="Summary">
@@ -71,6 +76,10 @@ npx torch-glare@latest add FormSummary
 ## Imports
 
 ```tsx
+import { useForm } from 'react-hook-form'
+
+import { FormBuilder } from '@/components/FormBuilder'
+import { FormRenderer } from '@/components/FormRenderer'
 import { FormSummary } from '@/components/FormSummary'
 ```
 
@@ -80,7 +89,7 @@ import { FormSummary } from '@/components/FormSummary'
 |---|---|---|
 | `title` | `ReactNode` | Panel title, e.g. `"Invoice"`. |
 | `subtitle` | `ReactNode` | Muted text beside the title, e.g. `"Summary"`. |
-| `form` | `UseFormReturn` | The form to read values from — required when rendered outside the `<FormBuilder>`. |
+| `form` | `UseFormReturn` | The form to read values from. The panel always renders outside the `<form>`, so pass the same hoisted instance you gave `FormRenderer` / `FormBuilder`. |
 | `width` | `number \| string` | Panel width; default `228`. |
 | `children` | `ReactNode` | `FormSummary.Group` children. |
 
@@ -121,3 +130,9 @@ const overallTotal  = v => taxable(v) + totalTax(v)
 ```
 
 The panel is **read-only** — it contributes nothing to the submitted values.
+
+## Related
+
+- [FormRenderer](./form-renderer.md) — its `summary` prop places this panel for you
+- [FormBuilder](./form-builder.md) — the fields the totals read from
+- [ConclusionHeader](./conclusion-header.md) — the header this panel uses

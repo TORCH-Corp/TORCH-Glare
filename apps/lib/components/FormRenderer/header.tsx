@@ -29,8 +29,10 @@ export interface FormHeaderBarProps {
  * The floating form header: a `HeaderBar` title pill on the left and a dark action
  * pill on the right, absolutely positioned over the scrollable body.
  *
- * Shared by **both** form surfaces — `FormBuilder.Header` (page) and `FormDrawer`
- * (drawer) — so a form's title looks identical wherever it is rendered.
+ * Shared by all three FormRenderer surfaces — the page form, `FormDrawer` and the
+ * detail view — so a form's title looks identical wherever it is rendered. This is
+ * chrome, so it lives here rather than in `FormBuilder`: a bare `<FormBuilder>` is
+ * fields and nothing else.
  *
  * Per the design both pills are 44px tall, reached differently: the title pill is
  * 6px padding + 32px content, the action pill 8px + 28px.
@@ -70,32 +72,17 @@ export function FormHeaderBar({
   );
 }
 
-export interface HeaderProps {
+/**
+ * The `header` prop's shape — `header={{ title, label, variant }}` on `FormRenderer`.
+ * There is no `FormRenderer.Header` component: the header is a prop, not a child, so a
+ * child element can never reconfigure the surrounding layout the way the old
+ * `FormBuilder.Header` did.
+ */
+export interface HeaderConfig {
   /** Plain title text (uppercased), e.g. the entity label or SKU. */
   title: string;
   /** Badge text — defaults from `variant` (New / Edit / View). */
   label?: string;
-  /** Colored badge variant. Defaults from the form `mode` (view → detail). */
+  /** Colored badge variant. */
   variant?: HeaderVariant;
-  /** Action buttons shown in the right-hand action pill (e.g. FormBuilder.Submit). */
-  children?: ReactNode;
 }
-
-/**
- * `FormBuilder.Header` — the page form's title + action bar. A thin, mode-aware
- * wrapper over `FormHeaderBar`: it defaults the badge variant from the form `mode`
- * (view → detail).
- *
- * Place it as a direct child of `<FormBuilder>`; the root then switches to the
- * scroll-shell layout that reserves space beneath the floating header.
- */
-export function Header({ title, label, variant = "new", children }: HeaderProps) {
-  return (
-    <FormHeaderBar title={title} label={label} variant={variant}>
-      {children}
-    </FormHeaderBar>
-  );
-}
-
-// Marker so the FormBuilder root can detect the header among its children.
-(Header as unknown as { __isFormHeader: boolean }).__isFormHeader = true;

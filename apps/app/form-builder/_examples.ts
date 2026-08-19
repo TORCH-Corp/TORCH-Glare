@@ -3,12 +3,17 @@ export const EXAMPLES = [
   {
     href: "/form-builder/single",
     title: "Single form",
-    blurb: "Compound fields, load a record to edit.",
+    blurb: "Fields wrapped in FormRenderer, load a record to edit.",
+  },
+  {
+    href: "/form-builder/bare",
+    title: "Bare FormBuilder",
+    blurb: "Just the fields, no chrome — what an embedded form looks like.",
   },
   {
     href: "/form-builder/stepper",
     title: "Stepper",
-    blurb: "Steps as components, full form registered.",
+    blurb: "FormRenderer.Stepper — steps as components, full form registered.",
   },
   { href: "/form-builder/drawer", title: "Drawer", blurb: "A form hosted in a FormDrawer." },
   { href: "/form-builder/fields", title: "Field types", blurb: "Every field type in one form." },
@@ -17,7 +22,11 @@ export const EXAMPLES = [
     title: "Form summary",
     blurb: "A live calculation panel beside the form.",
   },
-  { href: "/form-builder/renderer", title: "FormRenderer", blurb: "The config-object adapter." },
+  {
+    href: "/form-builder/renderer",
+    title: "FormRenderer",
+    blurb: "Page vs drawer from the same children.",
+  },
   {
     href: "/form-builder/create-form",
     title: "Create form (MCP)",
@@ -31,6 +40,6 @@ export const EXAMPLES = [
   {
     href: "/form-builder/sidebar",
     title: "Detail tabs",
-    blurb: "A display-only detail page — a sidebar of tabs swapping Section panels.",
+    blurb: "A display-only detail page — a sidebar of tabs swapping FormRenderer.Section panels.",
   },
 ];

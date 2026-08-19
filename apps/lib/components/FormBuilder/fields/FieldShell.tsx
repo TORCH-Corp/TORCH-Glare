@@ -36,7 +36,7 @@ export interface FieldShellProps {
 /**
  * Shared wrapper for every `FormBuilder.*` field: the FieldSection row + the RHF
  * `FormField`/`FormItem`/`FormControl`/`FormMessage` scaffolding. Also registers the
- * field name into the enclosing `FormBuilder.Step` (if any) so the stepper can
+ * field name into the enclosing `FormRenderer.Step` (if any) so the stepper can
  * validate per step.
  */
 export function FieldShell({

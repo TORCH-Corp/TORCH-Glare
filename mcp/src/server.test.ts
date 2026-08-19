@@ -255,6 +255,16 @@ test("the FormBuilder forms guide is served and covers all three form components
   for (const name of ["FormBuilder", "FormRenderer", "FormSummary"]) {
     assert.ok(guide.includes(name), `forms guide should cover ${name}`);
   }
+  // `includes("FormBuilder")` above is satisfied by "FormBuilder.Section", so it would pass on a
+  // guide teaching the removed API. Assert the removed parts are absent, and that the guide shows
+  // the chrome on FormRenderer.
+  assert.doesNotMatch(
+    guide,
+    /FormBuilder\.(Section|Stepper|Step|Header|Back|Next)\b/,
+    "forms guide must not teach a part that moved to FormRenderer",
+  );
+  assert.match(guide, /FormRenderer\.Section/, "forms guide should show FormRenderer.Section");
+  assert.match(guide, /FormRenderer\.Stepper/, "forms guide should show FormRenderer.Stepper");
   // The composition that only works via the hoisted form shared with the summary panel,
   // and the drawer laid out through FormRenderer.
   assert.match(guide, /useForm/, "forms guide should show hoisting useForm");
@@ -368,7 +378,7 @@ test("create-form maps a table/grid request to FormBuilder.Table, placed outside
   // The Table renders its own SectionBlock, so it lands AFTER the fields Section closes.
   assert.match(
     code,
-    /<\/FormBuilder\.Section>[\s\S]*<FormBuilder\.Table/,
+    /<\/FormRenderer\.Section>[\s\S]*<FormBuilder\.Table/,
     "Table sits outside (after) the fields Section",
   );
 
@@ -400,11 +410,11 @@ test("create-form detail layout builds a display detail page, not a form", () =>
     "sidebar item carries a tab value",
   );
   assert.match(code, /<FormRenderer\.Tab value="overview">/, "a Tab pairs with the sidebar value");
-  // Content MUST sit inside a FormBuilder.Section — the required wrapper.
+  // Content MUST sit inside a FormRenderer.Section — the required wrapper.
   assert.match(
     code,
-    /<FormRenderer\.Tab value="overview">[\s\S]*<FormBuilder\.Section[\s\S]*<\/FormBuilder\.Section>[\s\S]*<\/FormRenderer\.Tab>/,
-    "tab content is wrapped in a FormBuilder.Section",
+    /<FormRenderer\.Tab value="overview">[\s\S]*<FormRenderer\.Section[\s\S]*<\/FormRenderer\.Section>[\s\S]*<\/FormRenderer\.Tab>/,
+    "tab content is wrapped in a FormRenderer.Section",
   );
   // Default display cells (Grid/Row) are offered, and the fields become Rows.
   assert.match(code, /<FormRenderer\.Grid columns=\{2\}>/, "uses the default display Grid");
@@ -416,9 +426,99 @@ test("create-form detail layout builds a display detail page, not a form", () =>
   // The second tab shows the "bring your own component inside a Section" path.
   assert.match(
     code,
-    /<FormBuilder\.Section title="Activity log"[\s\S]*<YourTimeline/,
+    /<FormRenderer\.Section title="Activity log"[\s\S]*<YourTimeline/,
     "a custom component renders inside a Section",
   );
+
+  // A detail page uses no FormBuilder part at all, so importing it would be an unused import —
+  // a lint error in the consuming app. It was one, until this was fixed.
+  assert.doesNotMatch(
+    code,
+    /import \{ FormBuilder \}/,
+    "no FormBuilder import on a page that never uses one",
+  );
+});
+
+test("create-form emits a stepper through FormRenderer, not FormBuilder", () => {
+  // This path had NO coverage: if the generator still said `FormBuilder.Stepper`, every other
+  // test here stayed green. The stepper is chrome, and moved to FormRenderer.
+  const code = skeleton(parseFields("name, email, price (currency)"), {
+    layout: "stepper",
+    display: "page",
+    summary: false,
+  });
+
+  assert.match(code, /<FormRenderer\.Stepper>/, "wraps the steps in FormRenderer.Stepper");
+  assert.match(code, /<FormRenderer\.Step title="/, "each step is a FormRenderer.Step with a title");
+  assert.match(
+    code,
+    /<FormRenderer\.Stepper>[\s\S]*<FormRenderer\.Step[\s\S]*<FormRenderer\.Section[\s\S]*<\/FormRenderer\.Stepper>/,
+    "a step's fields sit in a Section inside the Stepper",
+  );
+  // The Save is still FormBuilder's, passed through FormRenderer's actions slot.
+  assert.match(
+    code,
+    /actions=\{<FormBuilder\.Submit>Save<\/FormBuilder\.Submit>\}/,
+    "the Save is a FormBuilder.Submit in FormRenderer's actions",
+  );
+});
+
+test("every create-form emission names the header prop and no removed FormBuilder part", () => {
+  // A blanket guard. Each `assert.match` elsewhere passes on output containing BOTH the old and
+  // the new spelling; only a negative assertion catches a half-done rename. `header` is emitted on
+  // every form and was asserted nowhere, so reverting it to a `FormBuilder.Header` child would
+  // have gone unnoticed.
+  const REMOVED = /FormBuilder\.(Section|Stepper|Step|Header|Back|Next)\b/;
+  const fields = parseFields("name, price (currency), catalog (table)");
+
+  const shapes: Array<[string, string]> = [
+    ["single", skeleton(fields, { layout: "single", display: "page", summary: false })],
+    ["stepper", skeleton(fields, { layout: "stepper", display: "page", summary: false })],
+    ["drawer", skeleton(fields, { layout: "single", display: "drawer", summary: false })],
+    ["summary", skeleton(fields, { layout: "single", display: "page", summary: true })],
+    ["drawer+summary", skeleton(fields, { layout: "single", display: "drawer", summary: true })],
+    ["detail", detailSkeleton(fields)],
+  ];
+
+  for (const [name, code] of shapes) {
+    assert.doesNotMatch(code, REMOVED, `${name} emission still names a removed FormBuilder part`);
+  }
+  // The detail page has its own header shape; every *form* shape must set the prop.
+  for (const [name, code] of shapes.filter(([n]) => n !== "detail")) {
+    assert.match(code, /header=\{\{/, `${name} emission should set FormRenderer's header prop`);
+  }
+});
+
+test("every FormRenderer part create-form emits is a real static (no drift)", async () => {
+  // The mirror of the FormBuilder drift guard above. Moving the chrome created exactly this risk:
+  // the generator names FormRenderer.* parts that only exist in form-renderer.tsx's Object.assign.
+  const src = await readFile(
+    new URL("../../apps/lib/components/FormRenderer/form-renderer.tsx", import.meta.url),
+    "utf-8",
+  );
+  const block = src.match(/Object\.assign\(FormRendererRoot,\s*\{([\s\S]*?)\n\}\)/);
+  assert.ok(block, "should find the FormRenderer Object.assign statics block");
+  const statics = new Set([...block[1].matchAll(/^\s{2}(\w+)[,:]/gm)].map((m) => m[1]));
+
+  const fields = parseFields("name, price (currency)");
+  const emitted = new Set<string>();
+  for (const code of [
+    skeleton(fields, { layout: "single", display: "page", summary: false }),
+    skeleton(fields, { layout: "stepper", display: "page", summary: false }),
+    detailSkeleton(fields),
+  ]) {
+    // `Sidebar.Item` is nested under `Sidebar`; the capture stops at the first word, which is
+    // the root static Object.assign actually declares.
+    for (const m of code.matchAll(/<FormRenderer\.(\w+)/g)) emitted.add(m[1]);
+  }
+
+  assert.ok(emitted.size > 0, "should have found FormRenderer parts in the emitted code");
+  for (const part of emitted) {
+    assert.ok(
+      statics.has(part),
+      `create-form emits FormRenderer.${part}, which no longer exists in form-renderer.tsx`,
+    );
+  }
 });
 
 test("create-form layout=detail routes the whole response to a display detail page", () => {
@@ -447,7 +547,7 @@ test("create-form layout=detail routes the whole response to a display detail pa
   );
   assert.match(
     out,
-    /<FormRenderer\.Tab value="overview">[\s\S]*<FormBuilder\.Section/,
+    /<FormRenderer\.Tab value="overview">[\s\S]*<FormRenderer\.Section/,
     "tab content wrapped in a Section",
   );
   assert.match(out, /FormRenderer\.Grid/, "default display Grid offered");

@@ -1,15 +1,11 @@
 "use client";
 
-import * as React from "react";
-import { ReactNode } from "react";
 import { useForm, type FieldValues } from "react-hook-form";
 
 import { cn } from "../../utils/cn";
 import { Form } from "../Form";
-import { SectionBlock, type SectionColor, type SectionVariant } from "../SectionBlock";
-import { LoadingContext, DirectionContext, StepperContext, FormIdContext } from "./context";
+import { LoadingContext, DirectionContext, FormIdContext } from "./context";
 import { markFieldKind } from "./field-kind";
-import { Header } from "./header";
 import type { FormBuilderRootProps } from "./types";
 import {
   TextField,
@@ -39,51 +35,7 @@ import {
   RichTextField,
   CustomField,
 } from "./fields";
-import {
-  Stepper,
-  Step,
-  Back,
-  Next,
-  StepperNav,
-  StepSlot,
-  useStepperState,
-  isStepElement,
-  isStepperElement,
-} from "./stepper";
 import { SubmitButton } from "./submit";
-
-// ─── Section ─────────────────────────────────────────────────────────────────
-
-export interface SectionProps {
-  title?: ReactNode;
-  color?: SectionColor;
-  icon?: ReactNode;
-  /**
-   * `"Table"` switches to the full-bleed table shell — no body padding, a rule under
-   * the header, and the card clipped to its radius. `FormBuilder.Table` uses it; pass
-   * it here only when hand-composing a table inside a section.
-   */
-  variant?: SectionVariant;
-  /** Right-aligned content on the title row — e.g. action buttons. */
-  action?: ReactNode;
-  children: ReactNode;
-}
-
-/** `FormBuilder.Section` — a titled Glare SectionBlock grouping fields. */
-function Section({ title, color, icon, variant, action, children }: SectionProps) {
-  return (
-    <SectionBlock title={title} color={color} icon={icon} variant={variant} action={action}>
-      {children}
-    </SectionBlock>
-  );
-}
-
-function isHeaderElement(node: React.ReactNode): node is React.ReactElement {
-  return (
-    React.isValidElement(node) &&
-    (node.type as { __isFormHeader?: boolean })?.__isFormHeader === true
-  );
-}
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
@@ -98,9 +50,7 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
   values,
   loading = false,
   fieldDirection,
-  layout = "page",
   resetOnSuccess,
-  conclusion,
   className,
 }: FormBuilderRootProps<T>) {
   // Hooks can't be conditional, so always create one; `formProp` wins when given
@@ -117,116 +67,25 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
     if (resetOnSuccess) form.reset();
   };
 
-  // Split out a FormBuilder.Header (renders absolutely) and detect a Stepper child.
-  const childArray = React.Children.toArray(children);
-  const header = childArray.find(isHeaderElement);
-  const rest = childArray.filter((n) => !isHeaderElement(n));
-
-  const stepperEl = rest.find(isStepperElement);
-  const stepChildren = stepperEl ? React.Children.toArray(stepperEl.props.children) : [];
-  const steps = stepChildren.filter(isStepElement);
-  const stepExtras = stepChildren.filter((n) => !isStepElement(n));
-  const isStepper = !!stepperEl;
-
-  // Stepper state is lifted HERE so the nav can live in its own grid column, outside the
-  // `<form>`. Called unconditionally (inert when there are no steps) to keep hooks order stable.
-  const stepper = useStepperState(steps, form.trigger as Parameters<typeof useStepperState>[1]);
-
-  // The stepper nav is its own grid column beside the fields, inside the scrolling body.
-  const nav = isStepper ? <StepperNav /> : null;
-
-  // The fields the `<form>` wraps: the stepper's steps (+ any custom footer extras like Back/Next),
-  // or the plain children. The Submit itself lives outside the form (see FormRenderer).
-  const fields = isStepper ? (
-    <>
-      {steps.map((step, i) => (
-        <StepSlot key={i} index={i} active={i === stepper.currentStep}>
-          {step.props.children}
-        </StepSlot>
-      ))}
-      {stepExtras}
-    </>
-  ) : (
-    rest
-  );
-
-  // The fields column caps at 1100px and centers — as the middle column of the grid, and
-  // standalone. `layout="bare"` drops the cap and the gutters so an embedded form fills its
-  // container instead: 48px of padding a side is most of a settings rail.
-  const fieldsInner = (
-    <div
-      className={cn(
-        "flex w-full flex-col gap-4",
-        layout === "page" && "mx-auto max-w-[1100px] px-[48px]",
-      )}
-    >
-      {fields}
-    </div>
-  );
-
-  const formEl = (
-    <form id={id} className="w-full min-w-0" onSubmit={form.handleSubmit(handleValid, onInvalid)}>
-      {fieldsInner}
-    </form>
-  );
-
-  // Inside the form surface: the stepper rail beside the fields. Columns never wrap — the
-  // layout stays side-by-side at every screen size (the fields column shrinks instead).
-  const bodyInner = nav ? (
-    <div className="grid w-full grid-cols-[1fr_minmax(0,1100px)_1fr] gap-8">
-      {nav}
-      {formEl}
-      {/* Empty third column — balances the rail's gutter so the middle column is centred. */}
-      <div />
-    </div>
-  ) : (
-    formEl
-  );
-
-  const surface = header ? (
-    // Scroll shell: the absolute header floats over the scrollable body. No fixed height — it
-    // fills whatever the parent gives it (like the drawer's panel fills its tray) and the body
-    // scrolls internally.
-    <div className="relative isolate flex h-full w-full flex-col overflow-hidden rounded-2xl bg-background-presentation-body-primary">
-      {header}
-      <div className="relative z-[1] flex min-h-0 w-full flex-1 flex-col overflow-y-auto px-6 py-6 pt-[72px] scrollbar-hide">
-        {bodyInner}
-      </div>
-    </div>
-  ) : (
-    bodyInner
-  );
-
-  // The conclusion (right) lives OUTSIDE the scroll surface — its own panel beside it (mirroring the
-  // drawer's tray, a 6px gutter). Only the surface's body scrolls; the conclusion stays put.
-  const body = conclusion ? (
-    <div className="flex h-full flex-row items-stretch">
-      <div className="min-h-0 min-w-0 flex-1">{surface}</div>
-      <div className="ml-[6px] flex min-h-0">{conclusion}</div>
-    </div>
-  ) : (
-    surface
-  );
-
-  // `className` lands on the OUTERMOST element — the one a parent lays out (e.g. `flex-1 min-h-0`
-  // to fill a flex column). `h-full` fills a parent that has a definite height.
-  const outerClassName = cn("h-full w-full @container", className);
-
-  const tree = (
-    <Form {...form}>
-      <div className={outerClassName}>{body}</div>
-    </Form>
-  );
-
+  // The `<form>` IS the outermost element — FormBuilder draws no frame of its own. `gap-4` is the
+  // spacing between sections, which is field structure; `@container` scopes any container query a
+  // field wants to the form's own width. Everything that used to wrap this — the page gutters, the
+  // scroll shell, the header, the stepper rail, the summary column — belongs to `FormRenderer`.
+  //
+  // `className` lands here, so a parent still lays the form out (e.g. `flex-1 min-h-0`).
   return (
     <FormIdContext.Provider value={id}>
       <LoadingContext.Provider value={loading}>
         <DirectionContext.Provider value={direction}>
-          {isStepper ? (
-            <StepperContext.Provider value={stepper}>{tree}</StepperContext.Provider>
-          ) : (
-            tree
-          )}
+          <Form {...form}>
+            <form
+              id={id}
+              className={cn("flex w-full min-w-0 flex-col gap-4 @container", className)}
+              onSubmit={form.handleSubmit(handleValid, onInvalid)}
+            >
+              {children}
+            </form>
+          </Form>
         </DirectionContext.Provider>
       </LoadingContext.Provider>
     </FormIdContext.Provider>
@@ -238,16 +97,24 @@ function FormBuilderRoot<T extends FieldValues = FieldValues>({
  *
  * ```tsx
  * <FormBuilder onSubmit={fn} resolver={r} defaultValues={d}>
- *   <FormBuilder.Section title="Identity" color="Blue">
- *     <FormBuilder.Text name="name" label="Name" required />
- *   </FormBuilder.Section>
- *   <FormBuilder.Submit>Save</FormBuilder.Submit>
+ *   <FormBuilder.Text name="name" label="Name" required />
+ *   <FormBuilder.Select name="category" label="Category" options={CATEGORY} />
  * </FormBuilder>
  * ```
  *
- * Steps are components (`FormBuilder.Stepper` + `FormBuilder.Step`). FormBuilder is
- * drawer-unaware — to show a form in a drawer, wrap it in `FormRenderer`'s `FormDrawer`
- * (or use `FormRenderer` with `display: "drawer"`).
+ * **FormBuilder is the fields and nothing else** — the `<form>`, its react-hook-form context and
+ * the field components. Each field draws its own `FieldSection` row (label, required marker,
+ * hint); beyond that FormBuilder draws no frame at all: no titled section cards, no page gutters,
+ * no scroll shell, no title header, no stepper rail, no summary column. Rendered bare it fills
+ * whatever you put it in, which is what an embedded form — a settings rail, a `DataViews` filter
+ * panel — wants.
+ *
+ * For a real page or drawer form, wrap it in `FormRenderer`, which owns all of that chrome:
+ * `display` (page vs drawer), `header`, `actions`, `summary`, `FormRenderer.Section` and the
+ * wizard (`FormRenderer.Stepper` + `FormRenderer.Step`).
+ *
+ * `FormBuilder.Submit` stays here — it is the form's own submit button, wired to the `<form>` by
+ * id so it works even when the chrome renders it outside the element.
  */
 export const FormBuilder = Object.assign(FormBuilderRoot, {
   // fields
@@ -284,15 +151,8 @@ export const FormBuilder = Object.assign(FormBuilderRoot, {
   Image: (props: Parameters<typeof FileField>[0]) => <FileField {...props} image />,
   RichText: RichTextField,
   Custom: CustomField,
-  // layout
-  Section,
-  Header,
+  // the form's own submit button
   Submit: SubmitButton,
-  // stepper
-  Stepper,
-  Step,
-  Back,
-  Next,
 });
 
 /**

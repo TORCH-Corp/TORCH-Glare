@@ -142,7 +142,7 @@ export default function FieldTypesExample() {
         header={{ title: "Field types", variant: "new" }}
         actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
       >
-        <FormBuilder.Section title="Text inputs" color="Blue">
+        <FormRenderer.Section title="Text inputs" color="Blue">
           <FormBuilder.Text name="title" label="Title" required placeholder="Text" />
           <FormBuilder.Email name="email" label="Email" required placeholder="name@example.com" />
           <FormBuilder.Password name="password" label="Password" required placeholder="••••••••" />
@@ -161,9 +161,9 @@ export default function FieldTypesExample() {
             fullWidth
             placeholder="Longer text…"
           />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="Choices" color="Red">
+        <FormRenderer.Section title="Choices" color="Red">
           <FormBuilder.Select name="category" label="Select" required options={OPTS} />
           <FormBuilder.SearchableSelect
             name="priority"
@@ -181,9 +181,9 @@ export default function FieldTypesExample() {
             required
           />
           <FormBuilder.SwitchBox name="darkMode" label="Switch box" subLabel="Dark mode" required />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="Rich inputs" color="Purple">
+        <FormRenderer.Section title="Rich inputs" color="Purple">
           <FormBuilder.Date name="dueDate" label="Date" required />
           <FormBuilder.File
             name="attachment"
@@ -201,9 +201,9 @@ export default function FieldTypesExample() {
             fullWidth
           />
           <FormBuilder.Signature name="signature" label="Signature" required fullWidth />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="More inputs" color="Orange">
+        <FormRenderer.Section title="More inputs" color="Orange">
           <FormBuilder.RadioCards
             name="tier"
             label="Radio cards"
@@ -226,9 +226,9 @@ export default function FieldTypesExample() {
             getNodeLabel={(n) => n.name}
             getNodeChildren={(n) => n.children}
           />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="Advanced inputs" color="Blue">
+        <FormRenderer.Section title="Advanced inputs" color="Blue">
           <FormBuilder.Slider name="volume" label="Slider" required min={0} max={100} suffix="%" />
           <FormBuilder.Slider
             name="rangeVals"
@@ -246,9 +246,9 @@ export default function FieldTypesExample() {
             presets={["#005ECC", "#047854", "#E30C30", "#F5A623"]}
           />
           <FormBuilder.Phone name="phone2" label="Phone" required />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="Field array" color="Green">
+        <FormRenderer.Section title="Field array" color="Green">
           <FormBuilder.FieldArray
             name="contacts"
             label="Contacts"
@@ -262,7 +262,7 @@ export default function FieldTypesExample() {
               </>
             )}
           </FormBuilder.FieldArray>
-        </FormBuilder.Section>
+        </FormRenderer.Section>
       </FormRenderer>
 
       <SubmitResult result={result} />

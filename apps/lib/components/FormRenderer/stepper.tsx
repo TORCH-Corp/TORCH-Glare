@@ -1,18 +1,42 @@
 "use client";
 
 import * as React from "react";
-import { useFormState, type FieldPath, type FieldValues } from "react-hook-form";
+import { useFormState, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 
 import { cn } from "../../utils/cn";
 import { Button } from "../Button";
+// The step *registry* stays with the fields: `FieldShell` registers each field name into it, so
+// it must ship with FormBuilder (which is installable on its own). Everything else about the
+// stepper — the rail, the state, Back/Next — is chrome and lives here. The dependency only ever
+// points this way: FormRenderer → FormBuilder, never back.
+import { StepContext, type StepRegistry } from "../FormBuilder/context";
 import { FormStepper, FormStep, FormStepIndicator, FormStepLabel } from "../FormStepper";
-import {
-  StepContext,
-  StepperContext,
-  useStepper,
-  type StepperContextValue,
-  type StepRegistry,
-} from "./context";
+
+// ─── Stepper state context ───────────────────────────────────────────────────
+
+/** Stepper state shared by the nav, the step slots and the Back/Next buttons. */
+export interface StepperContextValue {
+  currentStep: number;
+  totalSteps: number;
+  titles: string[];
+  isFirstStep: boolean;
+  isLastStep: boolean;
+  goToNext: () => void | Promise<void>;
+  goToPrevious: () => void;
+  goToStep: (index: number) => void;
+  /** Field names registered per step, for per-step validation. */
+  stepFields: Record<number, Set<string>>;
+  /** Steps that have passed validation — stay checked even after navigating back. */
+  completedSteps: Set<number>;
+}
+
+export const StepperContext = React.createContext<StepperContextValue | null>(null);
+
+export const useStepper = () => {
+  const ctx = React.useContext(StepperContext);
+  if (!ctx) throw new Error("FormRenderer.Step/Back/Next must be used within FormRenderer.Stepper");
+  return ctx;
+};
 
 // ─── Step (declaration only — the Stepper reads its props) ───────────────────
 
@@ -23,7 +47,7 @@ export interface StepProps {
 }
 
 /**
- * Declares a wizard step. It renders nothing itself — `FormBuilder.Stepper`
+ * Declares a wizard step. It renders nothing itself — `FormRenderer.Stepper`
  * collects Step elements as an array and renders every step's fields (so the
  * **whole form is registered**), toggling visibility per the active step.
  */
@@ -76,10 +100,14 @@ function StepSlot({
 /**
  * Vertical step rail (matches `Tabs.svg`): the numbered state badges stacked top
  * to bottom, joined by a short vertical connector between consecutive steps.
+ *
+ * `control` is passed in rather than read from context: the rail renders in its own grid column
+ * **outside** the `<form>`, so there is no `FormProvider` above it to read. Same reason
+ * `useStepperState` takes `trigger` as an argument.
  */
-function StepperNav() {
+function StepperNav({ control }: { control: Control<FieldValues> }) {
   const { titles, currentStep, goToStep, stepFields, completedSteps } = useStepper();
-  const { errors } = useFormState();
+  const { errors } = useFormState({ control });
 
   const stepHasError = (index: number) =>
     [...(stepFields[index] ?? [])].some((name) => name in errors);
@@ -150,13 +178,13 @@ function StepNavButton({
   );
 }
 
-/** `FormBuilder.Back` — chevron to the previous step; disabled on the first. */
+/** `FormRenderer.Back` — chevron to the previous step; disabled on the first. */
 export function Back() {
   const { goToPrevious, isFirstStep } = useStepper();
   return <StepNavButton dir="left" onClick={goToPrevious} disabled={isFirstStep} />;
 }
 
-/** `FormBuilder.Next` — chevron to the next step (validates first); disabled on the last. */
+/** `FormRenderer.Next` — chevron to the next step (validates first); disabled on the last. */
 export function Next() {
   const { goToNext, isLastStep } = useStepper();
   return <StepNavButton dir="right" onClick={() => void goToNext()} disabled={isLastStep} />;
@@ -165,7 +193,7 @@ export function Next() {
 // ─── Stepper action bar (Back/Next + divider, then the Submit) ────────────────
 
 /**
- * `FormRenderer` wraps its `actions` in this. When the form is a stepper it prepends the
+ * The FormRenderer root wraps its `actions` in this. When the form is a stepper it prepends the
  * chevron `Back`/`Next` controls + a divider before the (user-provided) Submit — the Figma
  * `Body-HeaderBar-1.0` layout. Outside a stepper there's no `StepperContext`, so it renders
  * the actions untouched.
@@ -191,10 +219,10 @@ export interface StepperProps {
 }
 
 /**
- * `FormBuilder.Stepper` — declares a wizard. It renders **nothing itself**: the
- * FormBuilder root detects it, lifts its state (so the nav can live in its own
+ * `FormRenderer.Stepper` — declares a wizard. It renders **nothing itself**: the
+ * FormRenderer root detects it, lifts its state (so the nav can live in its own
  * grid column *outside* the `<form>`), and renders `[nav | active step's fields]`.
- * Children are `FormBuilder.Step`s (plus an optional custom footer).
+ * Children are `FormRenderer.Step`s (plus an optional custom footer).
  *
  * Every step's fields stay registered with react-hook-form at all times — the
  * stepper only controls which step is *visible*. **Navigation is the step buttons
@@ -202,7 +230,7 @@ export interface StepperProps {
  * validates every step in between and stops at the first with errors (which shows a
  * red indicator). Only the last step shows the Submit button.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- children are read by the FormBuilder root
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- children are read by the FormRenderer root
 export function Stepper(_props: StepperProps) {
   return null;
 }
@@ -218,7 +246,7 @@ export function isStepperElement(node: React.ReactNode): node is React.ReactElem
 type TriggerFn = (names?: FieldPath<FieldValues>[]) => Promise<boolean>;
 
 /**
- * Stepper state — lifted to the FormBuilder root so the nav (rail) and the step
+ * Stepper state — lifted to the FormRenderer root so the nav (rail) and the step
  * fields can render in separate grid columns while sharing one state. `trigger` is
  * the form's `trigger` (passed in — no `useFormContext` needed). Inert when
  * `steps` is empty (a form without a stepper still calls this, for hooks order).

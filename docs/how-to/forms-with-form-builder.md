@@ -33,8 +33,8 @@ Three components, layered:
 
 | Component          | Use it for                                                                                                                             | When                                            |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| **`FormBuilder`**  | The form itself — fields authored as JSX children. Owns react-hook-form, validation, sections, steppers.                               | Always. This is the base.                       |
-| **`FormRenderer`** | Wraps `FormBuilder` to add **chrome**: page-vs-drawer display, the title header, an `actions` slot for the Save, and a `summary` slot. | Real forms — prefer it over raw `FormBuilder`.  |
+| **`FormBuilder`**  | The fields themselves, authored as JSX children. Owns react-hook-form and validation — and nothing else: no cards, no header, no frame. | Always. This is the base.                       |
+| **`FormRenderer`** | All the **chrome**: page-vs-drawer display, the title header, an `actions` slot for the Save, the titled `Section` cards, the stepper, and a `summary` slot. | Real forms — prefer it over raw `FormBuilder`.  |
 | **`FormSummary`**  | A read-only **calculation panel beside the form** — totals that recompute live as the user types.                                      | Invoices, orders, anything with a "conclusion". |
 
 Validation is **resolver-agnostic**: pass any react-hook-form resolver
@@ -96,31 +96,34 @@ export function ItemForm({
       header={{ title: "New item", variant: "new" }}
       actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
     >
-      <FormBuilder.Section title="Identity" color="Blue">
+      <FormRenderer.Section title="Identity" color="Blue">
         <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
         <FormBuilder.Textarea name="description" label="Description" fullWidth />
-      </FormBuilder.Section>
+      </FormRenderer.Section>
 
-      <FormBuilder.Section title="Classification" color="Red">
+      <FormRenderer.Section title="Classification" color="Red">
         <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
         <FormBuilder.Currency name="price" label="Base price" currencySymbol="$" />
-      </FormBuilder.Section>
+      </FormRenderer.Section>
 
-      <FormBuilder.Section title="Settings" color="Purple">
+      <FormRenderer.Section title="Settings" color="Purple">
         <FormBuilder.SwitchBox name="active" label="Active" subLabel="Enabled" />
         <FormBuilder.Checkbox name="agree" label="I agree to the terms" required />
-      </FormBuilder.Section>
+      </FormRenderer.Section>
     </FormRenderer>
   );
 }
 ```
 
-`FormBuilder.Section` groups fields in a `SectionBlock` (`color` is one of `Blue`, `Yellow`,
+`FormRenderer.Section` groups fields in a `SectionBlock` (`color` is one of `Blue`, `Yellow`,
 `Green`, `Red`, `Orange`, `Purple`, `Pink`, `Gray`). It also takes `icon`, `action`
 (right-aligned buttons on the title row) and `variant` — `variant="Table"` switches to the
 full-bleed table shell that `FormBuilder.Table` uses internally. Pass the Save via `actions` — a
-`FormBuilder.Submit`, which is loading-aware; it renders in the header action pill. (With raw
-`FormBuilder`, put the same `FormBuilder.Submit` in a `FormBuilder.Header`.)
+`FormBuilder.Submit`, which is loading-aware; it renders in the header action pill.
+
+> The section card belongs to `FormRenderer`, not `FormBuilder`: it is presentation, and it groups
+> read-only detail rows just as happily as fields. A bare `<FormBuilder>` renders its fields with
+> no card around them.
 
 ### Field types
 
@@ -168,8 +171,7 @@ whatever you pass to `actions` — put the Save there:
 auto-targets the form (via a form-id context), so it submits even though the header renders
 _outside_ the `<form>`.
 
-If you use raw `FormBuilder`, the same bar is `FormBuilder.Header` with a `FormBuilder.Submit`
-child.
+There is no header on raw `FormBuilder` — the title bar is FormRenderer's.
 
 ---
 
@@ -194,19 +196,19 @@ checked** in the rail even after you navigate back — a live error still shows 
   header={{ title: "New item", variant: "new" }}
   actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
-  <FormBuilder.Stepper>
-    <FormBuilder.Step title="Identity">
-      <FormBuilder.Section title="Identity" color="Blue">
+  <FormRenderer.Stepper>
+    <FormRenderer.Step title="Identity">
+      <FormRenderer.Section title="Identity" color="Blue">
         <FormBuilder.Text name="name" label="Name" required />
-      </FormBuilder.Section>
-    </FormBuilder.Step>
+      </FormRenderer.Section>
+    </FormRenderer.Step>
 
-    <FormBuilder.Step title="Classification">
-      <FormBuilder.Section title="Classification" color="Red">
+    <FormRenderer.Step title="Classification">
+      <FormRenderer.Section title="Classification" color="Red">
         <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
-      </FormBuilder.Section>
-    </FormBuilder.Step>
-  </FormBuilder.Stepper>
+      </FormRenderer.Section>
+    </FormRenderer.Step>
+  </FormRenderer.Stepper>
 </FormRenderer>
 ```
 
@@ -249,9 +251,9 @@ it renders in the drawer header, with no manual `id` / `form={id}` wiring:
   defaultValues={DEFAULTS}
   actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
 >
-  <FormBuilder.Section title="Identity" color="Blue">
+  <FormRenderer.Section title="Identity" color="Blue">
     …
-  </FormBuilder.Section>
+  </FormRenderer.Section>
 </FormRenderer>
 ```
 
@@ -322,7 +324,7 @@ export function InvoiceForm({ save }: { save: (v: Invoice) => Promise<void> }) {
         </FormSummary>
       }
     >
-      <FormBuilder.Section title="Line items" color="Green">
+      <FormRenderer.Section title="Line items" color="Green">
         <FormBuilder.FieldArray
           name="items"
           label="Items"
@@ -342,12 +344,12 @@ export function InvoiceForm({ save }: { save: (v: Invoice) => Promise<void> }) {
             </>
           )}
         </FormBuilder.FieldArray>
-      </FormBuilder.Section>
+      </FormRenderer.Section>
 
-      <FormBuilder.Section title="Rates" color="Purple">
+      <FormRenderer.Section title="Rates" color="Purple">
         <FormBuilder.Number name="taxRate" label="Tax rate (%)" />
         <FormBuilder.Number name="iqdRate" label="USD → IQD rate" />
-      </FormBuilder.Section>
+      </FormRenderer.Section>
     </FormRenderer>
   );
 }
@@ -358,7 +360,7 @@ Row options: `emphasized` (the primary result), `currency` + `tone`
 button), `format` (override the number formatting), `value` (a static row).
 
 The panel is **read-only** — it contributes nothing to the submitted values. On a page it sits
-beside the form (a `summary` **plus** a `FormBuilder.Stepper` becomes three columns: nav ·
+beside the form (a `summary` **plus** a `FormRenderer.Stepper` becomes three columns: nav ·
 fields · summary).
 
 ---
@@ -385,9 +387,9 @@ drawer's tray, beside the form:
     </FormSummary>
   }
 >
-  <FormBuilder.Section title="Identity" color="Blue">
+  <FormRenderer.Section title="Identity" color="Blue">
     …
-  </FormBuilder.Section>
+  </FormRenderer.Section>
 </FormRenderer>
 ```
 
@@ -396,12 +398,11 @@ drawer's tray, beside the form:
 ## 8. A detail (view) page — sidebar tabs, not a form
 
 Sometimes you want to **display** a record, not edit it. Give `FormRenderer` `FormRenderer.Sidebar`
++ `FormRenderer.Tab` children (instead of fields) and it switches to a display-only detail page: a
+left **sidebar** where each item swaps in its matching tab panel — no `<form>`, no submit. The
+sidebar sits where a stepper's rail would; only the active panel shows.
 
-- `FormRenderer.Tab` children (instead of fields) and it switches to a display-only detail page: a
-  left **sidebar** where each item swaps in its matching tab panel — no `<form>`, no submit. The
-  sidebar sits where a stepper's rail would; only the active panel shows.
-
-**Every tab's content is `FormBuilder.Section` blocks.** Inside a Section, use the default
+**Every tab's content is `FormRenderer.Section` blocks.** Inside a Section, use the default
 `FormRenderer.Grid` + `FormRenderer.Row` display cells (the read-only counterpart of form fields), or
 render **your own component** — anything goes inside a Section.
 
@@ -422,19 +423,19 @@ render **your own component** — anything goes inside a Section.
 
   {/* Default display cells */}
   <FormRenderer.Tab value="overview">
-    <FormBuilder.Section title="Main Information" color="Blue">
+    <FormRenderer.Section title="Main Information" color="Blue">
       <FormRenderer.Grid columns={2}>
         <FormRenderer.Row label="PO Number" value={record.poNumber} />
         <FormRenderer.Row label="Status" value={<Badge label="Submitted" color="yellow" />} />
       </FormRenderer.Grid>
-    </FormBuilder.Section>
+    </FormRenderer.Section>
   </FormRenderer.Tab>
 
   {/* Or bring your own component — still inside a Section */}
   <FormRenderer.Tab value="activity">
-    <FormBuilder.Section title="Activity log" color="Green">
+    <FormRenderer.Section title="Activity log" color="Green">
       <YourTimeline items={record.activity} />
-    </FormBuilder.Section>
+    </FormRenderer.Section>
   </FormRenderer.Tab>
 </FormRenderer>
 ```
@@ -465,3 +466,5 @@ takes `label` + `value` (any node). The first `Tab` is active by default.
 - [FormBuilder](../components/form-builder.md) — every field type and its value shape
 - [FormRenderer](../components/form-renderer.md) — display, header, `actions`, `summary`
 - [FormSummary](../components/form-summary.md) — the calculation panel
+- [FormBuilder 2.5.2 migration](../migration/form-builder-2.5.2.md) — what moved from
+  `FormBuilder` to `FormRenderer`, and the rename table

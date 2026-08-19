@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { FormBuilder } from "@/components/FormBuilder";
+import { FormRenderer } from "@/components/FormRenderer";
 import { EXAMPLES } from "./_examples";
 
 // ─── Shared demo model (zod schema is the source of truth) ───────────────────
@@ -126,7 +127,7 @@ export function SubmitResult<T>({ result }: { result: SubmitResultState<T> | nul
 
 export function IdentitySection() {
   return (
-    <FormBuilder.Section title="Identity" color="Blue">
+    <FormRenderer.Section title="Identity" color="Blue">
       <FormBuilder.Text name="name" label="Name" required placeholder="e.g. Acme Widget" />
       <FormBuilder.Textarea
         name="description"
@@ -134,35 +135,35 @@ export function IdentitySection() {
         fullWidth
         placeholder="Short summary…"
       />
-    </FormBuilder.Section>
+    </FormRenderer.Section>
   );
 }
 
 export function ClassificationSection() {
   return (
-    <FormBuilder.Section title="Classification" color="Red">
+    <FormRenderer.Section title="Classification" color="Red">
       <FormBuilder.Select name="category" label="Category" required options={CATEGORY} />
       <FormBuilder.SearchableSelect name="priority" label="Priority" options={PRIORITY} />
       <FormBuilder.RadioList name="plan" label="Billing plan" options={PLAN} />
       <FormBuilder.MultiSelect name="labels" label="Labels" options={LABELS} />
-    </FormBuilder.Section>
+    </FormRenderer.Section>
   );
 }
 
 export function FinancialSection() {
   return (
-    <FormBuilder.Section title="Financial" color="Green">
+    <FormRenderer.Section title="Financial" color="Green">
       <FormBuilder.Currency name="price" label="Base price" currencySymbol="$" placeholder="0.00" />
-    </FormBuilder.Section>
+    </FormRenderer.Section>
   );
 }
 
 export function SettingsSection() {
   return (
-    <FormBuilder.Section title="Settings" color="Purple">
+    <FormRenderer.Section title="Settings" color="Purple">
       <FormBuilder.SwitchBox name="active" label="Active" />
       <FormBuilder.Checkbox name="agree" label="Terms" subLabel="I agree to the terms" required />
-    </FormBuilder.Section>
+    </FormRenderer.Section>
   );
 }
 

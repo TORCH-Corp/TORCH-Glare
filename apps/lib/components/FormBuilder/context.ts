@@ -48,9 +48,14 @@ export const useBare = () => useContext(CellContext) !== false;
 export const useOnTable = () => useContext(CellContext) === "table";
 
 /**
- * Step registry — a `FormBuilder.Step` provides this so the fields rendered
- * inside it can register their `name`. `FormBuilder.Next` then validates just
- * those names before advancing. `null` when not inside a stepper.
+ * Step registry — a `FormRenderer.Step` provides this so the fields rendered inside it can
+ * register their `name`, and the stepper validates just those names before advancing. `null`
+ * when not inside a stepper.
+ *
+ * The stepper itself lives in `FormRenderer` — it is chrome. This registry stays here because
+ * the *fields* are what register into it (see `fields/FieldShell.tsx`), and FormBuilder must
+ * stand alone without FormRenderer installed. FormRenderer's `StepSlot` imports it from here;
+ * the dependency never points the other way.
  */
 export interface StepRegistry {
   register: (name: string) => void;
@@ -58,25 +63,3 @@ export interface StepRegistry {
 }
 export const StepContext = createContext<StepRegistry | null>(null);
 export const useStepRegistry = () => useContext(StepContext);
-
-/** Stepper state shared by the nav + Back/Next/Submit buttons. */
-export interface StepperContextValue {
-  currentStep: number;
-  totalSteps: number;
-  titles: string[];
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  goToNext: () => void | Promise<void>;
-  goToPrevious: () => void;
-  goToStep: (index: number) => void;
-  /** Field names registered per step, for per-step validation. */
-  stepFields: Record<number, Set<string>>;
-  /** Steps that have passed validation — stay checked even after navigating back. */
-  completedSteps: Set<number>;
-}
-export const StepperContext = createContext<StepperContextValue | null>(null);
-export const useStepper = () => {
-  const ctx = useContext(StepperContext);
-  if (!ctx) throw new Error("FormBuilder.Step/Back/Next must be used within FormBuilder.Stepper");
-  return ctx;
-};

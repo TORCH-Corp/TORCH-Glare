@@ -26,6 +26,9 @@ npx torch-glare@latest add Button
 
 ## Release notes
 
+- **v2.5.2** — **breaking**: `FormBuilder` now holds only the fields; the section cards, title
+  header and stepper moved to `FormRenderer`. See
+  [FormBuilder 2.5.2](./form-builder-2.5.2.md) for the rename table.
 - **v1.1.16** — see [CHANGELOG-1.1.16.md](../CHANGELOG-1.1.16.md) (adds `TextEditor`,
   `ChartBlockTool`, and related components).
 

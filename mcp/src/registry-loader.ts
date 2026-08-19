@@ -239,7 +239,7 @@ export class RegistryLoader {
   /**
    * Scan a folder's files for imports → npm deps + internal registry refs. A relative import is
    * resolved against the source tree and collapsed to its top-level `type/name` item (so a nested
-   * `../FormBuilder/header` becomes `components/FormBuilder`); imports within this folder are dropped.
+   * `../FormBuilder/context` becomes `components/FormBuilder`); imports within this folder are dropped.
    */
   private async scanFolderDeps(
     dirAbs: string,

@@ -34,7 +34,7 @@ export default function FormRendererExample() {
     <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="FormRenderer"
-        blurb="FormBuilder JSX + the renderer's display handling. Toggle page vs drawer."
+        blurb="The same FormBuilder children, rendered as a page or a drawer. FormRenderer owns the display decision."
       />
 
       <div className="flex gap-1 rounded-[8px] bg-black-alpha-10 p-1 w-fit">

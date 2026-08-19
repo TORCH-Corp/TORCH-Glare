@@ -74,14 +74,14 @@ export default function CreateFormExample() {
         header={{ title: "New record", variant: "new" }}
         actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
       >
-        <FormBuilder.Section title="Details" color="Blue">
+        <FormRenderer.Section title="Details" color="Blue">
           <FormBuilder.Text name="name" label="Name" required placeholder="Acme Corp." />
           <FormBuilder.Email name="email" label="Email" required placeholder="name@example.com" />
           <FormBuilder.Currency name="price" label="Price" currencySymbol="$" placeholder="0.00" />
           <FormBuilder.Select name="role" label="Role" required options={ROLE_OPTIONS} />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="Access" color="Purple">
+        <FormRenderer.Section title="Access" color="Purple">
           <FormBuilder.RadioList name="plan" label="Plan" required options={PLAN_OPTIONS} />
           <FormBuilder.CheckboxGroup
             name="perms"
@@ -91,7 +91,7 @@ export default function CreateFormExample() {
           />
           <FormBuilder.SwitchBox name="notify" label="Notifications" subLabel="Email me updates" />
           <FormBuilder.DateRange name="coverage" label="Coverage" />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
       </FormRenderer>
 
       <SubmitResult result={result} />

@@ -1,31 +1,61 @@
 ---
 title: FormBuilder
-description: A compound, composition-based form. Author forms as JSX children (FormBuilder.Text, FormBuilder.Select, …) with steps-as-components, a drawer wrapper, and any react-hook-form resolver.
+description: The fields. A compound, composition-based form — author fields as JSX children (FormBuilder.Text, FormBuilder.Select, …) wired to any react-hook-form resolver. All chrome around the fields lives in FormRenderer.
 component: true
 group: Forms
 keywords:
-  [form-builder, form, compound, composition, react-hook-form, resolver, stepper, drawer, fields]
+  [
+    form-builder,
+    form,
+    compound,
+    composition,
+    react-hook-form,
+    resolver,
+    fields,
+    validation,
+    table,
+    field-array,
+    submit,
+  ]
 ---
 
 # FormBuilder
 
 A **compound, composition-based** form. You author a form as JSX children — each
 field is a `FormBuilder.*` component wired to [react-hook-form](https://react-hook-form.com/)
-for you. Steps are components and the drawer is a wrapper.
+for you.
 
 ```tsx
 <FormBuilder onSubmit={save} resolver={zodResolver(schema)} defaultValues={d}>
-  <FormBuilder.Section title="Identity" color="Blue">
-    <FormBuilder.Text name="name" label="Name" required />
-    <FormBuilder.Currency name="price" label="Price" currencySymbol="$" />
-  </FormBuilder.Section>
-  <FormBuilder.Submit>Save</FormBuilder.Submit>
+  <FormBuilder.Text name="name" label="Name" required />
+  <FormBuilder.Currency name="price" label="Price" currencySymbol="$" />
 </FormBuilder>
 ```
 
-> Need the same form to render as a page _or_ a drawer, with a title header and an
-> `actions` slot for the Save? Wrap these same children in
-> [FormRenderer](./form-renderer.md).
+## FormBuilder is the fields — nothing else
+
+FormBuilder renders a `<form>`, its react-hook-form context, and your fields. Each field draws
+its own row (label, required marker, hint). Beyond that it draws **no frame at all**: no titled
+section cards, no page gutters, no scroll shell, no title header, no stepper rail, no summary
+column. Rendered bare it simply fills its container — which is what an embedded form wants (a
+settings rail, a `DataViews` filter panel).
+
+Everything drawn *around* the fields lives in **[FormRenderer](./form-renderer.md)**:
+
+| You want                              | Use                                                  |
+| ------------------------------------- | ---------------------------------------------------- |
+| A titled card grouping fields         | `FormRenderer.Section`                               |
+| A page title header + Save action bar | `FormRenderer`'s `header` and `actions` props        |
+| A wizard                              | `FormRenderer.Stepper` + `FormRenderer.Step`         |
+| A drawer                              | `FormRenderer` with `display="drawer"`               |
+| Live totals beside the form           | `FormRenderer`'s `summary` prop + [FormSummary](./form-summary.md) |
+| A read-only detail page               | `FormRenderer.Sidebar` + `FormRenderer.Tab`          |
+
+> **For real forms, reach for [FormRenderer](./form-renderer.md), not raw FormBuilder.** You still
+> author the fields as `FormBuilder.*` children — FormRenderer just wraps them.
+
+`FormBuilder.Submit` is the one non-field part that stays here — see
+[Field components](#field-components) for what it does.
 
 ## Installation
 
@@ -54,18 +84,12 @@ import { FormBuilder } from "@/components/FormBuilder";
 | `loading`        | `boolean`                           | Submit shows a spinner; inputs disable.                                                                                    |
 | `fieldDirection` | `'horizontal' \| 'vertical'`        | Row layout (auto-vertical inside a drawer).                                                                                |
 | `resetOnSuccess` | `boolean`                           | Reset to defaults after a successful submit.                                                                               |
-| `form`           | `UseFormReturn`                     | A hoisted `useForm` to bind to — pass when a `conclusion` panel must read the same values.                                 |
-| `conclusion`     | `ReactNode`                         | A live panel (e.g. `FormSummary`) rendered **outside** the `<form>` as the grid's right column.                            |
+| `form`           | `UseFormReturn`                     | A hoisted `useForm` to bind to — pass when something outside the form must read the same values.                           |
 | `id`             | `string`                            | Sets the underlying `<form id>`, so a button outside the form can submit it via `form={id}` (e.g. a drawer header's Save). |
-| `className`      | `string`                            | Lands on the form's outermost element — e.g. `"min-w-0 flex-1"` to fill the space beside a `conclusion` panel.             |
+| `className`      | `string`                            | Lands on the `<form>` element itself — e.g. `"min-w-0 flex-1"` to fill a flex parent.                                      |
 
-**Adaptive layout.** FormBuilder lays out responsively: a `FormBuilder.Stepper` puts its nav rail in
-a **left** column beside the fields (both inside the form surface, under the title header), and a
-`conclusion` renders as its own panel **outside** the form surface, beside it — the same structure
-`FormDrawer` uses in the drawer tray (6px gutter). So a stepper + conclusion reads as three columns
-(nav · fields · conclusion), a conclusion alone as two, and a plain form as one. The fields column
-caps at 1100px and centers. The conclusion is outside the `<form>` and reads values via its own
-`form` prop.
+There is no `layout` prop and no `conclusion` prop: the fields always fill their container, and a
+panel beside the form is `FormRenderer`'s `summary`.
 
 ## Field components
 
@@ -109,7 +133,7 @@ are named `${rowName}.field`.
 `FormBuilder.Table` is the **table-shaped** counterpart of `FieldArray` (value `object[]`): an editable
 grid where each row is a record and each column cell is any `FormBuilder.*` field. It renders its own
 `SectionBlock` (`variant="Table"` — the full-bleed table shell), so place it as a **top-level child** of
-the form, **not** inside a `FormBuilder.Section` — nesting produces a card inside a card. When you need a
+the form, **not** inside a `FormRenderer.Section` — nesting produces a card inside a card. When you need a
 table that isn't a form field, compose the shell yourself with `SectionBlock variant="Table"` (see
 [SectionBlock → Table Variant](./section-block.md#table-variant)).
 
@@ -168,77 +192,27 @@ clickable. Multi-select is also available as `.MultiSelect` / `.Tags` (a tag-chi
 renders like any other field — the `label` sits in the normal label column — and the box holds
 an optional inline `subLabel`, a vertical divider, and the switch.
 
-`FormBuilder.Section` (props `title`, `color`, `icon`, `action`, `variant`) groups fields in a Glare
-`SectionBlock`. `action` puts buttons on the title row; `variant="Table"` switches to the
-full-bleed table shell (what `FormBuilder.Table` uses internally). `FormBuilder.Submit` is a loading-aware submit button. It
-**auto-associates with the enclosing form** (via context), so it submits even when placed in a
-header / action bar that renders _outside_ the `<form>` — no manual `form={id}` wiring.
+To group fields into a titled card, use [`FormRenderer.Section`](./form-renderer.md) — it is
+presentation, so it lives there.
 
-## Title header + action bar
+`FormBuilder.Submit` is a loading-aware submit button. It **auto-associates with the enclosing
+form** (via context), so it submits even when placed in a header / action bar that renders
+_outside_ the `<form>` — no manual `form={id}` wiring.
 
-`FormBuilder.Header` renders a **title pill** (Glare `HeaderBar`) on the left and an
-**action bar** (your buttons) on the right, **absolutely positioned** over a
-scrollable form body — the products-services item-edit look. Place it as a direct
-child of `<FormBuilder>`; the root then switches to the scroll-shell layout.
+## Moved to FormRenderer
 
-```tsx
-<FormBuilder onSubmit={save} resolver={r} defaultValues={d}>
-  <FormBuilder.Header title="Item" variant="new">
-    <FormBuilder.Submit>Save</FormBuilder.Submit>
-    {/* add more actions, e.g. a "Save as draft" Button */}
-  </FormBuilder.Header>
+These all used to live here. They are chrome, so they now live on
+[FormRenderer](./form-renderer.md):
 
-  <FormBuilder.Section title="Identity" color="Blue">
-    <FormBuilder.Text name="name" label="Name" required />
-  </FormBuilder.Section>
-</FormBuilder>
-```
+| Was | Now |
+| --- | --- |
+| `FormBuilder.Section` | `FormRenderer.Section` |
+| `FormBuilder.Stepper` / `.Step` / `.Back` / `.Next` | `FormRenderer.Stepper` / `.Step` / `.Back` / `.Next` |
+| `FormBuilder.Header` | `FormRenderer`'s `header` prop |
+| the `layout` prop | gone — the fields always fill their container |
+| the `conclusion` prop | `FormRenderer`'s `summary` prop |
 
-- `title` — plain text (uppercased). `label` — badge text (defaults from `variant`).
-- `variant` — `"new" | "edit" | "detail"` (badge color; default `"new"`). `children` are
-  the action buttons; `FormBuilder.Submit` submits the form (it auto-associates with it, even
-  though the header sits outside `<form>`).
-
-## Stepper (steps are components)
-
-Wrap steps in `FormBuilder.Stepper`; each `FormBuilder.Step` holds a step's fields.
-**Every step's fields are always mounted and registered** — the whole form is live
-regardless of which step is showing; the stepper only toggles _visibility_.
-**Navigation is the step buttons themselves**: click a step to go there. Backward is
-free; clicking forward validates the steps in between and stops at the first one with
-errors (shown with a red indicator). A step that **passes validation stays checked** even
-after you navigate back to it. Put the **Submit** in the `FormBuilder.Header` (or the
-`FormRenderer` `actions`) — it submits every step's fields at once, from any step.
-
-`FormBuilder.Back` / `FormBuilder.Next` are **chevron step-nav buttons** (previous / next,
-disabled at the ends; `Next` validates the current step first). Place them in a
-`FormBuilder.Header`, or use `FormRenderer` — it prepends them before your Submit for a stepper
-automatically.
-
-```tsx
-<FormBuilder onSubmit={save} resolver={r} defaultValues={d}>
-  <FormBuilder.Header title="Item" variant="new">
-    <FormBuilder.Submit>Save</FormBuilder.Submit>
-  </FormBuilder.Header>
-
-  <FormBuilder.Stepper>
-    <FormBuilder.Step title="Basics">
-      <FormBuilder.Text name="name" label="Name" required />
-    </FormBuilder.Step>
-    <FormBuilder.Step title="Details">
-      <FormBuilder.Select name="category" label="Category" required options={cats} />
-    </FormBuilder.Step>
-  </FormBuilder.Stepper>
-</FormBuilder>
-```
-
-> **In a drawer?** `FormBuilder` is drawer-unaware — it only displays inputs. To
-> show a form in a drawer, wrap it in `FormDrawer` from
-> [FormRenderer](./form-renderer.md) (pass `fieldDirection="vertical"` to the
-> form), or use `FormRenderer` with `display="drawer"`.
-
-> Building a **detail page** with a sidebar of tabs (not a form)? That lives on `FormRenderer`
-> (`FormRenderer.Sidebar` / `.Tab`) — see the FormRenderer docs. `FormBuilder` itself stays form-only.
+See [the migration note](../migration/form-builder-2.5.2.md) for the full upgrade path.
 
 ## Calculation panel
 

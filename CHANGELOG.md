@@ -1,3 +1,55 @@
+## 2.5.2
+
+### Breaking — `FormBuilder` is now only the fields
+
+Everything drawn *around* the fields moved to `FormRenderer`. The split was already what the docs
+described; the code did not honour it. `FormBuilder` owned a rounded page shell, a title header
+that a *child element* switched on, a stepper rail, and a `conclusion` panel rendered outside its
+own `<form>` — while its own doc comment called it "drawer-unaware". The `layout="bare"` prop was
+the tell: page framing had been baked in, so anything embedding a form (a 260px settings rail, a
+`DataViews` filter panel) needed an escape hatch to switch it off. Now there is nothing to escape —
+a bare `<FormBuilder>` is a `<form>` and your fields, filling whatever it is placed in.
+
+**Renamed** — no compatibility shim, so the compiler finds every call site:
+
+| Before                | After                                     |
+| --------------------- | ----------------------------------------- |
+| `FormBuilder.Section` | `FormRenderer.Section`                    |
+| `FormBuilder.Stepper` | `FormRenderer.Stepper`                    |
+| `FormBuilder.Step`    | `FormRenderer.Step`                       |
+| `FormBuilder.Back`    | `FormRenderer.Back`                       |
+| `FormBuilder.Next`    | `FormRenderer.Next`                       |
+| `FormBuilder.Header`  | `FormRenderer`'s `header` prop            |
+
+`FormBuilder.Submit` does **not** move — it is the form's own submit button and still
+auto-associates with the `<form>` by id.
+
+**Removed root props:** `layout` (bare is the only behaviour; the 1100px cap and 48px gutters are
+FormRenderer's) and `conclusion` (use FormRenderer's `summary`). `FormBuilder`'s `className` now
+lands on the `<form>` element itself; FormRenderer's still lands on its outermost element, so
+`className="min-h-0 flex-1"` behaves as before.
+
+Fields land on exactly the same pixels — verified by comparing element geometry across five form
+pages before and after. Only the `<form>` element's own box changed, because the gutters that sat
+inside it now sit outside it. `FieldSection`, the per-field row layout, did not move.
+
+See [the migration note](docs/migration/form-builder-2.5.2.md) for the upgrade path.
+
+### Changed
+- **Registry:** `FormBuilder` dropped `components/FormStepper` and `components/HeaderBar`;
+  `FormRenderer` picked up those plus `components/SectionBlock` and `components/Button`. The
+  dependency stays one-directional — `FormRenderer → FormBuilder`, never the reverse — so
+  `add FormBuilder` still installs standalone, now as a smaller tree.
+- **`DataViews.Filters`** dropped its `layout="bare"` workaround; its embedded form needs no
+  special-casing any more.
+- **MCP server (1.8.0):** the forms instruction block, the `create-form` generator and its tests
+  now teach the new split.
+
+### Fixed
+- The stepper rail read `useFormState()` from context, which only worked because it happened to
+  render inside the form provider. It now takes `control` explicitly, as `useStepperState` already
+  did with `trigger` — the rail renders outside the `<form>` by design.
+
 ## 2.5.1
 
 ### Fixed
