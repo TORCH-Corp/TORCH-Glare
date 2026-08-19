@@ -248,7 +248,7 @@ export const FIELD_TYPES: FieldSpec[] = [
     value: "object[]",
     zod: "z.array(z.object({})).min(1, 'Add at least one row')",
     aliases: ["table", "grid", "data grid", "data-grid", "editable table", "spreadsheet"],
-    note: "Editable grid: each column's `cell` renders any FormBuilder.* field; supports `selectable` / `reorderable`. Renders its own `SectionBlock variant='Table'` (the full-bleed table shell) — place it as a top-level child, NOT inside a FormBuilder.Section. Give EVERY column a `width` so the table uses fixed layout and honours them.",
+    note: "Editable grid: each column's `cell` renders any FormBuilder.* field; supports `selectable` / `reorderable`. Renders its own `SectionBlock variant='Table'` (the full-bleed table shell) — place it as a top-level child, NOT inside a FormRenderer.Section. Give EVERY column a `width` so the table uses fixed layout and honours them.",
   },
   {
     static: "Custom",
@@ -460,9 +460,9 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
 
   const sectionBlock = plainFields.length
     ? [
-        `      <FormBuilder.Section title="Details" color="Blue">`,
+        `      <FormRenderer.Section title="Details" color="Blue">`,
         plainFields.map((f) => `        ${fieldJsx(f)}`).join("\n"),
-        `      </FormBuilder.Section>`,
+        `      </FormRenderer.Section>`,
       ].join("\n")
     : "";
   const tableBlocks = tableFields.map((f) => indent(fieldJsx(f), 6)).join("\n");
@@ -471,12 +471,12 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
   const body =
     layout === "stepper"
       ? [
-          `      <FormBuilder.Stepper>`,
-          `        <FormBuilder.Step title="Step 1">`,
+          `      <FormRenderer.Stepper>`,
+          `        <FormRenderer.Step title="Step 1">`,
           indent(section, 4),
-          `        </FormBuilder.Step>`,
-          `        {/* Add more <FormBuilder.Step title="…"> */}`,
-          `      </FormBuilder.Stepper>`,
+          `        </FormRenderer.Step>`,
+          `        {/* Add more <FormRenderer.Step title="…"> */}`,
+          `      </FormRenderer.Stepper>`,
         ].join("\n")
       : section;
 
@@ -544,7 +544,7 @@ export function skeleton(fields: ParsedField[], opts: FormOptions): string {
 
 /**
  * A display-only **detail page** starting point — `FormRenderer` in detail-tabs mode (NOT a form).
- * A left sidebar swaps `FormRenderer.Tab` panels; **every tab's content is `FormBuilder.Section`
+ * A left sidebar swaps `FormRenderer.Tab` panels; **every tab's content is `FormRenderer.Section`
  * blocks**. Inside a Section you use either the default `FormRenderer.Grid` + `FormRenderer.Row`
  * display cells, or your OWN component — anything renders inside a Section. No resolver, no submit.
  *
@@ -557,10 +557,12 @@ export function detailSkeleton(fields: ParsedField[]): string {
       .map((f) => `            <FormRenderer.Row label="${f.label}" value={record.${f.name}} />`)
       .join("\n") || `            <FormRenderer.Row label="Field" value={record.value} />`;
 
+  // A detail page is display-only: no `<form>`, no fields, no Submit — so it never touches
+  // `FormBuilder`. Importing it anyway would be an unused import, which fails lint in any
+  // consuming app with `no-unused-vars` on. (Sections live on FormRenderer since 2.5.2.)
   const imports = [
     `'use client'`,
     ``,
-    `import { FormBuilder } from '@/components/FormBuilder'`,
     `import { FormRenderer } from '@/components/FormRenderer'`,
     `import { Button } from '@/components/Button'`,
   ].join("\n");
@@ -588,21 +590,21 @@ export function detailSkeleton(fields: ParsedField[]): string {
     `        </FormRenderer.Sidebar.Item>`,
     `      </FormRenderer.Sidebar>`,
     ``,
-    `      {/* Every tab's content MUST be wrapped in FormBuilder.Section blocks. */}`,
+    `      {/* Every tab's content MUST be wrapped in FormRenderer.Section blocks. */}`,
     `      <FormRenderer.Tab value="overview">`,
-    `        <FormBuilder.Section title="Details" color="Blue">`,
+    `        <FormRenderer.Section title="Details" color="Blue">`,
     `          {/* Default display cells — or drop your OWN component in place of Row. */}`,
     `          <FormRenderer.Grid columns={2}>`,
     rows,
     `          </FormRenderer.Grid>`,
-    `        </FormBuilder.Section>`,
+    `        </FormRenderer.Section>`,
     `      </FormRenderer.Tab>`,
     ``,
     `      <FormRenderer.Tab value="activity">`,
-    `        <FormBuilder.Section title="Activity log" color="Green">`,
+    `        <FormRenderer.Section title="Activity log" color="Green">`,
     `          {/* Bring your own component — anything renders inside a Section. */}`,
     `          <YourTimeline items={record.activity} />`,
-    `        </FormBuilder.Section>`,
+    `        </FormRenderer.Section>`,
     `      </FormRenderer.Tab>`,
     `    </FormRenderer>`,
     `  )`,
@@ -639,9 +641,11 @@ export function buildCreateForm({
   }
 
   // A detail page is a display view, not a form — no field mapping / zod / submit. It renders
-  // FormRenderer in detail-tabs mode: a sidebar swapping FormBuilder.Section panels.
+  // FormRenderer in detail-tabs mode: a sidebar swapping FormRenderer.Tab panels, whose content
+  // is FormRenderer.Section blocks. No FormBuilder: `add FormRenderer` pulls it in transitively
+  // anyway, and the generated file never references it.
   if (layout === "detail") {
-    const installs = ["FormBuilder", "FormRenderer", "Button"]
+    const installs = ["FormRenderer", "Button"]
       .map((i) => `npx torch-glare add ${i}`)
       .join("\n");
 
@@ -652,7 +656,7 @@ export function buildCreateForm({
       ``,
       `A **detail page** is a display view, not a form. It's \`FormRenderer\` in detail-tabs mode: a` +
         ` left **sidebar** swaps \`FormRenderer.Tab\` panels, and **every tab's content is wrapped in** ` +
-        `\`FormBuilder.Section\` **blocks**. Inside a Section, use the default \`FormRenderer.Grid\` +` +
+        `\`FormRenderer.Section\` **blocks**. Inside a Section, use the default \`FormRenderer.Grid\` +` +
         ` \`FormRenderer.Row\` display cells, or drop in **your own component** — anything renders inside` +
         ` a Section. No \`onSubmit\`, no resolver, no \`useState\`.`,
       ``,
@@ -671,7 +675,7 @@ export function buildCreateForm({
       `## 3. Fill in the gaps`,
       ``,
       `- Each \`FormRenderer.Sidebar.Item value\` must match a \`FormRenderer.Tab value\` — that pairing is the tab switch. The first tab is active by default.`,
-      `- **Content must live in \`FormBuilder.Section\` blocks.** Inside one: use \`FormRenderer.Grid\` + \`FormRenderer.Row\` for label/value cells, OR render your own component (a table, timeline, chart …).`,
+      `- **Content must live in \`FormRenderer.Section\` blocks.** Inside one: use \`FormRenderer.Grid\` + \`FormRenderer.Row\` for label/value cells, OR render your own component (a table, timeline, chart …).`,
       `- \`FormRenderer.Grid\` takes \`columns\` (1–3, default 2) and spans full width; \`FormRenderer.Row\` takes \`label\` + \`value\` (any node — text, a \`Badge\`, etc.).`,
       `- Add more \`Sidebar.Item\` + \`Tab\` pairs for Items / Matching / Documents / … . \`variant="detail"\` gives the header a "View" badge; put page actions (Print / Approve) in \`actions\`.`,
       `- Need an **editable** form instead? Re-call \`create-form\` without \`layout="detail"\`.`,
@@ -730,7 +734,7 @@ export function buildCreateForm({
       display === "drawer"
         ? `- \`FormRenderer\` (with \`display="drawer"\`) places the Save action in the drawer header and lays any \`summary\` in the tray — just drive it with \`open\` / \`onOpenChange\`.`
         : ``,
-      `- \`FormBuilder.Section\` also takes \`icon\`, \`action\` (right-aligned buttons on the title row) and \`variant\` — \`variant="Table"\` is the full-bleed table shell.`,
+      `- \`FormRenderer.Section\` also takes \`icon\`, \`action\` (right-aligned buttons on the title row) and \`variant\` — \`variant="Table"\` is the full-bleed table shell.`,
       `- Use \`required\` on fields — never type a literal "*".`,
       `- Never hand-wire \`FormField\`/\`FormItem\`/\`FormControl\`/\`InputField\` rows, and never hold field state in \`useState\`.`,
     ].filter(Boolean),

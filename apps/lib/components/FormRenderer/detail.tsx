@@ -5,11 +5,11 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "../../utils/cn";
 import { formBarItemStyles } from "../TabFormItem";
-import { FormHeaderBar, type HeaderVariant } from "../FormBuilder/header";
+import { FormHeaderBar, type HeaderVariant } from "./header";
 
 /**
  * Detail-tabs — a display-only view where a left **sidebar** switches the main area between
- * **`FormBuilder.Section` panels** (a detail page, not a form). It lives on `FormRenderer`
+ * **`FormRenderer.Section` panels** (a detail page, not a form). It lives on `FormRenderer`
  * (`FormRenderer.Sidebar` / `.Sidebar.Item` / `.Tab`) so `FormBuilder` stays form-only. Built on
  * the same Radix Tabs primitive shadcn uses: the sidebar is the `Tabs.List`, each `Sidebar.Item` a
  * `Tabs.Trigger`, each `Tab` a `Tabs.Content` — so the fixed rail and the panels share tab state.
@@ -20,7 +20,7 @@ export interface DetailSidebarProps {
 }
 
 /**
- * `FormRenderer.Sidebar` — the tab rail, sitting where a `FormBuilder.Stepper`'s nav would.
+ * `FormRenderer.Sidebar` — the tab rail, sitting where a `FormRenderer.Stepper`'s nav would.
  * Renders **nothing itself**: the FormRenderer root detects it and places its `Sidebar.Item`
  * children (the tab triggers) into the fixed rail.
  */
@@ -80,7 +80,7 @@ export interface DetailRowProps {
 
 /**
  * `FormRenderer.Row` — a read-only label/value cell for detail content (the display counterpart of a
- * form field). Drop several inside a `FormRenderer.Grid` within a `FormBuilder.Section`.
+ * form field). Drop several inside a `FormRenderer.Grid` within a `FormRenderer.Section`.
  */
 export function DetailRow({ label, value }: DetailRowProps) {
   return (
@@ -110,7 +110,7 @@ const GRID_COLS: Record<NonNullable<DetailGridProps["columns"]>, string> = {
 /**
  * `FormRenderer.Grid` — arranges `FormRenderer.Row`s in an equal-column grid spanning the **full
  * section width** (default 2 columns, so cells split in half). Padded so the rows breathe inside a
- * `FormBuilder.Section` (clear of the title badge, roomy row + column spacing).
+ * `FormRenderer.Section` (clear of the title badge, roomy row + column spacing).
  */
 export function DetailGrid({ columns = 2, children }: DetailGridProps) {
   return (
@@ -121,7 +121,7 @@ export function DetailGrid({ columns = 2, children }: DetailGridProps) {
 export interface DetailTabProps {
   /** Ties this panel to the `Sidebar.Item` of the same `value`. */
   value: string;
-  /** The panel body — typically `FormBuilder.Section` display blocks. */
+  /** The panel body — typically `FormRenderer.Section` display blocks. */
   children: React.ReactNode;
 }
 

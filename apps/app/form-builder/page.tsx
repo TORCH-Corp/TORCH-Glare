@@ -10,8 +10,11 @@ export default function FormBuilderIndexPage() {
           FormBuilder examples
         </h1>
         <p className="typography-body-medium-regular text-content-presentation-global-secondary">
-          The compound <code>FormBuilder</code> (fields as JSX) and the config-driven{" "}
-          <code>FormRenderer</code>. Each example submits to a dummy async request.
+          <code>FormBuilder</code> is the fields — authored as JSX children, wired to
+          react-hook-form, and nothing else. <code>FormRenderer</code> is everything drawn around
+          them: the title header and Save action, the coloured <code>FormRenderer.Section</code>{" "}
+          cards, page vs drawer, the stepper, and the summary panel. Each example submits to a dummy
+          async request.
         </p>
       </header>
 

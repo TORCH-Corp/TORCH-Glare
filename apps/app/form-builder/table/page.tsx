@@ -70,7 +70,7 @@ export default function TableFieldExample() {
     <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="Table field"
-        blurb="FormBuilder.Table — an editable grid on the FieldArray pattern: any field per cell, row checkboxes, drag-drop reorder, add/remove."
+        blurb="FormBuilder.Table — an editable grid on the FieldArray pattern: any field per cell, row checkboxes, drag-drop reorder, add/remove. It draws its own section shell, so keep it a top-level child."
       />
 
       <FormRenderer<Values>

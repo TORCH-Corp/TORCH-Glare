@@ -435,7 +435,7 @@ import {
 ```
 
 For a table that edits form values, don't hand-compose this — use
-[`FormBuilder.Table`](./form-builder.md#formbuildertable), which renders exactly this shell
+[`FormBuilder.Table`](./form-builder.md#field-components), which renders exactly this shell
 and wires rows to `react-hook-form`.
 
 ### Custom Layout (override defaults)

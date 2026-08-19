@@ -22,7 +22,7 @@ export default function StepperExample() {
     <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="Stepper"
-        blurb="Steps are components; every step's fields stay registered — the nav only toggles visibility."
+        blurb="FormRenderer.Stepper — steps are components; every step's fields stay registered, the nav only toggles visibility."
       />
 
       {/* The step rail sits beside the active step's fields. The Save action lives in the form
@@ -36,20 +36,20 @@ export default function StepperExample() {
         header={{ title: "New item", variant: "new" }}
         actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
       >
-        <FormBuilder.Stepper>
-          <FormBuilder.Step title="Identity">
+        <FormRenderer.Stepper>
+          <FormRenderer.Step title="Identity">
             <IdentitySection />
-          </FormBuilder.Step>
-          <FormBuilder.Step title="Classification">
+          </FormRenderer.Step>
+          <FormRenderer.Step title="Classification">
             <ClassificationSection />
-          </FormBuilder.Step>
-          <FormBuilder.Step title="Financial">
+          </FormRenderer.Step>
+          <FormRenderer.Step title="Financial">
             <FinancialSection />
-          </FormBuilder.Step>
-          <FormBuilder.Step title="Settings">
+          </FormRenderer.Step>
+          <FormRenderer.Step title="Settings">
             <SettingsSection />
-          </FormBuilder.Step>
-        </FormBuilder.Stepper>
+          </FormRenderer.Step>
+        </FormRenderer.Stepper>
       </FormRenderer>
 
       <SubmitResult result={result} />

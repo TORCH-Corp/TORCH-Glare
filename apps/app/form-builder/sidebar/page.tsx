@@ -1,6 +1,5 @@
 "use client";
 
-import { FormBuilder } from "@/components/FormBuilder";
 import { FormRenderer } from "@/components/FormRenderer";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
@@ -8,7 +7,7 @@ import { DemoHeader } from "../_shared";
 
 // A display-only **detail page**: `FormRenderer.Sidebar` is the tab rail (where a stepper's nav would
 // go); each `FormRenderer.Sidebar.Item` swaps in its matching `FormRenderer.Tab` — panels of read-only
-// `FormBuilder.Section` blocks (`FormRenderer.Grid` + `.Row` lay out the label/value display cells).
+// `FormRenderer.Section` blocks (`FormRenderer.Grid` + `.Row` lay out the label/value display cells).
 // No form, no submit — the sidebar just changes what's rendered.
 
 const NAV = [
@@ -27,7 +26,7 @@ export default function SidebarDetailExample() {
     <div className="flex min-h-0 flex-1 flex-col gap-6">
       <DemoHeader
         title="Detail tabs (sidebar)"
-        blurb="A display-only detail page — the sidebar rail swaps FormBuilder.Section panels, sitting where a stepper's nav would. Built on the same Radix Tabs primitive as shadcn."
+        blurb="A display-only detail page — the sidebar rail swaps FormRenderer.Section panels, sitting where a stepper's nav would. Built on the same Radix Tabs primitive as shadcn."
       />
 
       <FormRenderer
@@ -61,7 +60,7 @@ export default function SidebarDetailExample() {
 
         {/* One panel per tab — read-only Section blocks. */}
         <FormRenderer.Tab value="overview">
-          <FormBuilder.Section title="Main Information" color="Blue">
+          <FormRenderer.Section title="Main Information" color="Blue">
             <Grid>
               <Row label="PO Number" value="PO-000123" />
               <Row label="Status" value={<Badge label="Submitted" color="yellow" />} />
@@ -70,17 +69,17 @@ export default function SidebarDetailExample() {
               <Row label="Created By" value="Ahmed Hassan" />
               <Row label="Created Date" value="March 20, 2026" />
             </Grid>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
 
-          <FormBuilder.Section title="Customer & Delivery" color="Red">
+          <FormRenderer.Section title="Customer & Delivery" color="Red">
             <Grid>
               <Row label="Customer" value="Global Office Inc. (sup-001)" />
               <Row label="Warehouse" value="Dubai Main Warehouse (wh-001)" />
               <Row label="Expected Delivery Date" value="April 5, 2026" />
             </Grid>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
 
-          <FormBuilder.Section title="Financial Information" color="Purple">
+          <FormRenderer.Section title="Financial Information" color="Purple">
             <Grid>
               <Row label="Currency" value="AED" />
               <Row label="Cost Center" value="CC-ADM-001" />
@@ -95,52 +94,52 @@ export default function SidebarDetailExample() {
                 }
               />
             </Grid>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
 
-          <FormBuilder.Section title="Notes" color="Green">
+          <FormRenderer.Section title="Notes" color="Green">
             <p className="typography-body-medium-regular text-content-presentation-global-secondary">
               Urgent order for Q1 office supplies. Please prioritize delivery.
             </p>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
         </FormRenderer.Tab>
 
         <FormRenderer.Tab value="items">
-          <FormBuilder.Section title="Items Table" color="Blue">
+          <FormRenderer.Section title="Items Table" color="Blue">
             <Grid>
               <Row label="Line 1" value="Ergonomic Chair × 20 — AED 18,000.00" />
               <Row label="Line 2" value="Standing Desk × 15 — AED 22,500.00" />
               <Row label="Line 3" value="Monitor Arm × 30 — AED 4,500.00" />
               <Row label="Total lines" value="3" />
             </Grid>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
         </FormRenderer.Tab>
 
         <FormRenderer.Tab value="matching">
-          <FormBuilder.Section title="Matching" color="Purple">
+          <FormRenderer.Section title="Matching" color="Purple">
             <Grid>
               <Row label="PO ↔ Receipt" value={<Badge label="Matched" color="green" />} />
               <Row label="PO ↔ Invoice" value={<Badge label="Pending" color="yellow" />} />
             </Grid>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
         </FormRenderer.Tab>
 
         <FormRenderer.Tab value="documents">
-          <FormBuilder.Section title="Documents" color="Red">
+          <FormRenderer.Section title="Documents" color="Red">
             <Grid>
               <Row label="Purchase Order" value="PO-000123.pdf" />
               <Row label="Quotation" value="QT-000089.pdf" />
             </Grid>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
         </FormRenderer.Tab>
 
         <FormRenderer.Tab value="activity">
-          <FormBuilder.Section title="Activity log" color="Green">
+          <FormRenderer.Section title="Activity log" color="Green">
             <Grid>
               <Row label="Created" value="Ahmed Hassan · March 20, 2026" />
               <Row label="Submitted" value="Ahmed Hassan · March 20, 2026" />
               <Row label="Approved" value="Mazen Maher · March 21, 2026" />
             </Grid>
-          </FormBuilder.Section>
+          </FormRenderer.Section>
         </FormRenderer.Tab>
       </FormRenderer>
     </div>

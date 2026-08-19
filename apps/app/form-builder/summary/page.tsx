@@ -122,12 +122,12 @@ export default function SummaryExample() {
           </FormSummary>
         }
       >
-        <FormBuilder.Section title="Customer" color="Blue">
+        <FormRenderer.Section title="Customer" color="Blue">
           <FormBuilder.Text name="customer" label="Customer" required placeholder="Acme Corp." />
           <FormBuilder.Currency name="balance" label="Balance" currencySymbol="$" />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="Line items" color="Green">
+        <FormRenderer.Section title="Line items" color="Green">
           <FormBuilder.FieldArray
             name="items"
             label="Items"
@@ -147,12 +147,12 @@ export default function SummaryExample() {
               </>
             )}
           </FormBuilder.FieldArray>
-        </FormBuilder.Section>
+        </FormRenderer.Section>
 
-        <FormBuilder.Section title="Rates" color="Purple">
+        <FormRenderer.Section title="Rates" color="Purple">
           <FormBuilder.Number name="taxRate" label="Tax rate (%)" />
           <FormBuilder.Number name="iqdRate" label="USD → IQD rate" />
-        </FormBuilder.Section>
+        </FormRenderer.Section>
       </FormRenderer>
 
       <SubmitResult result={result} />

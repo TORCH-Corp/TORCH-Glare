@@ -228,7 +228,7 @@ export interface TableColumn {
  * `FormBuilder.Table` — an editable table field (built on RHF `useFieldArray`). Each row is a
  * record; each column cell is any `FormBuilder.*` field. Supports per-row checkbox selection
  * (+ select-all + bulk delete), drag-drop reordering, and add/remove rows. Renders inside a
- * `SectionBlock`, so place it as a top-level child (not inside a `FormBuilder.Section`).
+ * `SectionBlock`, so place it as a top-level child (not inside a `FormRenderer.Section`).
  */
 export interface TableFieldProps {
   name: string;
@@ -278,24 +278,14 @@ export interface FormBuilderRootProps<T extends FieldValues = FieldValues> {
   loading?: boolean;
   /** Field row direction. Defaults to horizontal (vertical inside a drawer). */
   fieldDirection?: FieldDirection;
-  /**
-   * How the fields column is framed.
-   *
-   * `"page"` (the default) is the full-page form: centred, capped at 1100px, and held off the
-   * edges by 48px gutters.
-   *
-   * `"bare"` drops all three so the fields fill whatever they are placed inside. Use it when the
-   * form is embedded in something narrow — a 260px settings rail has no room to give up 96px to
-   * gutters, and its controls would overflow the panel rather than fill it.
-   */
-  layout?: "page" | "bare";
   /** Reset to defaults after a successful submit. */
   resetOnSuccess?: boolean;
   /**
-   * A live panel (e.g. `FormSummary`) rendered **outside** the `<form>`, as the right column of the
-   * adaptive grid — with a stepper it makes a 3-column layout (nav · fields · conclusion), otherwise
-   * 2 columns (fields · conclusion). It reads the shared values via its own `form` prop.
+   * Lands on the `<form>` element itself — FormBuilder renders nothing around it. Use it to let
+   * the form fill its parent (e.g. `"flex-1 min-h-0"` inside a flex column that has a height).
+   *
+   * There is no `layout` prop: the fields always fill their container. The page framing that
+   * used to live here — the 1100px cap and 48px gutters — belongs to `FormRenderer`.
    */
-  conclusion?: ReactNode;
   className?: string;
 }

@@ -100,7 +100,12 @@ function FiltersRoot({
                 </h3>
               ))}
             {active && (
-              <Button size="S" variant="BorderStyle" className="ms-auto" onClick={() => setFilters({})}>
+              <Button
+                size="S"
+                variant="BorderStyle"
+                className="ms-auto"
+                onClick={() => setFilters({})}
+              >
                 {clearLabel}
               </Button>
             )}
@@ -117,15 +122,7 @@ function FiltersRoot({
 
         {/* `onSubmit` is required by FormBuilder but never reached — there is no submit button and
             no Enter target. Filters emit as you touch them. */}
-        {/* `layout="bare"` because this form is embedded, not a page: FormBuilder's default
-            centres the fields at 1100px behind 48px gutters, which in a 260px rail leaves the
-            controls less room than their own minimum width and overflows them. */}
-        <FormBuilder
-          onSubmit={() => {}}
-          values={values}
-          fieldDirection="vertical"
-          layout="bare"
-        >
+        <FormBuilder onSubmit={() => {}} values={values} fieldDirection="vertical">
           <Sync fields={fields} />
           <CellContext.Provider value="bare">
             {/* Same fold as `Panel.Section`: a 0fr→1fr grid row, and `inert` so a collapsed
@@ -150,7 +147,6 @@ function FiltersRoot({
     </FiltersContext.Provider>
   );
 }
-
 
 /**
  * The filter surface, assembled in one place. `Presets` and `Custom` are ours because FormBuilder
