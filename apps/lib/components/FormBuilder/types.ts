@@ -276,7 +276,11 @@ export interface FormBuilderRootProps<T extends FieldValues = FieldValues> {
   values?: T;
   /** Loading flag — Submit shows a spinner and inputs disable. */
   loading?: boolean;
-  /** Field row direction. Defaults to horizontal (vertical inside a drawer). */
+  /**
+   * Field row direction. Unset means `"flexible"` — stacked, then label-beside-control once the
+   * field row passes the container `md` breakpoint. `FormRenderer` pins `"vertical"` in a drawer;
+   * pass `"flexible"` there to get the responsive layout back.
+   */
   fieldDirection?: FieldDirection;
   /** Reset to defaults after a successful submit. */
   resetOnSuccess?: boolean;

@@ -257,7 +257,9 @@ it renders in the drawer header, with no manual `id` / `form={id}` wiring:
 </FormRenderer>
 ```
 
-Inside a drawer the fields default to a vertical (narrow) layout automatically.
+Inside a drawer the fields default to a vertical (narrow) layout automatically. A drawer can be
+wide, though — pass `fieldDirection="flexible"` to hand the decision back to the container query,
+which goes label-beside-control once a field row passes the container `md` breakpoint.
 
 ---
 

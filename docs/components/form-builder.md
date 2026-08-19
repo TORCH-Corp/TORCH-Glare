@@ -82,7 +82,7 @@ import { FormBuilder } from "@/components/FormBuilder";
 | `defaultValues`  | `DefaultValues`                     | Initial values (create).                                                                                                   |
 | `values`         | `T`                                 | Controlled values (edit) — the form re-syncs when this changes.                                                            |
 | `loading`        | `boolean`                           | Submit shows a spinner; inputs disable.                                                                                    |
-| `fieldDirection` | `'horizontal' \| 'vertical'`        | Row layout (auto-vertical inside a drawer).                                                                                |
+| `fieldDirection` | `'horizontal' \| 'vertical' \| 'flexible'` | Row layout. Unset is responsive; a `FormRenderer` drawer pins `'vertical'`, and `'flexible'` asks for the responsive layout back.                                                                                |
 | `resetOnSuccess` | `boolean`                           | Reset to defaults after a successful submit.                                                                               |
 | `form`           | `UseFormReturn`                     | A hoisted `useForm` to bind to — pass when something outside the form must read the same values.                           |
 | `id`             | `string`                            | Sets the underlying `<form id>`, so a button outside the form can submit it via `form={id}` (e.g. a drawer header's Save). |

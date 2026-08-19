@@ -16,7 +16,7 @@ import type {
  */
 
 export type FormRendererDisplay = "page" | "drawer";
-export type FieldDirection = "horizontal" | "vertical";
+export type FieldDirection = "horizontal" | "vertical" | "flexible";
 
 export interface FormRendererProps<T extends FieldValues = FieldValues> {
   /** The form body — `FormRenderer.Section` / field / `FormRenderer.Stepper` JSX. */

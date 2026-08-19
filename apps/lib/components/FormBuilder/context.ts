@@ -2,7 +2,15 @@
 
 import { createContext, useContext } from "react";
 
-export type FieldDirection = "horizontal" | "vertical";
+/**
+ * How a field row lays out its label against its control.
+ *
+ * `"flexible"` is the responsive one: stacked, then label-beside-control once the field row itself
+ * is past the container `md` breakpoint. It is what you get by leaving `fieldDirection` unset — and
+ * it is assignable so you can ask for it back where something else defaults you away from it, most
+ * notably a `FormRenderer` drawer, which pins `"vertical"`.
+ */
+export type FieldDirection = "horizontal" | "vertical" | "flexible";
 
 /** Loading flag — drives the Submit spinner and disables inputs. */
 export const LoadingContext = createContext<boolean>(false);
