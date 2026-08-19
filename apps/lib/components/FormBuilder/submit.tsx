@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 
+import { cn } from "../../utils/cn";
 import { Button } from "../Button";
 import { useFormId, useLoading } from "./context";
 
@@ -30,7 +31,12 @@ export function SubmitButton({ children, className, loadingText, form }: SubmitB
       form={form ?? ctxFormId}
       variant="PrimeStyle"
       is_loading={loading}
-      className={className}
+      // `w-fit` because the FormBuilder root is a flex COLUMN: a direct child with `width: auto`
+      // inherits `align-items: stretch` and spans the whole form. Sections want that (SectionBlock
+      // sets its own `w-full`); a Save button does not. `w-fit` rather than `self-start` so the
+      // header action bar — a row with `items-center` — is untouched at every button size.
+      // Merged through `cn` so a caller can still opt into `className="w-full"` in a narrow drawer.
+      className={cn("w-fit", className)}
     >
       {loading ? (loadingText ?? children ?? "Saving…") : (children ?? "Save")}
     </Button>
