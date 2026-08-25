@@ -159,10 +159,22 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
   // inside it: a form embedded in a 260px rail has no room to give up 96px to gutters.
   const fieldsColumn = <div className="mx-auto w-full max-w-[1100px] px-[48px]">{formEl}</div>;
 
-  // Inside the form surface: the stepper rail beside the fields. Columns never wrap — the
-  // layout stays side-by-side at every screen size (the fields column shrinks instead).
+  // Inside the form surface: the stepper rail beside the fields. Columns never wrap — the layout
+  // stays side-by-side at every screen size; when space runs short the fields column shrinks and
+  // the rail's labels truncate.
+  //
+  // `minmax(180px,1fr)` and not a bare `1fr` on the side tracks. `1fr` means `minmax(auto,1fr)`,
+  // whose *auto* minimum stops a track shrinking below its content — so a long step label made the
+  // rail's track wider than the empty track opposite it, and the two side tracks being equal is the
+  // only thing centring the middle column. Hovering a step made it visibly worse: the label's
+  // padding grows 6px→9px on hover (FormStepper), so the centre jumped 3px every time.
+  //
+  // The minimum is a fixed 180px rather than `auto` precisely so it cannot depend on the labels:
+  // both side tracks size identically whatever the rail holds, so the middle column stays centred,
+  // and the rail still has room to be legible (a plain `minmax(0,…)` let it collapse to 0 in a
+  // narrow preview frame). Past that floor the labels truncate instead of pushing.
   const bodyInner = isStepper ? (
-    <div className="grid w-full grid-cols-[1fr_minmax(0,1100px)_1fr] gap-8">
+    <div className="grid w-full grid-cols-[minmax(180px,1fr)_minmax(0,1100px)_minmax(180px,1fr)] gap-8">
       <StepperNav control={formInstance.control as Control<FieldValues>} />
       {fieldsColumn}
       {/* Empty third column — balances the rail's gutter so the middle column is centred. */}

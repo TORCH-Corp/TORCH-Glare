@@ -115,7 +115,15 @@ function TableViewImpl({
 
   return (
     <DndContext {...contextProps}>
-      <div className={cn("bg-background-presentation-form-base flex h-full", className)}>
+      {/* Its own edge, matching the inbox and tree panels: this view is a surface on the shell,
+          not a fill of it. `overflow-hidden` keeps the rows clipped to the radius. */}
+      <div
+        className={cn(
+          "bg-background-presentation-form-base flex h-full overflow-hidden",
+          "border-border-presentation-global-primary rounded-[16px] border",
+          className,
+        )}
+      >
         <div className="flex flex-1 flex-col gap-4 overflow-hidden">
           <div
             ref={scrollRef}
@@ -125,12 +133,30 @@ function TableViewImpl({
             className="min-w-0 flex-1 overflow-auto rounded-lg"
           >
             <Table ref={tableRef} className="w-full">
-              <TableHeader>
+              {/* The header sticks to the scroller above by default — that lives on `TableHeader`
+                  in the primitive. Two things this view adds:
+
+                  Opacity. The primitive's header token is translucent, so scrolling rows read
+                  straight through it; the primitive can't fix that without naming a surface colour
+                  it doesn't know. Here the surface *is* known — the view root above sets
+                  `form-base` — so paint that as the background-color (tailwind-merge drops the
+                  primitive's translucent one, same `bg-color` group) and re-apply the tint as a
+                  background-image, which stacks above background-color. Composited that is the
+                  exact colour the header already had, just no longer see-through.
+
+                  And `shadow-none`, because the drop shadow reads as a seam now that the view
+                  carries its own border. */}
+              <TableHeader className="bg-background-presentation-form-base bg-[image:linear-gradient(var(--background-presentation-form-header),var(--background-presentation-form-header))] shadow-none">
                 <TableRow>
                   {onRowMove && <TableHead isDummy className="w-8" />}
                   {selectable && (
                     <TableHead isDummy className="w-12">
+                      {/* Size is stated on both this and the per-row checkbox rather than left to
+                          `Checkbox`'s default — they have to agree, and relying on the default on
+                          one side only is what previously made the select-all bigger than the
+                          column it heads. */}
                       <Checkbox
+                        size="M"
                         checked={allSelected ? true : someSelected ? "indeterminate" : false}
                         onCheckedChange={toggleAll}
                         aria-label="Select all rows"
@@ -149,7 +175,11 @@ function TableViewImpl({
                       // so a screen reader hears one identical button per column.
                       sortLabel={field.label ?? formatPathLabel(field.path)}
                     >
-                      {field.label ?? field.path}
+                      {/* Wrapped rather than handed to `Table` as bare text: `truncate` needs a box
+                          to clip, and the label's parent in the primitive is already `flex min-w-0`
+                          so this span shrinks and ellipsises instead of wrapping the header row
+                          onto a second line. */}
+                      <span className="truncate">{field.label ?? field.path}</span>
                     </TableHead>
                   ))}
                 </TableRow>
@@ -203,7 +233,7 @@ function TableViewImpl({
                             attributes, so it cannot express a controlled checkbox. */}
                             <div className="flex items-center justify-center">
                               <Checkbox
-                                size="S"
+                                size="M"
                                 checked={selected}
                                 onCheckedChange={() => toggleRow(id)}
                                 aria-label="Select row"

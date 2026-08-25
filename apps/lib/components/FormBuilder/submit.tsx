@@ -29,7 +29,10 @@ export function SubmitButton({ children, className, loadingText, form }: SubmitB
       // Defaults to the enclosing form's id, so a Save in the header (outside the `<form>`)
       // still submits it via native form-association.
       form={form ?? ctxFormId}
-      variant="PrimeStyle"
+      // The blue fill, because Save is the form's primary action and a primary action is blue.
+      // Deliberately not a prop: a form has one primary action, and letting each caller pick a
+      // variant is how the rule stops being a rule.
+      variant="BluColStyle"
       is_loading={loading}
       // `w-fit` because the FormBuilder root is a flex COLUMN: a direct child with `width: auto`
       // inherits `align-items: stretch` and spans the whole form. Sections want that (SectionBlock

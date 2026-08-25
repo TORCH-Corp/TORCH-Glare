@@ -44,8 +44,11 @@ export function Header({ title, children, className }: HeaderProps) {
     >
       {title !== undefined && (
         <>
-          <div className="flex h-9 shrink-0 items-center gap-2 rounded-[12px] border border-[#434446] bg-[#252729] px-[10px]">
-            <span className="text-[28px] font-[510] uppercase leading-[1.19] text-white">
+          {/* `min-w-0`, not `shrink-0`: the pill has to be able to give up width, or a long title
+              pushes the view switch, actions and panel toggle off the end of the bar. It yields
+              first and the title ellipsises instead. */}
+          <div className="flex h-9 min-w-0 items-center gap-2 rounded-[12px] border border-[#434446] bg-[#252729] px-[10px]">
+            <span className="truncate text-[28px] font-[510] uppercase leading-[1.19] text-white">
               {title}
             </span>
           </div>

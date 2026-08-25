@@ -253,8 +253,8 @@ function TreeViewImpl({
 
   return (
     // A split view, so the gap between the rail and the pane is part of the design: it paints the
-    // shell's black over the Master Container's surface, and the two cards float on it. The table
-    // and board fill their container instead, which is why only these two do this.
+    // shell's black over the Master Container's surface, and the two cards float on it. The board
+    // fills its container instead — the table now carries its own border, like these panels.
     <div className={cn("flex h-full gap-2 bg-black", className)}>
       <div
         className={cn(
@@ -265,9 +265,11 @@ function TreeViewImpl({
         )}
       >
         <div className="border-border-presentation-global-primary border-b px-3 py-2">
+          {/* `block` before `truncate` — the parent is a plain div, so an inline span would clip
+              nothing. Same reason as the inbox's panel header. */}
           <span
             style={{ fontFeatureSettings: "'cv05' on" }}
-            className="typography-display-medium-medium text-content-presentation-global-primary uppercase"
+            className="typography-display-medium-medium text-content-presentation-global-primary block truncate uppercase"
           >
             {labelField?.label ?? "categories"}
           </span>

@@ -188,6 +188,13 @@ Each takes `id`, `label` and `icon` to control how it appears in the switcher, s
 be registered twice with different data. Full props are under
 [API Reference](#api-reference) — one heading per part.
 
+Two things `DataViews.Table` does for you that you would otherwise wire by hand: its column header
+**stays put while the rows scroll under it**, and the view draws **its own border and radius**, so it
+reads as a separated surface like the inbox and tree panels rather than filling the shell edge to
+edge. Long column labels truncate with an ellipsis instead of wrapping the header row onto a second
+line. Inside `DataViews.Tree`, the same table drops that border — the tree's pane already draws one,
+and two would nest a pixel apart.
+
 ### The tree's pane
 
 Pick a node and the pane beside it lists what that node holds. Its header names the selected node

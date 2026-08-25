@@ -67,9 +67,12 @@ function InboxViewImpl({
         )}
       >
         <li className="border-border-presentation-global-primary border-b px-3 py-2">
+          {/* `block` before `truncate`: the parent is a plain `<li>`, so this span would otherwise
+              be inline — and `overflow` has no effect on an inline box, which would leave the
+              ellipsis silently doing nothing. */}
           <span
             style={{ fontFeatureSettings: "'cv05' on" }}
-            className="typography-display-medium-medium text-content-presentation-global-primary uppercase"
+            className="typography-display-medium-medium text-content-presentation-global-primary block truncate uppercase"
           >
             {titleField?.label ?? "inbox"}
           </span>

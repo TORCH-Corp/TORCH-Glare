@@ -356,7 +356,9 @@ function ColumnHeader({
         COLUMN_BG[group.color ?? "gray"],
       )}
     >
-      <h3 className="typography-headers-small-medium text-content-presentation-global-primary-light">
+      {/* `min-w-0` because this is a flex item: without it the heading refuses to shrink below its
+          text and a long group name pushes the action button out of the column. */}
+      <h3 className="typography-headers-small-medium text-content-presentation-global-primary-light min-w-0 truncate">
         {group.label}
       </h3>
       {onAction && (

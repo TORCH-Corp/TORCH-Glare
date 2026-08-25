@@ -134,7 +134,11 @@ function useIsActive(element: { value?: string }, defaultValue: string) {
 export const PaneTable = markPaneView(function PaneTable(props: TreePaneTableProps) {
   const active = useIsActive({ value: props.value }, "table");
   if (!active) return null;
-  return <TableView {...withoutTabProps(props)} />;
+  // Standalone, `TableView` draws its own border and radius so it reads as a separated surface.
+  // In here it is not standalone: the pane around it already draws exactly that border and radius
+  // (`tree-view.tsx`), so leaving the table's on nests one inside the other a pixel apart.
+  // `TreePaneTableProps` omits `className`, so there is no caller value to merge with.
+  return <TableView {...withoutTabProps(props)} className="rounded-none border-0" />;
 }, { defaultValue: "table", defaultLabel: "List", defaultIcon: <Table2 /> });
 
 /**
