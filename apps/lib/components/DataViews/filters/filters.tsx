@@ -95,7 +95,7 @@ function FiltersRoot({
               ) : (
                 // Reading the colour from a token rather than a `text-white` literal is what lets
                 // the same controls sit in the dark rail and in the light content area.
-                <h3 className="text-content-presentation-global-primary text-[18px] font-[510] leading-[1.32] tracking-[-0.01em]">
+                <h3 className="text-content-presentation-global-primary min-w-0 truncate text-[18px] font-[510] leading-[1.32] tracking-[-0.01em]">
                   {title}
                 </h3>
               ))}

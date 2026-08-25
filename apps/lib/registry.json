@@ -1,5 +1,5 @@
 {
-  "version": "2.5.2",
+  "version": "2.5.3",
   "generatedBy": "scripts/bin/generateRegistry",
   "npmVersions": {
     "@dnd-kit/core": "^6.3.1",

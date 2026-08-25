@@ -55,7 +55,9 @@ Everything drawn *around* the fields lives in **[FormRenderer](./form-renderer.m
 > author the fields as `FormBuilder.*` children — FormRenderer just wraps them.
 
 `FormBuilder.Submit` is the one non-field part that stays here — see
-[Field components](#field-components) for what it does.
+[Field components](#field-components) for what it does. It renders the **primary action**: the blue
+filled button. There is deliberately no `variant` prop — a form has one primary action, and letting
+each call site pick a style is how that stops being true.
 
 ## Installation
 

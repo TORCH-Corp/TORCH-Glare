@@ -311,7 +311,7 @@ function DataViewsRoot({
                       inherits it rather than landing on the black shell.
 
                       No border: Figma draws one, but every view already brings its own edge — the
-                      table its header rule, the split views their panel borders — so it only ever
+                      table and the split views each draw their own panel border — so it only ever
                       read as a second outline around the first. */}
                   <div className="bg-background-presentation-form-base flex flex-1 overflow-hidden rounded-[16px]">
                     {/* Clip the scrollable surface to the parent radius minus its 1px border

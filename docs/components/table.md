@@ -363,6 +363,39 @@ function ResizableTable() {
 | `className` | `string` | - | Additional CSS classes |
 | `children` | `React.ReactNode` | - | Header rows |
 
+#### Sticky header
+
+`TableHeader` carries `position: sticky; top: 0`, so a table inside a vertically scrolling container
+can keep its header in view while the rows move under it. Sticky keeps the element in normal flow,
+so it changes nothing in a table that does not scroll.
+
+It needs two things from you.
+
+**Pass `overflow-visible`.** Sticky resolves against the **nearest scrollport**, and `Table` defaults
+to `overflow-hidden` — which makes the table itself a scrollport, so the header pins to a box that
+never scrolls and appears not to stick. Turning that clipping off binds it to your scroller instead.
+
+Only do this when your scroller is `min-w-0` (or otherwise width-constrained). That default clipping
+is also what stops a `w-auto` table wider than its container from pushing the whole page wide, so
+opting out without a constrained scroller trades a sticky header for a horizontal scrollbar.
+
+**Give the header an opaque background** — see below.
+
+```tsx
+{/* `min-w-0` so a wide table scrolls in here rather than widening the layout */}
+<div className="min-w-0 max-h-[400px] overflow-auto">
+  <Table className="w-full overflow-visible">
+    <TableHeader className="bg-background-presentation-form-base">
+      ...
+```
+
+The default header background is translucent, which was fine when nothing ever passed beneath it.
+Once rows scroll under a stuck header they read through it, so give
+the header the opaque colour of whatever surface it sits on — `Table` cannot pick one for you,
+since forcing a surface would recolour every table not on it. `DataViews`' table view is the worked
+example: it paints the surface token as the background colour and re-applies the header tint as a
+`background-image`, which stacks above it, landing on the exact colour the header always had.
+
 ### TableBody Props
 
 | Prop | Type | Default | Description |

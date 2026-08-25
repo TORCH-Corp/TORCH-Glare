@@ -14,7 +14,17 @@ const titleBadge = cva(
         Orange: "bg-red-orange-900",
         Purple: "bg-violet-900",
         Pink: "bg-medium-violet-red-900",
-        Gray: "bg-background-presentation-badge-gray",
+        // Per Figma (`FormHeader10`, Color=Gray), which pairs two *variables*: the pill is
+        // `background/presentation/button/primary` and its label `content/presentation/global/
+        // primary-inverse`. They invert together — a light pill with dark text in the dark theme,
+        // dark pill with white text in the light one — so the text token has to ride along on the
+        // variant. It overrides the base `text-[#F4F4F4]` because `titleBadge` goes through `cn`
+        // (tailwind-merge) below; the other seven are dark palette chips that still want that base.
+        //
+        // This previously read `bg-background-presentation-badge-gray`, which is not a token at all:
+        // every badge colour has `-solid`/`-subtle` and none has a bare name, so the utility was
+        // never generated and a Gray badge painted no background whatsoever.
+        Gray: "bg-background-presentation-button-primary text-content-presentation-global-primary-inverse",
       },
     },
     defaultVariants: { color: "Blue" },

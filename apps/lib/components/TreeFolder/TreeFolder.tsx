@@ -311,68 +311,68 @@ export const TreeFolder = forwardRef<TreeFolderHandle, TreeFolderProps>(
 
         <TreeFolderStyles />
         <DndContext {...contextProps}>
-        <div ref={scrollRef} role="tree" className="tf-scroll flex-1 min-h-0 overflow-auto">
-          {isEmpty ? (
-            (emptyState ?? (
-              <div className="text-xs text-content-presentation-global-tertiary p-3">
-                Nothing here yet.
+          <div ref={scrollRef} role="tree" className="tf-scroll flex-1 min-h-0 overflow-auto pt-[6px]">
+            {isEmpty ? (
+              (emptyState ?? (
+                <div className="text-xs text-content-presentation-global-tertiary p-3">
+                  Nothing here yet.
+                </div>
+              ))
+            ) : (
+              <div className="min-w-max" style={stripStyle}>
+                <DragList ids={ids} makeRoom={false}>
+                  {visibleRows.map((row, idx) => {
+                    const prevRow = visibleRows[idx - 1];
+                    const nextRow = visibleRows[idx + 1];
+                    const isSelected = selectedId === row.node.id;
+                    const isDescendant = isDescendantOfSelected(row.node.id) && !isSelected;
+                    const inBand = isSelected || isDescendant;
+
+                    // Neighbour-aware band rounding: a row is "in-band" if it's the selected
+                    // node itself or one of its descendants. The Set lookup handles deep nesting.
+                    const prevInBand =
+                      inBand &&
+                      !!prevRow &&
+                      (prevRow.node.id === selectedId || descendantIdSet.has(prevRow.node.id));
+                    const nextInBand =
+                      inBand &&
+                      !!nextRow &&
+                      (nextRow.node.id === selectedId || descendantIdSet.has(nextRow.node.id));
+
+                    const isDragging = dragIdSet.has(row.node.id);
+                    const isDropTargetInside =
+                      dropTarget?.rowId === row.node.id && dropTarget.position === "inside";
+                    const isDropBefore =
+                      dropTarget?.rowId === row.node.id && dropTarget.position === "before";
+                    const isDropAfter =
+                      dropTarget?.rowId === row.node.id && dropTarget.position === "after";
+
+                    return (
+                      <TreeFolderRow
+                        key={row.node.id}
+                        row={row}
+                        rowHeight={rowHeight}
+                        indent={indent}
+                        iconFor={iconFor}
+                        isSelected={isSelected}
+                        isAncestor={isAncestorFn(row.node.id) && !isSelected}
+                        isDescendantOfSelected={isDescendant}
+                        isPrevInBand={prevInBand}
+                        isNextInBand={nextInBand}
+                        isDragging={isDragging}
+                        isDropTargetInside={isDropTargetInside}
+                        isDropBefore={isDropBefore}
+                        isDropAfter={isDropAfter}
+                        dndEnabled={dndEnabled}
+                        onSelect={handleSelect}
+                        onToggle={handleToggle}
+                      />
+                    );
+                  })}
+                </DragList>
               </div>
-            ))
-          ) : (
-            <div className="min-w-max" style={stripStyle}>
-              <DragList ids={ids} makeRoom={false}>
-              {visibleRows.map((row, idx) => {
-                const prevRow = visibleRows[idx - 1];
-                const nextRow = visibleRows[idx + 1];
-                const isSelected = selectedId === row.node.id;
-                const isDescendant = isDescendantOfSelected(row.node.id) && !isSelected;
-                const inBand = isSelected || isDescendant;
-
-                // Neighbour-aware band rounding: a row is "in-band" if it's the selected
-                // node itself or one of its descendants. The Set lookup handles deep nesting.
-                const prevInBand =
-                  inBand &&
-                  !!prevRow &&
-                  (prevRow.node.id === selectedId || descendantIdSet.has(prevRow.node.id));
-                const nextInBand =
-                  inBand &&
-                  !!nextRow &&
-                  (nextRow.node.id === selectedId || descendantIdSet.has(nextRow.node.id));
-
-                const isDragging = dragIdSet.has(row.node.id);
-                const isDropTargetInside =
-                  dropTarget?.rowId === row.node.id && dropTarget.position === "inside";
-                const isDropBefore =
-                  dropTarget?.rowId === row.node.id && dropTarget.position === "before";
-                const isDropAfter =
-                  dropTarget?.rowId === row.node.id && dropTarget.position === "after";
-
-                return (
-                  <TreeFolderRow
-                    key={row.node.id}
-                    row={row}
-                    rowHeight={rowHeight}
-                    indent={indent}
-                    iconFor={iconFor}
-                    isSelected={isSelected}
-                    isAncestor={isAncestorFn(row.node.id) && !isSelected}
-                    isDescendantOfSelected={isDescendant}
-                    isPrevInBand={prevInBand}
-                    isNextInBand={nextInBand}
-                    isDragging={isDragging}
-                    isDropTargetInside={isDropTargetInside}
-                    isDropBefore={isDropBefore}
-                    isDropAfter={isDropAfter}
-                    dndEnabled={dndEnabled}
-                    onSelect={handleSelect}
-                    onToggle={handleToggle}
-                  />
-                );
-              })}
-              </DragList>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
         </DndContext>
       </div>
     );

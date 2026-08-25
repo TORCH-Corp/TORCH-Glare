@@ -113,7 +113,10 @@ function StepperNav({ control }: { control: Control<FieldValues> }) {
     [...(stepFields[index] ?? [])].some((name) => name in errors);
 
   return (
-    <FormStepper activeStep={currentStep} className="shrink-0 flex-col items-start gap-[4px]">
+    // `min-w-0` so the rail can be squeezed: its grid track no longer grows to fit a long label
+    // (see form-renderer.tsx), so the column has to be allowed to shrink and let the labels
+    // truncate instead of spilling over the fields column.
+    <FormStepper activeStep={currentStep} className="min-w-0 shrink-0 flex-col items-start gap-[4px]">
       {titles.map((title, index) => {
         // The step buttons ARE the navigation: click to move. Backward is free;
         // clicking forward validates the steps in between (goToStep) and stops at
@@ -126,9 +129,21 @@ function StepperNav({ control }: { control: Control<FieldValues> }) {
             : "default";
         return (
           <React.Fragment key={title}>
-            <FormStep index={index} type={type} onClick={() => void goToStep(index)}>
+            {/* The shrink/truncate pair is passed in rather than changed in `FormStepper`, so its
+                other consumers keep sizing to their labels. `shrink` beats the pill's own
+                `shrink-0` and `truncate` beats the label's `whitespace-nowrap` — both via
+                tailwind-merge, which `FormStepper` runs the caller's className through. */}
+            <FormStep
+              index={index}
+              type={type}
+              onClick={() => void goToStep(index)}
+              // `max-w-full` is what actually makes the label truncate: the rail is
+              // `items-start`, so without a cap the pill shrink-wraps its label and grows straight
+              // past the track instead of clipping inside it.
+              className="min-w-0 max-w-full shrink"
+            >
               <FormStepIndicator />
-              <FormStepLabel>{title}</FormStepLabel>
+              <FormStepLabel className="truncate">{title}</FormStepLabel>
             </FormStep>
             {/* Connector between steps — a 3×16 rounded bar centred under the badge. */}
             {index < titles.length - 1 && (

@@ -40,7 +40,9 @@ export function Section({
             aria-controls={bodyId}
           />
         ) : (
-          <h3 className="text-content-presentation-global-primary text-[18px] font-[510] leading-[1.32] tracking-[-0.01em]">
+          // No `min-w-0` needed here, unlike the other headings: the parent is `flex flex-col`,
+          // so this already stretches to the column's width rather than sizing to its text.
+          <h3 className="text-content-presentation-global-primary truncate text-[18px] font-[510] leading-[1.32] tracking-[-0.01em]">
             {title}
           </h3>
         ))}

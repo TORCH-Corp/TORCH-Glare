@@ -18,6 +18,20 @@ const Table = React.forwardRef<
   <table
     data-theme={theme}
     ref={ref}
+    // `overflow-hidden` is the default, and it is load-bearing twice over: the table is `w-auto`,
+    // so one wider than its container would otherwise push the whole page wide and put a horizontal
+    // scrollbar on the layout; and callers that give the table a radius rely on it to clip the
+    // square header band out of the rounded corners.
+    //
+    // The cost is that it makes the table its own scroll container, and `TableHeader`'s `sticky`
+    // resolves against the *nearest* scrollport — so inside a clipping table the header pins to a
+    // box that never scrolls, i.e. does nothing. That is the right default: a header only benefits
+    // from sticking when the table sits in a scroller, and such a caller passes `overflow-visible`
+    // (tailwind-merge lets theirs win) to bind it to that scroller instead. Only do that where the
+    // scroller is `min-w-0`, or the width problem above comes back — `DataViews`' table view is the
+    // worked example.
+    //
+    // `[border-collapse:separate]` is what lets the header cells keep their borders while stuck.
     className={cn("overflow-hidden w-auto [border-collapse:separate] border-spacing-0", className)}
     {...props}
   >
@@ -34,9 +48,20 @@ const TableHeader = React.forwardRef<
     ref={ref}
     // The header band is one continuous bar, not a per-cell background — a background on each
     // `<th>` would paint over the half of the previous column's resize handle that overhangs
-    // the boundary.
+    // the boundary. That is also why `sticky` sits here rather than on the `<th>`s: per-cell
+    // sticky would leave this background behind and let rows show through it.
+    //
+    // `z-20` clears the `z-10` on the resize handle and sort button inside the cells. In a table
+    // that never scrolls vertically, `sticky` keeps the element in flow and changes nothing.
+    //
+    // The band's token is translucent (`#0003`), so once rows do slide under it they read through.
+    // Making it opaque is deliberately NOT done here: it would mean naming one surface colour, and
+    // this header paints over whatever its caller sits on — forcing a surface would visibly recolour
+    // every table not on that one. A caller whose table actually scrolls supplies the opaque
+    // background itself, where the surface is known; `DataViews`' table view is the worked example.
     className={cn(
       "bg-background-presentation-form-header backdrop-blur-[8px]",
+      "sticky top-0 z-20",
       "shadow-[0px_4px_8px_0px_rgba(0,0,0,0.15)]",
       className,
     )}
@@ -108,28 +133,28 @@ const MIN_COLUMN_WIDTH = 40;
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement> &
-    TableHeadVariantsProps &
-    React.ButtonHTMLAttributes<HTMLButtonElement> & {
-      sortType?: "asc" | "desc" | undefined;
-      onSort?: () => void;
-      /** Column name for the sort button's accessible label. */
-      sortLabel?: string;
-      /**
-       * Called with the new width (px) while the column is being drag-resized. Pass it to take
-       * **control** of the width — the header then renders `style.width` and expects you to
-       * feed the new value back. Required whenever the table needs a definite width
-       * (`table-layout: fixed`), because only the owner of every column width can total them.
-       * Omit for uncontrolled resizing, where the header keeps the width itself.
-       */
-      onResize?: (width: number) => void;
-      /**
-       * Classes for the inner layout box (the flex row holding the label and sort toggle).
-       * `className` and every other prop go to the `<th>` — reach for this only when you need
-       * to restyle the content box itself, e.g. its typography or colour.
-       */
-      contentClassName?: string;
-      isDummy?: boolean;
-    }
+  TableHeadVariantsProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    sortType?: "asc" | "desc" | undefined;
+    onSort?: () => void;
+    /** Column name for the sort button's accessible label. */
+    sortLabel?: string;
+    /**
+     * Called with the new width (px) while the column is being drag-resized. Pass it to take
+     * **control** of the width — the header then renders `style.width` and expects you to
+     * feed the new value back. Required whenever the table needs a definite width
+     * (`table-layout: fixed`), because only the owner of every column width can total them.
+     * Omit for uncontrolled resizing, where the header keeps the width itself.
+     */
+    onResize?: (width: number) => void;
+    /**
+     * Classes for the inner layout box (the flex row holding the label and sort toggle).
+     * `className` and every other prop go to the `<th>` — reach for this only when you need
+     * to restyle the content box itself, e.g. its typography or colour.
+     */
+    contentClassName?: string;
+    isDummy?: boolean;
+  }
 >(
   (
     {
@@ -287,11 +312,11 @@ const TableCell = React.forwardRef<
         // Never fade a dummy cell — its content is a centred checkbox or drag handle, not
         // clippable text.
         fade &&
-          !isDummy && [
-            "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
-            "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
-            "[&:has(input)]:[mask-image:none]",
-          ],
+        !isDummy && [
+          "[mask-image:linear-gradient(to_right,black_0%,black_0%,black_75%,transparent_100%)]",
+          "rtl:[mask-image:linear-gradient(to_left,black_0%,black_0%,black_75%,transparent_100%)]",
+          "[&:has(input)]:[mask-image:none]",
+        ],
         { "min-w-fit justify-center": isDummy },
         childrenClassName,
       )}
@@ -307,7 +332,7 @@ const TableCheckbox = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     id: string;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- id destructured to exclude it from the props spread onto Checkbox
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- id destructured to exclude it from the props spread onto Checkbox
 >(({ className, id, ...props }, ref) => {
   return (
     <div className={cn(["flex items-center justify-center"], className)}>
