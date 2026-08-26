@@ -132,7 +132,18 @@ function TableViewImpl({
             // pushes the whole component wide instead of scrolling within it.
             className="min-w-0 flex-1 overflow-auto rounded-lg"
           >
-            <Table ref={tableRef} className="w-full">
+            {/* One width for the table and the footer bar below it. Inside an `overflow-auto`
+                scroller a child's `w-full` resolves against the *visible* width, not the scrollable
+                width — so without this box the footer stopped at the fold whenever the columns
+                overflowed. `w-max` sizes to the table (the widest child); `min-w-full` keeps it
+                filling the scroller when the table is narrower. */}
+            <div className="w-max min-w-full">
+            {/* `overflow-visible` opts out of the primitive's `overflow-hidden` (tailwind-merge
+                lets ours win). It has to: a clipping table is its own scrollport, and the sticky
+                header would then resolve against a box that never scrolls. Safe here because the
+                scroller above is `min-w-0 overflow-auto`, so a wide table scrolls inside it rather
+                than pushing the layout. */}
+            <Table ref={tableRef} className="w-full overflow-visible">
               {/* The header sticks to the scroller above by default — that lives on `TableHeader`
                   in the primitive. Two things this view adds:
 
@@ -228,7 +239,7 @@ function TableViewImpl({
                       >
                         {onRowMove && <GripCell />}
                         {selectable && (
-                          <TableCell isDummy className="h-[40px] w-12" onClick={(e) => e.stopPropagation()}>
+                          <TableCell isDummy className="min-h-[40px] w-12" onClick={(e) => e.stopPropagation()}>
                             {/* What `TableCheckbox` renders, inlined: its props are typed as button
                             attributes, so it cannot express a controlled checkbox. */}
                             <div className="flex items-center justify-center">
@@ -245,8 +256,20 @@ function TableViewImpl({
                           // `undefined` means "you paint it" — distinct from `null`, which is a
                           // deliberate blank.
                           const custom = renderCell?.({ field, row, id, index, fields: visibleFields });
+                          // `fade={false}` and clip instead. The fade is a `mask-image` on every
+                          // cell, close to free on its own but very expensive once a sticky header
+                          // repaints the region each scroll frame: measured on this page,
+                          // mask+sticky costs ~61ms/frame against ~29ms with the mask off and
+                          // ~17ms with neither. `overflow-hidden` is passed back because
+                          // `fade={false}` otherwise switches the cell to `overflow-visible`, and
+                          // the text would spill into the next column.
                           return (
-                            <TableCell key={`${field.path}-${i}`} className="h-[40px]">
+                            <TableCell
+                              key={`${field.path}-${i}`}
+                              className="min-h-[40px]"
+                              fade={false}
+                              childrenClassName="overflow-hidden"
+                            >
                               {/* `isolate` confines the Badge's mix-blend-luminosity to a local
                               stacking context and `transform-gpu` promotes it to its own layer, so
                               the table's post-mount column reflow repaints cleanly instead of
@@ -287,6 +310,7 @@ function TableViewImpl({
                 {addRowLabel}
               </TableEndAction>
             )}
+            </div>
           </div>
         </div>
       </div>
@@ -419,7 +443,12 @@ function SkeletonRows({
           {grip && <TableCell isDummy className="h-[40px] w-8" />}
           {selectable && <TableCell isDummy className="h-[40px] w-12" />}
           {fields.map((field, i) => (
-            <TableCell key={`${field.path}-${i}`} className="h-[40px]">
+            <TableCell
+              key={`${field.path}-${i}`}
+              className="min-h-[40px]"
+              fade={false}
+              childrenClassName="overflow-hidden"
+            >
               {/* Widths cycle rather than repeat, so a column of bars reads as text that has not
                   arrived instead of as a grid. */}
               <SkeletonBar className={["w-[70%]", "w-[45%]", "w-[85%]", "w-[60%]"][(row + i) % 4]} />
