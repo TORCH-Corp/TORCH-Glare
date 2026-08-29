@@ -378,8 +378,10 @@ Inherits all variants from the Button component:
 ### Base Styles
 
 - **Square dimensions**: Equal width and height for perfect icon centering
-- **Rounded corners**: 4px border radius
+- **Rounded corners**: `radius/sm` (4px) at XS and S, `radius/lg` (8px) at M
 - **Icon-only design**: Optimized padding for icon display
+- **Action colours**: `action-secondary` at rest, `action-hover` on hover and
+  `action-disabled` when disabled — applied unless you pass an explicit `variant`
 - **Inherits Button styles**: All Button component styles and behaviors
 
 ### Custom Styling

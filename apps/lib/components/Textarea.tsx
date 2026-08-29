@@ -7,12 +7,19 @@ import { cva, VariantProps } from "class-variance-authority";
 const textareaStyles = cva(
   [
     "border",
-    "rounded-[8px]",
+    // `radius/xl` (12px). Figma's TextArea-Field has two sizes — S is `radius/lg` (8px) and M is
+    // `radius/xl` — and this component has no size variant: it renders its `Label` wrapper at
+    // `size="M"` below, so M is the size it actually is. Supporting S properly needs a real `size`
+    // prop, which is an API change rather than a radius one.
+    "rounded-radius-xl",
     "px-[8px]",
     "py-[12px]",
     "outline-none",
     "typography-body-large-regular",
-    "!min-h-[36px]",
+    // A floor for the empty field — without one, `field-sizing: content` collapses it to a single
+    // 50px line. No `!` — twMerge does not dedupe an important class against a plain one, so `!`
+    // here would make the height impossible to override from a caller's `className`.
+    "min-h-[200px]",
     "transition-[border,background-color,color,caret-color,box-shadow]",
     "ease-in-out",
     "duration-150",
@@ -29,7 +36,7 @@ const textareaStyles = cva(
     "disabled:text-border-presentation-action-disabled",
     "disabled:cursor-not-allowed",
     "disabled:placeholder-border-presentation-action-disabled",
-    "field-sizing-content w-full min-w-[100px] max-w-[100%]",
+    "w-full min-w-[100px] max-w-[100%]",
   ],
   {
     variants: {
@@ -54,6 +61,14 @@ interface TextareaProps
   secondaryLabel?: string; // Additional label text
   direction?: "row" | "column";
   theme?: "dark" | "light" | "default";
+  /**
+   * Grow the field to fit its content as the user types, instead of scrolling inside a fixed box.
+   * On by default, via CSS `field-sizing: content`. Set a `max-h-*` on the field to cap the growth —
+   * past the cap it scrolls. Note `rows` has no effect while this is on: the browser sizes the field
+   * from its content, so an empty field starts at one line. Pass `autoResize={false}` for the old
+   * fixed-height box with a drag handle.
+   */
+  autoResize?: boolean;
 }
 
 // Textarea component definition
@@ -68,6 +83,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       direction = "row",
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       theme, // excluded from ...props spread
+      autoResize = true,
       ...props
     },
     ref,
@@ -82,7 +98,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         size={"M"}
         className={cn(className)}
       >
-        <textarea className={cn(textareaStyles({ state }))} ref={ref} {...props} />
+        <textarea
+          // Auto-grow is pure CSS. Written as an arbitrary *property* rather than as
+          // `field-sizing-content`: that utility only exists in Tailwind v4 and this project is on
+          // v3, where it compiled to no rule at all and left the computed `field-sizing` at `fixed`.
+          // The drag handle goes away with it — the height is content-driven, and a manual drag
+          // would pin it and silently stop the growing.
+          className={cn(textareaStyles({ state }), autoResize && "[field-sizing:content] resize-none")}
+          ref={ref}
+          {...props}
+        />
       </Label>
     );
   },

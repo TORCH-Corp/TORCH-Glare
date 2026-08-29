@@ -4,7 +4,7 @@ import * as React from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { cn } from "../utils/cn";
-import { Button } from "./Button";
+import { ActionButton } from "./ActionButton";
 import { SimpleSelectValue, SimpleSelectItem } from "./SimpleSelect";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
@@ -30,24 +30,14 @@ const Calendar = ({
         Nav: (e) => {
           return (
             <div className="w-full flex items-center justify-between absolute top-0 left-0 p-[6px]">
-              <Button
-                onClick={e.onPreviousClick}
-                buttonType="icon"
-                variant="PrimeStyle"
-                size="M"
-                className="w-[26px] h-[26px]"
-              >
+              {/* Popover navigation rather than an in-field button, so it keeps its own 26px box
+                  and only adopts the shared action colours and radius. */}
+              <ActionButton onClick={e.onPreviousClick} size="S" className="w-[26px] h-[26px]">
                 <i className="ri-arrow-left-s-line"></i>
-              </Button>
-              <Button
-                onClick={e.onNextClick}
-                buttonType="icon"
-                variant="PrimeStyle"
-                size="M"
-                className="w-[26px] h-[26px]"
-              >
+              </ActionButton>
+              <ActionButton onClick={e.onNextClick} size="S" className="w-[26px] h-[26px]">
                 <i className="ri-arrow-right-s-line"></i>
-              </Button>
+              </ActionButton>
             </div>
           );
         },

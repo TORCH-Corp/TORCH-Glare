@@ -273,12 +273,54 @@ The TORCH mode plugin provides the actual color values and theme-specific styles
 - 500+ CSS custom properties
 - Gradient and alpha channel support
 - Comprehensive color palette
+- The shared **radius**, **container** and **breakpoint** scales (exported as
+  `borderRadius`, `containers` and `screens`)
 
 ### Installation
 
 ```bash
 npm install glare-torch-mode
 ```
+
+### The radius scale
+
+`borderRadius` produces the `rounded-radius-*` classes the components are built on — Button, Badge,
+the shared `Input` field root, ActionButton, Select and TextArea all use them. The keys mirror the
+Figma `radius/*` collection:
+
+| class | value | | class | value |
+|---|---|---|---|---|
+| `rounded-radius-none` | 0px | | `rounded-radius-2xl` | 16px |
+| `rounded-radius-xs` | 2px | | `rounded-radius-3xl` | 24px |
+| `rounded-radius-sm` | 4px | | `rounded-radius-4xl` | 32px |
+| `rounded-radius-md` | 6px | | `rounded-radius-5xl` | 40px |
+| `rounded-radius-lg` | 8px | | `rounded-radius-6xl` | 48px |
+| `rounded-radius-xl` | 12px | | `rounded-radius-round` | 9999px |
+
+Deliberately **not** reusing Tailwind's own `sm`/`md`/`lg` keys: that would override the built-in
+scale, where Glare's `sm` is 4px and Tailwind's is 2px, silently restyling every existing
+`rounded-sm`.
+
+Note that `tailwind-merge` does not dedupe these classes — they are custom scale keys, not values it
+recognises. Never put a `rounded-radius-*` on a `cva` base *and* on one of its variants: both survive
+and CSS source order decides the winner. Put it only on the variants.
+
+### Tailwind v4
+
+The plugin is a plain `addBase` function, so under v4 `@plugin` registers the colour variables but
+**not** the scales — those reach Tailwind through `theme.extend` in a JS config, which v4 does not
+have. Import the theme file as well (requires **1.4.0 or newer**):
+
+```css
+@import "tailwindcss";
+@import "glare-torch-mode/theme.css";   /* must precede the @plugin rules */
+@plugin "glare-torch-mode";
+```
+
+Without it `rounded-radius-*` is never generated and `sm:` / `@md:` fall back to Tailwind's values.
+Two v4-only caveats: the container scale is shared with `max-w-*`, so `--container-md` also sets
+`max-w-md` to 650px; and the plugin's `--radius-*` variables land in v4's own border-radius
+namespace — matching values, but `px` where Tailwind uses `rem`.
 
 ### Setup (Required with mapping-color-system)
 

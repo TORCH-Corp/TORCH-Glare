@@ -118,7 +118,10 @@ const subtleCompoundVariants = [
 export const badgeStyles = cva(
   [
     "inline-flex items-center justify-center w-fit",
-    "rounded-[6px]",
+    // `radius/md` (6px), read off the Badge master component in Figma. Note the badge instances
+    // nested inside InnerLabelField render at `radius/lg` — that is an instance override, not the
+    // component's own value, and reading it as the spec is how this briefly shipped as 8px.
+    "rounded-radius-md",
     "transition-all duration-200 ease-in-out",
     "whitespace-nowrap",
     "[&_i]:!leading-none",
@@ -215,7 +218,7 @@ export const Badge: React.FC<BadgeProps> = ({
             }
           }}
           className={cn(
-            "rounded-[4px]",
+            "rounded-radius-sm",
             "flex items-center justify-center cursor-pointer",
             "hover:bg-background-presentation-action-secondary",
             "transition-colors duration-150",

@@ -6,7 +6,8 @@ import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Icon, Input, Group } from "./Input";
-import { Button, LoadingIcon } from "./Button";
+import { LoadingIcon } from "./Button";
+import { ActionButton } from "./ActionButton";
 import { useClickOutside } from "../hooks/useClickOutside";
 // Reuse the exact menu-item styling so rows look identical to DropdownMenuItem.
 import { MenuItemStyles } from "./DropdownMenu";
@@ -189,7 +190,11 @@ export function SearchableSelect({
             setDropdownWidth(e.currentTarget.offsetWidth)
           }
           // Trigger styling mirrors the `Select` component's trigger so the two read identically.
-          className={cn("flex w-full items-center gap-1 rounded-[6px] p-[4px]", className)}
+          // `p-[3px]` so the end button lands 4px from the outer edge once the 1px border is added.
+          // The old `rounded-[6px]` here was dead but dangerous: `twMerge` cannot dedupe it against
+          // the Group's `rounded-radius-xl` (custom scale key vs arbitrary value), so both shipped
+          // and the 12px only won on CSS source order.
+          className={cn("flex w-full items-center gap-1 p-[3px]", className)}
         >
           {icon && <Icon>{icon}</Icon>}
           <Input
@@ -212,10 +217,10 @@ export function SearchableSelect({
               "!h-[24px]": size === "M",
             })}
           />
-          {/* Chevron toggle — boxed icon button matching the Select component. */}
-          <Button
+          {/* Chevron toggle — the shared in-field action button (Figma `ActionButton` M). */}
+          <ActionButton
             as="span"
-            buttonType="icon"
+            size="M"
             tabIndex={-1}
             aria-label={open ? "Close" : "Open"}
             onMouseDown={(e: React.MouseEvent) => {
@@ -227,11 +232,7 @@ export function SearchableSelect({
                 setOpen(true);
               }
             }}
-            className={cn(
-              // Same box + open-state fill as the Select trigger's chevron.
-              "h-[32px] w-[32px] shrink-0",
-              open && "bg-background-presentation-action-hover text-white",
-            )}
+            className={cn("shrink-0", open && "bg-background-presentation-action-hover text-white")}
           >
             <i
               className={cn(
@@ -239,7 +240,7 @@ export function SearchableSelect({
                 open && "rotate-180",
               )}
             />
-          </Button>
+          </ActionButton>
         </Group>
       </PopoverTrigger>
 

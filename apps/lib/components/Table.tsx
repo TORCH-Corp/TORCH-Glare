@@ -32,7 +32,7 @@ const Table = React.forwardRef<
     // worked example.
     //
     // `[border-collapse:separate]` is what lets the header cells keep their borders while stuck.
-    className={cn("overflow-hidden w-auto [border-collapse:separate] border-spacing-0", className)}
+    className={cn("overflow-visible w-auto [border-collapse:separate] border-spacing-0", className)}
     {...props}
   >
     {props.children}

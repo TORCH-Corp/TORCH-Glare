@@ -3,14 +3,7 @@
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 import { Button } from "@/components/Button";
-import {
-  Stepper,
-  Step,
-  StepIndicator,
-  StepConnector,
-  StepLabel,
-  StepDescription,
-} from "@/components/Stepper";
+import { Stepper, Step, StepIndicator, StepConnector, StepLabel } from "@/components/Stepper";
 
 export default function StepperExample() {
   const [activeStep, setActiveStep] = useState(1);
@@ -20,20 +13,13 @@ export default function StepperExample() {
 
   return (
     <>
-      <h1
-        className={cn(
-          "text-xl font-bold mb-8",
-          "text-content-presentation-global-primary"
-        )}
-      >
+      <h1 className={cn("text-xl font-bold mb-8", "text-content-presentation-global-primary")}>
         Stepper Preview
       </h1>
 
       {/* Horizontal Stepper — Interactive */}
       <div className="flex flex-col gap-4 w-full">
-        <span
-          className={cn("text-sm", "text-content-presentation-global-primary")}
-        >
+        <span className={cn("text-sm", "text-content-presentation-global-primary")}>
           Horizontal — Interactive (Step {activeStep + 1} of {totalSteps})
         </span>
 
@@ -76,11 +62,7 @@ export default function StepperExample() {
           >
             Next <i className="ri-arrow-right-s-line" />
           </Button>
-          <Button
-            size="S"
-            variant="PrimeContStyle"
-            onClick={() => setActiveStep(0)}
-          >
+          <Button size="S" variant="PrimeContStyle" onClick={() => setActiveStep(0)}>
             Reset
           </Button>
         </div>
@@ -88,20 +70,11 @@ export default function StepperExample() {
 
       {/* Sizes */}
       <div className="flex flex-col gap-6 w-full mt-8">
-        <span
-          className={cn("text-sm", "text-content-presentation-global-primary")}
-        >
-          Sizes
-        </span>
+        <span className={cn("text-sm", "text-content-presentation-global-primary")}>Sizes</span>
 
         {(["S", "M", "L"] as const).map((size) => (
           <div key={size} className="flex flex-col gap-2">
-            <span
-              className={cn(
-                "text-xs",
-                "text-content-presentation-global-primary"
-              )}
-            >
+            <span className={cn("text-xs", "text-content-presentation-global-primary")}>
               Size: {size}
             </span>
             <Stepper activeStep={2} orientation="horizontal" size={size}>
@@ -126,9 +99,7 @@ export default function StepperExample() {
 
       {/* With Descriptions */}
       <div className="flex flex-col gap-4 w-full mt-8">
-        <span
-          className={cn("text-sm", "text-content-presentation-global-primary")}
-        >
+        <span className={cn("text-sm", "text-content-presentation-global-primary")}>
           With Descriptions
         </span>
 
@@ -136,28 +107,23 @@ export default function StepperExample() {
           <Step index={0}>
             <StepIndicator />
             <StepLabel>Account</StepLabel>
-            <StepDescription>Create your account</StepDescription>
           </Step>
           <StepConnector />
           <Step index={1}>
             <StepIndicator />
             <StepLabel>Profile</StepLabel>
-            <StepDescription>Set up your profile</StepDescription>
           </Step>
           <StepConnector />
           <Step index={2}>
             <StepIndicator />
             <StepLabel>Complete</StepLabel>
-            <StepDescription>Review and finish</StepDescription>
           </Step>
         </Stepper>
       </div>
 
       {/* Error State */}
       <div className="flex flex-col gap-4 w-full mt-8">
-        <span
-          className={cn("text-sm", "text-content-presentation-global-primary")}
-        >
+        <span className={cn("text-sm", "text-content-presentation-global-primary")}>
           Error State
         </span>
 
@@ -172,10 +138,9 @@ export default function StepperExample() {
             <StepLabel>Validate</StepLabel>
           </Step>
           <StepConnector />
-          <Step index={2} isError>
+          <Step index={2} type="negative">
             <StepIndicator />
             <StepLabel>Process</StepLabel>
-            <StepDescription>Validation failed</StepDescription>
           </Step>
           <StepConnector />
           <Step index={3}>
@@ -187,9 +152,7 @@ export default function StepperExample() {
 
       {/* Custom Icons */}
       <div className="flex flex-col gap-4 w-full mt-8">
-        <span
-          className={cn("text-sm", "text-content-presentation-global-primary")}
-        >
+        <span className={cn("text-sm", "text-content-presentation-global-primary")}>
           Custom Icons
         </span>
 
@@ -219,9 +182,7 @@ export default function StepperExample() {
           </Step>
           <StepConnector />
           <Step index={3}>
-            <StepIndicator
-              icon={<i className="ri-check-double-line" />}
-            />
+            <StepIndicator icon={<i className="ri-check-double-line" />} />
             <StepLabel>Confirm</StepLabel>
           </Step>
         </Stepper>
@@ -229,9 +190,7 @@ export default function StepperExample() {
 
       {/* Vertical — Interactive */}
       <div className="flex flex-col gap-4 w-full mt-8">
-        <span
-          className={cn("text-sm", "text-content-presentation-global-primary")}
-        >
+        <span className={cn("text-sm", "text-content-presentation-global-primary")}>
           Vertical — Interactive (Step {verticalStep + 1} of {verticalTotalSteps})
         </span>
 
@@ -240,9 +199,6 @@ export default function StepperExample() {
             <StepIndicator />
             <div className="flex flex-col gap-1 pb-6">
               <StepLabel>Create Account</StepLabel>
-              <StepDescription>
-                Sign up with your email address
-              </StepDescription>
             </div>
           </Step>
 
@@ -250,9 +206,6 @@ export default function StepperExample() {
             <StepIndicator />
             <div className="flex flex-col gap-1 pb-6">
               <StepLabel>Verify Email</StepLabel>
-              <StepDescription>
-                Check your inbox for a verification link
-              </StepDescription>
             </div>
           </Step>
 
@@ -260,9 +213,6 @@ export default function StepperExample() {
             <StepIndicator />
             <div className="flex flex-col gap-1 pb-6">
               <StepLabel>Complete Profile</StepLabel>
-              <StepDescription>
-                Add your name, photo, and preferences
-              </StepDescription>
             </div>
           </Step>
 
@@ -270,9 +220,6 @@ export default function StepperExample() {
             <StepIndicator />
             <div className="flex flex-col gap-1">
               <StepLabel>Get Started</StepLabel>
-              <StepDescription>
-                Explore the dashboard and start building
-              </StepDescription>
             </div>
           </Step>
         </Stepper>
@@ -290,21 +237,83 @@ export default function StepperExample() {
             size="S"
             variant="PrimeStyle"
             disabled={verticalStep >= verticalTotalSteps}
-            onClick={() =>
-              setVerticalStep((s) => Math.min(verticalTotalSteps, s + 1))
-            }
+            onClick={() => setVerticalStep((s) => Math.min(verticalTotalSteps, s + 1))}
           >
             Next <i className="ri-arrow-right-s-line" />
           </Button>
-          <Button
-            size="S"
-            variant="PrimeContStyle"
-            onClick={() => setVerticalStep(0)}
-          >
+          <Button size="S" variant="PrimeContStyle" onClick={() => setVerticalStep(0)}>
             Reset
           </Button>
         </div>
       </div>
+
+      {/* ── Semantic types and states (merged in from the former FormStepper example) ── */}
+
+      <div className="flex flex-col gap-6 mt-10">
+        <Section title="Types — resting">
+          <Stepper>
+            <Step index={0} type="default" selected={false}>
+              <StepIndicator />
+              <StepLabel>Default</StepLabel>
+            </Step>
+            <Step index={1} type="success" selected={false}>
+              <StepIndicator />
+              <StepLabel>Success</StepLabel>
+            </Step>
+            <Step index={2} type="negative" selected={false}>
+              <StepIndicator />
+              <StepLabel>Negative</StepLabel>
+            </Step>
+          </Stepper>
+        </Section>
+
+        <Section title="Types — selected">
+          <Stepper>
+            <Step index={0} type="default" selected>
+              <StepIndicator />
+              <StepLabel>Default</StepLabel>
+            </Step>
+            <Step index={1} type="success" selected>
+              <StepIndicator />
+              <StepLabel>Success</StepLabel>
+            </Step>
+            <Step index={2} type="negative" selected>
+              <StepIndicator />
+              <StepLabel>Negative</StepLabel>
+            </Step>
+          </Stepper>
+        </Section>
+
+        <Section title="RTL direction">
+          <div dir="rtl">
+            <Stepper>
+              <Step index={0} type="default" selected>
+                <StepIndicator />
+                <StepLabel>افتراضي</StepLabel>
+              </Step>
+              <Step index={1} type="success">
+                <StepIndicator />
+                <StepLabel>نجاح</StepLabel>
+              </Step>
+              <Step index={2} type="negative">
+                <StepIndicator />
+                <StepLabel>خطأ</StepLabel>
+              </Step>
+            </Stepper>
+          </div>
+        </Section>
+      </div>
     </>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-3">
+      <span className={cn("text-sm font-medium", "text-content-presentation-global-secondary")}>
+        {title}
+      </span>
+      {children}
+    </div>
   );
 }

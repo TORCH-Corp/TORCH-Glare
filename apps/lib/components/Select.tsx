@@ -3,7 +3,7 @@ import React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { cn } from "../utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
-import { Button } from "./Button";
+import { ActionButton } from "./ActionButton";
 import { Tooltip } from "./Tooltip";
 import { MenuItemStyles } from "./DropdownMenu";
 import { Themes } from "../utils/types";
@@ -61,10 +61,11 @@ const SelectTrigger = React.forwardRef<
             {children}
           </p>
 
-          <Button
+          {/* The shared in-field action button. Its box tracks the trigger height the same way
+              InputField's does — a 30px field takes the 22px button, a 40px field the 32px one. */}
+          <ActionButton
             as={"span"}
-            buttonType="icon"
-            size={"L"}
+            size={size === "XL" ? "M" : size === "S" ? "XS" : "S"}
             className={cn([
               "group-aria-expanded:bg-background-presentation-action-hover",
               "group-aria-expanded:text-white",
@@ -80,7 +81,7 @@ const SelectTrigger = React.forwardRef<
                 { icon: icon },
               )}
             />
-          </Button>
+          </ActionButton>
         </SelectPrimitive.Trigger>
       </Tooltip>
     );
@@ -176,7 +177,7 @@ const SelectItem = React.forwardRef<
   >
     <div>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-      <SelectPrimitive.ItemIndicator className="ml-auto flex shrink-0">
+      <SelectPrimitive.ItemIndicator className="ms-auto flex shrink-0">
         <i className="ri-check-line text-[16px]" />
       </SelectPrimitive.ItemIndicator>
     </div>
@@ -253,7 +254,11 @@ const SelectContentStyles = cva(
 
 const PopoverTriggerStyles = cva(
   [
-    "flex flex-row rounded-[8px] justify-between items-center outline-none",
+    // No radius here — every `size` variant sets its own. `twMerge` does NOT dedupe the
+    // `rounded-radius-*` classes (they are custom scale keys, not values it recognises), so a
+    // radius on the base would survive alongside the variant's and let CSS source order pick the
+    // winner: `md` is generated before `lg`, so a base `lg` would silently beat size S's `md`.
+    "flex flex-row justify-between items-center outline-none",
     "[&_span]:text-content-presentation-action-light-primary",
     "typography-body-small-regular",
     "[&_p]:px-[10px] [&_p]:whitespace-nowrap",
@@ -299,12 +304,31 @@ const PopoverTriggerStyles = cva(
       onTable: {
         true: ["border-transparent", "bg-transparent"],
       },
+      // No `[&_span]:h-/w-` here: the chevron is an `ActionButton` and sizes itself from its own
+      // `size` prop. Those descendant rules used to force its box, and being descendant selectors
+      // they outranked the button's own classes — they also hit the SelectValue text span, which
+      // only escaped being squashed because an inline element ignores width/height.
       size: {
-        S: ["rounded-[6px] [&_span]:h-[22px] [&_span]:w-[22px] [&_p]:typography-body-small-medium"],
-        M: ["[&_span]:h-[26px] [&_span]:w-[26px] [&_p]:typography-body-medium-medium"],
-        L: ["[&_span]:h-[28px] [&_span]:w-[28px] [&_p]:typography-body-large-medium"],
+        // 24px tall — below the field scale's smallest step (30px), so it keeps its own
+        // `radius/md` rather than being rounded up to the 8px a real field would use.
+        // Heights are explicit because the trigger used to be sized by whichever chevron box the
+        // `[&_span]` rules imposed; now that the chevron sizes itself, the field must state its own.
+        //
+        // Every size states its padding so that `2×border + 2×padding + chevron` is exactly the
+        // trigger height — the chevron then sits an equal distance from all four edges instead of
+        // being flush to the border horizontally and centred vertically. Only XL had any padding
+        // before, which is why it was the only size that looked right.
+        //
+        // L and XL are the real field heights (30/40) and land on Figma's 4px. S and M have no
+        // Figma counterpart, so they take 3px — the most that still fits their chevron exactly.
+        S: ["h-[24px] p-[2px] rounded-radius-md [&_p]:typography-body-small-medium"],
+        // 28px and 30px — the field scale's S step (30px) is `radius/lg`.
+        M: ["h-[28px] p-[2px] rounded-radius-lg [&_p]:typography-body-medium-medium"],
+        L: ["h-[30px] p-[3px] rounded-radius-lg [&_p]:typography-body-large-medium"],
+        // 40px tall, so it is exactly InputField M and takes that size's `radius/xl` (12px).
+        // It sat at 8px before — the one place a 40px field in the system rounded like a 30px one.
         XL: [
-          "h-[40px] p-[4px] rounded-[8px] [&_span]:h-[32px] [&_span]:w-[32px] [&_p]:typography-body-large-regular [&_p]:px-[4px]",
+          "h-[40px] p-[3px] rounded-radius-xl [&_p]:typography-body-large-regular [&_p]:px-[4px]",
         ],
       },
     },

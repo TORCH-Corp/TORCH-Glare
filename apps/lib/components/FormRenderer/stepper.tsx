@@ -10,7 +10,16 @@ import { Button } from "../Button";
 // stepper — the rail, the state, Back/Next — is chrome and lives here. The dependency only ever
 // points this way: FormRenderer → FormBuilder, never back.
 import { StepContext, type StepRegistry } from "../FormBuilder/context";
-import { FormStepper, FormStep, FormStepIndicator, FormStepLabel } from "../FormStepper";
+// Aliased: this module exports its own `Stepper` and `Step` (the wizard behaviour —
+// `FormRenderer.Stepper` / `.Step`), which would otherwise collide with the presentational
+// component of the same name.
+import {
+  Stepper as StepperRail,
+  Step as StepPill,
+  StepIndicator,
+  StepLabel,
+  StepConnector,
+} from "../Stepper";
 
 // ─── Stepper state context ───────────────────────────────────────────────────
 
@@ -116,7 +125,7 @@ function StepperNav({ control }: { control: Control<FieldValues> }) {
     // `min-w-0` so the rail can be squeezed: its grid track no longer grows to fit a long label
     // (see form-renderer.tsx), so the column has to be allowed to shrink and let the labels
     // truncate instead of spilling over the fields column.
-    <FormStepper activeStep={currentStep} className="min-w-0 shrink-0 flex-col items-start gap-[4px]">
+    <StepperRail activeStep={currentStep} orientation="vertical" className="min-w-0 shrink-0">
       {titles.map((title, index) => {
         // The step buttons ARE the navigation: click to move. Backward is free;
         // clicking forward validates the steps in between (goToStep) and stops at
@@ -129,11 +138,11 @@ function StepperNav({ control }: { control: Control<FieldValues> }) {
             : "default";
         return (
           <React.Fragment key={title}>
-            {/* The shrink/truncate pair is passed in rather than changed in `FormStepper`, so its
+            {/* The shrink/truncate pair is passed in rather than changed in `Stepper`, so its
                 other consumers keep sizing to their labels. `shrink` beats the pill's own
                 `shrink-0` and `truncate` beats the label's `whitespace-nowrap` — both via
-                tailwind-merge, which `FormStepper` runs the caller's className through. */}
-            <FormStep
+                tailwind-merge, which `Stepper` runs the caller's className through. */}
+            <StepPill
               index={index}
               type={type}
               onClick={() => void goToStep(index)}
@@ -142,20 +151,17 @@ function StepperNav({ control }: { control: Control<FieldValues> }) {
               // past the track instead of clipping inside it.
               className="min-w-0 max-w-full shrink"
             >
-              <FormStepIndicator />
-              <FormStepLabel className="truncate">{title}</FormStepLabel>
-            </FormStep>
-            {/* Connector between steps — a 3×16 rounded bar centred under the badge. */}
-            {index < titles.length - 1 && (
-              <div
-                aria-hidden
-                className="ms-[12.5px] mt-[2px] h-[16px] w-[3px] rounded-full bg-[#A0A0A0]"
-              />
-            )}
+              <StepIndicator />
+              {/* `max-w-none` opts out of the component's 106px cap: the rail sizes to its own
+                  grid track, so the label should truncate there rather than 106px early. */}
+              <StepLabel className="max-w-none truncate">{title}</StepLabel>
+            </StepPill>
+            {/* Connector between steps — the component centres it under the indicator per size. */}
+            {index < titles.length - 1 && <StepConnector />}
           </React.Fragment>
         );
       })}
-    </FormStepper>
+    </StepperRail>
   );
 }
 

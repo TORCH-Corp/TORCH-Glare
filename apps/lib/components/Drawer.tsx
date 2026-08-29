@@ -37,6 +37,7 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 interface DrawerContentProps extends React.ComponentPropsWithoutRef<
   typeof DrawerPrimitive.Content
 > {
+  /** @deprecated No effect here — the drag handle is `DrawerPanel`'s `showHandle`. */
   showHandle?: boolean;
   notch?: React.ReactNode;
   notchSide?: "left" | "right";
@@ -87,7 +88,17 @@ const DrawerPanel = React.forwardRef<HTMLDivElement, DrawerPanelProps>(
       // would render white-on-light = invisible).
       data-theme="light"
       className={cn(
-        "flex flex-1 gap-2 rounded-t-[16px] p-1 bg-[#F0F0F0] min-h-0",
+        // `flex-col` is load-bearing: this panel stacks header / body / footer, and its own
+        // `showHandle` centres the drag handle with `mx-auto`, which only centres in a column.
+        // It was dropped in 37fddd5 alongside the tray's — on the tray that was deliberate (FormDrawer
+        // puts the panel and its summary side by side), here it was not, and every consumer that puts
+        // a header/body/footer straight into a panel rendered them in a row.
+        //
+        // `min-w-0` for the same reason, one axis over: the tray is a row now, so width is its
+        // main axis, and a flex item's default `min-width: auto` pins it to its content — a wide
+        // form pushed the panel straight out past the tray. `min-h-0` alone covered the old
+        // column tray; the row needs both.
+        "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1 bg-[#F0F0F0] min-h-0 min-w-0",
         framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
         className,
       )}
@@ -113,6 +124,12 @@ const DrawerContent = React.forwardRef<
       framed: framedProp,
       wrapperClassName,
       trayClassName,
+      // Destructured only to keep it out of `...props`. The handle belongs to `DrawerPanel` now, so
+      // this does nothing here — but it was never pulled out either, so it was being spread onto the
+      // DOM node and React warned "does not recognize the `showHandle` prop on a DOM element" every
+      // time a drawer opened. Kept in the props type rather than removed: consumers still pass it.
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      showHandle,
       ...props
     },
     ref,

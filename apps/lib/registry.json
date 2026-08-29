@@ -1,5 +1,5 @@
 {
-  "version": "2.5.3",
+  "version": "2.5.4",
   "generatedBy": "scripts/bin/generateRegistry",
   "npmVersions": {
     "@dnd-kit/core": "^6.3.1",
@@ -186,7 +186,7 @@
         "react-day-picker"
       ],
       "registryDependencies": [
-        "components/Button",
+        "components/ActionButton",
         "components/SimpleSelect",
         "utils/cn"
       ]
@@ -457,23 +457,11 @@
         "components/Button",
         "components/Drawer",
         "components/FormBuilder",
-        "components/FormStepper",
         "components/HeaderBar",
         "components/SectionBlock",
+        "components/Stepper",
         "components/TabFormItem",
         "utils/cn"
-      ]
-    },
-    {
-      "name": "FormStepper",
-      "type": "components",
-      "path": "components/FormStepper.tsx",
-      "npmDependencies": [
-        "class-variance-authority"
-      ],
-      "registryDependencies": [
-        "utils/cn",
-        "utils/types"
       ]
     },
     {
@@ -714,6 +702,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
+        "components/ActionButton",
         "components/Button",
         "components/DropdownMenu",
         "components/Input",
@@ -743,6 +732,7 @@
       "path": "components/SearchableTree.tsx",
       "npmDependencies": [],
       "registryDependencies": [
+        "components/ActionButton",
         "components/Button",
         "components/Input",
         "components/Popover",
@@ -757,6 +747,7 @@
       "path": "components/SearchableTreeDialog.tsx",
       "npmDependencies": [],
       "registryDependencies": [
+        "components/ActionButton",
         "components/Button",
         "components/Dialog",
         "components/Input",
@@ -793,7 +784,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "components/Button",
+        "components/ActionButton",
         "components/DropdownMenu",
         "components/Tooltip",
         "utils/cn",

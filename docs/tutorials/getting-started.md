@@ -104,12 +104,27 @@ Add the following to your `global.css` file:
    (e.g. Badge renders with no background). Keep it directly under
    @import "tailwindcss". */
 @import "mapping-color-system-v4/tailwindVars.css";
+/* Required, and needs glare-torch-mode >= 1.4.0. The plugin only registers the colour
+   variables; the radius scale, container sizes and breakpoints reach Tailwind through
+   `theme.extend` in a JS config, which v4 does not have. Without this the
+   `rounded-radius-*` classes are never generated (square corners on Button, Badge,
+   Input, ActionButton, Select, TextArea) and `sm:` / `@md:` fall back to Tailwind's
+   own values. Same @import-ordering rule as above applies. */
+@import "glare-torch-mode/theme.css";
 @plugin "glare-torch-mode";
 @plugin "tailwind-scrollbar-hide";
 @plugin "tailwindcss-animate";
 @plugin "glare-typography";
 @plugin "mapping-color-system-v4";
 ```
+
+Two version-4-only caveats:
+
+- Tailwind 4 shares the container scale with `max-w-*`, so `--container-md` also sets `max-w-md`
+  to 650px.
+- The plugin sets `--radius-*` on `:root`, which is Tailwind 4's own border-radius namespace. The
+  values match its defaults (2/4/6/8/12/16/24/32px) but are declared in `px` where Tailwind uses
+  `rem`, so they diverge if you change the root font size.
 
 > ⚠️ **Common failure:** if your Badge (or any component using
 > `bg-background-presentation-*` colors) renders with no background, the
@@ -130,6 +145,8 @@ Then configure your `tailwind.config.js`:
 
 ```js
 const { plugin, mappingVars } = require('mapping-color-system')
+// Design tokens plus the shared radius / container / screen scales.
+const torchMode = require('glare-torch-mode')
 
 module.exports = {
     content: [
@@ -139,26 +156,22 @@ module.exports = {
     theme: {
         extend: {
             colors: mappingVars,
-            containers: {
-                xs: "320px",
-                sm: "600px",
-                md: "768px",
-                lg: "1024px",
-                xl: "1280px",
-                "2xl": "1536px",
-            },
+            borderRadius: torchMode.borderRadius,
+            containers: torchMode.containers,
         },
     },
+    // Top level, not inside extend — this replaces Tailwind's breakpoints.
+    screens: torchMode.screens,
     plugins: [
         plugin,
         require('@tailwindcss/container-queries'),
         require('tailwindcss-animate'),
         require('tailwind-scrollbar-hide'),
         require('glare-typography'),
-        require('glare-torch-mode'),
+        torchMode,
         function ({ addVariant }) {
-            addVariant("rtl", '&[dir="rtl"]');
-            addVariant("ltr", '&[dir="ltr"]');
+            addVariant("rtl", ['&[dir="rtl"]', '[dir="rtl"] &']);
+            addVariant("ltr", ['&[dir="ltr"]', '[dir="ltr"] &']);
         },
     ],
 };
@@ -168,6 +181,14 @@ Important:
 - Specify the component path in the `content` array matching your `glare.json` path
 - Add all plugins to the `plugins` array
 - Add `mappingVars` to the `extend.colors` object
+- Take `borderRadius`, `containers` and `screens` from `glare-torch-mode` rather than hardcoding
+  them. `borderRadius` is what produces the `rounded-radius-*` classes the components are built on;
+  without it Button, Badge, Input, ActionButton, Select and TextArea render with square corners.
+- Put `screens` at the **top level**, not inside `extend`, so Glare's breakpoints replace
+  Tailwind's rather than being added alongside them (`sm` is 600px, not 640px).
+- Register `rtl` / `ltr` with **both** selectors. `&[dir="rtl"]` alone only matches an element that
+  carries the attribute itself, so an `rtl:` class on a component nested inside an RTL wrapper never
+  applies.
 
 ---
 

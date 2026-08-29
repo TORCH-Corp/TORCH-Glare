@@ -404,7 +404,7 @@ export const ColorPicker = forwardRef<HTMLElement, ColorPickerProps>(
                       }}
                       className={NUM_INPUT_CLS}
                     />
-                    <span className="pr-1 typography-body-small-regular text-content-presentation-action-light-secondary">
+                    <span className="pe-1 typography-body-small-regular text-content-presentation-action-light-secondary">
                       %
                     </span>
                   </Group>
