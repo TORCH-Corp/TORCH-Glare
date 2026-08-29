@@ -62,7 +62,16 @@ interface TrillingProps extends HTMLAttributes<HTMLDivElement> {
 }
 export const Trilling = ({ children, className, ...props }: TrillingProps) => {
   return (
-    <div {...props} className={cn("flex items-center justify-center h-full gap-1 py-1", className)}>
+    // `ps-1` mirrors the inner side of Figma's `EndField-Container` (`p-[4px]`), keeping the field's
+    // text clear of the end button instead of running straight into it.
+    //
+    // Logical, not physical: this slot flips to the left edge in RTL, so a `pl-1` would put the
+    // padding on the outside — measured as 0px of clearance and the button 8px from the edge
+    // instead of 4px. `padding-inline-start` follows the slot.
+    <div
+      {...props}
+      className={cn("flex items-center justify-center h-full gap-1 py-1 ps-1", className)}
+    >
       {children}
     </div>
   );
@@ -135,7 +144,10 @@ input:-webkit-autofill:active {
 
 export const GroupStyles = cva(
   [
-    "flex w-full min-w-0 px-1 justify-center items-center",
+    // 3px, not 4: Figma's `EndField-Container` is `p-[4px]` and its stroke sits *inside* that
+    // padding, so the end button lands 4px from the field's outer edge. CSS `border-box` adds the
+    // 1px border on top of the padding, so 4px here would render 5px. 1 + 3 = 4.
+    "flex w-full min-w-0 px-[3px] justify-center items-center",
     "typography-body-small-regular",
     "border",
     "transition-all duration-200 ease-in-out",
@@ -180,14 +192,17 @@ export const GroupStyles = cva(
           "[&_input]:text-white",
         ],
       },
+      // Radius per Figma's `radius/*` collection: S is `radius/lg` (8px) and M is `radius/xl`
+      // (12px) — a deliberate jump, not consecutive steps. This `Group` is the shared field root,
+      // so it is also what gives `InputField` and `InnerLabelField` their corners.
       size: {
         S: [
           "h-[30px] min-h-[30px]",
-          "rounded-[6px] [&_input]:h-[30px] [&_div[data-role='icon']]:text-[16px]",
+          "rounded-radius-lg [&_input]:h-[30px] [&_div[data-role='icon']]:text-[16px]",
         ],
         M: [
           "h-[40px] min-h-[40px]",
-          "rounded-[8px] [&_input]:h-[40px] [&_div[data-role='icon']]:text-[18px] [&_div[data-role='icon']]:px-[2px]",
+          "rounded-radius-xl [&_input]:h-[40px] [&_div[data-role='icon']]:text-[18px] [&_div[data-role='icon']]:px-[2px]",
         ],
       },
       error: {

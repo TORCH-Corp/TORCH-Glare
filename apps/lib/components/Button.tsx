@@ -248,10 +248,10 @@ export const buttonVariants = cva(
         ],
       },
       size: {
-        S: "h-[22px] py-[2px] px-[6px] typography-body-small-medium rounded-[4px] [&_i]:text-[12px]",
-        M: "h-[28px] py-[2px] px-[14px] typography-body-large-medium rounded-[6px] [&_i]:text-[18px]",
-        L: "h-[34px] py-[5px] px-[22px] typography-body-large-medium rounded-[8px] [&_i]:text-[20px]",
-        XL: "h-[40px] py-[8px] px-[30px] typography-headers-medium-medium rounded-[8px] [&_i]:text-[22px]",
+        S: "h-[22px] py-[2px] px-[6px] typography-body-small-medium rounded-radius-sm [&_i]:text-[12px]",
+        M: "h-[28px] py-[2px] px-[14px] typography-body-large-medium rounded-radius-md [&_i]:text-[18px]",
+        L: "h-[34px] py-[5px] px-[22px] typography-body-large-medium rounded-radius-lg [&_i]:text-[20px]",
+        XL: "h-[40px] py-[8px] px-[30px] typography-headers-medium-medium rounded-radius-lg [&_i]:text-[22px]",
       },
       is_loading: {
         true: "[&_i]:hidden",

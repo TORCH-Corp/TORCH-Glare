@@ -222,7 +222,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                           fill="black"
                         />
                       </svg>
-                      <p className="text-black-1000 text-right text-[12px] font-[510] leading-[148%]">
+                      <p className="text-black-1000 text-end text-[12px] font-[510] leading-[148%]">
                         {addLabel}
                       </p>
                     </div>

@@ -56,9 +56,9 @@ function Switchers({
       >
         <div
           className={cn(
-            "absolute left-[2px] w-[24px] h-[24px] rounded-full bg-background-presentation-switcher-knob shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_3px_8px_0px_rgba(0,0,0,0.15),0px_3px_1px_0px_rgba(0,0,0,0.06)] transition-all duration-200",
+            "absolute start-[2px] w-[24px] h-[24px] rounded-full bg-background-presentation-switcher-knob shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_3px_8px_0px_rgba(0,0,0,0.15),0px_3px_1px_0px_rgba(0,0,0,0.06)] transition-all duration-200",
             {
-              "left-[22px]": active,
+              "start-[22px]": active,
             }
           )}
         />

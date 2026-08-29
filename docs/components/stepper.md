@@ -1,6 +1,6 @@
 ---
 title: Stepper
-description: Generic horizontal/vertical stepper with pending, active, completed, and error states. Composed of Stepper, Step, StepIndicator, StepConnector, StepLabel, and StepDescription.
+description: The pill-shaped multi-step indicator — three semantic types (default, success, negative), horizontal or vertical, three sizes. Composed of Stepper, Step, StepIndicator, StepConnector and StepLabel.
 component: true
 group: Forms
 keywords: [stepper, steps, wizard, progress, multi-step, vertical, horizontal]
@@ -8,9 +8,11 @@ keywords: [stepper, steps, wizard, progress, multi-step, vertical, horizontal]
 
 # Stepper
 
-A generic step-progress component for wizards, onboarding flows, and multi-section forms. Each step has four states — `pending`, `active`, `completed`, `error` — derived automatically from `activeStep` or set explicitly per `Step`.
+The step-progress component for wizards, onboarding flows, and multi-section forms, drawn as the Figma `FormStepper-1.0` pill. Each step has a semantic `type` — `default`, `success`, `negative` — and a selected state derived from `activeStep` or set explicitly per `Step`.
 
-The component is composed of `Stepper`, `Step`, `StepIndicator`, `StepConnector`, `StepLabel`, and `StepDescription`. Compare to [`FormStepper`](./form-stepper.md), which is a pill-shaped variant with no connector line.
+Not to be confused with `FormRenderer.Stepper`, which is the wizard *behaviour* (step state, validation, Back/Next) and renders this component as its rail.
+
+The component is composed of `Stepper`, `Step`, `StepIndicator`, `StepConnector` and `StepLabel`. It is the single stepper in the library — the former `FormStepper` merged into it, so its types, states and badge live here alongside the orientation, sizes and connector.
 
 ## Installation
 
@@ -33,7 +35,6 @@ import {
   StepIndicator,
   StepConnector,
   StepLabel,
-  StepDescription,
 } from '@/components/Stepper'
 ```
 
@@ -73,7 +74,7 @@ export function BasicStepper() {
 }
 ```
 
-State derivation: `index < activeStep` → `completed`, `index === activeStep` → `active`, otherwise `pending`. Pass `isCompleted`, `isActive`, or `isError` on a `Step` to override.
+State derivation: `index === activeStep` → selected. Pass `selected` on a `Step` to override it, and `type` to mark a step as `success` or `negative`.
 
 ## Examples
 
@@ -85,7 +86,6 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
     <StepIndicator />
     <div>
       <StepLabel>Create account</StepLabel>
-      <StepDescription>Email and password.</StepDescription>
     </div>
   </Step>
   <StepConnector />
@@ -93,7 +93,6 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
     <StepIndicator />
     <div>
       <StepLabel>Verify email</StepLabel>
-      <StepDescription>Check your inbox for a code.</StepDescription>
     </div>
   </Step>
   <StepConnector />
@@ -101,7 +100,6 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
     <StepIndicator />
     <div>
       <StepLabel>Done</StepLabel>
-      <StepDescription>You're all set.</StepDescription>
     </div>
   </Step>
 </Stepper>
@@ -116,7 +114,7 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
     <StepLabel>Account</StepLabel>
   </Step>
   <StepConnector />
-  <Step index={1} isError>
+  <Step index={1} type="negative">
     <StepIndicator />
     <StepLabel>Payment</StepLabel>
   </Step>
@@ -133,7 +131,7 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
 ### Custom indicators
 
 ```tsx
-<Step index={0} isCompleted>
+<Step index={0} type="success">
   <StepIndicator
     completedIcon={<i className="ri-shield-check-line" />}
     errorIcon={<i className="ri-shield-cross-line" />}
@@ -145,9 +143,108 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
 ### Sizes
 
 ```tsx
-<Stepper size="S" activeStep={1}> {/* 22px indicators */} </Stepper>
-<Stepper size="M" activeStep={1}> {/* 28px — default */} </Stepper>
-<Stepper size="L" activeStep={1}> {/* 34px */} </Stepper>
+<Stepper size="S" activeStep={1}> {/* 24px pill, 20px indicator */} </Stepper>
+<Stepper size="M" activeStep={1}> {/* 28px pill, 24px indicator — default, the size Figma draws */} </Stepper>
+<Stepper size="L" activeStep={1}> {/* 34px pill, 30px indicator */} </Stepper>
+```
+
+### Step Types
+
+Three semantic types. `success` and `negative` add a small status badge on the indicator (check / info icon) and use filled colors when selected. `default` uses a gray ring at rest, blue ring on hover, and a solid blue fill when selected.
+
+```tsx
+export function StepTypes() {
+  return (
+    <Stepper>
+      <Step index={0} type="default" selected={false}>
+        <StepIndicator />
+        <StepLabel>Default</StepLabel>
+      </Step>
+      <Step index={1} type="success" selected={false}>
+        <StepIndicator />
+        <StepLabel>Success</StepLabel>
+      </Step>
+      <Step index={2} type="negative" selected={false}>
+        <StepIndicator />
+        <StepLabel>Negative</StepLabel>
+      </Step>
+    </Stepper>
+  )
+}
+```
+
+### Selected state
+
+```tsx
+export function SelectedSteps() {
+  return (
+    <Stepper>
+      <Step index={0} type="default" selected>
+        <StepIndicator />
+        <StepLabel>Default</StepLabel>
+      </Step>
+      <Step index={1} type="success" selected>
+        <StepIndicator />
+        <StepLabel>Success</StepLabel>
+      </Step>
+      <Step index={2} type="negative" selected>
+        <StepIndicator />
+        <StepLabel>Negative</StepLabel>
+      </Step>
+    </Stepper>
+  )
+}
+```
+
+### RTL direction
+
+The pill, label spacing, and indicator badge all flip under `dir="rtl"`.
+
+```tsx
+export function RTLStepper() {
+  return (
+    <div dir="rtl">
+      <Stepper>
+        <Step index={0} type="default" selected>
+          <StepIndicator />
+          <StepLabel>افتراضي</StepLabel>
+        </Step>
+        <Step index={1} type="success">
+          <StepIndicator />
+          <StepLabel>نجاح</StepLabel>
+        </Step>
+        <Step index={2} type="negative">
+          <StepIndicator />
+          <StepLabel>خطأ</StepLabel>
+        </Step>
+      </Stepper>
+    </div>
+  )
+}
+```
+
+### Custom badge icon
+
+`StepIndicator.badgeIcon` overrides the default check / info icon for `success` / `negative` types.
+
+```tsx
+<Step index={0} type="success" selected>
+  <StepIndicator badgeIcon={<i className="ri-shield-check-line" />} />
+  <StepLabel>Verified</StepLabel>
+</Step>
+```
+
+### Custom indicator content
+
+Children of `StepIndicator` replace the auto-rendered step number.
+
+```tsx
+<Step index={0} type="default" selected>
+  <StepIndicator>
+    <i className="ri-user-line" />
+  </StepIndicator>
+  <StepLabel>Account</StepLabel>
+</Step>
 ```
 
 ## API Reference
@@ -166,15 +263,14 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
 | Prop          | Type      | Default | Description                                                  |
 | ------------- | --------- | ------- | ------------------------------------------------------------ |
 | `index`       | `number`  | `0`     | Zero-based step index. Compared with `Stepper.activeStep`.   |
-| `isActive`    | `boolean` | —       | Force the active state.                                      |
-| `isCompleted` | `boolean` | —       | Force the completed state.                                   |
-| `isError`     | `boolean` | —       | Force the error state. Overrides active and completed.       |
+| `type`        | `'default' \| 'success' \| 'negative'` | `'default'` | Semantic state. `success`/`negative` fill the indicator and add a corner badge. |
+| `selected`    | `boolean` | `index === activeStep` | Force the selected state.                    |
 
 ### StepIndicator
 
 | Prop            | Type        | Default | Description                                       |
 | --------------- | ----------- | ------- | ------------------------------------------------- |
-| `icon`          | `ReactNode` | —       | Replaces the step number for the pending state.   |
+| `icon`          | `ReactNode` | —       | Replaces the step number.                         |
 | `completedIcon` | `ReactNode` | —       | Replaces the default check icon when completed.   |
 | `errorIcon`     | `ReactNode` | —       | Replaces the default close icon on error.         |
 
@@ -182,7 +278,7 @@ State derivation: `index < activeStep` → `completed`, `index === activeStep` �
 
 The line between steps. No props beyond standard HTML attributes — orientation comes from the parent `Stepper`.
 
-### StepLabel / StepDescription
+### StepLabel
 
 Forward `HTMLAttributes<HTMLDivElement>`. Their colors follow the parent `Step` state automatically.
 
@@ -192,7 +288,7 @@ Forward `HTMLAttributes<HTMLDivElement>`. Their colors follow the parent `Step` 
 - Active: blue informational background + focus ring.
 - Completed: green success background and ring; check icon.
 - Error: red negative background and ring; close icon.
-- Connectors: `2px` line, gray when pending, focus-blue when the preceding step is completed.
+- Connectors: `3px` rounded bar, `border-presentation-stepper-default` by default and focus-blue when `completed` is set. Vertically it centres itself under the indicator, tracking the stepper's size.
 
 ## TypeScript Types
 
@@ -204,18 +300,17 @@ type StepperVariants  = VariantProps<typeof stepperStyles>
 // { orientation?: 'horizontal' | 'vertical' }
 
 type IndicatorVariants = VariantProps<typeof stepIndicatorStyles>
-// { state?: 'pending' | 'active' | 'completed' | 'error'; size?: 'S' | 'M' | 'L' }
+// { type?: 'default' | 'success' | 'negative'; selected?: boolean; size?: 'S' | 'M' | 'L' }
 ```
 
 ## Accessibility
 
 - Wrap the stepper in a `<nav aria-label="Progress">` when it represents real navigation.
 - Use `aria-current="step"` on the active step's container when steps are interactive.
-- Don't rely on color alone for error — pair with `StepDescription` or an off-screen message.
+- Don't rely on colour alone for the negative type — pair it with an off-screen message.
 
 ## Best Practices
 
-1. Use `Stepper` when you need a connector line + numbered/iconified steps. Use `FormStepper` when you want pill-shaped buttons without a line.
+1. Add `StepConnector` between steps when you want the run of progress drawn; leave it out for a bare row of pills.
 2. Keep `Step` count to 3–5 horizontal, 3–7 vertical. Beyond that, switch to a checklist or summary.
-3. Drive state from `activeStep` in the parent — only fall back to `isActive`/`isCompleted` for non-linear flows.
-4. Provide a `StepDescription` only on vertical steppers — descriptions wrap horizontal layouts awkwardly.
+3. Drive selection from `activeStep` in the parent — only fall back to `selected` for non-linear flows.

@@ -71,7 +71,9 @@ const rail = cva("flex w-full min-w-[300px] flex-col items-start", {
   variants: {
     variant: {
       // Hairline between each direct child (form rows).
-      Default: "divide-y divide-gray-300",
+      // `divide-gray-300` was a hardcoded light gray, so in the dark theme every row separator
+      // rendered as a bright rgb(209,213,219) line. The token follows the theme.
+      Default: "divide-y divide-border-presentation-global-primary",
       // The table draws its own row borders — a divide rule would double up on the
       // table / scroller / end-action siblings.
       Table: "",

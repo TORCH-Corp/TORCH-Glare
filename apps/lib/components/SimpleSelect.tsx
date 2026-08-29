@@ -13,7 +13,7 @@ const SimpleSelectDropDown = ({ className, children, onClick }: SimpleSelectDrop
   return (
     <div
       className={cn(
-        "absolute min-w-[100px] z-[20] top-[27px] left-0",
+        "absolute min-w-[100px] z-[20] top-[27px] start-0",
         dropdownMenuStyles({ variant: "SystemStyle" }),
         className,
       )}
@@ -97,7 +97,7 @@ const SimpleSelectValue = ({
         "w-fit",
         "rounded-[6px]",
         "outline-none",
-        "pl-[8px]",
+        "ps-[8px]",
         className,
       ])}
     >

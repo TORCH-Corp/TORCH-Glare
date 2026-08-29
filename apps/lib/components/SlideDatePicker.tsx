@@ -47,7 +47,11 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
     const defaultPickerValue = {
       year: String(today.getFullYear()),
       month: String(today.getMonth() + 1),
-      day: String(today.getDate()),
+      // Zero-padded to match `getDayArray`, which emits "01".."31". Unpadded, a single-digit day
+      // ("5") matches no item in the wheel, so the picker cannot select the current date and falls
+      // back to the first day of the month — the field then shows the wrong date. Only reproducible
+      // on the 1st–9th, which is why it survived this long.
+      day: String(today.getDate()).padStart(2, "0"),
       hour: String(today.getHours()),
       minute: String(today.getMinutes()),
       time: today.getHours() < 12 ? "AM" : "PM",
@@ -60,7 +64,9 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 200 }, (_, i) => `${currentYear - 100 + i}`);
-    const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, ""));
+    // No padding: these must match `defaultPickerValue.month`, which is unpadded. (This previously
+    // read `padStart(2, "")` — an empty pad string, so it never padded anything.)
+    const months = Array.from({ length: 12 }, (_, i) => String(i + 1));
     const days = getDayArray(Number(pickerValue.year), Number(pickerValue.month));
     const monthsNames = [
       "January",
@@ -143,18 +149,25 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
     return (
       <Popover onOpenChange={setIsOpen}>
-        <PopoverTrigger ref={triggerRef} asChild data-theme={theme} className="w-full flex-1">
+        {/* The theme goes to the field as a prop, not as `data-theme` on the trigger. `asChild`
+            merges trigger props onto the child, which lands the attribute on the bare <input> — the
+            text then resolves dark tokens while the field around it follows the page, and on a light
+            page the value is white on white. Passing `theme` through means the whole field is dark
+            together, so it stays dark *and* readable. */}
+        <PopoverTrigger ref={triggerRef} asChild className="w-full flex-1">
           {isValidElement(children) ? (
-            cloneElement(children as React.ReactElement<HTMLInputElement>, {
+            cloneElement(children as React.ReactElement<HTMLInputElement & { theme?: string }>, {
               value:
                 (children as React.ReactElement<HTMLInputElement>).props.value ?? formattedValue,
               type: "input",
               readOnly: true,
+              theme,
             })
           ) : (
             /* If the children is not a valid element, Show the default input */
             <InputField
               readOnly
+              theme={theme}
               type="input"
               {...props}
               childrenSide={

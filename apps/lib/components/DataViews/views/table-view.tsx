@@ -132,8 +132,19 @@ function TableViewImpl({
             // pushes the whole component wide instead of scrolling within it.
             className="min-w-0 flex-1 overflow-auto rounded-lg"
           >
-            <Table ref={tableRef} className="w-full">
-              {/* The header sticks to the scroller above by default — that lives on `TableHeader`
+            {/* One width for the table and the footer bar below it. Inside an `overflow-auto`
+                scroller a child's `w-full` resolves against the *visible* width, not the scrollable
+                width — so without this box the footer stopped at the fold whenever the columns
+                overflowed. `w-max` sizes to the table (the widest child); `min-w-full` keeps it
+                filling the scroller when the table is narrower. */}
+            <div className="w-max min-w-full">
+              {/* `overflow-visible` opts out of the primitive's `overflow-hidden` (tailwind-merge
+                lets ours win). It has to: a clipping table is its own scrollport, and the sticky
+                header would then resolve against a box that never scrolls. Safe here because the
+                scroller above is `min-w-0 overflow-auto`, so a wide table scrolls inside it rather
+                than pushing the layout. */}
+              <Table ref={tableRef} className="w-full overflow-visible">
+                {/* The header sticks to the scroller above by default — that lives on `TableHeader`
                   in the primitive. Two things this view adds:
 
                   Opacity. The primitive's header token is translucent, so scrolling rows read
@@ -146,147 +157,160 @@ function TableViewImpl({
 
                   And `shadow-none`, because the drop shadow reads as a seam now that the view
                   carries its own border. */}
-              <TableHeader className="bg-background-presentation-form-base bg-[image:linear-gradient(var(--background-presentation-form-header),var(--background-presentation-form-header))] shadow-none">
-                <TableRow>
-                  {onRowMove && <TableHead isDummy className="w-8" />}
-                  {selectable && (
-                    <TableHead isDummy className="w-12">
-                      {/* Size is stated on both this and the per-row checkbox rather than left to
+                <TableHeader className="bg-background-presentation-form-base bg-[image:linear-gradient(var(--background-presentation-form-header),var(--background-presentation-form-header))] shadow-none">
+                  <TableRow>
+                    {onRowMove && <TableHead isDummy className="w-8" />}
+                    {selectable && (
+                      <TableHead isDummy className="w-12">
+                        {/* Size is stated on both this and the per-row checkbox rather than left to
                           `Checkbox`'s default — they have to agree, and relying on the default on
                           one side only is what previously made the select-all bigger than the
                           column it heads. */}
-                      <Checkbox
-                        size="M"
-                        checked={allSelected ? true : someSelected ? "indeterminate" : false}
-                        onCheckedChange={toggleAll}
-                        aria-label="Select all rows"
-                      />
-                    </TableHead>
-                  )}
-                  {/* Keyed by position: two fields may share a `path` — the same value shown two
+                        <Checkbox
+                          size="M"
+                          checked={allSelected ? true : someSelected ? "indeterminate" : false}
+                          onCheckedChange={toggleAll}
+                          aria-label="Select all rows"
+                        />
+                      </TableHead>
+                    )}
+                    {/* Keyed by position: two fields may share a `path` — the same value shown two
                     ways — and keying on it would collide. */}
-                  {visibleFields.map((field, i) => (
-                    <TableHead
-                      key={`${field.path}-${i}`}
-                      size="M"
-                      sortType={sort?.path === field.path ? sort.direction : undefined}
-                      onSort={() => setSort(cycle(field.path))}
-                      // Without this every sort control announces itself as a bare "Sort ascending",
-                      // so a screen reader hears one identical button per column.
-                      sortLabel={field.label ?? formatPathLabel(field.path)}
-                    >
-                      {/* Wrapped rather than handed to `Table` as bare text: `truncate` needs a box
+                    {visibleFields.map((field, i) => (
+                      <TableHead
+                        key={`${field.path}-${i}`}
+                        size="M"
+                        sortType={sort?.path === field.path ? sort.direction : undefined}
+                        onSort={() => setSort(cycle(field.path))}
+                        // Without this every sort control announces itself as a bare "Sort ascending",
+                        // so a screen reader hears one identical button per column.
+                        sortLabel={field.label ?? formatPathLabel(field.path)}
+                      >
+                        {/* Wrapped rather than handed to `Table` as bare text: `truncate` needs a box
                           to clip, and the label's parent in the primitive is already `flex min-w-0`
                           so this span shrinks and ellipsises instead of wrapping the header row
                           onto a second line. */}
-                      <span className="truncate">{field.label ?? field.path}</span>
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
+                        <span className="truncate">{field.label ?? field.path}</span>
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
 
-              <TableBody>
-                {loading && <SkeletonRows fields={visibleFields} grip={Boolean(onRowMove)} selectable={selectable} />}
-                {virtualize && padTop > 0 && (
-                  <tr aria-hidden style={{ height: padTop }} />
-                )}
-                <DragList ids={ids}>
-                  {renderIndexes.map((index) => {
-                    const row = rows[index];
-                    const id = ids[index];
-                    const selected = selection.includes(id);
-                    return (
-                      <DraggableRow
-                        key={id}
-                        id={id}
-                        draggable={Boolean(onRowMove)}
-                        state={selected ? "selected" : undefined}
-                        onClick={onRowClick ? () => onRowClick(row, id) : undefined}
-                        // A clickable row has to be reachable without a mouse. `<tr>` carries no
-                        // implicit role, so a bare `onClick` is invisible to the keyboard and to a
-                        // screen reader; these only appear when the row is actually interactive.
-                        tabIndex={onRowClick ? 0 : undefined}
-                        role={onRowClick ? "button" : undefined}
-                        onKeyDown={
-                          onRowClick
-                            ? (e) => {
-                              if (e.key !== "Enter" && e.key !== " ") return;
-                              if (e.target !== e.currentTarget) return;
-                              e.preventDefault();
-                              onRowClick(row, id);
-                            }
-                            : undefined
-                        }
-                        className={cn(
-                          // 40px per Figma's `Table-RowBackgroand-1.1`. `Table`'s body cells default
-                          // to 50, and the two live on different elements, so the cells below must be
-                          // told as well or CSS keeps the larger.
-                          "h-[40px]",
-                          "focus-visible:ring-border-presentation-state-focus outline-none focus-visible:ring-2",
-                          onRowClick && "cursor-pointer",
-                        )}
-                      >
-                        {onRowMove && <GripCell />}
-                        {selectable && (
-                          <TableCell isDummy className="h-[40px] w-12" onClick={(e) => e.stopPropagation()}>
-                            {/* What `TableCheckbox` renders, inlined: its props are typed as button
+                <TableBody>
+                  {loading && <SkeletonRows fields={visibleFields} grip={Boolean(onRowMove)} selectable={selectable} />}
+                  {virtualize && padTop > 0 && (
+                    <tr aria-hidden style={{ height: padTop }} />
+                  )}
+                  <DragList ids={ids}>
+                    {renderIndexes.map((index) => {
+                      const row = rows[index];
+                      const id = ids[index];
+                      const selected = selection.includes(id);
+                      return (
+                        <DraggableRow
+                          key={id}
+                          id={id}
+                          draggable={Boolean(onRowMove)}
+                          state={selected ? "selected" : undefined}
+                          onClick={onRowClick ? () => onRowClick(row, id) : undefined}
+                          // A clickable row has to be reachable without a mouse. `<tr>` carries no
+                          // implicit role, so a bare `onClick` is invisible to the keyboard and to a
+                          // screen reader; these only appear when the row is actually interactive.
+                          tabIndex={onRowClick ? 0 : undefined}
+                          role={onRowClick ? "button" : undefined}
+                          onKeyDown={
+                            onRowClick
+                              ? (e) => {
+                                if (e.key !== "Enter" && e.key !== " ") return;
+                                if (e.target !== e.currentTarget) return;
+                                e.preventDefault();
+                                onRowClick(row, id);
+                              }
+                              : undefined
+                          }
+                          className={cn(
+                            // 40px per Figma's `Table-RowBackgroand-1.1`. `Table`'s body cells default
+                            // to 50, and the two live on different elements, so the cells below must be
+                            // told as well or CSS keeps the larger.
+                            "h-[40px]",
+                            "focus-visible:ring-border-presentation-state-focus outline-none focus-visible:ring-2",
+                            onRowClick && "cursor-pointer",
+                          )}
+                        >
+                          {onRowMove && <GripCell />}
+                          {selectable && (
+                            <TableCell isDummy className="min-h-[40px] w-12" onClick={(e) => e.stopPropagation()}>
+                              {/* What `TableCheckbox` renders, inlined: its props are typed as button
                             attributes, so it cannot express a controlled checkbox. */}
-                            <div className="flex items-center justify-center">
-                              <Checkbox
-                                size="M"
-                                checked={selected}
-                                onCheckedChange={() => toggleRow(id)}
-                                aria-label="Select row"
-                              />
-                            </div>
-                          </TableCell>
-                        )}
-                        {visibleFields.map((field, i) => {
-                          // `undefined` means "you paint it" — distinct from `null`, which is a
-                          // deliberate blank.
-                          const custom = renderCell?.({ field, row, id, index, fields: visibleFields });
-                          return (
-                            <TableCell key={`${field.path}-${i}`} className="h-[40px]">
-                              {/* `isolate` confines the Badge's mix-blend-luminosity to a local
+                              <div className="flex items-center justify-center">
+                                <Checkbox
+                                  size="M"
+                                  checked={selected}
+                                  onCheckedChange={() => toggleRow(id)}
+                                  aria-label="Select row"
+                                />
+                              </div>
+                            </TableCell>
+                          )}
+                          {visibleFields.map((field, i) => {
+                            // `undefined` means "you paint it" — distinct from `null`, which is a
+                            // deliberate blank.
+                            const custom = renderCell?.({ field, row, id, index, fields: visibleFields });
+                            // `fade={false}` and clip instead. The fade is a `mask-image` on every
+                            // cell, close to free on its own but very expensive once a sticky header
+                            // repaints the region each scroll frame: measured on this page,
+                            // mask+sticky costs ~61ms/frame against ~29ms with the mask off and
+                            // ~17ms with neither. `overflow-hidden` is passed back because
+                            // `fade={false}` otherwise switches the cell to `overflow-visible`, and
+                            // the text would spill into the next column.
+                            return (
+                              <TableCell
+                                key={`${field.path}-${i}`}
+                                className="min-h-[40px]"
+                                fade={false}
+                                childrenClassName="overflow-hidden"
+                              >
+                                {/* `isolate` confines the Badge's mix-blend-luminosity to a local
                               stacking context and `transform-gpu` promotes it to its own layer, so
                               the table's post-mount column reflow repaints cleanly instead of
                               leaving a ghosted badge frame. */}
-                              <span className="isolate inline-flex transform-gpu">
-                                {custom === undefined ? <Cell field={field} row={row} /> : custom}
-                              </span>
-                            </TableCell>
-                          );
-                        })}
-                      </DraggableRow>
-                    );
-                  })}
-                </DragList>
-                {virtualize && padBottom > 0 && (
-                  <tr aria-hidden style={{ height: padBottom }} />
-                )}
-                {/* The trigger. A row of its own rather than an element after the table, so it sits
+                                <span className="isolate inline-flex transform-gpu">
+                                  {custom === undefined ? <Cell field={field} row={row} /> : custom}
+                                </span>
+                              </TableCell>
+                            );
+                          })}
+                        </DraggableRow>
+                      );
+                    })}
+                  </DragList>
+                  {virtualize && padBottom > 0 && (
+                    <tr aria-hidden style={{ height: padBottom }} />
+                  )}
+                  {/* The trigger. A row of its own rather than an element after the table, so it sits
                   inside the same scroller the rows do. */}
-                {hasMore && !loading && (
-                  <tr ref={sentinelRef as React.Ref<HTMLTableRowElement>} aria-hidden>
-                    <td style={{ height: 1, padding: 0, border: 0 }} colSpan={100} />
-                  </tr>
-                )}
-                {loadingMore && (
-                  <SkeletonRows
-                    rows={2}
-                    fields={visibleFields}
-                    grip={Boolean(onRowMove)}
-                    selectable={selectable}
-                  />
-                )}
-              </TableBody>
-            </Table>
-            {onAddRow && (
-              <TableEndAction onClick={onAddRow}>
-                <Plus className="h-4 w-4" aria-hidden />
-                {addRowLabel}
-              </TableEndAction>
-            )}
+                  {hasMore && !loading && (
+                    <tr ref={sentinelRef as React.Ref<HTMLTableRowElement>} aria-hidden>
+                      <td style={{ height: 1, padding: 0, border: 0 }} colSpan={100} />
+                    </tr>
+                  )}
+                  {loadingMore && (
+                    <SkeletonRows
+                      rows={2}
+                      fields={visibleFields}
+                      grip={Boolean(onRowMove)}
+                      selectable={selectable}
+                    />
+                  )}
+                </TableBody>
+              </Table>
+              {onAddRow && (
+                <TableEndAction onClick={onAddRow}>
+                  <Plus className="h-4 w-4" aria-hidden />
+                  {addRowLabel}
+                </TableEndAction>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -419,7 +443,12 @@ function SkeletonRows({
           {grip && <TableCell isDummy className="h-[40px] w-8" />}
           {selectable && <TableCell isDummy className="h-[40px] w-12" />}
           {fields.map((field, i) => (
-            <TableCell key={`${field.path}-${i}`} className="h-[40px]">
+            <TableCell
+              key={`${field.path}-${i}`}
+              className="min-h-[40px]"
+              fade={false}
+              childrenClassName="overflow-hidden"
+            >
               {/* Widths cycle rather than repeat, so a column of bars reads as text that has not
                   arrived instead of as a grid. */}
               <SkeletonBar className={["w-[70%]", "w-[45%]", "w-[85%]", "w-[60%]"][(row + i) % 4]} />

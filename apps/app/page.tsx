@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  ToggleButton,
-  ButtonGroup,
-  ButtonGroupItem,
-} from "@/components/ButtonGroup";
+import { ToggleButton, ButtonGroup, ButtonGroupItem } from "@/components/ButtonGroup";
 import { Button } from "@/components/Button";
 import {
   Timeline,
@@ -17,14 +13,7 @@ import {
   TimelineHeading,
   TimelineDescription,
 } from "@/components/Timeline";
-import {
-  Stepper,
-  Step,
-  StepIndicator,
-  StepConnector,
-  StepLabel,
-  StepDescription,
-} from "@/components/Stepper";
+import { Stepper, Step, StepIndicator, StepConnector, StepLabel } from "@/components/Stepper";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -56,14 +45,8 @@ import {
 } from "@/components/ContextMenu";
 import { BadgeField } from "@/components/BadgeField";
 import type { Tag } from "@/hooks/useTagSelection";
-import {
-  SearchableTable,
-  type SearchableTableColumn,
-} from "@/components/SearchableTable";
-import {
-  SearchableSelect,
-  type SearchableSelectOption,
-} from "@/components/SearchableSelect";
+import { SearchableTable, type SearchableTableColumn } from "@/components/SearchableTable";
+import { SearchableSelect, type SearchableSelectOption } from "@/components/SearchableSelect";
 import { SearchableTreeDialog } from "@/components/SearchableTreeDialog";
 import { SearchableTree } from "@/components/SearchableTree";
 
@@ -72,22 +55,26 @@ export default function Page() {
   const [multipleValues, setMultipleValues] = useState<string[]>(["bold"]);
   const [isBoldOn, setIsBoldOn] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  return <div data-theme="default" className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen">
-
-    <DropdownMenuDemo />
-    <SearchableTreeDialogDemo />
-    <SelectableTreeDialogDemo />
-    <SearchableTreeDialogRtlDemo />
-    <SearchableTreeDemo />
-    <SelectableTreeDemo />
-    <SearchableTreeRtlDemo />
-    <SearchableSelectDemo />
-    <SearchableTableDemo />
-    <BadgeFieldDemo />
-    <BadgeFieldRtlDemo />
-    <ContextMenuDemo />
-    <RtlMenuDemo />
-  </div>
+  return (
+    <div
+      data-theme="default"
+      className="p-8 space-y-12 bg-background-presentation-body-primary min-h-screen"
+    >
+      <DropdownMenuDemo />
+      <SearchableTreeDialogDemo />
+      <SelectableTreeDialogDemo />
+      <SearchableTreeDialogRtlDemo />
+      <SearchableTreeDemo />
+      <SelectableTreeDemo />
+      <SearchableTreeRtlDemo />
+      <SearchableSelectDemo />
+      <SearchableTableDemo />
+      <BadgeFieldDemo />
+      <BadgeFieldRtlDemo />
+      <ContextMenuDemo />
+      <RtlMenuDemo />
+    </div>
+  );
 
   return (
     <div className="p-8 space-y-12 bg-background-presentation-body-primary ">
@@ -116,10 +103,7 @@ export default function Page() {
             Basic Toggle with Text
           </h3>
           <div className="flex items-center gap-4">
-            <ToggleButton
-              pressed={isBoldOn}
-              onPressedChange={setIsBoldOn}
-            >
+            <ToggleButton pressed={isBoldOn} onPressedChange={setIsBoldOn}>
               <i className="ri-bold mr-2" />
               Bold
             </ToggleButton>
@@ -175,10 +159,18 @@ export default function Page() {
             Sizes
           </h3>
           <div className="flex items-center gap-4">
-            <ToggleButton size="S" defaultPressed>Size S</ToggleButton>
-            <ToggleButton size="M" defaultPressed>Size M</ToggleButton>
-            <ToggleButton size="L" defaultPressed>Size L</ToggleButton>
-            <ToggleButton size="XL" defaultPressed>Size XL</ToggleButton>
+            <ToggleButton size="S" defaultPressed>
+              Size S
+            </ToggleButton>
+            <ToggleButton size="M" defaultPressed>
+              Size M
+            </ToggleButton>
+            <ToggleButton size="L" defaultPressed>
+              Size L
+            </ToggleButton>
+            <ToggleButton size="XL" defaultPressed>
+              Size XL
+            </ToggleButton>
           </div>
         </div>
 
@@ -210,7 +202,9 @@ export default function Page() {
           </h3>
           <div className="flex items-center gap-4">
             <ToggleButton disabled>Disabled Off</ToggleButton>
-            <ToggleButton disabled defaultPressed>Disabled On</ToggleButton>
+            <ToggleButton disabled defaultPressed>
+              Disabled On
+            </ToggleButton>
           </div>
         </div>
       </section>
@@ -251,11 +245,7 @@ export default function Page() {
           <p className="typography-body-small-medium text-content-presentation-global-secondary">
             Selected: {multipleValues.join(", ") || "None"}
           </p>
-          <ButtonGroup
-            type="multiple"
-            value={multipleValues}
-            onValueChange={setMultipleValues}
-          >
+          <ButtonGroup type="multiple" value={multipleValues} onValueChange={setMultipleValues}>
             <ButtonGroupItem value="bold">
               <i className="ri-bold" />
             </ButtonGroupItem>
@@ -505,7 +495,9 @@ export default function Page() {
               </TimelineConnector>
               <TimelineContent>
                 <TimelineHeading>Order Placed</TimelineHeading>
-                <TimelineDescription>Your order has been confirmed and is being processed.</TimelineDescription>
+                <TimelineDescription>
+                  Your order has been confirmed and is being processed.
+                </TimelineDescription>
               </TimelineContent>
             </TimelineItem>
 
@@ -516,7 +508,9 @@ export default function Page() {
               </TimelineConnector>
               <TimelineContent>
                 <TimelineHeading>Payment Verified</TimelineHeading>
-                <TimelineDescription>Payment of $129.00 was successfully charged.</TimelineDescription>
+                <TimelineDescription>
+                  Payment of $129.00 was successfully charged.
+                </TimelineDescription>
               </TimelineContent>
             </TimelineItem>
 
@@ -527,7 +521,9 @@ export default function Page() {
               </TimelineConnector>
               <TimelineContent>
                 <TimelineHeading>In Transit</TimelineHeading>
-                <TimelineDescription>Package is on its way — expected delivery in 2 days.</TimelineDescription>
+                <TimelineDescription>
+                  Package is on its way — expected delivery in 2 days.
+                </TimelineDescription>
               </TimelineContent>
             </TimelineItem>
 
@@ -551,7 +547,10 @@ export default function Page() {
           <Timeline orientation="vertical">
             <TimelineItem>
               <TimelineConnector>
-                <TimelineIndicator variant="completed" icon={<i className="ri-git-commit-line" />} />
+                <TimelineIndicator
+                  variant="completed"
+                  icon={<i className="ri-git-commit-line" />}
+                />
                 <TimelineSeparator active />
               </TimelineConnector>
               <TimelineContent>
@@ -683,7 +682,7 @@ function DropdownMenuDemo() {
                 Copy
                 <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem variant={"Negative"} >
+              <DropdownMenuItem variant={"Negative"}>
                 <i className="ri-clipboard-line text-[16px]" />
                 Paste
                 <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
@@ -698,7 +697,7 @@ function DropdownMenuDemo() {
                 Copy
                 <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem variant={"Negative"} >
+              <DropdownMenuItem variant={"Negative"}>
                 <i className="ri-clipboard-line text-[16px]" />
                 Paste
                 <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
@@ -713,7 +712,7 @@ function DropdownMenuDemo() {
                 Copy
                 <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem variant={"Negative"} >
+              <DropdownMenuItem variant={"Negative"}>
                 <i className="ri-clipboard-line text-[16px]" />
                 Paste
                 <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
@@ -728,7 +727,7 @@ function DropdownMenuDemo() {
                 Copy
                 <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem variant={"Negative"} >
+              <DropdownMenuItem variant={"Negative"}>
                 <i className="ri-clipboard-line text-[16px]" />
                 Paste
                 <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
@@ -756,11 +755,7 @@ function DropdownMenuDemo() {
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Visible:{" "}
-          {[
-            showToolbar && "Toolbar",
-            showSidebar && "Sidebar",
-            showStatusBar && "Status Bar",
-          ]
+          {[showToolbar && "Toolbar", showSidebar && "Sidebar", showStatusBar && "Status Bar"]
             .filter(Boolean)
             .join(", ") || "None"}
         </p>
@@ -774,10 +769,7 @@ function DropdownMenuDemo() {
           <DropdownMenuContent align="start">
             <DropdownMenuLabel>Checkbox Items</DropdownMenuLabel>
             <DropdownMenuGroup>
-              <DropdownMenuCheckboxItem
-                checked={showToolbar}
-                onCheckedChange={setShowToolbar}
-              >
+              <DropdownMenuCheckboxItem checked={showToolbar} onCheckedChange={setShowToolbar}>
                 Toolbar
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
@@ -816,14 +808,9 @@ function DropdownMenuDemo() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuLabel>Position</DropdownMenuLabel>
-            <DropdownMenuRadioGroup
-              value={panelPosition}
-              onValueChange={setPanelPosition}
-            >
+            <DropdownMenuRadioGroup value={panelPosition} onValueChange={setPanelPosition}>
               <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="bottom">
-                Bottom
-              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
               <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
             <DropdownMenuSub>
@@ -885,10 +872,7 @@ function ContextMenuDemo() {
             </ContextMenuItem>
 
             <ContextMenuLabel>View</ContextMenuLabel>
-            <ContextMenuCheckboxItem
-              checked={showGrid}
-              onCheckedChange={setShowGrid}
-            >
+            <ContextMenuCheckboxItem checked={showGrid} onCheckedChange={setShowGrid}>
               Show Grid
             </ContextMenuCheckboxItem>
             <ContextMenuRadioGroup value={zoom} onValueChange={setZoom}>
@@ -966,10 +950,7 @@ function RtlMenuDemo() {
             </DropdownMenuItem>
 
             <DropdownMenuLabel>العرض</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem
-              checked={showGrid}
-              onCheckedChange={setShowGrid}
-            >
+            <DropdownMenuCheckboxItem checked={showGrid} onCheckedChange={setShowGrid}>
               إظهار الشبكة
             </DropdownMenuCheckboxItem>
             <DropdownMenuRadioGroup value={zoom} onValueChange={setZoom}>
@@ -1135,8 +1116,8 @@ function SelectableTreeDialogDemo() {
 
       <div className="space-y-4 max-w-[420px]">
         <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
-          Any node is selectable — clicking a folder OR a leaf selects it and
-          closes the dialog, showing it in the field.
+          Any node is selectable — clicking a folder OR a leaf selects it and closes the dialog,
+          showing it in the field.
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Selected: {selected ? selected.name : "None"}
@@ -1237,8 +1218,8 @@ function SelectableTreeDemo() {
 
       <div className="space-y-4 max-w-[420px]">
         <h3 className="typography-body-medium-medium text-content-presentation-global-secondary">
-          Any node is selectable — clicking a folder OR a leaf selects it and
-          closes the dropdown, showing it in the field.
+          Any node is selectable — clicking a folder OR a leaf selects it and closes the dropdown,
+          showing it in the field.
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
           Selected: {selected ? selected.name : "None"}
@@ -1296,7 +1277,11 @@ function SearchableTreeRtlDemo() {
 
 const SELECT_OPTIONS: SearchableSelectOption[] = [
   { value: "design", label: "Design", icon: <i className="ri-palette-line text-[16px]" /> },
-  { value: "frontend", label: "Frontend", icon: <i className="ri-code-s-slash-line text-[16px]" /> },
+  {
+    value: "frontend",
+    label: "Frontend",
+    icon: <i className="ri-code-s-slash-line text-[16px]" />,
+  },
   { value: "backend", label: "Backend", icon: <i className="ri-server-line text-[16px]" /> },
   { value: "qa", label: "QA", icon: <i className="ri-bug-line text-[16px]" /> },
   { value: "devops", label: "DevOps", icon: <i className="ri-terminal-box-line text-[16px]" /> },
@@ -1312,18 +1297,14 @@ const ALL_REMOTE = Array.from({ length: 200 }, (_, i) => ({
 const PAGE_SIZE = 20;
 
 function fakeFetch(query: string, page: number) {
-  return new Promise<{ options: SearchableSelectOption[]; hasMore: boolean }>(
-    (resolve) => {
-      setTimeout(() => {
-        const matched = ALL_REMOTE.filter((o) =>
-          o.label.toLowerCase().includes(query.toLowerCase())
-        );
-        const start = page * PAGE_SIZE;
-        const slice = matched.slice(start, start + PAGE_SIZE);
-        resolve({ options: slice, hasMore: start + PAGE_SIZE < matched.length });
-      }, 600);
-    }
-  );
+  return new Promise<{ options: SearchableSelectOption[]; hasMore: boolean }>((resolve) => {
+    setTimeout(() => {
+      const matched = ALL_REMOTE.filter((o) => o.label.toLowerCase().includes(query.toLowerCase()));
+      const start = page * PAGE_SIZE;
+      const slice = matched.slice(start, start + PAGE_SIZE);
+      resolve({ options: slice, hasMore: start + PAGE_SIZE < matched.length });
+    }, 600);
+  });
 }
 
 function SearchableSelectDemo() {
@@ -1443,7 +1424,7 @@ function fetchPeople(query: string, page: number) {
       const matched = ALL_REMOTE_PEOPLE.filter(
         (p) =>
           p.name.toLowerCase().includes(query.toLowerCase()) ||
-          p.role.toLowerCase().includes(query.toLowerCase())
+          p.role.toLowerCase().includes(query.toLowerCase()),
       );
       const start = page * PEOPLE_PAGE_SIZE;
       const slice = matched.slice(start, start + PEOPLE_PAGE_SIZE);
@@ -1521,8 +1502,7 @@ function SearchableTableDemo() {
           Async — dialog with server search + infinite scroll (200 rows, 20/page)
         </h3>
         <p className="typography-body-small-medium text-content-presentation-global-secondary">
-          Selected: {asyncSelected ? asyncSelected.name : "None"} · Loaded:{" "}
-          {rows.length}
+          Selected: {asyncSelected ? asyncSelected.name : "None"} · Loaded: {rows.length}
         </p>
         <SearchableTable<Person>
           columns={PEOPLE_COLUMNS}
@@ -1559,7 +1539,7 @@ function BadgeFieldDemo() {
   const [selected, setSelected] = useState<Tag[]>([]);
 
   return (
-    <section className="space-y-6" >
+    <section className="space-y-6">
       <h2 className="typography-body-large-medium text-content-presentation-global-primary border-b border-border-presentation-action-disabled pb-2">
         BadgeField
       </h2>
@@ -1674,11 +1654,7 @@ function StepperDemo() {
           >
             Next <i className="ri-arrow-right-s-line" />
           </Button>
-          <Button
-            size="S"
-            variant="PrimeContStyle"
-            onClick={() => setActiveStep(0)}
-          >
+          <Button size="S" variant="PrimeContStyle" onClick={() => setActiveStep(0)}>
             Reset
           </Button>
         </div>
@@ -1723,19 +1699,16 @@ function StepperDemo() {
           <Step index={0}>
             <StepIndicator />
             <StepLabel>Account</StepLabel>
-            <StepDescription>Create your account</StepDescription>
           </Step>
           <StepConnector />
           <Step index={1}>
             <StepIndicator />
             <StepLabel>Profile</StepLabel>
-            <StepDescription>Set up your profile</StepDescription>
           </Step>
           <StepConnector />
           <Step index={2}>
             <StepIndicator />
             <StepLabel>Complete</StepLabel>
-            <StepDescription>Review and finish</StepDescription>
           </Step>
         </Stepper>
       </div>
@@ -1756,10 +1729,9 @@ function StepperDemo() {
             <StepLabel>Validate</StepLabel>
           </Step>
           <StepConnector />
-          <Step index={2} isError>
+          <Step index={2} type="negative">
             <StepIndicator />
             <StepLabel>Process</StepLabel>
-            <StepDescription>Validation failed</StepDescription>
           </Step>
           <StepConnector />
           <Step index={3}>
@@ -1808,5 +1780,3 @@ function StepperDemo() {
     </section>
   );
 }
-
-

@@ -13,7 +13,8 @@ import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "./Dialog";
 import { Icon, Input, Group } from "./Input";
-import { Button, LoadingIcon } from "./Button";
+import { LoadingIcon } from "./Button";
+import { ActionButton } from "./ActionButton";
 
 /**
  * SearchableTreeDialog — a field that opens a modal Dialog to pick a node from a tree.
@@ -224,7 +225,8 @@ export function SearchableTreeDialog<T>({
           size={size === "XS" ? "S" : size}
           role="button"
           tabIndex={0}
-          className={cn("flex w-full items-center gap-1 p-1 cursor-pointer", className)}
+          // 3px + the 1px border = Figma's 4px from the field's outer edge.
+          className={cn("flex w-full items-center gap-1 p-[3px] cursor-pointer", className)}
         >
           {icon && <Icon>{icon}</Icon>}
           <span
@@ -237,24 +239,21 @@ export function SearchableTreeDialog<T>({
           >
             {triggerLabel}
           </span>
-          {/* Chevron toggle — boxed icon button matching the Select component. */}
-          <Button
+          {/* Chevron toggle — the shared in-field action button (Figma `ActionButton` M). */}
+          <ActionButton
             as="span"
-            buttonType="icon"
+            size="M"
             tabIndex={-1}
             aria-label={open ? "Close" : "Open"}
-            className={cn(
-              "shrink-0 h-[32px] w-[32px] rounded-[4px]",
-              open && "bg-background-presentation-action-hover text-white",
-            )}
+            className={cn("shrink-0", open && "bg-background-presentation-action-hover text-white")}
           >
             <i
               className={cn(
-                "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
+                "ri-arrow-down-s-line !text-[26px] transition-all duration-100 ease-in-out",
                 open && "rotate-180",
               )}
             />
-          </Button>
+          </ActionButton>
         </Group>
       </DialogTrigger>
 

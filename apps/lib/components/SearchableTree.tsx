@@ -5,7 +5,8 @@ import { cn } from "../utils/cn";
 import { Themes } from "../utils/types";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Icon, Input, Group } from "./Input";
-import { Button, LoadingIcon } from "./Button";
+import { LoadingIcon } from "./Button";
+import { ActionButton } from "./ActionButton";
 import { useClickOutside } from "../hooks/useClickOutside";
 
 /**
@@ -236,7 +237,8 @@ export function SearchableTree<T>({
           onFocus={(e: React.FocusEvent<HTMLDivElement>) =>
             setDropdownWidth(e.currentTarget.offsetWidth)
           }
-          className={cn("flex w-full items-center gap-1 p-1", className)}
+          // 3px + the 1px border = Figma's 4px from the field's outer edge.
+          className={cn("flex w-full items-center gap-1 p-[3px]", className)}
         >
           {icon && <Icon>{icon}</Icon>}
           {/* The field itself is the search input — typing filters the tree. */}
@@ -262,10 +264,10 @@ export function SearchableTree<T>({
               "!h-[24px]": size === "M",
             })}
           />
-          {/* Chevron toggle — boxed icon button matching the Select component. */}
-          <Button
+          {/* Chevron toggle — the shared in-field action button (Figma `ActionButton` M). */}
+          <ActionButton
             as="span"
-            buttonType="icon"
+            size="M"
             tabIndex={-1}
             aria-label={open ? "Close" : "Open"}
             onMouseDown={(e: React.MouseEvent) => {
@@ -278,18 +280,15 @@ export function SearchableTree<T>({
                 setOpen(true);
               }
             }}
-            className={cn(
-              "shrink-0 h-[32px] w-[32px] rounded-[4px]",
-              open && "bg-background-presentation-action-hover text-white",
-            )}
+            className={cn("shrink-0", open && "bg-background-presentation-action-hover text-white")}
           >
             <i
               className={cn(
-                "ri-arrow-down-s-line text-[20px] transition-all duration-100 ease-in-out",
+                "ri-arrow-down-s-line !text-[26px] transition-all duration-100 ease-in-out",
                 open && "rotate-180",
               )}
             />
-          </Button>
+          </ActionButton>
         </Group>
       </PopoverTrigger>
 

@@ -1,10 +1,11 @@
 "use client";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
-import React, { useEffect, useRef } from "react";
+import React, { cloneElement, isValidElement, useEffect, useRef } from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Slot } from "@radix-ui/react-slot";
 import { Themes } from "../utils/types";
+
 
 interface LocalPopOverProps extends VariantProps<typeof popoverStyles> {
   variant?: "SystemStyle" | "PresentationStyle";
@@ -32,18 +33,19 @@ PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> &
-    LocalPopOverProps & {
-      theme?: Themes;
-    }
+  LocalPopOverProps & {
+    theme?: Themes;
+  }
 >(
   (
     {
       className,
       align = "center",
       sideOffset = 4,
-      variant = "SystemStyle",
+      variant = "PresentationStyle",
       overlayBlur = false,
       theme,
+      children,
       ...props
     },
     ref,
@@ -58,7 +60,9 @@ const PopoverContent = React.forwardRef<
             sideOffset={sideOffset}
             className={cn(popoverStyles({ variant, overlayBlur }), className)}
             {...props}
-          />
+          >
+            {children}
+          </PopoverPrimitive.Content>
         </div>
       ) : (
         <PopoverPrimitive.Content
@@ -68,7 +72,9 @@ const PopoverContent = React.forwardRef<
           sideOffset={sideOffset}
           className={cn(popoverStyles({ variant, overlayBlur }), className)}
           {...props}
-        />
+        >
+          {children}
+        </PopoverPrimitive.Content>
       )}
     </PopoverPrimitive.Portal>
   ),
@@ -84,7 +90,7 @@ interface Props<T extends React.ElementType = "li">
 
 // Define the PopoverItem component with a generic type parameter
 const PopoverItem = <T extends React.ElementType = "li">({
-  variant = "SystemStyle",
+  variant = "Default",
   size = "M",
   asChild,
   className,
@@ -103,72 +109,95 @@ const PopoverItem = <T extends React.ElementType = "li">({
     }
   }, [active]);
 
+  const itemClassName = cn(PopoverItemStyles({ variant, size, active }), className);
+
+  // The styles are a two-layer chip (see `PopoverItemStyles`): this element is the container and
+  // the inner div is the row that lights up, which every `[&>div]:` rule targets. It therefore has
+  // to exist in both branches.
+  if (asChild && isValidElement(children)) {
+    // Slot merges the item's props onto the consumer's element (e.g. a Link), so the row div has to
+    // be injected as that element's child — wrapping the Link instead would move the class onto the
+    // wrapper and leave the anchor nested inside the item rather than being it.
+    const child = children as React.ReactElement<{ children?: React.ReactNode }>;
+    return (
+      <Slot className={itemClassName} ref={ref as React.Ref<HTMLElement>}>
+        {cloneElement(child, {}, <div>{child.props.children}</div>)}
+      </Slot>
+    );
+  }
+
   return (
     <Component
       {...(props as React.ComponentPropsWithoutRef<T>)} // Spread the props dynamically
-      className={cn(
-        PopoverItemStyles({
-          variant,
-          size,
-          active,
-        }),
-        className,
-      )}
-      /// <reference path="" />
+      className={itemClassName}
       ref={ref}
     >
-      {children}
+      <div>{children}</div>
     </Component>
   );
 };
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverItem };
 
+
 const PopoverItemStyles = cva(
+  // Ported from `MenuItemStyles` (ContextMenu/DropdownMenu) so a popover row and a menu row are the
+  // same object, minus the menu's grey `rgba(184,192,204,0.36)` container — a popover row sits
+  // directly on the panel. The inner `<div>` is still the row that lights up on hover/focus, and
+  // `PopoverItem` always renders it, including through `asChild`.
   [
-    "text-content-presentation-action-light-primary",
+    "text-content-presentation-global-primary-light typography-body-medium-regular",
     "outline-none",
     "border",
     "border-transparent",
     "flex w-full",
-    "gap-[8px]",
+    "shrink-0", // keep full row height so the popover scrolls instead of squishing
     "items-center",
     "justify-start",
     "text-overflow",
     "overflow-hidden",
-    "px-[12px]",
-    "rounded-[4px]",
+    "p-[2px]",
     "transition-all",
     "ease-in-out",
     "duration-300",
+    "[&>div]:flex",
+    "[&>div]:px-[12px]",
+    "[&>div]:py-[4px]",
+    "[&>div]:gap-2",
+    "[&>div]:w-full",
+    "[&>div]:rounded-[8px]",
+    "[&>div]:items-center",
+    "group",
   ],
   {
     variants: {
       variant: {
+        // The menu uses Radix's `data-highlighted`; a PopoverItem is a plain button, so the
+        // keyboard-highlight equivalent here is `:focus`.
         Default: [
-          "text-content-presentation-action-light-primary",
-          "bg-background-presentation-action-dropdown-primary",
-          "hover:bg-background-presentation-action-hover",
-          "hover:text-content-presentation-global-primary-inverse",
-          "focus:bg-background-presentation-action-hover",
-          "focus:text-content-presentation-global-primary-inverse",
-          "disabled:text-content-presentation-state-disabled",
-          "disabled:bg-white-00",
+          "text-content-presentation-global-primary-light",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-black-1000",
+          "[&:focus>div]:bg-white-alpha-75",
+          "[&:focus>div]:text-black-1000",
+          "[&:disabled>div]:text-content-presentation-global-primary-light",
+          "[&:disabled>div]:opacity-50",
+          "[&:disabled>div]:hover:bg-transparent",
+          "[&:disabled>div]:hover:shadow-none",
         ],
         Warning: [
-          "text-content-presentation-state-information",
-          "hover:bg-background-presentation-state-information-primary",
-          "focus:bg-background-presentation-state-information-primary",
-          "focus:text-content-presentation-global-primary-inverse",
-          "hover:text-content-presentation-global-primary-inverse",
+          "text-blue-sparkle-200",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-blue-sparkle-700",
+          "[&:focus>div]:bg-white-alpha-75",
+          "[&:focus>div]:text-blue-sparkle-700",
         ],
         Negative: [
-          "text-content-presentation-state-negative",
-          "hover:bg-background-presentation-state-negative-primary",
-          "hover:text-content-presentation-global-primary-inverse",
-          "focus:bg-background-presentation-state-negative-primary",
-          "focus:text-content-presentation-global-primary-inverse",
-          "active:text-content-presentation-state-negative",
+          "text-medium-red-200",
+          "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
+          "[&>div]:hover:text-medium-red-600",
+          "[&:focus>div]:bg-white-alpha-75",
+          "[&:focus>div]:text-medium-red-600",
         ],
         SystemStyle: [
           "bg-background-system-body-primary",
@@ -198,13 +227,13 @@ const PopoverItemStyles = cva(
           "text-content-presentation-action-light-primary",
         ],
       },
-
-      defaultVariants: {
-        variant: "Default",
-        size: "M",
-        active: false,
-        disabled: false,
-      },
+    },
+    // Same misplacement as `popoverStyles` — a sibling of `variants`, not one of them.
+    defaultVariants: {
+      variant: "Default",
+      size: "M",
+      active: false,
+      disabled: false,
     },
     compoundVariants: [
       {
@@ -239,22 +268,31 @@ const popoverStyles = cva(
           "bg-background-system-body-primary",
           "shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)]",
         ],
-        // Adopts the DropdownMenu surface (`menuContentStyles`): backdrop-blurred, borderless
-        // rounded-14 panel with a soft ambient shadow — keeping the original background color.
+        // Figma `Dropdown-Menu-1.0` (1735:159246) — the same surface `menuContentStyles` renders,
+        // so a popover and a dropdown menu are indistinguishable panels.
         PresentationStyle: [
-          "border-transparent",
+          // `border-0`, not `border-transparent`: the base sets `border`, and with `border-box`
+          // that 1px sits on top of the 4px padding, making the panel 2px wider than the design.
+          "border-0",
           "rounded-[14px]",
           "backdrop-blur-[21px]",
-          "bg-background-presentation-form-base",
+          // The design's fill is a raw `rgba(61,64,69,0.72)` with no Figma variable behind it, so it
+          // is spelled out exactly as DropdownMenu/ContextMenu already spell it. It has to be
+          // translucent: over the previous opaque `form-base` the backdrop-blur painted nothing.
+          "bg-[rgba(61,64,69,0.72)]",
           "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
+          // Figma's group-container stacks its rows with a 4px gutter.
+          "flex flex-col gap-1",
         ],
       },
       overlayBlur: {
         true: ["h-fit"],
       },
-      defaultVariants: {
-        variant: "PresentationStyle",
-      },
+    },
+    // Was nested inside `variants`, where cva reads it as a variant group called
+    // "defaultVariants" and no default is ever applied.
+    defaultVariants: {
+      variant: "PresentationStyle",
     },
   },
 );
