@@ -125,192 +125,200 @@ function TableViewImpl({
         )}
       >
         <div className="flex flex-1 flex-col gap-4 overflow-hidden">
-          <div
-            ref={scrollRef}
-            // `min-w-0` so the scroller can be narrower than the table inside it. Without it a flex
-            // item refuses to shrink below its content, so pinning the table to its natural width
-            // pushes the whole component wide instead of scrolling within it.
-            className="min-w-0 flex-1 overflow-auto rounded-lg"
-          >
-            {/* One width for the table and the footer bar below it. Inside an `overflow-auto`
-                scroller a child's `w-full` resolves against the *visible* width, not the scrollable
-                width — so without this box the footer stopped at the fold whenever the columns
-                overflowed. `w-max` sizes to the table (the widest child); `min-w-full` keeps it
-                filling the scroller when the table is narrower. */}
-            <div className="w-max min-w-full">
-              {/* `overflow-visible` opts out of the primitive's `overflow-hidden` (tailwind-merge
-                lets ours win). It has to: a clipping table is its own scrollport, and the sticky
-                header would then resolve against a box that never scrolls. Safe here because the
-                scroller above is `min-w-0 overflow-auto`, so a wide table scrolls inside it rather
-                than pushing the layout. */}
-              <Table ref={tableRef} className="w-full overflow-visible">
-                {/* The header sticks to the scroller above by default — that lives on `TableHeader`
-                  in the primitive. Two things this view adds:
+          {/* The scroller and the end action are stacked here with NO gap, so the bar sits flush
+              under the table the way it does on the card. `min-h-0` lets the scroller actually
+              shrink — a flex item will not go below its content without it. */}
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div
+              ref={scrollRef}
+              // `min-w-0` so the scroller can be narrower than the table inside it. Without it a flex
+              // item refuses to shrink below its content, so pinning the table to its natural width
+              // pushes the whole component wide instead of scrolling within it.
+              className="min-w-0 flex-1 overflow-auto rounded-lg"
+            >
+              {/* Sizes the table, not the footer — the end action now lives outside this scroller.
+                  Inside an `overflow-auto` scroller a child's `w-full` resolves against the *visible*
+                  width, so the table needs `w-max` to reach its natural width and scroll; `min-w-full`
+                  keeps it filling the scroller when the table is narrower. */}
+              <div className="w-max min-w-full">
+                {/* `overflow-visible` opts out of the primitive's `overflow-hidden` (tailwind-merge
+                  lets ours win). It has to: a clipping table is its own scrollport, and the sticky
+                  header would then resolve against a box that never scrolls. Safe here because the
+                  scroller above is `min-w-0 overflow-auto`, so a wide table scrolls inside it rather
+                  than pushing the layout. */}
+                <Table ref={tableRef} className="w-full overflow-visible">
+                  {/* The header sticks to the scroller above by default — that lives on `TableHeader`
+                    in the primitive. Two things this view adds:
 
-                  Opacity. The primitive's header token is translucent, so scrolling rows read
-                  straight through it; the primitive can't fix that without naming a surface colour
-                  it doesn't know. Here the surface *is* known — the view root above sets
-                  `form-base` — so paint that as the background-color (tailwind-merge drops the
-                  primitive's translucent one, same `bg-color` group) and re-apply the tint as a
-                  background-image, which stacks above background-color. Composited that is the
-                  exact colour the header already had, just no longer see-through.
+                    Opacity. The primitive's header token is translucent, so scrolling rows read
+                    straight through it; the primitive can't fix that without naming a surface colour
+                    it doesn't know. Here the surface *is* known — the view root above sets
+                    `form-base` — so paint that as the background-color (tailwind-merge drops the
+                    primitive's translucent one, same `bg-color` group) and re-apply the tint as a
+                    background-image, which stacks above background-color. Composited that is the
+                    exact colour the header already had, just no longer see-through.
 
-                  And `shadow-none`, because the drop shadow reads as a seam now that the view
-                  carries its own border. */}
-                <TableHeader className="bg-background-presentation-form-base bg-[image:linear-gradient(var(--background-presentation-form-header),var(--background-presentation-form-header))] shadow-none">
-                  <TableRow>
-                    {onRowMove && <TableHead isDummy className="w-8" />}
-                    {selectable && (
-                      <TableHead isDummy className="w-12">
-                        {/* Size is stated on both this and the per-row checkbox rather than left to
-                          `Checkbox`'s default — they have to agree, and relying on the default on
-                          one side only is what previously made the select-all bigger than the
-                          column it heads. */}
-                        <Checkbox
+                    And `shadow-none`, because the drop shadow reads as a seam now that the view
+                    carries its own border. */}
+                  <TableHeader className="bg-background-presentation-form-base bg-[image:linear-gradient(var(--background-presentation-form-header),var(--background-presentation-form-header))] shadow-none">
+                    <TableRow>
+                      {onRowMove && <TableHead isDummy className="w-8" />}
+                      {selectable && (
+                        <TableHead isDummy className="w-12">
+                          {/* Size is stated on both this and the per-row checkbox rather than left to
+                            `Checkbox`'s default — they have to agree, and relying on the default on
+                            one side only is what previously made the select-all bigger than the
+                            column it heads. */}
+                          <Checkbox
+                            size="M"
+                            checked={allSelected ? true : someSelected ? "indeterminate" : false}
+                            onCheckedChange={toggleAll}
+                            aria-label="Select all rows"
+                          />
+                        </TableHead>
+                      )}
+                      {/* Keyed by position: two fields may share a `path` — the same value shown two
+                      ways — and keying on it would collide. */}
+                      {visibleFields.map((field, i) => (
+                        <TableHead
+                          key={`${field.path}-${i}`}
                           size="M"
-                          checked={allSelected ? true : someSelected ? "indeterminate" : false}
-                          onCheckedChange={toggleAll}
-                          aria-label="Select all rows"
-                        />
-                      </TableHead>
-                    )}
-                    {/* Keyed by position: two fields may share a `path` — the same value shown two
-                    ways — and keying on it would collide. */}
-                    {visibleFields.map((field, i) => (
-                      <TableHead
-                        key={`${field.path}-${i}`}
-                        size="M"
-                        sortType={sort?.path === field.path ? sort.direction : undefined}
-                        onSort={() => setSort(cycle(field.path))}
-                        // Without this every sort control announces itself as a bare "Sort ascending",
-                        // so a screen reader hears one identical button per column.
-                        sortLabel={field.label ?? formatPathLabel(field.path)}
-                      >
-                        {/* Wrapped rather than handed to `Table` as bare text: `truncate` needs a box
-                          to clip, and the label's parent in the primitive is already `flex min-w-0`
-                          so this span shrinks and ellipsises instead of wrapping the header row
-                          onto a second line. */}
-                        <span className="truncate">{field.label ?? field.path}</span>
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                  {loading && <SkeletonRows fields={visibleFields} grip={Boolean(onRowMove)} selectable={selectable} />}
-                  {virtualize && padTop > 0 && (
-                    <tr aria-hidden style={{ height: padTop }} />
-                  )}
-                  <DragList ids={ids}>
-                    {renderIndexes.map((index) => {
-                      const row = rows[index];
-                      const id = ids[index];
-                      const selected = selection.includes(id);
-                      return (
-                        <DraggableRow
-                          key={id}
-                          id={id}
-                          draggable={Boolean(onRowMove)}
-                          state={selected ? "selected" : undefined}
-                          onClick={onRowClick ? () => onRowClick(row, id) : undefined}
-                          // A clickable row has to be reachable without a mouse. `<tr>` carries no
-                          // implicit role, so a bare `onClick` is invisible to the keyboard and to a
-                          // screen reader; these only appear when the row is actually interactive.
-                          tabIndex={onRowClick ? 0 : undefined}
-                          role={onRowClick ? "button" : undefined}
-                          onKeyDown={
-                            onRowClick
-                              ? (e) => {
-                                if (e.key !== "Enter" && e.key !== " ") return;
-                                if (e.target !== e.currentTarget) return;
-                                e.preventDefault();
-                                onRowClick(row, id);
-                              }
-                              : undefined
-                          }
-                          className={cn(
-                            // 40px per Figma's `Table-RowBackgroand-1.1`. `Table`'s body cells default
-                            // to 50, and the two live on different elements, so the cells below must be
-                            // told as well or CSS keeps the larger.
-                            "h-[40px]",
-                            "focus-visible:ring-border-presentation-state-focus outline-none focus-visible:ring-2",
-                            onRowClick && "cursor-pointer",
-                          )}
+                          sortType={sort?.path === field.path ? sort.direction : undefined}
+                          onSort={() => setSort(cycle(field.path))}
+                          // Without this every sort control announces itself as a bare "Sort ascending",
+                          // so a screen reader hears one identical button per column.
+                          sortLabel={field.label ?? formatPathLabel(field.path)}
                         >
-                          {onRowMove && <GripCell />}
-                          {selectable && (
-                            <TableCell isDummy className="min-h-[40px] w-12" onClick={(e) => e.stopPropagation()}>
-                              {/* What `TableCheckbox` renders, inlined: its props are typed as button
-                            attributes, so it cannot express a controlled checkbox. */}
-                              <div className="flex items-center justify-center">
-                                <Checkbox
-                                  size="M"
-                                  checked={selected}
-                                  onCheckedChange={() => toggleRow(id)}
-                                  aria-label="Select row"
-                                />
-                              </div>
-                            </TableCell>
-                          )}
-                          {visibleFields.map((field, i) => {
-                            // `undefined` means "you paint it" — distinct from `null`, which is a
-                            // deliberate blank.
-                            const custom = renderCell?.({ field, row, id, index, fields: visibleFields });
-                            // `fade={false}` and clip instead. The fade is a `mask-image` on every
-                            // cell, close to free on its own but very expensive once a sticky header
-                            // repaints the region each scroll frame: measured on this page,
-                            // mask+sticky costs ~61ms/frame against ~29ms with the mask off and
-                            // ~17ms with neither. `overflow-hidden` is passed back because
-                            // `fade={false}` otherwise switches the cell to `overflow-visible`, and
-                            // the text would spill into the next column.
-                            return (
-                              <TableCell
-                                key={`${field.path}-${i}`}
-                                className="min-h-[40px]"
-                                fade={false}
-                                childrenClassName="overflow-hidden"
-                              >
-                                {/* `isolate` confines the Badge's mix-blend-luminosity to a local
-                              stacking context and `transform-gpu` promotes it to its own layer, so
-                              the table's post-mount column reflow repaints cleanly instead of
-                              leaving a ghosted badge frame. */}
-                                <span className="isolate inline-flex transform-gpu">
-                                  {custom === undefined ? <Cell field={field} row={row} /> : custom}
-                                </span>
+                          {/* Wrapped rather than handed to `Table` as bare text: `truncate` needs a box
+                            to clip, and the label's parent in the primitive is already `flex min-w-0`
+                            so this span shrinks and ellipsises instead of wrapping the header row
+                            onto a second line. */}
+                          <span className="truncate">{field.label ?? field.path}</span>
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody>
+                    {loading && <SkeletonRows fields={visibleFields} grip={Boolean(onRowMove)} selectable={selectable} />}
+                    {virtualize && padTop > 0 && (
+                      <tr aria-hidden style={{ height: padTop }} />
+                    )}
+                    <DragList ids={ids}>
+                      {renderIndexes.map((index) => {
+                        const row = rows[index];
+                        const id = ids[index];
+                        const selected = selection.includes(id);
+                        return (
+                          <DraggableRow
+                            key={id}
+                            id={id}
+                            draggable={Boolean(onRowMove)}
+                            state={selected ? "selected" : undefined}
+                            onClick={onRowClick ? () => onRowClick(row, id) : undefined}
+                            // A clickable row has to be reachable without a mouse. `<tr>` carries no
+                            // implicit role, so a bare `onClick` is invisible to the keyboard and to a
+                            // screen reader; these only appear when the row is actually interactive.
+                            tabIndex={onRowClick ? 0 : undefined}
+                            role={onRowClick ? "button" : undefined}
+                            onKeyDown={
+                              onRowClick
+                                ? (e) => {
+                                  if (e.key !== "Enter" && e.key !== " ") return;
+                                  if (e.target !== e.currentTarget) return;
+                                  e.preventDefault();
+                                  onRowClick(row, id);
+                                }
+                                : undefined
+                            }
+                            className={cn(
+                              // 40px per Figma's `Table-RowBackgroand-1.1`. `Table`'s body cells default
+                              // to 50, and the two live on different elements, so the cells below must be
+                              // told as well or CSS keeps the larger.
+                              "h-[40px]",
+                              "focus-visible:ring-border-presentation-state-focus outline-none focus-visible:ring-2",
+                              onRowClick && "cursor-pointer",
+                            )}
+                          >
+                            {onRowMove && <GripCell />}
+                            {selectable && (
+                              <TableCell isDummy className="min-h-[40px] w-12" onClick={(e) => e.stopPropagation()}>
+                                {/* What `TableCheckbox` renders, inlined: its props are typed as button
+                              attributes, so it cannot express a controlled checkbox. */}
+                                <div className="flex items-center justify-center">
+                                  <Checkbox
+                                    size="M"
+                                    checked={selected}
+                                    onCheckedChange={() => toggleRow(id)}
+                                    aria-label="Select row"
+                                  />
+                                </div>
                               </TableCell>
-                            );
-                          })}
-                        </DraggableRow>
-                      );
-                    })}
-                  </DragList>
-                  {virtualize && padBottom > 0 && (
-                    <tr aria-hidden style={{ height: padBottom }} />
-                  )}
-                  {/* The trigger. A row of its own rather than an element after the table, so it sits
-                  inside the same scroller the rows do. */}
-                  {hasMore && !loading && (
-                    <tr ref={sentinelRef as React.Ref<HTMLTableRowElement>} aria-hidden>
-                      <td style={{ height: 1, padding: 0, border: 0 }} colSpan={100} />
-                    </tr>
-                  )}
-                  {loadingMore && (
-                    <SkeletonRows
-                      rows={2}
-                      fields={visibleFields}
-                      grip={Boolean(onRowMove)}
-                      selectable={selectable}
-                    />
-                  )}
-                </TableBody>
-              </Table>
-              {onAddRow && (
-                <TableEndAction onClick={onAddRow}>
-                  <Plus className="h-4 w-4" aria-hidden />
-                  {addRowLabel}
-                </TableEndAction>
-              )}
+                            )}
+                            {visibleFields.map((field, i) => {
+                              // `undefined` means "you paint it" — distinct from `null`, which is a
+                              // deliberate blank.
+                              const custom = renderCell?.({ field, row, id, index, fields: visibleFields });
+                              // `fade={false}` and clip instead. The fade is a `mask-image` on every
+                              // cell, close to free on its own but very expensive once a sticky header
+                              // repaints the region each scroll frame: measured on this page,
+                              // mask+sticky costs ~61ms/frame against ~29ms with the mask off and
+                              // ~17ms with neither. `overflow-hidden` is passed back because
+                              // `fade={false}` otherwise switches the cell to `overflow-visible`, and
+                              // the text would spill into the next column.
+                              return (
+                                <TableCell
+                                  key={`${field.path}-${i}`}
+                                  className="min-h-[40px]"
+                                  fade={false}
+                                  childrenClassName="overflow-hidden"
+                                >
+                                  {/* `isolate` confines the Badge's mix-blend-luminosity to a local
+                                stacking context and `transform-gpu` promotes it to its own layer, so
+                                the table's post-mount column reflow repaints cleanly instead of
+                                leaving a ghosted badge frame. */}
+                                  <span className="isolate inline-flex transform-gpu">
+                                    {custom === undefined ? <Cell field={field} row={row} /> : custom}
+                                  </span>
+                                </TableCell>
+                              );
+                            })}
+                          </DraggableRow>
+                        );
+                      })}
+                    </DragList>
+                    {virtualize && padBottom > 0 && (
+                      <tr aria-hidden style={{ height: padBottom }} />
+                    )}
+                    {/* The trigger. A row of its own rather than an element after the table, so it sits
+                    inside the same scroller the rows do. */}
+                    {hasMore && !loading && (
+                      <tr ref={sentinelRef as React.Ref<HTMLTableRowElement>} aria-hidden>
+                        <td style={{ height: 1, padding: 0, border: 0 }} colSpan={100} />
+                      </tr>
+                    )}
+                    {loadingMore && (
+                      <SkeletonRows
+                        rows={2}
+                        fields={visibleFields}
+                        grip={Boolean(onRowMove)}
+                        selectable={selectable}
+                      />
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
+            {/* Outside the scroller, deliberately: as a sibling its width is the component's visible
+                width, so it spans the full outer container and stays put while the columns scroll
+                sideways under it — instead of stretching to the table's scrollable width and sliding
+                away like a normal row. Same placement the form Table field uses. */}
+            {onAddRow && (
+              <TableEndAction onClick={onAddRow}>
+                <Plus className="h-4 w-4" aria-hidden />
+                {addRowLabel}
+              </TableEndAction>
+            )}
           </div>
         </div>
       </div>

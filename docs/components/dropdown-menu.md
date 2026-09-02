@@ -294,6 +294,8 @@ function Example() {
 
 Tall menus scroll instead of overflowing off-screen. The surface caps at `maxHeight` (default `320`px) and never exceeds the space available after collision handling. Pass `maxHeight` to change the cap.
 
+The panel itself does not scroll — it clips, and an inner viewport inside it does the scrolling. That keeps the panel's 4px frosted gutter fixed instead of scrolling away with the rows. Submenus behave identically and take their own `maxHeight`.
+
 ```typescript
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from "@/components/DropdownMenu";
 import { Button } from "@/components/Button";
@@ -396,6 +398,7 @@ function LongMenu() {
 |------|------|---------|-------------|
 | `variant` | `'PresentationStyle'` | `'PresentationStyle'` | Visual style variant |
 | `autoGroup` | `boolean` | `true` | Auto-wrap loose items in boxed groups |
+| `maxHeight` | `number` | `320` | Max height (px) before the submenu scrolls. Same `min(maxHeight, available-height)` cap as `DropdownMenuContent` |
 | `className` | `string` | - | Additional CSS classes |
 
 ### DropdownMenuLabel

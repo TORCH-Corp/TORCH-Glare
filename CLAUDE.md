@@ -413,11 +413,13 @@ const Tag = as || "div";
 <Tag {...props} />
 ```
 
-### Error State with Tooltip
+### Error State
+An invalid control is marked by the negative border variant — **not** by a forced-open tooltip.
+`InputField` / `BadgeField` / `Select` each derive it from their own error prop:
 ```typescript
-<Tooltip open={error !== undefined} text={error}>
-  <Component />
-</Tooltip>
+<Group error={errorMessage !== undefined} … />
+// or, on a trigger:
+PopoverTriggerStyles({ error: errors !== undefined, … })
 ```
 
 ## File Checklist for New Components

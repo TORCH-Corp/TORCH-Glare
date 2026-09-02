@@ -174,11 +174,22 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
   // and the rail still has room to be legible (a plain `minmax(0,…)` let it collapse to 0 in a
   // narrow preview frame). Past that floor the labels truncate instead of pushing.
   const bodyInner = isStepper ? (
-    <div className="grid w-full grid-cols-[minmax(180px,1fr)_minmax(0,1100px)_minmax(180px,1fr)] gap-8">
-      <StepperNav control={formInstance.control as Control<FieldValues>} />
-      {fieldsColumn}
-      {/* Empty third column — balances the rail's gutter so the middle column is centred. */}
-      <div />
+    // `@container` on the wrapper, not on the grid: an element cannot query its own size, so the
+    // measured box has to be an ancestor. It sits here rather than on the scroll body because
+    // `bodyInner` is also used directly when there is no header, and this way both paths get a
+    // container. The form then reacts to the width it is actually given — a rail, a drawer, a
+    // narrow preview frame — instead of the viewport's.
+    <div className="@container w-full">
+      {/* Below `@lg` the balancing column is dropped: it is empty, and in a narrow container its
+          180px floor plus a 32px gap is width the fields column needs more than the centring.
+          Both halves are required — a `display:none` child is not a grid item, but the third
+          track would still be reserved if the template kept describing it. */}
+      <div className="grid w-full grid-cols-[minmax(180px,1fr)_minmax(0,1100px)] gap-8 @lg:grid-cols-[minmax(180px,1fr)_minmax(0,1100px)_minmax(180px,1fr)]">
+        <StepperNav control={formInstance.control as Control<FieldValues>} />
+        {fieldsColumn}
+        {/* Empty third column — balances the rail's gutter so the middle column is centred. */}
+        <div className="hidden @lg:block" />
+      </div>
     </div>
   ) : (
     fieldsColumn

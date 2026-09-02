@@ -70,16 +70,27 @@ const DropdownMenuContent = React.forwardRef<
         ref={ref}
         sideOffset={sideOffset}
         collisionPadding={collisionPadding}
-        // Cap at maxHeight, but never exceed the space Radix has after collision
-        // handling. The menu scrolls (overflow on the surface) past this height.
+        // Cap at maxHeight, but never exceed the space Radix has after collision handling. The
+        // `100vh` fallback is load-bearing: an undefined var invalidates the whole `min()`, so
+        // `max-height` would resolve to `none` and the panel — which no longer scrolls itself —
+        // would grow unbounded with its rows clipped and unreachable.
         style={{
-          maxHeight: `min(${maxHeight}px, var(--radix-dropdown-menu-content-available-height))`,
+          maxHeight: `min(${maxHeight}px, var(--radix-dropdown-menu-content-available-height, 100vh))`,
           ...style,
         }}
         className={cn(menuContentStyles({ variant }), className)}
         {...props}
       >
-        {autoGroup ? autoGroupChildren(children) : children}
+        {/* Dedicated scroll viewport, matching Select's: the cap lives on the panel above, this
+            fills what is left and scrolls. `min-h-0` is what makes it work — a flex item will not
+            shrink below its content, so without it the list grows past the panel and the panel's
+            `overflow-hidden` just clips the rows with no scrollbar.
+
+            `gap-1` is re-declared here because `autoGroupChildren` emits several siblings (a group,
+            a label, a separator…) and this is now the element they are siblings within. */}
+        <div className="flex flex-col gap-1 flex-1 min-h-0 overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide">
+          {autoGroup ? autoGroupChildren(children) : children}
+        </div>
       </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
   ),
@@ -123,18 +134,45 @@ const DropdownMenuSubContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent> & {
     variant?: "PresentationStyle";
     autoGroup?: boolean;
+    maxHeight?: number;
   }
->(({ className, variant = "PresentationStyle", autoGroup = true, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.SubContent
-      ref={ref}
-      className={cn(menuContentStyles({ variant }), className)}
-      {...props}
-    >
-      {autoGroup ? autoGroupChildren(children) : children}
-    </DropdownMenuPrimitive.SubContent>
-  </DropdownMenuPrimitive.Portal>
-));
+>(
+  (
+    {
+      className,
+      variant = "PresentationStyle",
+      autoGroup = true,
+      collisionPadding = 8,
+      maxHeight = 320,
+      // Destructured out of `{...props}` so the spread below cannot clobber the cap. Radix
+      // re-publishes the namespaced available-height var on SubContent, so the same expression
+      // Content uses works here unchanged.
+      style,
+      children,
+      ...props
+    },
+    ref,
+  ) => (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        ref={ref}
+        collisionPadding={collisionPadding}
+        style={{
+          maxHeight: `min(${maxHeight}px, var(--radix-dropdown-menu-content-available-height, 100vh))`,
+          ...style,
+        }}
+        className={cn(menuContentStyles({ variant }), className)}
+        {...props}
+      >
+        {/* Same panel-clips / viewport-scrolls split as Content. A submenu is a peer surface, so it
+            shares the 320px default rather than getting a smaller one of its own. */}
+        <div className="flex flex-col gap-1 flex-1 min-h-0 overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide">
+          {autoGroup ? autoGroupChildren(children) : children}
+        </div>
+      </DropdownMenuPrimitive.SubContent>
+    </DropdownMenuPrimitive.Portal>
+  ),
+);
 DropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayName;
 
 const DropdownMenuItem = React.forwardRef<
@@ -456,16 +494,19 @@ export const menuContentStyles = cva(
     "rounded-[14px]",
     "min-w-[240px]",
     "outline-none",
-    "overflow-y-auto",
-    "overflow-x-hidden",
+    // The panel clips; the inner viewport below owns scrolling. Height is capped inline on the
+    // Content element from `min(maxHeight, available-height)` — no `max-h-*` class here on
+    // purpose, so the inline value governs.
+    "overflow-hidden",
     // Only animate the OPEN (enter) state. An exit animation on [data-state=closed]
     // holds the old DOM node during close, which breaks the context menu's
     // close/reposition on a second right-click (Radix issue #2572).
     "data-[state=open]:animate-in",
     "data-[state=open]:fade-in-0",
-    "scrollbar-hide",
     "backdrop-blur-[21px]",
-    "flex gap-1 flex-col",
+    // No `gap` here: the panel has exactly one child (the scroll viewport), so a gap between
+    // siblings has nothing to act on. The 4px between groups/labels lives on that viewport.
+    "flex flex-col",
   ],
   {
     variants: {
@@ -475,9 +516,11 @@ export const menuContentStyles = cva(
           "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
         ],
       },
-      defaultVariants: {
-        variant: "PresentationStyle",
-      },
+    },
+    // Was nested inside `variants`, where cva reads it as a variant group named
+    // "defaultVariants" and no default is ever applied. `menuGroupStyles` below has it right.
+    defaultVariants: {
+      variant: "PresentationStyle",
     },
   },
 );

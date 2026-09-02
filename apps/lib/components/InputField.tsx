@@ -1,7 +1,7 @@
 "use client";
 import { forwardRef, InputHTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
 import { cn } from "../utils/cn";
-import { Tooltip, ToolTipSide } from "./Tooltip";
+import { ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { ActionButton } from "./ActionButton";
 import { Themes } from "../utils/types";
@@ -13,8 +13,13 @@ export interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size
   icon?: ReactNode; // to add left side icon if you pass it
   childrenSide?: ReactNode; // to add action button to the end of the input
   popoverChildren?: ReactNode; // to add drop down list if you pass it
-  errorMessage?: string; // to show tooltip component when error_message not null
+  /** Marks the field invalid: any non-undefined value turns on the negative border. */
+  errorMessage?: string;
   onTable?: boolean; // to change the border style of the component when it is on table
+  /**
+   * @deprecated Ignored. The error tooltip was removed — an invalid field is shown by its negative
+   * border alone. Kept so existing call sites keep compiling; it will go in a future major.
+   */
   toolTipSide?: ToolTipSide;
   theme?: Themes;
 }
@@ -29,6 +34,7 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
       errorMessage,
       onTable,
       variant = "PresentationStyle",
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- deprecated no-op, destructured to keep it out of the {...props} spread
       toolTipSide,
       theme,
       className,
@@ -49,54 +55,47 @@ export const InputField = forwardRef<HTMLInputElement, Props>(
     // TODO: make the user input visible when input is focused
     return (
       <Popover onOpenChange={setIsPopoverOpen}>
-        <Tooltip
-          theme={theme}
-          toolTipSide={toolTipSide}
-          open={errorMessage !== undefined}
-          text={errorMessage}
-        >
-          <PopoverTrigger ref={triggerRef} asChild>
-            <Group
-              error={errorMessage !== undefined}
-              onTable={onTable}
-              size={size}
-              variant={variant}
-              data-theme={theme}
+        <PopoverTrigger ref={triggerRef} asChild>
+          <Group
+            error={errorMessage !== undefined}
+            onTable={onTable}
+            size={size}
+            variant={variant}
+            data-theme={theme}
+            onFocus={(e) => {
+              setPopoverWidth(e.currentTarget.offsetWidth);
+              setIsPopoverOpen(!isPopoverOpen);
+              inputRef.current?.focus();
+            }}
+            className={className}
+          >
+            {icon && <Icon>{icon}</Icon>}
+            <Input
+              {...props}
               onFocus={(e) => {
-                setPopoverWidth(e.currentTarget.offsetWidth);
-                setIsPopoverOpen(!isPopoverOpen);
-                inputRef.current?.focus();
+                setIsPopoverOpen(true);
+                props.onFocus?.(e);
               }}
-              className={className}
-            >
-              {icon && <Icon>{icon}</Icon>}
-              <Input
-                {...props}
-                onFocus={(e) => {
-                  setIsPopoverOpen(true);
-                  props.onFocus?.(e);
-                }}
-                onBlur={(e) => {
-                  setIsPopoverOpen(false);
-                  props.onBlur?.(e);
-                }}
-                ref={inputRef}
-              />
+              onBlur={(e) => {
+                setIsPopoverOpen(false);
+                props.onBlur?.(e);
+              }}
+              ref={inputRef}
+            />
 
-              <Trilling>
-                {childrenSide}
-                {popoverChildren && (
-                  <PopoverActionButton
-                    size={size}
-                    variant={variant}
-                    isPopoverOpen={isPopoverOpen}
-                    disabled={props.disabled}
-                  />
-                )}
-              </Trilling>
-            </Group>
-          </PopoverTrigger>
-        </Tooltip>
+            <Trilling>
+              {childrenSide}
+              {popoverChildren && (
+                <PopoverActionButton
+                  size={size}
+                  variant={variant}
+                  isPopoverOpen={isPopoverOpen}
+                  disabled={props.disabled}
+                />
+              )}
+            </Trilling>
+          </Group>
+        </PopoverTrigger>
 
         {popoverChildren && !props.disabled && (
           <PopoverContent

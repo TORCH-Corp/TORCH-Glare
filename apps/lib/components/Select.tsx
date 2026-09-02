@@ -4,7 +4,6 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { cn } from "../utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
 import { ActionButton } from "./ActionButton";
-import { Tooltip } from "./Tooltip";
 import { MenuItemStyles } from "./DropdownMenu";
 import { Themes } from "../utils/types";
 
@@ -18,6 +17,7 @@ const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
     VariantProps<typeof PopoverTriggerStyles> & {
+      /** Marks the trigger invalid: any non-undefined value turns on the negative border. */
       errors?: string;
       icon?: string;
       theme?: Themes;
@@ -38,52 +38,50 @@ const SelectTrigger = React.forwardRef<
     ref,
   ) => {
     return (
-      <Tooltip toolTipSide={"top"} open={errors !== undefined} text={errors}>
-        <SelectPrimitive.Trigger
-          data-theme={theme}
-          ref={ref}
-          className={cn(
-            PopoverTriggerStyles({
-              size,
-              variant,
-              error: errors !== undefined,
-              onTable,
-            }),
-            className,
-          )}
-          {...props}
+      <SelectPrimitive.Trigger
+        data-theme={theme}
+        ref={ref}
+        className={cn(
+          PopoverTriggerStyles({
+            size,
+            variant,
+            error: errors !== undefined,
+            onTable,
+          }),
+          className,
+        )}
+        {...props}
+      >
+        <p
+          className={cn({
+            "[&_span]:text-[#A0A0A0]": !props.value,
+          })}
         >
-          <p
-            className={cn({
-              "[&_span]:text-[#A0A0A0]": !props.value,
-            })}
-          >
-            {children}
-          </p>
+          {children}
+        </p>
 
-          {/* The shared in-field action button. Its box tracks the trigger height the same way
-              InputField's does — a 30px field takes the 22px button, a 40px field the 32px one. */}
-          <ActionButton
-            as={"span"}
-            size={size === "XL" ? "M" : size === "S" ? "XS" : "S"}
-            className={cn([
-              "group-aria-expanded:bg-background-presentation-action-hover",
-              "group-aria-expanded:text-white",
-            ])}
-          >
-            <i
-              className={cn(
-                "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180",
-                { "!text-[12px]": size === "S" },
-                { "!text-[16px]": size === "M" },
-                { "!text-[18px]": size === "L" },
-                { "!text-[26px]": size === "XL" },
-                { icon: icon },
-              )}
-            />
-          </ActionButton>
-        </SelectPrimitive.Trigger>
-      </Tooltip>
+        {/* The shared in-field action button. Its box tracks the trigger height the same way
+            InputField's does — a 30px field takes the 22px button, a 40px field the 32px one. */}
+        <ActionButton
+          as={"span"}
+          size={size === "XL" ? "M" : size === "S" ? "XS" : "S"}
+          className={cn([
+            "group-aria-expanded:bg-background-presentation-action-hover",
+            "group-aria-expanded:text-white",
+          ])}
+        >
+          <i
+            className={cn(
+              "ri-arrow-down-s-line transition-all duration-100 ease-in-out group-aria-expanded:rotate-180",
+              { "!text-[12px]": size === "S" },
+              { "!text-[16px]": size === "M" },
+              { "!text-[18px]": size === "L" },
+              { "!text-[26px]": size === "XL" },
+              { icon: icon },
+            )}
+          />
+        </ActionButton>
+      </SelectPrimitive.Trigger>
     );
   },
 );
@@ -140,10 +138,19 @@ const SelectContent = React.forwardRef<
         ref={ref}
         className={cn(SelectContentStyles({ variant }), className)}
         position={position}
+        // Never taller than 368px, and never taller than the space Radix has on screen. Valid because
+        // `position` defaults to "popper", which is what publishes the variable.
+        style={{
+          maxHeight: "min(368px, var(--radix-select-content-available-height, 100vh))",
+          ...props.style,
+        }}
         {...props}
       >
-        {/* Dedicated scroll viewport + boxed group, matching SearchableSelect's menu surface. */}
-        <SelectPrimitive.Viewport className="overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide">
+        {/* Dedicated scroll viewport + boxed group, matching SearchableSelect's menu surface.
+            `flex-1 min-h-0` is what makes it scroll: without `min-h-0` a flex item refuses to shrink
+            below its content, so the list grew past the panel and `overflow-hidden` simply clipped
+            the rows off with no scrollbar. */}
+        <SelectPrimitive.Viewport className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide">
           <div className="flex flex-col gap-[1px] overflow-hidden rounded-[10px]">{children}</div>
         </SelectPrimitive.Viewport>
       </SelectPrimitive.Content>
@@ -231,7 +238,8 @@ const SelectContentStyles = cva(
     "data-[state=open]:animate-in",
     "data-[state=open]:fade-in-0",
     "z-[1000]",
-    "max-h-[368px]",
+    // Panel height is set inline below from `min(368px, available-height)`; the class is kept off
+    // deliberately so the inline value governs.
   ],
   {
     variants: {

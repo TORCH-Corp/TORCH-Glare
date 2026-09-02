@@ -149,11 +149,11 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
 
     return (
       <Popover onOpenChange={setIsOpen}>
-        {/* The theme goes to the field as a prop, not as `data-theme` on the trigger. `asChild`
-            merges trigger props onto the child, which lands the attribute on the bare <input> — the
-            text then resolves dark tokens while the field around it follows the page, and on a light
-            page the value is white on white. Passing `theme` through means the whole field is dark
-            together, so it stays dark *and* readable. */}
+        {/* `theme` is deliberately NOT passed to the field: only the picker panel below is pinned
+            dark. The field follows the surrounding page instead, so it matches the other inputs
+            next to it. Note it must not be handed down as `data-theme` either — `asChild` merges
+            trigger props onto the child, which would land the attribute on the bare <input> and
+            leave its text resolving dark tokens inside a light field (white on white). */}
         <PopoverTrigger ref={triggerRef} asChild className="w-full flex-1">
           {isValidElement(children) ? (
             cloneElement(children as React.ReactElement<HTMLInputElement & { theme?: string }>, {
@@ -161,13 +161,11 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
                 (children as React.ReactElement<HTMLInputElement>).props.value ?? formattedValue,
               type: "input",
               readOnly: true,
-              theme,
             })
           ) : (
             /* If the children is not a valid element, Show the default input */
             <InputField
               readOnly
-              theme={theme}
               type="input"
               {...props}
               childrenSide={

@@ -9,7 +9,7 @@ import {
   FocusEvent,
 } from "react";
 import { cn } from "../utils/cn";
-import { Tooltip, ToolTipSide } from "./Tooltip";
+import { ToolTipSide } from "./Tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import { Themes } from "../utils/types";
 import { Icon, Input, Group, Trilling } from "./Input";
@@ -22,8 +22,13 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "va
   size?: "XS" | "S" | "M"; // this is used to change the size style of the component
   variant?: "SystemStyle" | "PresentationStyle";
   icon?: ReactNode; // to add left side icon if you pass it
-  errorMessage?: string; // to show tooltip component when error_message not null
+  /** Marks the field invalid: any non-undefined value turns on the negative border. */
+  errorMessage?: string;
   onTable?: boolean; // to change the border style of the component when it is on table
+  /**
+   * @deprecated Ignored. The error tooltip was removed — an invalid field is shown by its negative
+   * border alone. Kept so existing call sites keep compiling; it will go in a future major.
+   */
   toolTipSide?: ToolTipSide;
   label?: string;
   required?: boolean;
@@ -45,6 +50,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
     errorMessage,
     onTable,
     variant = "PresentationStyle",
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- deprecated no-op, destructured to keep it out of the {...props} spread
     toolTipSide,
     className,
     actionButton,
@@ -102,75 +108,73 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
 
     return (
       <Popover open={isPopoverOpen}>
-        <Tooltip toolTipSide={toolTipSide} open={errorMessage !== undefined} text={errorMessage}>
-          <PopoverTrigger asChild>
-            <Group
-              dir={dir}
-              error={errorMessage !== undefined}
-              onTable={onTable}
-              data-theme={theme}
-              variant={variant}
-              tabIndex={isPopoverOpen ? 0 : -1}
-              onKeyDown={handleKeyDown}
-              size={size === "XS" ? "S" : size}
-              ref={inputGroupRef}
-              onFocus={(e: FocusEvent<HTMLDivElement>) => {
-                setDropDownListWidth(e.currentTarget.offsetWidth);
-              }}
-              className={cn(
-                "flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-end  items-center",
-                {
-                  "flex-wrap justify-start": isPopoverOpen,
-                  "h-fit": isPopoverOpen,
-                },
-                className,
-              )}
-            >
-              {icon && <Icon>{icon}</Icon>}
+        <PopoverTrigger asChild>
+          <Group
+            dir={dir}
+            error={errorMessage !== undefined}
+            onTable={onTable}
+            data-theme={theme}
+            variant={variant}
+            tabIndex={isPopoverOpen ? 0 : -1}
+            onKeyDown={handleKeyDown}
+            size={size === "XS" ? "S" : size}
+            ref={inputGroupRef}
+            onFocus={(e: FocusEvent<HTMLDivElement>) => {
+              setDropDownListWidth(e.currentTarget.offsetWidth);
+            }}
+            className={cn(
+              "flex gap-1 flex-row w-full relative p-1 flex-nowrap overflow-hidden justify-end  items-center",
+              {
+                "flex-wrap justify-start": isPopoverOpen,
+                "h-fit": isPopoverOpen,
+              },
+              className,
+            )}
+          >
+            {icon && <Icon>{icon}</Icon>}
 
-              {selectedTagsStack.map((tag, index) => (
-                <Badge
-                  key={tag.id}
-                  size={size}
-                  color={tag.variant as VariantProps<typeof badgeStyles>["color"]}
-                  label={tag.name}
-                  isClosable={true}
-                  onClose={() => handleUnselectTag(tag.id)}
-                  className={focusedTagIndex === index ? "ring-2 ring-blue-500" : ""}
-                  tabIndex={focusedTagIndex === index ? 0 : -1}
-                />
-              ))}
-
-              <Input
-                {...props}
-                value={searchTags}
-                onChange={(e) => {
-                  filterTagsBySearch(e.target.value);
-                }}
-                onFocus={(e) => {
-                  props.onFocus?.(e);
-                  setFocusedTagIndex(null);
-                  setIsPopoverOpen(true);
-                }}
-                ref={inputRef}
-                className={cn(
-                  "min-w-[100px] w-full", // Added w-full to Input
-                  {
-                    "!h-[18px]": size === "XS",
-                    "!h-[22px]": size === "S",
-                    "!h-[24px]": size === "M",
-                  },
-                )}
+            {selectedTagsStack.map((tag, index) => (
+              <Badge
+                key={tag.id}
+                size={size}
+                color={tag.variant as VariantProps<typeof badgeStyles>["color"]}
+                label={tag.name}
+                isClosable={true}
+                onClose={() => handleUnselectTag(tag.id)}
+                className={focusedTagIndex === index ? "ring-2 ring-blue-500" : ""}
+                tabIndex={focusedTagIndex === index ? 0 : -1}
               />
-              {actionButton && (
-                <Trilling className="py-0">
-                  {/* Keep the ActionButton right aligned */}
-                  {actionButton}
-                </Trilling>
+            ))}
+
+            <Input
+              {...props}
+              value={searchTags}
+              onChange={(e) => {
+                filterTagsBySearch(e.target.value);
+              }}
+              onFocus={(e) => {
+                props.onFocus?.(e);
+                setFocusedTagIndex(null);
+                setIsPopoverOpen(true);
+              }}
+              ref={inputRef}
+              className={cn(
+                "min-w-[100px] w-full", // Added w-full to Input
+                {
+                  "!h-[18px]": size === "XS",
+                  "!h-[22px]": size === "S",
+                  "!h-[24px]": size === "M",
+                },
               )}
-            </Group>
-          </PopoverTrigger>
-        </Tooltip>
+            />
+            {actionButton && (
+              <Trilling className="py-0">
+                {/* Keep the ActionButton right aligned */}
+                {actionButton}
+              </Trilling>
+            )}
+          </Group>
+        </PopoverTrigger>
 
         <PopoverContent
           dir={dir}

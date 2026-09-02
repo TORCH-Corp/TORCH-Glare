@@ -96,7 +96,33 @@ panel beside the form is `FormRenderer`'s `summary`.
 ## Field components
 
 Each is a JSX child taking at least `name`, plus `label`, `placeholder`,
-`description`, `required`, `disabled`, `hidden`, `fullWidth`.
+`description`, `required`, `disabled`, `hidden`, `fullWidth`, `hints`.
+
+### Hints
+
+`hints` stacks alerts under a field — helper text, a caveat, a confirmation. Each entry mirrors
+`FieldHint`: `label`, an optional `state` of `info` (default) / `warning` / `error` / `success`, and
+an optional `icon`.
+
+```tsx
+<FormBuilder.Text
+  name="sku"
+  label="SKU"
+  required
+  hints={[
+    { state: "info", label: "Must be unique across the catalogue." },
+    { state: "warning", label: "Changing this breaks existing links." },
+  ]}
+/>
+```
+
+The validation error is not one of these — it is rendered automatically and always comes **first**,
+because it is the actionable message; your hints follow in the order given. A field with no `hints`
+renders exactly as before.
+
+Hints are ignored inside a `FormBuilder.Table` cell (and any other `bare` context): there errors
+surface as a tooltip on the control so a row stays one line tall, and stacking alerts would defeat
+that.
 
 | Component                                                                   | Input                                                                                 | Value                                                        |
 | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------ |

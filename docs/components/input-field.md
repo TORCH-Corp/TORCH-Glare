@@ -15,7 +15,7 @@ dependencies:
 
 # InputField
 
-> An enhanced input component that combines Input with integrated popover dropdowns, error tooltips, icons, and trailing actions. Perfect for complex form fields requiring additional UI elements.
+> An enhanced input component that combines Input with integrated popover dropdowns, error styling, icons, and trailing actions. Perfect for complex form fields requiring additional UI elements.
 
 ## Installation
 
@@ -206,9 +206,9 @@ function PasswordField() {
 | `icon` | `ReactNode` | - | Icon to display on the left side |
 | `childrenSide` | `ReactNode` | - | Content to display on the right side |
 | `popoverChildren` | `ReactNode` | - | Content for the dropdown popover |
-| `errorMessage` | `string` | - | Error message to display in tooltip |
+| `errorMessage` | `string` | - | Marks the field invalid — any non-undefined value turns on the negative border |
 | `onTable` | `boolean` | `false` | Optimized styling for table context |
-| `toolTipSide` | `'top' \| 'right' \| 'bottom' \| 'left'` | - | Tooltip position |
+| `toolTipSide` | `'top' \| 'right' \| 'bottom' \| 'left'` | - | **Deprecated, ignored.** The error tooltip was removed; an invalid field is shown by its border alone |
 | `theme` | `'dark' \| 'light' \| 'default'` | - | Theme variant |
 | `className` | `string` | - | Additional CSS classes |
 | `disabled` | `boolean` | `false` | Disables the input |

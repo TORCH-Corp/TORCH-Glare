@@ -41,6 +41,16 @@ export type FieldKind =
   | "custom";
 
 /** Props shared by every `FormBuilder.*` field. `name` is the RHF path. */
+/**
+ * One alert under a field. Mirrors `FieldHint`'s own props so the design system stays the single
+ * source of truth for how each state looks.
+ */
+export interface FieldHintSpec {
+  label: ReactNode;
+  state?: "info" | "warning" | "error" | "success";
+  icon?: ReactNode;
+}
+
 export interface BaseFieldProps {
   name: string;
   label?: ReactNode;
@@ -51,6 +61,12 @@ export interface BaseFieldProps {
   hidden?: boolean;
   /** Span the full section width. */
   fullWidth?: boolean;
+  /**
+   * Alerts stacked under the field. The validation error, when there is one, always renders first —
+   * it is the actionable message — and these follow in order. Ignored in `bare` mode (a
+   * `FormBuilder.Table` cell), where errors surface as a tooltip to keep the row one line tall.
+   */
+  hints?: FieldHintSpec[];
 }
 
 export interface OptionItem {

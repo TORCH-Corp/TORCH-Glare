@@ -10,7 +10,6 @@ import { FiltersContext, useDataViewsFilters } from "../context";
 import { collectFilterFields, renderFields } from "./children";
 import { Custom } from "./custom";
 import { Presets } from "./presets";
-import { Summary } from "./summary";
 import { Sync } from "./sync";
 import { toFormValues } from "./values";
 import type { FiltersProps } from "../types";
@@ -155,5 +154,4 @@ function FiltersRoot({
 export const Filters = Object.assign(FiltersRoot, {
   Presets,
   Custom,
-  Summary,
 });

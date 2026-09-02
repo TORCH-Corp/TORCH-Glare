@@ -59,6 +59,9 @@ interface Props<T> {
   searchPlaceholder?: string;
   /** Label shown on the dialog's search field. */
   title?: string;
+  /** Height cap for the scrolling body, in px. Also bounded by 55vh so it shrinks on short
+   *  screens. Past it the tree scrolls inside the dialog. Default 200. */
+  maxBodyHeight?: number;
 
   size?: "XS" | "S" | "M";
   variant?: "SystemStyle" | "PresentationStyle";
@@ -109,6 +112,7 @@ export function SearchableTreeDialog<T>({
   placeholder = "Select…",
   searchPlaceholder = "Search…",
   title = "Select an item",
+  maxBodyHeight = 200,
   size = "M",
   variant = "PresentationStyle",
   icon,
@@ -283,7 +287,13 @@ export function SearchableTreeDialog<T>({
         {/* SearchResult.Container — inset 12px each side, tucked under the bar (z-1). */}
         <div className="flex w-full items-start px-[12px]">
           {/* Body — frosted surface that connects to the bar with rounded-bottom. */}
-          <div className="flex-1 min-w-px max-h-[55vh] overflow-auto scrollbar-hide rounded-b-[14px] pt-[8px] pb-[4px] px-[4px] bg-[rgba(61,64,69,0.72)] backdrop-blur-[21px] shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]">
+          <div
+            // `max-h-[55vh]` alone never engaged: at a 900px viewport that is 495px, far more than
+            // the tree needs, so the body simply grew to fit and there was nothing to scroll.
+            // `maxBodyHeight` is the real cap; 55vh still bounds it on short screens.
+            style={{ maxHeight: `min(${maxBodyHeight}px, 55vh)` }}
+            className="flex-1 min-w-px min-h-0 overflow-auto scrollbar-hide rounded-b-[14px] pt-[8px] pb-[4px] px-[4px] bg-[rgba(61,64,69,0.72)] backdrop-blur-[21px] shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]"
+          >
             {visibleTree.length > 0 ? (
               <div className="flex flex-col gap-[4px]">
                 {/* "Tree" section label. */}

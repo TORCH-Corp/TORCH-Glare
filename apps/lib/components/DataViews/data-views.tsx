@@ -264,9 +264,9 @@ function DataViewsRoot({
     [isPanelOpen, setPanelOpen],
   );
 
-  // The descriptors as well as the value: `Filters.Summary` needs labels for its chips, and it is
-  // routinely rendered outside `Filters` — above the table, in a toolbar — where it cannot reach
-  // the context `Filters` provides to its own children.
+  // The descriptors as well as the value: a consumer such as `Filters.Presets` resolves a field by
+  // path, and may be rendered outside `Filters` — above the table, in a toolbar — where it cannot
+  // reach the context `Filters` provides to its own children.
   const filterFields = useMemo(() => collectFilterFields(children), [children]);
 
   const setFilters = useCallback(
