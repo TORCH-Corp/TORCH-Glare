@@ -231,7 +231,6 @@ export default function FiltersExample() {
 
         {/* The active query, as removable chips — including the search term. */}
         <div className="border-border-presentation-global-primary border-b px-4 py-2 empty:hidden">
-          <DataViews.Filters.Summary />
         </div>
 
         <DataViews.Table />

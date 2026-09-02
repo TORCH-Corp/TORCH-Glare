@@ -26,6 +26,19 @@ npx torch-glare@latest add Button
 
 ## Release notes
 
+- **v2.5.5** — **breaking**: `DataViews.Filters.Summary` is removed with no shim; delete any
+  `<DataViews.Filters.Summary />` (render your own from `useDataViewsFilters()` if you want one).
+  Also, every `FormBuilder.*` field takes a `hints` array, so one field can
+  carry several alerts. The validation error renders first, your hints follow. See
+  [FormBuilder](../components/form-builder.md#hints). Dropdown panels (`Select`,
+  `SearchableSelect`, `SearchableTree`, `Popover`, `DropdownMenu`, `ContextMenu`) now cap to the
+  space actually on screen and scroll their list in an inner viewport instead of being clipped —
+  note `SearchableTree`'s `maxBodyHeight` default drops 320 → 200, and menu submenus gained a
+  `maxHeight` (they were previously uncapped). `InputField`, `BadgeField` and `Select` no longer
+  pop an error tooltip — an invalid control is shown by its negative border alone, and
+  `toolTipSide` is deprecated and ignored. Plus fixes to `TabSwitch` dividers,
+  `FieldSection` hint placement, the
+  `FormRenderer` stepper grid, `SlideDatePicker` theming and `PopoverItem`'s disabled state.
 - **v2.5.2** — **breaking**: `FormBuilder` now holds only the fields; the section cards, title
   header and stepper moved to `FormRenderer`. See
   [FormBuilder 2.5.2](./form-builder-2.5.2.md) for the rename table.

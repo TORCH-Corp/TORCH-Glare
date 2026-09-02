@@ -129,8 +129,8 @@ export interface FiltersContextValue {
   setFilters: (filters: FilterState) => void;
   /**
    * What each filter control is, read off the `FormBuilder` children of `DataViews.Filters` —
-   * never derived from the rows. The root collects them as well, so `Filters.Summary` can label a
-   * chip even when it is rendered outside `Filters`.
+   * never derived from the rows. The root collects them as well, so a consumer such as
+   * `Filters.Presets` can resolve a field by path even when it is rendered outside `Filters`.
    */
   filterFields: readonly FilterFieldDescriptor[];
 }

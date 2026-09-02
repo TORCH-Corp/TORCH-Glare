@@ -141,10 +141,9 @@ export { Popover, PopoverTrigger, PopoverContent, PopoverItem };
 
 
 const PopoverItemStyles = cva(
-  // Ported from `MenuItemStyles` (ContextMenu/DropdownMenu) so a popover row and a menu row are the
-  // same object, minus the menu's grey `rgba(184,192,204,0.36)` container — a popover row sits
-  // directly on the panel. The inner `<div>` is still the row that lights up on hover/focus, and
-  // `PopoverItem` always renders it, including through `asChild`.
+  // `MenuItemStyles` (ContextMenu/DropdownMenu) minus its grey wrapper fill: same 2px gutter, same
+  // inner `<div>` that lights up on hover/focus, but the row itself stays transparent on the panel.
+  // `PopoverItem` always renders that inner div, including through `asChild`.
   [
     "text-content-presentation-global-primary-light typography-body-medium-regular",
     "outline-none",
@@ -158,6 +157,8 @@ const PopoverItemStyles = cva(
     "overflow-hidden",
     "p-[2px]",
     "transition-all",
+    // No `bg-[rgba(184,192,204,0.36)]` here, unlike the menu's item: a popover row sits directly on
+    // the panel with no grey container behind it. Everything else is the menu's rule set.
     "ease-in-out",
     "duration-300",
     "[&>div]:flex",
@@ -172,8 +173,9 @@ const PopoverItemStyles = cva(
   {
     variants: {
       variant: {
-        // The menu uses Radix's `data-highlighted`; a PopoverItem is a plain button, so the
-        // keyboard-highlight equivalent here is `:focus`.
+        // The menu marks its keyboard highlight with Radix's `data-highlighted` and its disabled
+        // rows with `data-disabled`; a PopoverItem is a plain <button>, so those become `:focus`
+        // and `:disabled` here. Everything else is the menu's rule set verbatim.
         Default: [
           "text-content-presentation-global-primary-light",
           "[&>div]:hover:bg-white-50 [&>div]:hover:shadow-[0_0_16px_0_rgba(0,0,0,0.36)]",
@@ -182,6 +184,7 @@ const PopoverItemStyles = cva(
           "[&:focus>div]:text-black-1000",
           "[&:disabled>div]:text-content-presentation-global-primary-light",
           "[&:disabled>div]:opacity-50",
+          "[&:disabled>div]:hover:text-content-presentation-global-primary-light",
           "[&:disabled>div]:hover:bg-transparent",
           "[&:disabled>div]:hover:shadow-none",
         ],
@@ -191,6 +194,11 @@ const PopoverItemStyles = cva(
           "[&>div]:hover:text-blue-sparkle-700",
           "[&:focus>div]:bg-white-alpha-75",
           "[&:focus>div]:text-blue-sparkle-700",
+          "[&:disabled>div]:text-content-presentation-global-primary-light",
+          "[&:disabled>div]:opacity-50",
+          "[&:disabled>div]:hover:text-content-presentation-global-primary-light",
+          "[&:disabled>div]:hover:bg-transparent",
+          "[&:disabled>div]:hover:shadow-none",
         ],
         Negative: [
           "text-medium-red-200",
@@ -198,6 +206,11 @@ const PopoverItemStyles = cva(
           "[&>div]:hover:text-medium-red-600",
           "[&:focus>div]:bg-white-alpha-75",
           "[&:focus>div]:text-medium-red-600",
+          "[&:disabled>div]:text-content-presentation-global-primary-light",
+          "[&:disabled>div]:opacity-50",
+          "[&:disabled>div]:hover:text-content-presentation-global-primary-light",
+          "[&:disabled>div]:hover:bg-transparent",
+          "[&:disabled>div]:hover:shadow-none",
         ],
         SystemStyle: [
           "bg-background-system-body-primary",
@@ -247,7 +260,10 @@ const PopoverItemStyles = cva(
 
 const popoverStyles = cva(
   [
-    "p-1 max-h-[200px] z-[1000] shrink-0",
+    // Cap at 200px but never exceed the room Radix actually has after collision handling, so a
+    // popover opened near a screen edge shrinks and scrolls instead of being cut off. Consumers that
+    // supply their own inner scroller override this with an inline `maxHeight`, which beats the class.
+    "p-1 max-h-[min(200px,var(--radix-popover-content-available-height,100vh))] z-[1000] shrink-0",
     "rounded-[8px]",
     "border",
     "min-w-[240px]",

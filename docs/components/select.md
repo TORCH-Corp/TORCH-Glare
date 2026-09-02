@@ -241,7 +241,7 @@ function Uncontrolled() {
 |------|------|---------|-------------|
 | `size` | `'S' \| 'M' \| 'L' \| 'XL'` | `'M'` | Size of the trigger |
 | `variant` | `'PresentationStyle' \| 'SystemStyle'` | `'PresentationStyle'` | Visual variant |
-| `errors` | `string` | - | Error message (shows tooltip) |
+| `errors` | `string` | - | Marks the trigger invalid — any non-undefined value turns on the negative border |
 | `theme` | `Themes` | - | Theme override |
 | `icon` | `string` | - | Custom icon class |
 | `className` | `string` | - | Additional CSS classes |

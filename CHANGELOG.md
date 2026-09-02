@@ -1,3 +1,135 @@
+## 2.5.5
+
+### `hints` — several alerts on one field
+
+Every `FormBuilder.*` field takes a `hints` array. Each entry mirrors `FieldHint`: a `label`, an
+optional `state` of `info` (default) / `warning` / `error` / `success`, and an optional `icon`.
+
+```tsx
+<FormBuilder.Text
+  name="sku"
+  label="SKU"
+  required
+  hints={[
+    { state: "info", label: "Must be unique across the catalogue." },
+    { state: "warning", label: "Changing this breaks existing links." },
+  ]}
+/>
+```
+
+Before this, a field had exactly one hint slot and the validation error owned it, so there was no way
+to attach helper text or a caveat. The error is still rendered for you and now comes **first** in the
+stack — it is the actionable message — with your hints following in the order given.
+
+Non-breaking: a field with no `hints` renders exactly as before. Added to `BaseFieldProps`, so all
+field types accept it. Ignored inside a `FormBuilder.Table` cell (and any other `bare` context),
+where errors surface as a tooltip on the control so a row stays one line tall.
+
+### Dropdown panels stay on screen, and their lists scroll
+
+`Select`, `SearchableSelect`, `SearchableTree`, `Popover`, `DropdownMenu` and `ContextMenu` capped
+their height with a fixed number and nothing else, so a dropdown opened near the bottom of the window
+was cut off by the viewport, and a long list overflowed its own panel and was clipped with no
+scrollbar. Both are fixed:
+
+- The panel now caps at `min(<its own limit>, var(--radix-*-content-available-height, 100vh))` — the
+  space Radix measured after collision handling. Opened near an edge the panel shrinks and scrolls
+  instead of running off the screen. The fallback in the `var()` matters: an undefined variable
+  invalidates the whole `min()` and drops the cap entirely.
+- The inner list is `flex-1 min-h-0`. Without `min-h-0` a flex item refuses to shrink below its
+  content, which is why the list grew past the panel and `overflow-hidden` simply cut the rows off.
+
+Scrollbars are hidden on these lists; scrolling itself is unchanged.
+
+`SearchableTree`'s `maxBodyHeight` default drops **320 → 200** to match the other menus. Pass
+`maxBodyHeight` explicitly to keep the old height. `SearchableTreeDialog` gains the same
+`maxBodyHeight` prop (default 200), applied as `min(maxBodyHeight, 55vh)`.
+
+### Breaking — `DataViews.Filters.Summary` is removed
+
+The chip strip that echoed the active filters above the rows is gone, along with the component
+itself (`DataViews/filters/summary.tsx`). It read as a row of tab-like buttons sitting between the
+header and the table, and the filter controls already show what is set.
+
+There is no shim — the compiler will point at every `<DataViews.Filters.Summary />`. Delete those;
+if you want a summary above your rows, render your own from `useDataViewsFilters()`, which still
+exposes `filters`, `setFilters` and `filterFields`. All the example pages have been updated.
+
+`Filters.Presets` and `Filters.Custom` are unaffected, and `filterFields` is still collected on the
+root — `Presets` resolves fields by path through it.
+
+### The DataViews table's add-row bar no longer scrolls with the columns
+
+`DataViews.Table` rendered its `TableEndAction` **inside** the horizontal scroller, wrapped in the
+`w-max min-w-full` box that sizes the table. That made the bar as wide as the table's *scrollable*
+width and slid it sideways with the columns — it behaved like a normal row.
+
+It is now a sibling of the scroller, matching what the form `Table` field already does: its width is
+the component's visible width and it stays put while the columns scroll under it. Measured on a
+2718px-wide table in an 814px viewport, the bar keeps a 820px width and does not move when the
+scroller is taken to its right edge. It also sits flush under the table rather than picking up the
+view's `gap-4`.
+
+For `DropdownMenu` and `ContextMenu` specifically, the panel now clips and an inner viewport scrolls,
+so the panel's 4px frosted gutter stays fixed instead of scrolling away with the rows. Two related
+fixes ride along:
+
+- **Submenus were completely uncapped.** `DropdownMenuSubContent` and `ContextMenuSubContent` shared
+  the panel styles but had no height limit at all, so a long submenu ran off the screen. Both now
+  take a `maxHeight` prop (default `320`, same as the parent menu) and scroll like any other menu.
+  They also pick up `collisionPadding={8}` for parity with `Content` — Radix's own default is `0`, so
+  a submenu no longer sits flush against the viewport edge.
+- **The height cap could silently vanish.** The inline `min()` referenced the Radix available-height
+  variable with no fallback, and an undefined variable invalidates the whole expression — leaving the
+  panel with no cap. Now `var(--radix-…-available-height, 100vh)`.
+
+### `SearchableTree` is one panel instead of two
+
+The tree body painted its own `rgba(61,64,69,0.72)` fill, `backdrop-blur-[21px]` and shadow on top of
+the popover surface already doing the same. Two problems: the shadow and fill doubled up, and a
+`backdrop-filter` establishes a backdrop root for its descendants, so the inner blur had nothing left
+to sample. The popover content is now the single frosted surface and the body is transparent padding
+on it. This also fixes the panel's uneven gutters — the body was `py-[8px] px-[4px]`, so the bottom
+inset read as larger than the sides; it is a uniform `p-[4px]` now.
+
+### No more error tooltips on the core inputs
+
+`InputField`, `BadgeField` and `Select` each forced a tooltip open for as long as a field was
+invalid. That tooltip is gone. Nothing else changes: all three already applied the negative border
+independently of it (`error={errorMessage !== undefined}`, and `error: errors !== undefined` on the
+Select trigger), so an invalid control still reads as invalid.
+
+`errorMessage` / `errors` keep their meaning — they are what turn the border on. `toolTipSide` is now
+**ignored** and marked `@deprecated`; it is still accepted so the existing call sites keep compiling,
+and will be removed in a future major.
+
+`FormBuilder`'s table cells and DataViews filter panels are unaffected — they surface errors through
+their own tooltip in `FieldShell`, which is deliberately left in place because it is the only error
+indicator those chrome-less fields have.
+
+### Fixes
+
+- **`TabSwitch`** — selecting a tab no longer shifts the control. The dividers touching the active
+  pill are still hidden by design, but they are now painted transparent instead of being unmounted.
+  Each one is a `w-px` plus `mx-[3px]`, so removing it took 7px out of the track: with three
+  options, selecting the middle one dropped both dividers and moved the control 14px. The slot is
+  always rendered and only its ink changes.
+- **`FieldSection`** — `childrenUnderLabel` (which carries the field's validation error and hints)
+  follows the layout. Stacked, it sits under the label; once the section reaches `@md` and splits
+  into two columns it moves under the control it describes, instead of being stranded at the bottom
+  of the 350px label column. Driven only by container width, so a `direction="vertical"` form — what
+  `FormRenderer` forces inside a drawer — behaves the same.
+- **`FormRenderer`** stepper — the empty third grid column that balances the rail's gutter is now
+  dropped below `@lg`, giving its 180px floor plus a 32px gap back to the fields. The grid template
+  changes with it: a `display:none` child is not a grid item, but the track would still be reserved
+  if the template kept describing it. Measured against the wrapper as a container query, so the form
+  reacts to the width it is given rather than the viewport's.
+- **`SlideDatePicker`** — `theme` now pins only the picker panel, not the trigger field. The field
+  follows the surrounding page so it matches the inputs beside it.
+- **`PopoverItem`** — disabled rows are styled (dimmed, no hover fill or shadow) rather than
+  responding to hover like an enabled one.
+- **`Card`** — the 12px corner is the `rounded-radius-xl` token instead of a literal. Same pixels.
+
 ## 2.5.2
 
 ### Breaking — `FormBuilder` is now only the fields

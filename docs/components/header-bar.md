@@ -146,13 +146,14 @@ All standard `HTMLAttributes<HTMLDivElement>` (for example `id`, `aria-*`, `data
 |---------|-----------|-----------|------------------------|
 | `new` | `bg-blue-sparkle-alpha-50` | `text-blue-sparkle-200` | pill (`label`) → title |
 | `edit` | `bg-orange-alpha-50` | `text-orange-200` | pill (`label`) → title |
-| `detail` | `bg-white-alpha-30` | `text-white-00` | title → pill (`label`) — positions swapped |
+| `detail` | `bg-white-alpha-15` | `text-white-00` | title → pill (`label`) — positions swapped |
 
 ## Styling
 
 - **Fixed dark container**: `rounded-[14px]`, `border-black-600`, `bg-black-1000`, `p-1.5`, with a double soft shadow. The surface is always dark regardless of theme.
 - **Layout**: the root is `inline-flex`, so the chip hugs its content rather than stretching to fill its parent.
-- **Typography**: 28px, weight 510, uppercase, SF Pro with the `cv05` stylistic set. Both `label` and `title` render uppercase.
+- **Typography**: `typography-display-medium-medium` (28px, weight 510) with the `cv05` stylistic set. Both `label` and `title` render uppercase.
+- **Ordering**: `detail` swaps the two children in the DOM rather than reversing the row, so the pair stays correct under `dir="rtl"` and reads in order to assistive tech.
 - **Emphasis pill**: the colored badge background and text color are driven entirely by `variant` (see the Variants table). For `detail`, the pill also moves to the right side.
 
 ## TypeScript Types

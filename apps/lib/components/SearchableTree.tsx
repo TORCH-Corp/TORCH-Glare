@@ -72,6 +72,8 @@ interface Props<T> {
    */
   selectableFolders?: boolean;
   /** Max height (px) of the scrollable tree body before it scrolls (default 320). */
+  /** Height cap for the scrolling body, in px. The panel never exceeds this, nor the room Radix
+   *  has on screen — past it the tree scrolls inside the panel. Default 200. */
   maxBodyHeight?: number;
 
   // --- Async (optional; static `nodes` still works) ---
@@ -112,7 +114,7 @@ export function SearchableTree<T>({
   className,
   defaultExpanded = true,
   selectableFolders = false,
-  maxBodyHeight = 320,
+  maxBodyHeight = 200,
   filterClientSide = true,
   onSearchChange,
   searchDebounceMs = 300,
@@ -299,16 +301,31 @@ export function SearchableTree<T>({
         variant={variant}
         align="start"
         sideOffset={4}
-        style={{ width: dropdownWidth || undefined }}
+        // The panel owns the height: `maxBodyHeight` at most, and never more than the room Radix has
+        // on screen. Inline beats popoverStyles' `max-h-[…]` class.
+        style={{
+          width: dropdownWidth || undefined,
+          maxHeight: `min(${maxBodyHeight}px, var(--radix-popover-content-available-height, 100vh))`,
+        }}
         onOpenAutoFocus={(e) => e.preventDefault()}
         onWheel={(e) => e.stopPropagation()}
-        className="p-0 border-0 bg-transparent shadow-none rounded-[14px] flex flex-col gap-0 overflow-visible"
+        // No `bg-transparent`/`shadow-none`: PopoverContent IS the frosted surface. Forcing it
+        // transparent and moving the glass to the inner div double-blurred (an element with
+        // backdrop-filter forms a backdrop root for its descendants, so the inner one sampled
+        // nothing). `overflow-hidden`, not `overflow-visible` — the list must stay inside the
+        // frosted panel rather than spilling rows over bare page content.
+        className="p-0 border-0 rounded-[14px] flex flex-col gap-0 overflow-hidden"
       >
         {/* SearchResult body — frosted surface holding the "Tree" label + rows. */}
-        <div className="flex w-full items-start">
+        {/* `flex-1 min-h-0 items-stretch`: this wrapper hands the panel's height down to the body.
+            With `items-start` the body sized to its own content and escaped the panel instead. */}
+        <div className="flex w-full flex-1 min-h-0 items-stretch">
           <div
-            className="flex-1 min-w-px overflow-auto scrollbar-hide rounded-[14px] py-[8px] px-[4px] bg-[rgba(61,64,69,0.72)] backdrop-blur-[21px] shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]"
-            style={{ maxHeight: maxBodyHeight }}
+            // Transparent: the frosted surface is the PopoverContent behind it. A second
+            // backdrop-filter here would sample nothing anyway.
+            // The cap now lives on the panel; this fills what is left and scrolls, which needs
+            // `min-h-0` — a flex item will not shrink below its content without it.
+            className="flex-1 min-w-px min-h-0 overflow-auto scrollbar-hide rounded-[14px] p-[4px]"
           >
             {visibleTree.length > 0 ? (
               <div className="flex flex-col gap-[4px]">

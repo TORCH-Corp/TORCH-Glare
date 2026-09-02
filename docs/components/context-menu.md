@@ -230,6 +230,8 @@ function RtlMenu() {
 
 Tall menus scroll instead of overflowing off-screen. The surface caps at `maxHeight` (default `320`px) and never exceeds the space available after collision handling. Pass `maxHeight` to change the cap.
 
+The panel itself does not scroll — it clips, and an inner viewport inside it does the scrolling. That keeps the panel's 4px frosted gutter fixed instead of scrolling away with the rows. Submenus behave identically and take their own `maxHeight` (same `320`px default).
+
 ```typescript
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuLabel } from "@/components/ContextMenu";
 
@@ -425,7 +427,7 @@ export const ContextMenuRadioItem: React.ForwardRefExoticComponent<ContextMenuRa
 - **Opens at the pointer**: the menu opens on right-click (`contextmenu`) at the exact cursor position, not anchored to a fixed trigger button.
 - **Second right-click closes it**: the Root is made controlled and tracks `open` in context. The Trigger listens in the capture phase, and when the menu is already open it `preventDefault()` / `stopPropagation()` and closes — so a second right-click dismisses instead of re-anchoring (which Radix handles unreliably).
 - **Auto-grouping**: by default (`autoGroup` on `ContextMenuContent`, default `true`) consecutive loose items (`ContextMenuItem`, `ContextMenuCheckboxItem`, `ContextMenuRadioItem`, and `ContextMenuSub`) are automatically wrapped in a `Boxed` `ContextMenuGroup`, so they render inside a boxed container like DropdownMenu even when you do not write a group. Labels and explicit groups act as boundaries and pass through unchanged. Set `autoGroup={false}` to render children verbatim.
-- **Max height & scrolling**: the surface caps its height at `min(maxHeight, available-height)` (where `maxHeight` defaults to `320`px and `available-height` is the space Radix has after collision handling). A taller menu scrolls vertically instead of overflowing off-screen — items and groups keep their full height rather than squishing. Pass `maxHeight={N}` to change the cap.
+- **Max height & scrolling**: the surface caps its height at `min(maxHeight, available-height)` (where `maxHeight` defaults to `320`px and `available-height` is the space Radix has after collision handling). A taller menu scrolls vertically instead of overflowing off-screen — items and groups keep their full height rather than squishing. The panel clips and an inner viewport scrolls, so the panel's frosted gutter stays put. Pass `maxHeight={N}` to change the cap; `ContextMenuSubContent` accepts it too.
 - **Checkbox / radio keep the menu open**: `ContextMenuCheckboxItem` and `ContextMenuRadioItem` call `event.preventDefault()` inside `onSelect`, stopping Radix's default auto-close so users can toggle multiple options in one pass.
 - **Open-only animation**: only the open (enter) state animates (`fade-in`). There is intentionally no exit animation — holding the old DOM node during close breaks close/reposition on a second right-click, so it is omitted to keep repositioning reliable.
 - **Submenus and RTL**: nested `ContextMenuSub` / `ContextMenuSubTrigger` / `ContextMenuSubContent` are supported, and `dir="rtl"` on the Root mirrors the layout (including the submenu chevron).

@@ -249,19 +249,23 @@ export function SearchableSelect({
         data-theme={theme}
         ref={popoverContentRef}
         variant={variant}
-        style={{ width: dropdownWidth || undefined }}
         onOpenAutoFocus={(e) => e.preventDefault()}
         onWheel={(e) => e.stopPropagation()}
         className={cn(menuContentStyles({ variant }))}
+        // The panel carries the cap — `maxVisibleItems` rows, but never more than the room Radix has
+        // on screen. Inline beats the `max-h-[…]` class popoverStyles contributes.
+        style={{
+          width: dropdownWidth || undefined,
+          maxHeight: `min(${maxVisibleItems * ROW_HEIGHT}px, var(--radix-popover-content-available-height, 100vh))`,
+        }}
       >
-        {/* Dedicated scroll viewport: caps height to ~maxVisibleItems rows and
-            scrolls the rest. Keeping it separate from the popover padding avoids
-            flex/overflow conflicts that block scrolling. */}
+        {/* Dedicated scroll viewport. The height cap lives on the panel above; this just fills what is
+            left and scrolls. `min-h-0` is required — a flex item will not shrink below its content, so
+            without it the list grew past the panel and was clipped instead of scrolling. */}
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide"
-          style={{ maxHeight: maxVisibleItems * ROW_HEIGHT }}
+          className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden rounded-[10px] scrollbar-hide"
         >
           {filteredOptions.length > 0 && (
             // Boxed group container — matches the DropdownMenu's auto-grouped look.

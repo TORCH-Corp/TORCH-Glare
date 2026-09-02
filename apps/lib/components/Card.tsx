@@ -6,7 +6,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const cardStyles = cva(
   [
     "flex flex-col justify-start",
-    "gap-2 rounded-[12px] border",
+    // `radius/xl` is 12px — the same value this literal had, now taken from the shared scale.
+    "gap-2 rounded-radius-xl border",
     "transition-all ease-in-out duration-200",
     "p-[16px]",
     "border-border-presentation-global-primary",

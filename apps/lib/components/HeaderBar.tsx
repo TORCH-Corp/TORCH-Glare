@@ -22,13 +22,18 @@ import { Themes } from "../utils/types";
  *            (renders plain "sales iNVOICE" on the LEFT, colored "de-344" on the RIGHT)
  */
 
-// Inner row: order is reversed for "detail" so the badge ends up on the right.
-const rowStyles = cva(["flex", "items-center"], {
+// 28px / weight 510 — the design's `Font/Size/Display/Medium`, which is exactly what this class
+// carries. Shared by the badge and the plain title so the two pieces cannot drift apart.
+const headerTextStyles = "typography-display-medium-medium uppercase [font-feature-settings:'cv05'_on]";
+
+// Colored pill holding `label`. 32px tall, 4px side padding, 8px radius — Figma `Header.Badge`.
+const badgeStyles = cva(["flex", "h-8", "items-center", "justify-center", "rounded-lg", "px-1"], {
   variants: {
     variant: {
-      new: "flex-row",
-      edit: "flex-row",
-      detail: "flex-row-reverse",
+      new: "bg-blue-sparkle-alpha-50",
+      edit: "bg-orange-alpha-50",
+      // `White Alpha/15`, not /30 — the detail chip is the faintest of the three.
+      detail: "bg-white-alpha-15",
     },
   },
   defaultVariants: {
@@ -36,49 +41,22 @@ const rowStyles = cva(["flex", "items-center"], {
   },
 });
 
-// Colored pill holding `label`.
-const badgeStyles = cva(
-  ["flex", "h-8", "items-center", "justify-center", "gap-2.5", "rounded-lg", "px-1"],
-  {
-    variants: {
-      variant: {
-        new: "bg-blue-sparkle-alpha-50",
-        edit: "bg-orange-alpha-50",
-        detail: "bg-white-alpha-30",
-      },
-    },
-    defaultVariants: {
-      variant: "new",
-    },
-  },
-);
-
 // Text inside the colored pill.
-const badgeTextStyles = cva(
-  [
-    "font-sans",
-    "text-[28px]",
-    "font-[510]",
-    "leading-normal",
-    "uppercase",
-    "[font-feature-settings:'cv05'_on]",
-  ],
-  {
-    variants: {
-      variant: {
-        new: "text-blue-sparkle-200",
-        edit: "text-orange-200",
-        detail: "text-white-00",
-      },
-    },
-    defaultVariants: {
-      variant: "new",
+const badgeTextStyles = cva([headerTextStyles], {
+  variants: {
+    variant: {
+      new: "text-blue-sparkle-200",
+      edit: "text-orange-200",
+      detail: "text-white-00",
     },
   },
-);
+  defaultVariants: {
+    variant: "new",
+  },
+});
 
 interface HeaderBarProps
-  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof rowStyles> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeStyles> {
   theme?: Themes;
   /** The colored emphasis pill text. */
   label: string;
@@ -88,25 +66,45 @@ interface HeaderBarProps
 
 const HeaderBar = forwardRef<HTMLDivElement, HeaderBarProps>(
   ({ variant = "new", label, title, theme, className, ...props }, ref) => {
+    const badge = (
+      <div className={cn(badgeStyles({ variant }))}>
+        <p className={cn(badgeTextStyles({ variant }))}>{label}</p>
+      </div>
+    );
+
+    // The plain title sits in its own 32px box with 6px side padding — that padding, not a row
+    // `gap`, is what separates it from the badge (matching the design's `padding` frame).
+    const plain = (
+      <div className="flex h-8 items-center justify-center px-1.5">
+        <p className={cn(headerTextStyles, "text-white-00")}>{title}</p>
+      </div>
+    );
+
     return (
       <div
         ref={ref}
         data-theme={theme}
         className={cn(
-          "inline-flex flex-col items-start rounded-[14px] border border-black-600 bg-black-1000 p-1.5 shadow-[0_0_32px_2px_rgba(0,0,0,0.05),0_0_32px_2px_rgba(0,0,0,0.05)]",
+          "inline-flex flex-col items-start overflow-hidden rounded-[14px] border border-black-600 bg-black-1000 p-1.5 shadow-[0_0_32px_2px_rgba(0,0,0,0.05),0_0_32px_2px_rgba(0,0,0,0.05)]",
           className,
         )}
         {...props}
       >
-        <div className={cn(rowStyles({ variant }))}>
-          <div className={cn(badgeStyles({ variant }))}>
-            <p className={cn(badgeTextStyles({ variant }))}>{label}</p>
-          </div>
-          <div className="flex h-8 items-center justify-center px-1.5">
-            <p className="font-sans text-[28px] font-[510] leading-normal uppercase text-white-00 [font-feature-settings:'cv05'_on]">
-              {title}
-            </p>
-          </div>
+        {/* `detail` genuinely swaps the two children rather than using `flex-row-reverse`. The
+            visual result is the same in LTR, but reversing the row would flip the pair the wrong
+            way under `dir="rtl"` and would read out of order to a screen reader. */}
+        <div className="flex items-center">
+          {variant === "detail" ? (
+            <>
+              {plain}
+              {badge}
+            </>
+          ) : (
+            <>
+              {badge}
+              {plain}
+            </>
+          )}
         </div>
       </div>
     );

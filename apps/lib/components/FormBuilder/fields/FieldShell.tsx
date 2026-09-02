@@ -16,6 +16,7 @@ import { FormField, FormItem, FormControl } from "../../Form";
 import { FieldHint } from "../../FieldHint";
 import { Tooltip } from "../../Tooltip";
 import { useDirection, useStepRegistry, useBare } from "../context";
+import type { FieldHintSpec } from "../types";
 
 export interface FieldShellProps {
   name: string;
@@ -26,6 +27,8 @@ export interface FieldShellProps {
   hidden?: boolean;
   /** Force the field's layout direction, overriding the form's `useDirection()` context. */
   direction?: "horizontal" | "vertical" | "flexible";
+  /** Alerts stacked under the validation error. See `FieldHintSpec`. */
+  hints?: FieldHintSpec[];
   /** The input, wired to the react-hook-form field. */
   children: (
     field: ControllerRenderProps<FieldValues, string>,
@@ -47,6 +50,7 @@ export function FieldShell({
   fullWidth,
   hidden,
   direction: directionProp,
+  hints,
   children,
 }: FieldShellProps) {
   const form = useFormContext();
@@ -108,7 +112,7 @@ export function FieldShell({
       secondaryLabel={description}
       direction={direction}
       className={fullWidth ? "max-w-full" : undefined}
-      childrenUnderLabel={<FieldError message={fieldError} />}
+      childrenUnderLabel={<FieldMessages message={fieldError} hints={hints} />}
     >
       <FormField
         control={form.control}
@@ -125,10 +129,20 @@ export function FieldShell({
   );
 }
 
-/** Validation error, shown as a `FieldHint` alert (no tooltip); null when there's none. */
-function FieldError({ message }: { message?: string }) {
-  if (!message) return null;
-  return <FieldHint state="error" label={message} />;
+/**
+ * The stack under a field: the validation error first (it is the actionable one), then any author
+ * `hints` in order. Renders nothing when there is neither, so a field without hints is unchanged.
+ */
+function FieldMessages({ message, hints }: { message?: string; hints?: FieldHintSpec[] }) {
+  if (!message && !hints?.length) return null;
+  return (
+    <div className="flex flex-col items-start gap-[4px]">
+      {message && <FieldHint state="error" label={message} />}
+      {hints?.map((hint, i) => (
+        <FieldHint key={i} state={hint.state ?? "info"} label={hint.label} icon={hint.icon} />
+      ))}
+    </div>
+  );
 }
 
 /**

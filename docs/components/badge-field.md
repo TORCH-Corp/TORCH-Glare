@@ -335,7 +335,7 @@ export function BadgeFieldWithIcon() {
 
 ### With Error State
 
-Display validation errors with tooltip.
+Display validation errors. `errorMessage` turns on the field's negative border.
 
 ```tsx
 export function BadgeFieldWithError() {
@@ -467,9 +467,9 @@ Extends all Input element props (except size and variant).
 | size | `'XS' \| 'S' \| 'M'` | `'M'` | Field size |
 | variant | `'PresentationStyle'` | `'PresentationStyle'` | Visual variant |
 | icon | `ReactNode` | - | Leading icon |
-| errorMessage | `string` | - | Error message (shows tooltip) |
+| errorMessage | `string` | - | Marks the field invalid — any non-undefined value turns on the negative border |
 | onTable | `boolean` | `false` | Table-specific styling |
-| toolTipSide | `ToolTipSide` | - | Tooltip position |
+| toolTipSide | `ToolTipSide` | - | **Deprecated, ignored.** The error tooltip was removed; an invalid field is shown by its border alone |
 | label | `string` | - | Field label |
 | required | `boolean` | `false` | Required indicator |
 | theme | `Themes` | - | Theme override |
@@ -674,7 +674,7 @@ describe('BadgeField', () => {
 - **ARIA Labels**: Proper labels for screen readers
 - **Focus Management**: Clear focus indicators
 - **Screen Reader**: Announces selected/removed tags
-- **Error Messages**: Accessible error tooltips
+- **Error Messages**: Invalid fields are marked with the negative border token
 - **Tab Order**: Logical tab navigation
 
 ## Performance

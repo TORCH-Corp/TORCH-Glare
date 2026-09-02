@@ -31,13 +31,16 @@ const trackStyles = cva(
     "rounded-[10px]",
     "bg-background-presentation-body-primary",
     "shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)]",
+    // Contains the active pill's drop-shadow: it is clipped at the track's rounded edge instead
+    // of bleeding onto whatever sits behind the switcher.
+    "overflow-hidden",
   ],
   {
     variants: {
       size: {
-        S: ["gap-[2px] p-[2px]"],
-        M: ["gap-[2px] p-[2px]"],
-        L: ["gap-[3px] p-[3px]"],
+        S: ["p-[2px]"],
+        M: ["p-[2px]"],
+        L: ["p-[3px] rounded-[12px]"],
       },
     },
     defaultVariants: { size: "M" },
@@ -48,7 +51,7 @@ const trackStyles = cva(
 // transparent and lighten on hover.
 const optionStyles = cva(
   [
-    "flex items-center justify-center gap-[4px]",
+    "flex items-center justify-center",
     "rounded-[8px]",
     "font-[510] leading-none",
     "transition-all duration-200 ease-in-out",
@@ -61,7 +64,7 @@ const optionStyles = cva(
       size: {
         S: ["h-5 px-2 text-[12px]", "[&_svg]:h-3 [&_svg]:w-3", "[&_i]:text-[12px]"],
         M: ["h-6 px-3 text-[14px]", "[&_svg]:h-[14px] [&_svg]:w-[14px]", "[&_i]:text-[14px]"],
-        L: ["h-8 px-4 text-[16px]", "[&_svg]:h-4 [&_svg]:w-4", "[&_i]:text-[16px]"],
+        L: ["h-8 px-4 text-[16px] rounded-[10px]", "[&_svg]:h-4 [&_svg]:w-4", "[&_i]:text-[16px]"],
       },
       active: {
         // Active option = a solid raised WHITE pill with dark text, in every
@@ -78,6 +81,8 @@ const optionStyles = cva(
           // keeps both states the same width — without it, selecting a tab resizes the pill and
           // shoves its neighbours. The design's own 4px gap absorbs the 1px.
           "border border-black/5",
+          // The pill casts outward to look raised; the track clips it (`overflow-hidden` on
+          // `trackStyles`) so the shadow never spills past the container.
           "drop-shadow-[0px_0px_5px_rgba(0,0,0,0.25)]",
         ],
         false: [
@@ -116,22 +121,23 @@ function TabSwitchInner<T extends string = string>(
     >
       {options.map((option, idx) => {
         const active = option.value === value;
-        const prevActive = idx > 0 && options[idx - 1].value === value;
-        // A divider sits between two inactive options only — the active pill is
-        // never flanked by one.
-        const showDivider = idx > 0 && !active && !prevActive;
         const isDisabled = disabled || option.disabled;
+        // A divider is drawn only between two INACTIVE options — the raised pill is never flanked
+        // by a rule, so the two dividers touching it fade out.
+        const prevActive = idx > 0 && options[idx - 1].value === value;
+        const showDivider = idx > 0 && !active && !prevActive;
 
         return (
           <div key={option.value} className="flex items-center">
             {idx > 0 && (
               <div
                 aria-hidden
+                // The slot is ALWAYS rendered and only its ink changes. Unmounting it instead cost
+                // the track 7px (`w-px` + `mx-[3px]`) every time one went away, so picking a tab
+                // resized the track and shoved its neighbours — with three options, selecting the
+                // middle one dropped both dividers and moved the track 14px.
                 className={cn(
-                  // The slot is always here, and only its ink changes. Unmounting it instead cost
-                  // the track 7px every time the rule below hid one, so picking a tab resized the
-                  // track and shoved its neighbours sideways.
-                  "mx-[3px] h-3 w-px",
+                  "h-3 w-px",
                   showDivider ? "bg-border-presentation-action-disabled" : "bg-transparent",
                 )}
               />

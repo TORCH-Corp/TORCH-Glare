@@ -406,21 +406,13 @@ control at its neutral position emits no key at all, is under
 </DataViews.Filters>
 ```
 
-`Filters.Summary` paints whatever is active as removable chips. It reads the same context, so it
-works anywhere — most usefully **outside** the rail, where it tells the user what is filtering the
-rows they are looking at:
-
-```tsx
-<DataViews.Filters.Summary className="px-4 py-2" />
-```
-
 ### Questions this design gets asked
 
 | Question | Answer |
 | --- | --- |
 | Is there an in-view filter panel *and* a Filters tab — which is canonical? | **One surface.** `DataViews.Filters` is a single component. Render it inside a `Panel.Tab` or as a standalone bar; author against the component, not against a tab. |
 | What orders the sections? | **The order you write the children.** There is no `order` prop for filters. |
-| Does the applied-count badge count constrained *fields* or selected *values*? | **There is no count badge.** `PanelToggle` carries none. `Filters.Summary` is the equivalent, and it renders **one chip per constrained field** — Status with three values selected is one chip. |
+| Is there an applied-count badge or a chip summary of active filters? | **No.** `PanelToggle` carries no count, and there is no summary component — the controls themselves show what is set. Render your own above the rows if you want one. |
 | Do `BadgeField` chip colours and `FieldConfig.variants` share a token set? | **They never meet.** Chips come from the field's own `options`; `variants` (`BadgeVariant`) styles `enum-badge` **columns**. Filters and columns are independent. |
 
 And the behaviours worth stating because they are easy to assume wrongly:
@@ -770,14 +762,6 @@ A filter no FormBuilder field covers.
 | `path` | `string` | — | **yes** | The key it writes into `filters`. |
 | `render` | `(args: { value: FilterValue \| undefined; setValue: (v: FilterValue \| undefined) => void }) => ReactNode` | — | **yes** | |
 | `label` | `ReactNode` | derived from `path` | no | |
-
-### DataViews.Filters.Summary
-
-| Prop | Type | Default | Required | Notes |
-| --- | --- | --- | --- | --- |
-| `className` | `string` | — | no | |
-
-Active filters — and the search term — as removable chips. Renders `null` when there are none.
 
 ### Cell
 
