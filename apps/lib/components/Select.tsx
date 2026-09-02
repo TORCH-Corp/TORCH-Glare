@@ -16,12 +16,12 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> &
-    VariantProps<typeof PopoverTriggerStyles> & {
-      /** Marks the trigger invalid: any non-undefined value turns on the negative border. */
-      errors?: string;
-      icon?: string;
-      theme?: Themes;
-    }
+  VariantProps<typeof PopoverTriggerStyles> & {
+    /** Marks the trigger invalid: any non-undefined value turns on the negative border. */
+    errors?: string;
+    icon?: string;
+    theme?: Themes;
+  }
 >(
   (
     {
@@ -124,9 +124,9 @@ SelectScrollDownButton.displayName = "SelectScrollDownButton";
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> &
-    VariantProps<typeof SelectContentStyles> & {
-      theme?: Themes;
-    }
+  VariantProps<typeof SelectContentStyles> & {
+    theme?: Themes;
+  }
 >(
   (
     { className, children, variant = "PresentationStyle", position = "popper", theme, ...props },

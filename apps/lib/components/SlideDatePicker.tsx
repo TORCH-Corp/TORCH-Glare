@@ -161,11 +161,13 @@ export const SlideDatePicker = forwardRef<HTMLInputElement, SlideDatePickerProps
                 (children as React.ReactElement<HTMLInputElement>).props.value ?? formattedValue,
               type: "input",
               readOnly: true,
+              theme,
             })
           ) : (
             /* If the children is not a valid element, Show the default input */
             <InputField
               readOnly
+              theme={theme}
               type="input"
               {...props}
               childrenSide={

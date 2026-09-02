@@ -297,6 +297,8 @@ const popoverStyles = cva(
           // translucent: over the previous opaque `form-base` the backdrop-blur painted nothing.
           "bg-[rgba(61,64,69,0.72)]",
           "shadow-[0_0_32px_2px_rgba(0,0,0,0.20),0_0_48px_2px_rgba(0,0,0,0.05)]",
+          // Figma's group-container stacks its rows with a 4px gutter.
+          "flex flex-col gap-1",
         ],
       },
       overlayBlur: {
