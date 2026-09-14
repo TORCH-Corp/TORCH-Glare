@@ -125,7 +125,28 @@ function StepperNav({ control }: { control: Control<FieldValues> }) {
     // `min-w-0` so the rail can be squeezed: its grid track no longer grows to fit a long label
     // (see form-renderer.tsx), so the column has to be allowed to shrink and let the labels
     // truncate instead of spilling over the fields column.
-    <StepperRail activeStep={currentStep} orientation="vertical" className="min-w-0 shrink-0">
+    //
+    // The rail is navigation, so it stays put while the fields scroll past it. Two of these three
+    // classes are load-bearing in a way that is easy to get wrong:
+    //
+    // `self-start` is NOT optional. The rail is a grid item, and a grid item defaults to
+    // `align-self: stretch` — its box is already the full row height, so `sticky` alone has no room
+    // to move within and does exactly nothing. This is the silent-no-op version of this fix.
+    //
+    // `top-[72px]`, not `top-0`. `FormHeaderBar` is `absolute inset-x-0 top-0` over a 44px pill at a
+    // 4px inset, so it covers the scrollport's first 48px, and the body's own `pt-[72px]` is inside
+    // the scrollport and does not push sticky down. `top-0` parks the rail under the floating
+    // header; 72px clears it and matches the offset used across this component family.
+    //
+    // No height cap: the scrollport is the form body, not the viewport, so a `100dvh`-based
+    // `max-h` would be wrong in any bounded container (a drawer, the 640px docs frame). A rail
+    // taller than the body simply scrolls until its end is reached, which is standard sticky
+    // behaviour and correct here.
+    <StepperRail
+      activeStep={currentStep}
+      orientation="vertical"
+      className="min-w-0 shrink-0 sticky self-start top-[72px]"
+    >
       {titles.map((title, index) => {
         // The step buttons ARE the navigation: click to move. Backward is free;
         // clicking forward validates the steps in between (goToStep) and stops at
@@ -272,11 +293,38 @@ type TriggerFn = (names?: FieldPath<FieldValues>[]) => Promise<boolean>;
  * the form's `trigger` (passed in — no `useFormContext` needed). Inert when
  * `steps` is empty (a form without a stepper still calls this, for hooks order).
  */
+/**
+ * LOCAL PATCH (Contact Center): optional external control of the active step.
+ *
+ * Upstream owns `currentStep` outright and advances it by clicking a step, gated on validating
+ * every step in between. That is right for a wizard whose steps are pages of one form — but not
+ * for one whose steps are owned by a SERVER: the import wizard goes upload → (job created) →
+ * mapping → (columns mapped, import started) → progress, and the user cannot click ahead to a
+ * step that does not exist yet.
+ *
+ * Passing `activeStep`/`onStepChange` makes the rail a display of someone else's state: internal
+ * advancement is suppressed and click-to-navigate is reported rather than applied. Omit both and
+ * every existing caller behaves exactly as before.
+ */
+export interface StepperControl {
+  activeStep?: number;
+  onStepChange?: (index: number) => void;
+}
+
 export function useStepperState(
   steps: React.ReactElement<StepProps>[],
   trigger: TriggerFn,
+  control?: StepperControl,
 ): StepperContextValue {
-  const [currentStep, setCurrentStep] = React.useState(0);
+  const [internalStep, setInternalStep] = React.useState(0);
+  // LOCAL PATCH (Contact Center): controlled when `activeStep` is supplied — see `StepperControl`.
+  const isControlled = control?.activeStep !== undefined;
+  const currentStep = isControlled ? (control?.activeStep as number) : internalStep;
+  const setCurrentStep: React.Dispatch<React.SetStateAction<number>> = (value) => {
+    const next = typeof value === "function" ? (value as (p: number) => number)(currentStep) : value;
+    if (isControlled) control?.onStepChange?.(next);
+    else setInternalStep(next);
+  };
   // Steps that have passed their last validation — kept so their checkmark persists when the
   // user navigates back to an earlier step.
   const [completedSteps, setCompletedSteps] = React.useState<Set<number>>(new Set());
@@ -305,6 +353,12 @@ export function useStepperState(
   // the first step that has errors (so you can't skip past an invalid step).
   const goToStep = async (index: number) => {
     const target = Math.max(0, Math.min(index, Math.max(0, lastIndex)));
+    // LOCAL PATCH (Contact Center): controlled — the owner decides whether the move is allowed,
+    // so report it and do not run the forward-validation gauntlet.
+    if (isControlled) {
+      control?.onStepChange?.(target);
+      return;
+    }
     if (target <= currentStep) {
       setCurrentStep(target);
       return;

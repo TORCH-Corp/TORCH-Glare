@@ -380,6 +380,12 @@ The layout has three stacked parts, and the order matters. Only the **scroller**
 horizontally; the header actions above it and the end-action below it stay put, which is
 what keeps `Add New` reachable on a wide table.
 
+The section body is itself the horizontal scrollport, so a table wider than the card scrolls
+**inside** it rather than being clipped or widening the page. One consequence worth knowing: a
+scrollport is the containing block for `position: sticky`, so a `Table`'s sticky header inside a
+section now resolves against a box that never scrolls vertically — i.e. it stops sticking. If you
+need a sticky header, give the table its own vertical scroller.
+
 ```tsx
 import { SectionBlock } from "@/components/SectionBlock";
 import { Button } from "@/components/Button";

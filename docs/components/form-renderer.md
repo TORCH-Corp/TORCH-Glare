@@ -58,6 +58,7 @@ It renders in the form's header action pill (page) or the drawer header (drawer)
 | `FormRenderer.Back` / `.Next`               | Chevron step controls. The header's action bar prepends them for you.           |
 | `FormRenderer.Sidebar` / `.Tab`             | The display-only [detail-tabs](#detail-tabs-sidebar) view.                     |
 | `FormRenderer.Grid` / `.Row`                | Read-only display cells inside a detail tab.                                    |
+| `FormRenderer.NotchAction`                  | A pill in the drawer's notch. You own the label, so it translates.              |
 
 ### `FormRenderer.Section`
 
@@ -109,6 +110,10 @@ import { FormBuilder } from "@/components/FormBuilder";
 | `actions`                                                      | `ReactNode`                   | The form's action bar — rendered in the header action pill (page) or drawer header (drawer). Put the Save here: `actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}`. A bare `FormBuilder.Submit` auto-targets this form.                                                   |
 | `id`                                                           | `string`                      | `id` on the underlying `<form>`. Optional — FormRenderer generates and wires one otherwise.                                                                                                                                                                                      |
 | `open` / `onOpenChange` / `title` / `badge` / `onOpenInNewTab` | —                             | Drawer control (when `display="drawer"`). `title` / `badge` are strings that override `header.title` / `header.label`.                                                                                                                                                           |
+| `embedded`                                                     | `boolean`                     | Render without the rounded body card, for a host that already draws one. Defaults to `true` in a drawer.                                                                                                                                                                          |
+| `activeTab` / `onTabChange`                                    | `string` / `(tab) => void`    | Make the [detail-tabs](#detail-tabs-sidebar) rail controlled, so the tab can live in the URL (`?tab=audit`) and survive a reload. Omit both for the uncontrolled default. Inert in form mode.                                                                                     |
+| `activeStep` / `onStepChange`                                  | `number` / `(index) => void`  | External control of a `FormRenderer.Stepper`'s step, for a wizard owned by something other than form validity. In controlled mode internal advancement is suppressed and a click is *reported*, not applied. Omit both and the stepper behaves exactly as before.                  |
+| `drawer`                                                       | `{ side?; nested?; framed?; hideHeader?; bareBody?; description?; wrapperClassName?; className? }` | Drawer layout, forwarded to `FormDrawer` — see [Drawer layout](#drawer-layout). One object rather than eight flat props, since none of it means anything on a page.                                                |
 
 ## Drawer
 
@@ -129,6 +134,60 @@ import { FormBuilder } from "@/components/FormBuilder";
 </FormRenderer>
 ```
 
+### Drawer layout
+
+Everything about how the drawer is *shaped* goes in one `drawer` object, because none of it means
+anything on a page:
+
+| Key               | Type                          | Default         | What it does                                                                                       |
+| ----------------- | ----------------------------- | --------------- | -------------------------------------------------------------------------------------------------- |
+| `side`            | `'inline-end' \| 'bottom'`    | `'inline-end'`  | Which edge it slides from. `'bottom'` is a sheet and drops the notch — there is no inline edge to hang it from. The default follows document direction. |
+| `nested`          | `boolean`                     | `false`         | **Required** when this drawer opens inside another one, or the two roots fight over the overlay and the scroll lock. Throws without a parent Drawer. |
+| `framed`          | `boolean`                     | `true`          | The dark tray frame and the panel's border / inset shadow.                                          |
+| `hideHeader`      | `boolean`                     | `false`         | Skip the header bar, for a child that draws its own. Also drops the body's top padding.             |
+| `bareBody`        | `boolean`                     | `false`         | Skip the padded scroll wrapper, for a child that already scrolls and offsets for its own header.    |
+| `description`     | `string`                      | —               | Screen-reader-only description. vaul warns when a drawer has none.                                  |
+| `wrapperClassName`| `string`                      | per `side`      | Lands on the positioner — width, height, insets. Replaces the default sizing.                       |
+| `className`       | `string`                      | —               | Lands on the tray.                                                                                  |
+
+```tsx
+// A bottom sheet, opened from inside another drawer.
+<FormRenderer
+  display="drawer"
+  open={open}
+  onOpenChange={setOpen}
+  title="Quick add"
+  drawer={{ side: "bottom", nested: true, description: "Add a line item" }}
+  onSubmit={save}
+  actions={<FormBuilder.Submit>Save</FormBuilder.Submit>}
+>
+  {fields}
+</FormRenderer>
+```
+
+### `FormRenderer.NotchAction`
+
+Buttons in the drawer's notch, authored by you. `onOpenInNewTab` still works, but it hardcodes an
+English label and allows only one action — write `NotchAction` children instead and you own both.
+They render nothing where you write them; the renderer lifts them into the notch.
+
+```tsx
+<FormRenderer display="drawer" open={open} onOpenChange={setOpen} title={t("invoice")}>
+  <FormRenderer.NotchAction onClick={openFullPage}>
+    {t("openInNewTab")}
+    <i className="ri-arrow-right-up-line text-[12px]" />
+  </FormRenderer.NotchAction>
+  <FormRenderer.NotchAction color="Blue" onClick={print}>
+    {t("print")}
+  </FormRenderer.NotchAction>
+
+  {fields}
+</FormRenderer>
+```
+
+`color` matches `DrawerNotchPill` and defaults to `"Yellow"`. Ignored on a page-display form, and a
+`side: "bottom"` sheet has no notch to put them in.
+
 ## Stepper
 
 Drop a `FormRenderer.Stepper` in as the child. The Save lives in the header `actions` and
@@ -139,6 +198,10 @@ your Submit, so the action bar reads `[◀] [▶] │ Save`. Back is disabled on
 validates the current step, then advances (disabled on the last step). A step that passes
 validation **stays checked** in the rail — even after you navigate back — while a live validation
 error overrides it to red. You still pass just the Submit; the nav is wired for you:
+
+The rail **stays put while the fields scroll**. It is navigation, so it pins below the header rather
+than scrolling out of view with the form; a rail taller than the form body scrolls to its end first,
+as any sticky element does.
 
 ```tsx
 <FormRenderer
@@ -266,7 +329,14 @@ outside the `<form>`, wire the Save button to the form via `id` / `form={id}`:
 ```
 
 `FormDrawer` props: `open`, `onOpenChange`, `title`, `badge`, `variant`, `actions`,
-`onOpenInNewTab`, `children`, `summary`. It owns no form state.
+`onOpenInNewTab`, `notchActions`, `children`, `summary`, plus the layout flags listed under
+[Drawer layout](#drawer-layout) — `side`, `nested`, `framed`, `hideHeader`, `bareBody`,
+`description`, `wrapperClassName`, `className`. It owns no form state.
+
+`notchActions` is the notch's button slot. Going through `FormRenderer` you rarely set it directly —
+write `FormRenderer.NotchAction` children and they are lifted into it for you. Using `FormDrawer` on
+its own, pass the buttons here. When both `notchActions` and `onOpenInNewTab` are given, the former
+wins; `onOpenInNewTab` remains only for callers happy with its built-in English label.
 
 ### The title
 

@@ -6,6 +6,7 @@ import type {
   Resolver,
   UseFormReturn,
 } from "react-hook-form";
+import type { FormDrawerProps } from "./FormDrawer";
 
 /**
  * FormRenderer — the chrome around a `FormBuilder`. You author the fields as **JSX children**
@@ -66,6 +67,42 @@ export interface FormRendererProps<T extends FieldValues = FieldValues> {
   actions?: ReactNode;
   /** `id` on the underlying `<form>`. Optional — FormRenderer generates and wires one otherwise. */
   id?: string;
+
+  /**
+   * LOCAL PATCH (Contact Center): detail-tabs control (when the children are a
+   * `FormRenderer.Sidebar` + `FormRenderer.Tab`s). Inert in form mode.
+   *
+   * `activeTab`/`onTabChange` make the rail controlled, so the caller can keep the tab in the URL
+   * (`useTabPersistence` → `?tab=`); omit both for the library's uncontrolled default.
+   * `embedded` renders without the rounded body card, for a host that already draws one.
+   */
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
+  embedded?: boolean;
+
+  /**
+   * LOCAL PATCH (Contact Center): external control of a `FormRenderer.Stepper`'s active step,
+   * for a wizard whose steps are owned by something other than form validity — a server job,
+   * say. Omit both and the stepper owns its own step exactly as before. Inert without a Stepper.
+   */
+  activeStep?: number;
+  onStepChange?: (index: number) => void;
+
+  /**
+   * LOCAL PATCH (Contact Center): drawer layout, forwarded to `FormDrawer`. One object rather
+   * than eight flat props, since none of it means anything on a page. See `FormDrawerProps`.
+   */
+  drawer?: Pick<
+    FormDrawerProps,
+    | "side"
+    | "nested"
+    | "framed"
+    | "hideHeader"
+    | "bareBody"
+    | "description"
+    | "wrapperClassName"
+    | "className"
+  >;
 
   /** Drawer control (when `display === "drawer"`). */
   open?: boolean;

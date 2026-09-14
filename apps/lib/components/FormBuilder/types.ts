@@ -101,6 +101,11 @@ export interface SearchableSelectFieldProps extends SelectFieldProps {
 /** `FormBuilder.MultiSelect` / `.Tags`, `.Radio`. */
 export interface OptionsFieldProps extends BaseFieldProps {
   options: OptionItem[];
+  /**
+   * LOCAL PATCH (Contact Center): `MultiSelect`/`Tags` only — let the user type a value that is
+   * not in `options` and have it become a badge. Pass `options={[]}` for a pure free-text list.
+   */
+  creatable?: boolean;
 }
 
 /** `FormBuilder.Currency`. */

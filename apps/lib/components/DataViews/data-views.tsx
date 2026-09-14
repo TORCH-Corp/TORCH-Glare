@@ -19,7 +19,9 @@ import {
   type RegisteredView,
 } from "./context";
 import { Actions, Header, PanelToggle, Search, ViewSwitch } from "./header";
+import { Empty } from "./states";
 import {
+  isEmptyElement,
   isHeaderElement,
   isPanelElement,
   isViewElement,
@@ -103,9 +105,13 @@ function DataViewsRoot({
   const panelEl = childArray.find(isPanelElement);
   // Anything the root does not position itself — a `Filters` bar, a toolbar of your own — sits
   // between the header and the views, in the order you wrote it.
+  // LOCAL PATCH (Contact Center): the empty slot. It must be excluded from `extras` too --
+  // `extras` is the negative-space bucket, so without this the element would render twice:
+  // once above the view and once as the body.
+  const emptyEl = childArray.find(isEmptyElement);
   const extras = childArray.filter(
     (n) =>
-      !isViewElement(n) && !isHeaderElement(n) && !isPanelElement(n),
+      !isViewElement(n) && !isHeaderElement(n) && !isPanelElement(n) && !isEmptyElement(n),
   );
 
   // `viewElements` is a fresh array on every render, so memoising on its identity would never
@@ -279,10 +285,15 @@ function DataViewsRoot({
     [currentQuery.filters, setFilters, filterFields],
   );
 
-  // The active view is always what renders. Nothing to show is shown as nothing — the view keeps
-  // its chrome and paints no rows — and `loading` is answered by the view's own skeleton, so the
-  // layout never swaps out from under the user.
-  const body = activeElement;
+  // The active view is what renders, unless a `DataViews.Empty` was supplied and the query has
+  // SETTLED on nothing — then the caller's empty state takes the view's place entirely.
+  //
+  // LOCAL PATCH (Contact Center). `!loading` is the whole reason this is safe: rows are empty
+  // while the first page is still in flight, so without it the empty state would replace the
+  // view's skeleton and announce "nothing matched" before anything had been asked for — the
+  // exact failure that made upstream ship no `Empty` at all (see `states.tsx`). Loading is still
+  // answered by the view's own skeleton; only a settled empty result swaps the body.
+  const body = emptyEl && !loading && rows.length === 0 ? emptyEl : activeElement;
 
   return (
     <DataContext.Provider value={dataValue}>
@@ -379,5 +390,6 @@ export const DataViews = Object.assign(DataViewsRoot, {
   Tree: TreeView,
   Detail,
   // states
+  Empty,
   // paging
 });

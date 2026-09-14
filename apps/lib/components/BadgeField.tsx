@@ -37,6 +37,15 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "va
   tags: Tag[];
   onValueChange?: (tags: Tag[]) => void;
   addLabel?: string;
+  /**
+   * LOCAL PATCH (Contact Center): let the user TYPE a value and have it become a selected badge,
+   * rather than only picking from `tags`. Enter or comma commits what is in the box; Backspace on
+   * an empty box removes the last badge. This is what makes a free-text list (emails, aliases,
+   * tags) expressible as a badge field instead of a one-column table.
+   */
+  creatable?: boolean;
+  /** Label for the "create this text" row. Receives the typed text. */
+  createLabel?: (value: string) => string;
 }
 
 export const BadgeField = forwardRef<HTMLInputElement, Props>(
@@ -57,6 +66,8 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
     theme,
     tags,
     addLabel = "add",
+    creatable = false,
+    createLabel = (value: string) => `Create "${value}"`,
     dir,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread
     children,
@@ -81,6 +92,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       selectedTagsStack,
       handleSelectTag,
       handleUnselectTag,
+      handleCreateTag,
       handleKeyDown,
       setFocusedTagIndex,
       filterTagsBySearch,
@@ -92,6 +104,7 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       searchTags,
     } = useTagSelection({
       Tags: tags,
+      creatable,
       onTagsChange: (e) => {
         // Native onChange keeps the event-shaped API (Tag[] in target.value)
         // for react-hook-form / Controller; onValueChange is the typed, direct
@@ -105,6 +118,14 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
       },
       inputRef,
     });
+
+    // LOCAL PATCH (Contact Center): offer the typed text as a new badge, unless it already exists
+    // (selected or listed) — in which case the normal rows already cover it.
+    const typedValue = searchTags.trim();
+    const alreadyExists = [...selectedTagsStack, ...filteredTags].some(
+      (tag) => tag.name.toLowerCase() === typedValue.toLowerCase(),
+    );
+    const showCreateRow = creatable && typedValue !== "" && !alreadyExists;
 
     return (
       <Popover open={isPopoverOpen}>
@@ -152,6 +173,26 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
               onChange={(e) => {
                 filterTagsBySearch(e.target.value);
               }}
+              // LOCAL PATCH (Contact Center): commit typed text as a badge. Handled here rather
+              // than in the Group's `handleKeyDown` because that one only ever navigates the
+              // existing list — and because `preventDefault` on Enter has to stop the surrounding
+              // `<form>` submitting before the badge is added.
+              onKeyDown={(e) => {
+                if (!creatable) return;
+                if (e.key === "Enter" || e.key === ",") {
+                  // Let Enter pick the highlighted row when the user is arrowing the list.
+                  if (e.key === "Enter" && focusedPopoverIndex !== null) return;
+                  if (!searchTags.trim()) return;
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleCreateTag(searchTags);
+                  return;
+                }
+                if (e.key === "Backspace" && searchTags === "" && selectedTagsStack.length > 0) {
+                  e.preventDefault();
+                  handleUnselectTag(selectedTagsStack[selectedTagsStack.length - 1].id);
+                }
+              }}
               onFocus={(e) => {
                 props.onFocus?.(e);
                 setFocusedTagIndex(null);
@@ -191,6 +232,22 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
           // Reuse the DropdownMenu surface so the list matches the menu design.
         >
           <div className={cn(menuContentStyles({ variant: "PresentationStyle" }), "p-0")}>
+            {/* LOCAL PATCH (Contact Center): the create-from-typed-text row. */}
+            {showCreateRow && (
+              <button
+                type="button"
+                onClick={() => handleCreateTag(searchTags)}
+                className={cn(
+                  MenuItemStyles({ variant: "Default", size: "M" }),
+                  "w-full p-1 shrink-0 h-fit",
+                )}
+              >
+                <div className="flex items-center gap-1 w-full">
+                  <i className="ri-add-line text-[14px]" />
+                  <span className="truncate">{createLabel(typedValue)}</span>
+                </div>
+              </button>
+            )}
             {filteredTags.length > 0 ? (
               filteredTags.map((tag, index) => (
                 <button
@@ -234,9 +291,17 @@ export const BadgeField = forwardRef<HTMLInputElement, Props>(
                 </button>
               ))
             ) : (
-              <div className="px-3 py-2 typography-body-small-regular text-white-alpha-75">
-                {tags.length === 0 ? "All tags selected" : "No matching tags found"}
-              </div>
+              // The create row already tells the user what will happen, so don't also say
+              // "no matching tags found" underneath it.
+              !showCreateRow && (
+                <div className="px-3 py-2 typography-body-small-regular text-white-alpha-75">
+                  {creatable
+                    ? "Type a value and press Enter"
+                    : tags.length === 0
+                      ? "All tags selected"
+                      : "No matching tags found"}
+                </div>
+              )
             )}{" "}
           </div>
         </PopoverContent>

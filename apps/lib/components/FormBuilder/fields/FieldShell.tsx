@@ -14,8 +14,7 @@ import {
 import { FieldSection } from "../../../layouts/FieldSection";
 import { FormField, FormItem, FormControl } from "../../Form";
 import { FieldHint } from "../../FieldHint";
-import { Tooltip } from "../../Tooltip";
-import { useDirection, useStepRegistry, useBare } from "../context";
+import { useDirection, useStepRegistry, useBare, useRequiredLabel } from "../context";
 import type { FieldHintSpec } from "../types";
 
 export interface FieldShellProps {
@@ -56,6 +55,8 @@ export function FieldShell({
   const form = useFormContext();
   const bare = useBare();
   const ctxDirection = useDirection();
+  // LOCAL PATCH (Contact Center): upstream hardcodes "(Required)". See context.ts.
+  const requiredLabel = useRequiredLabel();
   // A field may pin its own direction (e.g. RichText forces vertical), else the form's. When
   // neither is set this stays `undefined` — FieldSection then falls back to its responsive
   // `flexible` layout rather than a fixed two-column one.
@@ -79,9 +80,20 @@ export function FieldShell({
   if (hidden) return null;
 
   // Chrome-less mode — a `FormBuilder.Table` cell (`"table"`) or a panel field (`"bare"`).
-  // Render just the control: no FieldSection label/row, and errors surface as a tooltip on the
-  // control rather than a stacked FieldHint, so a row stays one line tall. Step registration
-  // above still applies. The control's border treatment is the caller's call, via `useOnTable`.
+  // Render just the control: no FieldSection label/row, so a row stays one line tall. Step
+  // registration above still applies. The control's border treatment is the caller's call,
+  // via `useOnTable`.
+  //
+  // LOCAL PATCH (Contact Center): the error Tooltip that used to wrap the control is gone.
+  // Upstream bound it to `open={Boolean(fieldError)}`, so it was not a hover tooltip at all — it
+  // was a bubble pinned open for as long as the field was invalid, anchored `top`, which in a
+  // table's first row sat directly on top of the column header. Several invalid cells meant
+  // several permanent bubbles over the header row. Its `TooltipTrigger` also stamped
+  // `aria-label="Open tooltip"` onto EVERY cell wrapper, error or not, so a screen reader
+  // announced every table input that way.
+  //
+  // The controls already signal invalidity themselves (`state="negative"` / `invalid`), so the
+  // red border remains; only the bubble is dropped. Re-apply after any `npx torch-glare update`.
   if (bare) {
     return (
       <FormField
@@ -90,14 +102,7 @@ export function FieldShell({
         render={({ field, fieldState }) => (
           <FormItem className="w-full">
             <FormControl>
-              <Tooltip
-                open={Boolean(fieldError)}
-                text={fieldError ?? ""}
-                toolTipSide="top"
-                variant="highlight"
-              >
-                <div className="w-full">{children(field, fieldState)}</div>
-              </Tooltip>
+              <div className="w-full">{children(field, fieldState)}</div>
             </FormControl>
           </FormItem>
         )}
@@ -108,7 +113,7 @@ export function FieldShell({
   return (
     <FieldSection
       label={label}
-      requiredLabel={required ? "(Required)" : undefined}
+      requiredLabel={required ? requiredLabel : undefined}
       secondaryLabel={description}
       direction={direction}
       className={fullWidth ? "max-w-full" : undefined}

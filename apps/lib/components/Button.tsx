@@ -60,7 +60,11 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             {},
             <div
               className={cn(
-                "flex items-center justify-center [&>:is(i,svg):first-child]:mr-[3px] [&>:is(i,svg):last-child]:ml-[3px] [&>:is(i,svg):only-child]:m-0 [&:has(>:is(i,svg):last-child):not(:has(>:is(i,svg):first-child))]:pl-[6px] [&:has(>:is(i,svg):first-child):not(:has(>:is(i,svg):last-child))]:pr-[6px]",
+                // LOCAL PATCH (Contact Center): logical, not physical. These were `mr`/`ml`/`pl`/`pr`,
+              // so under `dir="rtl"` a leading icon rendered on the right but kept its gap on
+              // its OUTER side — colliding with the label and drifting off the button edge.
+              // `me`/`ms`/`ps`/`pe` compile to the same values in LTR, so English is unchanged.
+              "flex items-center justify-center [&>:is(i,svg):first-child]:me-[3px] [&>:is(i,svg):last-child]:ms-[3px] [&>:is(i,svg):only-child]:m-0 [&:has(>:is(i,svg):last-child):not(:has(>:is(i,svg):first-child))]:ps-[6px] [&:has(>:is(i,svg):first-child):not(:has(>:is(i,svg):last-child))]:pe-[6px]",
                 containerClassName,
               )}
             >
@@ -71,7 +75,11 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         ) : (
           <div
             className={cn(
-              "flex items-center justify-center [&>:is(i,svg):first-child]:mr-[3px] [&>:is(i,svg):last-child]:ml-[3px] [&>:is(i,svg):only-child]:m-0 [&:has(>:is(i,svg):last-child):not(:has(>:is(i,svg):first-child))]:pl-[6px] [&:has(>:is(i,svg):first-child):not(:has(>:is(i,svg):last-child))]:pr-[6px]",
+              // LOCAL PATCH (Contact Center): logical, not physical. These were `mr`/`ml`/`pl`/`pr`,
+              // so under `dir="rtl"` a leading icon rendered on the right but kept its gap on
+              // its OUTER side — colliding with the label and drifting off the button edge.
+              // `me`/`ms`/`ps`/`pe` compile to the same values in LTR, so English is unchanged.
+              "flex items-center justify-center [&>:is(i,svg):first-child]:me-[3px] [&>:is(i,svg):last-child]:ms-[3px] [&>:is(i,svg):only-child]:m-0 [&:has(>:is(i,svg):last-child):not(:has(>:is(i,svg):first-child))]:ps-[6px] [&:has(>:is(i,svg):first-child):not(:has(>:is(i,svg):last-child))]:pe-[6px]",
               containerClassName,
             )}
           >

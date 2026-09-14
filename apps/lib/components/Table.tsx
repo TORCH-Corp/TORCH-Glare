@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
 import { useResize } from "../hooks/useResize";
+import { horizontalScrollerStyles } from "../utils/scroller";
 
 type TableHeadVariantsProps = VariantProps<typeof tableHeadVariants>;
 
@@ -18,18 +19,20 @@ const Table = React.forwardRef<
   <table
     data-theme={theme}
     ref={ref}
-    // `overflow-hidden` is the default, and it is load-bearing twice over: the table is `w-auto`,
-    // so one wider than its container would otherwise push the whole page wide and put a horizontal
-    // scrollbar on the layout; and callers that give the table a radius rely on it to clip the
-    // square header band out of the rounded corners.
+    // `overflow-visible` is the default, so the table does NOT clip or scroll itself. That is what
+    // lets `TableHeader`'s `sticky` reach past the table to the nearest real scrollport and
+    // actually pin — which is the whole point of it being sticky.
     //
-    // The cost is that it makes the table its own scroll container, and `TableHeader`'s `sticky`
-    // resolves against the *nearest* scrollport — so inside a clipping table the header pins to a
-    // box that never scrolls, i.e. does nothing. That is the right default: a header only benefits
-    // from sticking when the table sits in a scroller, and such a caller passes `overflow-visible`
-    // (tailwind-merge lets theirs win) to bind it to that scroller instead. Only do that where the
-    // scroller is `min-w-0`, or the width problem above comes back — `DataViews`' table view is the
-    // worked example.
+    // The consequence is that the table is `w-auto` and unclipped, so **a wider-than-its-container
+    // table is the container's problem**. Every table therefore needs a scrolling ancestor, or it
+    // pushes its container — and eventually the page — wide. Two provide one:
+    //   • `TableScroller` (below), wrapping the table directly. `FormBuilder.Table` uses it.
+    //   • `SectionBlock`'s body, which is `overflow-x-auto` — so a bare `<Table>` dropped into any
+    //     section card scrolls inside the card. That covers the app's detail tabs.
+    // `DataViews`' table view supplies its own `min-w-0 overflow-auto` scroller instead.
+    //
+    // A caller that wants the old self-clipping behaviour passes `overflow-hidden`
+    // (tailwind-merge lets theirs win) and gives up the sticky header in exchange.
     //
     // `[border-collapse:separate]` is what lets the header cells keep their borders while stuck.
     className={cn("overflow-visible w-auto [border-collapse:separate] border-spacing-0", className)}
@@ -388,23 +391,7 @@ TableEndAction.displayName = "TableEndAction";
  */
 const TableScroller = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "w-full overflow-x-auto overflow-y-hidden",
-        "[&::-webkit-scrollbar]:h-[14px]",
-        "[&::-webkit-scrollbar-track]:bg-transparent",
-        "[&::-webkit-scrollbar-thumb]:rounded-[7px]",
-        "[&::-webkit-scrollbar-thumb]:border-[5px] [&::-webkit-scrollbar-thumb]:border-solid",
-        "[&::-webkit-scrollbar-thumb]:border-transparent",
-        "[&::-webkit-scrollbar-thumb]:bg-clip-content",
-        "[&::-webkit-scrollbar-thumb]:bg-background-presentation-body-scroller-default",
-        "[&::-webkit-scrollbar-thumb:hover]:border-[3px]",
-        "[&::-webkit-scrollbar-thumb:hover]:bg-background-presentation-body-scroller-hover",
-        className,
-      )}
-      {...props}
-    >
+    <div ref={ref} className={cn("w-full", horizontalScrollerStyles, className)} {...props}>
       {children}
     </div>
   ),

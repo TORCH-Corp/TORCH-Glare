@@ -1,9 +1,13 @@
 import { forwardRef, HTMLAttributes, ReactNode } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/cn";
+import { horizontalScrollerStyles } from "../utils/scroller";
 
+// LOCAL PATCH (Contact Center): the pill's side padding is asymmetric (16 leading / 22 trailing),
+// so it must be logical — `ps`/`pe` rather than `pl`/`pr`. This pill heads every section card, so
+// mirrored the wrong way it reads as a systematic misalignment across the whole page.
 const titleBadge = cva(
-  "flex pt-2 pb-2 pl-[16px] pr-[22px] justify-center items-center gap-[6px] rounded-[10px] self-start typography-headers-medium-medium text-[#F4F4F4]",
+  "flex pt-2 pb-2 ps-[16px] pe-[22px] justify-center items-center gap-[6px] rounded-[10px] self-start typography-headers-medium-medium text-[#F4F4F4]",
   {
     variants: {
       color: {
@@ -56,12 +60,29 @@ const header = cva("flex px-[6px] justify-between gap-3", {
   defaultVariants: { variant: "Default" },
 });
 
-const body = cva("flex w-full flex-col", {
+// LOCAL PATCH (Contact Center): the body is the section's horizontal scrollport.
+//
+// `Table` renders `overflow-visible w-auto` (so its sticky header can reach a real scrollport), so
+// a table wider than its card does not clip or scroll itself — it widens the card, and then the
+// page. Only one call site in the app wraps its table in `TableScroller`; the rest drop a bare
+// `<Table>` straight into a section. Owning the scroll here contains all of them at once, and
+// replaces the `Table` variant's old `overflow-hidden`, which truncated instead of scrolling.
+//
+// `overflow-y-hidden` is required, not decorative: CSS computes `overflow-y: visible` to `auto`
+// whenever `overflow-x` is not `visible`, so without it every section grows a spurious vertical
+// scrollbar. The body is content-height, so nothing is clipped vertically. Same reasoning, and the
+// same scrollbar styling, as `TableScroller`.
+//
+// The cost: a scrollport is the containing block for `position: sticky`, so a `<Table>`'s sticky
+// header inside a section now pins to a box that never scrolls vertically — i.e. it stops
+// sticking. Sections hold short tables, and in `variant="Table"` those headers were already inert
+// under the old `overflow-hidden`.
+const body = cva(`flex w-full flex-col ${horizontalScrollerStyles}`, {
   variants: {
     variant: {
       Default: "px-[42px] gap-[2px]",
       // Full bleed, with the rule that separates the header from the table.
-      Table: "mt-[6px] border-t border-border-presentation-global-primary overflow-hidden",
+      Table: "mt-[6px] border-t border-border-presentation-global-primary",
     },
   },
   defaultVariants: { variant: "Default" },

@@ -59,5 +59,14 @@ export const isHeaderElement = (n: React.ReactNode) => isMarked(n, "__dvHeader")
 export const markPanel = <P extends object>(c: React.ComponentType<P>) => mark(c, "__dvPanel");
 export const isPanelElement = (n: React.ReactNode) => isMarked(n, "__dvPanel");
 
+/**
+ * LOCAL PATCH (Contact Center): the empty slot — what renders *in place of* the view when a
+ * settled query returns no rows. Without a marker the caller's empty state is just an "extra"
+ * and stacks ABOVE the view, so an empty list shows the message on top of an empty table.
+ * See `states.tsx` for why this does not reintroduce the bug upstream avoided.
+ */
+export const markEmpty = <P extends object>(c: React.ComponentType<P>) => mark(c, "__dvEmpty");
+export const isEmptyElement = (n: React.ReactNode) => isMarked(n, "__dvEmpty");
+
 
 

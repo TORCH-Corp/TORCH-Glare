@@ -702,3 +702,25 @@ These utilities depend on the following external libraries:
 - [Tailwind CSS Documentation](https://tailwindcss.com)
 - [date-fns Format Reference](https://date-fns.org/docs/format)
 - [TypeScript Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+
+---
+
+## Scroller Utilities
+
+### horizontalScrollerStyles
+
+The design's 14px horizontal scroller as a class string: a thin track that thickens and turns blue
+on hover. Shared by `TableScroller` and `SectionBlock`'s body so the two cannot drift.
+
+```tsx
+import { horizontalScrollerStyles } from "@/utils/scroller";
+import { cn } from "@/utils/cn";
+
+<div className={cn(horizontalScrollerStyles, "rounded-lg")}>
+  <table className="w-max">…</table>
+</div>
+```
+
+It includes `overflow-x-auto overflow-y-hidden`, so the element it lands on becomes the scrollport —
+you do not add an overflow class yourself.
+

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export interface Tag {
   id: string;
@@ -9,16 +9,22 @@ export interface Tag {
   [key: string]: unknown;
 }
 
+/** Stable key for a selection, used to tell an external change from one we just made. */
+const signatureOf = (tags: Tag[]) => tags.map((t) => t.id).join("\0");
+
 export const useTagSelection = ({
   Tags,
   onTagsChange,
   inputRef,
   singleSelect = false,
+  creatable = false,
 }: {
   Tags: Tag[];
   onTagsChange?: (selectedTags: Tag[]) => void;
   inputRef?: React.RefObject<HTMLInputElement | null>;
   singleSelect?: boolean;
+  /** Allow typed text to become a selected tag that was never in `Tags`. */
+  creatable?: boolean;
 }) => {
   // Split initial tags into selected and unselected
   const initialSelectedTags = Tags.filter((tag) => tag.isSelected);
@@ -36,18 +42,63 @@ export const useTagSelection = ({
   const [focusedPopoverIndex, setFocusedPopoverIndex] = useState<number | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  // Update internal state when Tags prop changes
-  useEffect(() => {
-    // Only update if the Tags array reference has changed
-    const selectedIds = selectedTagsStack.map((tag) => tag.id);
-    setTags(Tags.filter((tag) => !selectedIds.includes(tag.id)));
-  }, [Tags]);
+  // LOCAL PATCH (Contact Center): key both effects below off a SIGNATURE of `Tags`, not the array
+  // reference. A caller that builds its tag list inline — `MultiSelectField` does, from the form
+  // value — hands over a fresh array every render, so the upstream `[Tags]` dependency changed on
+  // every pass: effect → setTags → re-render → new array → effect, an infinite render loop.
+  const tagsSignature = Tags.map((tag) => `${tag.id}:${tag.isSelected ? 1 : 0}`).join(" ");
 
-  // Notify parent component when tags change
+  // Update internal state when Tags actually changes.
+  //
+  // Filter against the INCOMING selection as well as the one we hold: on an external sync (the
+  // hydration case below) `selectedTagsStack` is still the pre-sync value at this point, so
+  // filtering by it alone left the freshly selected values sitting in the dropdown as if they
+  // were still available to add.
   useEffect(() => {
-    if (onTagsChange) {
-      onTagsChange(selectedTagsStack);
+    const selectedIds = new Set([
+      ...selectedTagsStack.map((tag) => tag.id),
+      ...Tags.filter((tag) => tag.isSelected).map((tag) => tag.id),
+    ]);
+    setTags(Tags.filter((tag) => !selectedIds.has(tag.id)));
+  }, [tagsSignature]);
+
+  // LOCAL PATCH (Contact Center): follow the incoming selection.
+  //
+  // Upstream seeded `selectedTagsStack` from `Tags` ONCE, and the effect above refreshed only the
+  // AVAILABLE list — never the selection. That made the component effectively uncontrolled: on an
+  // edit form, react-hook-form's `reset()` hydration lands after mount, so a person's saved emails
+  // and tags rendered as an empty field. Re-sync whenever the incoming selected set differs from
+  // what we hold, and mark the change as external so it isn't echoed straight back to the parent.
+  const incomingSelected = Tags.filter((tag) => tag.isSelected);
+  const incomingSignature = signatureOf(incomingSelected);
+  const lastSyncedRef = useRef<string | null>(null);
+  // Starts true so the mount pass below is swallowed — see the notify effect.
+  const skipNotifyRef = useRef(true);
+
+  useEffect(() => {
+    if (lastSyncedRef.current === incomingSignature) return;
+    lastSyncedRef.current = incomingSignature;
+    // Already matches (we made this change ourselves) — don't re-set state, so the notify flag
+    // stays untouched and the user's next real edit still reaches the parent.
+    if (signatureOf(selectedTagsStack) === incomingSignature) return;
+    skipNotifyRef.current = true;
+    setSelectedTagsStack(
+      singleSelect && incomingSelected.length > 0 ? [incomingSelected[0]] : incomingSelected,
+    );
+  }, [incomingSignature]);
+
+  // Notify parent component when tags change.
+  //
+  // LOCAL PATCH (Contact Center): upstream fired this on MOUNT too, so an untouched field wrote
+  // `[]` into the form — marking it dirty and adding an empty-array key to the request payload for
+  // a value nobody entered. It also fires for a sync from the parent, which would echo the value
+  // straight back. Both are skipped via the flag.
+  useEffect(() => {
+    if (skipNotifyRef.current) {
+      skipNotifyRef.current = false;
+      return;
     }
+    onTagsChange?.(selectedTagsStack);
   }, [selectedTagsStack]);
 
   // Filter tags based on search input
@@ -90,6 +141,38 @@ export const useTagSelection = ({
       setTags((prev) => [...prev, { ...tagToUnselect, isSelected: false }]);
     }
     setFocusedTagIndex(null);
+  };
+
+  /**
+   * LOCAL PATCH (Contact Center): turn typed text into a selected tag.
+   *
+   * Upstream had no way in but `handleSelectTag(id)` against the fixed `Tags` list, so a free-text
+   * list (a person's emails, an organization's aliases) could not be expressed as a badge field at
+   * all — which is why those lists were built as one-column tables instead. Matching an existing
+   * tag by name selects it rather than creating a duplicate; the id IS the text, so a value the
+   * caller round-trips keeps a stable identity.
+   */
+  const handleCreateTag = (rawName: string) => {
+    const name = rawName.trim();
+    if (!name) return;
+    const sameName = (tag: Tag) => tag.name.toLowerCase() === name.toLowerCase();
+
+    // Already chosen — just clear the box so the user sees their text was accepted.
+    if (selectedTagsStack.some(sameName)) {
+      filterTagsBySearch("");
+      return;
+    }
+    // Offered in the list — select it instead of creating a look-alike.
+    const existing = tags.find(sameName);
+    if (existing) {
+      handleSelectTag(existing.id);
+      return;
+    }
+
+    const created: Tag = { id: name, name, value: name, isSelected: true };
+    setSelectedTagsStack((prev) => (singleSelect ? [created] : [...prev, created]));
+    filterTagsBySearch("");
+    setFocusedPopoverIndex(null);
   };
 
   // Reset the hook state with new data
@@ -198,6 +281,9 @@ export const useTagSelection = ({
     searchTags,
     handleSelectTag,
     handleUnselectTag,
+    // LOCAL PATCH (Contact Center) — see above.
+    handleCreateTag,
+    creatable,
     handleKeyDown,
     setFocusedTagIndex,
     setFocusedPopoverIndex,

@@ -433,7 +433,7 @@ There is **no automatic per-direction styling**. The anchor is set on the root w
 | Drag handle | on — `<DrawerPanel showHandle>` | off (the default) | off (the default) |
 | Frame / tray | usually off (`framed={false}`) for clean sheet | on (default) for the dark tray | on (default) |
 | Rounded corners | top corners only | all/left corners | top-left + bottom corners |
-| Notch side | top-left (`notchSide="left"`) | top-left | mirror to `notchSide="right"` |
+| Notch side | inline-start (`notchSide="start"`) | inline-start | mirror to `notchSide="end"` |
 | Best for | mobile sheets, action sheets, comments | create/edit forms, filters, detail panels | RTL panels, side navigation |
 
 ### Bottom (default)
@@ -509,7 +509,7 @@ A floating panel anchored to the right edge — the canonical home for create/ed
 
 ### Left (RTL / navigation)
 
-Mirror of the right recipe: `direction="left"`, anchor to the left edge, and if you use a notch, set `notchSide="right"` so the tab mirrors correctly.
+Mirror of the right recipe: `direction="left"`, anchor to the left edge, and if you use a notch, set `notchSide="end"` so the tab sits on the panel's trailing edge.
 
 ```tsx
 <Drawer direction="left">
@@ -517,7 +517,7 @@ Mirror of the right recipe: `direction="left"`, anchor to the left edge, and if 
     <Button variant="PrimeStyle">Open left drawer</Button>
   </DrawerTrigger>
   <DrawerContent
-    notchSide="right"
+    notchSide="end"
     wrapperClassName="top-2 left-2 bottom-2 right-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
     notch={
       <DrawerNotch>
@@ -589,7 +589,7 @@ brings its own background. This is where direction-specific styling is applied.
 |---|---|---|---|
 | `framed` | `boolean` | `true` | Show the dark "tray" frame (border + inset shadow) around the panel. Set `false` for clean bottom sheets. |
 | `notch` | `ReactNode` | — | A `DrawerNotch` tab rendered on the top edge. |
-| `notchSide` | `"left" \| "right"` | `"left"` | Which side the notch attaches to (and which corner stays square). Use `"right"` for left-anchored drawers. |
+| `notchSide` | `"start" \| "end"` | `"start"` | Which **inline** edge the notch attaches to (and which corner stays square). Logical, so it mirrors under `dir="rtl"` without you computing a direction. Use `"end"` for left-anchored drawers. |
 | `wrapperClassName` | `string` | — | Classes on the outer positioned element — this is how you anchor/size the panel per direction. |
 | `className` | `string` | — | Classes on the **dark tray**. Add a `gap-*` here when the tray holds more than one child. |
 | `trayClassName` | `string` | — | **Deprecated** — an alias for `className` (merged last, so it still wins). |
@@ -629,7 +629,7 @@ with each bringing its own background.
 | `DrawerDescription` | Muted supporting text (maps to Vaul `Drawer.Description`). |
 | `DrawerBadge` | Small uppercase status pill. `color`: `Blue \| Green \| Red \| Yellow \| Purple \| Gray` (default `Blue`). |
 | `DrawerFooter` | Bottom action area (`mt-auto`, stacked). |
-| `DrawerNotch` | The top-edge tab container. `side`: `"left" \| "right"`. |
+| `DrawerNotch` | The top-edge tab container. `side`: `"start" \| "end"` (default `"start"`); normally cloned in by `DrawerContent` from `notchSide`. |
 | `DrawerNotchClose` | Round close button for inside a notch. |
 | `DrawerNotchPill` | Pill button for inside a notch. `color`: `Yellow \| Blue \| Gray` (default `Yellow`). Styled `<button>` only — wire navigation yourself via `onClick` (see ["What 'Open in new tab' does"](#what-open-in-new-tab-does)). |
 | `DrawerNotchDivider` | Thin vertical divider between notch items. |

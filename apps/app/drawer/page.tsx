@@ -486,7 +486,7 @@ export default function DrawerPage() {
               <Button variant="PrimeStyle">Open left drawer</Button>
             </DrawerTrigger>
             <DrawerContent
-              notchSide="right"
+              notchSide="end"
               wrapperClassName="top-2 left-2 bottom-2 right-auto mt-0 h-auto w-[420px] max-w-[calc(100vw-16px)]"
               notch={
                 <DrawerNotch>

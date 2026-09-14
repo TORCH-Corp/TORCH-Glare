@@ -56,11 +56,13 @@ Three parts of `DataViews` itself went in the same release.
 `rows`; whether there is more is derived from `rows.length < total`, so there is no `hasMore` prop.
 See the *Large datasets* section of the [DataViews doc](./index.md).
 
-**`DataViews.Empty`** — when there is nothing to show, the view shows nothing: the table keeps its
-header band and has no rows, the board keeps its columns and has no cards. A centred message in
-place of the view threw away the chrome, and it could not tell "no results" apart from "not fetched
-yet" — so the first load of every page announced that nothing matched before anything had been
-asked for.
+**`DataViews.Empty`** — *removed, then re-added as opt-in.* It was dropped because rendering a
+centred message in place of the view threw away the chrome, and it could not tell "no results" apart
+from "not fetched yet" — so the first load of every page announced that nothing matched before
+anything had been asked for. It is back on different terms: the default is still to show nothing,
+and `DataViews.Empty` now renders **only** once the query has settled with no rows
+(`!loading && rows.length === 0`). Nothing to migrate — omit it and behaviour is unchanged. See the
+*Empty and loading* section of the [DataViews doc](./index.md).
 
 **`DataViews.Loading`** — each view now paints its own skeleton, in its own shape, driven by the
 `loading` prop. A custom view registered with `markView` gets the same thing: read `loading` from

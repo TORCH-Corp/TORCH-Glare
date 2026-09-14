@@ -5,6 +5,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "../../utils/cn";
 import { formBarItemStyles } from "../TabFormItem";
+import { useHtmlDir } from "../../hooks/useHtmlDir";
 import { FormHeaderBar, type HeaderVariant } from "./header";
 
 /**
@@ -55,7 +56,9 @@ function DetailSidebarItem({ value, icon, children }: DetailSidebarItemProps) {
       )}
     >
       {icon}
-      <span className="flex-1 truncate text-left typography-body-medium-medium">{children}</span>
+      {/* LOCAL PATCH (Contact Center): `text-start`, not `text-left` — otherwise an Arabic label
+          left-aligns inside a right-aligned rail, and `truncate` clips the wrong end. */}
+      <span className="flex-1 truncate text-start typography-body-medium-medium">{children}</span>
     </TabsPrimitive.Trigger>
   );
 }
@@ -153,24 +156,65 @@ export interface DetailTabsViewProps {
   /** The `FormRenderer.Tab` elements — the content panels. */
   tabs: React.ReactElement<DetailTabProps>[];
   className?: string;
+  /**
+   * LOCAL PATCH (Contact Center): the active tab, when the caller owns it. Omit both this and
+   * `onValueChange` to keep the original uncontrolled behaviour (defaults to the first tab).
+   *
+   * Upstream offered no way in, so a detail view could not put its tab in the URL — no
+   * `?tab=audit` deep link, no correct back-navigation, and a reload always bounced the user to
+   * the first tab. That is what this app's `useTabPersistence` provides.
+   */
+  value?: string;
+  /** LOCAL PATCH (Contact Center): fires when a rail item is clicked. See `value`. */
+  onValueChange?: (value: string) => void;
+  /**
+   * LOCAL PATCH (Contact Center): rendered inside a surface that already draws its own card —
+   * a drawer, a panel. Drops the rounded body background so it doesn't double up, and lets the
+   * host own the height instead of filling the viewport.
+   */
+  embedded?: boolean;
 }
 
 /**
  * The detail-tabs surface: the floating header over a fixed left rail (the sidebar) + a scrolling
- * content column showing the active tab. Radix `Tabs.Root` owns the state (uncontrolled, defaults to
- * the first tab). The rail matches the stepper's rail position; only the content column scrolls.
+ * content column showing the active tab. Radix `Tabs.Root` owns the state — uncontrolled and
+ * defaulting to the first tab, unless the caller passes `value`/`onValueChange`. The rail matches
+ * the stepper's rail position; only the content column scrolls.
  */
-export function DetailTabsView({ header, actions, sidebar, tabs, className }: DetailTabsViewProps) {
+export function DetailTabsView({
+  header,
+  actions,
+  sidebar,
+  tabs,
+  className,
+  value,
+  onValueChange,
+  embedded,
+}: DetailTabsViewProps) {
   const defaultValue = tabs[0]?.props.value;
+  // Radix treats a defined `value` as controlled, so only pass one of the two — handing it both
+  // logs a warning and pins the tab.
+  const controlled = value !== undefined;
+  // LOCAL PATCH (Contact Center): Radix Tabs defaults to `dir="ltr"` when given neither a `dir`
+  // prop nor a `DirectionProvider`, and it stamps that onto the subtree — which left this whole
+  // detail surface rendering left-to-right on an Arabic page, no matter what `<html dir>` said.
+  // Same fix already applied to `Tabs.tsx` and `TabPage.tsx`.
+  const htmlDir = useHtmlDir();
 
   return (
     <TabsPrimitive.Root
       orientation="vertical"
-      defaultValue={defaultValue}
+      dir={htmlDir}
+      {...(controlled ? { value, onValueChange } : { defaultValue, onValueChange })}
       className={cn("h-full w-full @container", className)}
     >
       {/* Scroll shell — mirrors FormBuilder's: the absolute header floats over the body. */}
-      <div className="relative isolate flex h-full w-full flex-col overflow-hidden rounded-2xl bg-background-presentation-body-primary">
+      <div
+        className={cn(
+          "relative isolate flex h-full w-full flex-col overflow-hidden",
+          !embedded && "rounded-2xl bg-background-presentation-body-primary",
+        )}
+      >
         {header && (
           <FormHeaderBar title={header.title} label={header.label} variant={header.variant}>
             {actions}
@@ -178,9 +222,14 @@ export function DetailTabsView({ header, actions, sidebar, tabs, className }: De
         )}
 
         <div className="relative z-[1] flex min-h-0 w-full flex-1 flex-row">
-          {/* The fixed rail — the tab list. `pt-[72px]` clears the floating header. */}
+          {/* The fixed rail — the tab list. `pt-[72px]` clears the floating header.
+
+              LOCAL PATCH (Contact Center): `border-e`, not `border-r`. The row is `flex-row`, which
+              is direction-aware, so under `dir="rtl"` the rail moves to the right — a physical
+              right border then lands on the outer screen edge instead of between rail and content,
+              leaving the rail visually detached. */}
           <TabsPrimitive.List asChild>
-            <aside className="flex h-full w-[216px] shrink-0 flex-col gap-1 overflow-y-auto border-r border-border-presentation-global-primary bg-black-alpha-5 px-2 pb-6 pt-[72px] scrollbar-hide">
+            <aside className="flex h-full w-[216px] shrink-0 flex-col gap-1 overflow-y-auto border-e border-border-presentation-global-primary bg-black-alpha-5 px-2 pb-6 pt-[72px] scrollbar-hide">
               {sidebar.props.children}
             </aside>
           </TabsPrimitive.List>

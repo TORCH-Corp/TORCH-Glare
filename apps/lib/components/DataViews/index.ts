@@ -26,9 +26,13 @@ export { useActiveRow } from "./hooks";
 export { Cell } from "./cell";
 
 // A view of your own gets the loading state the built-in four get: read `loading` from
-// `useDataViewsData()` and lay these out in your own shape. There is no `Empty` counterpart —
-// nothing to show is shown as nothing.
-export { SkeletonBar, skeletonKeys } from "./states";
+// `useDataViewsData()` and lay these out in your own shape.
+//
+// `DataViews.Empty` (LOCAL PATCH, Contact Center) is the counterpart upstream omits: a slot that
+// renders IN PLACE OF the view once a query has settled on no rows. It is opt-in and carries no
+// design of its own — see `states.tsx` for why it does not reintroduce the "announced nothing
+// matched before anything was asked for" bug that kept it out.
+export { SkeletonBar, skeletonKeys, Empty } from "./states";
 
 // Wrapping a part in a component of your own — a preset panel, a project-standard header — hides
 // the marker the root recognises it by, so the wrapper has to carry the marker itself:
@@ -36,7 +40,7 @@ export { SkeletonBar, skeletonKeys } from "./states";
 // ```tsx
 // const AppPanel = markPanel(function AppPanel() { return <DataViews.Panel>…</DataViews.Panel>; });
 // ```
-export { markHeader, markPanel, markView } from "./slots";
+export { markEmpty, markHeader, markPanel, markView } from "./slots";
 export { resolveBadgeVariant } from "./badge";
 
 export type { ResolvedBadgeProps } from "./badge";

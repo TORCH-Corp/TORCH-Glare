@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { Datepicker } from "@/components/Calendar";
+import { DatePicker } from "@/components/DatePicker";
 import { InputField } from "@/components/InputField";
 import { cn } from "@/utils/cn";
 import { useState, type ComponentProps } from "react";
@@ -12,11 +12,11 @@ export default function DatePickerExample() {
     <>
       <h1
         className={cn("text-2xl", {
-          "text-content-system-global-primary": true
+          "text-content-presentation-global-primary": true
 
         })}
       >
-        SlideDatePicker Preview
+        DatePicker Preview
       </h1>
 
       {/* Loop through variants and sizes */}
@@ -24,13 +24,15 @@ export default function DatePickerExample() {
         <div key={`${size}`} className="">
           <h2
             className={cn("text-lg font-semibold", {
-              "text-content-system-global-primary": true
+              "text-content-presentation-global-primary": true
 
             })}
           >{`Size: ${size}`}</h2>
-          <Datepicker
-            customInput={<InputField errorMessage={error ? "This is an error message" : undefined} size={size} />}
-            onChange={(e: unknown) => console.log(e)} />
+          {/* The custom trigger is a CHILD, not a `customInput` prop — `DatePicker` clones it and
+              feeds it the formatted value. */}
+          <DatePicker onChange={(e: unknown) => console.log(e)}>
+            <InputField errorMessage={error ? "This is an error message" : undefined} size={size} />
+          </DatePicker>
         </div>
       )}
 

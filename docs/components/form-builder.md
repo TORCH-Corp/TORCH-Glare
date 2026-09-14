@@ -136,6 +136,7 @@ that.
 | `FormBuilder.Select` (`options`)                                            | `Select`                                                                              | `string`                                                     |
 | `FormBuilder.SearchableSelect` (`options`, async: `onSearchChange`/`onLoadMore`/`hasMore`) | `SearchableSelect`                                                      | `string`                                                     |
 | `FormBuilder.MultiSelect` / `.Tags` (`options`)                             | `BadgeField`                                                                          | `string[]`                                                   |
+| `FormBuilder.MultiSelect` / `.Tags` (`creatable`)                           | `BadgeField` with free text                                                           | `string[]` — values not in `options` survive                 |
 | `FormBuilder.RadioList` (`options`, each with optional `description`)       | boxed radio list                                                                      | `string`                                                     |
 | `FormBuilder.CheckboxGroup` (`options`, each with optional `description`)   | boxed checkbox list                                                                   | `string[]`                                                   |
 | `FormBuilder.RadioCards` (`options` with `description`)                     | `RadioCard`                                                                           | `string`                                                     |
@@ -214,7 +215,10 @@ country code.
 `FormBuilder.RadioList` (single-select, `string`) and `FormBuilder.CheckboxGroup` (multi-select,
 `string[]`) render their `options` as a boxed, divided list — control on the left, primary
 label, and an optional per-option `description` shown as a secondary label. The whole row is
-clickable. Multi-select is also available as `.MultiSelect` / `.Tags` (a tag-chip picker).
+clickable. Multi-select is also available as `.MultiSelect` / `.Tags` (a tag-chip picker). Add
+`creatable` to either and the user can type a value that is not in `options` and commit it with
+Enter or comma; pass `options={[]}` for a pure free-text list. (`createLabel` is a `BadgeField`
+prop — it is not forwarded, so the create row keeps its default label inside a form.)
 
 `FormBuilder.SwitchBox` (value `boolean`) is a switch wrapped in a `#f9f9f9` field box. It
 renders like any other field — the `label` sits in the normal label column — and the box holds
@@ -226,6 +230,10 @@ presentation, so it lives there.
 `FormBuilder.Submit` is a loading-aware submit button. It **auto-associates with the enclosing
 form** (via context), so it submits even when placed in a header / action bar that renders
 _outside_ the `<form>` — no manual `form={id}` wiring.
+
+It also takes `disabled`, for permission gating: someone with read access should still *see* a
+record, so a Save they may not use is disabled rather than removed — a missing button looks broken,
+a disabled one says "not yours to change". The server refuses the write either way.
 
 ## Moved to FormRenderer
 

@@ -56,6 +56,18 @@ export const useBare = () => useContext(CellContext) !== false;
 export const useOnTable = () => useContext(CellContext) === "table";
 
 /**
+ * The "(Required)" tag `FieldShell` prints beside a `required` field's label.
+ *
+ * LOCAL PATCH (Contact Center): upstream hardcodes the English literal, so a
+ * localized app cannot translate it. Defaulting to that literal keeps every
+ * existing caller identical; provide the context once near the app root to
+ * localize every field at once. Logged in TORCH-GLARE-FEEDBACK.md — re-apply
+ * after any `npx torch-glare update`.
+ */
+export const RequiredLabelContext = createContext<string>("(Required)");
+export const useRequiredLabel = () => useContext(RequiredLabelContext);
+
+/**
  * Step registry — a `FormRenderer.Step` provides this so the fields rendered inside it can
  * register their `name`, and the stepper validates just those names before advancing. `null`
  * when not inside a stepper.

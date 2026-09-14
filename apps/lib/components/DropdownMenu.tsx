@@ -507,6 +507,20 @@ export const menuContentStyles = cva(
     // No `gap` here: the panel has exactly one child (the scroll viewport), so a gap between
     // siblings has nothing to act on. The 4px between groups/labels lives on that viewport.
     "flex flex-col",
+    // LOCAL PATCH (Contact Center): this was the ONE portalled surface in the library with no
+    // z-index. Radix portals the panel to <body> and positions it `fixed`, but `z-index: auto`
+    // paints in a LOWER layer than any positive z-index in the same stacking context, whatever
+    // the DOM order — so the library's own `Table` sticky header (`sticky top-0 z-20`,
+    // Table.tsx) painted straight over it. On a DataViews list that header is opaque and sits
+    // exactly where a topbar action menu opens, so the menu vanished entirely.
+    //
+    // The class goes on Content, not on Radix's positioner: Popper reads the content's COMPUTED
+    // z-index and copies it to the wrapper (@radix-ui/react-popper 1.3.7), which is the same
+    // mechanism `Select`'s identical panel already rides on.
+    //
+    // 1000 matches `Select` and `Popover` rather than clearing `z-20` by one, so a menu opened
+    // inside a Drawer or Dialog (both `z-50`) clears those too — the same half of this bug.
+    "z-[1000]",
   ],
   {
     variants: {

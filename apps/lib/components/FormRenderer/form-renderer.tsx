@@ -17,6 +17,7 @@ import {
 } from "./detail";
 import { FormDrawer } from "./FormDrawer";
 import { FormHeaderBar } from "./header";
+import { NotchAction, isNotchActionElement } from "./notch-action";
 import { Section } from "./section";
 import {
   Back,
@@ -72,6 +73,15 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
   title,
   badge,
   onOpenInNewTab,
+  // LOCAL PATCH (Contact Center): detail-tabs control — see FormRendererProps.
+  activeTab,
+  onTabChange,
+  embedded,
+  // LOCAL PATCH (Contact Center): external stepper control — see FormRendererProps.
+  activeStep,
+  onStepChange,
+  // LOCAL PATCH (Contact Center): drawer layout — see FormRendererProps.
+  drawer,
 }: FormRendererProps<T>) {
   const isDrawer = display === "drawer";
 
@@ -101,6 +111,14 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
 
   // Split out a `FormRenderer.Stepper`: its Steps become the visibility-toggled slots inside the
   // `<form>`, its non-Step children a footer, and its state drives the rail beside them.
+  // LOCAL PATCH (Contact Center): lift `FormRenderer.NotchAction` children out of the form
+  // body and into the drawer's notch. Authored as children so the caller owns the label (and
+  // therefore its translation) instead of the component hardcoding English — see notch-action.tsx.
+  const notchActions = childArray.filter(isNotchActionElement);
+  const bodyChildren = notchActions.length
+    ? childArray.filter((n) => !isNotchActionElement(n))
+    : children;
+
   const stepperEl = childArray.find(isStepperElement);
   const stepChildren = stepperEl ? Children.toArray(stepperEl.props.children) : [];
   const steps = stepChildren.filter(isStepElement) as ReactElement<StepProps>[];
@@ -111,17 +129,54 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
   const stepper = useStepperState(
     steps,
     formInstance.trigger as Parameters<typeof useStepperState>[1],
+    // LOCAL PATCH (Contact Center): undefined `activeStep` leaves the stepper uncontrolled.
+    { activeStep, onStepChange },
   );
 
   if (detailSidebar && detailTabs.length > 0) {
-    return (
+    const detailView = (
       <DetailTabsView
-        header={header}
-        actions={actions}
+        // In a drawer the tray already paints the surface and the drawer header carries the
+        // title, so the view drops its own card and its own floating header.
+        header={isDrawer ? undefined : header}
+        actions={isDrawer ? undefined : actions}
         sidebar={detailSidebar}
         tabs={detailTabs}
         className={className}
+        // LOCAL PATCH (Contact Center): lets the caller keep the tab in the URL, and render
+        // inside a surface that already draws its own card. Both optional.
+        value={activeTab}
+        onValueChange={onTabChange}
+        embedded={embedded ?? isDrawer}
       />
+    );
+
+    // LOCAL PATCH (Contact Center): a detail view can be a DRAWER too.
+    //
+    // Upstream returned the detail surface here unconditionally, *before* the `isDrawer` branch
+    // below — so `FormRenderer.Sidebar` + `display="drawer"` silently rendered a full page inside
+    // whatever the caller put it in, and a quick-view drawer had to be hand-rolled around the
+    // detail view instead. A record looks the same whether you opened it from a row or from its
+    // own route; only the surface differs, which is exactly what `display` is for.
+    if (!isDrawer) return detailView;
+    return (
+      <FormDrawer
+        open={open}
+        onOpenChange={onOpenChange ?? (() => {})}
+        title={title ?? header?.title}
+        badge={badge ?? header?.label}
+        variant={header?.variant}
+        actions={actions}
+        onOpenInNewTab={onOpenInNewTab}
+        notchActions={notchActions.length > 0 ? notchActions : undefined}
+        // `DetailTabsView` already owns its scroll container and already offsets for a header,
+        // so the drawer must not add a second of each — that is what `bareBody` is for. The
+        // drawer's own header still renders, carrying the title and actions.
+        bareBody
+        {...drawer}
+      >
+        {detailView}
+      </FormDrawer>
     );
   }
 
@@ -137,7 +192,7 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
       {stepExtras}
     </>
   ) : (
-    children
+    bodyChildren
   );
 
   const formEl = (
@@ -219,7 +274,10 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
     summary && !isDrawer ? (
       <div className="flex h-full flex-row items-stretch">
         <div className="min-h-0 min-w-0 flex-1">{surface}</div>
-        <div className="ml-[6px] flex min-h-0">{summary}</div>
+        {/* LOCAL PATCH (Contact Center): `ms-`, not `ml-`. Under `dir="rtl"` the summary sits to
+            the LEFT of the surface, so a physical left margin puts the gutter on its far side and
+            the two panels butt together. */}
+        <div className="ms-[6px] flex min-h-0">{summary}</div>
       </div>
     ) : (
       surface
@@ -267,6 +325,8 @@ function FormRendererRoot<T extends FieldValues = FieldValues>({
           ) : undefined
         }
         onOpenInNewTab={onOpenInNewTab}
+        notchActions={notchActions.length > 0 ? notchActions : undefined}
+        {...drawer}
       >
         {tree}
       </FormDrawer>
@@ -290,6 +350,7 @@ export const FormRenderer = Object.assign(FormRendererRoot, {
   Step,
   Back,
   Next,
+  NotchAction,
   Sidebar: DetailSidebar,
   Tab: DetailTab,
   Grid: DetailGrid,

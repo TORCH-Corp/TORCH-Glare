@@ -5,10 +5,13 @@ export function useActiveTreeItem(itemIds: string[]) {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!itemIds || itemIds.length === 0) {
+    // An empty list is a legitimate answer — a page with no Quick Nav has nothing to track. Only a
+    // missing list is a caller mistake worth a warning.
+    if (!itemIds) {
       console.warn("No itemIds provided to useActiveTreeItem.");
       return;
     }
+    if (itemIds.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {

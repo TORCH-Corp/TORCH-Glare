@@ -64,22 +64,45 @@ export function SearchableSelectField(props: SearchableSelectFieldProps) {
   );
 }
 
-/** `FormBuilder.MultiSelect` / `.Tags` — BadgeField, value is `string[]`. */
+/**
+ * `FormBuilder.MultiSelect` / `.Tags` — BadgeField, value is `string[]`.
+ *
+ * With `creatable`, the user can type a value that is not in `options` and it becomes a badge —
+ * so a free-text list (emails, aliases, tags) is one field rather than a one-column table. Pass
+ * `options={[]}` for a pure free-text list.
+ */
 export function MultiSelectField(props: OptionsFieldProps) {
   const onTable = useOnTable();
   return (
     <FieldShell {...props}>
       {(field) => {
-        const selected = new Set<string>(Array.isArray(field.value) ? field.value : []);
-        const tags: Tag[] = props.options.map((opt) => ({
-          id: opt.value,
-          name: opt.label,
-          value: opt.value,
-          isSelected: selected.has(opt.value),
-        }));
+        const values: string[] = Array.isArray(field.value) ? field.value : [];
+        const byValue = new Map(props.options.map((opt) => [opt.value, opt]));
+        // Selected first, IN VALUE ORDER, then whatever is left to offer. Order matters: the
+        // hook re-syncs from this list, so building it in `options` order would reshuffle the
+        // user's badges on every keystroke — and drop any created value that is not an option.
+        const tags: Tag[] = [
+          ...values.map((value) => ({
+            id: value,
+            name: byValue.get(value)?.label ?? value,
+            value,
+            isSelected: true,
+          })),
+          ...props.options
+            .filter((opt) => !values.includes(opt.value))
+            .map((opt) => ({
+              id: opt.value,
+              name: opt.label,
+              value: opt.value,
+              isSelected: false,
+            })),
+        ];
         return (
           <BadgeField
             tags={tags}
+            creatable={props.creatable}
+            placeholder={props.placeholder}
+            disabled={props.disabled}
             onValueChange={(picked) => field.onChange(picked.map((t) => t.value ?? t.id))}
             onTable={onTable}
             className="w-full"

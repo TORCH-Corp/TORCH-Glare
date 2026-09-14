@@ -28,6 +28,12 @@ npx torch-glare@latest add Button
 
 - **v2.5.5** — **breaking**: `DataViews.Filters.Summary` is removed with no shim; delete any
   `<DataViews.Filters.Summary />` (render your own from `useDataViewsFilters()` if you want one).
+  `DrawerContent.notchSide` / `DrawerNotch.side` become logical `"start" | "end"` (was
+  `"left" | "right"`), and `TreeFolder`'s drag wiring is internal — `dragHandlers`,
+  `TreeFolderRowDragHandlers`, `UseTreeFolderDnDResult`, `scrollContainerRef` and
+  `getRowDragHandlers` are gone. New, non-breaking: `BadgeField` `creatable` / `createLabel`,
+  `FormRenderer` `embedded` / controlled tabs and steps / `drawer` layout options /
+  `FormRenderer.NotchAction`, `FormBuilder.Submit` `disabled`, and `DataViews.Empty`.
   Also, every `FormBuilder.*` field takes a `hints` array, so one field can
   carry several alerts. The validation error renders first, your hints follow. See
   [FormBuilder](../components/form-builder.md#hints). Dropdown panels (`Select`,

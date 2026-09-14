@@ -16,10 +16,28 @@ export interface SubmitButtonProps {
    * **outside** the `<form>` element. Set it explicitly only to target a different form.
    */
   form?: string;
+  /**
+   * LOCAL PATCH (Contact Center): upstream removed this in 2.5.5, leaving no way to
+   * disable a Save. Re-apply after any `npx torch-glare update`.
+   *
+   * Disable the button while leaving the form readable.
+   *
+   * Used by permission gating: someone with read access should still SEE a
+   * record, so a Save they may not use is disabled rather than removed --
+   * a missing button looks broken, a disabled one says "not yours to change".
+   * The server refuses the write either way.
+   */
+  disabled?: boolean;
 }
 
 /** `FormBuilder.Submit` — a loading-aware submit button, hidden in view mode. */
-export function SubmitButton({ children, className, loadingText, form }: SubmitButtonProps) {
+export function SubmitButton({
+  children,
+  className,
+  loadingText,
+  form,
+  disabled,
+}: SubmitButtonProps) {
   const loading = useLoading();
   const ctxFormId = useFormId();
 
@@ -34,6 +52,8 @@ export function SubmitButton({ children, className, loadingText, form }: SubmitB
       // variant is how the rule stops being a rule.
       variant="BluColStyle"
       is_loading={loading}
+      // LOCAL PATCH (Contact Center) -- see `disabled` in SubmitButtonProps.
+      disabled={disabled}
       // `w-fit` because the FormBuilder root is a flex COLUMN: a direct child with `width: auto`
       // inherits `align-items: stretch` and spans the whole form. Sections want that (SectionBlock
       // sets its own `w-full`); a Save button does not. `w-fit` rather than `self-start` so the

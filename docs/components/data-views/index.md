@@ -39,7 +39,7 @@ import {
   useDataViewsFilters, useDataViewsPanel, useDataViewsPanelTabs,
   useActiveRow,                                // the row behind `activeId`
   Cell,                                        // paint one field the way the views paint it
-  markView, markHeader, markPanel,             // register a part of your own
+  markView, markHeader, markPanel, markEmpty,  // register a part of your own
   SkeletonBar, skeletonKeys,                   // the loading pieces every view is built from
   getByPath, formatPathLabel, defaultGetRowId, // read a value by dotted path
   buildCardRows, resolveBadgeVariant,
@@ -135,10 +135,35 @@ see the change, "new filter" and "new page" have already become one object.
 
 ## Empty and loading
 
-Neither is a part you render. When there is nothing to show, the view shows **nothing** — the table
-keeps its header band and has no rows; the board keeps its columns and has no cards. While
-`loading` is set, each view paints a **skeleton in its own shape**: the table shimmers rows at the
-real row height and column widths, the board shimmers cards inside its columns.
+**Loading is not a part you render.** While `loading` is set, each view paints a **skeleton in its
+own shape**: the table shimmers rows at the real row height and column widths, the board shimmers
+cards inside its columns.
+
+**Empty is opt-in.** By default the view simply shows nothing — the table keeps its header band and
+has no rows, the board keeps its columns and has no cards. That default is deliberate: a centred
+message in place of the view throws away the chrome, and it cannot tell "no results" from "not
+fetched yet".
+
+When you do want something there, render `DataViews.Empty` anywhere among the children. It is a
+passthrough with a marker — it holds no opinion about what an empty state looks like, it only tells
+the root to put its content where the view goes. The root swaps it in when the query has settled and
+returned nothing (`!loading && rows.length === 0`):
+
+```tsx
+<DataViews rows={rows} fields={fields} loading={loading}>
+  <DataViews.Table />
+  <DataViews.Empty>
+    <div className="flex flex-1 flex-col items-center justify-center gap-2">
+      <p>No invoices match these filters.</p>
+      <Button onClick={clearFilters}>Clear filters</Button>
+    </div>
+  </DataViews.Empty>
+</DataViews>
+```
+
+Your content is what receives the body slot's height, so give it `flex-1` if it should centre.
+Wrapping `DataViews.Empty` in a component of your own? Mark that wrapper with `markEmpty` so the
+root still recognises it, the same way `markView` / `markHeader` / `markPanel` work.
 
 ## Large datasets
 
@@ -183,6 +208,7 @@ and that is not built.
 | `DataViews.Board` | a kanban board | `groups` — it never groups rows itself | [`views`](./examples/views.md) |
 | `DataViews.Inbox` | a master list beside a detail pane | the pane, as `children` | [`inbox-routing`](./examples/inbox-routing.md) |
 | `DataViews.Tree` | a hierarchy, optionally beside a pane | `nodes` — it never builds one | [`tree-custom`](./examples/tree-custom.md) |
+| `DataViews.Empty` | your content, in place of the view, once a settled query returns no rows | the content — it holds no opinion about what empty looks like | — |
 
 Each takes `id`, `label` and `icon` to control how it appears in the switcher, so the same view can
 be registered twice with different data. Full props are under

@@ -40,7 +40,17 @@ interface DrawerContentProps extends React.ComponentPropsWithoutRef<
   /** @deprecated No effect here — the drag handle is `DrawerPanel`'s `showHandle`. */
   showHandle?: boolean;
   notch?: React.ReactNode;
-  notchSide?: "left" | "right";
+  /**
+   * Which INLINE edge the notch attaches to — `"start"` follows the document direction
+   * (left under LTR, right under RTL), so callers never compute `dir` themselves.
+   *
+   * LOCAL PATCH (Contact Center): these were physical `"left" | "right"` and every consumer
+   * passed `isRtl ? "right" : "left"`, duplicating a decision CSS already knows. The
+   * alignment (`self-start`) and the corner radii below are logical properties, so the
+   * browser mirrors them; only the wedge's SVG path needs a flip, which it does itself with
+   * `rtl:-scale-x-100`.
+   */
+  notchSide?: "start" | "end";
   /**
    * Show the dark "tray" frame (and panel border + inset shadow) around the
    * drawer panel. Defaults to `true`. Set to `false` for bottom-anchored
@@ -64,7 +74,8 @@ interface DrawerPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * The light `#F0F0F0` content surface inside a `DrawerContent`.
+ * The body surface inside a `DrawerContent` — the same surface a page draws, anchored to an
+ * edge, so it follows the app theme.
  *
  * It is an ordinary child, not something the tray paints — so a drawer can hold a panel
  * and something else beside it (e.g. a `FormSummary`), each bringing its own background.
@@ -81,12 +92,6 @@ const DrawerPanel = React.forwardRef<HTMLDivElement, DrawerPanelProps>(
   ({ className, framed = true, showHandle = false, children, ...props }, ref) => (
     <div
       ref={ref}
-      // The content surface is always light (#F0F0F0) regardless of the page
-      // theme, so pin a light theme here. This makes theme-aware content tokens
-      // (DrawerTitle/Description and any consumer content) resolve to their
-      // dark-on-light values instead of following a dark page theme (which
-      // would render white-on-light = invisible).
-      data-theme="light"
       className={cn(
         // `flex-col` is load-bearing: this panel stacks header / body / footer, and its own
         // `showHandle` centres the drag handle with `mx-auto`, which only centres in a column.
@@ -98,13 +103,26 @@ const DrawerPanel = React.forwardRef<HTMLDivElement, DrawerPanelProps>(
         // main axis, and a flex item's default `min-width: auto` pins it to its content — a wide
         // form pushed the panel straight out past the tray. `min-h-0` alone covered the old
         // column tray; the row needs both.
-        "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1 bg-[#F0F0F0] min-h-0 min-w-0",
-        framed && "border border-[#D4D4D4] shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
+        //
+        // LOCAL PATCH (Contact Center): the surface was `bg-[#F0F0F0]` with a `#D4D4D4` border —
+        // frozen copies of the LIGHT values of the two tokens below — and the panel pinned
+        // `data-theme="light"` so its content didn't render white-on-light against them.
+        // mapping-color-system-v4 selects on a BARE `[data-theme="light"]`, so that attribute
+        // re-declared every colour variable on this element and inherited to the whole subtree:
+        // a drawer was immune to the app's theme, and its content was correctly themed to the
+        // WRONG theme. A drawer is the same surface as a page, only anchored to an edge, so it
+        // reads the same tokens and follows `<html>` like everything else. Light and default
+        // resolve to the exact literals removed here (#F0F0F0 / #D4D4D4), so only dark changes.
+        "flex flex-1 flex-col gap-2 rounded-t-[16px] p-1 bg-background-presentation-body-primary min-h-0 min-w-0",
+        framed &&
+          "border border-border-presentation-global-primary shadow-[inset_0_-4px_16px_rgba(0,0,0,0.1)]",
         className,
       )}
       {...props}
     >
-      {showHandle && <div className="mx-auto h-2 w-[100px] rounded-full bg-[#D4D4D4]" />}
+      {showHandle && (
+        <div className="mx-auto h-2 w-[100px] rounded-full bg-border-presentation-global-primary" />
+      )}
       {children}
     </div>
   ),
@@ -120,7 +138,7 @@ const DrawerContent = React.forwardRef<
       className,
       children,
       notch,
-      notchSide = "left",
+      notchSide = "start",
       framed: framedProp,
       wrapperClassName,
       trayClassName,
@@ -146,10 +164,12 @@ const DrawerContent = React.forwardRef<
           )}
           {...props}
         >
+          {/* `self-start` / `self-end` are LOGICAL — the browser flips them under
+              `dir="rtl"`, so this needs no direction check. */}
           {notch && (
-            <div className={notchSide === "right" ? "self-end" : "self-start"}>
+            <div className={notchSide === "end" ? "self-end" : "self-start"}>
               {React.isValidElement(notch)
-                ? React.cloneElement(notch as React.ReactElement<{ side?: "left" | "right" }>, {
+                ? React.cloneElement(notch as React.ReactElement<{ side?: "start" | "end" }>, {
                     side: notchSide,
                   })
                 : notch}
@@ -164,10 +184,12 @@ const DrawerContent = React.forwardRef<
               framed
                 ? "p-1.5 bg-black-400 shadow-[0_0_4px_rgba(0,0,0,0.2),0_0_30px_rgba(0,0,0,0.4)]"
                 : "p-0",
+              // Logical corner radii (`ss` = start-start, `se` = start-end): the squared
+              // corner follows the notch under either direction with no JS.
               framed && notch
-                ? notchSide === "right"
-                  ? "rounded-tr-none rounded-tl-[22px] rounded-b-[22px]"
-                  : "rounded-tl-none rounded-tr-[22px] rounded-b-[22px]"
+                ? notchSide === "end"
+                  ? "rounded-se-none rounded-ss-[22px] rounded-b-[22px]"
+                  : "rounded-ss-none rounded-se-[22px] rounded-b-[22px]"
                 : framed
                   ? "rounded-t-[22px]"
                   : "",
@@ -193,14 +215,15 @@ const DrawerHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 DrawerHeader.displayName = "DrawerHeader";
 
 const drawerHeaderPane = cva(
-  // Dark pill. Force any DrawerTitle/Description inside it back to light text
-  // (their defaults are dark for the light content surface).
+  // A deliberately dark pill in every theme — the same slab the page-mode FormHeaderBar draws
+  // (FormRenderer/header.tsx). Its fill is a literal on purpose, not a frozen token: it must not
+  // follow the panel. So the title/description are forced to light text against it.
   "flex items-center gap-2 rounded-[14px] border p-2 bg-[#131415] border-[#2C2D2E] shadow-[0_0_32px_2px_rgba(0,0,0,0.05)] [&_[data-slot=drawer-title]]:text-white [&_[data-slot=drawer-description]]:text-[#9FA0A1]",
 );
 
 const DrawerHeaderTitle = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  // Dark surface — pin a dark theme so any buttons/content inside resolve their
-  // theme tokens for dark (the surrounding content surface is data-theme=light).
+  // The pane is dark in every theme, so pin dark here: the Buttons and content inside must
+  // resolve against THIS slab, not against the panel (which now follows the app theme).
   <div data-theme="dark" className={cn(drawerHeaderPane(), className)} {...props} />
 );
 DrawerHeaderTitle.displayName = "DrawerHeaderTitle";
@@ -243,40 +266,48 @@ const DrawerFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 DrawerFooter.displayName = "DrawerFooter";
 
 interface DrawerNotchProps extends React.HTMLAttributes<HTMLDivElement> {
-  side?: "left" | "right";
+  /** Logical edge, mirrored by the browser under `dir="rtl"`. See `notchSide`. */
+  side?: "start" | "end";
 }
 
-const DrawerNotch = ({ className, children, side = "left", ...props }: DrawerNotchProps) => {
-  // Wedge bridges the notch's bottom-edge corner into the tray's top edge.
-  // For a left-attached notch (the default), the wedge sits at the notch's
-  // bottom-right; for a right-attached notch, mirror it to the bottom-left.
+const DrawerNotch = ({ className, children, side = "start", ...props }: DrawerNotchProps) => {
+  // Wedge bridges the notch's bottom inline-end corner into the tray's top edge.
+  //
+  // LOCAL PATCH (Contact Center): both the DOM order and the SVG path used to be picked from a
+  // physical left/right. Neither needs to be: the row is `flex-row`, which is direction-aware, so
+  // writing {pill}{wedge} already renders wedge-on-the-left under RTL. Only the path's curve is
+  // physical, and `rtl:-scale-x-100` mirrors it.
+  //
+  // That class, not a rule in some stylesheet: an earlier draft of this comment pointed at an
+  // `rtl.css` that does not exist in this repo — so under `dir="rtl"` the wedge pointed the wrong
+  // way and nothing failed loudly. Keeping the mirror on the element means it travels with the
+  // component when a consumer copies it in, which a global stylesheet would not.
   const wedge = (
-    <svg aria-hidden width="12" height="12" viewBox="0 0 12 12" className="block shrink-0 self-end">
-      <path
-        d={
-          side === "right"
-            ? "M 12 0 L 12 12 L 0 12 A 12 12 0 0 0 12 0 Z"
-            : "M 0 0 L 0 12 L 12 12 A 12 12 0 0 1 0 0 Z"
-        }
-        fill="#434446"
-      />
+    <svg
+      aria-hidden
+      data-drawer-wedge
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      className="block shrink-0 self-end rtl:-scale-x-100"
+    >
+      <path d="M 0 0 L 0 12 L 12 12 A 12 12 0 0 1 0 0 Z" fill="#434446" />
     </svg>
   );
 
   return (
     <div className="relative flex flex-row items-end">
-      {side === "right" && wedge}
+      {side === "end" && wedge}
       <div
         className={cn(
-          "flex items-center gap-1 rounded-t-[18px] bg-black-400 px-1.5 pt-1.5 pb-1.5",
-          side === "right" ? "flex-row-reverse" : "flex-row",
+          "flex flex-row items-center gap-1 rounded-t-[18px] bg-black-400 px-1.5 pt-1.5 pb-1.5",
           className,
         )}
         {...props}
       >
         {children}
       </div>
-      {side === "left" && wedge}
+      {side === "start" && wedge}
     </div>
   );
 };

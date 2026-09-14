@@ -477,6 +477,32 @@ Extends all Input element props (except size and variant).
 | addLabel | `string` | `'add'` | Label for the add action shown in the field |
 | dir | `string` | `'ltr'` | Reading direction (`'rtl'` for right-to-left) |
 | placeholder | `string` | - | Input placeholder text |
+| creatable | `boolean` | `false` | Let the user type a value that is not in `tags` and commit it as a badge |
+| createLabel | `(value: string) => string` | ``value => `Create "${value}"` `` | Label for the create row; receives the typed text |
+
+### Creatable tags
+
+With `creatable`, the field stops being a picker over a fixed list: whatever the user types can
+become a badge. Enter or comma commits it; Backspace on an empty box removes the last badge. Pass
+`tags={[]}` for a pure free-text list — emails, aliases, arbitrary labels — which otherwise has to be
+modelled as a one-column table.
+
+```tsx
+<BadgeField
+  creatable
+  tags={recipients}
+  onValueChange={setRecipients}
+  placeholder="Add an email…"
+  createLabel={(value) => `Invite ${value}`}
+/>
+```
+
+The create row is suppressed when the typed text already matches a selected or listed tag
+(case-insensitive), so you cannot produce duplicates. With `creatable` set, the empty-list message
+becomes "Type a value and press Enter" rather than "All tags selected".
+
+> `FormBuilder.MultiSelect` / `.Tags` forward `creatable`, but **not** `createLabel` — inside a form
+> the create row keeps the default label.
 
 ### Tag Type
 

@@ -20,6 +20,7 @@ Custom React hooks that provide reusable functionality for common UI patterns. A
 - **useClickOutside** - Detect clicks outside a referenced element
 - **useResize** - Handle element resizing with RTL support
 - **useTagSelection** - Manage tag selection state with keyboard navigation
+- **useHtmlDir** - Track the document's text direction from `<html dir>`
 
 ---
 
@@ -1498,3 +1499,25 @@ All hooks support:
 - Edge 90+
 
 **IntersectionObserver** (useActiveTreeItem): Requires polyfill for older browsers.
+
+---
+
+## useHtmlDir
+
+Tracks the document's text direction from `<html dir>`, re-reading it when it changes — a language
+switch, say. Returns `"ltr" | "rtl"`.
+
+```tsx
+import { useHtmlDir } from "@/hooks/useHtmlDir";
+
+const dir = useHtmlDir();
+```
+
+Most mirroring should be done in CSS with logical properties, which need no JS at all. Reach for
+this only where a library wants the direction as a **value**: several Radix primitives default to
+`"ltr"` when given no `dir` prop and no `DirectionProvider`, and vaul computes an inline transform
+from its `direction` prop, which a stylesheet cannot override mid-drag.
+
+| Returns | Notes |
+| --- | --- |
+| `"ltr" \| "rtl"` | SSR-safe — returns `"ltr"` when there is no `document`. Watches the attribute with a `MutationObserver`, so a runtime language switch updates every consumer. |

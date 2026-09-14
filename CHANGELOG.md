@@ -45,6 +45,22 @@ Scrollbars are hidden on these lists; scrolling itself is unchanged.
 `maxBodyHeight` explicitly to keep the old height. `SearchableTreeDialog` gains the same
 `maxBodyHeight` prop (default 200), applied as `min(maxBodyHeight, 55vh)`.
 
+### Breaking — `notchSide` is logical, and `TreeFolder`'s drag API is internal
+
+**`DrawerContent.notchSide` and `DrawerNotch.side`** go from physical `"left" | "right"` to logical
+`"start" | "end"` (default `"left"` → `"start"`). Every caller was writing `isRtl ? "right" : "left"`
+to duplicate a decision CSS already knows; the logical values mirror themselves under `dir="rtl"`.
+No shim — the compiler finds each one. `"left"` → `"start"`, `"right"` → `"end"`.
+
+**`TreeFolder` owns its drag state now.** The row no longer takes handlers from the caller, it calls
+`useDragItem` itself. Removed: `TreeFolderRowProps.dragHandlers`, the `TreeFolderRowDragHandlers` and
+`UseTreeFolderDnDResult` types, and `useTreeFolderDnD`'s `scrollContainerRef` option and
+`getRowDragHandlers` return. If you rendered `<TreeFolderRow>` directly or wired the hook by hand,
+delete that wiring — `<TreeFolder>` itself is unchanged and needs nothing.
+
+Also in this release, without a prop to hang it on: `TreeFolderNode.meta` has always been part of the
+type but was never painted — it now renders, after the name and before the collapsed-child count.
+
 ### Breaking — `DataViews.Filters.Summary` is removed
 
 The chip strip that echoed the active filters above the rows is gone, along with the component
@@ -119,6 +135,11 @@ indicator those chrome-less fields have.
   into two columns it moves under the control it describes, instead of being stranded at the bottom
   of the 350px label column. Driven only by container width, so a `direction="vertical"` form — what
   `FormRenderer` forces inside a drawer — behaves the same.
+- **`FormRenderer`** stepper — the step rail no longer scrolls away with the fields. It is
+  navigation, so it now pins below the header (`sticky self-start top-[72px]`). `self-start` is the
+  load-bearing half: the rail is a grid item, and a grid item stretches to the full row height by
+  default, which leaves `sticky` nothing to move within. Measured on the docs demo, the rail holds
+  at 0px drift while the fields scroll 798px; before, it tracked them exactly.
 - **`FormRenderer`** stepper — the empty third grid column that balances the rail's gutter is now
   dropped below `@lg`, giving its 180px floor plus a 32px gap back to the fields. The grid template
   changes with it: a `display:none` child is not a grid item, but the track would still be reserved
