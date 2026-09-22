@@ -17,7 +17,7 @@ import { ROOT } from "../../utils/libMeta.js";
  * never disagree with the page it came from.
  *
  * Idempotent and deterministic.
- *   node scripts/bin/generateExampleDocs/index.js   (or `pnpm run examples`)
+ *   node scripts/bin/generateExampleDocs/index.js
  */
 
 const DOCS = path.join(ROOT, "docs");

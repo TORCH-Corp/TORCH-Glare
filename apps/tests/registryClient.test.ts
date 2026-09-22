@@ -131,9 +131,8 @@ describe("item memo", () => {
 });
 
 describe("registry index cache", () => {
-    // Tracks REGISTRY_URL, which is temporarily on `refactor/cli-v2` for pre-merge testing.
     const INDEX_URL =
-        "https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/refactor/cli-v2/registry/index.json";
+        "https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry/index.json";
 
     it("fetches the index once per process, from the Glare repo", async () => {
         const calls = stubFetch(index);

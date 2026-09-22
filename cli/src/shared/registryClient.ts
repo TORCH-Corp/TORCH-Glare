@@ -22,14 +22,8 @@ import type { Registry, RegistryItem, RegistryItemPayload } from "../types/main.
  * what it proxied (0.31-0.67s vs 0.27s), traded a CDN for a single VPS, and coupled every install
  * to a website deploy. raw already sends `access-control-allow-origin: *`, which was the one thing
  * the route added that could not be got for free.
- *
- * ⚠️ TEMPORARY: pointed at `refactor/cli-v2` so the registry can be tested from the branch before
- * it reaches `main`. **Put this back to `main` before merging or publishing** — otherwise the
- * released CLI installs every component from a feature branch, and every install breaks the day
- * that branch is deleted. `pnpm run deploy` refuses to publish while this says anything else.
  */
-const REGISTRY_URL =
-    "https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/refactor/cli-v2/registry";
+const REGISTRY_URL = "https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry";
 
 /** Parallel item fetches. Measured ~275ms per request; `add DataViews` is 55 items. */
 const CONCURRENCY = 8;

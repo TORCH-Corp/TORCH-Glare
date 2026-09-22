@@ -57,9 +57,9 @@ The library's hard rule — never emit `system` color tokens or the `SystemStyle
 the `presentation` equivalents — is sent once via the server's **`instructions`** (at connect), with
 a short reminder on the code-emitting tools.
 
-> When iterating on docs or component source in this repo, run `pnpm run build` (or
-> `pnpm run mcp:build` from the repo root) so the server picks up your changes — it reads the bundled
-> copies produced by `sync-docs`.
+> When iterating on docs or component source in this repo, run `pnpm run build` here (or
+> `pnpm -C mcp run build` from the repo root) so the server picks up your changes — it reads the
+> bundled copies produced by `sync-docs`.
 
 ## Development
 

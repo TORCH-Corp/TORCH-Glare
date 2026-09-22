@@ -19,9 +19,10 @@ paths, so a dependency resolves by concatenation. The format is described in
 **Nothing to change.** `glare.json` still takes a single `path` key and every command keeps its
 name — `add`, `hook`, `util`, `layout`, `provider`.
 
-The CLI no longer carries the library, so the tarball drops from 1.3 MB to ~960 KB and an
-unreachable registry is a real failure: the command says so and exits non-zero rather than quietly
-installing from a bundled copy.
+The CLI no longer carries the library, and the docs went with it — nothing in the CLI ever read
+them, and the MCP server ships its own copy for the tools that do. The tarball drops from 1.3 MB to
+**~40 KB**. An unreachable registry is now a real failure too: the command says so and exits
+non-zero rather than quietly installing from a bundled copy.
 
 ### Fixes
 

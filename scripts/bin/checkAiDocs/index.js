@@ -201,13 +201,13 @@ if (fs.existsSync(docsComponentsDir)) {
         const abs = path.join(DOCS_DIR, rel);
         const actual = fs.existsSync(abs) ? fs.readFileSync(abs, "utf-8") : null;
         if (actual === null) {
-            violations.push(`generated: docs/${rel} is missing — run \`pnpm run examples\``);
+            violations.push(`generated: docs/${rel} is missing — run \`node scripts/bin/generateExampleDocs/index.js\``);
         } else if (actual !== expected) {
-            violations.push(`generated: docs/${rel} is stale — run \`pnpm run examples\``);
+            violations.push(`generated: docs/${rel} is stale — run \`node scripts/bin/generateExampleDocs/index.js\``);
         }
     }
     for (const rel of staleExampleDocs(built)) {
-        violations.push(`generated: docs/${rel} is no longer generated — run \`pnpm run examples\``);
+        violations.push(`generated: docs/${rel} is no longer generated — run \`node scripts/bin/generateExampleDocs/index.js\``);
     }
 }
 
