@@ -96,15 +96,21 @@ async function updateItems(
     }
 
     // Keep only what the registry knows about; the rest of the folder is the project's own.
+    //
+    // Deduplicated, because several local entries can resolve to one registry item. A project that
+    // installed `TextEditor` back when it was a single file, and again after it became a folder,
+    // has both `TextEditor.tsx` and `TextEditor/` sitting there — and updating it twice is wasted
+    // work and a confusing duplicate line in the output.
     const known = namesOfType(registry, type);
     const present = getAvailableFiles(installedItemsDir);
-    const ours: string[] = [];
+    const resolved = new Set<string>();
     let untouched = 0;
     for (const entry of present) {
-        const resolved = resolveEntry(entry, known);
-        if (resolved) ours.push(resolved);
+        const match = resolveEntry(entry, known);
+        if (match) resolved.add(match);
         else untouched++;
     }
+    const ours = [...resolved];
 
     if (ours.length === 0) {
         console.log(`✅ No ${type} to update.`);
