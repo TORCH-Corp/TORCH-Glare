@@ -11,6 +11,11 @@ export function getInstallCommand(packageManager: string, dependencies: Set<stri
             return `pnpm add ${deps}`;
         case "yarn":
             return `yarn add ${deps}`;
+        // `detectPackageManager` recognises bun.lockb but there was no case for it here, so a Bun
+        // project silently had its dependencies installed by npm — which writes a package-lock.json
+        // beside the bun.lockb and leaves the project with two lockfiles disagreeing.
+        case "bun":
+            return `bun add ${deps}`;
         default:
             return `npm install ${deps}`;
     }

@@ -2,24 +2,31 @@ import fs from "fs";
 import path from "path";
 
 /**
- * Resolve a user-provided name to an actual entry in a templates directory.
+ * Resolve a user-provided name to a registry item name.
  *
- * `readdirSync` returns names **with** their extensions, so comparing a bare `useDragDrop` against
- * that list never matches — which is why `torch-glare hook useDragDrop` used to do nothing at all.
- * Every command resolves through here now, so a bare name, a name with an extension, and a folder
- * component all work the same way whichever command you reach for.
+ * `available` is now the registry's own list of item names, not a `readdirSync` of a templates
+ * directory. That inversion matters: resolution used to be filesystem-first, so a name the local
+ * listing did not contain was rejected before the registry was ever consulted — which made every
+ * component that exists only in the hosted registry unreachable.
  *
- * Tries, in order: exact match · `.tsx` · `.ts` · anything on disk the listing missed.
+ * Registry names carry no extension, so a user typing `Button.tsx` (or copying it out of a file
+ * tree) has it stripped rather than failing to match.
+ *
+ * Tries, in order: exact · extension stripped · case-insensitive.
  */
-export function resolveEntry(input: string, available: string[], dir: string): string | null {
-    if (available.includes(input)) return input;
+export function resolveEntry(input: string, available: string[]): string | null {
+    const candidates = [input, input.replace(/\.(tsx|ts)$/, "")];
 
-    for (const candidate of [`${input}.tsx`, `${input}.ts`]) {
+    for (const candidate of candidates) {
         if (available.includes(candidate)) return candidate;
     }
 
-    // Last-ditch: a folder component, or something the listing filtered out.
-    if (fs.existsSync(path.join(dir, input))) return input;
+    // `torch-glare add button` should not be a dead end when `Button` is right there.
+    for (const candidate of candidates) {
+        const match = available.find((name) => name.toLowerCase() === candidate.toLowerCase());
+        if (match) return match;
+    }
+
     return null;
 }
 

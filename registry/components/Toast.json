@@ -1,0 +1,16 @@
+{
+  "version": "2.6.0",
+  "name": "Toast",
+  "type": "components",
+  "dependencies": [
+    "react-hot-toast@^2.5.2"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/Toast.tsx",
+      "target": "components/Toast.tsx",
+      "content": "import React from \"react\";\nimport { Toaster as ToasterComponent, toast } from \"react-hot-toast\";\n\nconst Toaster = ({\n  position = \"top-left\",\n  reverseOrder = false,\n  gutter = 8,\n  containerClassName = \"\",\n  containerStyle = {},\n  toastOptions = {},\n  ...props\n}: React.ComponentPropsWithoutRef<typeof ToasterComponent>) => {\n  return (\n    <ToasterComponent\n      position={position}\n      reverseOrder={reverseOrder}\n      gutter={gutter}\n      containerClassName={containerClassName}\n      containerStyle={containerStyle}\n      {...props}\n      toastOptions={{\n        // Define default options\n        className: \"\",\n        duration: 8000,\n        removeDelay: 1000,\n        style: {\n          background: \"var(--background-presentation-state-information-secondary)\",\n          color: \"var(--content-presentation-global-primary)\",\n          borderRadius: \"16px\",\n        },\n\n        // Default options for specific types\n        success: {\n          duration: 3000,\n          style: {\n            background: \"var(--background-presentation-state-success-secondary)\",\n            color: \"var(--content-presentation-global-primary)\",\n            borderRadius: \"16px\",\n          },\n          iconTheme: {\n            primary: \"var(--background-presentation-state-success-primary)\",\n            secondary: \"var(--background-presentation-state-success-secondary)\",\n          },\n        },\n        error: {\n          duration: 5000,\n          style: {\n            background: \"var(--background-presentation-state-negative-secondary)\",\n            color: \"var(--content-presentation-global-primary)\",\n            borderRadius: \"16px\",\n          },\n          iconTheme: {\n            primary: \"var(--background-presentation-state-negative-primary)\",\n            secondary: \"var(--background-presentation-state-negative-secondary)\",\n          },\n        },\n        loading: {\n          duration: 4000,\n          style: {\n            background: \"var(--background-presentation-state-warning-secondary)\",\n            color: \"var(--content-presentation-global-primary)\",\n            borderRadius: \"16px\",\n          },\n          iconTheme: {\n            primary: \"var(--background-presentation-state-warning-primary)\",\n            secondary: \"var(--background-presentation-state-warning-secondary)\",\n          },\n        },\n        blank: {\n          duration: 4000,\n          style: {\n            background: \"var(--background-presentation-state-information-secondary)\",\n            color: \"var(--content-presentation-global-primary)\",\n            borderRadius: \"16px\",\n          },\n          iconTheme: {\n            primary: \"var(--background-presentation-state-information-primary)\",\n            secondary: \"var(--background-presentation-state-information-secondary)\",\n          },\n        },\n        ...toastOptions,\n      }}\n    />\n  );\n};\n\nexport { Toaster, toast };\n"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 {
   "name": "torch-glare",
-  "version": "2.5.6",
+  "version": "2.6.0",
   "type": "module",
   "license": "MIT",
-  "description": "A copy-in React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI copies component source directly into your project — you own the code.",
+  "description": "A React component library (TypeScript + Radix UI + Tailwind CSS). Its CLI installs component source from a hosted registry straight into your project — you own the code.",
   "homepage": "https://glare.torchcorp.com",
   "repository": {
     "type": "git",
@@ -22,11 +22,7 @@
     "cli"
   ],
   "files": [
-    "dist",
-    "apps/lib",
-    "docs",
-    "!**/*-dev.*",
-    "!apps/lib/components/**/*.md"
+    "dist"
   ],
   "bin": {
     "torch-glare": "dist/bin/index.js"
@@ -37,17 +33,16 @@
   "scripts": {
     "build": "tsc -b",
     "registry": "node scripts/bin/generateRegistry/index.js",
-    "examples": "node scripts/bin/generateExampleDocs/index.js",
+    "tag": "node scripts/bin/tagRelease/index.js",
     "docs:fix": "node scripts/bin/fixDocs/index.js",
     "check:ai-docs": "node scripts/bin/checkAiDocs/index.js",
+    "hooks:install": "git config core.hooksPath .githooks",
     "typecheck": "pnpm -C apps run typecheck",
     "lint": "pnpm -C apps run lint:lib",
     "format": "pnpm -C apps run format",
     "format:check": "pnpm -C apps run format:check",
     "test": "pnpm -C apps run test",
-    "mcp:build": "pnpm -C mcp install && pnpm -C mcp run build",
-    "prepare": "pnpm -C mcp install && pnpm -C mcp run build",
-    "deploy": "pnpm run registry && pnpm run examples && pnpm run check:ai-docs && npx tsc --build --force && npm publish --access public"
+    "deploy": "pnpm run registry && pnpm run check:ai-docs && npx tsc --build --force && npm publish --access public && pnpm run tag"
   },
   "dependencies": {
     "commander": "^13.1.0",

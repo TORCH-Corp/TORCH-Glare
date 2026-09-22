@@ -1,9 +1,14 @@
 /**
- * Loads the copy-in registry (apps/lib/registry.json) and exposes the install
- * metadata the CLI uses: the `torch-glare` command to add an item, its import
- * statement, its npm dependencies, and the transitive closure of internal
- * (registry) dependencies the CLI copies. This is what makes the MCP server
- * *actionable* for a copy-in library rather than merely descriptive.
+ * Loads the registry manifest and exposes the install metadata the CLI uses: the
+ * `torch-glare` command to add an item, its import statement, its npm dependencies,
+ * and the transitive closure of internal (registry) dependencies that come with it.
+ * This is what makes the MCP server *actionable* for a copy-in library rather than
+ * merely descriptive.
+ *
+ * The manifest and source read here are bundled into this package by
+ * `scripts/sync-docs.mjs`. That is deliberate and separate from how the CLI installs:
+ * the CLI fetches from the hosted registry, while this server answers source and API
+ * questions locally, so an AI query costs no network round trip.
  *
  * The transitive resolution mirrors the CLI's resolveInstallPlan
  * (cli/src/shared/resolveInstallPlan.ts) so the MCP reports exactly what an

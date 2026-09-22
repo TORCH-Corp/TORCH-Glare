@@ -21,23 +21,31 @@ const registry: Registry = JSON.parse(read(path.resolve(process.cwd(), "lib/regi
 const tmp = () => mkdtempSync(path.join(tmpdir(), "glare-cli-"));
 
 describe("resolveEntry", () => {
-    const available = ["Button.tsx", "DataViews", "useDragDrop.tsx", "cn.ts"];
-    const dir = path.resolve(process.cwd(), "lib/components");
+    // Registry item names, which carry no extension — the CLI resolves against the fetched index
+    // now, not a readdirSync of a templates directory.
+    const available = ["Button", "DataViews", "useDragDrop", "cn"];
 
     it("accepts a bare name, which is what every command passes", () => {
-        expect(resolveEntry("Button", available, dir)).toBe("Button.tsx");
+        expect(resolveEntry("Button", available)).toBe("Button");
         // The one that used to fail silently: the only hook shipped as .tsx.
-        expect(resolveEntry("useDragDrop", available, dir)).toBe("useDragDrop.tsx");
-        expect(resolveEntry("cn", available, dir)).toBe("cn.ts");
+        expect(resolveEntry("useDragDrop", available)).toBe("useDragDrop");
+        expect(resolveEntry("cn", available)).toBe("cn");
     });
 
     it("accepts the name with its extension, and a folder component", () => {
-        expect(resolveEntry("Button.tsx", available, dir)).toBe("Button.tsx");
-        expect(resolveEntry("DataViews", available, dir)).toBe("DataViews");
+        // Someone copying a filename out of a file tree still gets what they meant.
+        expect(resolveEntry("Button.tsx", available)).toBe("Button");
+        expect(resolveEntry("cn.ts", available)).toBe("cn");
+        expect(resolveEntry("DataViews", available)).toBe("DataViews");
+    });
+
+    it("accepts the wrong case rather than dead-ending", () => {
+        expect(resolveEntry("button", available)).toBe("Button");
+        expect(resolveEntry("dataviews", available)).toBe("DataViews");
     });
 
     it("returns null for something that does not exist", () => {
-        expect(resolveEntry("NotAThing", available, dir)).toBeNull();
+        expect(resolveEntry("NotAThing", available)).toBeNull();
     });
 });
 

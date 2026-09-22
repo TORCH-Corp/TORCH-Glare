@@ -1,0 +1,13 @@
+# The hosted registry is a build artifact of `pnpm run registry`, generated from apps/lib.
+# It is committed because raw.githubusercontent.com serves it directly and git tags are what
+# give the hosted registry its permanent version pins — but it duplicates every byte of library
+# source, so an unmarked diff would bury the actual change in ~1.1 MB of noise.
+#
+# `-diff` hides the content from `git diff`/`git log -p`; `linguist-generated` collapses it in
+# GitHub PRs and keeps it out of language stats. Regenerate rather than hand-edit.
+registry/** linguist-generated=true -diff
+
+# Keep generated JSON from being rewritten by autocrlf on a Windows checkout — the CLI compares
+# fetched content to files on disk, and a CRLF round-trip would make every file look modified.
+registry/** -text
+apps/lib/registry.json -text

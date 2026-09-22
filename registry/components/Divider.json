@@ -1,0 +1,16 @@
+{
+  "version": "2.6.0",
+  "name": "Divider",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/Divider.tsx",
+      "target": "components/Divider.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { cn } from \"../utils/cn\";\n\ninterface DividerProps extends React.HTMLAttributes<HTMLDivElement> {\n  orientation?: \"horizontal\" | \"vertical\";\n  decorative?: boolean;\n}\n\nconst Divider = React.forwardRef<HTMLDivElement, DividerProps>(\n  ({ className, orientation = \"horizontal\", decorative = true, ...props }, ref) => (\n    <div\n      ref={ref}\n      role={decorative ? \"none\" : \"separator\"}\n      aria-orientation={decorative ? undefined : orientation}\n      className={cn(\n        \"bg-border-presentation-global-primary\",\n        orientation === \"horizontal\" ? \"h-[1px] w-full\" : \"h-full w-[1px]\",\n        className,\n      )}\n      {...props}\n    />\n  ),\n);\nDivider.displayName = \"Divider\";\n\nexport { Divider };\n"
+    }
+  ]
+}

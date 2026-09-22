@@ -6,6 +6,11 @@ import { Config } from "../types/main.js";
 import { tailwindInit } from "../shared/tailwindInit.js";
 import readline from "readline";
 import { getAvailableFiles } from "../shared/getAvailableFiles.js";
+import { loadRegistry } from "../shared/loadRegistry.js";
+import { RegistryError } from "../shared/registryClient.js";
+import { resolveEntry } from "../shared/resolveEntry.js";
+import { namesOfType } from "../shared/addFromRegistry.js";
+import type { RegistryItem } from "../types/main.js";
 import { add } from "./add.js";
 import { addHook } from "./hook.js";
 import { addUtil } from "./utils.js";
@@ -37,20 +42,30 @@ export async function updateInstalledComponents(): Promise<void> {
         return;
     }
 
-    // Update components
-    await updateItems("components", targetFile);
+    // Fetched once, up front: every `updateItems` pass needs it to tell our items apart from
+    // yours, and loadRegistry caches per process anyway.
+    let registry;
+    try {
+        registry = await loadRegistry();
+    } catch (error) {
+        if (error instanceof RegistryError) {
+            console.error(`❌ ${error.message}`);
+            process.exitCode = 1;
+            return;
+        }
+        throw error;
+    }
 
-    // Update hooks
-    await updateItems("hooks", targetFile);
+    let untouched = 0;
+    for (const type of ["components", "hooks", "utils", "providers", "layouts"] as const) {
+        untouched += await updateItems(type, targetFile, registry);
+    }
 
-    // Update utils
-    await updateItems("utils", targetFile);
-
-    // Update providers
-    await updateItems("providers", targetFile);
-
-    // Update layouts
-    await updateItems("layouts", targetFile);
+    // Your own files live in the same folders as ours, so say plainly that they were left alone
+    // rather than leaving you to wonder why the counts do not add up.
+    if (untouched > 0) {
+        console.log(`ℹ️  Left ${untouched} file(s) alone — not TORCH Glare items.`);
+    }
 
     // Reinitialize Tailwind CSS configuration
     tailwindInit();
@@ -58,52 +73,75 @@ export async function updateInstalledComponents(): Promise<void> {
 }
 
 /**
- * Update items (components, hooks, or utils) by syncing them with the latest templates.
- * @param {string} type - The type of items to update (e.g., "components", "hooks", "utils").
- * @param {object} config - Configuration object.
+ * Re-install the registry items of one type that this project already has.
+ *
+ * The install directory is **yours**, not ours: `src/components` holds your components alongside
+ * the ones Glare installed. Updating used to hand every filename in it to `add`, so each of your
+ * own files produced a "not found" error — 22 of them in the Glare website, 8 in products-services
+ * — and, once `add` started exiting non-zero on a miss, made a successful update look like a
+ * failure. Only names the registry actually contains are ours to update.
+ *
+ * @returns how many local files were left alone.
  */
-async function updateItems(type: string, config: any): Promise<void> {
+async function updateItems(
+    type: RegistryItem["type"],
+    config: any,
+    registry: Awaited<ReturnType<typeof loadRegistry>>,
+): Promise<number> {
     const installedItemsDir = getInstalledItemsDir(config, type);
 
     // Exit if no installed items are found
     if (!checkIfItemsExist(installedItemsDir, type)) {
-        return;
+        return 0;
     }
 
-    // Get the list of installed items
-    const installedItems = getAvailableFiles(installedItemsDir);
+    // Keep only what the registry knows about; the rest of the folder is the project's own.
+    //
+    // Deduplicated, because several local entries can resolve to one registry item. A project that
+    // installed `TextEditor` back when it was a single file, and again after it became a folder,
+    // has both `TextEditor.tsx` and `TextEditor/` sitting there — and updating it twice is wasted
+    // work and a confusing duplicate line in the output.
+    const known = namesOfType(registry, type);
+    const present = getAvailableFiles(installedItemsDir);
+    const resolved = new Set<string>();
+    let untouched = 0;
+    for (const entry of present) {
+        const match = resolveEntry(entry, known);
+        if (match) resolved.add(match);
+        else untouched++;
+    }
+    const ours = [...resolved];
 
-    // Exit if there are no items to update
-    if (installedItems.length === 0) {
+    if (ours.length === 0) {
         console.log(`✅ No ${type} to update.`);
-        return;
+        return untouched;
     }
 
     console.log(`🔄 Updating installed ${type}...`);
 
-    // Update each installed item
-    installedItems.forEach((item) => {
-        switch (type) {
-            case "components":
-                add(item, true);
-                break;
-            case "hooks":
-                addHook(item, true);
-                break;
-            case "utils":
-                addUtil(item, true);
-                break;
-            case "providers":
-                addProvider(item, true);
-                break;
-            case "layouts":
-                addLayout(item, true);
-                break;
-            default:
-                console.log(`❌ Unknown item type: ${type}`);
-                break;
-        }
-    });
+    const installers: Record<string, (name: string, replace: boolean) => Promise<void>> = {
+        components: add,
+        hooks: addHook,
+        utils: addUtil,
+        providers: addProvider,
+        layouts: addLayout,
+    };
+
+    const install = installers[type];
+    if (!install) {
+        console.log(`❌ Unknown item type: ${type}`);
+        return untouched;
+    }
+
+    // Sequentially, and awaited. This was a `forEach` over async calls with no `await`, so every
+    // item installed at once, out of order, with each rejection unhandled. Copying local files
+    // mostly survived that; fetching over HTTP would not — it opens one connection per installed
+    // item and races several npm invocations against each other in the same project.
+    for (const item of ours) {
+        await install(item, true);
+    }
+
+    return untouched;
 }
 
 /**

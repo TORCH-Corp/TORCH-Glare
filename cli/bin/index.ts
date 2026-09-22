@@ -30,35 +30,32 @@ program
   .description("Initialize glare.json configuration file")
   .action(() => initConfig());
 
-program
-  .command("add [component]")
-  .description("Add a component interactively or install a specified one")
-  .option("-f, --force", "Overwrite the component if it already exists")
-  .action((component, options) => add(component, !!options.force));
-
-program
-  .command("hook [hook]")
+const installCommand = (
+  signature: string,
+  description: string,
+  run: (name: string | undefined, replace: boolean) => Promise<void>,
+) =>
+  program
+    .command(signature)
+    .description(description)
     .option("-f, --force", "Overwrite it if it already exists")
-  .description("Add a hook interactively or install a specified one")
-  .action((hook, options) => addHook(hook, !!options.force));
+    .action((name: string | undefined, options: { force?: boolean }) =>
+      run(name, !!options.force),
+    );
 
-program
-  .command("layout [layout]")
-    .option("-f, --force", "Overwrite it if it already exists")
-  .description("Add a Layout interactively or install a specified one")
-  .action((layout, options) => addLayout(layout, !!options.force));
-
-program
-  .command("util [util]")
-    .option("-f, --force", "Overwrite it if it already exists")
-  .description("Add a utils interactively or install a specified one")
-  .action((util, options) => addUtil(util, !!options.force));
-
-program
-  .command("provider [provider]")
-    .option("-f, --force", "Overwrite it if it already exists")
-  .description("Add a provider interactively or install a specified one")
-  .action((provider, options) => addProvider(provider, !!options.force));
+installCommand(
+  "add [component]",
+  "Add a component interactively or install a specified one",
+  add,
+);
+installCommand("hook [hook]", "Add a hook interactively or install a specified one", addHook);
+installCommand("layout [layout]", "Add a Layout interactively or install a specified one", addLayout);
+installCommand("util [util]", "Add a utils interactively or install a specified one", addUtil);
+installCommand(
+  "provider [provider]",
+  "Add a provider interactively or install a specified one",
+  addProvider,
+);
 
 program
   .command("update")

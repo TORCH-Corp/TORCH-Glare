@@ -1,0 +1,19 @@
+{
+  "version": "2.6.0",
+  "name": "LabelField",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "components/InputField",
+    "components/Label",
+    "components/Tooltip",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/LabelField.tsx",
+      "target": "components/LabelField.tsx",
+      "content": "import { InputHTMLAttributes, ReactNode, forwardRef } from \"react\";\nimport { InputField } from \"./InputField\";\nimport { Label } from \"./Label\";\nimport { ToolTipSide } from \"./Tooltip\";\nimport { Themes } from \"../utils/types\";\n\nexport interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, \"size\" | \"variant\"> {\n  size?: \"S\" | \"M\"; // this is used to change the size style of the component\n  variant?: \"SystemStyle\" | \"PresentationStyle\";\n  icon?: ReactNode; // to add left side icon if you pass it\n  childrenSide?: ReactNode; // to add action button to the end of the input\n  popoverChildren?: ReactNode; // to add drop down list if you pass it\n  errorMessage?: string; // to show tooltip component when error_message not null\n  onTable?: boolean; // to change the border style of the component when it is on table\n  label?: ReactNode; // main label\n  requiredLabel?: ReactNode; // normal text with required style\n  secondaryLabel?: ReactNode; // normal text with secondary style\n  labelDirections?: \"vertical\" | \"horizontal\"; // to change the direction of the label\n  childrenDirections?: \"vertical\" | \"horizontal\"; // to change the direction of the children\n  toolTipSide?: ToolTipSide;\n  theme?: Themes;\n}\n\nexport const LabelField = forwardRef<HTMLInputElement, Props>(\n  (\n    {\n      label,\n      requiredLabel,\n      secondaryLabel,\n      size,\n      variant,\n      theme,\n      icon,\n      childrenSide,\n      popoverChildren,\n      errorMessage,\n      onTable,\n      className,\n      labelDirections,\n      childrenDirections,\n      toolTipSide,\n\n      ...props\n    },\n    ref,\n  ) => {\n    return (\n      <Label\n        data-theme={theme}\n        label={label}\n        requiredLabel={requiredLabel}\n        secondaryLabel={secondaryLabel}\n        labelDirections={labelDirections}\n        childrenDirections={childrenDirections}\n        variant={variant}\n        className={className}\n      >\n        <InputField\n          {...props}\n          theme={theme}\n          ref={ref}\n          size={size}\n          icon={icon}\n          toolTipSide={toolTipSide}\n          variant={variant}\n          childrenSide={childrenSide}\n          popoverChildren={popoverChildren}\n          errorMessage={errorMessage}\n          onTable={onTable}\n        />\n      </Label>\n    );\n  },\n);\n\nLabelField.displayName = \"LabelField\";\n"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "version": "2.6.0",
+  "name": "Tooltip",
+  "type": "components",
+  "dependencies": [
+    "@radix-ui/react-tooltip@^1.1.8",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/Tooltip.tsx",
+      "target": "components/Tooltip.tsx",
+      "content": "import { cva, VariantProps } from \"class-variance-authority\";\nimport { ReactNode } from \"react\";\nimport { cn } from \"../utils/cn\";\nimport { Themes } from \"../utils/types\";\nimport * as TooltipPrimitive from \"@radix-ui/react-tooltip\";\nimport React from \"react\";\n\nconst TooltipProvider = TooltipPrimitive.Provider;\n\nconst ToolTipRoot = TooltipPrimitive.Root;\n\nconst TooltipTrigger = TooltipPrimitive.Trigger;\n\nconst TooltipContent = React.forwardRef<\n  React.ElementRef<typeof TooltipPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>\n>(({ className, sideOffset = 4, ...props }, ref) => (\n  <TooltipPrimitive.Portal>\n    <TooltipPrimitive.Content\n      ref={ref}\n      sideOffset={sideOffset}\n      className={cn(\n        \"z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-tooltip-content-transform-origin]\",\n        className,\n      )}\n      {...props}\n    />\n  </TooltipPrimitive.Portal>\n));\nTooltipContent.displayName = TooltipPrimitive.Content.displayName;\n\nconst TooltipArrow = TooltipPrimitive.Arrow;\nexport type ToolTipSide = \"top\" | \"right\" | \"bottom\" | \"left\";\n\nexport enum ContentAlign {\n  START = \"start\",\n  CENTER = \"center\",\n  END = \"end\",\n}\n\nconst tooltipStyles = cva(\"typography-body-medium-regular rounded-[4px] p-1\", {\n  variants: {\n    variant: {\n      primary: \"bg-background-system-body-tertiary text-content-system-global-primary\",\n      highlight: \"bg-gradient-to-r from-wavy-navy-900 to-wavy-navy-800 text-white\",\n    },\n  },\n  defaultVariants: {\n    variant: \"primary\",\n  },\n});\n\ninterface TooltipProps\n  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof tooltipStyles> {\n  onOpenChange?: (open: boolean) => void;\n  open?: boolean;\n  toolTipSide?: ToolTipSide;\n  contentAlign?: ContentAlign;\n  avoidCollisions?: boolean;\n  tip?: boolean;\n  delay?: number;\n  disabled?: boolean;\n  text: ReactNode;\n  theme?: Themes;\n}\n\nconst Tooltip: React.FC<TooltipProps> = ({\n  children,\n  open,\n  text,\n  theme = \"dark\",\n  onOpenChange,\n  toolTipSide,\n  contentAlign = ContentAlign.CENTER,\n  avoidCollisions = true,\n  delay = 400,\n  tip = true,\n  variant,\n  className,\n  ...props\n}) => {\n  return (\n    <TooltipProvider>\n      <ToolTipRoot\n        delayDuration={delay}\n        {...(typeof open !== \"undefined\" && { open })}\n        {...(onOpenChange && { onOpenChange })}\n      >\n        <TooltipTrigger aria-label=\"Open tooltip\" asChild>\n          {children}\n        </TooltipTrigger>\n\n        <TooltipContent\n          data-theme={theme}\n          sideOffset={2}\n          side={toolTipSide}\n          align={contentAlign}\n          avoidCollisions={avoidCollisions}\n          className={cn(tooltipStyles({ variant, className }))}\n          {...props}\n        >\n          {text}\n          {tip && (\n            <TooltipArrow\n              className={cn(\"fill-background-system-body-tertiary\", {\n                \"fill-wavy-navy-900\": variant === \"highlight\",\n              })}\n            />\n          )}\n        </TooltipContent>\n      </ToolTipRoot>\n    </TooltipProvider>\n  );\n};\n\nexport { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipArrow, ToolTipRoot };\n"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry/schema.json",
+  "title": "TORCH Glare registry",
+  "description": "Both shapes served by a Glare-compatible registry: the index at /index.json and a single item at /<type>/<Name>.json. An item's registryDependencies entry is also its URL path, so a dependency resolves by concatenation with the registry base.",
+  "oneOf": [
+    {
+      "$ref": "#/definitions/index"
+    },
+    {
+      "$ref": "#/definitions/item"
+    }
+  ],
+  "definitions": {
+    "type": {
+      "enum": [
+        "components",
+        "hooks",
+        "utils",
+        "layouts",
+        "providers"
+      ],
+      "description": "Also the sub-folder the item installs into."
+    },
+    "ref": {
+      "type": "string",
+      "pattern": "^(components|hooks|utils|layouts|providers)/[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "A \"type/name\" reference, which doubles as a URL path."
+    },
+    "index": {
+      "type": "object",
+      "required": [
+        "version",
+        "items"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "generatedBy": {
+          "type": "string"
+        },
+        "npmVersions": {
+          "type": "object",
+          "description": "Package name to semver range, shared across every item.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/indexItem"
+          }
+        }
+      }
+    },
+    "indexItem": {
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "path",
+        "npmDependencies",
+        "registryDependencies"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "type": {
+          "$ref": "#/definitions/type"
+        },
+        "path": {
+          "type": "string",
+          "description": "File or directory, relative to the library root."
+        },
+        "files": {
+          "type": "array",
+          "description": "Every file the item is made of. Expands a directory `path`.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "npmDependencies": {
+          "type": "array",
+          "description": "Bare package names; ranges live in the index's npmVersions.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "registryDependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ref"
+          }
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "dependencies",
+        "registryDependencies",
+        "files"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "type": {
+          "$ref": "#/definitions/type"
+        },
+        "dependencies": {
+          "type": "array",
+          "description": "npm specs with their range inlined, e.g. \"clsx@^2.1.1\".",
+          "items": {
+            "type": "string"
+          }
+        },
+        "registryDependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ref"
+          }
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/file"
+          }
+        }
+      }
+    },
+    "file": {
+      "type": "object",
+      "required": [
+        "path",
+        "target",
+        "content"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "description": "Where it installs, relative to the configured path. Must stay inside it."
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "version": "2.6.0",
+  "name": "useActiveTreeItem",
+  "type": "hooks",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "hooks/useActiveTreeItem.ts",
+      "target": "hooks/useActiveTreeItem.ts",
+      "content": "\"use client\";\nimport { useState, useEffect } from \"react\";\n\nexport function useActiveTreeItem(itemIds: string[]) {\n  const [activeId, setActiveId] = useState<string | null>(null);\n\n  useEffect(() => {\n    // An empty list is a legitimate answer — a page with no Quick Nav has nothing to track. Only a\n    // missing list is a caller mistake worth a warning.\n    if (!itemIds) {\n      console.warn(\"No itemIds provided to useActiveTreeItem.\");\n      return;\n    }\n    if (itemIds.length === 0) return;\n\n    const observer = new IntersectionObserver(\n      (entries) => {\n        let mostVisibleEntry: IntersectionObserverEntry | null = null;\n\n        for (const entry of entries) {\n          if (entry.isIntersecting) {\n            // Track the most visible entry (highest intersection ratio)\n            if (!mostVisibleEntry || entry.intersectionRatio > mostVisibleEntry.intersectionRatio) {\n              mostVisibleEntry = entry;\n            }\n          }\n        }\n\n        if (mostVisibleEntry) {\n          setActiveId(mostVisibleEntry.target.id);\n        }\n      },\n      {\n        rootMargin: \"-10% 0% -5% 0%\", // Adjust based on your layout\n        threshold: [0, 0.25, 0.5, 0.75, 1], // Multiple thresholds for better accuracy\n      },\n    );\n\n    // Observe all elements\n    itemIds.forEach((id) => {\n      const element = document.getElementById(id);\n      if (element) {\n        observer.observe(element);\n      } else {\n        console.warn(`Element with id \"${id}\" not found.`);\n      }\n    });\n\n    // Cleanup observer\n    return () => {\n      itemIds.forEach((id) => {\n        const element = document.getElementById(id);\n        if (element) {\n          observer.unobserve(element);\n        }\n      });\n    };\n  }, [itemIds]);\n\n  return { activeId };\n}\n"
+    }
+  ]
+}

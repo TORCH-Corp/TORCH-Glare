@@ -248,3 +248,5 @@ export const Badge: React.FC<BadgeProps> = ({
     </span>
   );
 };
+
+// a change the developer forgot to regenerate for

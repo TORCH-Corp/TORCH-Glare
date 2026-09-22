@@ -59,6 +59,12 @@ jobs:
       - name: Run tests
         run: pnpm run test
 
+      # The MCP server is a separate package with its own lockfile, not a workspace member, so
+      # `pnpm install` at the root does not reach it. This used to happen implicitly via the root
+      # `prepare` script; installing it here keeps the dependency explicit and visible.
+      - name: Install MCP dependencies
+        run: pnpm -C mcp install
+
       - name: Test MCP server
         run: pnpm -C mcp test
 
@@ -70,6 +76,19 @@ jobs:
           pnpm run registry
           git diff --exit-code apps/lib/registry.json \
             || (echo "❌ registry.json is stale — run 'pnpm run registry' and commit." && exit 1)
+          # registry/ is what raw.githubusercontent.com serves, so a stale copy means the hosted
+          # registry hands out old component source. Checking apps/lib/registry.json alone does not
+          # catch it: that manifest only records the dependency graph, so editing a component's body
+          # leaves it byte-identical while every inlined `content` in registry/ goes out of date.
+          #
+          # `git status --porcelain`, not `git diff`: diff only reports files git already tracks, so
+          # a newly generated or renamed item would slip through silently — the failure mode being
+          # a guard that passes because it is looking at nothing.
+          if [ -n "$(git status --porcelain -- registry/)" ]; then
+            echo "❌ registry/ is stale — run 'pnpm run registry' and commit:"
+            git status --short -- registry/
+            exit 1
+          fi
 
       - name: Build CLI
         run: pnpm build
@@ -139,7 +158,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           ack_no_webhook: true  # Add this to suppress webhook errors
-          title: "Torch-Glare-Website Dev Branch CI/CD"
+          title: "TORCH-Glare Dev Branch CI/CD"
           description: |
             ### Build Status: ${{ needs.test_and_build.result == 'success' && '✅ Success' || '❌ Failed' }}
             

@@ -1,0 +1,18 @@
+{
+  "version": "2.6.0",
+  "name": "LabeledRadio",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "components/Label",
+    "components/Radio",
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/LabeledRadio.tsx",
+      "target": "components/LabeledRadio.tsx",
+      "content": "\"use client\";\nimport { forwardRef } from \"react\";\nimport { Label } from \"./Label\";\nimport { Radio } from \"./Radio\";\nimport { cn } from \"../utils/cn\";\ninterface Props extends Omit<React.ComponentProps<typeof Radio>, \"size\"> {\n  label?: string;\n  secondaryLabel?: string;\n  requiredLabel?: string;\n  size?: \"S\" | \"M\" | \"L\";\n  theme?: \"dark\" | \"light\" | \"default\";\n  name?: string;\n}\n\nexport const LabeledRadio = forwardRef<HTMLButtonElement, Props>(\n  (\n    {\n      label,\n      theme,\n      secondaryLabel,\n      requiredLabel,\n      size = \"M\",\n      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread\n      type = \"radio\",\n      className,\n      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread\n      name,\n      id,\n      ...props\n    },\n    ref,\n  ) => {\n    return (\n      <Label\n        label={label}\n        secondaryLabel={secondaryLabel}\n        requiredLabel={requiredLabel}\n        size={size === \"L\" ? \"M\" : size}\n        labelDirections=\"horizontal\"\n        childrenDirections=\"horizontal\"\n        className={cn(className)}\n        id={id}\n        reverseChildren\n      >\n        <Radio id={id} {...props} data-theme={theme} ref={ref} />\n      </Label>\n    );\n  },\n);\n\nLabeledRadio.displayName = \"LabeledRadio\";\n"
+    }
+  ]
+}

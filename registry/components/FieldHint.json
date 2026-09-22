@@ -1,0 +1,19 @@
+{
+  "version": "2.6.0",
+  "name": "FieldHint",
+  "type": "components",
+  "dependencies": [
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/FieldHint.tsx",
+      "target": "components/FieldHint.tsx",
+      "content": "import { HTMLAttributes, ReactNode } from \"react\";\nimport { cva } from \"class-variance-authority\";\nimport { cn } from \"../utils/cn\";\nimport { Themes } from \"../utils/types\";\n\nexport const glareFieldAlert = cva(\n  \"flex relative justify-start items-center rounded-[4px] min-h-26px w-fit pr-1 rtl:pl-1 rtl:pr-0 [&>section]:text-white\",\n  {\n    variants: {\n      state: {\n        info: \"bg-background-presentation-state-information-secondary [&>section]:bg-background-presentation-state-information-primary [&>section]:text-background-presentation-state-information-secondary\",\n        warning:\n          \"bg-background-presentation-state-warning-secondary [&>section]:bg-background-presentation-state-warning-primary [&>section]:text-background-presentation-state-warning-secondary\",\n        error:\n          \"bg-background-presentation-state-negative-secondary [&>section]:bg-background-presentation-state-negative-primary [&>section]:text-background-presentation-state-negative-secondary\",\n        success:\n          \"bg-background-presentation-state-success-secondary [&>section]:bg-background-presentation-state-success-primary [&>section]:text-background-presentation-state-success-secondary\",\n      },\n    },\n    defaultVariants: {\n      state: \"info\",\n    },\n  },\n);\n\ntype FieldAlertVariant = \"success\" | \"error\" | \"warning\" | \"info\";\n\ninterface Props extends HTMLAttributes<HTMLDivElement> {\n  label: ReactNode;\n  state?: FieldAlertVariant;\n  icon?: ReactNode;\n  theme?: Themes;\n}\n\nexport const FieldHint: React.FC<Props> = ({ label, state, theme, icon, className, ...props }) => {\n  return (\n    <section\n      {...props}\n      data-theme={theme}\n      className={cn(\n        glareFieldAlert({\n          state,\n        }),\n        className,\n      )}\n    >\n      <section className=\"flex items-center justify-center min-w-[26px] min-h-[26px] h-full rounded-[4px] text-[18px]\">\n        {icon ? (\n          icon\n        ) : state === \"error\" ? (\n          <i className=\"ri-alert-fill\"></i>\n        ) : state === \"success\" ? (\n          <i className=\"ri-checkbox-circle-fill\"></i>\n        ) : (\n          <i className=\"ri-error-warning-fill\"></i>\n        )}\n      </section>\n      <p\n        className={\n          \"p-1 word-break-all text-content-presentation-global-primary text-wrap text-start whitespace-pre-wrap text-sm\"\n        }\n      >\n        {label}\n      </p>\n    </section>\n  );\n};\n\nexport default FieldHint;\n"
+    }
+  ]
+}
