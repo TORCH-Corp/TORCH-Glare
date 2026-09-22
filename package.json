@@ -36,6 +36,7 @@
     "tag": "node scripts/bin/tagRelease/index.js",
     "docs:fix": "node scripts/bin/fixDocs/index.js",
     "check:ai-docs": "node scripts/bin/checkAiDocs/index.js",
+    "hooks:install": "git config core.hooksPath .githooks",
     "typecheck": "pnpm -C apps run typecheck",
     "lint": "pnpm -C apps run lint:lib",
     "format": "pnpm -C apps run format",

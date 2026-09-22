@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+# Keep the generated registry in step with the library source being committed.
+#
+# `registry/` is what raw.githubusercontent.com serves, so a commit that changes a component but
+# not the registry ships source the hosted registry does not have. CI catches it, but only after
+# you have pushed and waited — and the fix is always the same command, so there is no reason to
+# make a person run it.
+#
+# Regeneration takes ~75ms, which is why this runs unconditionally rather than trying to guess
+# whether the commit touches the library.
+#
+# Install once:  pnpm run hooks:install
+# Skip once:     git commit --no-verify
+
+set -e
+
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+
+# Only the generated outputs. If the generator rewrote anything else, that is a bug in the
+# generator, not something to quietly stage.
+GENERATED="apps/lib/registry.json registry"
+
+node scripts/bin/generateRegistry/index.js >/dev/null
+
+CHANGED=$(git status --porcelain -- $GENERATED)
+[ -z "$CHANGED" ] && exit 0
+
+# A partial commit stages some changes and leaves others in the working tree. The generator reads
+# the working tree, so what it produces can describe source this commit does not contain. Staging
+# it anyway is still better than committing a stale registry, but say so rather than hiding it.
+if [ -n "$(git diff --name-only -- apps/lib)" ]; then
+    echo "⚠️  Unstaged changes under apps/lib — the registry was generated from the working tree,"
+    echo "   so it may describe source this commit does not include."
+fi
+
+git add -- $GENERATED
+
+echo "📦 Registry regenerated and staged:"
+echo "$CHANGED" | sed 's/^/   /' | head -10
+COUNT=$(echo "$CHANGED" | wc -l)
+[ "$COUNT" -gt 10 ] && echo "   … and $((COUNT - 10)) more"
+
+exit 0

@@ -59,6 +59,12 @@ jobs:
       - name: Run tests
         run: pnpm run test
 
+      # The MCP server is a separate package with its own lockfile, not a workspace member, so
+      # `pnpm install` at the root does not reach it. This used to happen implicitly via the root
+      # `prepare` script; installing it here keeps the dependency explicit and visible.
+      - name: Install MCP dependencies
+        run: pnpm -C mcp install
+
       - name: Test MCP server
         run: pnpm -C mcp test
 
