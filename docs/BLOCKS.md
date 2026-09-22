@@ -1,5 +1,10 @@
 # TORCH-Glare Blocks System
 
+> **Not implemented.** This document is a design note, not a description of the shipping CLI.
+> There is no `block` command in `torch-glare` and no `apps/lib/blocks/` directory; `blocks` is not
+> one of the registry's item types, so blocks have no hosted-registry representation either.
+> Everything below describes how the feature would work if it were built.
+
 ## Overview
 
 Blocks are complete, pre-built page templates that combine multiple components. Unlike components which are installed and used via props, blocks are copied into your project for direct customization.

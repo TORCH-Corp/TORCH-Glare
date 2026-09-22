@@ -1,0 +1,19 @@
+{
+  "version": "2.5.6",
+  "name": "LabeledCheckBox",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "components/Checkbox",
+    "components/Label",
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/LabeledCheckBox.tsx",
+      "target": "components/LabeledCheckBox.tsx",
+      "content": "\"use client\";\nimport { forwardRef } from \"react\";\nimport { Label } from \"./Label\";\nimport { Themes } from \"../utils/types\";\nimport { Checkbox } from \"./Checkbox\";\nimport { cn } from \"../utils/cn\";\ninterface Props extends Omit<React.ComponentProps<typeof Checkbox>, \"size\"> {\n  label: string;\n  id: string;\n  secondaryLabel?: string;\n  requiredLabel?: string;\n  size?: \"S\" | \"M\" | \"L\";\n  theme?: Themes;\n}\n\nexport const LabeledCheckBox = forwardRef<HTMLButtonElement, Props>(\n  (\n    {\n      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread\n      id,\n      label,\n      secondaryLabel,\n      requiredLabel,\n      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread\n      type = \"checkbox\",\n      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from {...props} spread\n      theme,\n      className,\n      size = \"M\",\n      ...props\n    },\n    ref,\n  ) => {\n    return (\n      <Label\n        label={label}\n        labelDirections=\"horizontal\"\n        childrenDirections=\"horizontal\"\n        secondaryLabel={secondaryLabel}\n        requiredLabel={requiredLabel}\n        size={size}\n        className={cn(className)}\n        reverseChildren\n      >\n        <Checkbox {...props} size={size === \"L\" ? \"M\" : size} ref={ref} />\n      </Label>\n    );\n  },\n);\n\nLabeledCheckBox.displayName = \"LabeledCheckBox\";\n"
+    }
+  ]
+}

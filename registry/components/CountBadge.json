@@ -1,0 +1,19 @@
+{
+  "version": "2.5.6",
+  "name": "CountBadge",
+  "type": "components",
+  "dependencies": [
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/CountBadge.tsx",
+      "target": "components/CountBadge.tsx",
+      "content": "import React, { HTMLAttributes } from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"../utils/cn\";\nimport { Themes } from \"../utils/types\";\n\n// Glare counter base styles\nexport const glareCounterStyles = cva(\n  [\n    \"flex justify-center items-center\",\n    \"w-[14px] h-[14px]\",\n    \"rounded-full\",\n    \"border border-background-system-body-primary\",\n    \"bg-background-system-state-negative\",\n    \"text-[8px]\",\n    \"text-white\",\n    \"overflow-hidden\",\n    \"h-[15px] w-[15px]\",\n  ],\n  {\n    variants: {\n      variant: {\n        default: \"bg-background-system-state-negative\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\n// Extracting the types of the variants used in glareCounterStyles\nexport type GlareCounterStylesProps = VariantProps<typeof glareCounterStyles>;\n\ninterface Props extends HTMLAttributes<HTMLDivElement>, GlareCounterStylesProps {\n  label: number; // label of the counter it should be a number\n  theme?: Themes;\n  className?: string;\n}\n\nexport const CountBadge: React.FC<Props> = ({ theme, label, variant, className, ...props }) => {\n  return (\n    <section\n      {...props}\n      data-theme={theme}\n      className={cn(glareCounterStyles({ variant }), className)}\n    >\n      <p>{label}</p>\n    </section>\n  );\n};\n\nexport default CountBadge;\n"
+    }
+  ]
+}

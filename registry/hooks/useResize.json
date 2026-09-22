@@ -1,0 +1,16 @@
+{
+  "version": "2.5.6",
+  "name": "useResize",
+  "type": "hooks",
+  "dependencies": [],
+  "registryDependencies": [
+    "utils/resize"
+  ],
+  "files": [
+    {
+      "path": "hooks/useResize.ts",
+      "target": "hooks/useResize.ts",
+      "content": "import { MutableRefObject, RefObject, useEffect, useState } from \"react\";\nimport { calculateNewWidthFromMouse, calculateNewWidthFromTouch } from \"../utils/resize\";\n\n// Hook to handle resizing with RTL support\nexport const useResize = (resizableRef: MutableRefObject<HTMLElement> | RefObject<HTMLElement>) => {\n  const [width, setWidth] = useState<number>();\n  const [isResizing, setIsResizing] = useState<boolean>(false);\n  const [isRTL, setIsRTL] = useState<boolean>(false);\n\n  // Start the resize process\n  const handleStartResize = () => {\n    setIsResizing(true);\n  };\n\n  // Stop the resize process\n  const handleStopResize = () => {\n    setIsResizing(false);\n  };\n\n  // Handle mouse move events\n  const handleMouseMove = (event: MouseEvent) => {\n    if (!isResizing) return;\n    const newWidth = calculateNewWidthFromMouse(event, resizableRef, isRTL);\n    setWidth(newWidth);\n  };\n\n  // Handle touch move events\n  const handleTouchMove = (event: TouchEvent) => {\n    if (!isResizing) return;\n    event.preventDefault(); // Prevent scrolling or other touch-related behaviors\n    const newWidth = calculateNewWidthFromTouch(event, resizableRef, isRTL);\n    setWidth(newWidth);\n  };\n\n  useEffect(() => {\n    let htmlDir = \"\";\n    if (document) {\n      htmlDir = document.documentElement.getAttribute(\"dir\") || \"ltr\";\n    }\n    // Determine the direction of the document\n    setIsRTL(htmlDir === \"rtl\");\n  }, []);\n\n  useEffect(() => {\n    if (!resizableRef.current) return;\n\n    // Add event listeners for mouse and touch events\n    document.addEventListener(\"mousemove\", handleMouseMove);\n    document.addEventListener(\"mouseup\", handleStopResize);\n    document.addEventListener(\"touchmove\", handleTouchMove, { passive: false });\n    document.addEventListener(\"touchend\", handleStopResize);\n\n    // Cleanup event listeners on unmount\n    return () => {\n      document.removeEventListener(\"mousemove\", handleMouseMove);\n      document.removeEventListener(\"mouseup\", handleStopResize);\n      document.removeEventListener(\"touchmove\", handleTouchMove);\n      document.removeEventListener(\"touchend\", handleStopResize);\n    };\n  }, [isResizing, isRTL]); // Depend on `isRtl` to handle direction changes dynamically\n\n  return {\n    width,\n    isResizing,\n    handleStartResize,\n  };\n};\n"
+    }
+  ]
+}

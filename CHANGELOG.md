@@ -1,3 +1,55 @@
+## Unreleased
+
+### Components now come from the Glare repo, not the CLI package
+
+`torch-glare` no longer carries the component library inside its own npm package. `add` fetches
+over HTTP from the `registry/` directory on this repository, so a fix to a component reaches your
+next install as soon as it lands on `main` — no new version of the CLI.
+
+```bash
+curl https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry/index.json             # every item and its dependencies
+curl https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry/components/Button.json  # one item, source inlined
+```
+
+Each item carries its files with source inlined, its npm dependencies pinned to the ranges the
+library builds against, and its `registryDependencies` as `type/name` refs — which double as URL
+paths, so a dependency resolves by concatenation. The format is described in
+[registry.md](docs/reference/registry.md) and published as JSON Schema alongside the registry.
+
+**Nothing to change.** `glare.json` still takes a single `path` key and every command keeps its
+name — `add`, `hook`, `util`, `layout`, `provider`.
+
+The CLI no longer carries the library, so the tarball drops from 1.3 MB to ~960 KB and an
+unreachable registry is a real failure: the command says so and exits non-zero rather than quietly
+installing from a bundled copy.
+
+### Fixes
+
+- **`TextEditor` installed without its type declarations.** The registry generator excluded
+  `*.d.ts`, dropping `components/TextEditor/editorjs.d.ts` — the file declaring the `@editorjs/*`
+  modules `TextEditor` imports. An installed `TextEditor` failed to typecheck, every editor plugin
+  resolving to an implicit `any`. It now ships with the component.
+- **Bun projects had their dependencies installed by npm.** `bun.lockb` was detected but had no
+  matching install command, so `add` silently ran `npm install` and left a `package-lock.json`
+  beside the `bun.lockb`. It now runs `bun add`.
+- **`update` installed everything at once, unordered.** It looped with `forEach` over async
+  installs without awaiting them, so every item ran concurrently and each failure went unhandled.
+  It is now sequential.
+- **A missing source file was skipped in silence.** An item the registry listed but could not
+  supply was passed over without a word, so a partial install reported success. It is now an error.
+- **`add button` no longer dead-ends.** Names resolve case-insensitively, and an unmatched name
+  suggests near matches instead of only saying "not found".
+- **`update` re-fetched the same component many times over.** It installs each item in turn and
+  each resolves its own dependency closure, which overlap heavily — with 55 items installed that
+  was 287 requests for 55 distinct items. Payloads are now reused within a run: 55 requests, no
+  redundancy.
+- **A failed `add` exited 0.** `add NoSuchComponent` reported the error and then reported success
+  to the shell, so `torch-glare add X && next build` built anyway. Failures now exit non-zero.
+- **A stale hosted registry could not be detected.** CI regenerated it but only compared
+  `apps/lib/registry.json`, which records the dependency graph — so editing a component's body
+  left it byte-identical while the hosted registry kept serving the old source. CI now checks the
+  generated registry too.
+
 ## 2.5.5
 
 ### `hints` — several alerts on one field

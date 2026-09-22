@@ -1,0 +1,14 @@
+{
+  "version": "2.5.6",
+  "name": "types",
+  "type": "utils",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "utils/types.ts",
+      "target": "utils/types.ts",
+      "content": "export type Themes = \"dark\" | \"light\" | \"default\";\n\nexport type ButtonVariant =\n  | \"PrimeStyle\"\n  | \"BluSecStyle\"\n  | \"YelSecStyle\"\n  | \"RedSecStyle\"\n  | \"BorderStyle\"\n  | \"PrimeContStyle\"\n  | \"BluContStyle\"\n  | \"RedContStyle\"\n  | \"PrimeColStyle\"\n  | \"BluColStyle\"\n  | \"RedColStyle\"\n  | \"GreenColStyle\"\n  | \"YelColStyle\";\n"
+    }
+  ]
+}

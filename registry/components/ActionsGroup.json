@@ -1,0 +1,18 @@
+{
+  "version": "2.5.6",
+  "name": "ActionsGroup",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "components/Divider",
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/ActionsGroup.tsx",
+      "target": "components/ActionsGroup.tsx",
+      "content": "import React, { HTMLAttributes } from \"react\";\nimport { cn } from \"../utils/cn\";\nimport { Themes } from \"../utils/types\";\nimport { Divider } from \"./Divider\";\n\ninterface Props extends HTMLAttributes<HTMLDivElement> {\n  withDivider?: boolean; // to display the divider line if you pass it see on figma design file\n  theme?: Themes;\n}\n\nconst ActionsGroup: React.FC<Props> = ({ withDivider, className, children, theme, ...props }) => {\n  return (\n    <section\n      {...props}\n      data-theme={theme}\n      className={cn(\"flex items-center gap-2 w-full\", className)}\n    >\n      {withDivider && <Divider />}\n      {children}\n      {withDivider && <Divider />}\n    </section>\n  );\n};\n\n//          <div className=\"flex border-t border-solid border-border-presentation-global-primary flex-1 px-2\" />\n\nexport default ActionsGroup;\n"
+    }
+  ]
+}

@@ -7,9 +7,9 @@ keywords: [cli, torch-glare, init, add, copy-in, glare.json]
 
 # CLI Reference
 
-TORCH Glare is a **copy-in** component library: the `torch-glare` CLI copies source files
-directly into your project (like shadcn/ui). You own the copied code and import it from your
-own local path — you never import components from the npm package.
+TORCH Glare is a **copy-in** component library: the `torch-glare` CLI writes component source
+directly into your project (like shadcn/ui). You own that code and import it from your own local
+path — there is no runtime package to import from.
 
 Run any command with `npx` (no global install required):
 
@@ -31,9 +31,10 @@ Run a command **without** a name to pick from an interactive list.
 | `provider [provider]` | Copy a provider (e.g. `ThemeProvider`). |
 | `update` | Re-sync everything already installed with the latest templates. |
 
-Component names are **case-sensitive PascalCase** — `add DatePicker`, not `add datepicker`.
-Every command takes a **bare name** — `hook useDragDrop`, not `hook useDragDrop.tsx` — and every one
-accepts `-f, --force`.
+Names are matched case-insensitively and a trailing extension is stripped, so `add datepicker` and
+`add DatePicker.tsx` both find `DatePicker`. Every install command accepts `-f, --force`, which
+overwrites what is already there across the whole dependency closure. Where components come from,
+and which release, is configured once in `glare.json` rather than passed per invocation.
 
 ## `init`
 
@@ -57,7 +58,7 @@ than editing that file, since its shape is yours.
 > first line: CSS requires imports to precede other at-rules, so an import placed after a `@plugin`
 > is silently dropped.
 
-`glare.json` controls where files are copied:
+`glare.json` controls where files are written:
 
 ```json
 {
@@ -65,8 +66,32 @@ than editing that file, since its shape is yours.
 }
 ```
 
-Files are copied into `<path>/components`, `<path>/hooks`, `<path>/utils`,
+`path` is the only key — where files are written, with a leading `@/` stripped.
+
+Files are written into `<path>/components`, `<path>/hooks`, `<path>/utils`,
 `<path>/layouts`, and `<path>/providers`. Import them from that path.
+
+A config written before the hosted registry keeps working unchanged; any extra keys are ignored.
+
+## Where components come from
+
+Components are fetched over HTTP from the `registry/` directory on the Glare repository, rather
+than shipped inside the CLI. A fix to a component reaches your next `add` as soon as it lands on
+`main`, without a new version of `torch-glare`.
+
+The registry is plain JSON, and public:
+
+```bash
+curl https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry/index.json            # every item and its dependencies
+curl https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry/components/Button.json # one item, with its source inlined
+```
+
+Each item lists its `files` (with content), its npm `dependencies` pinned to the ranges the library
+builds against, and its `registryDependencies` as `type/name` refs — which are also its URL paths,
+so a dependency resolves to a URL by concatenation.
+
+The shape is described in the [registry format reference](./registry.md), and published as a JSON
+Schema at `https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry/schema.json`.
 
 ## `add`
 
@@ -89,8 +114,12 @@ export function Example() {
 It ends with a summary — `✅ DataViews → ./: 56 installed (56 items).` — so a partial install is
 visible rather than something you discover at build time.
 
-Dependencies come from the generated `registry.json`, resolved in one pass, so each item is copied
-exactly once however many things import it.
+Dependencies come from the registry index, resolved in one pass, so each item is written exactly
+once however many things import it, and the whole closure is fetched in parallel.
+
+If the registry cannot be reached, the CLI says so and exits non-zero. It does not carry a copy of
+the library to fall back on — that is what "hosted" means — so a failed install is a failed install
+rather than a silent one against stale source.
 
 Existing files are never overwritten. Use `--force` to re-copy — it applies to **the whole
 dependency closure**, not just the component you named — or `update` to re-sync everything.
@@ -101,8 +130,9 @@ dependency closure**, not just the component you named — or `update` to re-syn
 npx torch-glare@latest update
 ```
 
-Re-copies every installed component, hook, util, layout, and provider from the latest
-templates. Review the diff afterward, since it overwrites your local copies.
+Re-installs every component, hook, util, layout, and provider you already have, from the registry.
+Each item is fetched once however many things depend on it. Review the diff afterward, since it
+overwrites your local copies.
 
 ## See also
 

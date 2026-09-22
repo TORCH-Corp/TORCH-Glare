@@ -1,0 +1,18 @@
+{
+  "version": "2.5.6",
+  "name": "Switch",
+  "type": "components",
+  "dependencies": [
+    "@radix-ui/react-switch@^1.1.3"
+  ],
+  "registryDependencies": [
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/Switch.tsx",
+      "target": "components/Switch.tsx",
+      "content": "\"use client\";\nimport { cn } from \"../utils/cn\";\nimport * as SwitchPrimitives from \"@radix-ui/react-switch\";\nimport React from \"react\";\n\nconst Switch = React.forwardRef<\n  React.ElementRef<typeof SwitchPrimitives.Root>,\n  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>\n>(({ className, ...props }, ref) => (\n  <SwitchPrimitives.Root\n    className={cn(\n      \"peer inline-flex w-[48px] h-[27px] shrink-0 cursor-pointer items-center rounded-[20px] border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-background-presentation-switcher-active data-[state=unchecked]:bg-background-presentation-switcher-disabled\",\n      className,\n    )}\n    {...props}\n    ref={ref}\n  >\n    <SwitchPrimitives.Thumb\n      className={cn(\n        \"pointer-events-none block w-[24px] h-[24px] rounded-full bg-background-presentation-switcher-knob shadow-lg ring-0 transition-transform\",\n        \"data-[state=checked]:translate-x-[21px] data-[state=unchecked]:translate-x-0\",\n        \"rtl:data-[state=checked]:-translate-x-[21px] rtl:data-[state=unchecked]:translate-x-0\",\n      )}\n    />\n  </SwitchPrimitives.Root>\n));\nSwitch.displayName = SwitchPrimitives.Root.displayName;\n\nexport { Switch };\n\n/* interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {\n  active: boolean;\n  activeLabel?: string;\n  disabledLabel?: string;\n  theme?: \"dark\" | \"light\" | \"default\";\n}\n\nfunction Switchers({\n  active,\n  activeLabel,\n  disabledLabel,\n  theme,\n  className,\n  ...props\n}: Props) {\n  return (\n    <section data-theme={theme} className={cn(\"flex justify-center items-center w-fit h-[28px] gap-[6px] overflow-hidden\", className)}>\n      <button\n        {...props}\n        className={cn(\n          \"flex p-[2px] items-center w-[48px] h-[28px] rounded-full bg-background-presentation-switcher-disabled relative transition-all duration-200 overflow-hidden\",\n          {\n            \"bg-background-presentation-switcher-active\": active,\n          }\n        )}\n      >\n        <div\n          className={cn(\n            \"absolute start-[2px] w-[24px] h-[24px] rounded-full bg-background-presentation-switcher-knob shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_3px_8px_0px_rgba(0,0,0,0.15),0px_3px_1px_0px_rgba(0,0,0,0.06)] transition-all duration-200\",\n            {\n              \"start-[22px]\": active,\n            }\n          )}\n        />\n      </button>\n\n      {activeLabel && (\n        <section\n          className={cn(\n            \"flex justify-center items-start flex-col gap-[10px] translate-y-[-15px] transition-all duration-300 ease-in-out\",\n            {\n              \"translate-y-[15px]\": active,\n            }\n          )}\n        >\n          <Label className=\"h-[20px]\" size=\"M\" label={activeLabel} />\n          <Label className=\"h-[20px]\" size=\"M\" label={disabledLabel} />\n        </section>\n      )}\n    </section>\n  );\n} */\n"
+    }
+  ]
+}

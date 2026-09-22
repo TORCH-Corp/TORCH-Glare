@@ -1,7 +1,6 @@
 import { execSync } from "child_process";
 import { getCurrentInstalledDependencies } from "./getCurrentInstalledDependencies.js";
 import { detectPackageManager } from "./detectPackageManager.js";
-import { getDependenciesAndInstallNestedComponents } from "./getDependenciesAndInstallNestedComponents.js";
 import { getInstallCommand } from "./getInstallCommand.js";
 
 /**
@@ -40,27 +39,5 @@ export function installNpmPackages(packages: Iterable<string>): string[] {
     } catch (error) {
         console.error("❌ Error installing dependencies:", (error as Error).message);
         return [];
-    }
-}
-
-/**
- * Legacy path: resolve a component's dependencies by scanning its imports.
- *
- * Only reached now for an item that is **not** in `registry.json` — something added to `apps/lib`
- * before `pnpm run registry` was re-run. Everything registered goes through `installFromPlan`,
- * which resolves the whole graph up front instead of discovering it one file at a time.
- *
- * @param {string} componentPath - Path to the component file.
- */
-export function installDependencies(componentPath: string): void {
-    const { depsNames } = getCurrentInstalledDependencies();
-
-    const dependenciesToInstall = getDependenciesAndInstallNestedComponents(
-        componentPath,
-        depsNames,
-    );
-
-    if (dependenciesToInstall.size > 0) {
-        installNpmPackages(dependenciesToInstall);
     }
 }

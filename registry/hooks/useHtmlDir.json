@@ -1,0 +1,14 @@
+{
+  "version": "2.5.6",
+  "name": "useHtmlDir",
+  "type": "hooks",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "hooks/useHtmlDir.ts",
+      "target": "hooks/useHtmlDir.ts",
+      "content": "import * as React from \"react\";\n\n/**\n * Track the document's text direction from `<html dir>`, updating when it\n * changes (e.g. on a language switch).\n *\n * Several Radix primitives (Tabs, etc.) default to `\"ltr\"` when no `dir` prop\n * or `DirectionProvider` is supplied, which leaves them rendered left-to-right\n * even on an RTL page. Forwarding this value as their `dir` makes them mirror\n * correctly in Arabic.\n */\nexport function useHtmlDir(): \"ltr\" | \"rtl\" {\n  const read = () =>\n    typeof document !== \"undefined\" && document.documentElement.dir === \"rtl\"\n      ? \"rtl\"\n      : \"ltr\";\n\n  const [dir, setDir] = React.useState<\"ltr\" | \"rtl\">(read);\n\n  React.useEffect(() => {\n    if (typeof document === \"undefined\") return;\n    const html = document.documentElement;\n    const sync = () => setDir(read());\n    sync();\n    const observer = new MutationObserver(sync);\n    observer.observe(html, { attributes: true, attributeFilter: [\"dir\"] });\n    return () => observer.disconnect();\n  }, []);\n\n  return dir;\n}\n"
+    }
+  ]
+}

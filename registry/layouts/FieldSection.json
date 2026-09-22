@@ -1,0 +1,18 @@
+{
+  "version": "2.5.6",
+  "name": "FieldSection",
+  "type": "layouts",
+  "dependencies": [],
+  "registryDependencies": [
+    "components/Label",
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "layouts/FieldSection.tsx",
+      "target": "layouts/FieldSection.tsx",
+      "content": "import { cn } from \"../utils/cn\";\nimport { ReactNode } from \"react\";\nimport { Label } from \"../components/Label\";\nimport { Themes } from \"../utils/types\";\n\ninterface Props {\n  label?: ReactNode;\n  secondaryLabel?: ReactNode;\n  requiredLabel?: ReactNode;\n  size?: \"S\" | \"M\" | \"L\";\n  childrenUnderLabel?: ReactNode;\n  theme?: Themes;\n  className?: string;\n  children?: ReactNode;\n  direction?: \"horizontal\" | \"vertical\" | \"flexible\";\n}\n\nexport function FieldSection({\n  children,\n  label,\n  secondaryLabel,\n  direction = \"flexible\",\n  requiredLabel,\n  size,\n  theme,\n  className,\n  childrenUnderLabel,\n  ...props\n}: Props) {\n  // Which copy of `childrenUnderLabel` is visible, driven purely by the `@md` container\n  // breakpoint (this section's own width reaching 650px) — deliberately not by `direction`.\n  // Pinning it per-direction breaks the common case: `FormRenderer` forces `direction=\"vertical\"`\n  // inside a drawer and FormBuilder puts the field's validation error in this slot, so a vertical\n  // form would strand every error under the label at any width.\n  const underLabelSlot = direction === \"vertical\" ? \"hidden\" : \"hidden @md:block\";\n  const underChildrenSlot = direction === \"vertical\" ? \"block\" : \"block @md:hidden\";\n\n  return (\n    <section\n      {...props}\n      data-theme={theme}\n      className={cn(\"w-full max-w-[1200px] min-w-[0px] @container\", className)}\n    >\n      <div\n        className={cn(\n          \"grid py-[16px] px-[12px] w-full min-w-[0px]\",\n          direction === \"vertical\" && \"grid-rows-[auto_1fr] gap-[12px]\",\n          direction === \"horizontal\" && \"grid-cols-[350px_1fr] gap-[24px]\",\n          direction === \"flexible\" &&\n          \"grid-rows-[auto_1fr] gap-[12px] @md:grid-cols-[350px_1fr] @md:grid-rows-[1fr] @md:gap-[24px]\",\n        )}\n      >\n        {/* Fixed width section for labels */}\n        <div className=\"flex flex-col gap-[12px]\">\n          {label && (\n            <Label\n              size={size}\n              label={label}\n              requiredLabel={requiredLabel}\n              labelDirections={\"horizontal\"}\n            />\n          )}\n\n          {secondaryLabel && <Label size={size} secondaryLabel={secondaryLabel} />}\n\n          {/* Stacked (below `@md`): the label column IS the full width, so under the label is the\n              natural spot. Hidden once `@md` splits the row into two columns — the copy in the\n              children column takes over there. Exactly one of the two is ever displayed. */}\n          {childrenUnderLabel && (\n            <div data-slot=\"under-label\" className={cn(underLabelSlot)}>\n              {childrenUnderLabel}\n            </div>\n          )}\n        </div>\n\n        {/* Flexible section that takes up the remaining space */}\n        <div className=\"grid grid-cols-1 place-items-end gap-[12px]\">\n          {children}\n\n          {/* Two-column (`@md` and up): the hint belongs under the control it describes, not\n              stranded at the bottom of the 350px label column. */}\n          {childrenUnderLabel && (\n            <div data-slot=\"under-children\" className={cn(\"w-full\", underChildrenSlot)}>\n              {childrenUnderLabel}\n            </div>\n          )}\n        </div>\n      </div>\n    </section>\n  );\n}\n"
+    }
+  ]
+}

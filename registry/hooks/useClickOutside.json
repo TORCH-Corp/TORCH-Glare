@@ -1,0 +1,14 @@
+{
+  "version": "2.5.6",
+  "name": "useClickOutside",
+  "type": "hooks",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "hooks/useClickOutside.ts",
+      "target": "hooks/useClickOutside.ts",
+      "content": "import { useEffect, useRef } from \"react\";\n\nexport function useClickOutside<T extends HTMLElement>(\n  callback: (event?: MouseEvent | PointerEvent) => void,\n  otherwise?: (event?: MouseEvent | PointerEvent) => void,\n) {\n  const ref = useRef<T>(null);\n\n  useEffect(() => {\n    function handleOutsideClick(event: MouseEvent | PointerEvent) {\n      if (ref.current && !ref.current.contains(event.target as Node)) {\n        callback(event);\n      } else {\n        otherwise?.(event);\n      }\n    }\n\n    document.addEventListener(\"mousedown\", handleOutsideClick);\n    document.addEventListener(\"pointerdown\", handleOutsideClick);\n    return () => {\n      document.removeEventListener(\"mousedown\", handleOutsideClick);\n      document.removeEventListener(\"pointerdown\", handleOutsideClick);\n    };\n  }, [callback]);\n\n  return ref;\n}\n"
+    }
+  ]
+}

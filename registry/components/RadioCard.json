@@ -1,0 +1,18 @@
+{
+  "version": "2.5.6",
+  "name": "RadioCard",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "components/Card",
+    "components/Radio",
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/RadioCard.tsx",
+      "target": "components/RadioCard.tsx",
+      "content": "import { forwardRef, ReactNode } from \"react\";\nimport { cn } from \"../utils/cn\";\nimport { Radio } from \"./Radio\";\nimport { Card, CardContent, CardDescription, CardHeader } from \"./Card\";\n\ninterface Props extends Omit<React.ComponentProps<typeof Radio>, \"size\" | \"value\"> {\n  headerLabel?: ReactNode;\n  id: string;\n  description?: ReactNode;\n  disabled?: boolean;\n  children?: ReactNode;\n  theme?: \"dark\" | \"light\" | \"default\";\n  value: string;\n}\n\nexport const RadioCard = forwardRef<HTMLInputElement, Props>(\n  ({ headerLabel, description, disabled, className, id, children, theme, value, ...props }) => {\n    return (\n      <Card\n        data-theme={theme}\n        htmlFor={id}\n        as=\"label\"\n        // The whole card is the radio's label — an interactive target, so it keeps the hover.\n        variant=\"clickable\"\n        className={cn(\n          \"relative [&>button]:data-[state=checked]:!border-none\",\n          '[&:has(button[data-state=\"checked\"])]:border-border-presentation-state-focus',\n          // Disabled state\n          disabled && \"!bg-background-presentation-action-disabled\",\n          disabled && \"cursor-not-allowed\",\n          disabled && \"hover:border-border-presentation-global-primary\",\n          className,\n        )}\n      >\n        <section className={\"absolute top-0 left-0 w-full p-[10px] flex justify-end\"}>\n          <Radio {...props} value={value} size=\"M\" id={id} disabled={disabled} />\n        </section>\n\n        <CardHeader>{headerLabel}</CardHeader>\n\n        <CardContent>\n          {description && <CardDescription>{description}</CardDescription>}\n          {children}\n        </CardContent>\n      </Card>\n    );\n  },\n);\n\nRadioCard.displayName = \"RadioCard\";\n"
+    }
+  ]
+}

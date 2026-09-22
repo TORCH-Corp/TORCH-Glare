@@ -1,0 +1,19 @@
+{
+  "version": "2.5.6",
+  "name": "Radio",
+  "type": "components",
+  "dependencies": [
+    "@radix-ui/react-radio-group@^1.2.3",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/Radio.tsx",
+      "target": "components/Radio.tsx",
+      "content": "\"use client\";\nimport { cn } from \"../utils/cn\";\nimport { cva } from \"class-variance-authority\";\nimport * as React from \"react\";\nimport * as RadioGroupPrimitive from \"@radix-ui/react-radio-group\";\n\nconst RadioGroup = React.forwardRef<\n  React.ElementRef<typeof RadioGroupPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>\n>(({ className, ...props }, ref) => {\n  return (\n    <RadioGroupPrimitive.Root className={cn(\"grid gap-0.5\", className)} {...props} ref={ref} />\n  );\n});\nRadioGroup.displayName = RadioGroupPrimitive.Root.displayName;\n\nconst Radio = React.forwardRef<\n  React.ElementRef<typeof RadioGroupPrimitive.Item>,\n  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> & {\n    size?: \"S\" | \"M\";\n  }\n>(({ className, size = \"S\", ...props }, ref) => {\n  return (\n    <RadioGroupPrimitive.Item\n      ref={ref}\n      className={cn(glareRadioStyles({ size }), className)}\n      {...props}\n    >\n      <RadioGroupPrimitive.Indicator className=\"bg-white rounded-full flex items-center justify-center shrink-0\">\n        <i className=\"ri-record-circle-fill text-background-presentation-state-information-primary leading-none shrink-0\"></i>\n      </RadioGroupPrimitive.Indicator>\n    </RadioGroupPrimitive.Item>\n  );\n});\nRadio.displayName = \"Radio\";\n\nexport { RadioGroup, Radio };\n\nconst glareRadioStyles = cva(\n  [\n    \"rounded-full shadow focus:outline-none flex items-center justify-center shrink-0\",\n    \"border border-border-presentation-action-checkbox-primary\",\n    \"bg-background-presentation-action-borderstyle\",\n    \"transition-[background,border-color,background-color] duration-200\",\n    \"hover:bg-blue-sparkle-alpha-15 hover:border-border-presentation-state-focus\",\n    \"checked:border-background-presentation-state-information-primary checked:hover:bg-white checked:bg-white\",\n    \"disabled:bg-background-presentation-action-disabled disabled:border-border-presentation-global-primary\",\n    \"disabled:cursor-not-allowed\",\n    \"data-[state=checked]:!border-none\",\n  ],\n  {\n    variants: {\n      size: {\n        S: [\"w-[12px]\", \"h-[12px] [&_i]:text-[10px] [&_i]:scale-[1.5]\"],\n        M: [\"w-[24px]\", \"h-[24px] [&_i]:text-[20px] [&_i]:scale-[1.47]\"],\n      },\n    },\n  },\n);\n"
+    }
+  ]
+}

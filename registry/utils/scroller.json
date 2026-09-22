@@ -1,0 +1,14 @@
+{
+  "version": "2.5.6",
+  "name": "scroller",
+  "type": "utils",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "utils/scroller.ts",
+      "target": "utils/scroller.ts",
+      "content": "/**\n * LOCAL PATCH (Contact Center): the design's 14px horizontal scroller — a thin track that thickens\n * and turns blue on hover.\n *\n * Lives here, not on `Table`, because two unrelated components wear it: `TableScroller` (the\n * wrapper `FormBuilder.Table` puts around its grid) and `SectionBlock`'s body (which scrolls any\n * wide content dropped into a section card). A section card should not have to import the table\n * component — and its consumers should not pull in the table's dependencies — just to share a\n * scrollbar.\n *\n * `overflow-y-hidden` is part of the set on purpose: CSS computes `overflow-y: visible` to `auto`\n * whenever `overflow-x` is not `visible`, so omitting it gives every consumer a spurious vertical\n * scrollbar.\n */\nexport const horizontalScrollerStyles = [\n  \"overflow-x-auto overflow-y-hidden\",\n  \"[&::-webkit-scrollbar]:h-[14px]\",\n  \"[&::-webkit-scrollbar-track]:bg-transparent\",\n  \"[&::-webkit-scrollbar-thumb]:rounded-[7px]\",\n  \"[&::-webkit-scrollbar-thumb]:border-[5px] [&::-webkit-scrollbar-thumb]:border-solid\",\n  \"[&::-webkit-scrollbar-thumb]:border-transparent\",\n  \"[&::-webkit-scrollbar-thumb]:bg-clip-content\",\n  \"[&::-webkit-scrollbar-thumb]:bg-background-presentation-body-scroller-default\",\n  \"[&::-webkit-scrollbar-thumb:hover]:border-[3px]\",\n  \"[&::-webkit-scrollbar-thumb:hover]:bg-background-presentation-body-scroller-hover\",\n].join(\" \");\n"
+    }
+  ]
+}

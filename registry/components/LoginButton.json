@@ -1,0 +1,20 @@
+{
+  "version": "2.5.6",
+  "name": "LoginButton",
+  "type": "components",
+  "dependencies": [
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "components/Button",
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/LoginButton.tsx",
+      "target": "components/LoginButton.tsx",
+      "content": "import { cva, type VariantProps } from \"class-variance-authority\";\nimport { cn } from \"../utils/cn\"; // Assuming you have a `cn` utility\nimport { ButtonHTMLAttributes } from \"react\";\nimport { LoadingIcon } from \"./Button\";\nimport { Themes } from \"../utils/types\";\n\nconst buttonVariants = cva(\n  \"w-full h-[42px] rounded-[8px] typography-body-large-regular flex justify-center items-center transition-all duration-250 ease-in-out border\",\n  {\n    variants: {\n      variant: {\n        default: [\n          \"bg-background-system-body-primary\",\n          \"text-content-system-global-primary\",\n          \"border-border-system-global-primary\",\n          \"hover:border-[#9748FF]\",\n        ],\n        noBg: [\n          \"bg-transparent\",\n          \"border-border-system-global-primary\",\n          \"text-content-system-global-primary\",\n          \"hover:border-[#9748FF]\",\n          \"no-underline\",\n        ],\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\nexport interface ButtonProps\n  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {\n  isLoading?: boolean;\n  theme?: Themes;\n}\n\nexport function LoginButton({\n  variant = \"default\",\n  className,\n  isLoading,\n  theme,\n  ...props\n}: ButtonProps) {\n  return (\n    <button data-theme={theme} {...props} className={cn(buttonVariants({ variant, className }))}>\n      {isLoading ? <LoadingIcon className=\"w-[20px] h-[20px]\" /> : props.children}\n    </button>\n  );\n}\n"
+    }
+  ]
+}

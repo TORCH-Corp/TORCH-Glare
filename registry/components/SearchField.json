@@ -1,0 +1,16 @@
+{
+  "version": "2.5.6",
+  "name": "SearchField",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "components/InputField"
+  ],
+  "files": [
+    {
+      "path": "components/SearchField.tsx",
+      "target": "components/SearchField.tsx",
+      "content": "import { forwardRef, ReactNode } from \"react\";\nimport { Props, InputField } from \"./InputField\";\n\ninterface SearchProps extends Props {\n  Searchplaceholder?: ReactNode;\n  secondaryPlaceholder?: ReactNode;\n  childrenSide?: ReactNode;\n}\n// Use InputField types in the SearchInput component\nexport const SearchField = forwardRef<HTMLInputElement, SearchProps>(\n  ({ Searchplaceholder, secondaryPlaceholder, childrenSide, ...props }, forwardedRef) => {\n    return (\n      <div className=\"mb-[10px] w-full h-fit justify-center items-center rounded-[12px] p-[3px] bg-[rgba(106,112,144,0.60)] shadow-[0px_0px_18px_0px_rgba(0,0,0,0.75)] backdrop-blur-[21px]\">\n        <InputField\n          {...props}\n          ref={forwardedRef}\n          type=\"text\"\n          variant=\"SystemStyle\"\n          size=\"M\"\n          className=\"h-[54px] rounded-[9px] p-[15px] border-border-system-global-primary bg-[rgba(0,0,0,0.60)]\"\n          icon={\n            <SearchInputPlaceholder\n              value={props.value}\n              secondaryPlaceholder={secondaryPlaceholder}\n              Searchplaceholder={Searchplaceholder}\n            />\n          }\n          childrenSide={childrenSide}\n        />\n      </div>\n    );\n  },\n);\n\nSearchField.displayName = \" SearchField\"; // Set displayName for debugging\n\nfunction SearchInputPlaceholder({\n  Searchplaceholder,\n  secondaryPlaceholder,\n  value,\n}: {\n  Searchplaceholder?: ReactNode;\n  secondaryPlaceholder?: ReactNode;\n  value?: string | number | readonly string[];\n}) {\n  return (\n    <div className=\"flex gap-[10px] justify-center items-center \">\n      <i className=\"ri-search-2-line text-[24px] text-[#E5E5E5]\"></i>\n\n      {value == \"\" ? (\n        <div className=\"flex gap-[5px] justify-center items-center \">\n          <p className=\"text-content-system-global-primary  typography-headers-medium-regular leading-none opacity-[0.8]\">\n            {Searchplaceholder}\n          </p>\n          <p className=\"text-content-system-global-primary  typography-body-medium-medium leading-none opacity-30 mix-blend-luminosity mt-[2px]\">\n            {secondaryPlaceholder}\n          </p>\n        </div>\n      ) : null}\n    </div>\n  );\n}\n"
+    }
+  ]
+}

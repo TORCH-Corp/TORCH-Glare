@@ -1,0 +1,16 @@
+{
+  "version": "2.5.6",
+  "name": "Skeleton",
+  "type": "components",
+  "dependencies": [],
+  "registryDependencies": [
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/Skeleton.tsx",
+      "target": "components/Skeleton.tsx",
+      "content": "import { cn } from \"../utils/cn\";\n\nfunction Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return (\n    <div\n      className={cn(\"animate-pulse rounded-md bg-border-presentation-global-primary\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { Skeleton };\n"
+    }
+  ]
+}

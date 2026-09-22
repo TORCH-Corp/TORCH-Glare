@@ -1,36 +1,42 @@
 ---
 title: Architecture
-description: How TORCH Glare is structured — the copy-in distribution model, the CLI, and the registry.
+description: How TORCH Glare is structured — the copy-in distribution model, the CLI, and the hosted registry.
 group: explanation
-keywords: [architecture, copy-in, cli, registry, shadcn]
+keywords: [architecture, copy-in, cli, registry, hosted, shadcn]
 ---
 
 # Architecture
 
 ## Copy-in distribution
 
-TORCH Glare does **not** ship compiled components you import from a package. Instead, the
-published `torch-glare` package contains a CLI plus the raw component source, and
-`npx torch-glare add <Component>` copies that source into your project. This is the same
-model popularized by shadcn/ui.
+TORCH Glare does **not** ship compiled components you import from a package.
+`npx torch-glare add <Component>` writes the component's source into your project, and from
+then on it is your code. This is the same model popularized by shadcn/ui.
 
 Consequences:
 
-- **You own the code.** Copied components live in your repo and can be edited freely.
+- **You own the code.** Installed components live in your repo and can be edited freely.
 - **No runtime package dependency.** You import from your own path (`@/components/…`), not
   from `torch-glare`.
-- **Explicit dependencies.** `add` also copies the component's internal dependencies
-  (nested components, hooks, utils) and installs required npm packages such as `@radix-ui/*`.
+- **Explicit dependencies.** `add` also installs the component's internal dependencies
+  (nested components, hooks, utils) and the npm packages it needs, such as `@radix-ui/*`.
 
 ## The registry
 
-The dependency graph is described by a generated manifest, `apps/lib/registry.json`. Each
-entry lists a component's npm dependencies and its internal (component/hook/util)
-dependencies. The CLI reads this manifest to resolve the full closure to copy when you run
-`add`, so results are deterministic and testable rather than inferred at install time.
+Component source lives in the `registry/` directory on this repository, not inside the CLI's npm
+package. `add` fetches what it needs over HTTP from `https://raw.githubusercontent.com/TORCH-Corp/TORCH-Glare/main/registry` — see the
+[registry format](../reference/registry.md) for the wire shape.
 
-The registry is generated from source (`pnpm run registry`) and validated in CI, so it never
-drifts from the actual imports.
+Splitting the two is what lets component source and tooling move independently. They used to share
+a version and a tarball, so correcting one `className` meant publishing a new CLI.
+
+The dependency graph is described by a generated manifest served at `/r/index.json`. Each entry
+lists a component's npm dependencies and its internal (component/hook/util) dependencies. The CLI
+fetches that index once and resolves the full closure locally, so an install is deterministic and
+testable rather than discovered one import at a time.
+
+Both the manifest and the per-item payloads are generated from source (`pnpm run registry`) and
+checked in CI, so neither drifts from the actual imports or from the source it serves.
 
 ## Layers
 

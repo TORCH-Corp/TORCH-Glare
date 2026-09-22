@@ -1,0 +1,20 @@
+{
+  "version": "2.5.6",
+  "name": "ActionButton",
+  "type": "components",
+  "dependencies": [
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "components/Button",
+    "utils/cn",
+    "utils/types"
+  ],
+  "files": [
+    {
+      "path": "components/ActionButton.tsx",
+      "target": "components/ActionButton.tsx",
+      "content": "import React, { ButtonHTMLAttributes } from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { Button } from \"./Button\";\nimport { cn } from \"../utils/cn\";\nimport { ButtonVariant, Themes } from \"../utils/types\";\n\n/**\n * The button that sits at the end of an input field — Figma `ActionButton` (Type=DropDown).\n *\n * Sizes are Figma's exactly: Xs 18, S 22, M 32, with `radius/sm` on the two small ones and\n * `radius/lg` on M.\n *\n * The `!` on the radius is load-bearing. `twMerge` does not dedupe `rounded-radius-*` — they are\n * custom scale keys, not values it recognises — so this radius and the one coming from `Button`'s\n * own `size` variant both survive, and CSS source order picks the winner. Tailwind emits the scale\n * in config order (sm before md before lg), so without `!` size S would render Button M's 6px\n * instead of its own 4px.\n */\nconst buttonVariants = cva(\"\", {\n  variants: {\n    size: {\n      XS: \"h-[18px] w-[18px] text-[12px] !rounded-radius-sm\",\n      S: \"h-[22px] w-[22px] text-[12px] !rounded-radius-sm\",\n      M: \"h-[32px] w-[32px] text-[18px] !rounded-radius-lg\",\n    },\n  },\n  defaultVariants: {\n    size: \"M\",\n  },\n});\n\n/**\n * Default/hover/disabled colours as Figma binds them. Applied only when the caller passes no\n * `variant`, so anything asking for a specific Button variant still gets it.\n *\n * `action-secondary` and `action-disabled` already match `Button`'s `PrimeStyle` equivalents; the\n * real difference is hover, where `PrimeStyle` uses `button-hover` and the design uses\n * `action-hover`.\n */\nconst actionTokens = [\n  \"bg-background-presentation-action-secondary\",\n  \"text-content-presentation-action-light-primary\",\n  \"hover:bg-background-presentation-action-hover\",\n  \"hover:text-content-presentation-global-hover\",\n  \"disabled:bg-background-presentation-action-disabled\",\n  \"disabled:text-content-presentation-state-disabled\",\n];\n\ninterface Props\n  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {\n  is_loading?: boolean;\n  disabled?: boolean;\n  asChild?: boolean;\n  as?: React.ElementType;\n  theme?: Themes;\n  variant?: ButtonVariant;\n}\nexport const ActionButton = function ({\n  size,\n  asChild,\n  as: Tag = \"button\",\n  className,\n  variant,\n  type = \"button\",\n  children,\n  theme,\n  ...props\n}: Props) {\n  return (\n    <Button\n      theme={theme}\n      asChild={asChild}\n      // Forwarded, not swallowed: the chevron inside a field renders `as=\"span\"` because it is\n      // nested in a clickable trigger, and a <button> cannot contain a <button>.\n      as={Tag}\n      buttonType=\"icon\"\n      // `type` is only meaningful on a real button; on a span it would be an invalid attribute.\n      type={Tag === \"button\" ? type : undefined}\n      size={size == \"XS\" ? \"S\" : size == \"S\" ? \"M\" : size == \"M\" ? \"L\" : \"S\"}\n      variant={variant}\n      className={cn(\n        buttonVariants({\n          size,\n        }),\n        !variant && actionTokens,\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </Button>\n  );\n};\n"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "version": "2.5.6",
+  "name": "Checkbox",
+  "type": "components",
+  "dependencies": [
+    "@radix-ui/react-checkbox@^1.1.4",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/Checkbox.tsx",
+      "target": "components/Checkbox.tsx",
+      "content": "\"use client\";\nimport { cn } from \"../utils/cn\";\nimport { cva } from \"class-variance-authority\";\nimport * as CheckboxPrimitive from \"@radix-ui/react-checkbox\";\nimport React from \"react\";\n\nconst glareCheckBoxStyles = cva(\n  [\n    \"peer shrink-0 shadow focus-visible:outline-none rounded-[3px]\",\n    \"flex items-center justify-center transition-colors\",\n    \"border border-border-presentation-action-checkbox-primary\",\n    \"bg-background-presentation-action-borderstyle\",\n    \"focus:bg-blue-sparkle-alpha-15 focus:border-border-presentation-state-focus\",\n    \"disabled:bg-background-presentation-action-disabled disabled:border-border-presentation-action-disabled disabled:cursor-not-allowed\",\n    \"data-[state=checked]:bg-blue-sparkle-600 data-[state=checked]:border-blue-sparkle-600\",\n    \"hover:border-border-presentation-action-hover\",\n  ],\n  {\n    variants: {\n      size: {\n        S: [\"w-[14px] h-[14px]\"],\n        M: [\"w-[16px] h-[16px]\"],\n      },\n    },\n  },\n);\n\nexport const Checkbox = React.forwardRef<\n  React.ElementRef<typeof CheckboxPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & { size?: \"S\" | \"M\" }\n>(({ className, size = \"M\", ...props }, ref) => (\n  <CheckboxPrimitive.Root\n    ref={ref}\n    className={cn(glareCheckBoxStyles({ size }), className)}\n    {...props}\n  >\n    <CheckboxPrimitive.Indicator>\n      <i className=\"ri-check-line text-white\" />\n    </CheckboxPrimitive.Indicator>\n  </CheckboxPrimitive.Root>\n));\nCheckbox.displayName = CheckboxPrimitive.Root.displayName;\n"
+    }
+  ]
+}

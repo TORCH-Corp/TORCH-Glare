@@ -1,0 +1,14 @@
+{
+  "version": "2.5.6",
+  "name": "resize",
+  "type": "utils",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "utils/resize.ts",
+      "target": "utils/resize.ts",
+      "content": "import { MutableRefObject, RefObject } from \"react\";\n\n// Extracted function to get the new width based on the mouse event\nexport const calculateNewWidthFromMouse = (\n  event: MouseEvent,\n  resizableRef: MutableRefObject<HTMLElement | null> | RefObject<HTMLElement | null>,\n  isRtl: boolean,\n): number => {\n  if (resizableRef.current) {\n    const rect = resizableRef.current.getBoundingClientRect();\n    return isRtl\n      ? rect.right - event.clientX // Reverse calculation for RTL\n      : event.clientX - rect.left;\n  }\n  return 0;\n};\n\n// Extracted function to get the new width based on the touch event\nexport const calculateNewWidthFromTouch = (\n  event: TouchEvent,\n  resizableRef: MutableRefObject<HTMLElement | null> | RefObject<HTMLElement | null>,\n  isRtl: boolean,\n): number => {\n  if (resizableRef.current) {\n    const rect = resizableRef.current.getBoundingClientRect();\n    return isRtl\n      ? rect.right - event.touches[0].clientX // Reverse calculation for RTL\n      : event.touches[0].clientX - rect.left;\n  }\n  return 0;\n};\n"
+    }
+  ]
+}

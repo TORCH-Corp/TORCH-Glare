@@ -1,0 +1,19 @@
+{
+  "version": "2.5.6",
+  "name": "Card",
+  "type": "components",
+  "dependencies": [
+    "@radix-ui/react-slot@^1.1.2",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "utils/cn"
+  ],
+  "files": [
+    {
+      "path": "components/Card.tsx",
+      "target": "components/Card.tsx",
+      "content": "import { cn } from \"../utils/cn\";\nimport React, { HTMLAttributes } from \"react\";\nimport { Slot } from \"@radix-ui/react-slot\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\n\nexport const cardStyles = cva(\n  [\n    \"flex flex-col justify-start\",\n    // `radius/xl` is 12px — the same value this literal had, now taken from the shared scale.\n    \"gap-2 rounded-radius-xl border\",\n    \"transition-all ease-in-out duration-200\",\n    \"p-[16px]\",\n    \"border-border-presentation-global-primary\",\n    \"bg-background-presentation-form-radiocard-base\",\n    \"focus:border-border-presentation-state-focus\",\n  ],\n  {\n    variants: {\n      variant: {\n        /** Static container — no hover affordance. */\n        default: [],\n        /** Interactive card (a link/label/button surface) — highlights on hover. */\n        clickable: [\"cursor-pointer\", \"hover:border-border-presentation-state-focus\"],\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\ninterface Props\n  extends\n    Omit<\n      HTMLAttributes<HTMLDivElement | HTMLHeadingElement | HTMLParagraphElement | HTMLLabelElement>,\n      \"htmlFor\"\n    >,\n    VariantProps<typeof cardStyles> {\n  as?: React.ElementType;\n  asChild?: boolean;\n  htmlFor?: string;\n}\n\n/**\n * A surface container. Defaults to a **static** card; pass `variant=\"clickable\"` when the whole\n * card is an interactive target so it gets the hover highlight + pointer cursor.\n */\nexport const Card = ({\n  className,\n  htmlFor,\n  asChild,\n  variant,\n  as: Tag = \"section\",\n  ...props\n}: Props) => {\n  const Component = asChild ? Slot : Tag;\n  return (\n    <Component htmlFor={htmlFor} {...props} className={cn(cardStyles({ variant }), className)} />\n  );\n};\n\ninterface GeneralProps extends HTMLAttributes<HTMLHeadingElement> {}\n\nexport const CardHeader = ({ className, ...props }: GeneralProps) => {\n  return (\n    <div\n      {...props}\n      className={cn(\n        \"text-content-presentation-global-primary m-0 typography-headers-medium-semibold\",\n        className,\n      )}\n    ></div>\n  );\n};\n\nexport const CardDescription = ({ className, ...props }: GeneralProps) => {\n  return (\n    <div\n      {...props}\n      className={cn(\n        \"text-content-presentation-global-primary m-0 typography-body-medium-semibold\",\n        className,\n      )}\n    ></div>\n  );\n};\n\nexport const CardContent = ({ className, ...props }: GeneralProps) => {\n  return (\n    <section\n      {...props}\n      className={cn(\"flex gap-1 flex-col items-start flex-1\", className)}\n    ></section>\n  );\n};\n"
+    }
+  ]
+}

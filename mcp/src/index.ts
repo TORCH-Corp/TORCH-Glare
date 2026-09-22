@@ -573,9 +573,9 @@ async function main() {
       const lines = [
         `# Installing ${item.name}`,
         "",
-        "TORCH Glare is a **copy-in** library: the CLI copies source into your project.",
+        "TORCH Glare is a **copy-in** library: the CLI writes component source from a hosted registry into your project.",
         item.isFolder
-          ? `\n> **Folder component** — \`add\` copies the whole \`apps/lib/${item.path}/\` directory (${item.files?.length ?? 0} files). It's a **compound** API (\`${item.name}.…\`, e.g. \`FormBuilder.Text\`, \`FormRenderer.Sidebar\`); read a part with \`get-component-source "${item.name}/<file>"\`.`
+          ? `\n> **Folder component** — \`add\` installs the whole \`${item.path}/\` directory (${item.files?.length ?? 0} files). It's a **compound** API (\`${item.name}.…\`, e.g. \`FormBuilder.Text\`, \`FormRenderer.Sidebar\`); read a part with \`get-component-source "${item.name}/<file>"\`.`
           : "",
         "## Command",
         "```bash",
@@ -599,7 +599,7 @@ async function main() {
           ? internalDeps.map((d) => `- ${d}`).join("\n")
           : "_None — this item is standalone._",
         "",
-        "> `torch-glare add` resolves and copies these internal dependencies for you; you do not add them one by one.",
+        "> `torch-glare add` resolves and installs these internal dependencies for you; you do not add them one by one.",
       ];
 
       return { content: [{ type: "text", text: RULES_HINT + lines.join("\n") }] };
@@ -622,7 +622,7 @@ async function main() {
       if (!source) {
         const item = registryLoader.getItemByName(itemName);
         const hint = item
-          ? `Source file could not be read (expected apps/lib/${item.path}).`
+          ? `Source file could not be read (expected ${item.path}).`
           : `"${itemName}" not found in the registry. Use search-components to find the right name.`;
         return { content: [{ type: "text", text: hint }] };
       }
@@ -631,7 +631,7 @@ async function main() {
         content: [
           {
             type: "text",
-            text: `${RULES_HINT}# ${itemName} — source (\`apps/lib/${source.path}\`)\n\n\`\`\`${lang}\n${source.code}\n\`\`\``,
+            text: `${RULES_HINT}# ${itemName} — source (\`${source.path}\`)\n\n\`\`\`${lang}\n${source.code}\n\`\`\``,
           },
         ],
       };
