@@ -74,6 +74,13 @@ export type FieldConfig = {
   defaultVariant?: BadgeVariant;
   variant?: BadgeVariant;
 
+  /**
+   * Value → display label, for `enum-badge`. Keyed exactly like `variants`, so a translated
+   * label sits beside the colour it belongs to. A value with no entry falls back to the raw
+   * value, which is what every `enum-badge` showed before this existed.
+   */
+  labels?: Record<string, string>;
+
   limit?: number;
   currency?: string | CurrencyOptions;
   format?: Intl.NumberFormatOptions;

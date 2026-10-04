@@ -16,7 +16,7 @@ export interface InstallResult {
 
 /** Where this project's files live — `<cwd>/<glare.json path>`, with a leading "@/" stripped. */
 export function installRoot(config: Config): string {
-    return path.join(process.cwd(), config.path.replace("@/", ""));
+    return path.resolve(process.cwd(), config.path.replace("@/", ""));
 }
 
 /**

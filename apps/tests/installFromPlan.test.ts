@@ -125,6 +125,44 @@ describe("write targets", () => {
     });
 });
 
+/**
+ * Every config path `init` or a human can write, not just the "./src" the cases above use.
+ *
+ * 2.6.0 shipped broken because these all behaved alike in tests while only "./src" was exercised.
+ * `installRoot` built the root with `path.join`, which keeps the trailing slash on "./" — so the
+ * root was "/app/", the guard compared against "/app//", and *every* file of *every* install was
+ * rejected as escaping. `init` writes `{ "path": "./" }` and nothing else, so the one config the
+ * CLI generates by itself was the one config that could not install anything.
+ */
+describe("install root, for each shape of config.path", () => {
+    const shapes = [
+        { path: "./", at: "components/Button.tsx", why: "what `init` writes" },
+        { path: "@/", at: "components/Button.tsx", why: "project root via alias" },
+        { path: "@/src", at: "src/components/Button.tsx", why: "aliased subdirectory" },
+        { path: "src", at: "src/components/Button.tsx", why: "bare subdirectory" },
+        { path: "./src/", at: "src/components/Button.tsx", why: "trailing slash on a subdirectory" },
+    ];
+
+    for (const { path: configPath, at, why } of shapes) {
+        it(`installs under ${JSON.stringify(configPath)} — ${why}`, async () => {
+            serve(index({}), payload([{ target: "components/Button.tsx" }]));
+            const result = await installFromPlan("components", "Button", { path: configPath }, false);
+
+            expect(result?.installed).toEqual(["components/Button"]);
+            expect(existsSync(path.join(root, at))).toBe(true);
+        });
+
+        it(`still rejects an escaping target under ${JSON.stringify(configPath)}`, async () => {
+            serve(index({}), payload([{ target: "../escaped.tsx" }]));
+
+            await expect(
+                installFromPlan("components", "Button", { path: configPath }, false),
+            ).rejects.toThrow(/outside the install directory/);
+            expect(existsSync(path.join(root, "escaped.tsx"))).toBe(false);
+        });
+    }
+});
+
 describe("npm dependency pinning", () => {
     const installed = () =>
         JSON.parse(readFileSync(path.join(root, "package.json"), "utf-8")).dependencies;

@@ -364,6 +364,7 @@
         "components/DataViews/panel/tab.tsx",
         "components/DataViews/slots.ts",
         "components/DataViews/states.tsx",
+        "components/DataViews/strings.ts",
         "components/DataViews/types.ts",
         "components/DataViews/views/board-view.tsx",
         "components/DataViews/views/card-rows.tsx",
@@ -392,6 +393,7 @@
         "components/Table",
         "components/TreeFolder",
         "hooks/useDragDrop",
+        "hooks/useHtmlLang",
         "hooks/useInfiniteScroll",
         "layouts/DataViewCard",
         "utils/cn",
@@ -1381,6 +1383,16 @@
       "path": "hooks/useHtmlDir.ts",
       "files": [
         "hooks/useHtmlDir.ts"
+      ],
+      "npmDependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "useHtmlLang",
+      "type": "hooks",
+      "path": "hooks/useHtmlLang.ts",
+      "files": [
+        "hooks/useHtmlLang.ts"
       ],
       "npmDependencies": [],
       "registryDependencies": []

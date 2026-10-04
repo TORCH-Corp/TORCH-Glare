@@ -140,7 +140,9 @@ function paint(
     case "enum-badge": {
       const key = String(value);
       const variant = field.variants?.[key] ?? field.defaultVariant ?? "gray";
-      return <Badge {...resolveBadgeVariant(variant)} label={key} size="S" />;
+      return (
+        <Badge {...resolveBadgeVariant(variant)} label={field.labels?.[key] ?? key} size="S" />
+      );
     }
 
     case "badge-array": {

@@ -115,7 +115,12 @@ describe("registry schema", () => {
         }
 
         expect(failures).toEqual([]);
-        expect(checked).toBe(92);
+        // Not a literal: the count exists to prove the walk above was not vacuous, and the index is
+        // the only authority on how many items there should be. Tying the two together also catches
+        // an item that is listed in the index but has no payload file to serve.
+        const index = read(path.join(REGISTRY_DIR, "index.json")) as { items: unknown[] };
+        expect(checked).toBe(index.items.length);
+        expect(checked).toBeGreaterThan(80);
     });
 
     // The point of these: prove the validator and the schema are strict enough that the three

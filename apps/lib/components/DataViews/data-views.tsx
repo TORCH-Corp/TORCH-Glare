@@ -19,12 +19,14 @@ import {
   type RegisteredView,
 } from "./context";
 import { Actions, Header, PanelToggle, Search, ViewSwitch } from "./header";
+import { useDataViewsStrings } from "./strings";
 import { Empty } from "./states";
 import {
   isEmptyElement,
   isHeaderElement,
   isPanelElement,
   isViewElement,
+  type ViewElement,
   viewMetaOf,
 } from "./slots";
 import { collectFilterFields, Filters } from "./filters";
@@ -117,8 +119,17 @@ function DataViewsRoot({
   // `viewElements` is a fresh array on every render, so memoising on its identity would never
   // hit. Key on what actually matters instead: which views are rendered and how they present.
   // `icon` is part of that — leave it out and swapping only an icon leaves a stale one showing.
+  const strings = useDataViewsStrings();
+  // A view that was not given a `label` falls back to its own English name, translated when the
+  // library ships that language. A view of your own keeps whatever `defaultLabel` it declared.
+  const labelOf = (el: ViewElement) => {
+    const meta = viewMetaOf(el)!;
+    return el.props.label ?? strings.viewLabels[meta.defaultLabel] ?? meta.defaultLabel;
+  };
+  // The *resolved* label, not `el.props.label`. Keying on the prop would leave a switcher stuck in
+  // the previous language, because a defaulted label changes without any prop changing.
   const viewKey = viewElements
-    .map((el) => `${el.props.id}|${el.props.label}|${iconKey(el.props.icon)}`)
+    .map((el) => `${el.props.id}|${labelOf(el)}|${iconKey(el.props.icon)}`)
     .join(",");
   const registered = useMemo<RegisteredView[]>(
     () =>
@@ -126,7 +137,7 @@ function DataViewsRoot({
         const meta = viewMetaOf(el)!;
         return {
           id: el.props.id ?? meta.defaultId,
-          label: el.props.label ?? meta.defaultLabel,
+          label: labelOf(el),
           icon: el.props.icon,
         };
       }),

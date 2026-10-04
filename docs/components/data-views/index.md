@@ -872,7 +872,7 @@ All seventeen, with the extra keys each one reads. Anything unrecognised falls b
 | `date` | — | the raw string |
 | `date-format` | `dateFormat` — token string (`YYYY MM DD HH mm ss`) or `Intl.DateTimeFormatOptions` | `{ year: "numeric", month: "short", day: "numeric" }` |
 | `boolean` | `trueLabel` · `falseLabel` · `trueVariant` · `falseVariant` | `"Yes"`/`"No"`, green/gray. Never shows the `-` placeholder |
-| `enum-badge` | `variants` (value → colour) · `defaultVariant` | `"gray"`; badge size `S` |
+| `enum-badge` | `variants` (value → colour) · `defaultVariant` · `labels` (value → display text) | `"gray"`; badge size `S`. Without `labels` the badge shows the raw value, so set it to translate the text without touching the data |
 | `badge-array` | `variant` · `limit` | `"blue"`, no limit; the overflow chip is `+N` in gray, size `XS` |
 | `currency` | `currency` — `"USD"` or `{ symbol, locale, decimals, code }` | symbol `"$"`; `Intl` currency style when `code` is set |
 | `number-format` | `format: Intl.NumberFormatOptions` | plain `Intl.NumberFormat` |
@@ -1328,6 +1328,83 @@ What is actually implemented, rather than what a data grid usually claims:
 
 The one thing to supply yourself: `fields[].label`. Without it a column falls back to its `path`,
 and `customer.name` is what the sort control will announce.
+
+## Localization
+
+**English and Arabic ship with the component.** There is nothing to install, pass or configure — the
+language is read from `<html lang>`, which your app already sets if it switches language at all:
+
+```ts
+// what i18next does for you already
+i18n.on("languageChanged", (lng) => {
+  document.documentElement.dir = lng === "ar" ? "rtl" : "ltr";
+  document.documentElement.lang = lng;
+});
+```
+
+The attribute is observed, not read once, so a language switch updates the text on a mounted page
+with no remount. `ar-SA` and `AR` both resolve to Arabic; any language not shipped falls back to
+English rather than rendering nothing.
+
+### What you still pass
+
+Every string **you** author is yours to translate, and the component has no opinion about it:
+
+```tsx
+<DataViews.Table label={t("views.list")} />
+<DataViews.PanelToggle>{t("panel.open")}</DataViews.PanelToggle>
+<DataViews.Panel.Tab value="config" label={t("panel.config")}>
+<DataViews.Search placeholder={t("search.placeholder")} />
+<DataViews.Panel.Sort title={t("panel.sort")} />
+```
+
+That covers view labels, panel tab labels, section `title`/`description`/`saveLabel`, the search
+`placeholder`, `addRowLabel`, a `boolean` field's `trueLabel`/`falseLabel`, an `enum-badge` field's
+`labels`, and `fields[].label`.
+
+### What the component carries
+
+The on-screen text it writes itself, where there is no prop to hand it in through.
+
+| | English | العربية |
+| --- | --- | --- |
+| view switcher tabs | `List` `Board` `Inbox` `Tree` `Cards` `Tab` | `قائمة` `لوحة` `البريد الوارد` `شجرة` `بطاقات` `تبويب` |
+| `Panel.Sort`, nothing sortable | `No sortable columns.` | `لا توجد أعمدة قابلة للترتيب.` |
+| tree pane, no label field | `Items` | `العناصر` |
+
+**Tabs** are the one place a default and your own text meet. Pass `label` on a view and it is used
+verbatim, in any language — the library never overrides it:
+
+```tsx
+<DataViews.Table label={t("views.list")} />   // yours, always
+<DataViews.Table />                           // "List" / "قائمة", from the table above
+```
+
+`DataViews.Panel.Tab` has no default at all — its `label` is required — so panel tabs are entirely
+yours and nothing here applies to them. A view of your own registered through `markView` keeps
+whatever `defaultLabel` it declared: the translations are keyed by the English names the built-in
+views use, so an unrecognised one falls straight through.
+
+`DATA_VIEWS_STRINGS` and `useDataViewsStrings()` are exported, so a part of your own can use the
+same words as the rest of the component.
+
+### Accessible names stay English
+
+Deliberately not localized: the search button, the panel close button, the column toggles, the row
+and select-all checkboxes, the drag grips, the sort announcements and the column resize grip all
+carry English `aria-label`s regardless of language. They are invisible on screen, so a page can look
+entirely correct in Arabic while a screen reader announces "Select all rows" — worth knowing if you
+have an accessibility requirement to meet.
+
+`fields[].label` is the exception worth passing: without it a column announces its `path`, so
+`customer.name` is what a screen reader reads in either language.
+
+### There is no override
+
+If you disagree with the Arabic wording, or need a language the library does not ship, there is no
+prop and no setter — you edit the installed copy of `components/DataViews/strings.ts`, and
+**`torch-glare update` will overwrite that edit**. Open an issue instead so the wording changes for
+everyone, or keep the edit in a patch you re-apply.
 
 ## Common Patterns
 

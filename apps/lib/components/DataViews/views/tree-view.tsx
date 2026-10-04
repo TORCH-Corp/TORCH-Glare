@@ -16,6 +16,7 @@ import {
   paneViewOption,
   type PaneViewElement,
 } from "./pane-views";
+import { useDataViewsStrings } from "../strings";
 import { SkeletonBar } from "../states";
 import { useControllable } from "../hooks/useControllable";
 import { DataContext, useDataViewsData, useDataViewsView } from "../context";
@@ -63,6 +64,7 @@ function TreePane({
   tabs: PaneViewElement[];
 }) {
   const data = useDataViewsData();
+  const strings = useDataViewsStrings();
 
   // The pane paints a different row set from the root's, and everything inside it reads `rows`
   // from context — so the swap happens here, once, rather than as a prop on each child.
@@ -73,9 +75,10 @@ function TreePane({
   // `enum-badge` would paint a Badge chip, and a chip inside display-size uppercase type is not a
   // title — it is a chip in the wrong place.
   const title =
-    (node && labelField ? String(getByPath(node.row, labelField.path) ?? "") : "") || "Items";
+    (node && labelField ? String(getByPath(node.row, labelField.path) ?? "") : "") ||
+    strings.paneFallbackTitle;
 
-  const options = tabs.map(paneViewOption);
+  const options = tabs.map((tab) => paneViewOption(tab, strings));
 
   return (
     <DataContext.Provider value={scoped}>
