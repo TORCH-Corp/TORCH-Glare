@@ -43,7 +43,12 @@ export { SkeletonBar, skeletonKeys, Empty } from "./states";
 export { markEmpty, markHeader, markPanel, markView } from "./slots";
 export { resolveBadgeVariant } from "./badge";
 
+// The eight strings DataViews paints itself, in the languages it ships. Chosen from `<html lang>`,
+// so there is nothing to wire — exported for a part of your own that wants the same words.
+export { DATA_VIEWS_STRINGS, useDataViewsStrings } from "./strings";
+
 export type { ResolvedBadgeProps } from "./badge";
+export type { DataViewsStrings } from "./strings";
 export type {
   DataContextValue,
   FiltersContextValue,

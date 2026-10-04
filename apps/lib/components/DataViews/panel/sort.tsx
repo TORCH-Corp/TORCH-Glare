@@ -2,6 +2,7 @@
 
 import { formatPathLabel } from "../../../utils/dataViews/path";
 import { useDataViewsData, useDataViewsView } from "../context";
+import { useDataViewsStrings } from "../strings";
 import { RadioGroup } from "./controls";
 import { Section } from "./section";
 import type { PanelSortProps } from "../types";
@@ -14,12 +15,13 @@ import type { PanelSortProps } from "../types";
 export function Sort({ title = "Default Sort", className }: PanelSortProps) {
   const { fields } = useDataViewsData();
   const { sort, setSort } = useDataViewsView();
+  const s = useDataViewsStrings();
   const sortable = fields.filter((f) => f.type !== "hidden");
 
   return (
     <Section title={title} className={className}>
       {sortable.length === 0 ? (
-        <p className="text-content-presentation-global-tertiary text-xs">No sortable columns.</p>
+        <p className="text-content-presentation-global-tertiary text-xs">{s.noSortableColumns}</p>
       ) : (
         <RadioGroup
           value={sort?.path ?? ""}

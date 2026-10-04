@@ -60,6 +60,10 @@ const SHOWCASE_FIELDS: FieldConfig[] = [
   },
   { path: "hidden", label: "hidden", type: "hidden" },
   { path: "status", label: "enum-badge", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" } },
+  // `labels` is keyed exactly like `variants`, so the displayed text is separate from the stored
+  // value — which is what makes an `enum-badge` translatable. `Delivered` has no entry, so it
+  // falls back to the raw value.
+  { path: "status", label: "enum-badge · labels", type: "enum-badge", variants: { Pending: "yellow", Shipped: "blue", Delivered: "green" }, labels: { Pending: "In wachtrij", Shipped: "Verzonden" } },
   {
     path: "tags",
     label: "badge-array · limit 3",

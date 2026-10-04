@@ -17,7 +17,7 @@ See the [component reference](../index.md) for what each prop does, or the [guid
 ```tsx
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Filter, Settings } from "lucide-react";
 import { Button } from "@/components/Button";
@@ -118,6 +118,16 @@ const nodesFromRows = (rows: readonly Order[]): TreeNode[] =>
 export default function AccessibilityExample() {
   const [rtl, setRtl] = useState(false);
   const [theme, setTheme] = useState<Themes>("default");
+
+  // Write the toggle onto `<html>`, both attributes, which is what a real app does — i18next sets
+  // `lang` and `dir` together in its `languageChanged` handler. The component reads `lang` from
+  // there for the strings it paints itself (the checkbox and grip names, the sort announcement,
+  // the view tabs), so a demo that only set `dir` on a wrapper div could not show any of it.
+  useEffect(() => {
+    const html = document.documentElement;
+    html.lang = rtl ? "ar" : "en";
+    html.dir = rtl ? "rtl" : "ltr";
+  }, [rtl]);
 
   const [query, setQuery] = useState(emptyQuery());
   const [activated, setActivated] = useState<string | null>(null);

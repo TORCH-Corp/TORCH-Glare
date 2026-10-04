@@ -37,6 +37,8 @@ import type {
  * **selected node's** rows rather than the whole set.
  */
 
+import type { DataViewsStrings } from "../strings";
+
 const PANE_VIEW = "__dvTreePaneView";
 
 interface PaneViewMeta {
@@ -105,12 +107,17 @@ export function flattenChildren(children: React.ReactNode): React.ReactNode[] {
   );
 }
 
-/** `value`, `label` and `icon` as the switch will show them — defaults filled in. */
-export function paneViewOption(element: PaneViewElement) {
+/**
+ * `value`, `label` and `icon` as the switch will show them — defaults filled in.
+ *
+ * `strings` is optional because one caller only wants `value`, and resolving a label it will throw
+ * away would mean making that call site a component.
+ */
+export function paneViewOption(element: PaneViewElement, strings?: DataViewsStrings) {
   const meta = paneViewMetaOf(element)!;
   return {
     value: element.props.value ?? meta.defaultValue,
-    label: element.props.label ?? meta.defaultLabel,
+    label: element.props.label ?? strings?.viewLabels[meta.defaultLabel] ?? meta.defaultLabel,
     icon: element.props.icon ?? meta.defaultIcon,
   };
 }
